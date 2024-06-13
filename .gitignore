@@ -1,18 +1,46 @@
-# Build and Release Folders
-bin-debug/
-bin-release/
-[Oo]bj/
-[Bb]in/
+##ignore this file##
+/target/
 
-# Other files and folders
-.settings/
+.classpath
+.class
+.project
+.settings   
+..gitignore
+ ##filter databfile、sln file##
+*.mdb  
+*.ldb  
+*.sln   
+##class file##
+*.com  
+*.class  
+*.dll  
+*.exe  
+*.o  
+*.so 
+# compression file
+*.7z  
+*.dmg  
+*.gz  
+*.iso  
+*.jar  
+*.rar  
+*.tar  
+*.zip  
+*.via
+*.tmp
+*.err
+# OS generated files #  
+.DS_Store  
+.DS_Store?  
+._*  
+.Spotlight-V100  
+.Trashes  
+Icon?  
+ehthumbs.db  
+Thumbs.db 
+/yihe3.0/yihe-applet-api/target
+/yihe3.0/yihe-framework/target
+/yihe3.0/yihe-generator/target
+/yihe3.0/yihe-quartz/target
+/yihe3.0/yihe-admin/target
 
-# Executables
-*.swf
-*.air
-*.ipa
-*.apk
-
-# Project files, i.e. `.project`, `.actionScriptProperties` and `.flexProperties`
-# should NOT be excluded as they contain compiler settings and other important
-# information for Eclipse / Flash Builder.
