@@ -1,0 +1,331 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yihe.system.mapper.YhLifeHabitDictMapper" >
+  <resultMap id="BaseResultMap" type="com.yihe.system.domain.YhLifeHabitDict" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="habit_name" property="habitName" jdbcType="VARCHAR" />
+    <result column="habit_type" property="habitType" jdbcType="INTEGER" />
+    <result column="habitDesc" property="habitDesc" jdbcType="VARCHAR" />
+    <result column="period_whether" property="periodWhether" jdbcType="INTEGER" />
+    <result column="period" property="period" jdbcType="VARCHAR" />
+    <result column="time_whether" property="timeWhether" jdbcType="INTEGER" />
+    <result column="begin_time" property="beginTime" jdbcType="VARCHAR" />
+    <result column="finish_time" property="finishTime" jdbcType="VARCHAR" />
+    <result column="life_img" property="lifeImg" jdbcType="VARCHAR" />
+    <result column="life_time" property="lifeTime" jdbcType="DATE" />
+    <result column="one_rank" property="oneRank" jdbcType="INTEGER" />
+    <result column="two_rank" property="twoRank" jdbcType="INTEGER" />
+    <result column="three_rank" property="threeRank" jdbcType="INTEGER" />
+    <result column="four_rank" property="fourRank" jdbcType="INTEGER" />
+    <result column="five_rank" property="fiveRank" jdbcType="INTEGER" />
+    <result column="remind_time" property="remindTime" jdbcType="VARCHAR" />
+    <result column="user_code" property="userCode" jdbcType="VARCHAR" />
+     <result column="category_name" property="categoryName" jdbcType="VARCHAR" />
+      <result column="standby" property="standby" jdbcType="VARCHAR" />
+    <result column="org_code" property="orgCode" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, habit_name, habit_type, habitDesc, period_whether, period, time_whether, begin_time, 
+    finish_time, life_img, life_time, one_rank, two_rank, three_rank, four_rank, five_rank, 
+    remind_time, user_code, standby, org_code
+  </sql>
+  
+  <select id="showhabitDictCodenull" resultMap="BaseResultMap">
+  	select * from yh_life_habit_dict where user_code=0
+  </select>
+  
+  
+  
+ <select id="showHabitName" resultMap="BaseResultMap" parameterType="map">
+ 	select * from yh_life_habit_dict
+ 	<where>
+		<if test="habitName!=null and habitName!=''">
+		 and habit_name like CONCAT('%',#{habitName},'%' )
+		</if>
+  	</where>
+ </select>
+ 
+ 
+ <select id="CountHAbitType" resultType="int" parameterType="java.lang.Integer">
+ 	select count(*) from yh_life_habit_dict where habit_type=#{habitType}
+ </select>
+ 
+ 
+ <select id="selctbyhabitName"  parameterType="map" resultType="int">
+	   select count(*) from yh_life_habit_dict where habit_name=#{habitName} and id!=#{id}
+  </select>
+  
+ <select id="selectbyhabit" resultMap="BaseResultMap" parameterType="map">
+   SELECT id, habit_name, period, category_name, life_time, life_img, org_code
+   FROM
+   (SELECT dict.id, habit_name, period, category_name, life_time, life_img, org_code
+   FROM
+   yh_life_habit_dict dict
+   INNER JOIN yh_life_habit_dict_category cate ON dict.habit_type = cate.id
+   WHERE
+   dict.remind_time IS NULL
+   <if test="habitType!=null and habitType !=''">
+     and habit_type=#{habitType}
+   </if>
+   <if test="habitName!=null and habitName!=''">
+     and habit_name like CONCAT('%',#{habitName},'%' )
+   </if>
+   ORDER BY
+   life_time DESC
+   ) a
+   LIMIT #{page},#{limit}
+ </select>
+ 
+ <select id="selectbyhabitCount" resultType="int" parameterType="map">
+   SELECT count(1)
+   FROM yh_life_habit_dict dict
+   INNER JOIN yh_life_habit_dict_category cate ON dict.habit_type = cate.id
+   WHERE  dict.remind_time IS NULL
+   <if test="habitType!=null and habitType !=''">
+     and habit_type=#{habitType}
+   </if>
+   <if test="habitName!=null and habitName!=''">
+     and habit_name like CONCAT('%',#{habitName},'%' )
+   </if>
+ </select>
+ 
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from yh_life_habit_dict
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from yh_life_habit_dict
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.yihe.system.domain.YhLifeHabitDict" >
+    insert into yh_life_habit_dict (id, habit_name, habit_type, 
+      habitDesc, period_whether, period, 
+      time_whether, begin_time, finish_time, 
+      life_img, life_time, one_rank, 
+      two_rank, three_rank, four_rank, 
+      five_rank, remind_time, user_code, 
+      standby, org_code)
+    values (#{id,jdbcType=INTEGER}, #{habitName,jdbcType=VARCHAR}, #{habitType,jdbcType=INTEGER}, 
+      #{habitDesc,jdbcType=VARCHAR}, #{periodWhether,jdbcType=INTEGER}, #{period,jdbcType=VARCHAR}, 
+      #{timeWhether,jdbcType=INTEGER}, #{beginTime,jdbcType=VARCHAR}, #{finishTime,jdbcType=VARCHAR}, 
+      #{lifeImg,jdbcType=VARCHAR}, #{lifeTime,jdbcType=DATE}, #{oneRank,jdbcType=INTEGER}, 
+      #{twoRank,jdbcType=INTEGER}, #{threeRank,jdbcType=INTEGER}, #{fourRank,jdbcType=INTEGER}, 
+      #{fiveRank,jdbcType=INTEGER}, #{remindTime,jdbcType=VARCHAR}, #{userCode,jdbcType=VARCHAR}, 
+      #{standby,jdbcType=VARCHAR}, #{orgCode,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.yihe.system.domain.YhLifeHabitDict" >
+    insert into yh_life_habit_dict
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="habitName != null" >
+        habit_name,
+      </if>
+      <if test="habitType != null" >
+        habit_type,
+      </if>
+      <if test="habitDesc != null" >
+        habitDesc,
+      </if>
+      <if test="periodWhether != null" >
+        period_whether,
+      </if>
+      <if test="period != null" >
+        period,
+      </if>
+      <if test="timeWhether != null" >
+        time_whether,
+      </if>
+      <if test="beginTime != null" >
+        begin_time,
+      </if>
+      <if test="finishTime != null" >
+        finish_time,
+      </if>
+      <if test="lifeImg != null" >
+        life_img,
+      </if>
+      <if test="lifeTime != null" >
+        life_time,
+      </if>
+      <if test="oneRank != null" >
+        one_rank,
+      </if>
+      <if test="twoRank != null" >
+        two_rank,
+      </if>
+      <if test="threeRank != null" >
+        three_rank,
+      </if>
+      <if test="fourRank != null" >
+        four_rank,
+      </if>
+      <if test="fiveRank != null" >
+        five_rank,
+      </if>
+      <if test="remindTime != null" >
+        remind_time,
+      </if>
+      <if test="userCode != null" >
+        user_code,
+      </if>
+      <if test="standby != null" >
+        standby,
+      </if>
+      <if test="orgCode != null" >
+        org_code,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="habitName != null" >
+        #{habitName,jdbcType=VARCHAR},
+      </if>
+      <if test="habitType != null" >
+        #{habitType,jdbcType=INTEGER},
+      </if>
+      <if test="habitDesc != null" >
+        #{habitDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="periodWhether != null" >
+        #{periodWhether,jdbcType=INTEGER},
+      </if>
+      <if test="period != null" >
+        #{period,jdbcType=VARCHAR},
+      </if>
+      <if test="timeWhether != null" >
+        #{timeWhether,jdbcType=INTEGER},
+      </if>
+      <if test="beginTime != null" >
+        #{beginTime,jdbcType=VARCHAR},
+      </if>
+      <if test="finishTime != null" >
+        #{finishTime,jdbcType=VARCHAR},
+      </if>
+      <if test="lifeImg != null" >
+        #{lifeImg,jdbcType=VARCHAR},
+      </if>
+      <if test="lifeTime != null" >
+        #{lifeTime,jdbcType=DATE},
+      </if>
+      <if test="oneRank != null" >
+        #{oneRank,jdbcType=INTEGER},
+      </if>
+      <if test="twoRank != null" >
+        #{twoRank,jdbcType=INTEGER},
+      </if>
+      <if test="threeRank != null" >
+        #{threeRank,jdbcType=INTEGER},
+      </if>
+      <if test="fourRank != null" >
+        #{fourRank,jdbcType=INTEGER},
+      </if>
+      <if test="fiveRank != null" >
+        #{fiveRank,jdbcType=INTEGER},
+      </if>
+      <if test="remindTime != null" >
+        #{remindTime,jdbcType=VARCHAR},
+      </if>
+      <if test="userCode != null" >
+        #{userCode,jdbcType=VARCHAR},
+      </if>
+      <if test="standby != null" >
+        #{standby,jdbcType=VARCHAR},
+      </if>
+      <if test="orgCode != null" >
+        #{orgCode,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.yihe.system.domain.YhLifeHabitDict" >
+    update yh_life_habit_dict
+    <set >
+      <if test="habitName != null" >
+        habit_name = #{habitName,jdbcType=VARCHAR},
+      </if>
+      <if test="habitType != null" >
+        habit_type = #{habitType,jdbcType=INTEGER},
+      </if>
+      <if test="habitDesc != null" >
+        habitDesc = #{habitDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="periodWhether != null" >
+        period_whether = #{periodWhether,jdbcType=INTEGER},
+      </if>
+      <if test="period != null" >
+        period = #{period,jdbcType=VARCHAR},
+      </if>
+      <if test="timeWhether != null" >
+        time_whether = #{timeWhether,jdbcType=INTEGER},
+      </if>
+      <if test="beginTime != null" >
+        begin_time = #{beginTime,jdbcType=VARCHAR},
+      </if>
+      <if test="finishTime != null" >
+        finish_time = #{finishTime,jdbcType=VARCHAR},
+      </if>
+      <if test="lifeImg != null" >
+        life_img = #{lifeImg,jdbcType=VARCHAR},
+      </if>
+      <if test="lifeTime != null" >
+        life_time = #{lifeTime,jdbcType=DATE},
+      </if>
+      <if test="oneRank != null" >
+        one_rank = #{oneRank,jdbcType=INTEGER},
+      </if>
+      <if test="twoRank != null" >
+        two_rank = #{twoRank,jdbcType=INTEGER},
+      </if>
+      <if test="threeRank != null" >
+        three_rank = #{threeRank,jdbcType=INTEGER},
+      </if>
+      <if test="fourRank != null" >
+        four_rank = #{fourRank,jdbcType=INTEGER},
+      </if>
+      <if test="fiveRank != null" >
+        five_rank = #{fiveRank,jdbcType=INTEGER},
+      </if>
+      <if test="remindTime != null" >
+        remind_time = #{remindTime,jdbcType=VARCHAR},
+      </if>
+      <if test="userCode != null" >
+        user_code = #{userCode,jdbcType=VARCHAR},
+      </if>
+      <if test="standby != null" >
+        standby = #{standby,jdbcType=VARCHAR},
+      </if>
+      <if test="orgCode != null" >
+        org_code = #{orgCode,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.yihe.system.domain.YhLifeHabitDict" >
+    update yh_life_habit_dict
+    set habit_name = #{habitName,jdbcType=VARCHAR},
+      habit_type = #{habitType,jdbcType=INTEGER},
+      habitDesc = #{habitDesc,jdbcType=VARCHAR},
+      period_whether = #{periodWhether,jdbcType=INTEGER},
+      period = #{period,jdbcType=VARCHAR},
+      time_whether = #{timeWhether,jdbcType=INTEGER},
+      begin_time = #{beginTime,jdbcType=VARCHAR},
+      finish_time = #{finishTime,jdbcType=VARCHAR},
+      life_img = #{lifeImg,jdbcType=VARCHAR},
+      life_time = #{lifeTime,jdbcType=DATE},
+      one_rank = #{oneRank,jdbcType=INTEGER},
+      two_rank = #{twoRank,jdbcType=INTEGER},
+      three_rank = #{threeRank,jdbcType=INTEGER},
+      four_rank = #{fourRank,jdbcType=INTEGER},
+      five_rank = #{fiveRank,jdbcType=INTEGER},
+      remind_time = #{remindTime,jdbcType=VARCHAR},
+      user_code = #{userCode,jdbcType=VARCHAR},
+      standby = #{standby,jdbcType=VARCHAR},
+      org_code = #{orgCode,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

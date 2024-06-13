@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>习惯管理</title>
+   <link rel="stylesheet"  th:href="@{/assets/libs/layui/css/layui.css}" />
+    <link rel="stylesheet"  th:href="@{/assets/module/admin.css}"  />
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body>
+ <!-- 页面加载loading -->
+<div class="page-loading">
+    <div class="ball-loader">
+        <span></span><span></span><span></span><span></span>
+    </div>
+</div>
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div class="layui-card-body">
+<div class="layui-row" style="height: 600px;">
+<div style="width: 100%; height:100%; background-color: #FFF; position: relative;">
+<div class="layui-tab layui-tab-brief" lay-filter="docDemoTabBrief">
+  <ul class="layui-tab-title">
+    <li class="layui-this" th:if="${type=='0'}">分类</li>
+    <li th:if="${type!='0'}">分类</li>
+    <li th:if="${type=='1'}" class="layui-this">习惯</li>
+    <li th:if="${type!='1'}">习惯</li>
+  </ul>
+  <div class="layui-tab-content" style="height: 100px;">
+  
+  
+  <div class="layui-tab-item" th:classappend="${type=='0'} ? 'layui-show' : ''"><!-- 课堂开始 -->
+    
+    
+    
+    <!-- 正文开始 -->
+		    <div class="layui-card">
+		        <div class="layui-card-body">
+		            <div class="layui-form toolbar">
+		                <div class="layui-form-item">
+		                    <div class="layui-inline" style="float: right;">
+		                     <a target="_self" href="/manage/content/habitadd?id=0"><button class="layui-btn icon-btn"><i class="layui-icon">&#xe654;</i>添加</button></a>
+		                        </button>
+		                    </div>
+		                </div>
+		            </div>
+		
+		            <table id="tableAuth" lay-filter="tableAuth"></table>
+		        </div>
+		    </div>
+		
+		
+    		
+    
+    </div>
+    <div class="layui-tab-item" th:classappend="${type=='1'} ? 'layui-show' : ''">
+    	
+    	<div class="demoTable">
+					 分类:
+					  <div class="layui-inline">
+					   <form class="layui-form" >
+							<select lay-filter="aihao" id="habitType">
+								
+						    </select>
+						</form>
+					  </div>
+				名称:
+					<div class="layui-inline" >
+			   		 <input class="layui-input" name="habitName" id="habitName" placeholder="请输入" autocomplete="off">
+			  	</div>
+					  <button class="layui-btn" data-type="reload" onclick="solo()"><i class="layui-icon"></i>搜索</button>
+					  <button class="layui-btn layui-btn-primary" id="btnempty" lay-submit="" lay-filter="reset">清除</button>
+					  <div class="layui-inline" style="float: right;" id="frontpage">
+		           		<a target="_self" href="/manage/content/customadd?id=0"><button class="layui-btn icon-btn"><i class="layui-icon">&#xe654;</i>添加</button></a>
+		           
+		            </div>   
+		</div>
+					
+		<table id="LAY_table_user" lay-filter="demo"></table>
+		
+    </div>
+    
+  </div>
+</div> 
+
+  </div>
+</div> 
+</div>   
+</div> 
+</div>   
+<!-- 表格操作列 -->
+<script type="text/html" id="tableBarAuth">
+
+    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="del">删除</a>
+ <a class="layui-btn layui-btn-primary layui-btn-xs" style="color:#2d8cf0" lay-event="edit">修改</a>
+
+
+   
+</script>
+
+</body>
+<script type="text/javascript" th:src="@{/assets/libs/layui/layui.js}"></script>
+<script type="text/javascript" th:src="@{/assets/js/common.js}"></script>
+<script type="text/javascript" th:src="@{/assets/js/jquery-1.11.1.js}"></script>
+<script type="text/html" id="temp_img">
+  <img onclick="openImg('{{d.categoryIcon}}');"  src="{{d.categoryIcon}}" >
+</script>      
+
+<script type="text/html" id="barDemo">
+ {{# if(d.quanxian != 1) { }}
+ --
+{{# } else if(d.standby == 1) { }}
+ --
+{{# } else { }}
+    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="del">删除</a>
+ <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="edit">修改</a>
+{{# } }}
+</script>
+
+<script type="text/html" id="habit_img">
+  <img onclick="openImg('{{d.lifeImg}}');"  src="{{d.lifeImg}}" >
+</script>      
+
+
+<!-- 注意：如果你直接复制所有代码到本地，上述js路径需要改成你本地的 -->
+<script>
+
+
+
+function openImg(url) {
+    layer.open({
+        type: 1,
+        title: ['列表图片展示'],
+        shadeClose: true,
+        area: ['600px', 'auto'], //宽高
+        content: '<img src="' + url + '" height="auto" width="600px">'
+    });
+}
+
+//导航栏
+layui.use('element', function(){
+  var $ = layui.jquery
+  ,element = layui.element; //Tab的切换功能，切换事件监听等，需要依赖element模块
+  
+  
+  $('.site-demo-active').on('click', function(){
+    var othis = $(this), type = othis.data('type');
+    active[type] ? active[type].call(this, othis) : '';
+  });
+  
+});
+
+
+
+//课堂分类
+layui.use(['layer', 'form', 'admin', 'treeTable', 'util','treeSelect', 'table'], function () {
+        var $ = layui.jquery;
+        var layer = layui.layer;
+        var form = layui.form;
+        var admin = layui.admin;
+        var treeTable = layui.treeTable;
+        var util = layui.util;
+        var treeSelect= layui.treeSelect;
+		var table = layui.table;
+		  //清除按钮
+		   $("#btnempty").click(function(){
+		   	window.location.reload();
+		   })
+		   
+		   $(function(){
+				var url = "/YhLifeHabitDictCategoryController/ShowselectByPrimaryKey";
+				var data2 = {
+					
+				};
+				$.post(url, data2, function(data) {
+					var htmld="<option value=''>全部</option>";
+			       	var item=data.data;
+			        for (var i = 0; i < item.length; i++) {
+			        	htmld+="<option value="+item[i].id+">"+item[i].categoryName+"</option>";
+					}
+			       	$('#habitType').append(htmld);
+			        form.render();
+				})
+			})
+        
+		   
+		      //方法级渲染(习惯管理)
+  	table.render({
+  		elem : '#LAY_table_user',
+  		url : '/YhLifeHabitDictController/selectbyhabit',
+  		method:'post',
+  		cols : [ [ 
+  			{type:'numbers'},  {
+  			field : 'habitName',
+  			title : '名称',
+  		},  {
+  			field : 'expect',
+  			title : '打卡周期',
+  		},  {
+  			field : 'categoryName',
+  			title : '分类',
+  		},{field:'lifeTime', title:'更新日期',sort : true,
+			templet : "<div>{{layui.util.toDateString(d.lifeTime, 'yyyy-MM-dd')}}</div>"}
+		 ,{
+  			title: '图标'
+  				, templet: '#habit_img'
+  				, field: 'lifeImg' 
+  		},{
+  			fixed : 'right',
+  			title : '操作',
+  			align : 'center',
+  			toolbar : '#barDemo'
+  		} ] ],
+  		id : 'byhabit',
+  		page : true,
+  		done: function(res, curr, count){
+ 	         if(count > 20) {
+ 	          $(".layui-table-page").show();
+ 	         }else {
+ 	          $(".layui-table-page").hide();
+ 	         }
+ 	       }
+  	});
+		  
+		 //分类表格监听			
+	        table.on('tool(demo)', function(obj) { //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
+	    		var data = obj.data; //获得当前行数据
+	    		var layEvent = obj.event; //获得 lay-event 对应的值
+	    		var tr = obj.tr; //获得当前行 tr 的DOM对象
+				
+	    		if(layEvent === 'edit'){//课堂修改
+	    			window.location.href="/manage/content/customadd?id="+data.id;
+	    		}else if (layEvent === 'del') { //删除
+	    			layer.confirm('真的删除行么', function(index) {
+	    				obj.del(); //删除对应行（tr）的DOM结构，并更新缓存
+	    				layer.close(index);
+	    				var url = "/YhLifeHabitDictController/deletehabitId";
+	    				var data2 = {
+	    					'id' : data.id
+	    				};
+	    				$.post(url, data2, function(e) {
+	    					if(e.data==1){
+	    						layer.msg("删除成功");
+	    						 table.reload('byhabit', {
+	    						        where: { //设定异步数据接口的额外参数，任意设
+	    						        'habitName':$("#habitName").val(),
+	    						        'habitType':$("#habitType").val()
+	    						       }
+	    						      });
+	    					}else{
+	    						layer.msg("删除失败");
+	    					}
+	    						
+	    					
+	    				})
+	    			});
+	    		}
+	    	});
+		  
+		  
+		 //搜索的方法
+		   solo=function(){
+		     table.reload('byhabit', {
+		        where: { //设定异步数据接口的额外参数，任意设
+		        'habitName':$("#habitName").val(),
+		        'habitType':$("#habitType").val()
+		       }
+		      });
+		     
+		    }
+		   
+        //分类表格监听			
+        table.on('tool(tableAuth)', function(obj) { //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
+    		var data = obj.data; //获得当前行数据
+    		var layEvent = obj.event; //获得 lay-event 对应的值
+    		var tr = obj.tr; //获得当前行 tr 的DOM对象
+			
+    		if(layEvent === 'edit'){//课堂修改
+    			window.location.href="/manage/content/habitadd?id="+data.id;
+    		}else if (layEvent === 'del') { //删除
+    			layer.confirm('真的删除行么', function(index) {
+    				obj.del(); //删除对应行（tr）的DOM结构，并更新缓存
+    				layer.close(index);
+    				var url = "/YhLifeHabitDictCategoryController/deleteDictId";
+    				var data2 = {
+    					'id' : data.id
+    				};
+    				$.post(url, data2, function(e) {
+    					if(e.data==1){
+    						layer.msg("删除成功");
+    						tableReload();//重载表格的方法
+    					}else{
+    						layer.msg("删除失败");
+    					}
+    						
+    					
+    				})
+    			});
+    		}
+    	});
+        
+        
+       
+        
+        //方法级渲染(分类管理)
+      	table.render({
+      		elem : '#tableAuth',
+      		url : '/YhLifeHabitDictCategoryController/ShowselectByPrimaryKey',
+      		method:'post',
+      		cols : [ [ 
+      			{type:'numbers'},  {
+      			field : 'categoryName',
+      			title : '名称',
+      		},  {
+      			field : 'num',
+      			title : '习惯数量',
+      		},{
+      			title: '默认图标'
+      				, templet: '#temp_img'
+      				, field: 'categoryIcon' 
+      		},{
+      			fixed : 'right',
+      			title : '操作',
+      			align : 'center',
+      			toolbar : '#tableBarAuth'
+      		} ] ],
+      		id : 'tableBank',
+      	});
+          
+        
+
+    });
+</script>
+</html>

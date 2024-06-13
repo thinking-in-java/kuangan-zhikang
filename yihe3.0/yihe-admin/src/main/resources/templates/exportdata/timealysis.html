@@ -1,0 +1,1444 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script th:src="@{/assets/libs/echarts/echarts.min.js}"></script>
+
+    <script type="text/javascript" th:src="@{/assets/js/jquery-1.11.1.js}"></script>
+    <style>
+        td{
+            border: 1px solid black ;
+            text-align:center;
+            width:60px
+        }
+        tr{
+            height: 50px;
+        }
+    </style>
+</head>
+<body>
+<div style="margin-left: 20%">
+<h2>时间段对比分析</h2>
+</div>
+<div style="margin-left: 5%">
+
+    <image th:src="${img}" style="width: 300px;height: 100px;margin-left:700px"></image>
+    <div style="height: 30px;"></div>
+    <div>数据源:</div>
+<!--    <div>客户:<span style="color: red">谷宜健康</span></div>-->
+    <div style="height: 30px;"></div>
+    <div>性别:<span th:text="${sex}" style="color: red"></span>  <span style="margin-left: 30%;">年龄</span> <span th:text="${ageqian}" style="color: red" ></span> 岁</div>
+    <div style="height: 30px;"></div>
+    <div>对比时间段（干预前）:<span style="color: red" th:text="${ganyuqiantime}"></span>  <span style="margin-left: 10%;">对比时间段（干预后）:</span> <span style="color: #ff0000" th:text="${ganyuhoutime}"></span> </div>
+    <div style="height: 30px;"></div>
+    <div>对比内容：<span style="color: red" th:text="${count}"></span></div>
+<!--  危险统计图 -->
+    <div style="height: 30px"></div>
+    <div>（<span style="color: red">干预前后危险因素汇集情况</span>）占比如下图所示：</div>
+    <div style="height: 30px"></div>
+<div id="risk" style="width: 800px;height: 500px">
+
+</div>
+    <div style="height: 60px"></div>
+    <div>（<span style="color: red">干预前后未来发病较高风险情况</span>）占比如下图所示：</div>
+    <div style="height: 30px"></div>
+<!-- 疾病统计图 -->
+<div id="disease" style="width: 800px;height: 500px">
+
+</div>
+    <div style="height: 30px"></div>
+    <span>具体数值统计如下表所示：</span>
+    <div style="height:10px"></div>
+<!--  表格部分  -->
+<table id="addcount" style="border-collapse:collapse;width:820px;">
+    <tr>
+        <td colspan="13"><span style="color: red">干预前后危险因素汇集</span> &nbsp; 数据详情</td>
+    </tr>
+    <tr style="background-color: #E6F7FF">
+        <td rowspan="3">危险因素</td>
+        <td colspan="4">男性</td>
+        <td colspan="4">女性</td>
+        <td colspan="4">合计</td>
+
+    </tr>
+    <tr style="background-color: #E6F7FF">
+        <td  colspan="2">干预前</td>
+        <td  colspan="2">干预后</td>
+        <td  colspan="2">干预前</td>
+        <td  colspan="2">干预后</td>
+        <td  colspan="2">干预前</td>
+        <td  colspan="2">干预后</td>
+    </tr>
+    <tr style="background-color: #E6F7FF">
+        <td colspan="1">人数</td>
+        <td colspan="1">占比</td>
+        <td colspan="1">人数</td>
+        <td colspan="1">占比</td>
+        <td colspan="1">人数</td>
+        <td colspan="1">占比</td>
+        <td colspan="1">人数</td>
+        <td colspan="1">占比</td>
+        <td colspan="1">人数</td>
+        <td colspan="1">占比</td>
+        <td colspan="1">人数</td>
+        <td colspan="1">占比</td>
+    </tr>
+    <tr>
+        <td>过量饮酒</td>
+        <td>55</td>
+        <td>6%</td>
+        <td>55</td>
+        <td>6%</td>
+        <td>55</td>
+        <td>6%</td>
+        <td>55</td>
+        <td>6%</td>
+        <td>55</td>
+        <td>6%</td>
+        <td>55</td>
+        <td>6%</td>
+    </tr>
+    <tr>
+        <td>吸烟</td>
+        <td>55</td>
+        <td>6%</td>
+        <td>55</td>
+        <td>6%</td>
+        <td>55</td>
+        <td>6%</td>
+        <td>55</td>
+        <td>6%</td>
+        <td>55</td>
+        <td>6%</td>
+        <td>55</td>
+        <td>6%</td>
+    </tr>
+    <tr>
+        <td>缺乏运动</td>
+        <td>55</td>
+        <td>6%</td>
+        <td>55</td>
+        <td>6%</td>
+        <td>55</td>
+        <td>6%</td>
+        <td>55</td>
+        <td>6%</td>
+        <td>55</td>
+        <td>6%</td>
+        <td>55</td>
+        <td>6%</td>
+    </tr>
+    <tr>
+        <td>血糖高</td>
+        <td>55</td>
+        <td>6%</td>
+        <td>55</td>
+        <td>6%</td>
+        <td>55</td>
+        <td>6%</td>
+        <td>55</td>
+        <td>6%</td>
+        <td>55</td>
+        <td>6%</td>
+        <td>55</td>
+        <td>6%</td>
+    </tr>
+    <tr>
+        <td>谷物摄入过多</td>
+        <td>55</td>
+        <td>6%</td>
+        <td>55</td>
+        <td>6%</td>
+        <td>55</td>
+        <td>6%</td>
+        <td>55</td>
+        <td>6%</td>
+        <td>55</td>
+        <td>6%</td>
+        <td>55</td>
+        <td>6%</td>
+    </tr>
+    <tr>
+        <td>肉类摄入过多</td>
+        <td>55</td>
+        <td>6%</td>
+        <td>55</td>
+        <td>6%</td>
+        <td>55</td>
+        <td>6%</td>
+        <td>55</td>
+        <td>6%</td>
+        <td>55</td>
+        <td>6%</td>
+        <td>55</td>
+        <td>6%</td>
+    </tr>
+    <tr>
+        <td>蔬菜水果摄入不足</td>
+        <td>55</td>
+        <td>6%</td>
+        <td>55</td>
+        <td>6%</td>
+        <td>55</td>
+        <td>6%</td>
+        <td>55</td>
+        <td>6%</td>
+        <td>55</td>
+        <td>6%</td>
+        <td>55</td>
+        <td>6%</td>
+    </tr>
+    <tr>
+        <td>血压高</td>
+        <td>55</td>
+        <td>6%</td>
+        <td>55</td>
+        <td>6%</td>
+        <td>55</td>
+        <td>6%</td>
+        <td>55</td>
+        <td>6%</td>
+        <td>55</td>
+        <td>6%</td>
+        <td>55</td>
+        <td>6%</td>
+    </tr>
+    <tr>
+        <td>血脂异常</td>
+        <td>55</td>
+        <td>6%</td>
+        <td>55</td>
+        <td>6%</td>
+        <td>55</td>
+        <td>6%</td>
+        <td>55</td>
+        <td>6%</td>
+        <td>55</td>
+        <td>6%</td>
+        <td>55</td>
+        <td>6%</td>
+    </tr>
+    <tr>
+        <td>肥胖超重</td>
+        <td>55</td>
+        <td>6%</td>
+        <td>55</td>
+        <td>6%</td>
+        <td>55</td>
+        <td>6%</td>
+        <td>55</td>
+        <td>6%</td>
+        <td>55</td>
+        <td>6%</td>
+        <td>55</td>
+        <td>6%</td>
+    </tr>
+    <tr>
+        <td>腰围过大</td>
+        <td>55</td>
+        <td>6%</td>
+        <td>55</td>
+        <td>6%</td>
+        <td>55</td>
+        <td>6%</td>
+        <td>55</td>
+        <td>6%</td>
+        <td>55</td>
+        <td>6%</td>
+        <td>55</td>
+        <td>6%</td>
+    </tr>
+    <tr style="background-color: #E6F7FF">
+        <td>合计</td>
+        <td>55</td>
+        <td>6%</td>
+        <td>55</td>
+        <td>6%</td>
+        <td>55</td>
+        <td>6%</td>
+        <td>55</td>
+        <td>6%</td>
+        <td>55</td>
+        <td>6%</td>
+        <td>55</td>
+        <td>6%</td>
+    </tr>
+<!--    干预前后未来发病较高风险-->
+    <tr>
+        <td colspan="13"><span style="color: red">干预前后未来发病较高风险</span> &nbsp; 数据详情</td>
+    </tr>
+    <tr>
+        <td>糖尿病</td>
+        <td>55</td>
+        <td>6%</td>
+        <td>55</td>
+        <td>6%</td>
+        <td>55</td>
+        <td>6%</td>
+        <td>55</td>
+        <td>6%</td>
+        <td>55</td>
+        <td>6%</td>
+        <td>55</td>
+        <td>6%</td>
+    </tr>
+    <tr>
+        <td>高血压</td>
+        <td>55</td>
+        <td>6%</td>
+        <td>55</td>
+        <td>6%</td>
+        <td>55</td>
+        <td>6%</td>
+        <td>55</td>
+        <td>6%</td>
+        <td>55</td>
+        <td>6%</td>
+        <td>55</td>
+        <td>6%</td>
+    </tr>
+    <tr>
+        <td>冠心病</td>
+        <td>55</td>
+        <td>6%</td>
+        <td>55</td>
+        <td>6%</td>
+        <td>55</td>
+        <td>6%</td>
+        <td>55</td>
+        <td>6%</td>
+        <td>55</td>
+        <td>6%</td>
+        <td>55</td>
+        <td>6%</td>
+    </tr>
+    <tr>
+        <td>脑卒中</td>
+        <td>55</td>
+        <td>6%</td>
+        <td>55</td>
+        <td>6%</td>
+        <td>55</td>
+        <td>6%</td>
+        <td>55</td>
+        <td>6%</td>
+        <td>55</td>
+        <td>6%</td>
+        <td>55</td>
+        <td>6%</td>
+    </tr>
+    <tr>
+        <td>肺癌</td>
+        <td>55</td>
+        <td>6%</td>
+        <td>55</td>
+        <td>6%</td>
+        <td>55</td>
+        <td>6%</td>
+        <td>55</td>
+        <td>6%</td>
+        <td>55</td>
+        <td>6%</td>
+        <td>55</td>
+        <td>6%</td>
+    </tr>
+    <tr>
+        <td>前列腺癌</td>
+        <td>55</td>
+        <td>6%</td>
+        <td>55</td>
+        <td>6%</td>
+        <td>55</td>
+        <td>6%</td>
+        <td>55</td>
+        <td>6%</td>
+        <td>55</td>
+        <td>6%</td>
+        <td>55</td>
+        <td>6%</td>
+    </tr>
+    <tr>
+        <td>乳腺癌</td>
+        <td>55</td>
+        <td>6%</td>
+        <td>55</td>
+        <td>6%</td>
+        <td>55</td>
+        <td>6%</td>
+        <td>55</td>
+        <td>6%</td>
+        <td>55</td>
+        <td>6%</td>
+        <td>55</td>
+        <td>6%</td>
+    </tr>
+    <tr>
+        <td>骨质疏松质骨折</td>
+        <td>55</td>
+        <td>6%</td>
+        <td>55</td>
+        <td>6%</td>
+        <td>55</td>
+        <td>6%</td>
+        <td>55</td>
+        <td>6%</td>
+        <td>55</td>
+        <td>6%</td>
+        <td>55</td>
+        <td>6%</td>
+    </tr>
+    <tr>
+        <td>血脂异常</td>
+        <td>55</td>
+        <td>6%</td>
+        <td>55</td>
+        <td>6%</td>
+        <td>55</td>
+        <td>6%</td>
+        <td>55</td>
+        <td>6%</td>
+        <td>55</td>
+        <td>6%</td>
+        <td>55</td>
+        <td>6%</td>
+    </tr>
+    <tr>
+        <td>血脂异常</td>
+        <td>55</td>
+        <td>6%</td>
+        <td>55</td>
+        <td>6%</td>
+        <td>55</td>
+        <td>6%</td>
+        <td>55</td>
+        <td>6%</td>
+        <td>55</td>
+        <td>6%</td>
+        <td>55</td>
+        <td>6%</td>
+    </tr>
+    <tr style="background-color: #E6F7FF">
+        <td>合计</td>
+        <td>55</td>
+        <td>6%</td>
+        <td>55</td>
+        <td>6%</td>
+        <td>55</td>
+        <td>6%</td>
+        <td>55</td>
+        <td>6%</td>
+        <td>55</td>
+        <td>6%</td>
+        <td>55</td>
+        <td>6%</td>
+    </tr>
+</table>
+注：<br>
+<span>用户在一个区间内有多条数据记录时，干预前的以最早的数据为基准，干预后的以最新数据为基准进行分析统计。</span>
+   </div>
+<script type='text/javascript'>
+    var riskText =['过量饮酒', '吸烟', '缺乏运动', '血糖高', '蔬菜', '水果',"血压高", '血脂异常', '肥胖超重', '腰围过大'] // 危险统计图 描述文字
+    var risk=eval('[[${list1}]]');  // 危险统计图干预前数组
+    var manrisk=eval('[[${list1man}]]');
+    var womanrisk=eval('[[${list1woman}]]');
+    var meddleRisk=eval('[[${list2}]]') ; // 危险统计图干预后数组
+    var manmeddleRisk=eval('[[${list2man}]]') ;
+    var womanmeddleRisk=eval('[[${list2woman}]]') ;
+    var diseaseText =  diseaseText=['血脂异常','骨质疏松致骨折' , '乳腺癌', '前列腺癌', '肺癌', '脑卒中', '冠心病', '高血压','糖尿病'] // 疾病统计图 描述文字
+    var disease =eval('[[${list3}]]'); // 疾病统计图干预前数组
+    var mandisease =eval('[[${list3man}]]');
+    var womandisease =eval('[[${list3woman}]]');
+    var meddleDisease = eval('[[${list4}]]'); // 疾病统计图干预后数组
+    var manmeddleDisease = eval('[[${list4man}]]');
+    var womanmeddleDisease = eval('[[${list4woman}]]');
+    var data1;
+    var allpeople=eval('[[${allpeople}]]');
+    var mancount=eval('[[${mancount}]]');
+    var womancount=eval('[[${womancount}]]');
+    console.log(mandisease)
+    console.log('[[${list4}]]')
+    console.log('[[${list1man}]]')
+    console.log('[[${list1woman}]]')
+
+    console.log('[[${list2man}]]')
+    console.log('[[${list2woman}]]')
+    // 获得危险统计图数据
+    window.onload = function () {
+        var html="";
+        if(eval('[[${risk}]]')==true&&eval('[[${dissess}]]')==true){
+            console.log("全部");
+        }
+        if(eval('[[${sex}]]'+""=="全部")){
+            if(eval('[[${risk}]]')==true){
+                html+="    <tr>\n" +
+                    "        <td colspan='13'><span style='color: red'>干预前后危险因素汇集</span> &nbsp; 数据详情</td>\n" +
+                    "    </tr>\n" +
+                    "    <tr style='background-color: #E6F7FF'>\n" +
+                    "        <td rowspan='3'>危险因素</td>\n" +
+                    "        <td colspan='4'>男性</td>\n" +
+                    "        <td colspan='4'>女性</td>\n" +
+                    "        <td colspan='4'>合计</td>\n" +
+                    "\n" +
+                    "    </tr>\n" +
+                    "    <tr style='background-color: #E6F7FF'>\n" +
+                    "        <td  colspan='2'>干预前</td>\n" +
+                    "        <td  colspan='2'>干预后</td>\n" +
+                    "        <td  colspan='2'>干预前</td>\n" +
+                    "        <td  colspan='2'>干预后</td>\n" +
+                    "        <td  colspan='2'>干预前</td>\n" +
+                    "        <td  colspan='2'>干预后</td>\n" +
+                    "    </tr>\n" +
+                    "    <tr style='background-color: #E6F7FF'>\n" +
+                    "        <td colspan='1'>人数</td>\n" +
+                    "        <td colspan='1'>占比</td>\n" +
+                    "        <td colspan='1'>人数</td>\n" +
+                    "        <td colspan='1'>占比</td>\n" +
+                    "        <td colspan='1'>人数</td>\n" +
+                    "        <td colspan='1'>占比</td>\n" +
+                    "        <td colspan='1'>人数</td>\n" +
+                    "        <td colspan='1'>占比</td>\n" +
+                    "        <td colspan='1'>人数</td>\n" +
+                    "        <td colspan='1'>占比</td>\n" +
+                    "        <td colspan='1'>人数</td>\n" +
+                    "        <td colspan='1'>占比</td>\n" +
+                    "    </tr>\n" +
+                    "    <tr>\n" +
+                    "        <td>过量饮酒</td>\n" +
+                    "        <td>"+manrisk[0]+"</td>\n" +
+                    "        <td>"+chufa(manrisk[0],mancount)+"%</td>\n" +
+                    "        <td>"+manmeddleRisk[0]+"</td>\n" +
+                    "        <td>"+chufa(manmeddleRisk[0],mancount)+"%</td>\n" +
+                    "        <td>"+womanrisk[0]+"</td>\n" +
+                    "        <td>"+chufa(womanrisk[0],womancount)+"%</td>\n" +
+                    "        <td>"+womanmeddleRisk[0]+"</td>\n" +
+                    "        <td>"+chufa(womanmeddleRisk[0],womancount)+"%</td>\n" +
+                    "        <td>"+risk[0]+"</td>\n" +
+                    "        <td>"+chufa(risk[0],allpeople)+"%</td>\n" +
+                    "        <td>"+meddleRisk[0]+"</td>\n" +
+                    "        <td>"+chufa(meddleRisk[0],allpeople)+"%</td>\n" +
+                    "    </tr>\n" +
+                    "    <tr>\n" +
+                    "        <td>吸烟</td>\n" +
+                    "        <td>"+manrisk[1]+"</td>\n" +
+                    "        <td>"+chufa(manrisk[1],mancount)+"%</td>\n" +
+                    "        <td>"+manmeddleRisk[1]+"</td>\n" +
+                    "        <td>"+chufa(manmeddleRisk[1],mancount)+"%</td>\n" +
+                    "        <td>"+womanrisk[1]+"</td>\n" +
+                    "        <td>"+chufa(womanrisk[1],womancount)+"%</td>\n" +
+                    "        <td>"+womanmeddleRisk[1]+"</td>\n" +
+                    "        <td>"+chufa(womanmeddleRisk[1],womancount)+"%</td>\n" +
+                    "        <td>"+risk[1]+"</td>\n" +
+                    "        <td>"+chufa(risk[1],allpeople)+"%</td>\n" +
+                    "        <td>"+meddleRisk[1]+"</td>\n" +
+                    "        <td>"+chufa(meddleRisk[1],allpeople)+"%</td>\n" +
+                    "    </tr>\n" +
+                    "    <tr>\n" +
+                    "        <td>缺乏运动</td>\n" +
+                    "        <td>"+manrisk[2]+"</td>\n" +
+                    "        <td>"+chufa(manrisk[2],mancount)+"%</td>\n" +
+                    "        <td>"+manmeddleRisk[2]+"</td>\n" +
+                    "        <td>"+chufa(manmeddleRisk[2],mancount)+"%</td>\n" +
+                    "        <td>"+womanrisk[2]+"</td>\n" +
+                    "        <td>"+chufa(womanrisk[2],womancount)+"%</td>\n" +
+                    "        <td>"+womanmeddleRisk[2]+"</td>\n" +
+                    "        <td>"+chufa(womanmeddleRisk[2],womancount)+"%</td>\n" +
+                    "        <td>"+risk[2]+"</td>\n" +
+                    "        <td>"+chufa(risk[2],allpeople)+"%</td>\n" +
+                    "        <td>"+meddleRisk[2]+"</td>\n" +
+                    "        <td>"+chufa(meddleRisk[2],allpeople)+"%</td>\n" +
+                    "    </tr>\n" +
+                    "    <tr>\n" +
+                    "        <td>血糖高</td>\n" +
+                    "        <td>"+manrisk[3]+"</td>\n" +
+                    "        <td>"+chufa(manrisk[3],mancount)+"%</td>\n" +
+                    "        <td>"+manmeddleRisk[3]+"</td>\n" +
+                    "        <td>"+chufa(manmeddleRisk[3],mancount)+"%</td>\n" +
+                    "        <td>"+womanrisk[3]+"</td>\n" +
+                    "        <td>"+chufa(womanrisk[3],womancount)+"%</td>\n" +
+                    "        <td>"+womanmeddleRisk[3]+"</td>\n" +
+                    "        <td>"+chufa(womanmeddleRisk[3],womancount)+"%</td>\n" +
+                    "        <td>"+risk[3]+"</td>\n" +
+                    "        <td>"+chufa(risk[3],allpeople)+"%</td>\n" +
+                    "        <td>"+meddleRisk[3]+"</td>\n" +
+                    "        <td>"+chufa(meddleRisk[3],allpeople)+"%</td>\n" +
+                    "    </tr>\n" +
+                    "    <tr>\n" +
+                    "        <td>蔬菜摄入过少</td>\n" +
+                    "        <td>"+manrisk[4]+"</td>\n" +
+                    "        <td>"+chufa(manrisk[4],mancount)+"%</td>\n" +
+                    "        <td>"+manmeddleRisk[4]+"</td>\n" +
+                    "        <td>"+chufa(manmeddleRisk[4],mancount)+"%</td>\n" +
+                    "        <td>"+womanrisk[4]+"</td>\n" +
+                    "        <td>"+chufa(womanrisk[4],womancount)+"%</td>\n" +
+                    "        <td>"+womanmeddleRisk[4]+"</td>\n" +
+                    "        <td>"+chufa(womanmeddleRisk[4],womancount)+"%</td>\n" +
+                    "        <td>"+risk[4]+"</td>\n" +
+                    "        <td>"+chufa(risk[4],allpeople)+"%</td>\n" +
+                    "        <td>"+meddleRisk[4]+"</td>\n" +
+                    "        <td>"+chufa(meddleRisk[4],allpeople)+"%</td>\n" +
+                    "    </tr>\n" +
+                    "    <tr>\n" +
+                    "        <td>水果摄入过少</td>\n" +
+                    "        <td>"+manrisk[5]+"</td>\n" +
+                    "        <td>"+chufa(manrisk[5],mancount)+"%</td>\n" +
+                    "        <td>"+manmeddleRisk[5]+"</td>\n" +
+                    "        <td>"+chufa(manmeddleRisk[5],mancount)+"%</td>\n" +
+                    "        <td>"+womanrisk[5]+"</td>\n" +
+                    "        <td>"+chufa(womanrisk[5],womancount)+"%</td>\n" +
+                    "        <td>"+womanmeddleRisk[5]+"</td>\n" +
+                    "        <td>"+chufa(womanmeddleRisk[5],womancount)+"%</td>\n" +
+                    "        <td>"+risk[5]+"</td>\n" +
+                    "        <td>"+chufa(risk[5],allpeople)+"%</td>\n" +
+                    "        <td>"+meddleRisk[5]+"</td>\n" +
+                    "        <td>"+chufa(meddleRisk[5],allpeople)+"%</td>\n" +
+                    "    </tr>\n" +
+                    "    <tr>\n" +
+                    "        <td>血压高</td>\n" +
+                    "        <td>"+manrisk[6]+"</td>\n" +
+                    "        <td>"+chufa(manrisk[6],mancount)+"%</td>\n" +
+                    "        <td>"+manmeddleRisk[6]+"</td>\n" +
+                    "        <td>"+chufa(manmeddleRisk[6],mancount)+"%</td>\n" +
+                    "        <td>"+womanrisk[6]+"</td>\n" +
+                    "        <td>"+chufa(womanrisk[6],womancount)+"%</td>\n" +
+                    "        <td>"+womanmeddleRisk[6]+"</td>\n" +
+                    "        <td>"+chufa(womanmeddleRisk[6],womancount)+"%</td>\n" +
+                    "        <td>"+risk[6]+"</td>\n" +
+                    "        <td>"+chufa(risk[6],allpeople)+"%</td>\n" +
+                    "        <td>"+meddleRisk[6]+"</td>\n" +
+                    "        <td>"+chufa(meddleRisk[6],allpeople)+"%</td>\n" +
+                    "    </tr>\n" +
+                    "    <tr>\n" +
+                    "        <td>血脂异常</td>\n" +
+                    "        <td>"+manrisk[7]+"</td>\n" +
+                    "        <td>"+chufa(manrisk[7],mancount)+"%</td>\n" +
+                    "        <td>"+manmeddleRisk[7]+"</td>\n" +
+                    "        <td>"+chufa(manmeddleRisk[7],mancount)+"%</td>\n" +
+                    "        <td>"+womanrisk[7]+"</td>\n" +
+                    "        <td>"+chufa(womanrisk[7],womancount)+"%</td>\n" +
+                    "        <td>"+womanmeddleRisk[7]+"</td>\n" +
+                    "        <td>"+chufa(womanmeddleRisk[7],womancount)+"%</td>\n" +
+                    "        <td>"+risk[7]+"</td>\n" +
+                    "        <td>"+chufa(risk[7],allpeople)+"%</td>\n" +
+                    "        <td>"+meddleRisk[7]+"</td>\n" +
+                    "        <td>"+chufa(meddleRisk[7],allpeople)+"%</td>\n" +
+                    "    </tr>\n" +
+                    "    <tr>\n" +
+                    "        <td>肥胖超重</td>\n" +
+                    "        <td>"+manrisk[8]+"</td>\n" +
+                    "        <td>"+chufa(manrisk[8],mancount)+"%</td>\n" +
+                    "        <td>"+manmeddleRisk[8]+"</td>\n" +
+                    "        <td>"+chufa(manmeddleRisk[8],mancount)+"%</td>\n" +
+                    "        <td>"+womanrisk[8]+"</td>\n" +
+                    "        <td>"+chufa(womanrisk[8],womancount)+"%</td>\n" +
+                    "        <td>"+womanmeddleRisk[8]+"</td>\n" +
+                    "        <td>"+chufa(womanmeddleRisk[8],womancount)+"%</td>\n" +
+                    "        <td>"+risk[8]+"</td>\n" +
+                    "        <td>"+chufa(risk[8],allpeople)+"%</td>\n" +
+                    "        <td>"+meddleRisk[8]+"</td>\n" +
+                    "        <td>"+chufa(meddleRisk[8],allpeople)+"%</td>\n" +
+                    "    </tr>\n" +
+                    "    <tr>\n" +
+                    "        <td>腰围过大</td>\n" +
+                    "        <td>"+manrisk[9]+"</td>\n" +
+                    "        <td>"+chufa(manrisk[9],mancount)+"%</td>\n" +
+                    "        <td>"+manmeddleRisk[9]+"</td>\n" +
+                    "        <td>"+chufa(manmeddleRisk[9],mancount)+"%</td>\n" +
+                    "        <td>"+womanrisk[9]+"</td>\n" +
+                    "        <td>"+chufa(womanrisk[9],womancount)+"%</td>\n" +
+                    "        <td>"+womanmeddleRisk[9]+"</td>\n" +
+                    "        <td>"+chufa(womanmeddleRisk[9],womancount)+"%</td>\n" +
+                    "        <td>"+risk[9]+"</td>\n" +
+                    "        <td>"+chufa(risk[9],allpeople)+"%</td>\n" +
+                    "        <td>"+meddleRisk[9]+"</td>\n" +
+                    "        <td>"+chufa(meddleRisk[9],allpeople)+"%</td>\n" +
+                    "    </tr>\n" +
+                    "    <tr>\n"  ;
+                    // "    <tr style='background-color: #E6F7FF'>\n" +
+                    // "        <td>合计</td>\n" +
+                    // "        <td>55</td>\n" +
+                    // "        <td>6%</td>\n" +
+                    // "        <td>55</td>\n" +
+                    // "        <td>6%</td>\n" +
+                    // "        <td>55</td>\n" +
+                    // "        <td>6%</td>\n" +
+                    // "        <td>55</td>\n" +
+                    // "        <td>6%</td>\n" +
+                    // "        <td>55</td>\n" +
+                    // "        <td>6%</td>\n" +
+                    // "        <td>55</td>\n" +
+                    // "        <td>6%</td>\n" +
+                    // "    </tr>"
+            }
+            if(eval('[[${dissess}]]')==true){
+                html+="    <tr>\n" +
+                    "        <td colspan='13'><span style='color: red'>干预前后未来发病较高风险</span> &nbsp; 数据详情</td>\n" +
+                    "    </tr>\n" +
+
+                    "    <tr style='background-color: #E6F7FF'>\n" +
+                    "        <td rowspan='3'>危险因素</td>\n" +
+                    "        <td colspan='4'>男性</td>\n" +
+                    "        <td colspan='4'>女性</td>\n" +
+                    "        <td colspan='4'>合计</td>\n" +
+                    "\n" +
+                    "    </tr>\n" +
+                    "    <tr style='background-color: #E6F7FF'>\n" +
+                    "        <td  colspan='2'>干预前</td>\n" +
+                    "        <td  colspan='2'>干预后</td>\n" +
+                    "        <td  colspan='2'>干预前</td>\n" +
+                    "        <td  colspan='2'>干预后</td>\n" +
+                    "        <td  colspan='2'>干预前</td>\n" +
+                    "        <td  colspan='2'>干预后</td>\n" +
+                    "    </tr>\n" +
+                    "    <tr style='background-color: #E6F7FF'>\n" +
+                    "        <td colspan='1'>人数</td>\n" +
+                    "        <td colspan='1'>占比</td>\n" +
+                    "        <td colspan='1'>人数</td>\n" +
+                    "        <td colspan='1'>占比</td>\n" +
+                    "        <td colspan='1'>人数</td>\n" +
+                    "        <td colspan='1'>占比</td>\n" +
+                    "        <td colspan='1'>人数</td>\n" +
+                    "        <td colspan='1'>占比</td>\n" +
+                    "        <td colspan='1'>人数</td>\n" +
+                    "        <td colspan='1'>占比</td>\n" +
+                    "        <td colspan='1'>人数</td>\n" +
+                    "        <td colspan='1'>占比</td>\n" +
+                    "    </tr>"+
+                    "        <td>血脂异常</td>\n" +
+                    "        <td>"+mandisease[0]+"</td>\n" +
+                    "        <td>"+chufa(mandisease[0],mancount)+"%</td>\n" +
+                    "        <td>"+manmeddleDisease[0]+"</td>\n" +
+                    "        <td>"+chufa(manmeddleDisease[0],mancount)+"%</td>\n" +
+                    "        <td>"+womandisease[0]+"</td>\n" +
+                    "        <td>"+chufa(womandisease[0],womancount)+"%</td>\n" +
+                    "        <td>"+womanmeddleDisease[0]+"</td>\n" +
+                    "        <td>"+chufa(womanmeddleDisease[0],womancount)+"%</td>\n" +
+                    "        <td>"+disease[0]+"</td>\n" +
+                    "        <td>"+chufa(disease[0],allpeople)+"%</td>\n" +
+                    "        <td>"+meddleDisease[0]+"</td>\n" +
+                    "        <td>"+chufa(meddleDisease[0],allpeople)+"%</td>\n" +
+                    "    </tr>\n" +
+                    "    <tr>\n" +
+                    "        <td>骨质疏松致骨折</td>\n" +
+                    "        <td>"+mandisease[1]+"</td>\n" +
+                    "        <td>"+chufa(mandisease[1],mancount)+"%</td>\n" +
+                    "        <td>"+manmeddleDisease[1]+"</td>\n" +
+                    "        <td>"+chufa(manmeddleDisease[1],mancount)+"%</td>\n" +
+                    "        <td>"+womandisease[1]+"</td>\n" +
+                    "        <td>"+chufa(womandisease[1],womancount)+"%</td>\n" +
+                    "        <td>"+womanmeddleDisease[1]+"</td>\n" +
+                    "        <td>"+chufa(womanmeddleDisease[1],womancount)+"%</td>\n" +
+                    "        <td>"+disease[1]+"</td>\n" +
+                    "        <td>"+chufa(disease[1],allpeople)+"%</td>\n" +
+                    "        <td>"+meddleDisease[1]+"</td>\n" +
+                    "        <td>"+chufa(meddleDisease[1],allpeople)+"%</td>\n" +
+                    "    </tr>\n" +
+                    "    <tr>\n" +
+                    "        <td>乳腺癌</td>\n" +
+                    "        <td>"+mandisease[2]+"</td>\n" +
+                    "        <td>"+chufa(mandisease[2],mancount)+"%</td>\n" +
+                    "        <td>"+manmeddleDisease[2]+"</td>\n" +
+                    "        <td>"+chufa(manmeddleDisease[2],mancount)+"%</td>\n" +
+                    "        <td>"+womandisease[2]+"</td>\n" +
+                    "        <td>"+chufa(womandisease[2],womancount)+"%</td>\n" +
+                    "        <td>"+womanmeddleDisease[2]+"</td>\n" +
+                    "        <td>"+chufa(womanmeddleDisease[2],womancount)+"%</td>\n" +
+                    "        <td>"+disease[2]+"</td>\n" +
+                    "        <td>"+chufa(disease[2],allpeople)+"%</td>\n" +
+                    "        <td>"+meddleDisease[2]+"</td>\n" +
+                    "        <td>"+chufa(meddleDisease[2],allpeople)+"%</td>\n" +
+                    "    </tr>\n" +
+                    "    <tr>\n" +
+                    "        <td>前列腺癌</td>\n" +
+                    "        <td>"+mandisease[3]+"</td>\n" +
+                    "        <td>"+chufa(mandisease[3],mancount)+"%</td>\n" +
+                    "        <td>"+manmeddleDisease[3]+"</td>\n" +
+                    "        <td>"+chufa(manmeddleDisease[3],mancount)+"%</td>\n" +
+                    "        <td>"+womandisease[3]+"</td>\n" +
+                    "        <td>"+chufa(womandisease[3],womancount)+"%</td>\n" +
+                    "        <td>"+womanmeddleDisease[3]+"</td>\n" +
+                    "        <td>"+chufa(womanmeddleDisease[3],womancount)+"%</td>\n" +
+                    "        <td>"+disease[3]+"</td>\n" +
+                    "        <td>"+chufa(disease[3],allpeople)+"%</td>\n" +
+                    "        <td>"+meddleDisease[3]+"</td>\n" +
+                    "        <td>"+chufa(meddleDisease[3],allpeople)+"%</td>\n" +
+                    "    </tr>\n" +
+                    "    <tr>\n" +
+                    "        <td>肺癌</td>\n" +
+                    "        <td>"+mandisease[4]+"</td>\n" +
+                    "        <td>"+chufa(mandisease[4],mancount)+"%</td>\n" +
+                    "        <td>"+manmeddleDisease[4]+"</td>\n" +
+                    "        <td>"+chufa(manmeddleDisease[4],mancount)+"%</td>\n" +
+                    "        <td>"+womandisease[4]+"</td>\n" +
+                    "        <td>"+chufa(womandisease[4],womancount)+"%</td>\n" +
+                    "        <td>"+womanmeddleDisease[4]+"</td>\n" +
+                    "        <td>"+chufa(womanmeddleDisease[4],womancount)+"%</td>\n" +
+                    "        <td>"+disease[4]+"</td>\n" +
+                    "        <td>"+chufa(disease[4],allpeople)+"%</td>\n" +
+                    "        <td>"+meddleDisease[4]+"</td>\n" +
+                    "        <td>"+chufa(meddleDisease[4],allpeople)+"%</td>\n" +
+                    "    </tr>\n" +
+                    "    <tr>\n" +
+                    "        <td>脑卒中</td>\n" +
+                    "        <td>"+mandisease[5]+"</td>\n" +
+                    "        <td>"+chufa(mandisease[5],mancount)+"%</td>\n" +
+                    "        <td>"+manmeddleDisease[5]+"</td>\n" +
+                    "        <td>"+chufa(manmeddleDisease[5],mancount)+"%</td>\n" +
+                    "        <td>"+womandisease[5]+"</td>\n" +
+                    "        <td>"+chufa(womandisease[5],womancount)+"%</td>\n" +
+                    "        <td>"+womanmeddleDisease[5]+"</td>\n" +
+                    "        <td>"+chufa(womanmeddleDisease[5],womancount)+"%</td>\n" +
+                    "        <td>"+disease[5]+"</td>\n" +
+                    "        <td>"+chufa(disease[5],allpeople)+"%</td>\n" +
+                    "        <td>"+meddleDisease[5]+"</td>\n" +
+                    "        <td>"+chufa(meddleDisease[5],allpeople)+"%</td>\n" +
+                    "    </tr>\n" +
+                    "    <tr>\n" +
+                    "        <td>冠心病</td>\n" +
+                    "        <td>"+mandisease[6]+"</td>\n" +
+                    "        <td>"+chufa(mandisease[6],mancount)+"%</td>\n" +
+                    "        <td>"+manmeddleDisease[6]+"</td>\n" +
+                    "        <td>"+chufa(manmeddleDisease[6],mancount)+"%</td>\n" +
+                    "        <td>"+womandisease[6]+"</td>\n" +
+                    "        <td>"+chufa(womandisease[6],womancount)+"%</td>\n" +
+                    "        <td>"+womanmeddleDisease[6]+"</td>\n" +
+                    "        <td>"+chufa(womanmeddleDisease[6],womancount)+"%</td>\n" +
+                    "        <td>"+disease[6]+"</td>\n" +
+                    "        <td>"+chufa(disease[6],allpeople)+"%</td>\n" +
+                    "        <td>"+meddleDisease[6]+"</td>\n" +
+                    "        <td>"+chufa(meddleDisease[6],allpeople)+"%</td>\n" +
+                    "    </tr>\n" +
+                    "    <tr>\n" +
+                    "        <td>高血压</td>\n" +
+                    "        <td>"+mandisease[7]+"</td>\n" +
+                    "        <td>"+chufa(mandisease[7],mancount)+"%</td>\n" +
+                    "        <td>"+manmeddleDisease[7]+"</td>\n" +
+                    "        <td>"+chufa(manmeddleDisease[7],mancount)+"%</td>\n" +
+                    "        <td>"+womandisease[7]+"</td>\n" +
+                    "        <td>"+chufa(womandisease[7],womancount)+"%</td>\n" +
+                    "        <td>"+womanmeddleDisease[7]+"</td>\n" +
+                    "        <td>"+chufa(womanmeddleDisease[7],womancount)+"%</td>\n" +
+                    "        <td>"+disease[7]+"</td>\n" +
+                    "        <td>"+chufa(disease[7],allpeople)+"%</td>\n" +
+                    "        <td>"+meddleDisease[7]+"</td>\n" +
+                    "        <td>"+chufa(meddleDisease[7],allpeople)+"%</td>\n" +
+                    "    </tr>\n" +
+                    "    <tr>\n" +
+                    "        <td>糖尿病</td>\n" +
+                    "        <td>"+mandisease[8]+"</td>\n" +
+                    "        <td>"+chufa(mandisease[8],mancount)+"%</td>\n" +
+                    "        <td>"+manmeddleDisease[8]+"</td>\n" +
+                    "        <td>"+chufa(manmeddleDisease[8],mancount)+"%</td>\n" +
+                    "        <td>"+womandisease[8]+"</td>\n" +
+                    "        <td>"+chufa(womandisease[8],womancount)+"%</td>\n" +
+                    "        <td>"+womanmeddleDisease[8]+"</td>\n" +
+                    "        <td>"+chufa(womanmeddleDisease[8],womancount)+"%</td>\n" +
+                    "        <td>"+disease[8]+"</td>\n" +
+                    "        <td>"+chufa(disease[8],allpeople)+"%</td>\n" +
+                    "        <td>"+meddleDisease[8]+"</td>\n" +
+                    "        <td>"+chufa(meddleDisease[8],allpeople)+"%</td>\n" +
+                    "    </tr>\n" +
+                    "    <tr>\n"
+
+            }
+        }else if(eval('[[${sex}]]'+""=="男")){
+            if(eval('[[${risk}]]')==true){
+                html+="    <tr>\n" +
+                    "        <td colspan='13'><span style='color: red'>干预前后危险因素汇集</span> &nbsp; 数据详情</td>\n" +
+                    "    </tr>\n" +
+                    "    <tr style='background-color: #E6F7FF'>\n" +
+                    "        <td rowspan='3'>危险因素</td>\n" +
+                    "        <td colspan='12'>男性</td>\n" +
+                    "\n" +
+                    "    </tr>\n" +
+                    "    <tr style='background-color: #E6F7FF'>\n" +
+                    "        <td style='width:45%'  colspan='6'>干预前</td>\n" +
+                    "        <td  style='width:45%' colspan='6'>干预后</td>\n" + +
+                    "    </tr>\n" +
+                    "    <tr style='background-color: #E6F7FF'>\n" +
+                    "        <td style='width:22.5%' colspan='3'>人数</td>\n" +
+                    "        <td style='width:22.5%' colspan='3'>占比</td>\n" +
+                    "        <td style='width:22.5%' colspan='3'>人数</td>\n" +
+                    "        <td style='width:22.5%' colspan='3'>占比</td>\n" +
+                    "    </tr>\n" +
+                    "    <tr>\n" +
+                    "        <td>过量饮酒</td>\n" +
+                    "        <td colspan='3'>"+manrisk[0]+"</td>\n" +
+                    "        <td colspan='3'>"+chufa(manrisk[0],mancount)+"%</td>\n" +
+                    "        <td colspan='3'>"+manmeddleRisk[0]+"</td>\n" +
+                    "        <td colspan='3'>"+chufa(manmeddleRisk[0],mancount)+"%</td>\n" +
+                    "    </tr>\n" +
+                    "    <tr>\n" +
+                    "        <td >吸烟</td>\n" +
+                    "        <td colspan='3'>"+manrisk[1]+"</td>\n" +
+                    "        <td colspan='3'>"+chufa(manrisk[1],mancount)+"%</td>\n" +
+                    "        <td colspan='3'>"+manmeddleRisk[1]+"</td>\n" +
+                    "        <td colspan='3'>"+chufa(manmeddleRisk[1],mancount)+"%</td>\n" +
+                    "    </tr>\n" +
+                    "    <tr>\n" +
+                    "        <td>缺乏运动</td>\n" +
+                    "        <td colspan='3'>"+manrisk[2]+"</td>\n" +
+                    "        <td colspan='3'>"+chufa(manrisk[2],mancount)+"%</td>\n" +
+                    "        <td colspan='3'>"+manmeddleRisk[2]+"</td>\n" +
+                    "        <td colspan='3'>"+chufa(manmeddleRisk[2],mancount)+"%</td>\n" +
+                    "    </tr>\n" +
+                    "    <tr>\n" +
+                    "        <td>血糖高</td>\n" +
+                    "        <td colspan='3'>"+manrisk[3]+"</td>\n" +
+                    "        <td colspan='3'>"+chufa(manrisk[3],mancount)+"%</td>\n" +
+                    "        <td colspan='3'>"+manmeddleRisk[3]+"</td>\n" +
+                    "        <td colspan='3'>"+chufa(manmeddleRisk[3],mancount)+"%</td>\n" +
+                    "    </tr>\n" +
+                    "    <tr>\n" +
+                    "        <td>蔬菜摄入过少</td>\n" +
+                    "        <td colspan='3'>"+manrisk[4]+"</td>\n" +
+                    "        <td colspan='3'>"+chufa(manrisk[4],mancount)+"%</td>\n" +
+                    "        <td colspan='3'>"+manmeddleRisk[4]+"</td>\n" +
+                    "        <td colspan='3'>"+chufa(manmeddleRisk[4],mancount)+"%</td>\n" +
+                    "    </tr>\n" +
+                    "    <tr>\n" +
+                    "        <td>水果摄入过少</td>\n" +
+                    "        <td colspan='3'>"+manrisk[5]+"</td>\n" +
+                    "        <td colspan='3'>"+chufa(manrisk[5],mancount)+"%</td>\n" +
+                    "        <td colspan='3'>"+manmeddleRisk[5]+"</td>\n" +
+                    "        <td colspan='3'>"+chufa(manmeddleRisk[5],mancount)+"%</td>\n" +
+                    "    </tr>\n" +
+                    "    <tr>\n" +
+                    "        <td>血压高</td>\n" +
+                    "        <td colspan='3'>"+manrisk[6]+"</td>\n" +
+                    "        <td colspan='3'>"+chufa(manrisk[6],mancount)+"%</td>\n" +
+                    "        <td colspan='3'>"+manmeddleRisk[6]+"</td>\n" +
+                    "        <td colspan='3'>"+chufa(manmeddleRisk[6],mancount)+"%</td>\n" +
+                    "    </tr>\n" +
+                    "    <tr>\n" +
+                    "        <td>血脂异常</td>\n" +
+                    "        <td colspan='3'>"+manrisk[7]+"</td>\n" +
+                    "        <td colspan='3'>"+chufa(manrisk[7],mancount)+"%</td>\n" +
+                    "        <td colspan='3'>"+manmeddleRisk[7]+"</td>\n" +
+                    "        <td colspan='3'>"+chufa(manmeddleRisk[7],mancount)+"%</td>\n" +
+                    "    </tr>\n" +
+                    "    <tr>\n" +
+                    "        <td>肥胖超重</td>\n" +
+                    "        <td colspan='3'>"+manrisk[8]+"</td>\n" +
+                    "        <td colspan='3'>"+chufa(manrisk[8],mancount)+"%</td>\n" +
+                    "        <td colspan='3'>"+manmeddleRisk[8]+"</td>\n" +
+                    "        <td colspan='3'>"+chufa(manmeddleRisk[8],mancount)+"%</td>\n" +
+                    "    </tr>\n" +
+                    "    <tr>\n" +
+                    "        <td>腰围过大</td>\n" +
+                    "        <td colspan='3'>"+manrisk[9]+"</td>\n" +
+                    "        <td colspan='3'>"+chufa(manrisk[9],mancount)+"%</td>\n" +
+                    "        <td colspan='3'>"+manmeddleRisk[9]+"</td>\n" +
+                    "        <td colspan='3'>"+chufa(manmeddleRisk[9],mancount)+"%</td>\n" +
+                    "    </tr>\n" +
+                    "    <tr>\n"  ;
+                // "    <tr style='background-color: #E6F7FF'>\n" +
+                // "        <td>合计</td>\n" +
+                // "        <td>55</td>\n" +
+                // "        <td>6%</td>\n" +
+                // "        <td>55</td>\n" +
+                // "        <td>6%</td>\n" +
+                // "        <td>55</td>\n" +
+                // "        <td>6%</td>\n" +
+                // "        <td>55</td>\n" +
+                // "        <td>6%</td>\n" +
+                // "        <td>55</td>\n" +
+                // "        <td>6%</td>\n" +
+                // "        <td>55</td>\n" +
+                // "        <td>6%</td>\n" +
+                // "    </tr>"
+            }
+            if(eval('[[${dissess}]]')==true) {
+                html += "    <tr>\n" +
+                    "        <td colspan='13'><span style='color: red'>干预前后未来发病较高风险</span> &nbsp; 数据详情</td>\n" +
+                    "    </tr>\n" +
+
+                    "    <tr style='background-color: #E6F7FF'>\n" +
+                    "        <td rowspan='3'>危险因素</td>\n" +
+                    "        <td colspan='12'>男性</td>\n" +
+                    "\n" +
+                    "    </tr>\n" +
+                    "    <tr style='background-color: #E6F7FF'>\n" +
+                    "        <td style='width:50%'  colspan='6'>干预前</td>\n" +
+                    "        <td style='width:50%' colspan='6'>干预后</td>\n" +
+                    "    </tr>\n" +
+                    "    <tr style='background-color: #E6F7FF'>\n" +
+                    "        <td style='width: :22.5%' colspan='3'>人数</td>\n" +
+                    "        <td style='width: :22.5%' colspan='3'>占比</td>\n" +
+                    "        <td style='width: :22.5%' colspan='3'>人数</td>\n" +
+                    "        <td style='width: :22.5%' colspan='3'>占比</td>\n" +
+                    "    </tr>" +
+                    "        <td>血脂异常</td>\n" +
+                    "        <td colspan='3'>" + mandisease[0] + "</td>\n" +
+                    "        <td colspan='3'>" + chufa(mandisease[0], mancount) + "%</td>\n" +
+                    "        <td colspan='3'>" + manmeddleDisease[0] + "</td>\n" +
+                    "        <td colspan='3'>" + chufa(manmeddleDisease[0], mancount) + "%</td>\n" +
+                    "    </tr>\n" +
+                    "    <tr>\n" +
+                    "        <td>骨质疏松致骨折</td>\n" +
+                    "        <td colspan='3'>" + mandisease[1] + "</td>\n" +
+                    "        <td colspan='3'>" + chufa(mandisease[1], mancount) + "%</td>\n" +
+                    "        <td colspan='3'>" + manmeddleDisease[1] + "</td>\n" +
+                    "        <td colspan='3'>" + chufa(manmeddleDisease[1], mancount) + "%</td>\n" +
+                    "    </tr>\n" +
+                    "    <tr>\n" +
+                    "        <td>乳腺癌</td>\n" +
+                    "        <td colspan='3'>" + mandisease[2] + "</td>\n" +
+                    "        <td colspan='3'>" + chufa(mandisease[2], mancount) + "%</td>\n" +
+                    "        <td colspan='3'>" + manmeddleDisease[2] + "</td>\n" +
+                    "        <td colspan='3'>" + chufa(manmeddleDisease[2], mancount) + "%</td>\n" +
+                    "    </tr>\n" +
+                    "    <tr>\n" +
+                    "        <td>前列腺癌</td>\n" +
+                    "        <td colspan='3'>" + mandisease[3] + "</td>\n" +
+                    "        <td colspan='3'>" + chufa(mandisease[3], mancount) + "%</td>\n" +
+                    "        <td colspan='3'>" + manmeddleDisease[3] + "</td>\n" +
+                    "        <td colspan='3'>" + chufa(manmeddleDisease[3], mancount) + "%</td>\n" +
+                    "    </tr>\n" +
+                    "    <tr>\n" +
+                    "        <td>肺癌</td>\n" +
+                    "        <td colspan='3'>" + mandisease[4] + "</td>\n" +
+                    "        <td colspan='3'>" + chufa(mandisease[4], mancount) + "%</td>\n" +
+                    "        <td colspan='3'>" + manmeddleDisease[4] + "</td>\n" +
+                    "        <td colspan='3'>" + chufa(manmeddleDisease[4], mancount) + "%</td>\n" +
+                    "    </tr>\n" +
+                    "    <tr>\n" +
+                    "        <td>脑卒中</td>\n" +
+                    "        <td colspan='3'>" + mandisease[5] + "</td>\n" +
+                    "        <td colspan='3'>" + chufa(mandisease[5], mancount) + "%</td>\n" +
+                    "        <td colspan='3'>" + manmeddleDisease[5] + "</td>\n" +
+                    "        <td colspan='3'>" + chufa(manmeddleDisease[5], mancount) + "%</td>\n" +
+                    "    </tr>\n" +
+                    "    <tr>\n" +
+                    "        <td>冠心病</td>\n" +
+                    "        <td colspan='3'>" + mandisease[6] + "</td>\n" +
+                    "        <td colspan='3'>" + chufa(mandisease[6], mancount) + "%</td>\n" +
+                    "        <td colspan='3'>" + manmeddleDisease[6] + "</td>\n" +
+                    "        <td colspan='3'>" + chufa(manmeddleDisease[6], mancount) + "%</td>\n" +
+                    "    </tr>\n" +
+                    "    <tr>\n" +
+                    "        <td>高血压</td>\n" +
+                    "        <td colspan='3'>" + mandisease[7] + "</td>\n" +
+                    "        <td colspan='3'>" + chufa(mandisease[7], mancount) + "%</td>\n" +
+                    "        <td colspan='3'>" + manmeddleDisease[7] + "</td>\n" +
+                    "        <td colspan='3'>" + chufa(manmeddleDisease[7], mancount) + "%</td>\n" +
+                    "    </tr>\n" +
+                    "    <tr>\n" +
+                    "        <td>糖尿病</td>\n" +
+                    "        <td colspan='3'>" + mandisease[8] + "</td>\n" +
+                    "        <td colspan='3'>" + chufa(mandisease[8], mancount) + "%</td>\n" +
+                    "        <td colspan='3'>" + manmeddleDisease[8] + "</td>\n" +
+                    "        <td colspan='3'>" + chufa(manmeddleDisease[8], mancount) + "%</td>\n" +
+                    "    </tr>\n" +
+                    "    <tr>\n"
+            }
+        }else if(eval('[[${sex}]]'+""=="女")){
+            if(eval('[[${risk}]]')==true){
+                html+="    <tr>\n" +
+                    "        <td colspan='13'><span style='color: red'>干预前后危险因素汇集</span> &nbsp; 数据详情</td>\n" +
+                    "    </tr>\n" +
+                    "    <tr style='background-color: #E6F7FF'>\n" +
+                    "        <td rowspan='3'>危险因素</td>\n" +
+                    "        <td colspan='12'>女性</td>\n" +
+                    "\n" +
+                    "    </tr>\n" +
+                    "    <tr style='background-color: #E6F7FF'>\n" +
+                    "        <td style='width:45%' colspan='6'>干预前</td>\n" +
+                    "        <td  style='width:45%' colspan='6'>干预后</td>\n" + +
+                        "    </tr>\n" +
+                    "    <tr style='background-color: #E6F7FF'>\n" +
+                    "        <td style='width:22.5%' colspan='3'>人数</td>\n" +
+                    "        <td style='width:22.5%' colspan='3'>占比</td>\n" +
+                    "        <td style='width:22.5%' colspan='3'>人数</td>\n" +
+                    "        <td style='width:22.5%' colspan='3'>占比</td>\n" +
+                    "    </tr>\n" +
+                    "    <tr>\n" +
+                    "        <td>过量饮酒</td>\n" +
+                    "        <td colspan='3'>"+womanrisk[0]+"</td>\n" +
+                    "        <td colspan='3'>"+chufa(womanrisk[0],womancount)+"%</td>\n" +
+                    "        <td colspan='3'>"+womanmeddleRisk[0]+"</td>\n" +
+                    "        <td colspan='3'>"+chufa(womanmeddleRisk[0],womancount)+"%</td>\n" +
+                    "    </tr>\n" +
+                    "    <tr>\n" +
+                    "        <td>吸烟</td>\n" +
+                    "        <td colspan='3'>"+womanrisk[1]+"</td>\n" +
+                    "        <td colspan='3'>"+chufa(womanrisk[1],womancount)+"%</td>\n" +
+                    "        <td colspan='3'>"+womanmeddleRisk[1]+"</td>\n" +
+                    "        <td colspan='3'>"+chufa(womanmeddleRisk[1],womancount)+"%</td>\n" +
+                    "    </tr>\n" +
+                    "    <tr>\n" +
+                    "        <td>缺乏运动</td>\n" +
+                    "        <td colspan='3'>"+womanrisk[2]+"</td>\n" +
+                    "        <td colspan='3'>"+chufa(womanrisk[2],womancount)+"%</td>\n" +
+                    "        <td colspan='3'>"+womanmeddleRisk[2]+"</td>\n" +
+                    "        <td colspan='3'>"+chufa(womanmeddleRisk[2],womancount)+"%</td>\n" +
+                    "    </tr>\n" +
+                    "    <tr>\n" +
+                    "        <td>血糖高</td>\n" +
+                    "        <td colspan='3'>"+womanrisk[3]+"</td>\n" +
+                    "        <td colspan='3'>"+chufa(womanrisk[3],womancount)+"%</td>\n" +
+                    "        <td colspan='3'>"+womanmeddleRisk[3]+"</td>\n" +
+                    "        <td colspan='3'>"+chufa(womanmeddleRisk[3],womancount)+"%</td>\n" +
+                    "    </tr>\n" +
+                    "    <tr>\n" +
+                    "        <td>蔬菜摄入过少</td>\n" +
+                    "        <td colspan='3'>"+womanrisk[4]+"</td>\n" +
+                    "        <td colspan='3'>"+chufa(womanrisk[4],womancount)+"%</td>\n" +
+                    "        <td colspan='3'>"+womanmeddleRisk[4]+"</td>\n" +
+                    "        <td colspan='3'>"+chufa(womanmeddleRisk[4],womancount)+"%</td>\n" +
+                    "    </tr>\n" +
+                    "    <tr>\n" +
+                    "        <td>水果摄入过少</td>\n" +
+                    "        <td colspan='3'>"+womanrisk[5]+"</td>\n" +
+                    "        <td colspan='3'>"+chufa(womanrisk[5],womancount)+"%</td>\n" +
+                    "        <td colspan='3'>"+womanmeddleRisk[5]+"</td>\n" +
+                    "        <td colspan='3'>"+chufa(womanmeddleRisk[5],womancount)+"%</td>\n" +
+                    "    </tr>\n" +
+                    "    <tr>\n" +
+                    "        <td>血压高</td>\n" +
+                    "        <td colspan='3'>"+womanrisk[6]+"</td>\n" +
+                    "        <td colspan='3'>"+chufa(womanrisk[6],womancount)+"%</td>\n" +
+                    "        <td colspan='3'>"+womanmeddleRisk[6]+"</td>\n" +
+                    "        <td colspan='3'>"+chufa(womanmeddleRisk[6],womancount)+"%</td>\n" +
+                    "    </tr>\n" +
+                    "    <tr>\n" +
+                    "        <td>血脂异常</td>\n" +
+                    "        <td colspan='3'>"+womanrisk[7]+"</td>\n" +
+                    "        <td colspan='3'>"+chufa(womanrisk[7],womancount)+"%</td>\n" +
+                    "        <td colspan='3'>"+womanmeddleRisk[7]+"</td>\n" +
+                    "        <td colspan='3'>"+chufa(womanmeddleRisk[7],womancount)+"%</td>\n" +
+                    "    </tr>\n" +
+                    "    <tr>\n" +
+                    "        <td>肥胖超重</td>\n" +
+                    "        <td colspan='3'>"+womanrisk[8]+"</td>\n" +
+                    "        <td colspan='3'>"+chufa(womanrisk[8],womancount)+"%</td>\n" +
+                    "        <td colspan='3'>"+womanmeddleRisk[8]+"</td>\n" +
+                    "        <td colspan='3'>"+chufa(womanmeddleRisk[8],womancount)+"%</td>\n" +
+                    "    </tr>\n" +
+                    "    <tr>\n" +
+                    "        <td>腰围过大</td>\n" +
+                    "        <td colspan='3'>"+womanrisk[9]+"</td>\n" +
+                    "        <td colspan='3'>"+chufa(womanrisk[9],womancount)+"%</td>\n" +
+                    "        <td colspan='3'>"+womanmeddleRisk[9]+"</td>\n" +
+                    "        <td colspan='3'>"+chufa(womanmeddleRisk[9],womancount)+"%</td>\n" +
+                    "    </tr>\n" +
+                    "    <tr>\n"  ;
+                // "    <tr style='background-color: #E6F7FF'>\n" +
+                // "        <td>合计</td>\n" +
+                // "        <td>55</td>\n" +
+                // "        <td>6%</td>\n" +
+                // "        <td>55</td>\n" +
+                // "        <td>6%</td>\n" +
+                // "        <td>55</td>\n" +
+                // "        <td>6%</td>\n" +
+                // "        <td>55</td>\n" +
+                // "        <td>6%</td>\n" +
+                // "        <td>55</td>\n" +
+                // "        <td>6%</td>\n" +
+                // "        <td>55</td>\n" +
+                // "        <td>6%</td>\n" +
+                // "    </tr>"
+            }
+            if(eval('[[${dissess}]]')==true) {
+                html += "    <tr>\n" +
+                    "        <td colspan='13'><span style='color: red'>干预前后未来发病较高风险</span> &nbsp; 数据详情</td>\n" +
+                    "    </tr>\n" +
+
+                    "    <tr style='background-color: #E6F7FF'>\n" +
+                    "        <td rowspan='3'>危险因素</td>\n" +
+                    "        <td colspan='12'>女性</td>\n" +
+                    "\n" +
+                    "    </tr>\n" +
+                    "    <tr style='background-color: #E6F7FF'>\n" +
+                    "        <td style='width: 45%' colspan='6'>干预前</td>\n" +
+                    "        <td style='width: 45%' colspan='6'>干预后</td>\n" +
+                    "    </tr>\n" +
+                    "    <tr style='background-color: #E6F7FF'>\n" +
+                    "        <td style='width: 22.5%' colspan='3'>人数</td>\n" +
+                    "        <td style='width: 22.5%' colspan='3'>占比</td>\n" +
+                    "        <td style='width: 22.5%' colspan='3'>人数</td>\n" +
+                    "        <td style='width: 22.5%' colspan='3'>占比</td>\n" +
+                    "    </tr>" +
+                    "        <td>血脂异常</td>\n" +
+                    "        <td colspan='3'>" + womandisease[0] + "</td>\n" +
+                    "        <td colspan='3'>" + chufa(womandisease[0], womancount) + "%</td>\n" +
+                    "        <td colspan='3'>" + womanmeddleDisease[0] + "</td>\n" +
+                    "        <td colspan='3'>" + chufa(womanmeddleDisease[0], womancount) + "%</td>\n" +
+                    "    </tr>\n" +
+                    "    <tr>\n" +
+                    "        <td>骨质疏松致骨折</td>\n" +
+                    "        <td colspan='3'>" + womandisease[1] + "</td>\n" +
+                    "        <td colspan='3'>" + chufa(womandisease[1], womancount) + "%</td>\n" +
+                    "        <td colspan='3'>" + womanmeddleDisease[1] + "</td>\n" +
+                    "        <td colspan='3'>" + chufa(womanmeddleDisease[1], womancount) + "%</td>\n" +
+                    "    </tr>\n" +
+                    "    <tr>\n" +
+                    "        <td>乳腺癌</td>\n" +
+                    "        <td colspan='3'>" + womandisease[2] + "</td>\n" +
+                    "        <td colspan='3'>" + chufa(womandisease[2], womancount) + "%</td>\n" +
+                    "        <td colspan='3'>" + womanmeddleDisease[2] + "</td>\n" +
+                    "        <td colspan='3'>" + chufa(womanmeddleDisease[2], womancount) + "%</td>\n" +
+                    "    </tr>\n" +
+                    "    <tr>\n" +
+                    "        <td>前列腺癌</td>\n" +
+                    "        <td colspan='3'>" + womandisease[3] + "</td>\n" +
+                    "        <td colspan='3'>" + chufa(womandisease[3], womancount) + "%</td>\n" +
+                    "        <td colspan='3'>" + womanmeddleDisease[3] + "</td>\n" +
+                    "        <td colspan='3'>" + chufa(womanmeddleDisease[3], womancount) + "%</td>\n" +
+                    "    </tr>\n" +
+                    "    <tr>\n" +
+                    "        <td>肺癌</td>\n" +
+                    "        <td colspan='3'>" + womandisease[4] + "</td>\n" +
+                    "        <td colspan='3'>" + chufa(womandisease[4], womancount) + "%</td>\n" +
+                    "        <td colspan='3'>" + womanmeddleDisease[4] + "</td>\n" +
+                    "        <td colspan='3'>" + chufa(womanmeddleDisease[4], womancount) + "%</td>\n" +
+                    "    </tr>\n" +
+                    "    <tr>\n" +
+                    "        <td>脑卒中</td>\n" +
+                    "        <td colspan='3'>" + womandisease[5] + "</td>\n" +
+                    "        <td colspan='3'>" + chufa(womandisease[5], womancount) + "%</td>\n" +
+                    "        <td colspan='3'>" + womanmeddleDisease[5] + "</td>\n" +
+                    "        <td colspan='3'>" + chufa(womanmeddleDisease[5], womancount) + "%</td>\n" +
+                    "    </tr>\n" +
+                    "    <tr>\n" +
+                    "        <td>冠心病</td>\n" +
+                    "        <td colspan='3'>" + womandisease[6] + "</td>\n" +
+                    "        <td colspan='3'>" + chufa(womandisease[6], womancount) + "%</td>\n" +
+                    "        <td colspan='3'>" + womanmeddleDisease[6] + "</td>\n" +
+                    "        <td colspan='3'>" + chufa(womanmeddleDisease[6], womancount) + "%</td>\n" +
+                    "    </tr>\n" +
+                    "    <tr>\n" +
+                    "        <td>高血压</td>\n" +
+                    "        <td colspan='3'>" + womandisease[7] + "</td>\n" +
+                    "        <td colspan='3'>" + chufa(womandisease[7], womancount) + "%</td>\n" +
+                    "        <td colspan='3'>" + womanmeddleDisease[7] + "</td>\n" +
+                    "        <td colspan='3'>" + chufa(womanmeddleDisease[7], womancount) + "%</td>\n" +
+                    "    </tr>\n" +
+                    "    <tr>\n" +
+                    "        <td>糖尿病</td>\n" +
+                    "        <td colspan='3'>" + womandisease[8] + "</td>\n" +
+                    "        <td colspan='3'>" + chufa(womandisease[8], womancount) + "%</td>\n" +
+                    "        <td colspan='3'>" + womanmeddleDisease[8] + "</td>\n" +
+                    "        <td colspan='3'>" + chufa(womanmeddleDisease[8], womancount) + "%</td>\n" +
+                    "    </tr>\n" +
+                    "    <tr>\n"
+            }
+        }
+
+        var green = "#ec5d51";
+        var red = "#009dff";
+        risk = {
+            legend: {
+                orient: 'horizontal',
+                right: 0,
+                bottom: 0,
+                selectedMode: false,
+                itemGap: 10,
+                itemWidth: 12,
+                itemHeight: 12,
+                data: ['干预前', '干预后']
+            },
+            grid: {
+                left: 0,
+                right: 0,
+                top: 0,
+                bottom: '3%',
+                containLabel: true
+            },
+            xAxis: {
+                type: 'value',
+                boundaryGap: [0, 0.01]
+            },
+            yAxis: {
+                type: 'category',
+                data: riskText
+            },
+            series: [{
+                name: '干预前',
+                type: 'bar',
+                barGap: 0,
+                silent: true,
+                stack: 1,
+                data: risk,
+                itemStyle: {
+                    normal: {
+                        barBorderRadius: [0, 5, 5, 0]
+                    }
+                },
+                label: {
+                    normal: {
+                        show: true,
+                        position: 'insideRight'
+                    }
+                }
+            }, {
+                name: '干预后',
+                type: 'bar',
+                barGap: 0,
+                silent: true,
+                stack: 2,
+                data: meddleRisk,
+                itemStyle: {
+                    normal: {
+                        barBorderRadius: [0, 5, 5, 0]
+                    }
+                },
+                label: {
+                    normal: {
+                        show: true,
+                        position: 'insideRight'
+                    }
+                }
+            }, {
+                name: '干预前',
+                type: 'bar',
+                barGap: 0,
+                stack: 2,
+                silent: true,
+                data: [0, 0, 0, 0, 0, 0, 0]
+            }]
+        };
+        var setRisk = echarts.init(document.getElementById('risk'));
+        // 使用刚指定的配置项和数据显示图表。
+        setRisk.setOption(risk);
+
+
+        disease = {
+            legend: {
+                orient: 'horizontal',
+                right: 0,
+                bottom: 0,
+                selectedMode: false,
+                itemGap: 10,
+                itemWidth: 12,
+                itemHeight: 12,
+                data: ['干预前', '干预后']
+            },
+            grid: {
+                left: 0,
+                right: 0,
+                top: 0,
+                bottom: '3%',
+                containLabel: true
+            },
+            xAxis: {
+                type: 'value',
+                boundaryGap: [0, 0.01]
+            },
+            yAxis: {
+                type: 'category',
+                data: diseaseText
+            },
+            series: [{
+                name: '干预前',
+                type: 'bar',
+                barGap: 0,
+                silent: true,
+                stack: 1,
+                data: disease,
+                itemStyle: {
+                    normal: {
+                        barBorderRadius: [0, 5, 5, 0]
+                    }
+                },
+                label: {
+                    normal: {
+                        show: true,
+                        position: 'insideRight'
+                    }
+                }
+            }, {
+                name: '干预后',
+                type: 'bar',
+                barGap: 0,
+                silent: true,
+                stack: 2,
+                data: meddleDisease,
+                itemStyle: {
+                    normal: {
+                        barBorderRadius: [0, 5, 5, 0]
+                    }
+                },
+                label: {
+                    normal: {
+                        show: true,
+                        position: 'insideRight'
+                    }
+                }
+            }, {
+                name: '干预前',
+                type: 'bar',
+                barGap: 0,
+                stack: 2,
+                silent: true,
+                label: {
+                    normal: {
+                        show: true,
+                        position: 'right',
+                        textStyle: {
+                            fontWeight: 'bolder',
+                            color: red
+                        }
+                    }
+                }
+            }, {
+                name: '干预前',
+                type: 'bar',
+                barGap: 0,
+                stack: 2,
+                silent: true,
+                label: {
+                    normal: {
+                        show: true,
+                        position: 'right',
+
+                        textStyle: {
+                            fontWeight: 'bolder',
+                            color: green
+                        }
+                    }
+                }
+            }, {
+                name: '干预前',
+                type: 'bar',
+                barGap: 0,
+                stack: 2,
+                silent: true,
+                label: {
+                    normal: {
+                        show: true,
+                        position: 'right',
+
+                        textStyle: {
+                            fontWeight: 'bolder',
+                            color: green
+                        }
+                    }
+                }
+            }]
+        };
+        $("#addcount").empty().append(html);
+        //获取dom容器
+        var setDisease = echarts.init(document.getElementById('disease'));
+        // 使用刚指定的配置项和数据显示图表。
+        setDisease.setOption(disease);
+
+    }
+    function chufa(beichu,chu) {
+        if(chu==0){
+            return 0;
+        }
+        return toDecimal(beichu/chu);
+    }
+    function toDecimal(x) {
+        var f = parseFloat(x);
+        if (isNaN(f)) {
+            return 0;
+        }
+        f = Math.round(x*100)/100;
+        return Math.floor(f * 100);
+    }
+
+</script>
+</body>
+</html>

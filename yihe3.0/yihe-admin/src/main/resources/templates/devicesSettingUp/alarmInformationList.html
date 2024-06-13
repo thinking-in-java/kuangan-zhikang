@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, maximum-scale=1">
+<title>告警信息管理</title>
+<link rel="stylesheet" th:href="@{/assets/libs/layui/css/layui.css}" />
+<link rel="stylesheet" th:href="@{/assets/module/admin.css}" />
+</head>
+<body>
+	<!-- 加载动画 -->
+	<div class="page-loading">
+		<div class="ball-loader">
+			<span></span><span></span><span></span><span></span>
+		</div>
+	</div>
+	 
+	 
+ <div class="layui-tab layui-tab-brief" style="margin:0">
+		 
+		<div class="layui-tab-content">
+			<div class="layui-tab-item layui-show">
+				<div class="layui-fluid" style="padding:0">
+					<div class="layui-card">
+						<div class="layui-card-body">
+
+							<div class="layui-form toolbar" style="    margin-left: -22px;">
+								<div class="layui-form-item">
+									 
+
+
+									<div class="layui-inline">
+										<label class="layui-form-label">姓&emsp;&emsp;名：</label>
+										<div class="layui-input-inline">
+											<input name="nameLike" id="nameLike" class="layui-input"
+												type="text" placeholder="输入姓名" />
+										</div>
+									</div>
+									<div class="layui-inline">
+										<label class="layui-form-label">告警类型：</label>
+										<div class="layui-input-inline">
+											<select name="nametype" id="nametype" lay-verify="required">
+				                               <option value=""></option>
+				                               <option th:each="tlist:${typeList}"
+							th:value="${tlist.id}">[[${tlist.name}]]([[${tlist.typenum}]])</option>
+				                               
+				                             </select>
+										</div>
+									</div>
+									<div class="layui-inline">
+										<label class="layui-form-label">处理状态：</label>
+										<div class="layui-input-inline">
+											<select name="status" id="status" lay-verify="required">
+				                               <option value=""></option>
+				                               <option th:each="slist:${statuList}"
+							th:value="${slist.statusid}">[[${slist.status}]]([[${slist.statusnum}]])</option>
+				                             </select>
+										</div>
+									</div>
+									<div class="layui-inline">
+										<label class="layui-form-label">告警时间：</label>
+										<div class="layui-input-inline" style="    width: 300px;">
+											<input type="text" class="layui-input" id="test10" name="startTime" placeholder=" - ">
+										</div>
+									</div>
+									 
+
+									<div class="layui-inline" style="padding-left: 20px;">
+										<button class="layui-btn icon-btn sousuoDN" data-type="reload"><i class="layui-icon"></i>搜索</button>
+										<button class="layui-btn layui-btn-primary" id="btnempty" lay-submit="" lay-filter="reset">清除</button>
+								
+									</div>
+ 									 
+
+								</div>
+							</div>
+							 
+							<table class="layui-hide" id="pinggu" lay-filter="pinggu"></table>
+
+						</div>
+					</div>
+				</div>
+
+			</div>
+			<!-- 评估记录 -->
+			 
+
+		</div>
+	</div>
+	</div>
+	</div>
+	<!-- 正文开始 -->
+
+
+	<!-- 表格操作列 -->
+	<script type="text/html" id="tableBar">
+    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="edit">详情</a>
+</script>
+	 
+<script type="text/html" id="titleTpl">
+  {{d.typename}}{{d.type}}
+</script>
+	 
+<script type="text/html" id="statusTpl">
+  {{#  if(d.status ==0 ){ }}
+  	 等待处理
+  {{#  } else if(d.status ==1 ) { }}
+    	正在处理
+  {{#  }else{ }}
+	处理完毕
+	{{#  } }}
+</script>
+
+	<!-- js部分 -->
+	<script type="text/javascript" th:src="@{/assets/libs/layui/layui.js}"></script>
+	<script type="text/javascript" th:src="@{/assets/js/common.js}"></script>
+	<script>
+	function screeningList() {
+		window.location.href = "/system/device/addDiaryInfo"
+	}
+		layui
+				.use(
+						[ 'layer', 'form', 'table',  
+								'laypage', 'treeSelect', 'admin','element','laydate'
+								 ],
+						function() {
+							var $ = layui.jquery;
+							var layer = layui.layer;
+							var form = layui.form;
+							var table = layui.table;
+							var laypage = layui.laypage;
+							var element = layui.element;
+							var admin = layui.admin;
+							var form = layui.form;
+							 
+							 var laydate = layui.laydate;
+							 
+
+							  //清除按钮
+					        $("#btnempty").click(function(){
+					        	window.location.reload()
+					         
+					        })
+					        
+							  
+							 //日期时间范围
+							  laydate.render({
+							    elem: '#test10'
+							    ,type: 'datetime'
+							    ,range: true,
+								  trigger: 'click'
+							  });
+							 
+							 
+							
+
+							//这是Layui 给 后台添加的映射  映射controller 的实体类
+							var $ = layui.$, active2 = {
+								reload : function() {
+									//获取 上面input 值
+
+									var startTime = $('#test10').val();
+									var nameLike = $('#nameLike').val();
+									var nametype = $('#nametype').val();
+									var status = $('#status').val();
+									//执行重载
+									table.reload('pinggu', {
+										page : {
+											curr : 1
+										//重新从第 1 页开始
+										},
+										where : {
+											//这里注意一定要跟Bean 里面的属性对应
+											startTime:startTime,
+											nametype:nametype,
+											 nameLike:nameLike,
+											 status:status
+											
+											
+										}
+									});
+								}
+							};
+							
+							
+							//这个是搜索按钮事件， 找到你的搜索按钮 获取搜索按钮点击事件。只需要把$(’’)这里面的内容修改了就可以了。
+							$('.sousuoDN').on('click', function() {
+
+								var type = $(this).data('type');
+								active2[type] ? active2[type].call(this) : '';
+
+							});
+							
+							
+							table.on('tool(pinggu)', function(obj){
+							    var data = obj.data;
+							    //console.log(obj)
+							   if(obj.event === 'edit'){
+							      console.log(data)
+							      window.location.href="/YhHeThresholdAlarm/findThresholdById?id="+data.id
+							    }
+							  });
+
+							var insTb = table.render({
+								elem : '#pinggu',
+								url : '/YhHeThresholdAlarm/findThresholdList',
+								cellMinWidth : 50, //全局定义常规单元格的最小宽度，layui 2.2.1 新增
+								page : true,
+								cols : [ [{
+									type : 'numbers',
+									title : '序号'
+								}, {
+									field : 'name',
+									title : '姓名',
+									width : 100
+
+								}, {
+									field : 'terminalId',
+									title : '序列号'
+								}, {
+									field : 'terminalType',
+									title : '告警类型',
+									templet: '#titleTpl'
+								}, {
+									field : 'content',
+									title : '告警内容'
+								},{
+									field : 'status',
+									title : '告警状态',
+									templet: '#statusTpl'
+								}, {
+									field : 'time',
+									title : '告警时间'
+								}, {
+									align : 'center',
+									toolbar : '#tableBar',
+									title : '操作',
+									minWidth : 200
+								} ] ],
+								response : {
+
+									statusCode : 0
+								//规定成功的状态码，默认：0
+
+								},
+
+								parseData : function(res) { //将原始数据解析成 table 组件所规定的数据
+									return {
+										"code" : res.data.code, //解析接口状态
+										"msg" : res.data.msg, //解析提示文本
+										"count" : res.data.count, //解析数据长度
+										"data" : res.data.data
+									}
+
+								}
+							});
+ 
+							
+						});
+	</script>
+</body>
+
+</html>

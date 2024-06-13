@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yihe.system.mapper.YHUserBmiMapper" >
+  <resultMap id="BaseResultMap" type="com.yihe.system.domain.YHUserBmi" >
+    <id column="U_Bmi_Id" property="uBmiId" jdbcType="INTEGER" />
+    <result column="U_Height" property="uHeight" jdbcType="REAL" />
+    <result column="U_Weight" property="uWeight" jdbcType="REAL" />
+    <result column="Entry_Time" property="entryTime" jdbcType="VARCHAR" />
+    <result column="Is_Del" property="isDel" jdbcType="INTEGER" />
+    <result column="E_User_Id" property="eUserId" jdbcType="INTEGER" />
+    <result column="Env" property="env" jdbcType="VARCHAR" />
+    <result column="Data_Source" property="dataSource" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    U_Bmi_Id, U_Height, U_Weight, Entry_Time, Is_Del, E_User_Id, Env, Data_Source
+  </sql>
+  
+   <insert id="importYHUserBmi" parameterType="java.util.List">
+           insert into yh_user_bmi (U_Height, U_Weight, Entry_Time, Is_Del, E_User_Id, Env, Data_Source) value
+           <foreach collection="Onlist" index="index" item="item" separator=",">
+	  	 (#{item.uHeight,jdbcType=REAL}, #{item.uWeight,jdbcType=REAL}, 
+	      #{item.entryTime,jdbcType=VARCHAR}, #{item.isDel,jdbcType=INTEGER}, #{item.eUserId,jdbcType=INTEGER}, 
+	      #{item.env,jdbcType=VARCHAR}, #{item.dataSource,jdbcType=VARCHAR})
+           </foreach>
+     </insert>
+  
+   <!-- 体重检测总数 -->
+   <select id="selectByBmiCount" resultType="int" >
+  	select count(*) from yh_user_bmi
+  </select>
+  
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from yh_user_bmi
+    where U_Bmi_Id = #{uBmiId,jdbcType=INTEGER}
+  </select>
+  <select id="selectByPrimaryKeyByUsercodeLimit" resultMap="BaseResultMap" parameterType="java.lang.String" >
+   SELECT  <include refid="Base_Column_List" /> FROM yh_user_bmi WHERE E_user_id=#{usercode} and is_Del=2  ORDER BY Entry_Time DESC LIMIT 1
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from yh_user_bmi
+    where U_Bmi_Id = #{uBmiId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.yihe.system.domain.YHUserBmi" >
+    insert into yh_user_bmi (U_Bmi_Id, U_Height, U_Weight, 
+      Entry_Time, Is_Del, E_User_Id, 
+      Env, Data_Source)
+    values (#{uBmiId,jdbcType=INTEGER}, #{uHeight,jdbcType=REAL}, #{uWeight,jdbcType=REAL}, 
+      #{entryTime,jdbcType=VARCHAR}, #{isDel,jdbcType=INTEGER}, #{eUserId,jdbcType=INTEGER}, 
+      #{env,jdbcType=VARCHAR}, #{dataSource,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.yihe.system.domain.YHUserBmi" >
+    insert into yh_user_bmi
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="uBmiId != null" >
+        U_Bmi_Id,
+      </if>
+      <if test="uHeight != null" >
+        U_Height,
+      </if>
+      <if test="uWeight != null" >
+        U_Weight,
+      </if>
+      <if test="entryTime != null" >
+        Entry_Time,
+      </if>
+      <if test="isDel != null" >
+        Is_Del,
+      </if>
+      <if test="eUserId != null" >
+        E_User_Id,
+      </if>
+      <if test="env != null" >
+        Env,
+      </if>
+      <if test="dataSource != null" >
+        Data_Source,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="uBmiId != null" >
+        #{uBmiId,jdbcType=INTEGER},
+      </if>
+      <if test="uHeight != null" >
+        #{uHeight,jdbcType=REAL},
+      </if>
+      <if test="uWeight != null" >
+        #{uWeight,jdbcType=REAL},
+      </if>
+      <if test="entryTime != null" >
+        #{entryTime,jdbcType=VARCHAR},
+      </if>
+      <if test="isDel != null" >
+        #{isDel,jdbcType=INTEGER},
+      </if>
+      <if test="eUserId != null" >
+        #{eUserId,jdbcType=INTEGER},
+      </if>
+      <if test="env != null" >
+        #{env,jdbcType=VARCHAR},
+      </if>
+      <if test="dataSource != null" >
+        #{dataSource,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.yihe.system.domain.YHUserBmi" >
+    update yh_user_bmi
+    <set >
+      <if test="uHeight != null" >
+        U_Height = #{uHeight,jdbcType=REAL},
+      </if>
+      <if test="uWeight != null" >
+        U_Weight = #{uWeight,jdbcType=REAL},
+      </if>
+      <if test="entryTime != null" >
+        Entry_Time = #{entryTime,jdbcType=VARCHAR},
+      </if>
+      <if test="isDel != null" >
+        Is_Del = #{isDel,jdbcType=INTEGER},
+      </if>
+      <if test="eUserId != null" >
+        E_User_Id = #{eUserId,jdbcType=INTEGER},
+      </if>
+      <if test="env != null" >
+        Env = #{env,jdbcType=VARCHAR},
+      </if>
+      <if test="dataSource != null" >
+        Data_Source = #{dataSource,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where U_Bmi_Id = #{uBmiId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.yihe.system.domain.YHUserBmi" >
+    update yh_user_bmi
+    set U_Height = #{uHeight,jdbcType=REAL},
+      U_Weight = #{uWeight,jdbcType=REAL},
+      Entry_Time = #{entryTime,jdbcType=VARCHAR},
+      Is_Del = #{isDel,jdbcType=INTEGER},
+      E_User_Id = #{eUserId,jdbcType=INTEGER},
+      Env = #{env,jdbcType=VARCHAR},
+      Data_Source = #{dataSource,jdbcType=VARCHAR}
+    where U_Bmi_Id = #{uBmiId,jdbcType=INTEGER}
+  </update>
+  
+
+ <!--  查询用户体重 -->
+  <select id="selectYHUserBmi" resultType="map" parameterType="java.lang.String" >
+   select  tz.U_Weight,
+(select count(1) from yh_user_bmi where E_User_Id=#{ eUserId,jdbcType=INTEGER} and Is_Del = 2) as num,
+tz.Data_Source,tz.Entry_Time
+from yh_user_reginfo as reg 
+left join yh_user_bmi tz
+on reg.user_code = tz.E_User_Id
+where tz.U_Bmi_Id = (select U_Bmi_Id from yh_user_bmi where E_User_Id=#{ eUserId,jdbcType=INTEGER} and Is_Del = 2 order by Entry_Time desc limit 1)
+  </select>
+  
+  <select id="selectPageByParam" resultMap="BaseResultMap" parameterType="java.lang.String"  >
+  select  tz.U_Weight,tz.Entry_Time
+	from yh_user_reginfo as reg 
+	inner join yh_user_bmi tz
+	on reg.user_code = tz.E_User_Id 
+	and Is_Del = 2
+	 where reg.user_code=#{ eUserId,jdbcType=INTEGER} order by Entry_Time desc 
+  </select>
+
+  <select id="selectBmiPage" resultMap="BaseResultMap" parameterType="java.lang.String"  >
+   select  tz.U_Weight,tz.Entry_Time
+	from yh_user_reginfo as reg 
+	inner join yh_user_bmi tz
+	on reg.user_code = tz.E_User_Id 
+	and Is_Del = 2
+	 where reg.user_code=#{ eUserId,jdbcType=INTEGER} order by Entry_Time desc 
+  </select>
+  
+  
+</mapper>

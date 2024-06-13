@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yihe.applet.api.mapper.YhPlanDetailMapper" >
+    <resultMap type="com.yihe.system.domain.YhFoodSrecipe" id="YhFoodSrecipeResult">
+        <result property="fsId"    column="Fs_Id"    />
+        <result property="dType"    column="D_Type"    />
+        <result property="eLevel"    column="E_Level"    />
+        <result property="genter"    column="genter"    />
+        <result property="isUse"    column="Is_Use"    />
+        <result property="fElements"    column="F_Elements"    />
+        <result property="packageNumber"    column="Package_number"    />
+        <result property="isDel"    column="Is_Del"    />
+        <result property="diseaseid"    column="diseaseid"    />
+        <result property="oneself"    column="oneself"    />
+        <result property="fsDescribe"    column="fs_describe"    />
+    </resultMap>
+    <select id="selectfoodcount" parameterType="String" resultType="int">
+        SELECT COUNT(*) FROM yh_food_user_diary WHERE user_code=#{usercode} and TO_DAYS(C_Time)=TO_DAYS(NOW());
+    </select>
+
+    <select id="selectsportcount" parameterType="String" resultType="int">
+         SELECT COUNT(*) FROM yh_sport_diary WHERE user_code=#{usercode} and TO_DAYS(Entry_Time)=TO_DAYS(NOW()) AND Diary_Details  is not null;
+    </select>
+    
+    <select id="changhFoodSrecipes" parameterType="com.yihe.applet.api.domain.YhplanDetail" resultMap="YhFoodSrecipeResult">
+        select * from yh_food_srecipe where diseaseid=#{diseassid} and F_type=2;
+    </select>
+
+    <insert id="insertyhfoodlog" parameterType="com.yihe.system.domain.YhFoodSrecipeRecord">
+        insert into yh_food_srecipe_record(record_data,record_name,record_kay,record_type,record_mode,user_code,meal_id,illness_id,age,height,weight,strength,sex)
+        value (#{recordData},#{recordName},#{recordKay},#{recordType},#{recordMode},#{userCode},#{mealId},#{illnessId},#{age},#{height},#{weight},#{strength},#{sex})
+    </insert>
+
+    <update id="upatefoodlogispaln" parameterType="String">
+        update  yh_food_srecipe_record set record_type=2,standby=current_timestamp where  record_mode="健康计划" and user_code=#{Usercode} and record_type=1
+    </update>
+
+    <update id="upatefoodlogisnotpaln" parameterType="String">
+         update  yh_food_srecipe_record set record_type=3,standby=current_timestamp where   user_code=#{Usercode} and record_type=1
+    </update>
+
+    <update id="isfinishi" parameterType="String">
+         update  yh_food_srecipe_record set record_type=1 where   user_code=#{Usercode} and record_type=3
+    </update>
+
+    <update id="updatereg" parameterType="com.yihe.applet.api.domain.YhplanDetail">
+        update yh_user_reginfo set birth_date=#{brethday} where user_code=#{Usercode}
+    </update>
+    <update id="updateperson" parameterType="com.yihe.applet.api.domain.YhplanDetail">
+        update yh_user_personage_condition set stature=#{height},weight=#{weight} where user_code=#{Usercode}
+    </update>
+    <select id="selectperson" parameterType="com.yihe.applet.api.domain.YhplanDetail" resultType="int">
+        select count(*) from yh_user_personage_condition where user_code=#{Usercode}
+    </select>
+    <insert id="insertperson" parameterType="com.yihe.applet.api.domain.YhplanDetail">
+        insert into yh_user_personage_condition(stature,weight,user_code) VALUE(#{weight},#{height},#{Usercode})
+    </insert>
+</mapper>

@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, maximum-scale=1">
+<title>信息概要</title>
+<link rel="stylesheet" th:href="@{/assets/libs/layui/css/layui.css}" />
+<link rel="stylesheet" th:href="@{/assets/module/admin.css}" />
+<!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    
+<style>
+</style>
+<style>
+.displays{
+	display: none
+}
+img{
+	width: 20px;
+	width: 20px;
+}
+</style>
+</head>
+<body>
+<form class="layui-form" id="test" style="display:none">
+ 
+
+		 <div  style="margin-top: 20px;width: 50%;float: left">
+			    <label class="layui-form-label" >受理方式:</label>
+			    <div class="layui-input-block">
+				     <select id="selecttype" name="quiz" lay-search>
+				    	<option value="1">电话回访</option>
+				  		<option value="2">微信回访</option>
+				  		<option value="3">小程序聊天回访</option>
+				  		<option value="4">上门回访</option>
+					</select>
+			    </div>
+		  </div>
+		<div  style="margin-top: 20px;width: 30%;float: left">
+			<label class="layui-form-label" >配合态度:</label>
+			<div class="layui-input-block">
+				<select id="peihechengdu" name="peihe" lay-search>
+					<option value="2">比较配合</option>
+					<option value="3">非常配合</option>
+
+					<option value="1">一般配合</option>
+					<option value="0">不配合</option>
+				</select>
+			</div>
+		</div>
+		  <div class="layui-form-item layui-form-text" style="position: relative;top: 40px">
+		    <label class="layui-form-label" >受理情况:</label>
+			    <div class="layui-input-block" style="width: 80%">
+			      <textarea id='acceptsituation' lay-verify="required" name="desc" placeholder="请输入服务过程和结果，最大限制500个字符" class="layui-textarea"></textarea>
+			    </div>
+		  </div>
+</form>
+<form class="layui-form" id="test2" style="display:none">
+ 
+
+		  <div class="layui-form-item layui-form-text">
+		    <label class="layui-form-label" >原因:</label>
+			    <div class="layui-input-block" style="margin-top: 20px;width: 80%">
+			      <textarea id='cause' lay-verify="required" name="desc" placeholder="请输入服务过程和结果，最大限制200个字符" class="layui-textarea"></textarea>
+			    </div>
+		  </div>
+</form>
+
+
+
+	<!-- 正文开始 -->
+	<input id="serviceid" type="hidden" th:value="${serviceid}">
+	<div class="layui-fluid ew-console-wrapper">
+			<div class="layui-col-xs12 layui-col-sm6 layui-col-md6" style="width: 60%">
+				<div class="layui-card" >
+					
+					<div class="layui-card-body" style="height: 362px">
+						<div style="height:100%;width: 100%">
+							<h3 style="display: inline-block;">健康检测</h3>
+<!--							<span id="fanhu" style="display: inline-block;float: right;color: #a6a6a6">返回</span>-->
+							<div style="height: 50px;width: 100%;margin-top: 10px;">
+								<div style="float: left;width: 15%;margin-left: 5%;height: 100%">
+									<strong >姓名</strong>
+									<span class='variable' style="display: block;margin-top: 10px;">张三</span>
+								</div>
+								<div style="float: left;width: 15%;">
+									<strong >性别</strong>
+									<span class='variable' style="display: block;margin-top: 10px;">男</span>
+								</div>
+								<div style="float: left;width: 18%;">
+									<strong >年龄</strong>
+									<span class='variable' style="display: block;margin-top: 10px;">55</span>
+								</div>
+								<div style="float: left;width: 25%;">
+									<strong >手机号码</strong>
+									<span class='variable' style="display: block;margin-top: 10px;">13399990000</span>
+								</div>
+								<div style="float: left;width: 20%;">
+									<strong >用户编号</strong>
+									<span class='variable' style="display: block;margin-top: 10px;">100325</span>
+								</div>
+							</div>
+							<div style="height: 60px;width: 100%;margin-top: 30px;">
+								<div style="float: left;width: 100%;margin-left: 5%;height: 100%">
+									<strong>服务指示</strong>
+									<span class='variable' style="display: block;margin-top: 15px;color: red;">首次使用指导和问候、提供使用帮助和健康建议等</span>
+								</div>
+							</div>
+							<div style="height: 60px;width: 100%;margin-top: 30px;">
+								<div style="float: left;width: 100%;margin-left: 5%;height: 100%">
+									<strong>关键内容</strong>
+									<span class='variable' style="display: block;margin-top: 15px;color: red;">血压120/85</span>
+								</div>
+							</div>
+							<!--<div style="height: 50px;width: 100%;margin-top:30px;">-->
+								<!--<div style="float: left;width: 30%;margin-left: 5%;height: 100%">-->
+									<!--<strong >设备类型</strong>-->
+									<!--<span style="display: block;margin-top: 10px;">一体机</span>-->
+								<!--</div>-->
+								<!--<div style="float: left;width: 30%;">-->
+									<!--<strong >设备序列号</strong>-->
+									<!--<span style="display: block;margin-top: 10px;">SKE50019020004</span>-->
+								<!--</div>-->
+								<!--<div style="float: left;width: 30%;">-->
+									<!--<strong >设备手机号</strong>-->
+									<!--<span style="display: block;margin-top: 10px;">19966660000</span>-->
+								<!--</div>-->
+							<!--</div>-->
+							
+						</div>
+					</div>
+				</div>
+			</div>
+			
+			<div class="layui-col-xs12 layui-col-sm6 layui-col-md6" style="width: 38%;float: right;margin-top: 0px;">
+				<div class="layui-card" >
+					
+					<div class="layui-card-body" style="height: 362px">
+						<div style="height:100%;width: 100%">
+							<h3>服务详情</h3>
+							<div style="height: 50px;width: 100%;margin-top: 10px;">
+								<div style="float: left;margin-left: 5%;height: 100%;width: 98%">
+									<span style="width: 20%;display: inline-block;">受理人:</span>
+									<span class='doctorvariable' style="margin-top: 10px;">doctor王</span>
+								</div>
+							</div>
+							<div style="height: 50px;width: 100%;">
+								<div style="float: left;margin-left: 5%;height: 100%;width: 98%">
+									<span style="width: 20%;display: inline-block;">受理时间	:</span>
+									<span	class='doctorvariable' style="margin-top: 10px;">2020-02-25 14:05:29</span>
+								</div>
+							</div>
+							<div style="height: 50px;width: 100%;margin-top: 10px;">
+								<div style="float: left;margin-left: 5%;height: 100%;width: 98%">
+									<span style="width: 20%;display: inline-block;">服务方式：</span>
+									<span	class='doctorvariable' style="margin-top: 10px;" id="huifang">电话回访1</span>
+									<block id="hidepeihe" style="display: none">
+									<span id="taidu"	 style="width: 15%;display: inline-block;float: right">电话回访</span>
+									<span style="width: 15%;display: inline-block;float: right">配合态度 ：</span>
+									</block>
+								</div>
+							</div>
+							<div style="height:100px;width: 100%;">
+								<div style="float: left;margin-left: 5%;height: 100%;width: 98%">
+								<div style="width: 20%;float: left;">
+									<span style="display: inline-block;height:100%;">受理情况：</span>
+								</div >
+									
+									<span	class='doctorvariable' style="display: inline-block;width: 70%">用户本次血脂检测有两项异常指标值，
+												电话联系用户进行了生活方式的调查，然后对他的饮食推荐和运动
+												推荐计划做了调整。最终发送了医嘱消息</span>
+								</div>
+							</div>
+							<div style="height: 10px;width: 100%" class='displays timemer'>
+								<div style="float: left;margin-left: 5%;height: 100%;width: 98%">
+									<span style="width: 20%;display: inline-block;">完成时间	:</span>
+									<span 	class='doctorvariable timemers'  >2020-02-25 14:05:29</span>
+								</div>
+							</div>
+							<div style="height: 10px;width: 100%" class='displays	timemer'>
+								<div style="float: left;margin-left: 5%;height: 100%;width: 98%">
+									<span style="width: 20%;display: inline-block;">关闭时间	:</span>
+									<span 	class='doctorvariable timemers' >2020-02-25 14:05:29</span>
+								</div>
+							</div>
+							<div style="height:40px;width: 100%;margin-top: 30px">
+								<button type="button" class="layui-btn layui-btn-primary userdetail">用户详情</button>
+								<button type="button" class="layui-btn layui-btn-primary closeservice" style="margin-left: 30%">关闭</button>
+								<button  type="button" class="layui-btn layui-btn-normal  displays clickbtn">立即受理</button>
+								<button  type="button" class="layui-btn layui-btn-normal  displays clickbtn">完成任务</button>
+								<button  type="button" class="layui-btn layui-btn-normal  displays clickbtn">已关闭</button>
+								<button  type="button" class="layui-btn layui-btn-normal  displays clickbtn">已完成</button>
+							</div>
+						</div>
+						
+					</div>
+				</div>
+			</div>
+	</div>
+
+
+		<!--<div class="layui-col-xs12" style="padding-top: 20px;">-->
+			<!--<div class="layui-card">-->
+				<!--<div class="layui-card-body" style="height: 150px;">-->
+					<!---->
+					<!---->
+				<!--</div>-->
+			<!--</div>-->
+		<!--</div>-->
+
+
+	</div>
+
+	<!-- js部分 -->
+
+	<script type="text/javascript" th:src="@{/assets/libs/layui/layui.js}"></script>
+	<script type="text/javascript" th:src="@{/assets/js/common.js}"></script>
+	<script th:src="@{/assets/libs/echarts/echarts.min.js}"></script>
+	<script th:src="@{/assets/libs/echarts/echartsTheme.js}"></script>
+	<script th:inline="javascript">
+		 /*<![CDATA[*/
+			layui.use(['layer', 'element', 'form', 'notice'], function() {
+				var $ = layui.jquery;
+				var layer = layui.layer;
+				var element = layui.element;
+				var form = layui.form;
+				var notice = layui.notice;
+				/* 查询详情 */
+					$.ajax({
+		    			type:"POST",
+			            url:'/yhtaskserviceapicontroller/queryswitchbyid',
+			            dataType:"json",
+			            data:{switchid:1,typeid:1,childname:"血压"},
+			            success:function(res){
+
+			            }
+		    		});
+					/* $.ajax({
+		    			type:"POST",
+			            url:'/yhtaskserviceapicontroller/insertperson',
+			            dataType:"json",
+			            data:{usercode:"10015",gender:"1",service_waiting_time:"2020-04-07 11:37:52",service_type:"1",service_content:'帮助用户解读最新评估报告结果，并根据实际情况调整干预方案',service_record:'血压很高呀',returnvisit:'2',childnodes:'1',childtag:'1'},
+			            success:function(res){
+
+			            }
+		    		}); */
+				getdetail();
+				function getdetail(){
+					var id=$("#serviceid").val();
+					$.ajax({
+		    			type:"POST",
+			            url:"/yhmanagetaskcontroller/selectdetalserviceplan",
+			            dataType:"json",
+			            data:{id:id},
+			            success:function(res){
+
+			            	var sex='';
+			            	if(res.data.managetask[0].gender==1){
+			            		sex='男'
+			            	}
+			            	if(res.data.managetask[0].gender==2){
+			            		sex='女'
+			            	}
+			            	$(".variable").eq(0).html(res.data.name);
+			            	$(".variable").eq(1).html(sex);
+			            	$(".variable").eq(2).html(jsGetAge(res.data.managetask[0].birth_date));
+			            	$(".variable").eq(3).html(res.data.mobile);
+			            	$(".variable").eq(4).html(res.data.user_code);
+			            	$(".variable").eq(5).html(res.data.managetask[0].service_content);
+			            	$(".variable").eq(6).html(res.data.managetask[0].service_record);
+			            	if(res.data.managetask[0].service_state==0 ){
+			            		$(".doctorvariable").eq(1).html("-	-");
+			            		$(".doctorvariable").eq(3).html("-	-");
+			            		$(".doctorvariable").eq(4).text("立即受理");
+			            		$(".clickbtn").eq(0).removeClass('displays');
+			            	}else if(res.data.managetask[0].service_state==1){
+			            		$(".doctorvariable").eq(1).html(res.data.managetask[0].start_service_time);
+			            		$(".doctorvariable").eq(3).html("-	-");
+			            		$(".doctorvariable").eq(4).text("完成任务");
+			            		$(".clickbtn").eq(1).removeClass('displays');
+			            	}else if(res.data.managetask[0].service_state==2){
+			            		$(".doctorvariable").eq(1).html(res.data.managetask[0].start_service_time);
+			            		$(".doctorvariable").eq(3).html(res.data.managetask[0].acceptsituation);
+			            		$(".doctorvariable").eq(4).text("服务关闭");
+			            		$(".timemer").eq(1).removeClass('displays');
+			            		$(".timemer").eq(0).addClass('displays');
+			            		$(".clickbtn").eq(2).removeClass('displays');
+			            		$(".clickbtn").eq(2).css('margin-left','45%')
+			            		$(".closeservice").eq(0).addClass('displays');
+			            		$(".timemers").eq(1).html(res.data.managetask[0].end_service_time);
+			            	}else if(res.data.managetask[0].service_state==3){
+			            	    $("#hidepeihe").show();
+			            	    var taiduhm="";
+			            	    if(res.data.managetask[0].satisfaction==0){
+                                    taiduhm="不配合"
+								}else if(res.data.managetask[0].satisfaction==1){
+                                    taiduhm="一般配合"
+								}else if(res.data.managetask[0].satisfaction==2){
+                                    taiduhm="比较配合"
+                                }else if(res.data.managetask[0].satisfaction==3){
+                                    taiduhm="非常配合"
+                                }
+			            	    $("#taidu").html(taiduhm);
+			            		$(".doctorvariable").eq(1).html(res.data.managetask[0].start_service_time);
+			            		$(".doctorvariable").eq(3).html(res.data.managetask[0].acceptsituation);
+			            		$(".doctorvariable").eq(4).text("已完成");
+			            		$(".clickbtn").eq(3).removeClass('displays');
+			            		$(".timemer").eq(0).removeClass('displays');
+			            		$(".timemer").eq(1).addClass('displays')
+			            		$(".timemers").eq(0).html(res.data.managetask[0].end_service_time);
+			            	}
+			            	
+			            	
+			            	
+			            	
+			            	 var vistname=res.data.managetask[0].returnvisit==1?'电话回访':res.data.managetask[0].returnvisit==2?'微信回访':res.data.managetask[0].returnvisit==3?'小程序聊天回访':res.data.managetask[0].returnvisit==4?'上门回访':res.data.managetask[0].returnvisit==5?'短信回访':res.data.managetask[0].returnvisit==6?'小程序订阅通知回访':res.data.managetask[0].returnvisit==7?'公众号通知回访':'上门回访';
+			            	 $("#huifang").html(vistname);
+			            	if(res.data.managetask[0].returnvisit==1){
+			            		$(".doctorvariable").eq(2).html("电话回访");
+			            	}else if(res.data.managetask[0].returnvisit==2){
+			            		$(".doctorvariable").eq(2).html("微信回访");
+			            	}else if(res.data.managetask[0].returnvisit==3){
+			            		$(".doctorvariable").eq(2).html("小程序站内信回访");
+			            	}else if(res.data.managetask[0].returnvisit==4){
+			            		$(".doctorvariable").eq(2).html("上门回访");
+			            	}
+			            }
+		    		});
+				};
+				
+				
+				$.ajax({
+	    			type:"POST",
+		            url:"/yhmanagetaskcontroller/selectdetaldoctor",
+		            dataType:"json",
+		            success:function(res){
+
+		            	$(".doctorvariable").eq(0).html(res.data.name);
+		            	
+		            }
+	    		});
+				
+				function jsGetAge(strBirthday)
+				{       
+					var date = new Date(); 
+					var thisYear=date.getFullYear();
+					strBirthday=strBirthday.substr(0,4);
+					age=(thisYear-strBirthday);
+				    
+				    return age;//返回周岁年龄
+				    
+				}
+				$(".clickbtn").click(function(){
+					var url='';
+					var data='';
+					if(this.innerHTML=='立即受理'){
+						$(".clickbtn").eq(0).addClass('displays ');
+						$(".clickbtn").eq(1).removeClass('displays');
+						notice.success({
+			                title: '消息通知',
+			                message: '服务任务受理成功!'
+			            });
+						updatestate({id:$("#serviceid").val(),state:1});
+
+					}else if(this.innerHTML=='完成任务'){
+						
+						
+						
+					        layer.open({
+					            type:2,
+					            skin: 'layui-layer-rim', //加上边框
+					            area: ['1100px', '600px'], //宽高
+					            content:'/manage/acceptse/complete?checked='+$("#serviceid").val(),
+					            resize: false,
+					            success: function (index, layero) {
+					             
+					            },
+					            // 右上角关闭按钮触发的回调：默认会自动触发关闭。如果不想关闭，return false即可
+					              cancel: function(index, layero){
+					                  
+					                      //window.open("/manageXht/health/testing","_self"); 
+					                  
+					                  //return false;
+					              },
+					           });
+						
+						
+						
+						
+					/* 	var url="";
+						var data='';
+						var index=layer.open({
+							  type:1,
+							  area:['60%','350px'],
+							  title: '完成服务任务'
+							  ,content: $("#test"),
+							  shade: 0.5,
+							  btn: ['提交', '取消']
+							  ,btn1: function(index, layero){
+								  var kk=$("#selecttype").val();
+								  var taidu=$("#peihechengdu").val();
+								  var acceptsituation=$("#acceptsituation").val();
+								  if(acceptsituation.replace(/[^\x00-\xff]/g, 'AA').length>500){
+										layer.msg('不能超过500个字符！', {icon: 5});
+										return false;
+									}
+								  		updatestate({id:$("#serviceid").val(),state:3,servicetype:kk,acceptsituation:acceptsituation,satisfaction:taidu});
+								  		layer.close(index); 
+								  		$(".clickbtn").eq(1).addClass('displays ');
+										$(".clickbtn").eq(3).removeClass('displays');
+										notice.success({
+							                title: '消息通知',
+							                message: '服务任务完成!'
+							            });
+								  },
+								  btn2: function(index, layero){
+									  layer.close(index); 
+								   return false;
+								  },
+								  cancel: function(layero,index){ 
+								   layer.closeAll();
+								  }
+
+							}); */
+					}else{
+						return;
+					}
+
+				});
+				function updatestate(data){
+					$.ajax({
+		    			type:"POST",
+			            url:'/yhmanagetaskcontroller/updatestate',
+			            dataType:"json",
+			            data:data,
+			            success:function(res){
+			            	getdetail();
+			            }
+		    		});
+				}
+				$(".closeservice").click(function(){
+					var index=layer.open({
+						  type:1,
+						  area:['50%','250px'],
+						  title: '关闭服务任务'
+						  ,content: $("#test2"),
+						  shade: 0.5,
+						  btn: ['提交', '取消']
+						  ,btn1: function(index, layero){
+							  var acceptsituation=$("#cause").val();
+							  if(acceptsituation.replace(/[^\x00-\xff]/g, 'AA').length>200){
+									layer.msg('不能超过200个字符！', {icon: 5});
+									return false;
+								}
+							  		updatestate({id:$("#serviceid").val(),state:2,acceptsituation:acceptsituation})
+							  		layer.close(index); 
+							  		$(".clickbtn").eq(0).addClass('displays');
+							  		$(".clickbtn").eq(1).addClass('displays');
+							  		$(".clickbtn").eq(2).css('margin-left','30%')
+									$(".clickbtn").eq(3).addClass('displays');
+									$(".closeservice").eq(0).addClass('displays');
+									notice.success({
+						                title: '消息通知',
+						                message: '服务任务关闭成功!'
+						            });
+							  },
+							  btn2: function(index, layero){
+								  layer.close(index); 
+							   return false;
+							  },
+							  cancel: function(layero,index){ 
+							   layer.closeAll();
+							  }
+
+						});
+				});
+				
+				$(".userdetail").click(function(){
+					window.open("../register/userIndex?page=summary&userCode="+$(".variable").eq(4).html()+"");
+				});
+				$("#fanhu").click(function(){
+					// window.location.href = "/manage/task/service";
+					// window.location.href ="/manage/taskservice/totaltaskservice?type=0";
+					// self.location=document.referrer;
+					console.log();
+					var datas=document.referrer;
+					console.log(datas);
+					if(datas.indexOf("manage/service/serrviceaccept") != -1 ){
+						window.location.replace(document.referrer)
+					}
+					//
+				})
+
+			});
+			   /*]]>*/
+		</script>
+</body>
+
+</html>

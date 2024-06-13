@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yihe.system.mapper.YHDocGroupMapper" >
+  <resultMap id="BaseResultMap" type="com.yihe.system.domain.YHDocGroup" >
+    <id column="U_Docgroup_Id" property="uDocgroupId" jdbcType="INTEGER" />
+    <result column="Docid" property="docid" jdbcType="INTEGER" />
+    <result column="Gname" property="gname" jdbcType="VARCHAR" />
+    <result column="establishTime" property="establishTime" jdbcType="VARCHAR" />
+    <result column="User_Count" property="userCount" jdbcType="INTEGER" />
+    <result column="Sort" property="sort" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    U_Docgroup_Id, Docid, Gname, User_Count, Sort,establishTime
+  </sql>
+  <select id="findGroupListByName"  resultMap="BaseResultMap">
+   SELECT * FROM `yh_doc_group` WHERE Gname like concat('%',#{gname},'%')
+  </select>
+  <!-- 根据disease_code对应的基本 查询系统分组 -->
+  <select id="findGroupInfoByDisCode" resultType="java.lang.Integer">
+   SELECT U_Docgroup_Id FROM `yh_doc_group` WHERE disease_code=#{code}  AND Sort=1
+  </select>
+  <!-- 查询分组人数 -->
+  <select id="findEnrolinfoByDoctorInfoForNum"  resultType="java.lang.Integer">
+  SELECT count(1) FROM  yh_user_make_card AS a
+		INNER JOIN yh_user_enrolinfo AS b
+		ON a.user_code=b.user_code
+		WHERE
+		a.doctor=(SELECT id FROM `yh_user_admin_info` WHERE
+		user_code=#{doctor})
+		and b.Flag_Dgroup LIKE CONCAT('%',#{ginfo},'%')
+  </select>
+  <select id="findDocGroupInfoByIdList" resultMap="BaseResultMap">
+  
+	SELECT * FROM `yh_doc_group` WHERE U_Docgroup_Id IN (#{idList})
+  </select>
+  
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from yh_doc_group
+    where U_Docgroup_Id = #{uDocgroupId,jdbcType=INTEGER}
+  </select>
+  
+  <select id="selectAllInfo" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from yh_doc_group
+    where Docid = (SELECT id FROM  yh_user_admin_info WHERE  user_code=#{userCode}) OR  Sort=1  order by  establishTime desc
+  </select>
+  
+  
+  <select id="selectByPrimaryKeyByDoc" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from yh_doc_group
+    where
+
+    (Docid = (SELECT id FROM  yh_user_admin_info WHERE  user_code=#{docid}) OR  Sort=1)
+    <if test="nikename != null and nikename != ''">
+     and Gname LIKE CONCAT('%',#{nikename},'%')
+    </if>
+    ORDER BY  User_Count DESC,U_Docgroup_Id
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from yh_doc_group
+    where U_Docgroup_Id = #{uDocgroupId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.yihe.system.domain.YHDocGroup" >
+    insert into yh_doc_group (U_Docgroup_Id, Docid, Gname, 
+      User_Count, Sort)
+    values (#{uDocgroupId,jdbcType=INTEGER}, #{docid,jdbcType=INTEGER}, #{gname,jdbcType=VARCHAR}, 
+      #{userCount,jdbcType=INTEGER}, #{sort,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.yihe.system.domain.YHDocGroup" >
+    insert into yh_doc_group
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="uDocgroupId != null" >
+        U_Docgroup_Id,
+      </if>
+      <if test="docid != null" >
+        Docid,
+      </if>
+      <if test="gname != null" >
+        Gname,
+      </if>
+      <if test="userCount != null" >
+        User_Count,
+      </if>
+       <if test="establishTime != null" >
+        establishTime,
+      </if>
+      <if test="sort != null" >
+        Sort,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="uDocgroupId != null" >
+        #{uDocgroupId,jdbcType=INTEGER},
+      </if>
+      <if test="docid != null" >
+        #{docid,jdbcType=INTEGER},
+      </if>
+      <if test="gname != null" >
+        #{gname,jdbcType=VARCHAR},
+      </if>
+      <if test="userCount != null" >
+        #{userCount,jdbcType=INTEGER},
+      </if>
+       <if test="establishTime != null" >
+        #{establishTime,jdbcType=VARCHAR},
+      </if>
+      <if test="sort != null" >
+        #{sort,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.yihe.system.domain.YHDocGroup" >
+    update yh_doc_group
+    <set >
+      <if test="docid != null" >
+        Docid = #{docid,jdbcType=INTEGER},
+      </if>
+      <if test="gname != null" >
+        Gname = #{gname,jdbcType=VARCHAR},
+      </if>
+      <if test="userCount != null" >
+        User_Count = #{userCount,jdbcType=INTEGER},
+      </if>
+      <if test="sort != null" >
+        Sort = #{sort,jdbcType=INTEGER},
+      </if>
+    </set>
+    where U_Docgroup_Id = #{uDocgroupId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKeyByUserCount" parameterType="com.yihe.system.domain.YHDocGroup" >
+  UPDATE yh_doc_group SET User_Count=User_Count-1 WHERE `U_Docgroup_Id`=#{uDocgroupId}
+  </update>
+  <update id="updateByPrimaryKeyByUserCountUp" parameterType="com.yihe.system.domain.YHDocGroup" >
+  UPDATE yh_doc_group SET User_Count=User_Count+1 WHERE `U_Docgroup_Id`=#{uDocgroupId}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.yihe.system.domain.YHDocGroup" >
+    update yh_doc_group
+    set Docid = #{docid,jdbcType=INTEGER},
+      Gname = #{gname,jdbcType=VARCHAR},
+      User_Count = #{userCount,jdbcType=INTEGER},
+      Sort = #{sort,jdbcType=INTEGER}
+    where U_Docgroup_Id = #{uDocgroupId,jdbcType=INTEGER}
+  </update>
+  
+  <update id="modifyInfoUserCountJianYi">
+  
+UPDATE 
+   `yh_doc_group` 
+SET
+  
+  
+  `User_Count` = User_Count-1
+  
+   
+WHERE `U_Docgroup_Id` = #{gid}
+  
+  </update>
+</mapper>

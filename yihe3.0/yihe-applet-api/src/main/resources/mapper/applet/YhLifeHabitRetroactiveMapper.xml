@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yihe.applet.api.mapper.YhLifeHabitRetroactiveMapper" >
+  <resultMap id="BaseResultMap" type="com.yihe.applet.api.domain.YhLifeHabitRetroactive" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="gain_time" property="gainTime" jdbcType="DATE" />
+    <result column="user_code" property="userCode" jdbcType="VARCHAR" />
+    <result column="past_time" property="pastTime" jdbcType="DATE" />
+    <result column="whether" property="whether" jdbcType="INTEGER" />
+    <result column="mode" property="mode" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, gain_time, user_code, past_time, whether, mode
+  </sql>
+  
+  <!-- 查询该用户是否又补签卡 -->
+  <select id="showRetroactivecode" resultMap="BaseResultMap" parameterType="java.lang.String">
+  	select * from yh_life_habit_retroactive where past_time >= now() and user_code=#{userCode,jdbcType=VARCHAR} and whether=0 limit 1;
+  </select>
+  
+  
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from yh_life_habit_retroactive
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from yh_life_habit_retroactive
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.yihe.applet.api.domain.YhLifeHabitRetroactive" >
+    insert into yh_life_habit_retroactive (id, gain_time, user_code, 
+      past_time, whether, mode
+      )
+    values (#{id,jdbcType=INTEGER}, #{gainTime,jdbcType=DATE}, #{userCode,jdbcType=VARCHAR}, 
+      #{pastTime,jdbcType=DATE}, #{whether,jdbcType=INTEGER}, #{mode,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.yihe.applet.api.domain.YhLifeHabitRetroactive" >
+    insert into yh_life_habit_retroactive
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="gainTime != null" >
+        gain_time,
+      </if>
+      <if test="userCode != null" >
+        user_code,
+      </if>
+      <if test="pastTime != null" >
+        past_time,
+      </if>
+      <if test="whether != null" >
+        whether,
+      </if>
+      <if test="mode != null" >
+        mode,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="gainTime != null" >
+        #{gainTime,jdbcType=DATE},
+      </if>
+      <if test="userCode != null" >
+        #{userCode,jdbcType=VARCHAR},
+      </if>
+      <if test="pastTime != null" >
+        #{pastTime,jdbcType=DATE},
+      </if>
+      <if test="whether != null" >
+        #{whether,jdbcType=INTEGER},
+      </if>
+      <if test="mode != null" >
+        #{mode,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.yihe.applet.api.domain.YhLifeHabitRetroactive" >
+    update yh_life_habit_retroactive
+    <set >
+      <if test="gainTime != null" >
+        gain_time = #{gainTime,jdbcType=DATE},
+      </if>
+      <if test="userCode != null" >
+        user_code = #{userCode,jdbcType=VARCHAR},
+      </if>
+      <if test="pastTime != null" >
+        past_time = #{pastTime,jdbcType=DATE},
+      </if>
+      <if test="whether != null" >
+        whether = #{whether,jdbcType=INTEGER},
+      </if>
+      <if test="mode != null" >
+        mode = #{mode,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.yihe.applet.api.domain.YhLifeHabitRetroactive" >
+    update yh_life_habit_retroactive
+    set gain_time = #{gainTime,jdbcType=DATE},
+      user_code = #{userCode,jdbcType=VARCHAR},
+      past_time = #{pastTime,jdbcType=DATE},
+      whether = #{whether,jdbcType=INTEGER},
+      mode = #{mode,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

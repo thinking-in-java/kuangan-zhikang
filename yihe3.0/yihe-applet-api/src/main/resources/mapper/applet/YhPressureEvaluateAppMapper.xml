@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yihe.applet.api.mapper.YhPressureEvaluateAppMapper" >
+  <resultMap id="BaseResultMap" type="com.yihe.applet.api.domain.YhPressureEvaluateApp" >
+    <id column="Id" property="id" jdbcType="INTEGER" />
+    <result column="Evaluate_Data" property="evaluateData" jdbcType="VARCHAR" />
+    <result column="Evaluate_Type" property="evaluateType" jdbcType="INTEGER" />
+    <result column="Evaluate_Score" property="evaluateScore" jdbcType="VARCHAR" />
+    <result column="User_Code" property="userCode" jdbcType="VARCHAR" />
+    <result column="Evaluate_Date" property="evaluateDate" jdbcType="VARCHAR" />
+    <result column="Do_Date" property="doDate" jdbcType="VARCHAR" />
+    <result column="Is_Del" property="isDel" jdbcType="INTEGER" />
+    <result column="Evaluate_select" property="evaluateSelect" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    Id, Evaluate_Data, Evaluate_Type, Evaluate_Score, User_Code, Evaluate_Date, Do_Date, 
+    Is_Del, Evaluate_select
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from yh_pressure_evaluate
+    where Id = #{id,jdbcType=INTEGER}
+  </select>
+  
+   <select id="selectAlList" resultMap="BaseResultMap">
+    select * from yh_pressure_evaluate where Evaluate_Type =#{type,jdbcType=INTEGER} and User_Code=#{userCode,jdbcType=VARCHAR}
+  </select>
+  
+  <select id="selectCount" resultMap="BaseResultMap">
+   SELECT COUNT(1) FROM `yh_pressure_evaluate` WHERE User_Code=#{userCode,jdbcType=VARCHAR} AND Is_del=2  GROUP BY Evaluate_Type
+  </select>
+
+  <select id="findUserRecord" resultMap="BaseResultMap">
+    select * from yh_pressure_evaluate where Evaluate_Type =#{type,jdbcType=INTEGER} and User_Code=#{userCode,jdbcType=VARCHAR} and Is_del=2  order by Evaluate_Date desc limit 1
+  </select>
+
+  <select id="assessCount" resultType="integer">
+    SELECT COUNT(DISTINCT User_Code) FROM yh_pressure_evaluate WHERE Is_del=2 and Evaluate_Type=#{type,jdbcType=INTEGER}
+  </select>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from yh_pressure_evaluate
+    where Id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.yihe.applet.api.domain.YhPressureEvaluateApp" >
+    insert into yh_pressure_evaluate (Id, Evaluate_Data, Evaluate_Type, 
+      Evaluate_Score, User_Code, Evaluate_Date, 
+      Do_Date, Is_Del, Evaluate_select
+      )
+    values (#{id,jdbcType=INTEGER}, #{evaluateData,jdbcType=VARCHAR}, #{evaluateType,jdbcType=INTEGER}, 
+      #{evaluateScore,jdbcType=VARCHAR}, #{userCode,jdbcType=VARCHAR}, #{evaluateDate,jdbcType=VARCHAR}, 
+      #{doDate,jdbcType=VARCHAR}, #{isDel,jdbcType=INTEGER}, #{evaluateSelect,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.yihe.applet.api.domain.YhPressureEvaluateApp"  useGeneratedKeys="true" keyProperty="id">
+    insert into yh_pressure_evaluate
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        Id,
+      </if>
+      <if test="evaluateData != null" >
+        Evaluate_Data,
+      </if>
+      <if test="evaluateType != null" >
+        Evaluate_Type,
+      </if>
+      <if test="evaluateScore != null" >
+        Evaluate_Score,
+      </if>
+      <if test="userCode != null" >
+        User_Code,
+      </if>
+      <if test="evaluateDate != null" >
+        Evaluate_Date,
+      </if>
+      <if test="doDate != null" >
+        Do_Date,
+      </if>
+      <if test="isDel != null" >
+        Is_Del,
+      </if>
+      <if test="evaluateSelect != null" >
+        Evaluate_select,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="evaluateData != null" >
+        #{evaluateData,jdbcType=VARCHAR},
+      </if>
+      <if test="evaluateType != null" >
+        #{evaluateType,jdbcType=INTEGER},
+      </if>
+      <if test="evaluateScore != null" >
+        #{evaluateScore,jdbcType=VARCHAR},
+      </if>
+      <if test="userCode != null" >
+        #{userCode,jdbcType=VARCHAR},
+      </if>
+      <if test="evaluateDate != null" >
+        #{evaluateDate,jdbcType=VARCHAR},
+      </if>
+      <if test="doDate != null" >
+        #{doDate,jdbcType=VARCHAR},
+      </if>
+      <if test="isDel != null" >
+        #{isDel,jdbcType=INTEGER},
+      </if>
+      <if test="evaluateSelect != null" >
+        #{evaluateSelect,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.yihe.applet.api.domain.YhPressureEvaluateApp" >
+    update yh_pressure_evaluate
+    <set >
+      <if test="evaluateData != null" >
+        Evaluate_Data = #{evaluateData,jdbcType=VARCHAR},
+      </if>
+      <if test="evaluateType != null" >
+        Evaluate_Type = #{evaluateType,jdbcType=INTEGER},
+      </if>
+      <if test="evaluateScore != null" >
+        Evaluate_Score = #{evaluateScore,jdbcType=VARCHAR},
+      </if>
+      <if test="userCode != null" >
+        User_Code = #{userCode,jdbcType=VARCHAR},
+      </if>
+      <if test="evaluateDate != null" >
+        Evaluate_Date = #{evaluateDate,jdbcType=VARCHAR},
+      </if>
+      <if test="doDate != null" >
+        Do_Date = #{doDate,jdbcType=VARCHAR},
+      </if>
+      <if test="isDel != null" >
+        Is_Del = #{isDel,jdbcType=INTEGER},
+      </if>
+      <if test="evaluateSelect != null" >
+        Evaluate_select = #{evaluateSelect,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where Id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.yihe.applet.api.domain.YhPressureEvaluateApp" >
+    update yh_pressure_evaluate
+    set Evaluate_Data = #{evaluateData,jdbcType=VARCHAR},
+      Evaluate_Type = #{evaluateType,jdbcType=INTEGER},
+      Evaluate_Score = #{evaluateScore,jdbcType=VARCHAR},
+      User_Code = #{userCode,jdbcType=VARCHAR},
+      Evaluate_Date = #{evaluateDate,jdbcType=VARCHAR},
+      Do_Date = #{doDate,jdbcType=VARCHAR},
+      Is_Del = #{isDel,jdbcType=INTEGER},
+      Evaluate_select = #{evaluateSelect,jdbcType=VARCHAR}
+    where Id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

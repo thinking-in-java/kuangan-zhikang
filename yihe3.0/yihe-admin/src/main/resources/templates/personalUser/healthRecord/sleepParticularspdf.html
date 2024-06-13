@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	  <link rel="stylesheet"  th:href="@{/assets/libs/layui/css/layui.css}" />
+    <link rel="stylesheet"  th:href="@{/assets/module/admin.css}"  />
+	</head>
+	<style>
+		
+		.layui-table th{
+background-color: #EDF4FF;
+}
+.layui-elem-quote {
+    margin-bottom: 10px;
+    padding: 15px;
+    line-height: 22px;
+    border-radius: 0 2px 2px 0;
+    background-color: #E6F7FF;
+}
+	</style>
+	<body>
+		
+		
+  
+  
+  
+  <div class="layui-container" style="background-color: #ffffff;">
+  
+ 
+ 
+
+ <div class="layui-row">
+    <div class="layui-col-xs6">
+      <div class="grid-demo grid-demo-bg1" style="padding-top: 20px;"><h1>睡眠评估报告</h1></div>
+    </div>
+    <div class="layui-col-xs6">
+      <div class="grid-demo" style="float: right;"><img style="height="300px"; width="300px";" th:src="${getrepotimg}"></div>
+    </div>
+  </div>
+ 
+ <table class="layui-table" lay-size="lg">
+  <thead>
+    <tr>
+      <th>用户编码</th>
+      <th>姓名</th>
+      <th>性别</th>
+      <th>评估时年龄</th>
+      <th>评估日期</th>
+      <th>评估结果</th>
+    </tr> 
+  </thead>
+  <tbody>
+    <tr>
+    
+     <td id="userCode">[[${port.userCode}]]</td>
+      <td id="userName">[[${port.userName}]]</td>
+      <td id="gender">[[${port.gender}  == 1 ?'男':'女' ]]</td>
+      <td id="age">[[${port.age}]]</td>
+      <td id="qtime">[[${#dates.format(port.qtime, 'yyyy-MM-dd')}]]</td>
+      <td id="reportLevel">[[${port.reportLevel}]]</td>
+    </tr>
+  </tbody>
+</table>
+ 
+  <br />
+  <p style="color: #38A4FF;">此次的睡眠质量得分：<span id="reportScore">[[${port.reportScore}]]</span>分</p>
+  
+  
+    <br />
+   
+   
+   <div class="layui-row" style="width: 100%;">
+    <div style="width: 33%;float: left;">
+      <div class="grid-demo grid-demo-bg1" style="text-align: center;" id="difference" >&nbsp;<i class='layui-icon layui-icon-triangle-d' th:if="${port.reportLevel} eq '差'"></i></div>
+    </div>
+      <div  style="width: 33%;float: left;">
+      <div class="grid-demo" style="text-align: center;" id="ordinary" >&nbsp; <i class='layui-icon layui-icon-triangle-d' th:if="${port.reportLevel} eq '一般'"></i> </div>
+    </div>
+    <div  style="width: 33%;float: left;">
+      <div class="grid-demo grid-demo-bg1" style="text-align: center;" id="well" >&nbsp;<i class='layui-icon layui-icon-triangle-d' th:if="${port.reportLevel} eq '良好'"></i></div>
+    </div>
+  </div>
+  
+  
+   <div class="layui-row" style="width: 100%;">
+    <div style="width: 33%;float: left;">
+      <div class="grid-demo grid-demo-bg1" style="background-color: #ec5d51;text-align: center;"><span style="color: #f7f7f7">差</span></div>
+    </div>
+    <div  style="width: 33%;float: left;">
+      <div class="grid-demo" style="background-color: #38a4ff;text-align: center;"><span style="color: #f7f7f7">一般</span></div>
+    </div>
+    <div  style="width: 33%;float: left;">
+      <div class="grid-demo grid-demo-bg1" style="background-color:#43d9b8;text-align: center;"><span style="color: #f7f7f7">良好</span></div>
+    </div>
+  </div>
+  
+  <div id="maintain" th:if="${#lists.isEmpty(port.vojo)}">
+  	<br /><br /><blockquote class='layui-elem-quote'>
+  	<h2>请继续保持</h2>
+  	</blockquote><br /><br />
+  	<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[[${port.result}]]</p>
+  </div>
+  
+  <div id="extant" th:if="${not #lists.isEmpty(port.vojo)}">
+  		<br /><br />
+  		<blockquote class='layui-elem-quote'><h2>主要存在问题</h2></blockquote><br />  
+  		 	<div class='layui-row'>
+  		 	<div class='layui-col-xs6' style="margin-top: 20px;" th:each="result : ${result}">
+	  		 	<div class='grid-demo grid-demo-bg1'>
+	  		 	<i class='layui-icon layui-icon-circle-dot' style='color: red;'></i>
+	  		 	<span style='padding-left: 40px;'>[[${result}]]</span>
+	  		 	</div>
+  		 	</div>
+  		 		<br />
+  		 	</div>
+  		 <br />
+  		 <p><h3>推荐：由本人或家人协助完成为期2周的睡眠日记。</h3></p>
+  </div>
+  
+  <div id="content" th:if="${not #lists.isEmpty(port.vojo)}">
+  		<br /><br />
+  		<div th:each="title : ${port.vojo}">
+  		<blockquote class='layui-elem-quote'>
+  			<h2>[[${title.headline}]]</h2>
+  		</blockquote>
+  			<br />
+  			
+  			
+  			<span th:each="subtitle : ${title.subtitle}" th:if="${title.headline} ne '医生干预'">
+	  			<p  >
+	  				<br /><p><h3 style='color: #38A4FF'>※[[${subtitle.subtitle}]]</h3></p><br /><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[[${subtitle.content}]] </p>
+	  			</p>
+  			</span>
+  			
+  			<span th:each="subtitle : ${title.subtitle}" th:if="${title.headline} eq '医生干预'" >
+	  			<p >
+	  				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[[${subtitle.content}]]
+	  			</p>
+	  			<br />
+  			</span>
+  			
+  		</div>
+  </div> 
+  
+  
+  
+ <br />
+<hr class="layui-bg-green">
+ <br />
+<p style="height: 200px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;人的一生，约有1/3的时间在睡眠中度过，睡眠使得大脑、身体得到休息，有助于日常的工作和学习；科学提高睡眠质量，是良好工作学习生活状态的前提。结合自身实际情况，在苏醒时间稳定的情况下，调整睡眠周期，找到最适合自己的睡眠时长，无需刻意追求“8小时”。</p>
+
+ </div>
+ 
+  
+  
+  
+	</body>
+	<script type="text/javascript" th:src="@{/assets/libs/layui/layui.js}"></script>
+<script type="text/javascript" th:src="@{/assets/js/common.js}"></script>
+<script type="text/javascript" th:src="@{/assets/js/jquery-1.11.1.js}"></script>
+
+<!-- <script type="text/javascript">
+
+$('#back').click(function(){
+	window.location.href="/manage/usertosee/sleep?usercode="+$("#userCode").html()+"&type=1";
+})
+
+$(function(){
+	var id = [[${id}]];
+	 $.ajax({
+   		 type:'post',
+   		 url:'/YhSleepReportController/showSleepDetail',
+   		 data:{id:id},
+   		success : function(data){
+   			$("#age").html(data.data.age);
+			$("#userCode").html(data.data.userCode);
+			$("#userName").html(data.data.userName);
+			$("#reportLevel").html(data.data.reportLevel);
+			$("#qtime").html(data.data.qtime);
+			$("#reportScore").html(data.data.reportScore);
+			if(data.data.gender=="1"){
+				$("#gender").html("男");
+			}else{
+				$("#gender").html("女");
+			}
+			if(data.data.reportLevel=="差"){
+				$("#difference").html("<i class='layui-icon layui-icon-triangle-d'></i>");
+			}else if(data.data.reportLevel=="一般"){
+				$("#ordinary").html("<i class='layui-icon layui-icon-triangle-d'></i>");
+			}else{
+				$("#well").html("<i class='layui-icon layui-icon-triangle-d'></i>");
+			}
+			
+			if(data.data.vojo==null || data.data.vojo==""){
+				$("#maintain").html("<br /><br /><blockquote class='layui-elem-quote'><h2>请继续保持</h2></blockquote><br /><br /><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"+data.data.result+" </p>");
+			}else{
+				var result=data.data.result.split(',');
+				var extant="";
+				for(var i=0;i<result.length-1;i++){
+					extant+="<div class='layui-col-xs6'><div class='grid-demo grid-demo-bg1'><i class='layui-icon layui-icon-circle-dot' style='color: red;'></i><span style='padding-left: 40px;'>"+result[i]+"</span></div></div><br />";
+				}
+				$("#extant").html("<br /><br /><blockquote class='layui-elem-quote'><h2>主要存在问题</h2></blockquote><br />   <div class='layui-row'>"+extant+"</div><br /><p><h3>推荐：由本人或家人协助完成为期2周的睡眠日记。</h3></p>");
+				var content="";
+				for(var j=0;j<data.data.vojo.length;j++){
+					
+					var particulars="<br /><br /><blockquote class='layui-elem-quote'><h2>"+data.data.vojo[j].headline+"</h2></blockquote>";
+					if(data.data.vojo[j].headline=="医生干预"){
+						for(var k=0;k<data.data.vojo[j].subtitle.length;k++){
+							particulars+="<br /><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"+data.data.vojo[j].subtitle[k].content+" </p>";
+						}
+					}else{
+						for(var k=0;k<data.data.vojo[j].subtitle.length;k++){
+							particulars+="<br /><p><h3 style='color: #38A4FF'>※"+data.data.vojo[j].subtitle[k].subtitle+"</h3></p><br /><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"+data.data.vojo[j].subtitle[k].content+" </p>";
+						}
+					}
+					content+=particulars;
+				}
+				$("#content").html(content);
+			
+			}
+				
+			
+   		}
+   	 })
+})
+
+
+
+</script> -->
+	
+	
+</html>

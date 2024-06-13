@@ -1,0 +1,236 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yihe.applet.api.mapper.YhOrgTreeAppMapper" >
+  <resultMap id="BaseResultMap" type="com.yihe.applet.api.domain.YhOrgTreeApp" >
+    <id column="Org_Code" property="orgCode" jdbcType="VARCHAR" />
+    <result column="Org_Name" property="orgName" jdbcType="VARCHAR" />
+    <result column="Super_Org_Code" property="superOrgCode" jdbcType="VARCHAR" />
+    <result column="Is_Del" property="isDel" jdbcType="INTEGER" />
+    <result column="Add_Date" property="addDate" jdbcType="DATE" />
+    <result column="Class_Number" property="classNumber" jdbcType="INTEGER" />
+    <result column="User_Code" property="userCode" jdbcType="VARCHAR" />
+    <result column="Docdor_Code" property="docdorCode" jdbcType="VARCHAR" />
+    <result column="org_tree_upload_id" property="orgTreeUploadId" jdbcType="INTEGER" />
+    <result column="org_customer_code" property="orgCustomerCode" jdbcType="VARCHAR" />
+    <result column="province" property="province" jdbcType="VARCHAR" />
+    <result column="city" property="city" jdbcType="VARCHAR" />
+    <result column="county" property="county" jdbcType="VARCHAR" />
+    <result column="standby" property="standby" jdbcType="VARCHAR" />
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="com.yihe.applet.api.domain.YhOrgTreeApp" extends="BaseResultMap" >
+    <result column="Org_Note" property="orgNote" jdbcType="LONGVARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    Org_Code, Org_Name, Super_Org_Code, Is_Del, Add_Date, Class_Number, User_Code, Docdor_Code, 
+    org_tree_upload_id, org_customer_code, province, city, county, standby
+  </sql>
+  <sql id="Blob_Column_List" >
+    Org_Note
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from yh_org_tree
+    where Org_Code = #{orgCode,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from yh_org_tree
+    where Org_Code = #{orgCode,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.yihe.applet.api.domain.YhOrgTreeApp" >
+    insert into yh_org_tree (Org_Code, Org_Name, Super_Org_Code, 
+      Is_Del, Add_Date, Class_Number, 
+      User_Code, Docdor_Code, org_tree_upload_id, 
+      org_customer_code, province, city, 
+      county, standby, Org_Note
+      )
+    values (#{orgCode,jdbcType=VARCHAR}, #{orgName,jdbcType=VARCHAR}, #{superOrgCode,jdbcType=VARCHAR}, 
+      #{isDel,jdbcType=INTEGER}, #{addDate,jdbcType=DATE}, #{classNumber,jdbcType=INTEGER}, 
+      #{userCode,jdbcType=VARCHAR}, #{docdorCode,jdbcType=VARCHAR}, #{orgTreeUploadId,jdbcType=INTEGER}, 
+      #{orgCustomerCode,jdbcType=VARCHAR}, #{province,jdbcType=VARCHAR}, #{city,jdbcType=VARCHAR}, 
+      #{county,jdbcType=VARCHAR}, #{standby,jdbcType=VARCHAR}, #{orgNote,jdbcType=LONGVARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.yihe.applet.api.domain.YhOrgTreeApp" >
+    insert into yh_org_tree
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="orgCode != null" >
+        Org_Code,
+      </if>
+      <if test="orgName != null" >
+        Org_Name,
+      </if>
+      <if test="superOrgCode != null" >
+        Super_Org_Code,
+      </if>
+      <if test="isDel != null" >
+        Is_Del,
+      </if>
+      <if test="addDate != null" >
+        Add_Date,
+      </if>
+      <if test="classNumber != null" >
+        Class_Number,
+      </if>
+      <if test="userCode != null" >
+        User_Code,
+      </if>
+      <if test="docdorCode != null" >
+        Docdor_Code,
+      </if>
+      <if test="orgTreeUploadId != null" >
+        org_tree_upload_id,
+      </if>
+      <if test="orgCustomerCode != null" >
+        org_customer_code,
+      </if>
+      <if test="province != null" >
+        province,
+      </if>
+      <if test="city != null" >
+        city,
+      </if>
+      <if test="county != null" >
+        county,
+      </if>
+      <if test="standby != null" >
+        standby,
+      </if>
+      <if test="orgNote != null" >
+        Org_Note,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="orgCode != null" >
+        #{orgCode,jdbcType=VARCHAR},
+      </if>
+      <if test="orgName != null" >
+        #{orgName,jdbcType=VARCHAR},
+      </if>
+      <if test="superOrgCode != null" >
+        #{superOrgCode,jdbcType=VARCHAR},
+      </if>
+      <if test="isDel != null" >
+        #{isDel,jdbcType=INTEGER},
+      </if>
+      <if test="addDate != null" >
+        #{addDate,jdbcType=DATE},
+      </if>
+      <if test="classNumber != null" >
+        #{classNumber,jdbcType=INTEGER},
+      </if>
+      <if test="userCode != null" >
+        #{userCode,jdbcType=VARCHAR},
+      </if>
+      <if test="docdorCode != null" >
+        #{docdorCode,jdbcType=VARCHAR},
+      </if>
+      <if test="orgTreeUploadId != null" >
+        #{orgTreeUploadId,jdbcType=INTEGER},
+      </if>
+      <if test="orgCustomerCode != null" >
+        #{orgCustomerCode,jdbcType=VARCHAR},
+      </if>
+      <if test="province != null" >
+        #{province,jdbcType=VARCHAR},
+      </if>
+      <if test="city != null" >
+        #{city,jdbcType=VARCHAR},
+      </if>
+      <if test="county != null" >
+        #{county,jdbcType=VARCHAR},
+      </if>
+      <if test="standby != null" >
+        #{standby,jdbcType=VARCHAR},
+      </if>
+      <if test="orgNote != null" >
+        #{orgNote,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.yihe.applet.api.domain.YhOrgTreeApp" >
+    update yh_org_tree
+    <set >
+      <if test="orgName != null" >
+        Org_Name = #{orgName,jdbcType=VARCHAR},
+      </if>
+      <if test="superOrgCode != null" >
+        Super_Org_Code = #{superOrgCode,jdbcType=VARCHAR},
+      </if>
+      <if test="isDel != null" >
+        Is_Del = #{isDel,jdbcType=INTEGER},
+      </if>
+      <if test="addDate != null" >
+        Add_Date = #{addDate,jdbcType=DATE},
+      </if>
+      <if test="classNumber != null" >
+        Class_Number = #{classNumber,jdbcType=INTEGER},
+      </if>
+      <if test="userCode != null" >
+        User_Code = #{userCode,jdbcType=VARCHAR},
+      </if>
+      <if test="docdorCode != null" >
+        Docdor_Code = #{docdorCode,jdbcType=VARCHAR},
+      </if>
+      <if test="orgTreeUploadId != null" >
+        org_tree_upload_id = #{orgTreeUploadId,jdbcType=INTEGER},
+      </if>
+      <if test="orgCustomerCode != null" >
+        org_customer_code = #{orgCustomerCode,jdbcType=VARCHAR},
+      </if>
+      <if test="province != null" >
+        province = #{province,jdbcType=VARCHAR},
+      </if>
+      <if test="city != null" >
+        city = #{city,jdbcType=VARCHAR},
+      </if>
+      <if test="county != null" >
+        county = #{county,jdbcType=VARCHAR},
+      </if>
+      <if test="standby != null" >
+        standby = #{standby,jdbcType=VARCHAR},
+      </if>
+      <if test="orgNote != null" >
+        Org_Note = #{orgNote,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where Org_Code = #{orgCode,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.yihe.applet.api.domain.YhOrgTreeApp" >
+    update yh_org_tree
+    set Org_Name = #{orgName,jdbcType=VARCHAR},
+      Super_Org_Code = #{superOrgCode,jdbcType=VARCHAR},
+      Is_Del = #{isDel,jdbcType=INTEGER},
+      Add_Date = #{addDate,jdbcType=DATE},
+      Class_Number = #{classNumber,jdbcType=INTEGER},
+      User_Code = #{userCode,jdbcType=VARCHAR},
+      Docdor_Code = #{docdorCode,jdbcType=VARCHAR},
+      org_tree_upload_id = #{orgTreeUploadId,jdbcType=INTEGER},
+      org_customer_code = #{orgCustomerCode,jdbcType=VARCHAR},
+      province = #{province,jdbcType=VARCHAR},
+      city = #{city,jdbcType=VARCHAR},
+      county = #{county,jdbcType=VARCHAR},
+      standby = #{standby,jdbcType=VARCHAR},
+      Org_Note = #{orgNote,jdbcType=LONGVARCHAR}
+    where Org_Code = #{orgCode,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.yihe.applet.api.domain.YhOrgTreeApp" >
+    update yh_org_tree
+    set Org_Name = #{orgName,jdbcType=VARCHAR},
+      Super_Org_Code = #{superOrgCode,jdbcType=VARCHAR},
+      Is_Del = #{isDel,jdbcType=INTEGER},
+      Add_Date = #{addDate,jdbcType=DATE},
+      Class_Number = #{classNumber,jdbcType=INTEGER},
+      User_Code = #{userCode,jdbcType=VARCHAR},
+      Docdor_Code = #{docdorCode,jdbcType=VARCHAR},
+      org_tree_upload_id = #{orgTreeUploadId,jdbcType=INTEGER},
+      org_customer_code = #{orgCustomerCode,jdbcType=VARCHAR},
+      province = #{province,jdbcType=VARCHAR},
+      city = #{city,jdbcType=VARCHAR},
+      county = #{county,jdbcType=VARCHAR},
+      standby = #{standby,jdbcType=VARCHAR}
+    where Org_Code = #{orgCode,jdbcType=VARCHAR}
+  </update>
+</mapper>

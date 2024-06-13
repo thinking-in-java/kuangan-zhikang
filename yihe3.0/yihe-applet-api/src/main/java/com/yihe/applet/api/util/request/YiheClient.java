@@ -1,0 +1,54 @@
+package com.yihe.applet.api.util.request;
+
+
+
+import com.alibaba.fastjson.JSONObject;
+import com.yihe.applet.api.util.response.AbstractHealthAiResData;
+import com.yihe.applet.api.util.response.HealthAiResponse;
+
+/**
+ * API 执行接口
+ *
+ * @author lll
+ */
+public interface YiheClient {
+
+
+    /**
+     * 执行API请求
+     * @param reqDataJson 请求业务数据json字符串
+     * @param url         API请求地址
+     * @return 返回Json
+     */
+    String execute(String reqDataJson, String url);
+
+
+    /**
+     * 执行API请求
+     *
+     * @param reqData 请求业务数据Map
+     * @param url     API请求地址
+     * @return 返回Json
+     */
+    String execute(JSONObject reqData, String url);
+
+
+    /**
+     * 执行API请求
+     *
+     * @param reqData 请求业务数据
+     * @param url     API请求地址
+     * @param <T>     返回对象
+     * @return API Response
+     */
+    <T extends AbstractHealthAiResData> HealthAiResponse<T> execute(AbstractHealthAiReqData reqData, String url);
+
+
+    /**
+     * 获取最后一次的请求Json
+     *
+     * @return 最后一次的请求Json
+     */
+    String getLastRequestJson();
+
+}

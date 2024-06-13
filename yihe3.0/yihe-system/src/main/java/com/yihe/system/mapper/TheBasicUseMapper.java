@@ -1,0 +1,66 @@
+package com.yihe.system.mapper;
+
+import com.yihe.system.domain.TheBasicUse;
+
+public interface TheBasicUseMapper {
+    int allprople(TheBasicUse theBasicUse);
+    int selectjiankang(TheBasicUse theBasicUse);
+    int selectjiangkangtimes(TheBasicUse theBasicUse);
+    int selectchangjian(TheBasicUse theBasicUse);
+    int selectchangjiantimes(TheBasicUse theBasicUse);
+    int selectAxing(TheBasicUse theBasicUse);
+    int selectAxingtimes(TheBasicUse theBasicUse);
+    int selectPSTRI(TheBasicUse theBasicUse);
+    int selectPSTRItimes(TheBasicUse theBasicUse);
+    int selectxinlijiankang(TheBasicUse theBasicUse);
+    int selectxinlijiankangtimes(TheBasicUse theBasicUse);
+    int selectsleeprepout(TheBasicUse theBasicUse);
+    int selectsleeprepouttimes(TheBasicUse theBasicUse);
+    int selectxiguanpinggu(TheBasicUse theBasicUse);
+    int selectxiguanpinggutimes(TheBasicUse theBasicUse);
+    int selecttiwen(TheBasicUse theBasicUse);
+    int selecttiwentimes(TheBasicUse theBasicUse);
+    int selectizhong(TheBasicUse theBasicUse);
+    int selecttizhongtimes(TheBasicUse theBasicUse);
+    int selecxueya(TheBasicUse theBasicUse);
+    int selectxueyatimes(TheBasicUse theBasicUse);
+    int selecxuetang(TheBasicUse theBasicUse);
+    int selectxuetangtimes(TheBasicUse theBasicUse);
+    int selecxueyang(TheBasicUse theBasicUse);
+    int selectxueyangtimes(TheBasicUse theBasicUse);
+    int selecxinlv(TheBasicUse theBasicUse);
+    int selectxinlvtimes(TheBasicUse theBasicUse);
+    int selectizhi(TheBasicUse theBasicUse);
+    int selecttizhitimes(TheBasicUse theBasicUse);
+    int selecxuezhi(TheBasicUse theBasicUse);
+    int selectxuezhitimes(TheBasicUse theBasicUse);
+    int selecshengongneg(TheBasicUse theBasicUse);
+    int selectshengongnegtimes(TheBasicUse theBasicUse);
+    int selecgangongneng(TheBasicUse theBasicUse);
+    int selectgangongtimes(TheBasicUse theBasicUse);
+    int selecxindaintu(TheBasicUse theBasicUse);
+    int selectxindaintutimes(TheBasicUse theBasicUse);
+    int selecnianjian(TheBasicUse theBasicUse);
+    int selectnianjiantimes(TheBasicUse theBasicUse);
+    int selecqitazhibiao(TheBasicUse theBasicUse);
+    int selectqitazhibiaotimes(TheBasicUse theBasicUse);
+    int selecyinshiriji(TheBasicUse theBasicUse);
+    int selectyinshirijitimes(TheBasicUse theBasicUse);
+    int selecyundongriji(TheBasicUse theBasicUse);
+    int selectyundongrijitimes(TheBasicUse theBasicUse);
+    int selecshuimianriji(TheBasicUse theBasicUse);
+    int selectshuimianrijitimes(TheBasicUse theBasicUse);
+    int selecgaoxueya(TheBasicUse theBasicUse);
+    int selectgaoxueyatimes(TheBasicUse theBasicUse);
+    int selectgaoxuetang(TheBasicUse theBasicUse);
+    int selectgaoxuetangtimes(TheBasicUse theBasicUse);
+    int selectgaoxuezhi(TheBasicUse theBasicUse);
+    int selectgaoxuezhitimes(TheBasicUse theBasicUse);
+    int selectgaoniansuan(TheBasicUse theBasicUse);
+    int selectgaoniansuantimes(TheBasicUse theBasicUse);
+
+    int selectjianzhi(TheBasicUse theBasicUse);
+    int selectjianzhitimes(TheBasicUse theBasicUse);
+    int selectxiguanriji(TheBasicUse theBasicUse);
+    int selectxiguanrijitimes(TheBasicUse theBasicUse);
+}

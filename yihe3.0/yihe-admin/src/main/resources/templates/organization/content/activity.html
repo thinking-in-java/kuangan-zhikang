@@ -1,0 +1,275 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>精彩活动</title>
+   <link rel="stylesheet"  th:href="@{/assets/libs/layui/css/layui.css}" />
+    <link rel="stylesheet"  th:href="@{/assets/module/admin.css}"  />
+     <!-- 注意：如果你直接复制所有代码到本地，上述css路径需要改成你本地的 -->
+  <style type="text/css">
+
+
+	#sousuo td{
+		padding-right: 5px;
+		padding-top: 5px;
+	}
+	#sousuo .layui-input {
+ 		height: 40px;
+	}
+    	.layui-table-box {
+ min-height:425px;
+}
+  </style>
+</head>
+<body> 
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div class="layui-card-body">
+<div class="demoTable">
+		 <!-- 搜索开始 -->
+		 
+		 <div class="layui-form-item">
+		 
+		 <div class="layui-inline" style="margin-left: -59px;">
+					<label class="layui-form-label">状态:</label>
+					<div class="layui-input-block" style="width: 270px;">
+						<form class="layui-form" >
+							<select lay-filter="aihao" id="eventType">
+								<option value="">全部</option>
+						       <option value="1">已发布</option>
+						       <option value="2">草稿</option>
+						    </select>
+						</form>
+					</div>
+				</div>
+				
+				
+		 		<div class="layui-inline" style="margin-left: -35px;">
+					<label class="layui-form-label">在线报名:</label>
+					<div class="layui-input-block" style="width: 270px;">
+						<form class="layui-form" >
+							<select lay-filter="aihao" id="center">
+								<option value="">全部</option>
+						       <option value="1">已开启</option>
+						       <option value="2">未开启</option>
+						    </select>
+						</form>
+					</div>
+				</div>
+				
+				<div class="layui-inline" style="margin-left: -59px;">
+					<label class="layui-form-label">名称:</label>
+					<div class="layui-input-block" style="width: 270px;">
+						<input class="layui-input" name="eventName" id="eventName" placeholder="请输入" autocomplete="off">
+					</div>
+				</div>
+				
+					  <button class="layui-btn" data-type="reload" onclick="solo()"><i class="layui-icon"></i>搜索</button>
+					  <button class="layui-btn layui-btn-primary" id="btnempty" lay-submit="" lay-filter="reset">清除</button>
+					  <div class="layui-inline" style="float: right;" id="frontpage">
+				   	  <a target="_self" href="/manage/content/activityadd?id=0"><button class="layui-btn icon-btn"><i class="layui-icon">&#xe654;</i>添加</button></a>
+          
+		            </div>   
+					</div>
+					
+<!-- 搜索结束 -->
+		</div>
+	<br>
+ 
+<table id="LAY_table_user" lay-filter="demo"></table>
+</div>   
+</div> 
+</div>   
+<script type="text/html" id="usernameTpl">
+  <a class="layui-table-link" onclick="show('{{d.pactId}}');">{{ d.pactTitle }}</a>
+</script>
+
+<script type="text/html" id="barDemo">
+    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="del">删除</a>
+ <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="edit">修改</a>
+<a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="export">导出</a>
+</script>
+
+         
+<script type="text/html" id="temp_img">
+  <img onclick="openImg('{{d.eventImg}}');"  src="{{d.eventImg}}" >
+</script>      
+          <!-- js部分 -->
+<script type="text/javascript" th:src="@{/assets/libs/layui/layui.js}"></script>
+<script type="text/javascript" th:src="@{/assets/js/common.js}"></script>
+<!-- 注意：如果你直接复制所有代码到本地，上述js路径需要改成你本地的 -->
+<script>
+
+function openImg(url) {
+    layer.open({
+        type: 1,
+        title: ['封面图片展示'],
+        shadeClose: true,
+        area: ['600px', 'auto'], //宽高
+        content: '<img src="' + url + '" height="auto" width="600px">'
+    });
+}
+
+layui.use(['layer', 'form', 'admin', 'table', 'util'], function () {
+    var $ = layui.jquery;
+    var layer = layui.layer;
+    var form = layui.form;
+    var admin = layui.admin;
+    var util = layui.util;
+    table = layui.table;
+  //搜索的方法
+   solo=function(){
+     table.reload('tableBank', {
+        where: { //设定异步数据接口的额外参数，任意设
+        'eventName':$("#eventName").val(),
+        'eventType':$("#eventType").val(),
+        'center':$("#center").val(),
+       }
+      });
+     
+    }
+    
+   //清除按钮
+   $("#btnempty").click(function(){
+   	window.location.reload();
+   })
+  
+	table.on('tool(demo)', function(obj) { //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
+		var data = obj.data; //获得当前行数据
+		var layEvent = obj.event; //获得 lay-event 对应的值
+		var tr = obj.tr; //获得当前行 tr 的DOM对象
+
+		if (layEvent === 'del') { //删除
+			layer.confirm('真的删除行么', function(index) {
+				obj.del(); //删除对应行（tr）的DOM结构，并更新缓存
+				layer.close(index);
+				//向服务端发送删除指令.
+				var url = "/YhEventEnroll/clientdele";
+				var data2 = {
+					'id' : data.id
+				};
+				$.post(url, data2, function(e) {
+					table.reload('tableBank');
+					if(e.data==1){
+						layer.msg("删除成功");
+						tableReload();//重载表格的方法
+					}else{
+						layer.msg("删除失败");
+					}
+						
+					
+				})
+			});
+		} else if (layEvent === 'edit') {
+			window.location.href="/manage/content/activityadd?id="+data.id;
+		}else if(layEvent === 'export'){
+			if(obj.data.total==0){
+				layer.msg("该活动无人报名!");
+			}else{
+				 window.location.href="/YhEventEnroll/exportOperateLog?id="+data.id;
+			}
+			
+		}
+	});
+    
+  //方法级渲染
+	table.render({
+		elem : '#LAY_table_user',
+		url : '/YhEventEnroll/selectEnrollAll',
+		method:'post',
+		cols : [ [ {type:'numbers'},{
+			field : 'eventName',
+			title : '活动名',
+		},
+		{
+            title: '在线报名', templet: function (d) {
+                var strs = [
+                    '<span style="color: #52c41a;">已开启</span>',
+                    '<span style="color:red">未开启</span>'	
+                ];
+                if(d.startDate==null || d.startDate==""){
+                    return strs[1];
+                }else{
+                    return strs[0];
+                }
+            }, align: 'center', width: 100
+        },
+        {
+            templet: function (d) {
+            	if(d.startDate==null){
+            		return "--";
+            	}
+                return util.toDateString(d.startDate);
+            }, title: '开始时间', align: 'startDate'
+        },{
+            templet: function (d) {
+            	if(d.registerEndDate==null){
+            		return "--";
+            	}
+                return util.toDateString(d.registerEndDate);
+            }, title: '结束时间', align: 'registerEndDate'
+        },  {
+			field : 'total',
+			title : '报名数',
+			width: 100, 
+		},{
+			title: '封面图片'
+			, templet: '#temp_img'
+			, field: 'eventImg' 
+		},{
+            templet: function (d) {
+                return util.toDateString(d.publicDate);
+            }, title: '创建日期', align: 'publicDate'
+        },{
+            title: '状态', templet: function (d) {
+                var strs = [
+                    '<span style="color:red">草稿</span>',
+                    '<span style="color: #52c41a;">已发布</span>'
+                ];
+                if(d.eventType==1 || d.startDate=="1"){
+                    return strs[1];
+                }else{
+                    return strs[0];
+                }
+            }, align: 'center', width: 100
+        },{
+			fixed : 'right',
+			title : '操作',
+			align : 'center',
+			toolbar : '#barDemo'
+		} ] ],
+		id : 'tableBank',
+		page : true,
+		done: function(res, curr, count){
+	         if(count > 10) {
+	          $(".layui-table-page").show();
+	         }else {
+	          $(".layui-table-page").hide();
+	         }
+	       }
+	});
+
+    // 搜索
+    $('#btnSearchAuth').click(function () {
+        var keyword = $('#edtSearchAuth').val();
+        if (keyword) {
+            insTb.filterData(keyword);
+        } else {
+            insTb.clearFilter();
+        }
+    });
+
+ 
+
+    
+
+  
+  
+});
+
+
+
+
+</script>
+
+</body>
+</html>

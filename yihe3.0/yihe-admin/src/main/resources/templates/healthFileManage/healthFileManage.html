@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, maximum-scale=1">
+<title>健康档案管理</title>
+<link rel="stylesheet" th:href="@{/assets/libs/layui/css/layui.css}" />
+<link rel="stylesheet" th:href="@{/assets/module/admin.css}" />
+<!-- js部分 -->
+
+<style type="text/css">
+.layui-form-label {
+
+    float: left;
+    display: block;
+    padding: 9px 5px;
+    width: 80px;
+    font-weight: 400;
+    line-height: 20px;
+    text-align: right;
+
+}
+.layui-form-onswitch {
+
+    border-color: rgba(24, 144, 255, 1);
+    background-color: rgba(24, 144, 255, 1);
+
+}
+.theme-colorful{
+	margin: 20px;
+}
+.layui-table-box {
+	min-height:500px;
+}
+.layui-form-switch {
+    position: relative;
+    height: 22px;
+    line-height: 22px;
+    min-width: 35px;
+    padding: 0 5px;
+    margin-top: 0px;
+    border: 1px solid #d2d2d2;
+    border-radius: 20px;
+    cursor: pointer;
+    background-color: #fff;
+    -webkit-transition: .1s linear;
+    transition: .1s linear;
+}
+</style>
+
+</head>
+<body>
+	<!-- 加载动画 -->
+	<div class="page-loading">
+		<div class="ball-loader">
+			<span></span><span></span><span></span><span></span>
+		</div>
+	</div>
+	 
+	 
+<div class="layui-row layui-col-space15"  style="padding: 4px;">
+	<div class="layui-card">
+
+	<input id="guishu" type="hidden" value="">
+	<!-- 注册卡头部搜索 -->
+	<div id="search-header">
+		<form id="regForm" lay-filter="regForm" class="layui-form queryForm">
+			<div class="layui-form-item">
+
+				<div class="layui-inline" style="margin-left: -59px;">
+					<label class="layui-form-label">归属</label>
+					<div class="layui-input-block" style="width: 270px;">
+						<input type="text" id="tree" lay-filter="tree" class="layui-input">
+					</div>
+				</div>
+
+
+				<div class="layui-inline">
+					<label class="layui-form-label" style="margin-left: -26px;">有效性</label>
+					<div class="layui-input-inline" style="width: 110px">
+						<select id="validity" name="validity" lay-filter="" lay-search>
+							<option value="">全部</option>
+							<option value="Y">未过期</option>
+							<option value="N">已过期</option>
+						</select>
+					</div>
+				</div>
+				
+				<div class="layui-inline">
+					<label class="layui-form-label" style="margin-left: -38px;">状态</label>
+					<div class="layui-input-inline" style="width: 80px;">
+						<select id="lockFlag" name="lockFlag" lay-filter="" lay-search>
+							<option value="">全部</option>
+							<option value="2">正常</option>
+							<option value="1">锁定</option>
+						</select>
+					</div>
+				</div>
+				
+				 <div class="layui-inline" style="margin-left: 3px;">
+                        <label class="layui-form-label w-auto">姓名:</label>
+                        <div class="layui-input-inline">
+                            <input id="name" class="layui-input" placeholder="请输入" style="width: 124px;"/>
+                        </div>
+                    </div>
+                    
+                    <div class="layui-inline" style="margin-left: -76px;">
+                        <label class="layui-form-label w-auto">账号:</label>
+                        <div class="layui-input-inline">
+                            <input id=userName class="layui-input" placeholder="请输入" style="width: 150px;"/>
+                        </div>
+                    </div>
+
+					<div class="layui-inline">
+						<label class="layui-form-label">建档时间：</label>
+						<div class="layui-input-inline" style="width: 297px;">  
+							<input type="text" class="layui-input" id="test10" name="startTime" placeholder=" - ">
+						</div>
+					</div>
+
+
+		 	<!-- <div class="layui-inline" style="margin-left: -24px;">
+					<label class="layui-form-label"></label>
+					<div class="layui-input-inline"
+						style="width: 148px; margin-left: -119px;">
+						<button class="layui-btn" lay-submit=""
+							lay-filter="regManageQueryBtn"><i class="layui-icon layui-icon-search"></i>搜索</button> 
+							<i class="layui-icon layui-icon-search"></i>搜索</button>  
+							
+						<button class="layui-btn" lay-submit=""
+							lay-filter="reset">清除</button>
+					</div>
+				</div> -->
+				
+				
+		 <div class="layui-inline" style="padding-left: 20px;">
+				<button class="layui-btn icon-btn sousuoDN" lay-submit="" lay-filter="regManageQueryBtn"><i class="layui-icon"></i>搜索</button>
+				<button class="layui-btn layui-btn-primary" lay-submit=""
+							lay-filter="reset">清除</button>
+		
+			</div> 
+				
+
+			</div>
+
+		</form>
+	</div>
+
+            <!-- 批量操作 -->
+			<div id="piliang" class="layui-form toolbar" style="background-color: #e6f7ff;height: 50px;margin-top: 10px;margin-bottom: 10px;display: none;">
+				<span style="font-size: 14px;color: #505050;line-height: 50px;margin-left: 9px;">批量操作</span>
+				<img alt="" src="">
+				<span  id="xuanze">已选择**项</span>
+				<span id="huoqu" style="padding-left:15px ">跨页全选:</span>
+				<input type="checkbox"  lay-filter="checkall" style="margin-top: 0px;" title="跨页全选"  name="checkall"   lay-skin="switch" lay-text="跨页全选|取消">
+				<span id="clickxuan" style="color: #1890ff;margin-left: 15px;">清空</span>
+                <button id="updateRole" style="width: 120px;float: right;margin-right: 16px;text-align: center;margin-top: 7px;background: rgba(24, 144, 255, 1);color: white;"  class="layui-btn layui-btn-primary">更改角色权限</button>
+			</div>
+	<table id="demo" lay-filter="test"></table>
+		</div>
+	</div>
+	
+	
+</body>
+ <script type="text/html" id="toutiao">
+
+
+
+<div class='layui-inline' style='margin-top:14px;float:left '><label class='layui-form-label w-auto'></label><div class='layui-input-inline mr0'><input id='setmealMame' style='width: 160px;' class='layui-input' placeholder='请输入分组名称'/></div></div>
+<input id='guishujishu' type='hidden' value=''>
+      <button id='selectyishi' style='margin-top:14px;margin-left:10px;background-color: #5a9ae2'  class='layui-btn'>搜索</button>
+		<button id="eliminate" style='margin-top:14px;margin-left:10px;'  class='layui-btn layui-btn-primary'>清除</button>
+<div style='background-color:#e6f7ff;width: 550px;height:193px;margin-top:20px;margin-left:15px;border-radius:4px;overflow:auto'>
+<form id="RoleForm" lay-filter="RoleForm" class="layui-form">
+<ul id='changedoctor'>
+<li style='margin-left: 20px;'><input type='checkbox'  lay-filter='filter' value='1' name='like1' lay-skin='primary'><label  class='yishiname'>啦啦啦啦</label><label class='killOrder1'>正常       使用啦啦啦啦患者</label><label  style='color: red;margin-left: 50px'>执行中</label></li>
+<li style='margin-left: 20px;'><input type='checkbox'  lay-filter='filter' value='2' name='like1' lay-skin='primary'><label  class='yishiname'>啦啦啦啦2</label><label class='killOrder1'>正常       使用啦啦啦啦患者</label></li>
+</ul>
+</div>
+        <input id="pitch" name="pitch" type="hidden" value="">
+    
+
+        <div class="layui-form-item text-right" style="    text-align: center;    padding-top: 10px;">
+            <button class="layui-btn layui-btn-primary" type="button" ew-event="closePageDialog">取消</button>
+            <button class="layui-btn" lay-filter="SubmitRole" lay-submit>保存</button>
+        </div>
+    </form>
+    
+</script>
+<script type="text/javascript" th:src="@{/assets/libs/layui/layui.js}"></script>
+<script type="text/javascript" th:src="@{/assets/js/common.js}"></script>
+<script type="text/javascript">
+layui.use(['laypage', 'layer','element','admin', 'treeTable','table','form','treeSelect','laydate','util','upload'], function(){
+	  var laypage = layui.laypage;
+	  var layer = layui.layer;
+	  var element = layui.element;
+	  var table = layui.table;
+	  var form = layui.form;
+	  var $ = layui.jquery;
+	  var laydate = layui.laydate;
+	  var util = layui.util;
+	  var treeSelect= layui.treeSelect;
+	  var upload = layui.upload;
+	  var admin = layui.admin;
+  
+  var ids = new Array();// 勾选的id集合
+  var table_data = new Array();// 表格数据缓存
+  
+//日期时间范围
+  laydate.render({
+    elem: '#test10'
+    ,type: 'datetime'
+    ,range: true,
+	  trigger: 'click'
+  });
+  
+  treeSelect.render({
+      // 选择器
+      elem: '#tree',
+      // 数据 
+      data: '/YhUserMakeCard/showPullDownTree',
+      // 异步加载方式：get/post，默认get
+      type: 'get',
+      // 占位符
+      placeholder: '全部',
+      // 是否开启搜索功能：true/false，默认false
+      search: true,
+      // 点击回调
+      click: function(d){
+          console.log($('#guishu').val(d.current.id));
+      },
+      // 加载完成后的回调函数
+      success: function (d) {
+          console.log(d);
+      }
+      
+  }); 
+
+//今天的时间
+  var day2 = new Date();
+  day2.setTime(day2.getTime());
+  var s2 = day2.getFullYear()+"-" + ((day2.getMonth()+1)>=10?(day2.getMonth()+1):"0"+(day2.getMonth()+1)) + "-" + ((day2.getDate())>=10?(day2.getDate()):"0"+(day2.getDate()))+" "+"00:00:00";
+  var s3 = day2.getFullYear()+"-" + ((day2.getMonth()+1)>=10?(day2.getMonth()+1):"0"+(day2.getMonth()+1)) + "-" + ((day2.getDate())>=10?(day2.getDate()):"0"+(day2.getDate()))+" "+"23:59:59";
+var flagStr = '[[${strTime}]]'
+var test10Value=null;
+	if('1'==flagStr){
+		element.tabChange('demo', 2); 
+		$("#test10").val(s2+" - "+s3)
+		test10Value=s2+" - "+s3;
+	}
+  //第一个实例
+	var regManageTb = table.render({
+	  id : 'regManageTb',
+    elem: '#demo'
+    ,url: '/YhUserReginfo/page' //数据接口
+     ,method : 'get'
+    	 ,where : {regTime:test10Value} // 你额外要携带数据，以键值对的方式存入
+    ,page: true //开启分页
+    ,limit : 20// 每页显示的条数
+	,limits : [ 5, 10, 20, 50, 100 ] // 每页条数的选择项
+	,loading : true // 是否显示加载条(切换分页的时候显示）
+	,cellMinWidth : 80 // 全局定义所有常规单元格的最小宽度（默认：60）
+	 ,sort:true
+    ,cols: [ //表头//当前时间戳
+    	[
+    	/* {type: 'checkbox',LAY_CHECKED: false}, */
+        {type:'numbers', title:'序号', align: 'center',width: 50}
+        ,{field: 'user_code', align: 'center', title: '用户编码',width: 90} 
+        ,{field: 'name', title: '姓名', align: 'center',width: 90}
+        ,{field: 'user_name', title: '账号', align: 'center',width: 90}
+        ,{field: 'classify', title: '分类', align: 'center',width: 90,templet:function(d){
+        	if(d.classify==null || d.classify==""){
+        		return "--";
+        	}else{
+        		if(d.classify=="1"){
+        			return "一般人群";
+        		}else if(d.classify==2){
+        			return "慢病患者";
+        		}else if(d.classify==3){
+        			return "慢病高危人群";
+        		}	
+        	}
+        	
+        	
+        		
+        	}
+        }
+        ,{field: 'Org_Name', align: 'center', title: '归属',width: 290} 	
+        
+        ,{field: 'reg_time', title: '建档时间', align: 'center',sort: true,width: 160}
+        ,{field: 'Add_Date', title: '服务结束日期', align: 'center',sort: true,width: 130,templet:function(d){
+        	// 结果：1477808630404 通过valueOf()函数返回指定对象的原始值获得准确的时间戳值
+        	//当前时间戳
+        	var timestamp = (new Date()).valueOf(); 
+        	//数据库结束时间戳
+    		var time  = d.Add_Date;
+    		var finishTime = (new Date(time)).valueOf();
+    		if(time==null || time==""){
+    			return "<font>--</font>";
+    		}else{
+    			return d.Add_Date;
+    		}
+       } 
+        }
+        ,{field: 'lock_flag', align: 'center', title: '状态',templet : function(d){
+        	if(d.lock_flag==1){
+        		return "锁定";
+        	}else{
+        		return "正常";
+        	}
+        }
+       } 
+        ,{ field: 'cz',title: '操作', align: 'center',width: 120,templet: function (d){
+        	var userCode = d.user_code;
+        	var orgId = d.Org_Code;
+        	if(d.user_code!=null || d.user_code!=''){
+        		var health = "health";
+        		return "<a href='/manage/register/userIndex?page=health&userCode="+userCode+"&orgId="+orgId+"&type2="+health+"' target='_blank'><font color='#36A4FF'>编辑档案</font></a>";	
+        	}
+        } }
+        
+      ]
+      ],
+      done: function(res, curr, count){
+   	   $('table tr').on('click',function(){
+  	     $('table tr').css('background','');
+  	     $(this).css('background','<%=PropKit.use("config.properties").get("table_color")%>');
+  	    });
+  	   // 设置换页勾选之前的
+  	   table_data = res.data;
+  	   console.log("表格数据",table_data)
+  	   //在缓存中找到PM_CODE ,然后设置data表格中的选中状态
+  	   //循环所有数据，找出对应关系，设置checkbox选中状态
+  	   for(var i=0;i<res.data.length;i++){
+  	    for(var j=0;j<ids.length;j++){
+  	     if(res.data[i].user_code==ids[j]){
+  	      //这里才是真正的有效勾选
+  	      res.data[i]["LAY_CHECKED"]='true';
+  	      //找到对应数据改变勾选样式，呈现出选中效果
+  	      var index= res.data[i]['LAY_TABLE_INDEX'];
+  	      $('.layui-table tr[data-index=' + index + '] input[type="checkbox"]').prop('checked', true);
+  	      $('.layui-table tr[data-index=' + index + '] input[type="checkbox"]').next().addClass('layui-form-checked');
+  	     }
+  	    }
+  	   }
+  	   //设置全选checkbox的选中状态，只有改变LAY_CHECKED的值， table.checkStatus才能抓取到选中的状态
+  	   var checkStatus = table.checkStatus('test');
+  	 /*   if(checkStatus.isAll){
+  	    $('.layui-table-header th[data-field="0"] input[type="checkbox"]').prop('checked', true);
+  	    $('.layui-table-header th[data-field="0"] input[type="checkbox"]').next().addClass('layui-form-checked');
+  	   } */
+  	   if(count > 20) {
+	        	$(".layui-table-page").show();
+	        }else {
+	        	$(".layui-table-page").hide();
+	        }
+	      }
+  });
+ 
+    
+//复选框选中监听,将选中的id 设置到缓存数组,或者删除缓存数组
+	 table.on('checkbox(test)', function (obj) {
+		 console.log("==========",obj);
+		 
+	  if(obj.checked==true){
+	   if(obj.type=='one'){
+	    ids.push(obj.data.user_code);
+	    console.log("点击一个复选框",ids)
+	   }else{
+	    for(var i=0;i<table_data.length;i++){
+	     ids.push(table_data[i].user_code);
+	    
+	    }
+	   }
+	  }else{
+	   if(obj.type=='one'){
+	    for(var i=0;i<ids.length;i++){
+	     if(ids[i]==obj.data.user_code){
+	    	//ids.pop(); 
+	    	 ids.splice(i,1);
+	    	 console.log("------111-------",ids[i])
+	     
+	     }
+	    }
+	   }else{
+	    var page = $("#demo .layui-laypage-curr").text();
+ 	let startIndex = (page - 1) * 20
+ 	let endIndex = page * 20
+		let curPageIds = table_data.map(function(item, index) {
+			if (startIndex <= index >= endIndex) {
+				return item.user_code	
+			}
+		})
+		ids = ids.filter(item => !curPageIds.includes(item))
+	   }
+	  }
+	  
+	  //norepeat(ids);
+	  if(ids.length>0){
+			 $("#piliang").show();
+			   if(obj.type=="all"){
+				 console.log("进入全选")
+				 ids.sort();
+				for(var i = 0;i < ids.length-1;i++){
+					if(ids[i]==ids[i+1]){
+						ids.splice(i+1,1);
+						i--;
+					}
+				}
+			 }  
+			 $("#xuanze").html("已选择"+ids.length+"项")
+		 }else{
+			 $("#piliang").hide();
+		 }
+	  console.log("所有id",ids);
+	 });
+	 
+		//全部全选
+		var tablelist = [];
+		form.on('switch(checkall)', function (data) {
+			//先将存id的数组清空
+			ids.length = 0;
+			var checked = data.elem.checked;
+			console.log("checked",data)
+			if(this.checked){
+				 console.log("进入 ",checked);
+					$.ajax({
+             		url: '/YhUserReginfo/selectAll',
+             		success: function (data) {
+ 						 tablelist = data.data
+ 						   for(var i=0;i<tablelist.length;i++){
+ 							     ids.push(tablelist[i].user_code);
+ 							   }
+ 						
+ 				    	   for(var i=0;i<tablelist.length;i++){
+ 					    	    for(var j=0;j<ids.length;j++){
+ 					    	     if(tablelist[i].user_code==ids[j]){
+ 					    	      //这里才是真正的有效勾选
+ 					    	      tablelist[i]["LAY_CHECKED"]='true';
+ 					    	      //找到对应数据改变勾选样式，呈现出选中效果
+ 					    	      var index= tablelist[i]['LAY_TABLE_INDEX'];
+ 					    	      $('.layui-table tr[data-index=' + i + '] input[type="checkbox"]').prop('checked', true);
+ 					    	      $('.layui-table tr[data-index=' + i + '] input[type="checkbox"]').next().addClass('layui-form-checked');
+ 					    	     $('.layui-table-header th[data-field="0"] input[type="checkbox"]').prop('checked', true);
+ 					      	    $('.layui-table-header th[data-field="0"] input[type="checkbox"]').next().addClass('layui-form-checked');
+ 					    	     }
+ 					    	    }
+ 					    	   }
+ 					    	   //设置全选checkbox的选中状态，只有改变LAY_CHECKED的值， table.checkStatus才能抓取到选中的状态
+ 					    	   var checkStatus = table.checkStatus('test');
+ 					    	   if(checkStatus.isAll){
+ 					    	    $('.layui-table-header th[data-field="0"] input[type="checkbox"]').prop('checked', true);
+ 					    	    $('.layui-table-header th[data-field="0"] input[type="checkbox"]').next().addClass('layui-form-checked');
+ 					    	   }
+ 						 $("#xuanze").html("已选择"+ids.length+"项")
+ 						 console.log("所有id-------",ids);
+ 					}
+					
+             	})
+				 
+			}else{
+				 ids.length = 0;
+				for(var i = 0;i < tablelist.length;i++){   //勾选行回显
+					console.log("全部取消")
+					tablelist[i]["LAY_CHECKED"]='false';
+					//找到对应数据改变勾选样式，呈现出选中效果
+					 $('.layui-table-header th[data-field="0"] input[type="checkbox"]').prop('checked', false);
+ 					    	    $('.layui-table-header th[data-field="0"] input[type="checkbox"]').next().removeClass('layui-form-checked');
+					 $('.layui-table tr[data-index=' + i + '] input[type="checkbox"]').prop('checked', false);
+		    	     $('.layui-table tr[data-index=' + i + '] input[type="checkbox"]').next().removeClass('layui-form-checked');
+				}
+				 $("#piliang").hide();
+				form.render("checkbox");
+				//location.reload();//刷新页面 
+			} 
+			
+			 console.log("所有id===",ids);
+		});
+    //清空
+		$("#clickxuan").on('click',function(){
+			location.reload();//刷新页面 
+		})
+		//更改角色积分
+		$("#updateRole").on('click',function(){
+			showhealth();
+			showheadline();
+		})
+		 //显示编辑弹窗头条
+	    function showheadline(mRole) {
+	        admin.open({
+	            type: 1,
+	            title: '修改分组',
+	            content: $('#toutiao').html(),
+	            area: ['450px', '400px'],
+	            success: function (layero, dIndex) {
+	               // var url = '/YhSportRecommendRecordController/insertSelective';
+	                // 表单提交事件
+	                form.on('submit(SubmitRole)', function (data) {
+	                    
+	                    var groupingId= $('#changedoctor input[name="like1"]:checked ').val()//获取选中的值
+	                    console.log(groupingId)
+	                    if( typeof(groupingId)=='undefined'){
+	                    	layer.msg('请选择分组');
+	                    }else{
+	                     	$.ajax({
+	                    		url: '/YhUserCommodityData/soldoutCommodity',
+	                    		data:{flag:3,ids:ids,groupingId:groupingId},
+	                    		 traditional: true,//这里设置为true
+	                    		success: function (data) {
+	        						console.log(data,"修改分组")
+	        						if(data.code==20000){
+	        							 parent.layer.msg('操作成功');
+	        							 setTimeout(function () {
+	        								 location.reload();
+	        					            }, 2000);
+	        							  
+	        						}else{
+	        							parent.layer.msg('操作失败');
+	        						}
+	        					}
+	                    	})
+	                    }
+	              
+	                    
+	                 
+	                });
+	            }
+	        });
+	    }
+				
+				   function showhealth(){
+					    	 $.ajax({
+					     	 type: "get",
+					          url: '/IntegralShoppingGrouping/selectAllGrouping',
+					          success: function(data){
+					        	  console.log(data)
+					        	  var item=data.data;
+					   	     	var htmld="";
+					   	        for (var i = 0; i < item.length; i++) {
+					   	        	var setmealMame = item[i].name;
+					   	        	var groupingId = item[i].groupingId;
+					  	        	 htmld+="<li style='margin-left: 20px;margin-top: 10px;'><input type='radio'  lay-filter='filter' value="+groupingId+" name='like1' lay-skin='primary'><label  class='yishiname' style='width: 30%;'>"+setmealMame+"</label></li>";
+						      
+						        		 
+					   	       }
+					   	     $("#changedoctor").empty().append(htmld);
+					   	        form.render();
+					        	  
+					          }
+					     });
+					   }
+  function createTime(v){
+		var date = new Date(v);
+	    var y = date.getFullYear();
+	    var m = date.getMonth()+1;
+	    m = m<10?'0'+m:m;
+	    var d = date.getDate();
+	    d = d<10?("0"+d):d;
+	    var h = date.getHours();
+	    h = h<10?("0"+h):h;
+	    var M = date.getMinutes();
+	    M = M<10?("0"+M):M;
+	    var str = y+"-"+m+"-"+d+" "+h+":"+M;
+	    return str;
+	}
+  
+//头部搜素表单提交1
+  form.on('submit(regManageQueryBtn)', function(data){
+	 /*   console.log(data.elem);//被执行事件的元素DOM对象，一般为button对象
+	  console.log(data.form); //被执行提交的form对象，一般在存在form标签时才会返回
+	 console.log(data.field); //当前容器的全部表单字段，名值对形式：{name: value} */
+		regManageTb.reload({
+		  where : {
+				//这里注意一定要跟Bean 里面的属性对应
+			 orgCode:$('#guishu').val(),
+			 validity:$('#validity').val(), 
+			 name:$('#name').val(), 
+			 userName:$('#userName').val(),
+			 regTime:$('#test10').val(),
+			 lockFlag:$('#lockFlag').val()
+			},
+		  page : {
+			  curr : 1
+		  }
+		  
+	  });
+	// 阻止表单跳转。如果需要表单跳转，去掉这段即可。
+	  return false;
+  });
+
+	//是否可用更改时触发
+	//监听状态操作
+	form.on('switch(userStatus)', function(obj){
+		var userCode = obj.value;
+		var lockFlag = "";
+		if(obj.elem.checked == true){
+			lockFlag="2";
+		}else{
+			lockFlag="1";
+		}
+		//var userStatus = obj.elem.checked?'Y':'N';
+		
+		$.ajax({
+			type:'post',
+			url:'/YhUserReginfo/updateLockFlag',
+			 data: {userCode:userCode,lockFlag:lockFlag},
+			dataType:'json',
+			success : function(data){
+				if(data==1){
+					
+					layer.msg("操作成功");
+				}else{
+					layer.msg("操作失败");
+				}
+				table.reload('regManageTb', {url: '/YhUserReginfo/page'});
+			}
+			
+		})
+		
+	});
+	
+});
+</script>
+
+</html>

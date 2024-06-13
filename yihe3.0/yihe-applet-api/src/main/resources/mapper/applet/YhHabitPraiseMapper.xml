@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yihe.applet.api.mapper.YhHabitPraiseMapper" >
+  <resultMap id="BaseResultMap" type="com.yihe.applet.api.domain.YhHabitPraise" >
+    <id column="pr_id" property="prId" jdbcType="INTEGER" />
+    <result column="commentId" property="commentid" jdbcType="VARCHAR" />
+    <result column="user_code" property="userCode" jdbcType="VARCHAR" />
+    <result column="add_time" property="addTime" jdbcType="TIMESTAMP" />
+    <result column="type" property="type" jdbcType="VARCHAR" />
+    <result column="standby" property="standby" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    pr_id, commentId, user_code, add_time, type, standby
+  </sql>
+  
+  <select id="showCountParise" resultType="int" parameterType="java.lang.String">
+  	select count(*) from yh_habit_praise where commentId=#{commentid};
+  </select>
+  
+  
+  <select id="showCountPariseCode" resultType="int" parameterType="map">
+  	select count(*) from yh_habit_praise where commentId=#{commentid,jdbcType=VARCHAR} and user_code=#{userCode,jdbcType=VARCHAR}
+  </select>
+  
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from yh_habit_praise
+    where pr_id = #{prId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="map" >
+    delete from yh_habit_praise
+    where commentId=#{commentid,jdbcType=VARCHAR} and user_code=#{userCode,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.yihe.applet.api.domain.YhHabitPraise" >
+    insert into yh_habit_praise (pr_id, commentId, user_code, 
+      add_time, type, standby
+      )
+    values (#{prId,jdbcType=INTEGER}, #{commentid,jdbcType=VARCHAR}, #{userCode,jdbcType=VARCHAR}, 
+      #{addTime,jdbcType=TIMESTAMP}, #{type,jdbcType=VARCHAR}, #{standby,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.yihe.applet.api.domain.YhHabitPraise" >
+    insert into yh_habit_praise
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="prId != null" >
+        pr_id,
+      </if>
+      <if test="commentid != null" >
+        commentId,
+      </if>
+      <if test="userCode != null" >
+        user_code,
+      </if>
+      <if test="addTime != null" >
+        add_time,
+      </if>
+      <if test="type != null" >
+        type,
+      </if>
+      <if test="standby != null" >
+        standby,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="prId != null" >
+        #{prId,jdbcType=INTEGER},
+      </if>
+      <if test="commentid != null" >
+        #{commentid,jdbcType=VARCHAR},
+      </if>
+      <if test="userCode != null" >
+        #{userCode,jdbcType=VARCHAR},
+      </if>
+      <if test="addTime != null" >
+        #{addTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="type != null" >
+        #{type,jdbcType=VARCHAR},
+      </if>
+      <if test="standby != null" >
+        #{standby,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.yihe.applet.api.domain.YhHabitPraise" >
+    update yh_habit_praise
+    <set >
+      <if test="commentid != null" >
+        commentId = #{commentid,jdbcType=VARCHAR},
+      </if>
+      <if test="userCode != null" >
+        user_code = #{userCode,jdbcType=VARCHAR},
+      </if>
+      <if test="addTime != null" >
+        add_time = #{addTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="type != null" >
+        type = #{type,jdbcType=VARCHAR},
+      </if>
+      <if test="standby != null" >
+        standby = #{standby,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where pr_id = #{prId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.yihe.applet.api.domain.YhHabitPraise" >
+    update yh_habit_praise
+    set commentId = #{commentid,jdbcType=VARCHAR},
+      user_code = #{userCode,jdbcType=VARCHAR},
+      add_time = #{addTime,jdbcType=TIMESTAMP},
+      type = #{type,jdbcType=VARCHAR},
+      standby = #{standby,jdbcType=VARCHAR}
+    where pr_id = #{prId,jdbcType=INTEGER}
+  </update>
+
+  <select id="selectCodeByCommentId" resultMap="BaseResultMap">
+    select user_code from yh_habit_praise where pr_id=#{id}
+  </select>
+
+  <select id="selectprId" parameterType="com.yihe.applet.api.domain.YhHabitPraise" resultMap="BaseResultMap">
+    select * from yh_habit_praise where commentId=#{commentid} and user_code=#{userCode}
+  </select>
+</mapper>

@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<link rel="stylesheet"  th:href="@{/assets/libs/layui/css/layui.css}" />
+		<title>查看睡眠分析报告</title>
+		<style type="text/css">
+			body {
+	padding: 20px;
+	background-color: white;
+}
+#back {
+	line-height: 20px;
+	text-align: right;
+}
+
+#back a {
+	color: black;
+	text-decoration: none;
+}
+
+.content {
+	font-size: 14px;
+}
+
+.tableDemo {
+	text-align: center;
+	border: #D2D2D2 2px solid;
+	margin: 0 30px;
+}
+
+.tableDemo table {
+	width: 100%;
+}
+
+.tableDemo table tr td {
+	padding: 10px;
+}
+
+.tableDemo table tr:not(:first-child) td:first-child {
+	color: #9F9F9F;
+}
+.send {
+		margin-left: 45%;
+    position:relative;
+    width:100px;
+    height:35px;
+    background:#FFAF5F;
+    border-radius:5px; /* 圆角 */
+}
+ 
+.send .arrow {
+    position:absolute;
+    top:35px;
+    right:40px; /* 圆角的位置需要细心调试哦 */
+    width:0;
+    height:0;
+    font-size:0;
+    border:solid 8px;
+    border-color:#FFAF5F white white white;
+}
+#sleepLink {
+	width: 50%;
+	height: 300px;
+	margin: 0 auto;
+}
+.layui-col-md4{
+	margin-top: 20px;
+}
+		</style>
+	</head>
+	<body class="layui-view-body">
+		<div class="layui-content">
+			<div class="layui-col-xs6">
+				<div class="grid-demo grid-demo-bg1">
+					<h2>睡眠分析报告</h2>
+				</div>
+			</div>
+			<div class="layui-col-xs6" id="back">
+				<div ><a  href="#">返回上一页</a></div>
+			</div>
+		</div>
+		<div class="layui-row layui-col-space20">
+			<div class="layui-col-xs6">
+				<div class="grid-demo grid-demo-bg1">
+					<table class="layui-table" lay-size="lg">
+					  <thead>
+					    <tr>
+					      <th >姓名</th>
+						  <th >性别</th>
+						  <th >年龄</th>
+						  <th >编码</th>
+					    </tr> 
+					  </thead>
+					  <tbody>
+					    <tr>
+					      <td id="userName"></td>
+						      <td id="gender"></td>
+						      <td id="age"></td>
+						      <td id="userCode"></td>
+					    </tr>
+					  </tbody>
+					</table>
+				</div>
+			</div>
+			<div class="layui-col-xs6">
+				<div>
+					<img height="100px" th:src="${getrepotimg}" />
+				</div>
+			</div>
+			<div style="margin-top: 160px;">
+				<p class="content">报告是根据您过去一周（<samp id="startTime"></samp>至<samp id="endTime"></samp>）所记录的睡眠日记做出的评价，你记录的天数越多，报告结果更精确。它不但可以使您很好地了解过去一周的总体睡眠情况；而且可以使健康管理师根据您的睡眠情况推荐更适合你的睡眠方案，给您个性化的改善指导。希望您能仔细阅读这份报告，小结每周的睡眠情况，努力改进不足的方面。有任何问题可随时咨询健康管理师。</p>
+			</div>
+			<hr style="padding: 0px;">
+			<div>
+				<div class="progress" style="height: 20px;width:100%;margin:20px auto;">
+					<div class="send" style="margin-bottom: 20px;">
+						<p style="width: 100%;line-height: 35px;text-align: center;color: white;">您在这里</p>
+						<div class="arrow">
+						</div>
+					</div>
+					<div class="layui-progress" style="width: 33%; float: left;">
+						<div class="layui-progress-bar layui-bg-orange" lay-percent="100%"></div>
+						<div style="margin-top: 10px;text-align: center;">
+							不足
+						</div>
+					</div>
+					<div class="layui-progress" style="margin-left: 2px;width: 33%;float: left;">
+						<div class="layui-progress-bar layui-bg-blue" lay-percent="100%"></div>
+						<div style="margin-top: 10px;text-align: center;">
+							良好
+						</div>
+					</div>
+					<div class="layui-progress" style="margin-left: 2px;width: 33%;float: left;">
+						<div class="layui-progress-bar layui-bg-green" lay-percent="100%"></div>
+						<div style="margin-top: 10px;text-align: center;">
+							睡多了
+						</div>
+					</div>
+				</div>
+			</div>
+			<div style="margin-top: 50px;">
+				<p class="content">身体需要通过夜间睡眠来进行调节，充足的休息可以调节身体状态，提高工作效率，进入良性循环。因此请继续保持睡眠充足，它会带给您更多的健康与快乐。想了解更多睡眠与健康的知识，请进入“健康课堂”。
+					若有任何问题，请咨询健康管理师。
+				</p>
+			</div>
+			<hr style="padding: 0px;">
+			<div class="layui-row">
+				<div class="layui-col-xs6">
+					<div id="sportLink"></div>
+				</div>
+				<div class="layui-col-xs6">
+					<div id="sportCircular"></div>
+				</div>
+			</div>
+			<h3 style="font-size: bolder;margin: 0;padding: 0;">睡眠记录情况</h3>
+			<div id="sleepLink"></div>
+			<div class="layui-row">
+				<div class="layui-col-md4">
+					<div class="tableDemo">
+						<table border="0">
+							<tr>
+								<td><i class="layui-icon layui-icon-console" style="padding-right: 10px;color: #D43030;"></i>日平均睡眠时间</td>
+								<td id="meantime"></td>
+							</tr>
+							<tr>
+								<td>理想值</td>
+								<td>6-9小时</td>
+							</tr>
+						</table>
+					</div>
+				</div>
+				<div class="layui-col-md4">
+					<div class="tableDemo">
+						<table border="0">
+							<tr>
+								<td><i class="layui-icon" style="padding-right: 10px;color: #D43030;">&#xe628;</i>平均入睡时间</td>
+								<td id="averagesleep"></td>
+							</tr>
+							<tr>
+								<td>理想值</td>
+								<td>21:00-24:00</td>
+							</tr>
+						</table>
+					</div>
+				</div>
+				<div class="layui-col-md4">
+					<div class="tableDemo">
+						<table border="0">
+							<tr>
+								<td><i class="layui-icon" style="padding-right: 10px;color: #D43030;">&#xe636;</i>平均起床时间</td>
+								<td id="averagewakeup"></td>
+							</tr>
+							<tr>
+								<td>理想值</td>
+								<td>5:00-8:30</td>
+							</tr>
+						</table>
+					</div>
+				</div>
+				<div class="layui-col-md4">
+					<div class="tableDemo">
+						<table border="0">
+							<tr>
+								<td><i class="layui-icon" style="padding-right: 10px;color: #00BAAD;">&#xe637;</i>睡眠记录</td>
+								<td id="size"></td>
+							</tr>
+							<tr>
+								<td>早睡天数</td>
+								<td id="xinlai"></td>
+							</tr>
+							<tr>
+								<td>早起天数</td>
+								<td id="rshui"></td>
+							</tr>
+						</table>
+					</div>
+				</div>
+				<div class="layui-col-md4">
+					<div class="tableDemo">
+						<table border="0">
+							<tr>
+								<td><i class="layui-icon" style="padding-right: 10px;color: #00BAAD;">&#xe650;</i>睡眠充足</td>
+								<td id="adequate"></td>
+							</tr>
+							<tr>
+								<td>睡眠不足</td>
+								<td id="insufficient"></td>
+							</tr>
+							<tr>
+								<td>睡多了</td>
+								<td id="Sleepmore"></td>
+							</tr>
+						</table>
+					</div>
+				</div>
+			</div>
+			
+		</div>
+		<script th:src="@{/assets/libs/echarts/echarts.min.js}"></script>
+		<script type="text/javascript" th:src="@{/assets/libs/layui/layui.js}"></script>
+		<script type="text/javascript" th:src="@{/assets/js/common.js}"></script>
+		<script type="text/javascript" th:src="@{/assets/js/jquery-1.11.1.js}"></script>
+		<script type="text/javascript">
+		layui.use(['layer', 'form', 'admin', 'table','laydate', 'util'], function () {
+			var table = layui.table;
+
+		//转换静态表格
+		table.init('demo', {});
+		layui.use('element', function(){
+		  var element = layui.element;
+		});
+		
+		$('#back').click(function(){
+			window.location.href="/manage/usertosee/sleep?usercode="+$("#userCode").html()+"&type=3";
+		})
+		
+		$(function(){
+			var id = [[${id}]];
+			 $.ajax({
+		   		 type:'post',
+		   		 url:'/YhSleepUserDiaryController/showSleepRecordAnalyze',
+		   		 data:{id:id},
+		   		success : function(data){
+		   			$("#age").html(data.nut);
+					$("#userCode").html(data.userCode);
+					$("#userName").html(data.userName);
+					if(data.age=="1"){
+						$("#gender").html("男");
+					}else{
+						$("#gender").html("女");
+					}
+					$("#startTime").html(data.startTime);
+					$("#endTime").html(data.endTime);
+					$("#xinlai").html(data.xinlai+"&nbsp;天");
+					$("#rshui").html(data.rshui+"&nbsp;天");
+					var  arr=data.averagesleep.split(":");
+					if(arr[0]<=24){
+						$("#averagesleep").html("<i class='layui-icon layui-icon-praise' style='padding-right: 10px;color: #00BAAD;'></i>"+data.averagesleep+"");
+					}else{
+						$("#averagesleep").html("<i class='layui-icon layui-icon-tread' style='padding-right: 10px;color: #D43030;'></i>"+data.averagesleep+"");
+					}
+					var  averagewakeup=data.averagewakeup.split(":");
+					if(averagewakeup[0].substr(1,2)<=8){
+						$("#averagewakeup").html("<i class='layui-icon layui-icon-praise' style='padding-right: 10px;color: #00BAAD;'></i>"+data.averagewakeup+"");
+					}else{
+						$("#averagewakeup").html("<i class='layui-icon layui-icon-tread' style='padding-right: 10px;color: #D43030;'></i>"+data.averagewakeup+"");
+					}
+					$("#size").html(data.size+"&nbsp;天");
+					
+				    if(data.meantime>=6 || data.meantime<=9){
+				    	$(".send").css("margin-left","40%");
+						$("#meantime").html("<i class='layui-icon layui-icon-praise' style='padding-right: 10px;color: #00BAAD;'></i>"+data.meantime+"小时");
+					}else if(data.meantime>9){
+						$(".send").css("margin-left","70%");
+						$("#meantime").html("<i class='layui-icon layui-icon-tread' style='padding-right: 10px;color: #D43030;'></i>"+data.meantime+"小时");
+					}else{
+						$(".send").css("margin-left","10%");
+						$("#meantime").html("<i class='layui-icon layui-icon-tread' style='padding-right: 10px;color: #D43030;'></i>"+data.meantime+"小时");
+					}
+				    sleepLink(data.cTime,data.energyLevel);
+				    var adequate=0;//充足
+				    var Sleepmore=0;//睡多了
+				    var insufficient=0;//不足
+				    for(var i=0;i<data.energyLevel.length;i++){
+					    if(data.energyLevel[i]>=6 || data.energyLevel[i]<=9){
+					    	adequate++;
+				    	}else if(data.meantime>9){
+				    		Sleepmore++;
+				    	}else{
+				    		insufficient++;
+				    	}
+				    }
+				    $("#adequate").html(adequate+"&nbsp;天");
+				    $("#Sleepmore").html(Sleepmore+"&nbsp;天");
+				    $("#insufficient").html(insufficient+"&nbsp;天");
+				    
+				    
+				    
+		   		}
+		   	 })
+		})
+		
+		
+		
+		});
+
+		function sleepLink(cTime,energyLevel) {
+			var myChart = echarts.init(document.getElementById('sleepLink'), 'light');
+			option = {
+				color: ['#00BAAD'],
+				visualMap: {
+					left: 'right',
+					top: '-7',
+					right: '6%',
+					pieces: [{
+							gt: 9,
+							color: '#EC5D51',
+							label: '睡多了(>9)'
+						}, // (8, Infinity]
+						{
+							gt: 6,
+							lte: 9,
+							color: '#00BAAD',
+							label: '良好(6-9)'
+						}, // (4, 8]
+						{
+							gt: 0,
+							lte: 6,
+							color: '#FFC300',
+							label: '睡眠不足(0-6)'
+						}, // (0, 4]
+					]
+				},
+				tooltip: {
+					trigger: 'axis',
+					axisPointer: { // 坐标轴指示器，坐标轴触发有效
+						type: 'shadow' // 默认为直线，可选为：'line' | 'shadow'
+					}
+				},
+				grid: {
+					left: '3%',
+					right: '4%',
+					bottom: '3%',
+					containLabel: true
+				},
+				xAxis: [{
+					type: 'category',
+					data: cTime,
+					axisTick: {
+						alignWithLabel: true
+					}
+				}],
+				yAxis: [{
+					name: '时长(小时)',
+					nameTextStyle: {
+						fontWeight: 'bolder',
+						fontSize: 16
+					}
+				}],
+				series: [{
+					name: '睡眠时间',
+					type: 'bar',
+					barWidth: '60%',
+					data: energyLevel
+				}]
+			};
+			myChart.setOption(option);
+			window.addEventListener("resize", function() {
+				myChart.resize();
+			});
+		}
+		</script>
+	</body>
+</html>

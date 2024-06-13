@@ -1,0 +1,772 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>食物库管理</title>
+   <link rel="stylesheet"  th:href="@{/assets/libs/layui/css/layui.css}" />
+    <link rel="stylesheet"  th:href="@{/assets/module/admin.css}"  />
+       <style type="text/css">
+    	.layui-table-box {
+ min-height:425px;
+}
+    </style>
+</head>
+<body>
+ <!-- 页面加载loading -->
+<div class="page-loading">
+    <div class="ball-loader">
+        <span></span><span></span><span></span><span></span>
+    </div>
+</div>
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div class="layui-card-body">
+
+<div class="layui-row" style="height: 600px;">
+<div style="width: 100%; height:100%; background-color: #FFF; position: relative;">
+<div class="layui-tab layui-tab-brief" lay-filter="docDemoTabBrief">
+  <ul class="layui-tab-title">
+    <li class="layui-this" lay-id="thisclicks3">食物</li>
+    <li lay-id="thisclicks4">套餐</li>
+  </ul>
+  <div class="layui-tab-content" style="height: 100px;">
+
+  	<!-- 食物 -->
+    <div class="layui-tab-item layui-show">
+
+   		<div class="layui-row">
+            <div class="" style="float:left;width: 70%;"> <label class="layui-form-label w-auto">名称:</label>
+                <div class="layui-inline">
+                    <input class="layui-input" name="fCName" id="fCName" placeholder="请输入" autocomplete="off">
+                </div>
+
+                <div class="layui-inline">
+                    <label style="padding-right: 0px;" class="layui-form-label w-auto">分类：</label>
+                    <div class="layui-input-inline mr0">
+                        <form class="layui-form" >
+                            <select lay-filter="aihao" id="fType">
+                                <option value="">全部</option>
+                                <option value="1">谷薯芋、杂豆、主食</option>
+                                <option value="2">蛋类、肉类及制品</option>
+                                <option value="3">奶类及制品</option>
+                                <option value="4">蔬果和菌藻</option>
+                                <option value="5">坚果、大豆及制品</option>
+                                <option value="6">饮料</option>
+                                <option value="7">食用油、油脂及制品</option>
+                                <option value="8">调味品</option>
+                                <option value="9">零食、点心、冷饮</option>
+                                <option value="10">菜肴</option>
+                            </select>
+                        </form>
+                    </div>
+                </div>
+
+                <button class="layui-btn" data-type="reload" onclick="solo()"><i class="layui-icon"></i>搜索</button>
+                <button class="layui-btn layui-btn-primary" id="btnempty" lay-submit="" lay-filter="reset">清除</button></div>
+            <div class="layui-col-xs6 layui-col-md4" style="float:right;width: 30%;text-align: right;">  <div class="layui-inline"  id="frontpage2">
+                <a target="_self" href="/manage/content/foodladd2?id=0"><button class="layui-btn icon-btn"><i class="layui-icon">&#xe654;</i>添加菜肴</button></a>
+            </div>
+                <div class="layui-inline"   id="frontpage">
+                    <a target="_self" href="/manage/content/foodladd?id=0"><button class="layui-btn layui-btn-primary"><i class="layui-icon">&#xe654;</i>添加食物</button></a>
+                </div></div>
+
+
+					</div>
+		<table id="LAY_table_user" lay-filter="demo"></table>
+
+
+
+
+    </div>
+
+
+    <!-- 套餐 -->
+    <div class="layui-tab-item">
+
+    	<div class="layui-tab " lay-filter="docDemoTabBrief2">
+							<ul class="layui-tab-title">
+								<li  class="layui-this" lay-id="thisclicks1">每日食谱管理</li>
+								<li id="thisclicks" lay-id="thisclicks2">干预套餐管理</li>
+							</ul>
+							<div class="layui-tab-content"
+								style="padding: 10px 0px 10px 0px; min-height: 500px">
+								<div class="layui-tab-item  layui-show">
+									<div class="layui-form toolbar">
+										<div class="layui-form-item">
+											<div class="layui-inline">
+												<label style="padding: 9px 15px 9px 0; text-align: left;"
+													class="layui-form-label">模板来源：</label>
+												<div class="layui-input-inline">
+													<select name="oneself" id="oneself">
+														<option value="">全部</option>
+														<option value="1">系统提供</option>
+														<option value="2">我的创建</option>
+														<option value="3">其他人创建的</option>
+													</select>
+												</div>
+											</div>
+
+											<div class="layui-inline">
+												<label style="padding: 9px 15px 9px 0; text-align: left;"
+													class="layui-form-label">能量等级：</label>
+												<div class="layui-inline">
+													<select name="eLevel" id="eLevel" lay-search="">
+														<option value="">全部</option>
+														<option th:each="list:${todayFoodGroup}"
+															th:value="${list}">[[${list}]]</option>
+													</select>
+												</div>
+											</div>
+
+											<div class="layui-inline">
+												<label style="padding: 9px 15px 9px 0; text-align: left;"
+													class="layui-form-label">适用人群：</label>
+												<div class="layui-inline">
+													<select name="diseaseid" id="diseaseid" lay-search="">
+														<option value="">全部</option>
+														<option th:each="list:${dCategory}" th:value="${list.id}">[[${list.diseaseName}]]</option>
+													</select>
+												</div>
+											</div>
+
+											<div class="layui-inline" style="padding-left: 20px;">
+												<button class="layui-btn icon-btn sousuoDN"
+													id="selectbyconditions2" data-type="selectby">
+													<i class="layui-icon"></i>搜索
+												</button>
+												<button class="layui-btn layui-btn-primary" id="btnempty2"
+													lay-submit="" lay-filter="reset">清除</button>
+
+											</div>
+											<div id="addplan" class="layui-inline" style="float: right">
+												<button class="layui-btn icon-btn " data-type="reloadd">
+													<i class="layui-icon layui-icon-addition"></i>添加食谱
+												</button>
+											</div>
+
+										</div>
+									</div>
+
+									<table class="layui-hide" id="pinggu" lay-filter="pinggu"></table>
+
+								</div>
+
+
+								<!--计划模板管理-->
+								<div class="layui-tab-item">
+									<div class="layui-form toolbar">
+										<div class="layui-form-item">
+											<div class="layui-inline">
+												<label style="padding: 9px 15px 9px 0; text-align: left;"
+													class="layui-form-label">模板来源：</label>
+												<div class="layui-input-inline">
+													<select name="oneself2" id="oneself2">
+														<option value="">全部</option>
+														<option value="1">系统提供</option>
+														<option value="2">我的创建</option>
+														<option value="3">其他人创建的</option>
+													</select>
+												</div>
+											</div>
+
+											<div class="layui-inline">
+												<label style="padding: 9px 15px 9px 0; text-align: left;"
+													class="layui-form-label">类型：</label>
+												<div class="layui-input-inline">
+													<select name="ftype2" id="ftype2">
+														<option value="">全部</option>
+														<option value="1">风险评估推荐</option>
+														<option value="2">健康计划推荐</option>
+														<option value="3">医师手动推荐</option>
+													</select>
+												</div>
+											</div>
+
+											<div class="layui-inline">
+												<label style="padding: 9px 15px 9px 0; text-align: left;"
+													class="layui-form-label">能量等级：</label>
+												<div class="layui-inline">
+													<select name="eLevelTc" id="eLevelTc" lay-search="">
+														<option value="">全部</option>
+														<option th:each="list:${todayFoodGroup}"
+															th:value="${list}">[[${list}]]</option>
+													</select>
+												</div>
+											</div>
+
+
+											<div class="layui-inline">
+												<label style="padding: 9px 15px 9px 0; text-align: left;"
+													class="layui-form-label">适用人群：</label>
+												<div class="layui-inline">
+													<select name="diseaseid2" id="diseaseid2" lay-search="">
+														<option value="">全部</option>
+														<option th:each="list:${dCategory}" th:value="${list.id}">[[${list.diseaseName}]]</option>
+													</select>
+												</div>
+											</div>
+
+
+											<div class="layui-inline">
+												<label class="layui-form-label">描&emsp;&emsp;述：</label>
+												<div class="layui-input-inline">
+													<input name="fsDescribe" id="fsDescribe" class="layui-input"
+														type="text" placeholder="请输入" />
+												</div>
+											</div>
+
+
+
+
+											<div class="layui-inline" style="padding-left: 20px;">
+												<button class="layui-btn icon-btn sousuoDN"
+													id="selectbyconditions3" data-type="selectby">
+													<i class="layui-icon"></i>搜索
+												</button>
+												<button class="layui-btn layui-btn-primary" id="btnempty3"
+													lay-submit="" lay-filter="reset">清除</button>
+
+											</div>
+											<div id="addplan2" class="layui-inline" style="float: right">
+												<button class="layui-btn icon-btn " data-type="reloadd">
+													<i class="layui-icon layui-icon-addition"></i>添加套餐
+												</button>
+											</div>
+
+										</div>
+									</div>
+
+									<table class="layui-hide" id="pinggu2" lay-filter="pinggu2"></table>
+
+								</div>
+
+
+							</div>
+						</div>
+
+
+
+
+    </div>
+
+
+
+  </div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</body>
+<script type="text/javascript" th:src="@{/assets/libs/layui/layui.js}"></script>
+<script type="text/javascript" th:src="@{/assets/js/common.js}"></script>
+<script type="text/javascript" th:src="@{/assets/js/jquery-1.11.1.js}"></script>
+<script type="text/html" id="temp_img">
+ {{# if(d.fCImg==null ||d.fCImg =='') { }}
+ <img onclick="openImg('http://qiniuyun.yhy.ren/foodCommon.jpg');"  src="http://qiniuyun.yhy.ren/foodCommon.jpg" >
+{{# } else { }}
+ <img onclick="openImg('{{d.fCImg}}');"  src="{{d.fCImg}}" >
+{{# } }}
+
+</script>
+
+<script type="text/html" id="barDemo">
+ {{# if(d.quanxian != 1) { }}
+ --
+{{# } else { }}
+    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="del">删除</a>
+ <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="edit">修改</a>
+{{# } }}
+</script>
+
+
+<script type="text/html" id="Weight">
+	100
+</script>
+
+<script type="text/html" id="barDemo1">
+ {{# if(d.oneself == 1) { }}
+ --
+{{# } else { }}
+    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="del">删除</a>
+ <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="edit">修改</a>
+{{# } }}
+</script>
+	<script type="text/html" id="tableBar2">
+    {{#if (d.quanxuan!=1) { }}
+    <span>- -</span>
+    {{# }else{ }}
+    <a style="background-color:#fff;color: #0C0C0C;border: 1px solid ;border-color:#9F9F9F !important; " class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+<a style="background-color:#fff;color: #2a9ce4;border: 1px solid ;border-color:#9F9F9F !important; " class="layui-btn layui-btn-xs" lay-event="edit">修改</a>
+    {{# } }}
+</script>
+	<script type="text/html" id="tableBar3">
+    {{#if (d.ftype!=3) { }}
+    <span>- -</span>
+    {{# }else{ }}
+    <a style="background-color:#fff;color: #0C0C0C;border: 1px solid ;border-color:#9F9F9F !important; " class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+<a style="background-color:#fff;color: #2a9ce4;border: 1px solid ;border-color:#9F9F9F !important; " class="layui-btn layui-btn-xs" lay-event="edit">修改</a>
+    {{# } }}
+</script>
+<script>
+
+function openImg(url) {
+    layer.open({
+        type: 1,
+        title: ['列表图片展示'],
+        shadeClose: true,
+        area: ['600px', 'auto'], //宽高
+        content: '<img src="' + url + '" height="auto" width="600px">'
+    });
+}
+
+
+//导航栏
+layui.use('element', function(){
+  var $ = layui.jquery
+  ,element = layui.element; //Tab的切换功能，切换事件监听等，需要依赖element模块
+
+
+  $('.site-demo-active').on('click', function(){
+    var othis = $(this), type = othis.data('type');
+    active[type] ? active[type].call(this, othis) : '';
+  });
+
+});
+
+
+
+//课堂分类
+layui.use(['layer', 'form', 'admin', 'util','treeSelect', 'table','element'], function () {
+      var $ = layui.jquery;
+      var layer = layui.layer;
+      var form = layui.form;
+      var admin = layui.admin;
+      var util = layui.util;
+      var treeSelect= layui.treeSelect;
+		var table = layui.table;
+ var  element = layui.element;
+		var fanhui=[[${fanhui}]]
+		console.log("fanhui",fanhui)
+
+			//切换到指定Tab项	var fanhui=[[${fanhui}]]
+			console.log("fanhui",fanhui)
+			if(fanhui=='1'){
+				//切换到指定Tab项
+				 element.tabChange('docDemoTabBrief', 'thisclicks4'); //根据传入的id传入到指定的tab项
+	            element.tabChange('docDemoTabBrief2', 'thisclicks1'); //根据传入的id传入到指定的tab项
+			}
+			if(fanhui=='2'){
+				//切换到指定Tab项
+				 element.tabChange('docDemoTabBrief', 'thisclicks4'); //根据传入的id传入到指定的tab项
+	            element.tabChange('docDemoTabBrief2', 'thisclicks2'); //根据传入的id传入到指定的tab项
+			}
+
+
+
+
+
+		//清除按钮
+	    $("#btnempty").click(function(){
+			$("#fCName").val("");
+			$("#fType").val("");
+			form.render('select');
+			table.reload('tableBank', {
+		        where: { //设定异步数据接口的额外参数，任意设
+		        'fCName':$("#fCName").val(),
+		        'fType':$("#fType").val()
+		       }
+		      });
+	    })
+
+
+	  //清除按钮
+	    $("#btnempty1").click(function(){
+			$("#name").val("");
+			 table.reload('mealBank', {
+			        where: { //设定异步数据接口的额外参数，任意设
+			        'name':$("#name").val(),
+			       }
+			      });
+	    })
+
+
+
+		    	//每日食谱管理table数据
+				var data2 = {};
+				function table2(data) {
+					var insTb2 = table.render({
+						id : 'table2id',
+						elem : '#pinggu',
+						url : '/YhFoodSrecipeRecordContriller/dailyRecipesMechanism',
+						cellMinWidth : 80, //全局定义常规单元格的最小宽度，layui 2.2.1 新增
+						page : true,
+						limit: 10, //每页默认显示的数量
+
+						where : data,
+						cols : [ [ {
+
+							title : '创建日期',
+							field :'cTime',
+						}, {
+							field : 'eLevel',
+							title : '能量等级',
+						}, {
+							field : 'diseaseidStr',
+							title : '适用人群',
+						}, {
+							field : 'fElementsStr',
+							title : '餐次构成',
+
+						}, {
+							field : 'oneselfStr',
+							title : '来源',
+						}, {
+							align : 'center',
+							toolbar : '#tableBar2',
+							title : '操作',
+
+						} ] ],
+						response : {
+
+							statusCode : 0
+						//规定成功的状态码，默认：0
+
+						},
+
+						parseData : function(res) { //将原始数据解析成 table 组件所规定的数据
+							console.log("table2",res.data)
+							return {
+								"code" : res.data.code, //解析接口状态
+								"msg" : res.data.msg, //解析提示文本
+								"count" : res.data.count, //解析数据长度
+								"data" : res.data.data
+							//解析数据列表
+							}
+
+						}
+					});
+				}
+
+				table2(data2);
+				//干预调整搜索按钮事件
+				$("#selectbyconditions2").click(function() {
+					data2 = {
+							oneself : $("#oneself").val(),
+							eLevel : $("#eLevel").val(),
+							diseaseid : $("#diseaseid").val()
+
+
+					};
+					console.log(data2)
+					table2(data2);
+				});
+
+				//每日食谱管理table数据
+				var data3 = {};
+				function table3(data) {
+					var insTb3 = table.render({
+						id : 'table3id',
+						elem : '#pinggu2',
+						url : '/YhFoodSrecipeRecordContriller/findFoodPackageManagement',
+						cellMinWidth : 80, //全局定义常规单元格的最小宽度，layui 2.2.1 新增
+						page : true,
+						limit: 10, //每页默认显示的数量
+
+						where : data,
+						cols : [ [ {
+
+							title : '创建日期',
+							field :'creationTime',
+						}, {
+							field : 'fsDescribe',
+							title : '套餐描述',
+						}, {
+							field : 'eLevel',
+							title : '能量等级',
+						}, {
+							field : 'diseaseName',
+							title : '适用人群',
+
+						},{
+							title:"套餐类型",
+							templet : function(d) {
+								if(d.ftype==1){
+									return "风险评估推荐";
+								}
+								if(d.ftype==2){
+									return "健康计划推荐";
+								}
+								if(d.ftype==3){
+									return "医师手动推荐";
+								}
+
+							}
+						}, {
+							field : 'oneselfStr',
+							title : '来源',
+						}, {
+							align : 'center',
+							toolbar : '#tableBar3',
+							title : '操作',
+
+						} ] ],
+						response : {
+
+							statusCode : 0
+						//规定成功的状态码，默认：0
+
+						},
+
+						parseData : function(res) { //将原始数据解析成 table 组件所规定的数据
+							console.log("table3",res.data)
+							return {
+								"code" : res.data.code, //解析接口状态
+								"msg" : res.data.msg, //解析提示文本
+								"count" : res.data.count, //解析数据长度
+								"data" : res.data.data
+							//解析数据列表
+							}
+
+						}
+					});
+				}
+
+				table3(data3);
+
+				//干预调整搜索按钮事件
+				$("#selectbyconditions3").click(function() {
+					data3 = {
+							oneself : $("#oneself2").val(),
+							ftype : $("#ftype2").val(),
+							elevel : $("#eLevelTc").val(),
+							diseaseid : $("#diseaseid2").val(),
+							fsDescribe : $("#fsDescribe").val()
+
+
+					};
+					console.log(data3)
+					table3(data3);
+				});
+
+				//干预调整清空按钮事件
+				  $("#btnempty2").click(function(){
+
+
+			            data2={};
+
+					$("#oneself").val('');
+						$("#eLevel").val('');
+					$("#diseaseid").val('');
+			        	 form.render("select");
+			            form.render();
+			            table2(data2);
+			        })
+
+			        //干预调整清空按钮事件
+				  $("#btnempty3").click(function(){
+
+
+			            data3={};
+
+					$("#fsDescribe").val('');
+						$("#diseaseid2").val('');
+					$("#eLevelTc").val('');
+					$("#ftype2").val('');
+			        	 form.render("select");
+			            form.render();
+			            table3(data3);
+			        })
+
+
+
+			          table.on('tool(pinggu)', function (obj) { //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
+		            var data = obj.data;
+		            var layEvent = obj.event;
+		            userCode = data.usercode;
+		            if (layEvent === 'edit') { // 查看
+
+					window.location.href="/manage/intervene/addDailyRecipes?uFoodErecipeId="+data.uFoodErecipeId;
+		            }
+		            if (layEvent === 'modification') { //编辑
+
+		            }
+		            if(layEvent === 'del'){//删除
+
+		                layer.confirm('你确定要删除吗?', {icon: 3, title:'提示'}, function(index){
+		                    $.ajax({
+		                        type:"POST",
+		                        url:'/YhFoodSrecipeRecordContriller/renderingDelRecipes?uFoodErecipeId='+data.uFoodErecipeId,
+		                        dataType:"json",
+		                        success:function(res){
+		                        	table2({});
+		                            form.render();
+		                        }
+		                    });
+		                    layer.close(index);
+		                });
+		            }
+		        });
+
+				  table.on('tool(pinggu2)', function (obj) { //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
+			            var data = obj.data;
+			            var layEvent = obj.event;
+			            userCode = data.usercode;
+			            if (layEvent === 'edit') { // 查看
+			            	window.location.href="/manage/intervene/addSetMeal2?id="+data.id;
+			            }
+			            if (layEvent === 'modification') { //编辑
+
+			            }
+			            if(layEvent === 'del'){//删除
+
+			                layer.confirm('你确定要删除吗?', {icon: 3, title:'提示'}, function(index){
+			                    $.ajax({
+			                        type:"POST",
+			                        url:'/YhFoodSrecipeRecordContriller/delSetMeal?id='+data.id,
+			                        dataType:"json",
+			                        success:function(res){
+			                        	table3({});
+			                            form.render();
+			                        }
+			                    });
+			                    layer.close(index);
+			                });
+			            }
+			        });
+
+
+					$("#addplan").click(function(){
+			            window.location.href="/manage/intervene/addDailyRecipes?uFoodErecipeId=0";
+			        })
+					$("#addplan2").click(function(){
+			            window.location.href="/manage/intervene/addSetMeal?id=0";
+			        })
+	  	//搜索的方法
+		   add=function(){
+		     table.reload('mealBank', {
+		        where: { //设定异步数据接口的额外参数，任意设
+		        'name':$("#name").val(),
+		       }
+		      });
+
+		    }
+
+
+		//搜索的方法
+		   solo=function(){
+		     table.reload('tableBank', {
+		        where: { //设定异步数据接口的额外参数，任意设
+		        'fCName':$("#fCName").val(),
+		        'fType':$("#fType").val()
+		       }
+		      });
+
+		    }
+
+		   table.on('tool(demo)', function(obj) { //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
+				var data = obj.data; //获得当前行数据
+
+				var layEvent = obj.event; //获得 lay-event 对应的值
+				var tr = obj.tr; //获得当前行 tr 的DOM对象
+
+				if (layEvent === 'del') { //删除
+					layer.confirm('真的删除行么', function(index) {
+						obj.del(); //删除对应行（tr）的DOM结构，并更新缓存
+						layer.close(index);
+						//向服务端发送删除指令.
+						var url = "/YhFoodCookBook/fCIdfood";
+						var data2 = {
+							'fCId' : data.fCId
+						};
+						$.post(url, data2, function(e) {
+							table.reload('tableBank');
+							if(e.data==1){
+								layer.msg("删除成功");
+								tableReload();//重载表格的方法
+							}else{
+								layer.msg("删除失败");
+							}
+
+
+						})
+					});
+				} else if (layEvent === 'edit') {
+					if(data.fType=='10'){
+						window.location.href="/manage/content/foodladd2?id="+data.fCId;
+					}else{
+						window.location.href="/manage/content/foodladd?id="+data.fCId;
+					}
+
+
+				}
+			});
+
+
+      //方法级渲染(食物管理)
+  	table.render({
+  		elem : '#LAY_table_user',
+  		url : '/YhFoodCookBook/selectCookBook',
+  		method:'post',
+  		cols : [ [
+  			{type:'numbers'},  {
+  			field : 'fCName',
+  			title : '名称',
+  		},{
+  			fixed : 'right',
+  			title : '重量(克)',
+  			align : 'center',
+  			toolbar : '#Weight'
+  		},{
+				align : 'energyKcal',
+  			title : '热量(/100克)', templet: function (d) {
+					return Math.round(d.energyKcal * 100) / 100;
+				}
+  		}, {
+       	 title: '描述信息', templet: function (d) {
+          	var ss="";
+               if(d.measuringUnit==null || d.measuringUnit==""){
+              	  ss="--";
+                }else{
+          		  ss=d.measuringUnit;
+                }
+               return ss;
+           }, align: 'measuringUnit'
+     },{
+  			field : 'foodcategoryname',
+  			title : '分类',
+  		},{
+  			title: '封面图'
+  				, templet: '#temp_img'
+  				, field: 'fCImg'
+  		},{
+  			fixed : 'right',
+  			title : '操作',
+  			align : 'center',
+  			toolbar : '#barDemo'
+  		} ] ],
+  		id : 'tableBank',
+  		page : true,
+  		done: function(res, curr, count){
+ 	         if(count > 20) {
+ 	          $(".layui-table-page").show();
+ 	         }else {
+ 	          $(".layui-table-page").hide();
+ 	         }
+ 	       }
+  	});
+
+
+
+
+
+
+
+  });
+
+
+</script>
+</html>

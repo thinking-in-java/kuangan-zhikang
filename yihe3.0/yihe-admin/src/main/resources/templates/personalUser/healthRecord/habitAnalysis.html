@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+			<link rel="stylesheet"  th:href="@{/assets/libs/layui/css/layui.css}" />
+		<title>查看习惯分析报告</title>
+	<style type="text/css">
+		body {
+	padding: 20px;
+	background-color: white;
+}
+
+#back {
+	line-height: 20px;
+	text-align: right;
+}
+
+#back a {
+	color: black;
+	text-decoration: none;
+}
+
+.content {
+	font-size: 14px;
+}
+
+.tableDemo {
+	text-align: center;
+	border: #D2D2D2 1px solid;
+	margin: 0 30px;
+}
+
+.tableDemo table {
+	width: 100%;
+}
+
+.tableDemo table tr td {
+	padding: 10px;
+}
+
+.tableDemo table tr:not(:first-child) td:first-child {
+	color: #9F9F9F;
+}
+
+#intake {
+	width: 100%;
+	height: 400px;
+}
+
+.pContent p {
+	font-size: 14px;
+	color: rgba(128, 128, 128, 1);
+	line-height: 200%;
+}
+#threeMeals{
+	width: 100%;
+	height: 280px;
+}
+#nutrition{
+	width: 100%;
+	height: 200px;
+}
+
+		
+	</style>
+	</head>
+	<body class="layui-view-body">
+		<div class="layui-content">
+			<div class="layui-col-xs6">
+				<div class="grid-demo grid-demo-bg1">
+					<h2>习惯分析报告</h2>
+				</div>
+			</div>
+			<div class="layui-col-xs6" id="back">
+				<div><a href="javascript:;">返回上一页</a></div>
+			</div>
+		</div>
+		<div class="layui-row layui-col-space20">
+			<div class="layui-col-xs6">
+				<div class="grid-demo grid-demo-bg1">
+					<table class="layui-table" lay-size="lg">
+					  <thead>
+					    <tr>
+					      <th >姓名</th>
+						  <th >性别</th>
+						  <th >年龄</th>
+						  <th >编码</th>
+					    </tr> 
+					  </thead>
+					  <tbody>
+					    <tr>
+					      <td id="userName"></td>
+						      <td id="gender"></td>
+						      <td id="age"></td>
+						      <td id="userCode"></td>
+					    </tr>
+					  </tbody>
+					</table>
+				</div>
+			</div>
+			<div class="layui-col-xs6">
+				<div>
+					<img height="100px" th:src="${getrepotimg}" />
+				</div>
+			</div>
+			<div style="margin-top: 160px;">
+				<p class="content">报告是根据您过去一月（<samp id="startTime"></samp>至<samp id="endTime"></samp>
+					）所记录的习惯日记做出的评价。它不但可以使您很好地了解过去一月的总体习惯改善情况，维持或修改相关内容；而且可以使健康管理师根据您完成的情况确定下一月的推荐方案，给您个性化的改善指导。希望您能仔细阅读这份报告，小结每月的改善情况，做得好的方面请继续保持，不足的方面请努力改进。有任何问题可随时咨询健康管理师。</p>
+			</div>
+			
+			<div id="recommend">
+			<hr style="padding: 0px;">
+			
+			<h2>推荐改善情况</h2>
+			<br>
+			<div class="layui-row" id="push">
+			
+				
+				
+			</div>
+			
+			<br />
+				<div>
+					
+				<p class="content">以上推荐基于您在<samp id="startTime"></samp>填写的健康习惯调查问卷。一个好习惯的养成一般需要持续2个月的时间，建议您在坚持记录习惯日记2个月后，根据自己的最新状态重新填写问卷，从而获取新的推荐方案。良好的习惯是成功的一半，保持良好的习惯成就更好的自己，一起见证您为了更美的自己付出的努力和坚持。</p>
+			</div>
+			
+			</div>
+			
+			
+			<hr style="padding: 0px;">
+			<div class="layui-row">
+				<div class="layui-col-md4">
+					<div class="tableDemo">
+						<table border="0">
+							<tr>
+								<td><i class="layui-icon layui-icon-fire" style="padding-right: 10px;color: #D43030;"></i>打卡数</td>
+								<td><span id="punch"></span>次</td>
+							</tr>
+							<tr>
+								<td>补打次数</td>
+								<td><span id="lifeadd"></span>次</td>
+							</tr>
+							<tr>
+								<td>连续打卡天数</td>
+								<td><span id="signpunch"></span> 天</td>
+							</tr>
+							<tr>
+								<td>累计打卡天数</td>
+								<td><span id="accumulativenum"></span>天</td>
+							</tr>
+							<tr>
+								<td>&nbsp;&nbsp;</td>
+								<td>&nbsp;&nbsp;</td>
+							</tr>
+						</table>
+					</div>
+				</div>
+				<div class="layui-col-md4">
+					<div class="tableDemo">
+						<table border="0">
+							<tr>
+								<td><i class="layui-icon layui-icon-fire" style="padding-right: 10px;color: #D43030;"></i>我的习惯</td>
+								<td><span id="showmyhabit"></span>个</td>
+							</tr>
+							<tr>
+								<td>饮食</td>
+								<td><span id="food1"></span>个</td>
+							</tr>
+							<tr>
+								<td>运动</td>
+								<td><span id="motion1"></span> 个</td>
+							</tr>
+							<tr>
+								<td>睡眠</td>
+								<td><span id="sleep1"></span>个</td>
+							</tr>
+							<tr>
+								<td>其它</td>
+								<td><span id="elsew1"></span>个</td>
+							</tr>
+						</table>
+					</div>
+				</div>
+				<div class="layui-col-md4" style="padding-left: 5%;">
+					<div id="chartmain2" style="width: 100%;height: 230px;"></div>
+				</div>
+
+				<br />
+			</div>
+			
+			<div class="layui-row">
+				<div class="layui-col-xs12">
+					<div id="intake"></div>
+				</div>
+			</div>
+		
+		
+		<br />
+				<!-- <div>
+					
+				<p class="content" style="text-align:center">你在坚持习惯“每日早起”表现得最好，累计打卡了18次，连续打卡天数13天。但是在坚持习惯“每日早睡”表现得差强人意，希望你在制定改善计划后能够下定决心努力坚持。健康取决于习惯，来自于日常生活的点点滴滴。</p>
+			</div> -->
+			
+	
+		</div>
+		<script th:src="@{/assets/libs/echarts/echarts.min.js}"></script>
+		<script type="text/javascript" th:src="@{/assets/libs/layui/layui.js}"></script>
+		<script type="text/javascript" th:src="@{/assets/js/common.js}"></script>
+		<script type="text/javascript" th:src="@{/assets/js/jquery-1.11.1.js}"></script>
+		<script type="text/javascript">
+		$('#back').click(function(){
+			window.location.href="/manage/usertosee/habit?usercode="+$("#userCode").html()+"&type=4";
+		})
+		
+		
+		
+	
+	
+
+		
+		
+		
+		layui.use(['layer', 'form', 'admin', 'table','laydate', 'util'], function () {
+			var table = layui.table;
+		$(function(){
+			var id = [[${id}]];
+			 $.ajax({
+		   		 type:'post',
+		   		 url:'/YhLifeHabitDictController/showHabitAnalyze',
+		   		 data:{id:id},
+		   		success : function(data){
+		   			$("#age").html(data.nut);
+					$("#userCode").html(data.userCode);
+					$("#userName").html(data.userName);
+					if(data.age=="1"){
+						$("#gender").html("男");
+					}else{
+						$("#gender").html("女");
+					}
+					$("#startTime").html(data.startTime);
+					$("#endTime").html(data.endTime);
+					
+					$("#punch").html(data.punch);
+					$("#lifeadd").html(data.lifeadd);
+					$("#signpunch").html(data.signpunch);
+					$("#accumulativenum").html(data.accumulativenum);
+					$("#showmyhabit").html(data.showmyhabit);
+					$("#food1").html(data.food1);
+					$("#motion1").html(data.motion1);
+					$("#sleep1").html(data.sleep1);
+					$("#elsew1").html(data.elsew1);
+					
+					
+					chartmain2(data.food,data.motion,data.sleep,data.elsew);
+			
+					var mycars = new Array()
+					mycars[0]=['product', '习惯记录', '实际打卡'];
+					 for(var k=0;k<data.array.length;k++){
+							mycars[k+1]=[''+data.array[k].time+'', data.array[k].recommend, data.array[k].notoverweight];
+					}
+					intake(mycars);
+				
+				
+				if(data.vojo!=null){
+					var mend="";
+					var sum="";
+					 for(var j=0;j<data.vojo.length;j++){
+						 if(data.vojo[j].sum==0){
+							 sum="无期限";
+						 }else{
+							 sum=data.vojo[j].sum+"天";
+						 }
+							 mend+="<div class='layui-col-md4'><div class='tableDemo'><table border='0'><tr><td><i class='layui-icon layui-icon-fire' style='padding-right: 10px;color: #D43030;'></i>"+data.vojo[j].habitName+"</td><td></td></tr><tr><td>总完成天数</td><td>"+data.vojo[j].complete+" / "+sum+"</td></tr><tr><td>连续完成天数</td><td>"+data.vojo[j].sustain+"/"+sum+"</td></tr></table></div></div>";
+					 }
+					$("#push").html(mend);
+				}else{
+					$("#recommend").hidden();
+				}
+		   		}
+		   	 })
+		})
+		
+		
+		});
+		
+		
+		function intake(take) {
+			var myChart = echarts.init(document.getElementById('intake'), 'light');
+			option = {
+				legend: {},
+				tooltip: {},
+				dataset: {
+					source: take
+				},
+				xAxis: {
+					type: 'category'
+				},
+				yAxis: {
+					name: '打卡（次数）',
+					nameTextStyle: {
+						fontWeight: 'bolder',
+						fontSize: 16
+					}
+				},
+				// Declare several bar series, each will be mapped
+				// to a column of dataset.source by default.
+				series: [{
+						type: 'bar'
+					},
+					{
+						type: 'bar'
+					}
+				]
+			};
+			// 使用刚指定的配置项和数据显示图表。
+			myChart.setOption(option);
+			window.addEventListener("resize", function() {
+				myChart.resize();
+			});
+		}
+		
+		
+		
+		function chartmain2(food,motion,sleep,elsew) {
+			var myChart = echarts.init(document.getElementById('chartmain2'));
+			let bgColor = '#fff';
+			let title = '今日打卡';
+			let color = ['#0E7CE2', '#FF8352', '#E271DE', '#F8456B', '#00FFFF', '#4AEAB0'];
+			let echartData = [{
+			        name: "饮食",
+			        value: food
+			    },
+			    {
+			        name: "运动",
+			        value: motion
+			    },
+			    {
+			        name: "睡眠",
+			        value: sleep
+			    },
+			    {
+			        name: "其它",
+			        value: elsew
+			    }
+			];
+
+			let formatNumber = function(num) {
+			    let reg = /(?=(\B)(\d{3})+$)/g;
+			    return num.toString().replace(reg, ',');
+			}
+			let total = echartData.reduce((a, b) => {
+			    return a + b.value * 1
+			}, 0);
+
+			option = {
+			    color: color,
+			    // tooltip: {
+			    //     trigger: 'item'
+			    // },
+			    title: [{
+			        text: '{name|' + title + '}\n{val|' + formatNumber(total) + '}',
+			        top: 'center',
+			        left: 'center',
+			        textStyle: {
+			            rich: {
+			                name: {
+			                    fontSize: 14,
+			                    fontWeight: 'normal',
+			                    color: '#666666',
+			                    padding: [10, 0]
+			                },
+			                val: {
+			                    fontSize: 30,
+			                    fontWeight: 'bold',
+			                    color: '#333333',
+			                }
+			            }
+			        }
+			    }],
+			    series: [{
+			        type: 'pie',
+			        radius: ['40%', '50%'],
+			        center: ['50%', '50%'],
+			        data: echartData,
+			        hoverAnimation: false,
+			        itemStyle: {
+			            normal: {
+			                borderColor: bgColor,
+			                borderWidth: 2
+			            }
+			        },
+			        labelLine: {
+			            normal: {
+			                length: 20,
+			                length2: 120,
+			                lineStyle: {
+			                    color: '#e6e6e6'
+			                }
+			            }
+			        },
+			        label: {
+			            normal: {
+			                formatter: params => {
+			                    return (
+			                        '{icon|●}{name|' + params.name + '}{value|' +
+			                        formatNumber(params.value) + '}'
+			                    );
+			                },
+			                padding: [0 , -100, 25, -100],
+			                rich: {
+			                    icon: {
+			                        fontSize: 16
+			                    },
+			                    name: {
+			                        fontSize: 14,
+			                        padding: [0, 10, 0, 4],
+			                        color: '#666666'
+			                    },
+			                    value: {
+			                        fontSize: 18,
+			                        fontWeight: 'bold',
+			                        color: '#333333'
+			                    }
+			                }
+			            }
+			        },
+			    }]
+			};
+			myChart.setOption(option);
+			window.addEventListener("resize", function() {
+				myChart.resize();
+			});
+		}
+
+		
+		</script>
+		
+		
+	</body>
+</html>

@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yihe.system.mapper.YhcheidentificationMapper" >
+    <resultMap id="yhChineseAnwser" type="com.yihe.system.domain.YhChineseAnwserr">
+        <id column="id" jdbcType="INTEGER" property="id" />
+        <result column="User_code" jdbcType="VARCHAR" property="userCode" />
+        <result column="chooselist" jdbcType="VARCHAR" property="chooselist" />
+        <result column="A_score" jdbcType="INTEGER" property="aScore" />
+        <result column="B_score" jdbcType="INTEGER" property="bScore" />
+        <result column="C_score" jdbcType="INTEGER" property="cScore" />
+        <result column="D_score" jdbcType="INTEGER" property="dScore" />
+        <result column="E_score" jdbcType="INTEGER" property="eScore" />
+        <result column="F_score" jdbcType="INTEGER" property="fScore" />
+        <result column="G_score" jdbcType="INTEGER" property="gScore" />
+        <result column="H_score" jdbcType="INTEGER" property="hScore" />
+        <result column="I_score" jdbcType="INTEGER" property="iScore" />
+        <result column="state" jdbcType="INTEGER" property="state" />
+        <result column="A_istype" jdbcType="INTEGER" property="aIstype" />
+        <result column="B_istype" jdbcType="INTEGER" property="bIstype" />
+        <result column="C_istype" jdbcType="INTEGER" property="cIstype" />
+        <result column="D_istype" jdbcType="INTEGER" property="dIstype" />
+        <result column="E_istype" jdbcType="INTEGER" property="eIstype" />
+        <result column="F_istype" jdbcType="INTEGER" property="fIstype" />
+        <result column="G_istype" jdbcType="INTEGER" property="gIstype" />
+        <result column="H_istype" jdbcType="INTEGER" property="hIstype" />
+        <result column="I_istype" jdbcType="INTEGER" property="iIstype" />
+        <result column="time" jdbcType="VARCHAR" property="time" />
+        <result column="times" jdbcType="VARCHAR" property="times" />
+        <result column="times2" jdbcType="VARCHAR" property="times2" />
+        <result column="gender" jdbcType="VARCHAR" property="gender" />
+        <result column="userName" jdbcType="VARCHAR" property="userName" />
+        <result column="name" jdbcType="VARCHAR" property="name" />
+        <result column="birth_date" jdbcType="VARCHAR" property="birth_date" />
+    </resultMap>
+
+
+    <select id="selectUserYhPainTotalReportParam" resultMap="yhChineseAnwser" parameterType="java.lang.String" >
+        select * from yh_chinese_anwser where User_code=#{userCode}
+
+        <if test="qtstrTime !=null and qtstrTime !='' and qtendTime !=null and qtendTime !=''">
+            AND time BETWEEN  #{qtstrTime}  AND #{qtendTime}
+        </if>
+
+        order by time desc
+    </select>
+
+    <select id="selectUserAllYhPainTotalReportParam" resultMap="yhChineseAnwser">
+        select * from (select port.*,regin.name as `name`,regin.user_name as userName,(
+        select count(*) from (select port.*,regin.name as `name` from yh_chinese_anwser as port
+        left join yh_user_reginfo as regin
+        on port.User_code = regin.user_code
+        LEFT JOIN  yh_org_tree as tree
+        ON regin.Org_code=tree.Org_Code
+        left JOIN yh_user_make_card as card
+        on regin.user_code=card.User_Code
+        left JOIN yh_user_admin_info as yuai
+        ON yuai.id=card.doctor
+        where yuai.user_code=#{userCode}
+        <if test="orgCode!=null and orgCode!='' ">
+            and tree.Org_Code=#{orgCode}
+        </if>
+        <if test="qtstrTime !=null and qtstrTime !='' and qtendTime !=null and qtendTime !=''">
+            AND port.time BETWEEN  #{qtstrTime}  AND #{qtendTime}
+        </if>
+        <if test="orgCode!=null and orgCode!='' ">
+            and tree.Org_Code=#{orgCode}
+        </if>
+        <if test="name!=null and name!='' ">
+            and regin.name=#{name}
+        </if>
+        order by port.time desc) w
+
+        <if test="symptom =='assess'.toString()">
+            group by user_code
+            order by w.time desc
+        </if>
+
+
+        ) as times from yh_chinese_anwser as port
+        left join yh_user_reginfo as regin
+        on port.User_code = regin.user_code
+        LEFT JOIN  yh_org_tree as tree
+        ON regin.Org_code=tree.Org_Code
+        left JOIN yh_user_make_card as card
+        on regin.user_code=card.User_Code
+        left JOIN yh_user_admin_info as yuai
+        ON yuai.id=card.doctor
+        where yuai.user_code=#{userCode}
+        <if test="orgCode!=null and orgCode!='' ">
+            and tree.Org_Code=#{orgCode}
+        </if>
+        <if test="qtstrTime !=null and qtstrTime !='' and qtendTime !=null and qtendTime !=''">
+            AND port.time BETWEEN  #{qtstrTime}  AND #{qtendTime}
+        </if>
+        <if test="orgCode!=null and orgCode!='' ">
+            and tree.Org_Code=#{orgCode}
+        </if>
+        <if test="name!=null and name!='' ">
+            and regin.name=#{name}
+        </if>
+        order by port.time desc) w
+
+        <if test="symptom =='assess'.toString()">
+            group by user_code
+            order by w.time desc
+        </if>
+
+
+    </select>
+
+    <select id="selectByPrimaryKey" resultMap="yhChineseAnwser" parameterType="java.lang.Integer" >
+   	select port.*,info.name as `name`,info.gender as `gender`,info.birth_date from yh_chinese_anwser as port
+	left join yh_user_reginfo as info
+	on port.User_code = info.user_code
+    where id = #{reportId,jdbcType=INTEGER}
+  </select>
+</mapper>

@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>用户查看健康检测</title>
+   <link rel="stylesheet"  th:href="@{/assets/libs/layui/css/layui.css}" />
+    <link rel="stylesheet"  th:href="@{/assets/module/admin.css}"  />
+    <style type="text/css">
+    .layui-table th {
+            text-align: center;
+	 }
+	  .layui-table tr {
+            text-align: center;
+	 }
+	 .layui-table-cell {
+	height: auto !important;
+}
+</style>
+</head>
+<body style="margin: 20px;background-color: white;">
+ 
+<div class="layui-form" >
+  <table class="layui-table">
+    <colgroup>
+      <col width="50">
+      <col width="150">
+      <col width="250">
+      <col width="150">
+      <col width="150">
+      <col width="150">
+      <col width="150">	
+      <col>
+    </colgroup>
+    <thead>
+      <tr>
+    	<th>序号</th>
+   	 	<th>监测项</th>
+        <th>数值</th>
+        <th>累计记录次数</th>
+        <th>记录方式</th>
+        <th>监测时间</th>
+        <th>操作</th>
+      </tr> 
+    </thead>
+    <tbody>
+      <tr>
+      	<td>1</td>
+        <td>体温</td>
+        <td ><span th:if="${not #lists.isEmpty(temperatureMap)}" th:text="${temperatureMap['temperature']}"></span>
+        <span th:if="${not #lists.isEmpty(temperatureMap)}">℃</span></td>
+        <td><span th:if="${not #lists.isEmpty(temperatureMap)}" th:text="${temperatureMap['num']}"></span></td> 
+         <td><span th:if="${not #lists.isEmpty(temperatureMap)}" th:text="${temperatureMap['Data_Source']}"></span></td>
+        <td><span th:if="${not #lists.isEmpty(temperatureMap)}" th:text="${temperatureMap['Entry_Time']}"></span></td>
+	    <td><a  th:href="@{'/manage/health/indicator?type=tiwen&userCode='+${userCode}}"><font color='#36A4FF'>查看</font></a></td>
+      </tr>
+       <tr>
+      	<td>2</td>
+       <td>血氧</td>
+       <td  ><span th:if="${not #lists.isEmpty(OxygenMap)}" th:text="${OxygenMap['oxygen']}"></span> <span th:if="${not #lists.isEmpty(OxygenMap)}">%</span></td>
+        <td><span th:if="${not #lists.isEmpty(OxygenMap)}" th:text="${OxygenMap['num']}"></span></td>
+        <td><span th:if="${not #lists.isEmpty(OxygenMap)}" th:text="${OxygenMap['type']}"></span></td>
+        <td><span th:if="${not #lists.isEmpty(OxygenMap)}" th:text="${OxygenMap['Entry_Time']}"></span></td>
+        <td><a  th:href="@{'/manage/health/indicator?type=oxygen&userCode='+${userCode}}"><font color='#36A4FF'>查看</font></a></td>
+      </tr> 
+       <tr>
+      <td>3</td>
+      <td>体重</td>
+      <td ><span th:if="${not #lists.isEmpty(tzMap)}" th:text="${tzMap['U_Weight']}"></span><span th:if="${not #lists.isEmpty(tzMap)}">kg</span></td>
+        <td ><span  th:if="${not #lists.isEmpty(tzMap)}" th:text="${tzMap['num']}"></span></td>
+        <td><span th:if="${not #lists.isEmpty(tzMap)}" th:text="${tzMap['Data_Source']}"></span></td>
+        <td><span th:if="${not #lists.isEmpty(tzMap)}"  th:text="${tzMap['Entry_Time']}"></span></td>
+        <td><a  th:href="@{'/manage/health/indicator?type=weight&userCode='+${userCode}}"><font color='#36A4FF'>查看</font></a></td>
+      </tr>
+   <tr>
+       <td>4</td>
+       <td >血压</td>
+        <td><span th:if="${not #lists.isEmpty(xyMap)}">收缩压：</span>
+        <span  th:if="${not #lists.isEmpty(xyMap)}" th:text="${xyMap['Sbp']}">
+        </span><span th:if="${not #lists.isEmpty(xyMap)}">mmHg</span> <br>
+     
+	     <span th:if="${not #lists.isEmpty(xyMap)}">  舒张压：</span>
+	     <span th:if="${not #lists.isEmpty(xyMap)}" th:text="${xyMap['Dbp']}"></span>
+	     <span th:if="${not #lists.isEmpty(xyMap)}">mmHg</span></td> 
+     
+        <td><span  th:if="${not #lists.isEmpty(xyMap)}" th:text="${xyMap['num']}"></span></td>
+        <td><span th:if="${not #lists.isEmpty(xyMap)}" th:text="${xyMap['type']}"></span></td>
+        <td><span th:if="${not #lists.isEmpty(xyMap)}" th:text="${xyMap['Entry_Time']}"></span></td>
+        <td><a  th:href="@{'/manage/health/indicator?type=bloodpressure&userCode='+${userCode}}"><font color='#36A4FF'>查看</font></a></td>
+      </tr> 
+      <tr>
+      	<td>5</td>
+        <td>血糖</td>
+        <td>
+        <span th:if="${not #lists.isEmpty(xtMap)}" th:text="${xtMap['Env']}"></span>
+        <span th:if="${not #lists.isEmpty(xtMap)}" th:text="${xtMap['Bs']}"></span>
+        <span th:if="${not #lists.isEmpty(xtMap)}">mmol/L</span></td>
+        <td><span th:if="${not #lists.isEmpty(xtMap)}" th:text="${xtMap['num']}"></span></td>
+        <td><span th:if="${not #lists.isEmpty(xtMap)}" th:text="${xtMap['Data_Source']}"></span></td>
+        <td><span th:if="${not #lists.isEmpty(xtMap)}" th:text="${xtMap['Entry_Time']}"></span></td>
+         <td><a  th:href="@{'/manage/health/indicator?type=env&userCode='+${userCode}}"><font color='#36A4FF'>查看</font></a></td>
+      </tr>
+       <tr>
+      	<td>6</td>
+        <td>心率</td>
+        <td><span th:if="${not #lists.isEmpty(xinlvMap)}" th:text="${xinlvMap['heart_rate']}"></span> <span th:if="${not #lists.isEmpty(xinlvMap)}">Bpm</span></td>
+        <td><span th:if="${not #lists.isEmpty(xinlvMap)}" th:text="${xinlvMap['num']}"></span></td>
+        <td><span th:if="${not #lists.isEmpty(xinlvMap)}" th:text="${xinlvMap['Data_Source']}"></span></td>
+        <td><span th:if="${not #lists.isEmpty(xinlvMap)}" th:text="${xinlvMap['Entry_Time']}"></span></td>
+        <td><a  th:href="@{'/manage/health/indicator?type=heartrate&userCode='+${userCode}}"><font color='#36A4FF'>查看</font></a></td>
+      </tr> 
+      <tr>
+      	<td>7</td>
+        <td>体脂</td>
+          <td>
+           <span  th:if="${not #lists.isEmpty(bodyFatMap)}">脂肪率：</span>
+          <span th:if="${not #lists.isEmpty(bodyFatMap)}" th:text="${bodyFatMap['fat_rate']}"></span>
+          <span  th:if="${not #lists.isEmpty(bodyFatMap)}">%</span><br>
+          
+           		<span  th:if="${not #lists.isEmpty(bodyFatMap)}"> 肌肉率：</span>
+		        <span th:if="${not #lists.isEmpty(bodyFatMap)}" th:text="${bodyFatMap['muscle']}"></span>
+		         <span th:if="${not #lists.isEmpty(bodyFatMap)}">%</span><br>
+		         
+		         <span  th:if="${not #lists.isEmpty(bodyFatMap)}">骨骼量：</span>
+		        <span th:if="${not #lists.isEmpty(bodyFatMap)}" th:text="${bodyFatMap['bones']}"></span>
+		      	<span th:if="${not #lists.isEmpty(bodyFatMap)}" >Kg</span>
+		      </td> 
+		      
+		      
+		
+		      
+		      
+		      
+		      
+		      
+        <td><span th:if="${not #lists.isEmpty(bodyFatMap)}" th:text="${bodyFatMap['num']}"></span></td>
+        <td><span th:if="${not #lists.isEmpty(bodyFatMap)}" th:text="${bodyFatMap['type']}"></span></td>
+        <td><span th:if="${not #lists.isEmpty(bodyFatMap)}" th:text="${bodyFatMap['Entry_Time']}"></span></td> 
+         <td><a  th:href="@{'/manage/health/indicator?type=fatrate&userCode='+${userCode}}"><font color='#36A4FF'>查看</font></a></td>
+      </tr> 
+   <tr>									
+      	<td>8</td>
+        <td>血脂四项</td>
+         <td>
+         <span  th:if="${not #lists.isEmpty(bloodfatFatMap)}">总胆固醇：</span>
+         <span th:if="${not #lists.isEmpty(bloodfatFatMap)}" th:text="${bloodfatFatMap['Cholesterin']}"></span>
+         <span th:if="${not #lists.isEmpty(bloodfatFatMap)}">mmol/L</span><br>
+         
+         <span  th:if="${not #lists.isEmpty(bloodfatFatMap)}">    甘油三脂：</span>
+		    <span th:if="${not #lists.isEmpty(bloodfatFatMap)}" th:text="${bloodfatFatMap['Tring']}"></span>
+		<span th:if="${not #lists.isEmpty(bloodfatFatMap)}">mmol/L</span><br>
+		
+		  <span  th:if="${not #lists.isEmpty(bloodfatFatMap)}">高密度脂蛋白胆固醇：</span>
+		   <span th:if="${not #lists.isEmpty(bloodfatFatMap)}" th:text="${bloodfatFatMap['Hdl']}"></span>
+			<span th:if="${not #lists.isEmpty(bloodfatFatMap)}" >mmol/L</span><br>
+			 
+			 <span  th:if="${not #lists.isEmpty(bloodfatFatMap)}">低密度脂蛋白胆固醇： </span>
+		       <span th:if="${not #lists.isEmpty(bloodfatFatMap)}" th:text="${bloodfatFatMap['Ldl']}"></span>
+			<span th:if="${not #lists.isEmpty(bloodfatFatMap)}">mmol/L</span>
+			</td> 
+		      
+		      
+        <td><span th:if="${not #lists.isEmpty(bloodfatFatMap)}"  th:text="${bloodfatFatMap['num']}"></span></td>
+        <td><span th:if="${not #lists.isEmpty(bloodfatFatMap)}"  th:text="${bloodfatFatMap['Data_Source']}"></span></td>
+        <td><span th:if="${not #lists.isEmpty(bloodfatFatMap)}"  th:text="${bloodfatFatMap['Entry_Time']}"></span></td> 
+         <td><a  th:href="@{'/manage/health/indicator?type=bloodfat&userCode='+${userCode}}"><font color='#36A4FF'>查看</font></a></td>
+      </tr>
+      <tr>	
+		<td>9</td>
+        <td>肾功能</td>
+      	<td>
+      	<span th:if="${not #lists.isEmpty(functionMap)}" >血肌酐：</span>
+      	<span th:if="${not #lists.isEmpty(functionMap)}" th:text="${functionMap['creatinine']}"></span>
+      	<span th:if="${not #lists.isEmpty(functionMap)}" >μmol/L</span> <br>
+     
+      	
+      	<span th:if="${not #lists.isEmpty(functionMap)}" >血尿素氮：</span>
+		  <span th:if="${not #lists.isEmpty(functionMap)}" th:text="${functionMap['urea_nitrogen']}"></span>
+		  <span th:if="${not #lists.isEmpty(functionMap)}" >μmol/L</span> <br>
+		      
+		 <span th:if="${not #lists.isEmpty(functionMap)}" > 血尿酸： </span>
+		<span th:if="${not #lists.isEmpty(functionMap)}" th:text="${functionMap['uric_acid']}"></span>
+		 <span th:if="${not #lists.isEmpty(functionMap)}" >μmol/L</span> 
+		</td> 
+		  
+		   
+        <td><span th:if="${not #lists.isEmpty(functionMap)}" th:text="${functionMap['num']}"></span></td>
+        <td><span th:if="${not #lists.isEmpty(functionMap)}" th:text="${functionMap['Data_Source']}"></span></td>
+        <td><span th:if="${not #lists.isEmpty(functionMap)}" th:text="${functionMap['inertTime']}"></span></td> 
+         <td><a  th:href="@{'/manage/health/indicator?type=kidney&userCode='+${userCode}}"><font color='#36A4FF'>查看</font></a></td>
+      </tr>
+       <tr>
+      	<td>10</td>
+        <td>肝功能</td> 
+        
+         
+         <td>
+         <span th:if="${not #lists.isEmpty(liverMap)}">谷丙转氨酶：</span>
+         	<span th:if="${not #lists.isEmpty(liverMap)}" th:text="${liverMap['gu_Bing']}"></span>
+         	<span th:if="${not #lists.isEmpty(liverMap)}">u/L</span><br>
+         	
+         	<span th:if="${not #lists.isEmpty(liverMap)}">  谷草转氨酶：</span>
+         	<span th:if="${not #lists.isEmpty(liverMap)}" th:text="${liverMap['millet_straw']}"></span>
+         	<span th:if="${not #lists.isEmpty(liverMap)}">u/L</span><br>
+         
+         <span th:if="${not #lists.isEmpty(liverMap)}">  血清白蛋白：</span>
+         	<span th:if="${not #lists.isEmpty(liverMap)}" th:text="${liverMap['serum_albumin']}"></span>
+         	<span th:if="${not #lists.isEmpty(liverMap)}">g/l</span><br>
+         
+		      <span th:if="${not #lists.isEmpty(liverMap)}">   血清球蛋白：</span>
+         	<span th:if="${not #lists.isEmpty(liverMap)}" th:text="${liverMap['serum_globulin']}"></span>
+         	<span th:if="${not #lists.isEmpty(liverMap)}">g/l</span><br>
+         
+		      </td> 
+		      
+		      
+        <td><span th:if="${not #lists.isEmpty(liverMap)}" th:text="${liverMap['num']}"></span></td>
+        <td><span th:if="${not #lists.isEmpty(liverMap)}" th:text="${liverMap['Data_Source']}"></span></td>
+        <td><span th:if="${not #lists.isEmpty(liverMap)}" th:text="${liverMap['insertTime']}"></span></td> 
+         <td><a  th:href="@{'/manage/health/indicator?type=liver&userCode='+${userCode}}"><font color='#36A4FF'>查看</font></a></td>
+      </tr> 
+      
+            <tr>
+      	<td>11</td>
+        <td>动脉硬化</td>
+        <td>
+         <span th:if="${not #lists.isEmpty(yhUserArtery)}">最大血压 （收缩压）：[[${yhUserArtery.sbp}]] mmHg</span><br>
+        <span  th:if="${not #lists.isEmpty(yhUserArtery)}">最小血压 （收缩压）：[[${yhUserArtery.dbp}]] mmHg </span><br>
+         <span th:if="${not #lists.isEmpty(yhUserArtery)}">脉博（心率） : [[${yhUserArtery.pulse}]] 次/分钟</span><br>
+         <span th:if="${not #lists.isEmpty(yhUserArtery)}">中心动脉硬度指标: [[${yhUserArtery.avi}]]</span><br>
+          <span th:if="${not #lists.isEmpty(yhUserArtery)}">上臂动脉硬度指标 : [[${yhUserArtery.api}]]</span><br>
+          <span th:if="${not #lists.isEmpty(yhUserArtery)}">中心动脉血压值 : [[${yhUserArtery.csbp}]] mmHg</span><br>
+          <span th:if="${not #lists.isEmpty(yhUserArtery)}">中心动脉脉压值 : [[${yhUserArtery.capp}]] mmHg</span><br>
+		  </td> 
+		     
+        <td><span th:if="${not #lists.isEmpty(yhUserArtery)}" th:text="${yhUserArtery.insertcount}"></span></td>
+        <td><span th:if="${not #lists.isEmpty(yhUserArtery)}">
+        	<span>E500设备上传</span>
+        </span></td>
+        <td><span th:if="${not #lists.isEmpty(yhUserArtery)}" th:text="${yhUserArtery.createdate}"></span></td> 
+        <td><a  th:href="@{'/manage/health/indicator?type=artery&userCode='+${userCode}}"><font color='#36A4FF'>查看</font></a></td>
+      </tr> 
+            
+     <!-- <div id="layer-photos-demo" class="layer-photos-demo">
+	  <img layer-pid="图片id，可以不写" layer-src="大图地址" src="缩略图" alt="图片名">
+	  <img layer-pid="图片id，可以不写" layer-src="大图地址" src="缩略图" alt="图片名">
+	</div>  -->
+      	
+      	<tr>
+      	<td>12</td>
+        <td>心电图</td>
+       <td>
+       <div id="layer-photos-demo" class="layer-photos-demo">
+	       <span th:if="${not #lists.isEmpty(EcgMap)}">
+	       <img id="imgClick" th:src="${EcgMap['pig_path']}" alt="心电图">
+	       </span>
+	   </div>
+       <span th:if="${not #lists.isEmpty(EcgMap)}" th:text="${EcgMap['resurt_text']}"></span>
+       </td>
+        <td><span th:if="${not #lists.isEmpty(EcgMap)}" th:text="${EcgMap['num']}"></span></td>
+        <td><span th:if="${not #lists.isEmpty(EcgMap)}" th:text="${EcgMap['Data_Source']}"></span></td>
+        <td><span th:if="${not #lists.isEmpty(EcgMap)}" th:text="${EcgMap['Entry_Time']}"></span></td>
+       <td><a  th:href="@{'/manage/health/indicator?type=ecg&userCode='+${userCode}}"><font color='#36A4FF'>查看</font></a></td>
+      </tr> 
+      <tr>
+      	<td>13</td>
+        <td>尿检</td>
+        <td> 
+         <span th:if="${not #lists.isEmpty(UbaMap)}">红细胞：</span>
+        <span th:if="${not #lists.isEmpty(UbaMap)}" th:text="${UbaMap['redBloodCell']}"></span><br>
+
+            <span th:if="${not #lists.isEmpty(UbaMap)}">白细胞：</span>
+            <span th:if="${not #lists.isEmpty(UbaMap)}" th:text="${UbaMap['whiteBloodCell']}"></span><br>
+
+         <span th:if="${not #lists.isEmpty(UbaMap)}"> 尿蛋白：</span>
+        <span th:if="${not #lists.isEmpty(UbaMap)}" th:text="${UbaMap['urineProtein']}"></span><br>
+         
+         <span th:if="${not #lists.isEmpty(UbaMap)}">  酮体：</span>
+        <span th:if="${not #lists.isEmpty(UbaMap)}" th:text="${UbaMap['ketone']}"></span><br>
+        
+        
+		     
+		     
+        <td><span th:if="${not #lists.isEmpty(UbaMap)}" th:text="${UbaMap['num']}"></span></td>
+        <td><span th:if="${not #lists.isEmpty(UbaMap)}" th:text="${UbaMap['Data_Source']}"></span></td>
+        <td><span th:if="${not #lists.isEmpty(UbaMap)}" th:text="${UbaMap['addDate']}"></span></td> 
+       <td><a  th:href="@{'/manage/health/indicator?type=uba&userCode='+${userCode}}"><font color='#36A4FF'>查看</font></a></td>
+      </tr> 
+      
+       <tr>
+      	<td>14</td>
+        <td>其他指标</td>
+        <td>
+         <span th:if="${not #lists.isEmpty(qtMap)}">尿微量蛋白：</span>
+        <span  th:if="${not #lists.isEmpty(qtMap)}" th:text="${qtMap['urine_microprotein']}"></span>
+         <span th:if="${not #lists.isEmpty(qtMap)}">  μg/min</span><br>
+         
+          <span th:if="${not #lists.isEmpty(qtMap)}">糖化血红蛋白：</span>
+        <span  th:if="${not #lists.isEmpty(qtMap)}" th:text="${qtMap['glycosylated_hemoglobin']}"></span>
+         <span  th:if="${not #lists.isEmpty(qtMap)}">  %</span><br>
+      		
+      	 <span  th:if="${not #lists.isEmpty(qtMap)}"> 同型半胱氨酸：</span>
+        <span  th:if="${not #lists.isEmpty(qtMap)}" th:text="${qtMap['glycosylated_hemoglobin']}"></span>
+         <span  th:if="${not #lists.isEmpty(qtMap)}">μmol/L</span>
+		  </td> 
+		     
+        <td><span th:if="${not #lists.isEmpty(qtMap)}" th:text="${qtMap['num']}"></span></td>
+        <td><span th:if="${not #lists.isEmpty(qtMap)}" th:text="${qtMap['Data_Source']}"></span></td>
+        <td><span th:if="${not #lists.isEmpty(qtMap)}" th:text="${qtMap['insertTime']}"></span></td> 
+        <td><a  th:href="@{'/manage/health/indicator?type=else&userCode='+${userCode}}"><font color='#36A4FF'>查看</font></a></td>
+      </tr> 
+    </tbody>
+  </table>
+</div>
+</body>
+<script type="text/javascript" th:src="@{/assets/libs/layui/layui.js}"></script>
+<script type="text/javascript" th:src="@{/assets/js/common.js}"></script>
+<script type="text/javascript" th:src="@{/assets/js/jquery-1.11.1.js}"></script>
+<script type="text/javascript" th:src="@{/assets/userIndex/blood.js}"></script>
+<script th:src="@{/assets/libs/echarts/echarts.min.js}"></script>
+
+<script type="text/javascript" th:inline="javascript">
+
+layui.use([ 'layer', 'form', 'laydate', 'notice' ],function() {
+	var $ = layui.jquery;
+	var layer = layui.layer;
+	var form = layui.form;
+	var laydate = layui.laydate;
+	var notice = layui.notice;
+
+
+	 
+
+	
+	  //var usercode = [[${userCode}]]; 
+	 $("#imgClick").on('click',function(){
+		var src = $("#imgClick").attr("src");
+		//调用示例
+		
+		 layer.photos({
+		   photos: '#layer-photos-demo'
+		   ,anim: 5 //0-6的选择，指定弹出图片动画类型，默认随机（请注意，3.0之前的版本用shift参数）
+		   ,closeBtn: true
+		   ,shade: .1
+		 }); 
+		 
+	 })
+
+	
+
+});
+</script>
+</html>

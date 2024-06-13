@@ -1,0 +1,273 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yihe.system.mapper.YhFoodUserScrecipeWebNewMapper" >
+  <resultMap id="BaseResultMap" type="com.yihe.system.domain.YhFoodUserScrecipeWebNew" >
+    <id column="U_Food_Erecipe_Id" property="uFoodErecipeId" jdbcType="INTEGER" />
+    <result column="C_Time" property="cTime" jdbcType="TIMESTAMP" />
+    <result column="Start_Time" property="startTime" jdbcType="TIMESTAMP" />
+    <result column="State_Flag" property="stateFlag" jdbcType="INTEGER" />
+    <result column="Srecipe_Id" property="srecipeId" jdbcType="INTEGER" />
+    <result column="Is_Del" property="isDel" jdbcType="INTEGER" />
+    <result column="E_Level" property="eLevel" jdbcType="INTEGER" />
+    <result column="diseaseid" property="diseaseid" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="INTEGER" />
+    <result column="oneself" property="oneself" jdbcType="INTEGER" />
+    <result column="user_code" property="userCode" jdbcType="VARCHAR" />
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="com.yihe.system.domain.YhFoodUserScrecipeWebNew" extends="BaseResultMap" >
+    <result column="F_Elements" property="fElements" jdbcType="LONGVARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    U_Food_Erecipe_Id, C_Time, Start_Time, State_Flag, Srecipe_Id, Is_Del, E_Level, diseaseid, 
+    status, oneself, user_code
+  </sql>
+  <sql id="Blob_Column_List" >
+    F_Elements
+  </sql>
+  <select id="findFoodUserScrecipe2ByIdList" resultMap="ResultMapWithBLOBs"  >
+  
+SELECT U_Food_Erecipe_Id,C_Time,E_Level,diseaseid,F_Elements,oneself,user_code FROM `yh_food_user_screcipe2` WHERE Is_Del=2 AND  U_Food_Erecipe_Id IN 
+<foreach collection="list" item="id" index="index" open="(" close=")" separator=",">
+	  #{id}
+	</foreach>
+  </select>
+  <select id="findFoodUserScrecipeGroupLevel" resultType="java.lang.String">
+  SELECT E_Level FROM yh_food_user_screcipe2 GROUP BY E_Level
+  
+  </select>
+  <select id="findTodayScrecipeInfo" resultMap="ResultMapWithBLOBs" >
+   SELECT U_Food_Erecipe_Id,C_Time,E_Level,diseaseid,F_Elements,oneself,user_code FROM `yh_food_user_screcipe2`
+ <where>
+ Is_Del=2
+ <if test="oneself == 1">
+ AND oneself=1 
+ </if>
+ <if test="oneself == 2">
+ AND user_code=#{usercode}  AND oneself=2 
+ </if>
+  <if test="oneself == 3">
+  AND oneself=2  AND user_code!=#{usercode}
+ </if>
+ <if test="eLevel != null and eLevel != ''">
+ AND E_Level=#{eLevel}
+ </if>
+ <if test="diseaseid != null and diseaseid != ''">
+ AND diseaseid  LIKE CONCAT('%',#{diseaseid},'%') 
+ </if>
+ </where>
+
+ 
+   ORDER BY C_Time DESC
+  </select>
+  
+  
+  <select id="findTodayScrecipeInfo2" resultMap="ResultMapWithBLOBs" >
+   SELECT U_Food_Erecipe_Id,C_Time,E_Level,diseaseid,F_Elements,oneself,user_code FROM `yh_food_user_screcipe2`
+ <where>
+ Is_Del=2
+ <if test="oneself == 1">
+ AND oneself=1 
+ </if>
+ <if test="oneself == 2">
+ AND user_code=#{usercode}  AND oneself=2 
+ </if>
+  <if test="oneself == 3">
+  AND oneself=2  AND user_code!=#{usercode}
+ </if>
+ <if test="eLevel != null and eLevel != ''">
+ AND E_Level=#{eLevel}
+ </if>
+ <if test="diseaseid != null">
+ <foreach collection="diseaseid" item="item" separator=" " open="" close="">  
+        AND CONCAT(';',diseaseid,';') LIKE   #{item}
+              </foreach>
+ </if>
+  <if test="idlist != null">
+  and  U_Food_Erecipe_Id NOT IN
+  <foreach collection="idlist" item="idlist" index="index" open="(" close=")" separator=",">
+	  #{idlist}
+	</foreach>
+  </if>
+ </where>
+
+ 
+   ORDER BY C_Time DESC
+  </select>
+  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from yh_food_user_screcipe2
+    where U_Food_Erecipe_Id = #{uFoodErecipeId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from yh_food_user_screcipe2
+    where U_Food_Erecipe_Id = #{uFoodErecipeId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.yihe.system.domain.YhFoodUserScrecipeWebNew" >
+    insert into yh_food_user_screcipe2 (U_Food_Erecipe_Id, C_Time, Start_Time, 
+      State_Flag, Srecipe_Id, Is_Del, 
+      E_Level, diseaseid, status, 
+      oneself, user_code, F_Elements
+      )
+    values (#{uFoodErecipeId,jdbcType=INTEGER}, #{cTime,jdbcType=TIMESTAMP}, #{startTime,jdbcType=TIMESTAMP}, 
+      #{stateFlag,jdbcType=INTEGER}, #{srecipeId,jdbcType=INTEGER}, #{isDel,jdbcType=INTEGER}, 
+      #{eLevel,jdbcType=INTEGER}, #{diseaseid,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER}, 
+      #{oneself,jdbcType=INTEGER}, #{userCode,jdbcType=VARCHAR}, #{fElements,jdbcType=LONGVARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.yihe.system.domain.YhFoodUserScrecipeWebNew" >
+    insert into yh_food_user_screcipe2
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="uFoodErecipeId != null" >
+        U_Food_Erecipe_Id,
+      </if>
+      <if test="cTime != null" >
+        C_Time,
+      </if>
+      <if test="startTime != null" >
+        Start_Time,
+      </if>
+      <if test="stateFlag != null" >
+        State_Flag,
+      </if>
+      <if test="srecipeId != null" >
+        Srecipe_Id,
+      </if>
+      <if test="isDel != null" >
+        Is_Del,
+      </if>
+      <if test="eLevel != null" >
+        E_Level,
+      </if>
+      <if test="diseaseid != null" >
+        diseaseid,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="oneself != null" >
+        oneself,
+      </if>
+      <if test="userCode != null" >
+        user_code,
+      </if>
+      <if test="fElements != null" >
+        F_Elements,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="uFoodErecipeId != null" >
+        #{uFoodErecipeId,jdbcType=INTEGER},
+      </if>
+      <if test="cTime != null" >
+        #{cTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="startTime != null" >
+        #{startTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="stateFlag != null" >
+        #{stateFlag,jdbcType=INTEGER},
+      </if>
+      <if test="srecipeId != null" >
+        #{srecipeId,jdbcType=INTEGER},
+      </if>
+      <if test="isDel != null" >
+        #{isDel,jdbcType=INTEGER},
+      </if>
+      <if test="eLevel != null" >
+        #{eLevel,jdbcType=INTEGER},
+      </if>
+      <if test="diseaseid != null" >
+        #{diseaseid,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="oneself != null" >
+        #{oneself,jdbcType=INTEGER},
+      </if>
+      <if test="userCode != null" >
+        #{userCode,jdbcType=VARCHAR},
+      </if>
+      <if test="fElements != null" >
+        #{fElements,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="findMaxSrecipeId" resultType="java.lang.Integer">
+  SELECT Srecipe_Id FROM `yh_food_user_screcipe2` ORDER BY Srecipe_Id DESC LIMIT 1
+  </select>
+  <update id="updateByPrimaryKeySelective" parameterType="com.yihe.system.domain.YhFoodUserScrecipeWebNew" >
+    update yh_food_user_screcipe2
+    <set >
+      <if test="cTime != null" >
+        C_Time = #{cTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="startTime != null" >
+        Start_Time = #{startTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="stateFlag != null" >
+        State_Flag = #{stateFlag,jdbcType=INTEGER},
+      </if>
+      <if test="srecipeId != null" >
+        Srecipe_Id = #{srecipeId,jdbcType=INTEGER},
+      </if>
+      <if test="isDel != null" >
+        Is_Del = #{isDel,jdbcType=INTEGER},
+      </if>
+      <if test="eLevel != null" >
+        E_Level = #{eLevel,jdbcType=INTEGER},
+      </if>
+      <if test="diseaseid != null" >
+        diseaseid = #{diseaseid,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="oneself != null" >
+        oneself = #{oneself,jdbcType=INTEGER},
+      </if>
+      <if test="userCode != null" >
+        user_code = #{userCode,jdbcType=VARCHAR},
+      </if>
+      <if test="fElements != null" >
+        F_Elements = #{fElements,jdbcType=LONGVARCHAR},
+      </if>
+       <if test="updateUsercode != null" >
+        updateUsercode = #{updateUsercode,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where U_Food_Erecipe_Id = #{uFoodErecipeId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.yihe.system.domain.YhFoodUserScrecipeWebNew" >
+    update yh_food_user_screcipe2
+    set C_Time = #{cTime,jdbcType=TIMESTAMP},
+      Start_Time = #{startTime,jdbcType=TIMESTAMP},
+      State_Flag = #{stateFlag,jdbcType=INTEGER},
+      Srecipe_Id = #{srecipeId,jdbcType=INTEGER},
+      Is_Del = #{isDel,jdbcType=INTEGER},
+      E_Level = #{eLevel,jdbcType=INTEGER},
+      diseaseid = #{diseaseid,jdbcType=VARCHAR},
+      status = #{status,jdbcType=INTEGER},
+      oneself = #{oneself,jdbcType=INTEGER},
+      user_code = #{userCode,jdbcType=VARCHAR},
+      F_Elements = #{fElements,jdbcType=LONGVARCHAR}
+    where U_Food_Erecipe_Id = #{uFoodErecipeId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.yihe.system.domain.YhFoodUserScrecipeWebNew" >
+    update yh_food_user_screcipe2
+    set C_Time = #{cTime,jdbcType=TIMESTAMP},
+      Start_Time = #{startTime,jdbcType=TIMESTAMP},
+      State_Flag = #{stateFlag,jdbcType=INTEGER},
+      Srecipe_Id = #{srecipeId,jdbcType=INTEGER},
+      Is_Del = #{isDel,jdbcType=INTEGER},
+      E_Level = #{eLevel,jdbcType=INTEGER},
+      diseaseid = #{diseaseid,jdbcType=VARCHAR},
+      status = #{status,jdbcType=INTEGER},
+      oneself = #{oneself,jdbcType=INTEGER},
+      user_code = #{userCode,jdbcType=VARCHAR}
+    where U_Food_Erecipe_Id = #{uFoodErecipeId,jdbcType=INTEGER}
+  </update>
+</mapper>

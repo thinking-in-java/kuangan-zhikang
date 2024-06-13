@@ -1,0 +1,654 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<html>
+<head>
+<meta charset="utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, maximum-scale=1">
+<title>食物库管理</title>
+<link rel="stylesheet" th:href="@{/assets/libs/layui/css/layui.css}" />
+<link rel="stylesheet" th:href="@{/assets/module/admin.css}" />
+<link rel="stylesheet" th:href="@{/assets/css/formSelects-v4.css}" />
+</head>
+<body>
+	<!-- 页面加载loading -->
+	<div class="page-loading">
+		<div class="ball-loader">
+			<span></span><span></span><span></span><span></span>
+		</div>
+	</div>
+
+	<a id="cancel" target="_self" style="display: none"
+		href="/manage/content/foodl" lay-text="食物管理">"食物管理"</a>
+	<div class="layui-fluid">
+		<div class="layui-row">
+			<div
+				style="width: 100%; height: 100%; background-color: #FFF; position: relative;">
+				<div th:if="${id==0}"
+					style="font-size: 20px; font-weight: bold; margin-left: 20px; padding-top: 30px;">新建食物</div>
+				<div th:if="${id!=0}"
+					style="font-size: 20px; font-weight: bold; margin-left: 20px; padding-top: 30px;">修改食物</div>
+				<form class="layui-form" id="express">
+
+					<input id="fCId" name="fCId" type="hidden" th:value="${id}">
+
+					<div class="layui-form-item">
+						<div class="layui-inline">
+							<label style="width: 10%"
+								class="layui-form-label layui-form-required">名称</label>
+							<div class="layui-input-block">
+								<div class="layui-row">
+
+									<input style="margin-left: -89px; width: 450px;" type="text"
+										name="fCName" id="fCName" lay-verify="required"
+										lay-reqtext="名称是必填项，岂能为空？" maxlength="16"
+										placeholder="请输入名称，最大限制16个字符" autocomplete="off"
+										class="layui-input">
+								</div>
+							</div>
+						</div>
+
+					</div>
+
+
+
+					<div class="layui-form-item">
+						<div class="layui-inline">
+							<label style="width: 10%"
+								class="layui-form-label layui-form-required">分类</label>
+							<div class="layui-input-block">
+								<div class="layui-row" style="margin-left: -89px; width: 450px;">
+
+									<select lay-filter="aihao" id="fType" name="fType"
+										lay-verify="required" lay-reqtext="分类是必填项，不能为空哦">
+										<option value="">全部</option>
+										<option value="1">谷薯芋、杂豆、主食</option>
+										<option value="2">蛋类、肉类及制品</option>
+										<option value="3">奶类及制品</option>
+										<option value="4">蔬果和菌藻</option>
+										<option value="5">坚果、大豆及制品</option>
+										<option value="6">饮料</option>
+										<option value="7">食用油、油脂及制品</option>
+										<option value="8">调味品</option>
+										<option value="9">零食、点心、冷饮</option>
+									</select>
+								</div>
+							</div>
+						</div>
+
+					</div>
+					
+					 <div class="layui-form-item">
+						<div class="layui-inline">
+							<label style="width: 16%"
+								class="layui-form-label layui-form-required">是否常用</label>
+							<div class="layui-input-block">
+								<div class="layui-row" style="margin-left: -89px; width: 450px;">
+
+									<select name="usedFood" id="usedFood" lay-verify="required">
+							        <option value="0">不常用</option>
+							        <option value="1">常用</option>
+							      </select>
+								</div>
+							</div>
+						</div>
+
+					</div>
+					
+					
+					
+					<div class="layui-form-item">
+						<div class="layui-inline">
+							<label style="width: 25%"
+								class="layui-form-label  ">不适宜食用人群</label>
+							<div class="layui-input-block">
+								<div class="layui-row" style="margin-left: -89px; width: 450px;">
+
+									<select name="notRecommendFood" xm-select="select1"
+									  lay-verType="tips">
+									<option th:each="glist:${selectByExample}"
+										th:value="${glist.id}">[[${glist.diseaseName}]]</option>
+
+								</select>
+								</div>
+							</div>
+						</div>
+
+					</div>
+
+ 
+
+
+					<div
+						style="font-size: 20px; font-weight: bold; margin-left: 20px; padding-top: 30px;">营养成分(每100克营养元素参考值)</div>
+					<div class="layui-form-item">
+
+
+
+
+						<div class="layui-inline">
+							<label style="width: 45%;"
+								class="layui-form-label layui-form-required">热量(千卡)</label>
+							<div class="layui-input-block">
+								<div class="layui-row">
+									<input type="number" style="margin-left: -89px; width: 200px;"
+										placeholder="请输入" id="energyKcal" name="energyKcal"
+										lay-verify="required|number" autocomplete="off"
+										class="layui-input" >
+								</div>
+							</div>
+						</div>
+
+
+						<div class="layui-inline">
+							<label style="width: 50%;"
+								class="layui-form-label layui-form-required">碳水化合物(克)</label>
+							<div class="layui-input-block">
+								<div class="layui-row">
+									<input type="number" style="margin-left: -89px; width: 200px;"
+										placeholder="请输入" id="cho" name="cho"
+										lay-verify="required|number" autocomplete="off"
+										class="layui-input" >
+								</div>
+							</div>
+						</div>
+
+
+						<div class="layui-inline">
+							<label style="width: 30%;"
+								class="layui-form-label layui-form-required">脂肪(克)</label>
+							<div class="layui-input-block">
+								<div class="layui-row">
+									<input type="number" style="margin-left: -89px; width: 200px;"
+										placeholder="请输入" name="fat" id="fat"
+										lay-verify="required|number" autocomplete="off"
+										class="layui-input" >
+								</div>
+							</div>
+						</div>
+
+
+						<div class="layui-inline">
+							<label style="width: 45%;"
+								class="layui-form-label layui-form-required">蛋白质(克)</label>
+							<div class="layui-input-block">
+								<div class="layui-row">
+									<input type="number" style="margin-left: -89px; width: 200px;"
+										placeholder="请输入" id="protein" name="protein"
+										lay-verify="required|number" autocomplete="off"
+										class="layui-input" >
+								</div>
+							</div>
+						</div>
+
+						<div class="layui-inline">
+							<label style="width: 45%;" class="layui-form-label">胆固醇(毫克)</label>
+							<div class="layui-input-block">
+								<div class="layui-row">
+									<input type="number" style="margin-left: -89px; width: 200px;"
+										placeholder="请输入胆固醇" id="cholesterol" name="cholesterol"
+										autocomplete="off" class="layui-input" >
+								</div>
+							</div>
+						</div>
+					</div>
+
+
+
+
+					<div class="layui-form-item">
+						<div class="layui-inline">
+							<label style="width: 45%;" class="layui-form-label">维生素A(微克)</label>
+							<div class="layui-input-block">
+								<div class="layui-row">
+									<input type="number" style="margin-left: -89px; width: 200px;"
+										placeholder="请输入维生素A" id="vitamina" name="vitamina"
+										class="layui-input" >
+								</div>
+							</div>
+						</div>
+
+
+						<div class="layui-inline">
+							<label style="width: 35%;" class="layui-form-label">纤维素(克)</label>
+							<div class="layui-input-block">
+								<div class="layui-row">
+									<input type="number" style="margin-left: -89px; width: 200px;"
+										placeholder="请输入纤维素" id="cellulose" name="cellulose"
+										class="layui-input" >
+								</div>
+							</div>
+						</div>
+
+
+						<div class="layui-inline">
+							<label style="width: 45%;" class="layui-form-label">维生素C(微克)</label>
+							<div class="layui-input-block">
+								<div class="layui-row">
+									<input type="number" style="margin-left: -89px; width: 200px;"
+										placeholder="请输入维生素C" id="vitaminc" name="vitaminc"
+										class="layui-input" >
+								</div>
+							</div>
+						</div>
+
+
+						<div class="layui-inline">
+							<label style="width: 45%;" class="layui-form-label">维生素E(微克)</label>
+							<div class="layui-input-block">
+								<div class="layui-row">
+									<input type="number" style="margin-left: -89px; width: 200px;"
+										placeholder="请输入维生素E" id="vitamine" name="vitamine"
+										class="layui-input" >
+								</div>
+							</div>
+						</div>
+
+
+						<div class="layui-inline">
+							<label style="width: 40%;" class="layui-form-label">硫胺素(毫克)</label>
+							<div class="layui-input-block">
+								<div class="layui-row">
+									<input type="number" style="margin-left: -89px; width: 200px;"
+										placeholder="请输入硫胺素" id="thiamine" name="thiamine"
+										class="layui-input" >
+								</div>
+							</div>
+						</div>
+
+						<div class="layui-inline">
+							<label style="width: 40%;" class="layui-form-label">核黄素(毫克)</label>
+							<div class="layui-input-block">
+								<div class="layui-row">
+									<input type="number" style="margin-left: -89px; width: 200px;"
+										placeholder="请输入核黄素" id="riboflavin" name="riboflavin"
+										class="layui-input" >
+								</div>
+							</div>
+						</div>
+					</div>
+
+
+
+					<div class="layui-form-item">
+						<div class="layui-inline">
+							<label style="width: 35%;" class="layui-form-label">烟酸(毫克)</label>
+							<div class="layui-input-block">
+								<div class="layui-row">
+									<input type="number" style="margin-left: -89px; width: 200px;"
+										placeholder="请输入烟酸" id="niacin" name="niacin"
+										class="layui-input" >
+								</div>
+							</div>
+						</div>
+
+
+						<div class="layui-inline">
+							<label style="width: 28%;" class="layui-form-label">镁(毫克)</label>
+							<div class="layui-input-block">
+								<div class="layui-row">
+									<input type="number" style="margin-left: -89px; width: 200px;"
+										placeholder="请输入镁" id="magnesium" name="magnesium"
+										class="layui-input" >
+								</div>
+							</div>
+						</div>
+
+
+						<div class="layui-inline">
+							<label style="width: 28%;" class="layui-form-label">钙
+								(毫克)</label>
+							<div class="layui-input-block">
+								<div class="layui-row">
+									<input type="number" style="margin-left: -89px; width: 200px;"
+										placeholder="请输入钙" id="calcium" name="calcium"
+										class="layui-input" >
+								</div>
+							</div>
+						</div>
+
+
+						<div class="layui-inline">
+							<label style="width: 28%;" class="layui-form-label">铁(毫克)</label>
+							<div class="layui-input-block">
+								<div class="layui-row">
+									<input type="number" style="margin-left: -89px; width: 200px;"
+										placeholder="请输入铁" id="rron" name="rron" class="layui-input" >
+								</div>
+							</div>
+						</div>
+
+						<div class="layui-inline">
+							<label style="width: 28%;" class="layui-form-label">铜(毫克)</label>
+							<div class="layui-input-block">
+								<div class="layui-row">
+									<input type="number" style="margin-left: -89px; width: 200px;"
+										placeholder="请输入铜" id="copper" name="copper"
+										class="layui-input" >
+								</div>
+							</div>
+						</div>
+
+						<div class="layui-inline">
+							<label style="width: 28%;" class="layui-form-label">锰(毫克)</label>
+							<div class="layui-input-block">
+								<div class="layui-row">
+									<input type="number" style="margin-left: -89px; width: 200px;"
+										placeholder="请输入锰" id="manganese" name="manganese"
+										class="layui-input" >
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<div class="layui-form-item">
+						<div class="layui-inline">
+							<label style="width: 28%;" class="layui-form-label">钾(毫克)</label>
+							<div class="layui-input-block">
+								<div class="layui-row">
+									<input type="number" style="margin-left: -89px; width: 200px;"
+										placeholder="请输入钾" id="potassium" name="potassium"
+										class="layui-input" >
+								</div>
+							</div>
+						</div>
+
+
+						<div class="layui-inline">
+							<label style="width: 28%;" class="layui-form-label">磷(毫克)</label>
+							<div class="layui-input-block">
+								<div class="layui-row">
+									<input type="number" style="margin-left: -89px; width: 200px;"
+										placeholder="请输入磷" id="phosphorus" name="phosphorus"
+										class="layui-input" >
+								</div>
+							</div>
+						</div>
+
+
+						<div class="layui-inline">
+							<label style="width: 28%;" class="layui-form-label">钠(毫克)</label>
+							<div class="layui-input-block">
+								<div class="layui-row">
+									<input type="number" style="margin-left: -89px; width: 200px;"
+										placeholder="请输入钠" id="sodium" name="sodium"
+										class="layui-input" >
+								</div>
+							</div>
+						</div>
+
+
+						<div class="layui-inline">
+							<label style="width: 28%;" class="layui-form-label">硒(毫克)</label>
+							<div class="layui-input-block">
+								<div class="layui-row">
+									<input type="number" style="margin-left: -89px; width: 200px;"
+										placeholder="请输入硒" id="selenium" name="selenium"
+										class="layui-input" >
+								</div>
+							</div>
+						</div>
+
+
+						<div class="layui-inline">
+							<label style="width: 28%;" class="layui-form-label">锌(毫克)</label>
+							<div class="layui-input-block">
+								<div class="layui-row">
+									<input type="number" style="margin-left: -89px; width: 200px;"
+										placeholder="请输入锌" id="zinc" name="zinc" class="layui-input" >
+								</div>
+							</div>
+						</div>
+
+					</div>
+
+					<div class="layui-form-item">
+						<label style="width: 72px;" class="layui-form-label">描述信息</label>
+						<div class="layui-input-block">
+							<div class="layui-row">
+								<input placeholder="请填写，最大限制20个字符。示例：25g小麦相当于一手掌的量"
+									maxlength="20" style="margin-left: -89px; height: 36px;"
+									id="measuringUnit" name="measuringUnit" class="layui-input"></input>
+							</div>
+						</div>
+					</div>
+
+
+					<div class="layui-form-item">
+						<label style="width: 72px;" class="layui-form-label">食物图</label> <input
+							id="fCImg" name="fCImg" type="hidden" value="">
+
+						<div class="layui-inline">
+							<div class="layui-input-block">
+								<div class="layui-upload-drag" id="test10">
+									<i class="layui-icon"></i>
+									<p>点击上传，或将图片拖拽到此处</p>
+									<p>(尺寸：4:3 )</p>
+									<div class="layui-hide" id="uploadDemoView">
+										<hr>
+										<img src="" alt="上传成功后渲染" style="max-width: 196px">
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+
+
+
+
+					<div class="layui-form-item"
+						style="margin-left: -88px; padding-bottom: 40px;">
+						<div class="layui-input-block">
+							<button class="layui-btn " lay-submit='' lay-filter="regSubmit"
+								id="">保存</button>
+							<button type="reset" onclick="cancel()"
+								class="layui-btn layui-btn-primary">&emsp;取消&emsp;</button>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+
+
+</body>
+<script type="text/javascript" th:src="@{/assets/libs/layui/layui.js}"></script>
+<script type="text/javascript" th:src="@{/assets/js/common.js}"></script>
+<script type="text/javascript" th:src="@{/assets/js/jquery-1.11.1.js}"></script>
+<script type="text/javascript"
+		th:src="@{/assets/js/formSelects-v4.min.js}"></script>
+<script type="text/javascript">
+	$('#fCName').blur(function() {
+		var fCName = $("#fCName").val();
+		var fCId = $("#fCId").val();
+		$.ajax({
+			type : 'get',
+			url : '/YhFoodCookBook/selctFcNameRepetition',
+			data : {
+				fCName : fCName,
+				fCId : fCId
+			},
+			success : function(data) {
+				if (data == 1) {
+					layer.msg("膳食名称已被占用!");
+				}
+			}
+		});
+	})
+
+	cancel = function() {
+		document.getElementById("cancel").click();
+	}
+
+	layui.use(['upload'], function() {
+		var $ = layui.jquery, upload = layui.upload;
+		
+		
+		//拖拽上传图片
+		upload.render({
+			elem : '#test10',
+			url : '/Uploading/addEnrollImg' //改成您自己的上传接口
+			,
+			before : function(obj) { //obj参数包含的信息，跟 choose回调完全一致，可参见上文。
+				this.layerIndex = layer.load(0, {
+					shade : [ 0.5, '#666c7f' ]
+				});
+			},
+			done : function(res) {
+				layer.close(this.layerIndex);
+				layer.msg('上传成功');
+				layui.$('#uploadDemoView').removeClass('layui-hide')
+						.find('img').attr('src', res.files);
+				layui.$("#fCImg").val(res.files);
+				console.log(res)
+			}
+		});
+
+	});
+
+	layui
+			.use(
+					[ 'form', 'layedit', 'laydate','formSelects' ],
+					function() {
+						var form = layui.form, layer = layui.layer, layedit = layui.layedit, laydate = layui.laydate;
+						var formSelects = layui.formSelects;
+						var fcid = $("#fCId").val();
+						if (fcid != 0) {
+							$.ajax({
+								type : "post",
+								url : "/YhFoodCookBook/selectfCIdfood",
+								dataType : "json",
+								data : {
+									"fCId" : fcid
+								},
+								success : function(data) {
+									console.log(data.data)
+									var notfoodRecom=data.data.notRecommendFood.split(";");
+									console.log(notfoodRecom)
+									let arr = JSON.parse('[' + String(notfoodRecom) + ']')
+									console.log(arr)
+									formSelects.value('select1', arr); 
+									if (data.data.cholesterol != 0) {
+										$("#cholesterol").val(
+												data.data.cholesterol);
+									}
+									if (data.data.vitamina != 0) {
+										$("#vitamina").val(data.data.vitamina);
+									}
+									if (data.data.cellulose != 0) {
+										$("#cellulose")
+												.val(data.data.cellulose);
+									}
+									if (data.data.vitaminc != 0) {
+										$("#vitaminc").val(data.data.vitaminc);
+									}
+									if (data.data.vitamine != 0) {
+										$("#vitamine").val(data.data.vitamine);
+									}
+									if (data.data.thiamine != 0) {
+										$("#thiamine").val(data.data.thiamine);
+									}
+									if (data.data.riboflavin != 0) {
+										$("#riboflavin").val(
+												data.data.riboflavin);
+									}
+									if (data.data.niacin != 0) {
+										$("#niacin").val(data.data.niacin);
+									}
+									if (data.data.magnesium != 0) {
+										$("#magnesium")
+												.val(data.data.magnesium);
+									}
+									if (data.data.calcium != 0) {
+										$("#calcium").val(data.data.calcium);
+									}
+									if (data.data.rron != 0) {
+										$("#rron").val(data.data.rron);
+									}
+									if (data.data.zinc != 0) {
+										$("#zinc").val(data.data.zinc);
+									}
+									if (data.data.copper != 0) {
+										$("#copper").val(data.data.copper);
+									}
+									if (data.data.manganese != 0) {
+										$("#manganese")
+												.val(data.data.manganese);
+									}
+									if (data.data.potassium != 0) {
+										$("#potassium")
+												.val(data.data.potassium);
+									}
+									if (data.data.phosphorus != 0) {
+										$("#phosphorus").val(
+												data.data.phosphorus);
+									}
+									if (data.data.sodium != 0) {
+										$("#sodium").val(data.data.sodium);
+									}
+									if (data.data.selenium != 0) {
+										$("#selenium").val(data.data.selenium);
+									}
+									$("#fType").val(data.data.fType);
+									$("#cho").val(data.data.cho);
+									$("#energyKcal").val(data.data.energyKcal);
+									$("#measuringUnit").val(
+											data.data.measuringUnit);
+									$("#fCImg").val(data.data.fCImg);
+									$("#fCName").val(data.data.fCName);
+									$("#fat").val(data.data.fat);
+									$("#protein").val(data.data.protein);
+									$("#cookPerson").val(data.data.cookPerson);
+									$("#usedFood").val(data.data.usedFood);
+									form.render('select');
+
+									layui.$('#uploadDemoView').removeClass(
+											'layui-hide').find('img').attr(
+											'src', data.data.fCImg);
+								}
+							});
+						}
+
+						//监听提交
+						form.on('submit(regSubmit)', function(dataYh) {
+						   // console.log(JSON.stringify(dataYh.field))
+							 
+							var fCName = $("#fCName").val();
+							var fCId = $("#fCId").val();
+							$.ajax({
+								type : 'get',
+								url : '/YhFoodCookBook/selctFcNameRepetition',
+								data : {
+									fCName : fCName,
+									fCId : fCId
+								},
+								success : function(data) {
+									if (data == 1) {
+										layer.msg("膳食名称已被占用!");
+									}
+									
+									if (data == 0) {
+										$.ajax({
+											type : "post",
+											url : "/YhFoodCookBook/insertfood",
+											dataType : "json",
+											data : dataYh.field,
+											success : function(data) {
+												if (data.data == 1) {
+													layer.msg('操作成功');
+													cancel();
+												} else {
+													layer.msg('操作失败');
+												}
+											}
+										});
+									}
+								}
+							});
+							return false;
+						});
+
+					});
+</script>
+</html>

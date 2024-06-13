@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yihe.applet.api.mapper.YhScoreEventCategoryAppMapper" >
+  <resultMap id="BaseResultMap" type="com.yihe.applet.api.domain.YhScoreEventCategoryApp" >
+    <id column="scoreEvent_ID" property="scoreeventId" jdbcType="INTEGER" />
+    <result column="event_name" property="eventName" jdbcType="VARCHAR" />
+    <result column="score" property="score" jdbcType="INTEGER" />
+    <result column="event_type" property="eventType" jdbcType="VARCHAR" />
+    <result column="type" property="type" jdbcType="INTEGER" />
+    <result column="continuous_status" property="continuousStatus" jdbcType="INTEGER" />
+    <result column="putaway" property="putaway" jdbcType="INTEGER" />
+    <result column="update_date" property="updateDate" jdbcType="TIMESTAMP" />
+    <result column="creator" property="creator" jdbcType="VARCHAR" />
+    <result column="standby" property="standby" jdbcType="VARCHAR" />
+    <result column="standby2" property="standby2" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    scoreEvent_ID, event_name, score, event_type, type, continuous_status, putaway, update_date, 
+    creator, standby, standby2
+  </sql>
+  <select id="seleventType" parameterType="string" resultType="string">
+    select event_type from yh_score_event_category where event_name=#{eventName,jdbcType=VARCHAR}
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from yh_score_event_category
+    where scoreEvent_ID = #{scoreeventId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from yh_score_event_category
+    where scoreEvent_ID = #{scoreeventId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.yihe.applet.api.domain.YhScoreEventCategoryApp" >
+    insert into yh_score_event_category (scoreEvent_ID, event_name, score, 
+      event_type, type, continuous_status, 
+      putaway, update_date, creator, 
+      standby, standby2)
+    values (#{scoreeventId,jdbcType=INTEGER}, #{eventName,jdbcType=VARCHAR}, #{score,jdbcType=INTEGER}, 
+      #{eventType,jdbcType=VARCHAR}, #{type,jdbcType=INTEGER}, #{continuousStatus,jdbcType=INTEGER}, 
+      #{putaway,jdbcType=INTEGER}, #{updateDate,jdbcType=TIMESTAMP}, #{creator,jdbcType=VARCHAR}, 
+      #{standby,jdbcType=VARCHAR}, #{standby2,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.yihe.applet.api.domain.YhScoreEventCategoryApp" >
+    insert into yh_score_event_category
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="scoreeventId != null" >
+        scoreEvent_ID,
+      </if>
+      <if test="eventName != null" >
+        event_name,
+      </if>
+      <if test="score != null" >
+        score,
+      </if>
+      <if test="eventType != null" >
+        event_type,
+      </if>
+      <if test="type != null" >
+        type,
+      </if>
+      <if test="continuousStatus != null" >
+        continuous_status,
+      </if>
+      <if test="putaway != null" >
+        putaway,
+      </if>
+      <if test="updateDate != null" >
+        update_date,
+      </if>
+      <if test="creator != null" >
+        creator,
+      </if>
+      <if test="standby != null" >
+        standby,
+      </if>
+      <if test="standby2 != null" >
+        standby2,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="scoreeventId != null" >
+        #{scoreeventId,jdbcType=INTEGER},
+      </if>
+      <if test="eventName != null" >
+        #{eventName,jdbcType=VARCHAR},
+      </if>
+      <if test="score != null" >
+        #{score,jdbcType=INTEGER},
+      </if>
+      <if test="eventType != null" >
+        #{eventType,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null" >
+        #{type,jdbcType=INTEGER},
+      </if>
+      <if test="continuousStatus != null" >
+        #{continuousStatus,jdbcType=INTEGER},
+      </if>
+      <if test="putaway != null" >
+        #{putaway,jdbcType=INTEGER},
+      </if>
+      <if test="updateDate != null" >
+        #{updateDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="creator != null" >
+        #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="standby != null" >
+        #{standby,jdbcType=VARCHAR},
+      </if>
+      <if test="standby2 != null" >
+        #{standby2,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.yihe.applet.api.domain.YhScoreEventCategoryApp" >
+    update yh_score_event_category
+    <set >
+      <if test="eventName != null" >
+        event_name = #{eventName,jdbcType=VARCHAR},
+      </if>
+      <if test="score != null" >
+        score = #{score,jdbcType=INTEGER},
+      </if>
+      <if test="eventType != null" >
+        event_type = #{eventType,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null" >
+        type = #{type,jdbcType=INTEGER},
+      </if>
+      <if test="continuousStatus != null" >
+        continuous_status = #{continuousStatus,jdbcType=INTEGER},
+      </if>
+      <if test="putaway != null" >
+        putaway = #{putaway,jdbcType=INTEGER},
+      </if>
+      <if test="updateDate != null" >
+        update_date = #{updateDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="creator != null" >
+        creator = #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="standby != null" >
+        standby = #{standby,jdbcType=VARCHAR},
+      </if>
+      <if test="standby2 != null" >
+        standby2 = #{standby2,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where scoreEvent_ID = #{scoreeventId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.yihe.applet.api.domain.YhScoreEventCategoryApp" >
+    update yh_score_event_category
+    set event_name = #{eventName,jdbcType=VARCHAR},
+      score = #{score,jdbcType=INTEGER},
+      event_type = #{eventType,jdbcType=VARCHAR},
+      type = #{type,jdbcType=INTEGER},
+      continuous_status = #{continuousStatus,jdbcType=INTEGER},
+      putaway = #{putaway,jdbcType=INTEGER},
+      update_date = #{updateDate,jdbcType=TIMESTAMP},
+      creator = #{creator,jdbcType=VARCHAR},
+      standby = #{standby,jdbcType=VARCHAR},
+      standby2 = #{standby2,jdbcType=VARCHAR}
+    where scoreEvent_ID = #{scoreeventId,jdbcType=INTEGER}
+  </update>
+      <!-- 查询积分类型 -->
+   <select id="selectEventType" parameterType="java.lang.String" resultMap="BaseResultMap">
+  select * from yh_score_event_category where event_type=#{eventType,jdbcType=VARCHAR}
+  </select>
+     <!--查询记录积分完成状态 -->
+   <select id="selectIntegralStatus" parameterType="map" resultType="map">
+	 select t1.*,
+		case WHEN t2.healthstar_ID is null then '0' else '1' end as status
+			from yh_score_event_category t1 
+		left join yh_health_star t2 on t1.event_name=t2.healthstars_events 
+			and DATE_FORMAT(t2.events_time,'%Y-%m-%d')=DATE_FORMAT(now(),'%Y-%m-%d')
+			and t2.user_code= #{userCode,jdbcType=VARCHAR}
+	where t1.event_type in  ('user_signin','sport_log','food_log','record_sleep','record_habits','publish_classroom','publish_habit')
+	      <if test="type != null and type == 0" >
+        		and t1.`type` = 1
+     	 </if>
+     	 <if test="type != null and type == 1" >
+        		and t1.`type` = 2
+     	 </if>
+	
+union all 
+		select t1.*,
+			case WHEN t2.healthstar_ID is null then '0' else '1' end as status
+		from yh_score_event_category t1 
+		left join yh_health_star t2 on t1.event_name=t2.healthstars_events 
+			and DATE_FORMAT(t2.events_time,'%Y-%m')=DATE_FORMAT(now() , '%Y-%m' )  
+			and t2.user_code=#{userCode,jdbcType=VARCHAR}
+		where t1.event_type in ('health_assess','habit_assess','sleep_assess','pressure_assess','symptom_assess')
+		<if test="type != null and type == 0" >
+        		and t1.`type` = 1
+     	 </if>
+     	 <if test="type != null and type == 1" >
+        		and t1.`type` = 2
+     	 </if>
+  </select>
+</mapper>

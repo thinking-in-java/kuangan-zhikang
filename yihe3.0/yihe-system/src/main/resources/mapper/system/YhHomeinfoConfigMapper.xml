@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yihe.system.mapper.YhHomeinfoConfigMapper" >
+  <resultMap id="BaseResultMap" type="com.yihe.system.domain.YhHomeinfoConfig" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="info_type" property="infoType" jdbcType="INTEGER" />
+    <result column="info_img" property="infoImg" jdbcType="VARCHAR" />
+    <result column="info_title" property="infoTitle" jdbcType="VARCHAR" />
+    <result column="info_time" property="infoTime" jdbcType="VARCHAR" />
+    <result column="info_status" property="infoStatus" jdbcType="INTEGER" />
+    <result column="info_source" property="infoSource" jdbcType="INTEGER" />
+    <result column="info_content" property="infoContent" jdbcType="INTEGER" />
+    <result column="info_tip" property="infoTip" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, info_type, info_img, info_title, info_time, info_status, info_source, info_content, 
+    info_tip
+  </sql>
+  
+  <select id="selectByOrder" resultMap="BaseResultMap">
+  	select * from yh_homeinfo_config order by info_tip asc
+  </select>
+  
+  <select id="InfoTipMax" resultType="java.lang.String">
+  	select max(info_tip)  from yh_homeinfo_config where info_type=1
+  </select>
+  
+   <select id="amendinfotip" resultMap="BaseResultMap"  parameterType="java.lang.Integer">
+   select * from yh_homeinfo_config where info_tip=#{infoTip,jdbcType=INTEGER}
+  </select>
+    
+  <!-- 查询轮播图 -->
+   <select id="selectByslideshow" resultMap="BaseResultMap">
+   select * from yh_homeinfo_config where info_type=1 order by info_tip asc limit 0,5;
+  </select>
+  
+  <!-- 查询轮播图总行数 -->
+   <select id="selectByslideshownumber"  resultType="java.lang.Integer">
+   select count(*) from yh_homeinfo_config where info_type=1;
+  </select>
+  
+  
+  <!-- 查询健康头条 -->
+   <select id="selectByheadline" resultMap="BaseResultMap">
+   select * from yh_homeinfo_config where info_type=2  order by info_time asc limit 0,3 ;
+  </select>
+  
+  <!-- 查询健康头条行数 -->
+   <select id="selectByheadlinenumber"  resultType="java.lang.Integer">
+   select count(*) from yh_homeinfo_config where info_type=2;
+  </select>
+  
+  
+  
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from yh_homeinfo_config
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from yh_homeinfo_config
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.yihe.system.domain.YhHomeinfoConfig" >
+    insert into yh_homeinfo_config (id, info_type, info_img, 
+      info_title, info_time, info_status, 
+      info_source, info_content, info_tip
+      )
+    values (#{id,jdbcType=INTEGER}, #{infoType,jdbcType=INTEGER}, #{infoImg,jdbcType=VARCHAR}, 
+      #{infoTitle,jdbcType=VARCHAR}, #{infoTime,jdbcType=VARCHAR}, #{infoStatus,jdbcType=INTEGER}, 
+      #{infoSource,jdbcType=INTEGER}, #{infoContent,jdbcType=INTEGER}, #{infoTip,jdbcType=INTEGER}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.yihe.system.domain.YhHomeinfoConfig" >
+    insert into yh_homeinfo_config
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="infoType != null" >
+        info_type,
+      </if>
+      <if test="infoImg != null" >
+        info_img,
+      </if>
+      <if test="infoTitle != null" >
+        info_title,
+      </if>
+      <if test="infoTime != null" >
+        info_time,
+      </if>
+      <if test="infoStatus != null" >
+        info_status,
+      </if>
+      <if test="infoSource != null" >
+        info_source,
+      </if>
+      <if test="infoContent != null" >
+        info_content,
+      </if>
+      <if test="infoTip != null" >
+        info_tip,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="infoType != null" >
+        #{infoType,jdbcType=INTEGER},
+      </if>
+      <if test="infoImg != null" >
+        #{infoImg,jdbcType=VARCHAR},
+      </if>
+      <if test="infoTitle != null" >
+        #{infoTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="infoTime != null" >
+        #{infoTime,jdbcType=VARCHAR},
+      </if>
+      <if test="infoStatus != null" >
+        #{infoStatus,jdbcType=INTEGER},
+      </if>
+      <if test="infoSource != null" >
+        #{infoSource,jdbcType=INTEGER},
+      </if>
+      <if test="infoContent != null" >
+        #{infoContent,jdbcType=INTEGER},
+      </if>
+      <if test="infoTip != null" >
+        #{infoTip,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.yihe.system.domain.YhHomeinfoConfig" >
+    update yh_homeinfo_config
+    <set >
+      <if test="infoType != null" >
+        info_type = #{infoType,jdbcType=INTEGER},
+      </if>
+      <if test="infoImg != null" >
+        info_img = #{infoImg,jdbcType=VARCHAR},
+      </if>
+      <if test="infoTitle != null" >
+        info_title = #{infoTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="infoTime != null" >
+        info_time = #{infoTime,jdbcType=VARCHAR},
+      </if>
+      <if test="infoStatus != null" >
+        info_status = #{infoStatus,jdbcType=INTEGER},
+      </if>
+      <if test="infoSource != null" >
+        info_source = #{infoSource,jdbcType=INTEGER},
+      </if>
+      <if test="infoContent != null" >
+        info_content = #{infoContent,jdbcType=INTEGER},
+      </if>
+      <if test="infoTip != null" >
+        info_tip = #{infoTip,jdbcType=INTEGER},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.yihe.system.domain.YhHomeinfoConfig" >
+    update yh_homeinfo_config
+    set info_type = #{infoType,jdbcType=INTEGER},
+      info_img = #{infoImg,jdbcType=VARCHAR},
+      info_title = #{infoTitle,jdbcType=VARCHAR},
+      info_time = #{infoTime,jdbcType=VARCHAR},
+      info_status = #{infoStatus,jdbcType=INTEGER},
+      info_source = #{infoSource,jdbcType=INTEGER},
+      info_content = #{infoContent,jdbcType=INTEGER},
+      info_tip = #{infoTip,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

@@ -1,0 +1,639 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>主页信息配置管理</title>
+   <link rel="stylesheet"  th:href="@{/assets/libs/layui/css/layui.css}" />
+    <link rel="stylesheet"  th:href="@{/assets/module/admin.css}"  />
+     <!-- 注意：如果你直接复制所有代码到本地，上述css路径需要改成你本地的 -->
+ 
+ <style type="text/css">
+ body{
+		padding: 10px;
+	}
+ .layui-form-selectup dl {
+     top: 42px;
+     bottom: unset;
+ }
+ 	.layui-elem-quote {
+    margin-bottom: 21px;
+    padding: 9px;
+    line-height: 3px;
+    border-left: 5px solid #009688;
+    border-radius: 0 2px 2px 0;
+    background-color: #ffffff;
+    margin-top: 20px;
+    float: left;
+    margin-left: 32px;
+}
+
+ </style>
+</head>
+<body> 
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div class="layui-card-body">
+<div style="height: 52px;    margin-left: -31px;">
+ <blockquote class="layui-elem-quote" style="text-align: center;">
+          轮播图	 <label style="color: red;padding-left: 20px;">提示：轮播图最多设置五张，通过“上移”、“下移”调整轮播图顺序</label>&nbsp; 最佳尺寸：（宽：高）5:4
+ </blockquote> 
+
+<div class="layui-inline" style="float: right;padding-top: 15px;padding-right: 4px;">
+	<button type="button" class="layui-btn layui-btn-normal" style="background-color: rgba(67, 207, 124, 1);"  id="btnAddRole"><i class="layui-icon layui-icon-addition">添加</i></button>
+</div>
+ </div>
+ 
+ 
+ <div>
+<table id="LAY_table_user" lay-filter="slideshow"></table>	
+ </div>	
+ 
+ <!-- <div style="height: 52px;">
+ <blockquote class="layui-elem-quote" style="text-align: center;">
+          健康头条	   <label style="color: red;padding-left: 20px;">提示：健康头条最多设置3条</label>
+ </blockquote> 
+ 
+<div class="layui-inline" style="float: right;padding-top: 15px;padding-right: 4px;">
+	<button type="button" class="layui-btn layui-btn-normal" style="background-color: rgba(67, 207, 124, 1);" id="frontpage" ><i class="layui-icon layui-icon-addition">添加</i></button>
+</div>
+ </div>
+  -->
+<!--  
+ <div>
+<table id="headline" lay-filter="demo"></table>
+ </div> -->
+ </div>
+  </div>
+   </div>
+<!-- 表单弹窗 -->
+<script type="text/html" id="modelRole">
+    <div id="">
+        <form id="modelRoleForm" lay-filter="modelRoleForm" class="layui-form" style="padding: 35px;" action="">
+            <input id="id" name="id" type="hidden" value="0">
+            <input id="infoType" name="infoType" type="hidden" value="1">
+
+            <div class="layui-form-item">
+                <label class="layui-form-label">来源：</label>
+                <div class="layui-input-block" style="width: 258px;">
+                    <select name="infoSource" lay-verify="required" lay-filter="allCompanys" lay-search="">
+                        <option value="0">无（仅图片）</option>
+                        <option value="1">健康课堂</option>
+                        <option value="2">精彩活动</option>
+                        <option value="3">健康素养</option>
+                    </select>
+                </div>
+            </div>
+            <div class="layui-form-item" id="erqi">
+                <label class="layui-form-label">内容：</label>
+                <div class="layui-input-block" style="width: 258px;">
+                    <select name="infoContent" id="doctors" lay-verify="required" lay-search="">
+                    </select>
+                </div>
+            </div>
+
+    <div class="layui-form-item">
+                <label class="layui-form-label"><text style="color:red">*</text>上传图片：</label>
+                <div class="layui-input-block">
+                    <div class="layui-upload-drag" id="test10">
+                        <i class="layui-icon"></i>
+                        <p>点击上传，或将文件拖拽到此处</p>
+                        <div class="layui-hide" id="uploadDemoView">
+                            <hr>
+                            <img src="" alt="上传成功后渲染" style="max-width: 196px">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <input id="fCImg" name="infoImg" lay-verify="required" lay-reqtext="图片不能为空哦!" type="hidden" value="">
+
+            <div class="layui-form-item">
+                <div class="layui-input-block">
+                    <button class="layui-btn layui-btn-primary" type="button" ew-event="closePageDialog">取消</button>
+                    <button class="layui-btn" lay-filter="modelSubmitRole" lay-submit>保存</button>
+                </div>
+            </div>
+        </form>
+    </div>
+    
+</script>
+
+
+<!-- 表单弹窗 -->
+<script type="text/html" id="toutiao">
+   
+ <form id="RoleForm" lay-filter="RoleForm" class="layui-form model-form">
+
+		<input id="id" name="id" type="hidden" value="0">
+
+ 		 		<input id="infoType" name="infoType" type="hidden" value="2">
+        
+    <div class="layui-form-item">
+    <label class="layui-form-label">选择内容</label>
+    <div class="layui-input-block">
+ 	<select name="infoContent" id="health" lay-verify="required" lay-search="">
+          
+        </select>
+    </div>
+  </div>
+
+        <div class="layui-form-item text-right" style="    text-align: center;">
+            <button class="layui-btn layui-btn-primary" type="button" ew-event="closePageDialog">取消</button>
+            <button class="layui-btn" lay-filter="SubmitRole" lay-submit>保存</button>
+        </div>
+    </form>
+    
+</script>
+
+<script type="text/html" id="temp_img">
+  <img onclick="openImg('{{d.infoImg}}');"  src="{{d.infoImg}}" >
+</script>      
+
+<script type="text/html" id="slide">
+
+{{# if(d.infoTip ==[[${number}]]) { }}
+ <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="slidelete">删除</a>
+<a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="move">上移</a>
+    <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="slideedit">修改</a>
+{{# } else if(d.infoTip == 1) { }}
+ <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="slidelete">删除</a>
+<a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="below">下移</a>
+    <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="slideedit">修改</a>
+{{# } else { }}
+ <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="slidelete">删除</a>
+<a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="move"> 上移</a>
+<a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="below"> 下移</a>
+    <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="slideedit">修改</a>
+{{# } }}
+
+
+ 
+</script>
+
+<script type="text/html" id="barDemo">
+ <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="dele">删除</a>
+    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="edit">编辑</a>
+</script>
+
+          <!-- js部分 -->
+<script type="text/javascript" th:src="@{/assets/libs/layui/layui.js}"></script>
+<script type="text/javascript" th:src="@{/assets/js/common.js}"></script>
+<script type="text/javascript">
+
+function openImg(url) {
+    layer.open({
+        type: 1,
+        title: ['封面图片展示'],
+        shadeClose: true,
+        area: ['600px', 'auto'], //宽高
+        content: '<img src="' + url + '" height="auto" width="600px">'
+    });
+}
+layui.use(['layer', 'form', 'admin', 'table', 'util','upload'], function () {
+    var $ = layui.jquery;
+    var layer = layui.layer;
+    var form = layui.form;
+    var admin = layui.admin;
+    var util = layui.util;
+    var table = layui.table;
+    var upload = layui.upload;
+
+   
+    function showhealth(){
+    	 var d ="";
+	  	 $.ajax({
+       	 type: "post",
+            url: "/YhHomeinfoConfigControoler/showheadline",
+            dataType:"json",
+            data:d,
+            success: function(data){
+           	 var htmld="<option value=''>请选择</option>";
+		       	var item=data.data;
+		        for (var i = 0; i < item.length; i++) {
+		        	htmld+="<option value="+item[i].id+">"+item[i].heTitle+"</option>";
+				}
+		       	$('#health').append(htmld);
+		        form.render();
+            }   	
+       });
+    }
+    
+    form.on('select(allCompanys)', function (data) {
+    	 var select_text = data.elem[data.elem.selectedIndex].text;
+			var select_val = data.value;
+			$('#doctors').html("");
+			if(select_val==1){
+
+          	  $("#erqi").show();
+				 var d ="";
+			  	 $.ajax({
+		        	 type: "post",
+		             url: "/YhHomeinfoConfigControoler/selectByExample",
+		             dataType:"json",
+		             data:d,
+		             success: function(data){
+		            	 var htmld="<option value=''>请选择</option>";
+		 		       	var item=data.data;
+		 		        for (var i = 0; i < item.length; i++) {
+		 		        	htmld+="<option value="+item[i].infoid+">"+item[i].title+"</option>";
+		 				}
+		 		       	$('#doctors').append(htmld);
+		 		        form.render();
+		             }   	
+		        });
+			}else if(select_val==2){
+				  $("#erqi").show();
+				 var d ="";
+			  	 $.ajax({
+		        	 type: "post",
+		             url: "/YhHomeinfoConfigControoler/selectByEnrooll",
+		             dataType:"json",
+		             data:d,
+		             success: function(data){
+		            	 var htmld="<option value=''>请选择</option>";
+		 		       	var item=data.data;
+		 		        for (var i = 0; i < item.length; i++) {
+		 		        	htmld+="<option value="+item[i].id+">"+item[i].eventName+"</option>";
+		 				}
+		 		       	$('#doctors').append(htmld);
+		 		        form.render();
+		             }   	
+		        });
+			}else{
+
+          	  $("#erqi").hide();
+			}
+    });
+    
+
+    
+    
+ // 添加头条
+    $('#frontpage').click(function () {
+    	showhealth();
+        showheadline();
+    });
+ 
+  //显示编辑弹窗头条
+   /*  function showheadline(mRole) {
+        admin.open({
+            type: 1,
+            title: (mRole ? '修改' : '添加') + '内容',
+            content: $('#toutiao').html(),
+            area: ['35%', '30%'],
+            success: function (layero, dIndex) {
+                var url = '/YhHomeinfoConfigControoler/insertHealthHeadline';
+                if(mRole!=null){
+            		$('#health').html("");
+            		 var d ="";
+     			  	 $.ajax({
+     		        	 type: "post",
+     		        	 url: "/YhHomeinfoConfigControoler/showheadline",
+     		             dataType:"json",
+     		             data:d,
+     		             success: function(data){
+     		            	 var htmld="<option value=''>请选择</option>";
+     		 		       	var item=data.data;
+     		 		        for (var i = 0; i < item.length; i++) {
+     		 		        	if(mRole.infoContent==item[i].id){
+     		 		        		htmld+="<option value="+item[i].id+" selected>"+item[i].heTitle+"</option>";
+     		 		        	}else{
+     		 		        		htmld+="<option value="+item[i].id+">"+item[i].heTitle+"</option>";
+     		 		        	}
+     		 		        }
+     		 		       	$('#health').append(htmld);
+     		 		        form.render();
+     		             }   	
+     		        });
+                }
+                form.val('RoleForm', mRole);  // 回显数据
+                // 表单提交事件
+                form.on('submit(SubmitRole)', function (data) {
+                    layer.load(2);
+                    $.post(url, data.field, function (res) {
+                  	  table.reload('tableBank');
+  					layer.msg("成功");
+  					 layer.closeAll();
+                    }, 'json');
+                    return false;
+                });
+            }
+        });
+    } */
+    
+ 
+ 
+    
+ // 添加轮播图
+    $('#btnAddRole').click(function () {
+    	 var number = [[${number}]];
+    	 if(number==5){
+    		 layer.msg('轮播图最多设置五张哦!');
+    	 }else{
+    		 showEditModel();
+    	 }
+    });
+ 
+
+  //显示编辑弹窗
+  function showEditModel(mRole) {
+      admin.open({
+          type: 1,
+          title: (mRole ? '修改' : '添加') + '轮播图',
+          content: $('#modelRole').html(),
+          area: ['600px', '600px'],
+          success: function (layero, dIndex) {
+              var url = '/YhHomeinfoConfigControoler/insertSelective';
+              if(mRole!=null){
+            		$('#doctors').html("");
+            	  layui.$('#uploadDemoView').removeClass('layui-hide').find('img').attr('src', mRole.infoImg);
+            	  if(mRole.infoSource==1){
+            		  $("#erqi").show();
+     				 var d ="";
+     			  	 $.ajax({
+     		        	 type: "post",
+     		             url: "/YhHomeinfoConfigControoler/selectByExample",
+     		             dataType:"json",
+     		             data:d,
+     		             success: function(data){
+     		            	 var htmld="<option value=''>请选择</option>";
+     		 		       	var item=data.data;
+     		 		        for (var i = 0; i < item.length; i++) {
+     		 		        	if(mRole.infoContent==item[i].infoid){
+     		 		        		htmld+="<option value="+item[i].infoid+" selected>"+item[i].title+"</option>";
+     		 		        	}else{
+     		 		        		htmld+="<option value="+item[i].infoid+">"+item[i].title+"</option>";
+     		 		        	}
+     		 		        }
+     		 		       	$('#doctors').append(htmld);
+     		 		        form.render();
+     		             }   	
+     		        });
+     			  	 
+     			}else if(mRole.infoSource==2){
+     				 $("#erqi").show();
+     				 var d ="";
+     			  	 $.ajax({
+     		        	 type: "post",
+     		             url: "/YhHomeinfoConfigControoler/selectByEnrooll",
+     		             dataType:"json",
+     		             data:d,
+     		             success: function(data){
+     		            	 var htmld="<option value=''>请选择</option>";
+     		 		       	var item=data.data;
+     		 		        for (var i = 0; i < item.length; i++) {
+     		 		        	if(mRole.infoContent==item[i].id){
+     		 		        		htmld+="<option value="+item[i].id+" selected>"+item[i].eventName+"</option>";
+     		 		        	}else{
+
+     		 		        		htmld+="<option value="+item[i].id+">"+item[i].eventName+"</option>";
+     		 		        	}
+     		 		        	}
+     		 		       	$('#doctors').append(htmld);
+     		 		        form.render();
+     		             }   	
+     		        });
+     			}else{
+     				 $("#erqi").hide();
+     				 
+     			}
+            	//重新渲染
+            	form.render('select')
+              }else{
+            	  $("#erqi").hide();
+              }
+              form.val('modelRoleForm', mRole);  // 回显数据
+
+        	 
+              // 表单提交事件
+              form.on('submit(modelSubmitRole)', function (data) {
+                  layer.load(2);
+                  $.post(url, data.field, function (res) {
+                	  table.reload('lbtu');
+					layer.msg("成功");
+					 layer.closeAll();
+					window.location.reload();
+					tableReload();//重载表格的方法
+                  }, 'json');
+                  return false;
+              });
+          }
+      });
+      //拖拽上传图片
+	  upload.render({
+	    elem: '#test10'
+	    ,url: '/Uploading/addEnrollImg' //改成您自己的上传接口
+	    ,done: function(res){
+	      layer.msg('上传成功');
+	      layui.$('#uploadDemoView').removeClass('layui-hide').find('img').attr('src', res.files);
+	      layui.$("#fCImg").val(res.files);
+	      console.log(res)
+	    }
+	  });
+
+  }
+  
+  
+    
+  //方法级渲染轮播图
+	table.render({
+		elem : '#LAY_table_user',
+		url : '/YhHomeinfoConfigControoler/selectByslideshow',
+		method:'post',
+		cellMinWidth: 80,
+		cols : [ [  {type: 'numbers'},{
+			title: '封面图片'
+			, templet: '#temp_img'
+			, field: 'infoImg' 
+		},	{
+            title: '内容(模块:标题)', templet: function (d) {
+                var ss="";
+             	if(d.infoTitle==null || d.infoTitle=="" || d.infoTitle==0){
+             		ss="--";
+                }else{
+                	if(d.infoSource==1){
+                		ss="健康课堂:"+d.infoTitle;   
+                	}else{
+                		ss="精彩活动:"+d.infoTitle;   
+                	}
+             		
+                }
+                 return ss;
+             }, align: 'infoTitle'
+         }, {
+			field : 'infoTime',
+			title : '添加时间',
+		},{
+			fixed : 'right',
+			title : '操作',
+			align : 'center',
+			toolbar : '#slide'
+		} ] ],
+		id : 'lbtu',
+		parseData : function(res) { //将原始数据解析成 table 组件所规定的数据
+			//alert(res.data.data.length);
+			return {
+				"code" : res.data.code, //解析接口状态
+				"msg" : res.data.msg, //解析提示文本
+				"count" : res.data.count, //解析数据长度
+				"data" : res.data.data
+			}
+
+		}
+	});
+
+  
+	  table.on('tool(slideshow)', function(obj) { //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
+		   var data = obj.data;
+           var layEvent = obj.event;
+           if (layEvent === 'slideedit') { // 修改
+               showEditModel(data);
+           } else if (layEvent === 'slidelete') { // 删除
+        	   layer.confirm('真的删除行么', function(index) {
+					obj.del(); //删除对应行（tr）的DOM结构，并更新缓存
+					layer.close(index);
+					//向服务端发送删除指令.
+					var url = "/YhHomeinfoConfigControoler/deleteEnrooll";
+					var data2 = {
+						'id' : data.id
+					};
+					$.post(url, data2, function(e) {
+						table.reload('lbtu');
+						if(e.data==1){
+							layer.msg("删除成功");
+							window.location.reload();
+							tableReload();//重载表格的方法
+						}else{
+							layer.msg("删除失败");
+						}
+							
+						
+					})
+				});
+           
+           }else if(layEvent === 'below'){
+        	   layer.confirm('真的确认下移吗?', function(index) {
+					var url = "/YhHomeinfoConfigControoler/amendinfotip";
+					var data2 = {
+						'id' : data.id,
+						'type':1,
+						'infotip':data.infoTip
+					};
+					$.post(url, data2, function(e) {
+						table.reload('lbtu');
+						if(e.data==1){
+							layer.msg("下移成功");
+							tableReload();//重载表格的方法
+						}else{
+							layer.msg("下移失败");
+						}
+							
+						
+					})
+				});
+           }else if(layEvent === 'move'){
+        	   layer.confirm('真的确认上移吗?', function(index) {
+					var url = "/YhHomeinfoConfigControoler/amendinfotip";
+					var data2 = {
+						'id' : data.id,
+						'type':2,
+						'infotip':data.infoTip
+					};
+					$.post(url, data2, function(e) {
+						table.reload('lbtu');
+						if(e.data==1){
+							layer.msg("上移成功");
+							tableReload();//重载表格的方法
+						}else{
+							layer.msg("上移失败");
+						}
+							
+						
+					})
+				});
+           }
+		});
+
+  
+  
+	//方法级渲染健康头条
+	table.render({
+		elem : '#headline',
+		url : '/YhHomeinfoConfigControoler/selectByheadline',
+		method:'post',
+		cellMinWidth: 80,
+		cols : [ [ {
+			field : 'id',
+			title : '编号',
+			fixed : true
+		},{
+			title: '封面图片'
+			, templet: '#temp_img'
+			, field: 'infoImg' 
+		},	{
+            title: '内容(模块:标题)', templet: function (d) {
+                var ss="";
+             	if(d.infoTitle==null || d.infoTitle==""){
+             		ss="--";
+                }else{
+             		ss=d.infoTitle;   
+                }
+                 return ss;
+             }, align: 'infoTitle'
+         }, {
+			field : 'infoTime',
+			title : '添加时间',
+		},{
+			fixed : 'right',
+			title : '操作',
+			align : 'center',
+			toolbar : '#barDemo'
+		} ] ],
+		id : 'tableBank',
+		parseData : function(res) { //将原始数据解析成 table 组件所规定的数据
+			return {
+				"code" : res.data.code, //解析接口状态
+				"msg" : res.data.msg, //解析提示文本
+				"count" : res.data.count, //解析数据长度
+				"data" : res.data.data
+			}
+
+		}
+	});
+
+	
+	 table.on('tool(demo)', function(obj) { //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
+		   var data = obj.data;
+         var layEvent = obj.event;
+         if (layEvent === 'edit') { // 修改
+            showheadline(data);
+         } else if (layEvent === 'dele') { // 删除
+      	   layer.confirm('真的删除行么', function(index) {
+					obj.del(); //删除对应行（tr）的DOM结构，并更新缓存
+					layer.close(index);
+					//向服务端发送删除指令.
+					var url = "/YhHomeinfoConfigControoler/deleteEnrooll";
+					var data2 = {
+						'id' : data.id
+					};
+					$.post(url, data2, function(e) {
+						table.reload('lbtu');
+						if(e.data==1){
+							layer.msg("删除成功");
+							tableReload();//重载表格的方法
+						}else{
+							layer.msg("删除失败");
+						}
+							
+						
+					})
+				});
+         
+         }
+		});
+    
+
+  
+  
+});
+</script>
+</body>
+</html>

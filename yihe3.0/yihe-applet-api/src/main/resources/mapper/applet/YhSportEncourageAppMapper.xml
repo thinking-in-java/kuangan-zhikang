@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yihe.applet.api.mapper.YhSportEncourageAppMapper" >
+  <resultMap id="BaseResultMap" type="com.yihe.applet.api.domain.YhSportEncourageApp" >
+    <id column="zw_id" property="zwId" jdbcType="INTEGER" />
+    <result column="ch_id" property="chId" jdbcType="INTEGER" />
+    <result column="time_add" property="timeAdd" jdbcType="DATE" />
+    <result column="user_code" property="userCode" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    zw_id, ch_id, time_add, user_code
+  </sql>
+  
+  <select id="showEncourageNum" parameterType="map" resultType="int">
+  	select count(*) from yh_sport_encourage where user_code=#{userCode,jdbcType=VARCHAR} and time_add=#{timeAdd} and ch_id=#{chId,jdbcType=INTEGER}
+  </select>
+  
+  <select id="selectByChidSall" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+  	select * from yh_sport_encourage where ch_id=#{chId,jdbcType=INTEGER} order by time_add desc
+  </select>
+  
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from yh_sport_encourage
+    where zw_id = #{zwId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from yh_sport_encourage
+    where zw_id = #{zwId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.yihe.applet.api.domain.YhSportEncourageApp" >
+    insert into yh_sport_encourage (zw_id, ch_id, time_add, 
+      user_code)
+    values (#{zwId,jdbcType=INTEGER}, #{chId,jdbcType=INTEGER}, #{timeAdd,jdbcType=DATE}, 
+      #{userCode,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.yihe.applet.api.domain.YhSportEncourageApp" >
+    insert into yh_sport_encourage
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="zwId != null" >
+        zw_id,
+      </if>
+      <if test="chId != null" >
+        ch_id,
+      </if>
+      <if test="timeAdd != null" >
+        time_add,
+      </if>
+      <if test="userCode != null" >
+        user_code,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="zwId != null" >
+        #{zwId,jdbcType=INTEGER},
+      </if>
+      <if test="chId != null" >
+        #{chId,jdbcType=INTEGER},
+      </if>
+      <if test="timeAdd != null" >
+        #{timeAdd,jdbcType=DATE},
+      </if>
+      <if test="userCode != null" >
+        #{userCode,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.yihe.applet.api.domain.YhSportEncourageApp" >
+    update yh_sport_encourage
+    <set >
+      <if test="chId != null" >
+        ch_id = #{chId,jdbcType=INTEGER},
+      </if>
+      <if test="timeAdd != null" >
+        time_add = #{timeAdd,jdbcType=DATE},
+      </if>
+      <if test="userCode != null" >
+        user_code = #{userCode,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where zw_id = #{zwId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.yihe.applet.api.domain.YhSportEncourageApp" >
+    update yh_sport_encourage
+    set ch_id = #{chId,jdbcType=INTEGER},
+      time_add = #{timeAdd,jdbcType=DATE},
+      user_code = #{userCode,jdbcType=VARCHAR}
+    where zw_id = #{zwId,jdbcType=INTEGER}
+  </update>
+</mapper>

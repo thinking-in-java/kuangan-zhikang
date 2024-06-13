@@ -1,0 +1,300 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yihe.system.mapper.YhUserCommodityDataMapper" >
+  <resultMap id="BaseResultMap" type="com.yihe.system.domain.YhUserCommodityData" >
+    <id column="merchandise_id" property="merchandiseId" jdbcType="INTEGER" />
+    <result column="merchandise_type" property="merchandiseType" jdbcType="VARCHAR" />
+    <result column="merchandise_name" property="merchandiseName" jdbcType="VARCHAR" />
+    <result column="grouping_id" property="groupingId" jdbcType="INTEGER" />
+    <result column="cover_img" property="coverImg" jdbcType="VARCHAR" />
+    <result column="pzk_integral" property="pzkIntegral" jdbcType="INTEGER" />
+    <result column="azk_integral" property="azkIntegral" jdbcType="INTEGER" />
+    <result column="inventory" property="inventory" jdbcType="INTEGER" />
+    <result column="putaway" property="putaway" jdbcType="INTEGER" />
+    <result column="creator" property="creator" jdbcType="VARCHAR" />
+    <result column="standby" property="standby" jdbcType="VARCHAR" />
+    <result column="add_date" property="addDate" jdbcType="TIMESTAMP" />
+    <result column="update_date" property="updateDate" jdbcType="TIMESTAMP" />
+    <result column="org_code" property="orgCode" jdbcType="VARCHAR" />
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="com.yihe.system.domain.YhUserCommodityData" extends="BaseResultMap" >
+    <result column="image_text" property="imageText" jdbcType="LONGVARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    merchandise_id, merchandise_type, merchandise_name, grouping_id, cover_img, pzk_integral, 
+    azk_integral, inventory, putaway, creator, standby, add_date, update_date, org_code
+  </sql>
+  <sql id="Blob_Column_List" >
+    image_text
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from yh_user_commodity_data
+    where merchandise_id = #{merchandiseId,jdbcType=INTEGER}
+  </select>
+  
+    <select id="selectAll" resultMap="ResultMapWithBLOBs">
+   select * from yh_user_commodity_data;
+  </select>
+  
+  
+  
+    <delete id="batchDeleteYhUserCommodityData" parameterType="java.util.Map" >
+    delete from yh_user_commodity_data
+    where merchandise_id in 
+      <foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+           #{item.merchandiseId,jdbcType=INTEGER}
+      </foreach> 
+  </delete>
+    
+  <update id="batchUpdateYhUserCommodityData" parameterType="java.util.Map"> 
+   update yh_user_commodity_data set 
+      <if test="flag == 1">
+       			putaway = 1
+      		</if>
+      		 <if test="flag == 2">
+       			putaway = 2
+      		</if> 
+      		  <if test="flag == 3">
+       			grouping_id = #{groupingId}
+      		</if>
+      		 <if test="flag == 4">
+       			standby = 2
+      		</if>
+      		where merchandise_id in
+       <foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+           #{item.merchandiseId,jdbcType=INTEGER}
+      </foreach> 
+    </update>
+    
+
+
+    <select id="selectAllCommodityData" resultMap="BaseResultMap">
+		select dity.*,(select count(1) from yh_user_order where merchandise_id=dity.merchandise_id
+             group by merchandise_id) as num
+			from yh_user_commodity_data as dity
+			where dity.org_code =#{orgCode}
+    <if test="merchandiseType != null" >
+       and merchandise_type = #{merchandiseType} 
+      </if>
+      <if test="groupingId != null" >
+       and grouping_id = #{groupingId} 
+      </if>
+      <if test="putaway != null" >
+       and putaway = #{putaway} 
+      </if>
+      <if test="conversion != null and conversion==1" >
+       and `inventory` &gt; 0
+      </if>
+      <if test="conversion != null and conversion==2" >
+       and `inventory` &lt;= 0
+      </if>
+      <if test="merchandiseName != null and merchandiseName!='' " >
+       and merchandise_name LIKE CONCAT('%',#{merchandiseName},'%') 
+      </if>
+       and standby = 1
+      order by add_date desc
+  </select>
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from yh_user_commodity_data
+    where merchandise_id = #{merchandiseId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.yihe.system.domain.YhUserCommodityData" >
+    insert into yh_user_commodity_data (merchandise_id, merchandise_type, merchandise_name, 
+      grouping_id, cover_img, pzk_integral, 
+      azk_integral, inventory, putaway, 
+      creator, standby, add_date, 
+      update_date, org_code, image_text
+      )
+    values (#{merchandiseId,jdbcType=INTEGER}, #{merchandiseType,jdbcType=VARCHAR}, #{merchandiseName,jdbcType=VARCHAR}, 
+      #{groupingId,jdbcType=INTEGER}, #{coverImg,jdbcType=VARCHAR}, #{pzkIntegral,jdbcType=INTEGER}, 
+      #{azkIntegral,jdbcType=INTEGER}, #{inventory,jdbcType=INTEGER}, #{putaway,jdbcType=INTEGER}, 
+      #{creator,jdbcType=VARCHAR}, #{standby,jdbcType=VARCHAR}, #{addDate,jdbcType=TIMESTAMP}, 
+      #{updateDate,jdbcType=TIMESTAMP}, #{orgCode,jdbcType=VARCHAR}, #{imageText,jdbcType=LONGVARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.yihe.system.domain.YhUserCommodityData" >
+    insert into yh_user_commodity_data
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="merchandiseId != null" >
+        merchandise_id,
+      </if>
+      <if test="merchandiseType != null" >
+        merchandise_type,
+      </if>
+      <if test="merchandiseName != null" >
+        merchandise_name,
+      </if>
+      <if test="groupingId != null" >
+        grouping_id,
+      </if>
+      <if test="coverImg != null" >
+        cover_img,
+      </if>
+      <if test="pzkIntegral != null" >
+        pzk_integral,
+      </if>
+      <if test="azkIntegral != null" >
+        azk_integral,
+      </if>
+      <if test="inventory != null" >
+        inventory,
+      </if>
+      <if test="putaway != null" >
+        putaway,
+      </if>
+      <if test="creator != null" >
+        creator,
+      </if>
+      <if test="standby != null" >
+        standby,
+      </if>
+      <if test="addDate != null" >
+        add_date,
+      </if>
+      <if test="updateDate != null" >
+        update_date,
+      </if>
+      <if test="orgCode != null" >
+        org_code,
+      </if>
+      <if test="imageText != null" >
+        image_text,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="merchandiseId != null" >
+        #{merchandiseId,jdbcType=INTEGER},
+      </if>
+      <if test="merchandiseType != null" >
+        #{merchandiseType,jdbcType=VARCHAR},
+      </if>
+      <if test="merchandiseName != null" >
+        #{merchandiseName,jdbcType=VARCHAR},
+      </if>
+      <if test="groupingId != null" >
+        #{groupingId,jdbcType=INTEGER},
+      </if>
+      <if test="coverImg != null" >
+        #{coverImg,jdbcType=VARCHAR},
+      </if>
+      <if test="pzkIntegral != null" >
+        #{pzkIntegral,jdbcType=INTEGER},
+      </if>
+      <if test="azkIntegral != null" >
+        #{azkIntegral,jdbcType=INTEGER},
+      </if>
+      <if test="inventory != null" >
+        #{inventory,jdbcType=INTEGER},
+      </if>
+      <if test="putaway != null" >
+        #{putaway,jdbcType=INTEGER},
+      </if>
+      <if test="creator != null" >
+        #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="standby != null" >
+        #{standby,jdbcType=VARCHAR},
+      </if>
+      <if test="addDate != null" >
+        #{addDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateDate != null" >
+        #{updateDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="orgCode != null" >
+        #{orgCode,jdbcType=VARCHAR},
+      </if>
+      <if test="imageText != null" >
+        #{imageText,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.yihe.system.domain.YhUserCommodityData" >
+    update yh_user_commodity_data
+    <set >
+      <if test="merchandiseType != null" >
+        merchandise_type = #{merchandiseType,jdbcType=VARCHAR},
+      </if>
+      <if test="merchandiseName != null" >
+        merchandise_name = #{merchandiseName,jdbcType=VARCHAR},
+      </if>
+      <if test="groupingId != null" >
+        grouping_id = #{groupingId,jdbcType=INTEGER},
+      </if>
+      <if test="coverImg != null" >
+        cover_img = #{coverImg,jdbcType=VARCHAR},
+      </if>
+      <if test="pzkIntegral != null" >
+        pzk_integral = #{pzkIntegral,jdbcType=INTEGER},
+      </if>
+      <if test="azkIntegral != null" >
+        azk_integral = #{azkIntegral,jdbcType=INTEGER},
+      </if>
+      <if test="inventory != null" >
+        inventory = #{inventory,jdbcType=INTEGER},
+      </if>
+      <if test="putaway != null" >
+        putaway = #{putaway,jdbcType=INTEGER},
+      </if>
+      <if test="creator != null" >
+        creator = #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="standby != null" >
+        standby = #{standby,jdbcType=VARCHAR},
+      </if>
+      <if test="addDate != null" >
+        add_date = #{addDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateDate != null" >
+        update_date = #{updateDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="orgCode != null" >
+        org_code = #{orgCode,jdbcType=VARCHAR},
+      </if>
+      <if test="imageText != null" >
+        image_text = #{imageText,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where merchandise_id = #{merchandiseId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.yihe.system.domain.YhUserCommodityData" >
+    update yh_user_commodity_data
+    set merchandise_type = #{merchandiseType,jdbcType=VARCHAR},
+      merchandise_name = #{merchandiseName,jdbcType=VARCHAR},
+      grouping_id = #{groupingId,jdbcType=INTEGER},
+      cover_img = #{coverImg,jdbcType=VARCHAR},
+      pzk_integral = #{pzkIntegral,jdbcType=INTEGER},
+      azk_integral = #{azkIntegral,jdbcType=INTEGER},
+      inventory = #{inventory,jdbcType=INTEGER},
+      putaway = #{putaway,jdbcType=INTEGER},
+      creator = #{creator,jdbcType=VARCHAR},
+      standby = #{standby,jdbcType=VARCHAR},
+      add_date = #{addDate,jdbcType=TIMESTAMP},
+      update_date = #{updateDate,jdbcType=TIMESTAMP},
+      org_code = #{orgCode,jdbcType=VARCHAR},
+      image_text = #{imageText,jdbcType=LONGVARCHAR}
+    where merchandise_id = #{merchandiseId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.yihe.system.domain.YhUserCommodityData" >
+    update yh_user_commodity_data
+    set merchandise_type = #{merchandiseType,jdbcType=VARCHAR},
+      merchandise_name = #{merchandiseName,jdbcType=VARCHAR},
+      grouping_id = #{groupingId,jdbcType=INTEGER},
+      cover_img = #{coverImg,jdbcType=VARCHAR},
+      pzk_integral = #{pzkIntegral,jdbcType=INTEGER},
+      azk_integral = #{azkIntegral,jdbcType=INTEGER},
+      inventory = #{inventory,jdbcType=INTEGER},
+      putaway = #{putaway,jdbcType=INTEGER},
+      creator = #{creator,jdbcType=VARCHAR},
+      standby = #{standby,jdbcType=VARCHAR},
+      add_date = #{addDate,jdbcType=TIMESTAMP},
+      update_date = #{updateDate,jdbcType=TIMESTAMP},
+      org_code = #{orgCode,jdbcType=VARCHAR}
+    where merchandise_id = #{merchandiseId,jdbcType=INTEGER}
+  </update>
+</mapper>

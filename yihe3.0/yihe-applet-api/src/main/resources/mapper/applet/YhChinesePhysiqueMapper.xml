@@ -1,0 +1,271 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yihe.applet.api.mapper.YhChinesePhysiqueMapper" >
+
+    <resultMap id="yhChinesePhysique" type="com.yihe.applet.api.domain.YhChinesePhysique" >
+        <id column="q_id" property="qId" jdbcType="INTEGER" />
+        <result column="health_qstion" property="healthQstion" jdbcType="VARCHAR" />
+        <result column="answer_1" property="answer1" jdbcType="VARCHAR" />
+        <result column="answer_2" property="answer2" jdbcType="VARCHAR" />
+        <result column="answer_3" property="answer3" jdbcType="VARCHAR" />
+        <result column="answer_4" property="answer4" jdbcType="VARCHAR" />
+        <result column="answer_5" property="answer5" jdbcType="VARCHAR" />
+    </resultMap>
+
+    <resultMap type="com.yihe.system.domain.YhUserHealthyPlan" id="YhUserHealthyPlanResult">
+        <result property="id" column="id" />
+        <result property="userCode" column="user_code" />
+        <result property="courseseq" column="courseseq" />
+        <result property="planDay" column="plan_day" />
+        <result property="plandetailId" column="plandetail_id" />
+        <result property="planId" column="plan_id" />
+        <result property="planStartdate" column="plan_startdate" />
+        <result property="planEnddate" column="plan_enddate" />
+        <result property="planState" column="plan_state" />
+        <result property="planChoose" column="plan_choose" />
+        <result property="planUnique" column="plan_unique" />
+    </resultMap>
+
+    <resultMap id="yhHealthyPlandays" type="com.yihe.applet.api.domain.YhHealthyPlandays">
+        <id column="id" jdbcType="INTEGER" property="id" />
+        <result column="planday" jdbcType="INTEGER" property="planday" />
+        <result column="plandetail_id" jdbcType="VARCHAR" property="plandetailId" />
+        <result column="plan_id" jdbcType="INTEGER" property="planId" />
+        <result column="plan_isskip" jdbcType="INTEGER" property="plan_isskip" />
+        <result column="plan_num" jdbcType="INTEGER" property="plan_num" />
+    </resultMap>
+
+    <resultMap id="yhHealthyPlandetail" type="com.yihe.applet.api.domain.YhHealthyPlandetail">
+        <id column="id" jdbcType="INTEGER" property="id" />
+        <result column="plandetail_title" jdbcType="VARCHAR" property="plandetailTitle" />
+        <result column="plandetail_type" jdbcType="INTEGER" property="plandetailType" />
+        <result column="plandetail_url" jdbcType="VARCHAR" property="plandetailUrl" />
+        <result column="plandetail_content" jdbcType="VARCHAR" property="plandetailContent" />
+        <result column="plandetail_total" jdbcType="INTEGER" property="plandetailTotal" />
+        <result column="plandetail_tip" jdbcType="VARCHAR" property="plandetailTip" />
+        <result column="plandetail_jumpuri" jdbcType="VARCHAR" property="plandetail_jumpuri" />
+        <result column="plandetail_finishportrait" jdbcType="VARCHAR" property="plandetail_finishportrait" />
+    </resultMap>
+
+    <resultMap id="yhChineseAnwser" type="com.yihe.applet.api.domain.YhChineseAnwser">
+        <id column="id" jdbcType="INTEGER" property="id" />
+        <result column="User_code" jdbcType="VARCHAR" property="userCode" />
+        <result column="chooselist" jdbcType="VARCHAR" property="chooselist" />
+        <result column="A_score" jdbcType="INTEGER" property="aScore" />
+        <result column="B_score" jdbcType="INTEGER" property="bScore" />
+        <result column="C_score" jdbcType="INTEGER" property="cScore" />
+        <result column="D_score" jdbcType="INTEGER" property="dScore" />
+        <result column="E_score" jdbcType="INTEGER" property="eScore" />
+        <result column="F_score" jdbcType="INTEGER" property="fScore" />
+        <result column="G_score" jdbcType="INTEGER" property="gScore" />
+        <result column="H_score" jdbcType="INTEGER" property="hScore" />
+        <result column="I_score" jdbcType="INTEGER" property="iScore" />
+        <result column="state" jdbcType="INTEGER" property="state" />
+        <result column="A_istype" jdbcType="INTEGER" property="aIstype" />
+        <result column="B_istype" jdbcType="INTEGER" property="bIstype" />
+        <result column="C_istype" jdbcType="INTEGER" property="cIstype" />
+        <result column="D_istype" jdbcType="INTEGER" property="dIstype" />
+        <result column="E_istype" jdbcType="INTEGER" property="eIstype" />
+        <result column="F_istype" jdbcType="INTEGER" property="fIstype" />
+        <result column="G_istype" jdbcType="INTEGER" property="gIstype" />
+        <result column="H_istype" jdbcType="INTEGER" property="hIstype" />
+        <result column="I_istype" jdbcType="INTEGER" property="iIstype" />
+        <result column="time" jdbcType="VARCHAR" property="time" />
+    </resultMap>
+
+
+    <select id="selectsex" parameterType="String" resultType="java.lang.Integer">
+        select gender from yh_user_reginfo where user_code=#{Usercode}
+    </select>
+
+    <select id="selectallinfo" parameterType="int" resultMap="yhChinesePhysique">
+        select * from yh_chinese_physique
+        <if test="sex==1">
+            where q_id!=57
+        </if>
+
+        <if test="sex==2">
+            where q_id!=58
+        </if>
+    </select>
+
+    <insert id="addhinesePhysique" parameterType="com.yihe.applet.api.domain.YhChineseAnwser">
+        insert into yh_chinese_anwser
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="userCode != null">
+                User_code,
+            </if>
+            <if test="chooselist != null">
+                chooselist,
+            </if>
+            <if test="aScore != null">
+                A_score,
+            </if>
+            <if test="bScore != null">
+                B_score,
+            </if>
+            <if test="cScore != null">
+                C_score,
+            </if>
+            <if test="dScore != null">
+                D_score,
+            </if>
+            <if test="eScore != null">
+                E_score,
+            </if>
+            <if test="fScore != null">
+                F_score,
+            </if>
+            <if test="gScore != null">
+                G_score,
+            </if>
+            <if test="hScore != null">
+                H_score,
+            </if>
+            <if test="iScore != null">
+                I_score,
+            </if>
+            <if test="state != null">
+                state,
+            </if>
+            <if test="aIstype != null">
+                A_istype,
+            </if>
+            <if test="bIstype != null">
+                B_istype,
+            </if>
+            <if test="cIstype != null">
+                C_istype,
+            </if>
+            <if test="dIstype != null">
+                D_istype,
+            </if>
+            <if test="eIstype != null">
+                E_istype,
+            </if>
+            <if test="fIstype != null">
+                F_istype,
+            </if>
+            <if test="gIstype != null">
+                G_istype,
+            </if>
+            <if test="hIstype != null">
+                H_istype,
+            </if>
+            <if test="iIstype != null">
+                I_istype,
+            </if>
+            <if test="time != null">
+                time,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="userCode != null">
+                #{userCode,jdbcType=VARCHAR},
+            </if>
+            <if test="chooselist != null">
+                #{chooselist,jdbcType=VARCHAR},
+            </if>
+            <if test="aScore != null">
+                #{aScore,jdbcType=INTEGER},
+            </if>
+            <if test="bScore != null">
+                #{bScore,jdbcType=INTEGER},
+            </if>
+            <if test="cScore != null">
+                #{cScore,jdbcType=INTEGER},
+            </if>
+            <if test="dScore != null">
+                #{dScore,jdbcType=INTEGER},
+            </if>
+            <if test="eScore != null">
+                #{eScore,jdbcType=INTEGER},
+            </if>
+            <if test="fScore != null">
+                #{fScore,jdbcType=INTEGER},
+            </if>
+            <if test="gScore != null">
+                #{gScore,jdbcType=INTEGER},
+            </if>
+            <if test="hScore != null">
+                #{hScore,jdbcType=INTEGER},
+            </if>
+            <if test="iScore != null">
+                #{iScore,jdbcType=INTEGER},
+            </if>
+            <if test="state != null">
+                #{state,jdbcType=INTEGER},
+            </if>
+            <if test="aIstype != null">
+                #{aIstype,jdbcType=INTEGER},
+            </if>
+            <if test="bIstype != null">
+                #{bIstype,jdbcType=INTEGER},
+            </if>
+            <if test="cIstype != null">
+                #{cIstype,jdbcType=INTEGER},
+            </if>
+            <if test="dIstype != null">
+                #{dIstype,jdbcType=INTEGER},
+            </if>
+            <if test="eIstype != null">
+                #{eIstype,jdbcType=INTEGER},
+            </if>
+            <if test="fIstype != null">
+                #{fIstype,jdbcType=INTEGER},
+            </if>
+            <if test="gIstype != null">
+                #{gIstype,jdbcType=INTEGER},
+            </if>
+            <if test="hIstype != null">
+                #{hIstype,jdbcType=INTEGER},
+            </if>
+            <if test="iIstype != null">
+                #{iIstype,jdbcType=INTEGER},
+            </if>
+            <if test="time != null">
+                #{time,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+
+    <select id="selectanwser" resultMap="yhChineseAnwser" parameterType="String">
+        select  * from yh_chinese_anwser where User_code=#{Usercode} and state=1 ORDER BY time DESC LIMIT 1
+    </select>
+
+    <select id="isfirstzy" resultType="int" parameterType="String">
+        select count(*) from yh_chinese_anwser where User_code=#{Usercode} and state=1
+    </select>
+
+    <select id="alltims" resultType="int">
+        select count(*) from yh_chinese_anwser
+    </select>
+
+    <select id="getmaxplan" parameterType="String" resultMap="YhUserHealthyPlanResult">
+        SELECT * FROM `yh_user_healthy_plan` WHERE user_code=#{Usercode} AND plan_state=1 AND plan_startdate &lt; (SELECT NOW())
+        ORDER BY plan_day DESC LIMIT 1
+    </select>
+
+    <select id="getbeginplan" parameterType="String" resultMap="YhUserHealthyPlanResult">
+        SELECT * FROM `yh_user_healthy_plan` WHERE user_code=#{Usercode} AND plan_state=0 AND plan_day =1
+          LIMIT 1
+    </select>
+
+    <select id="selectplandays" resultMap="yhHealthyPlandays">
+        select * from yh_healthy_plandays where planday &lt;= #{plandays} and plan_id=#{planid} ORDER BY planday DESC
+    </select>
+
+    <select id="getplandetail" parameterType="String" resultMap="yhHealthyPlandetail">
+        select * from yh_healthy_plandetail where id=#{id}
+    </select>
+
+    <select id="getyhuserplan" resultMap="YhUserHealthyPlanResult">
+        select  * from yh_user_healthy_plan where user_code=#{Usercode} and plan_day=#{getPlanday} and plan_id=#{getPlanId} and plan_state=1
+    </select>
+</mapper>

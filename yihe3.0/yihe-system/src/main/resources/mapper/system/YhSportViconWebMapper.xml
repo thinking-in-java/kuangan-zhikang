@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yihe.system.mapper.YhSportViconWebMapper" >
+  <resultMap id="BaseResultMap" type="com.yihe.system.domain.YhSportViconWeb" >
+    <id column="vicon_id" property="viconId" jdbcType="INTEGER" />
+    <result column="vicon_type" property="viconType" jdbcType="VARCHAR" />
+    <result column="vicon_video" property="viconVideo" jdbcType="VARCHAR" />
+    <result column="vicon_name" property="viconName" jdbcType="VARCHAR" />
+    <result column="vicon_img" property="viconImg" jdbcType="VARCHAR" />
+    <result column="vicon_strength" property="viconStrength" jdbcType="VARCHAR" />
+    <result column="vicon_content" property="viconContent" jdbcType="VARCHAR" />
+    <result column="vicon_explain_img" property="viconExplainImg" jdbcType="VARCHAR" />
+    <result column="vicon_muscle_img" property="viconMuscleImg" jdbcType="VARCHAR" />
+    <result column="is_del" property="isDel" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    vicon_id, vicon_type, vicon_video, vicon_name, vicon_img, vicon_strength, vicon_content, 
+    vicon_explain_img, vicon_muscle_img, is_del
+  </sql>
+  
+    <!-- 查询所有运动精彩移动模糊查询 -->
+    <select id="selectSportVicon" resultMap="BaseResultMap" parameterType="map">
+  		select * from yh_sport_vicon
+  		<where>
+  			<if test="viconName != null and viconName != ''">
+				AND vicon_name LIKE CONCAT('%',#{viconName},'%')
+			</if>
+  		</where>
+  		LIMIT  #{page},#{limit}
+  </select>
+  
+    <!-- 查询所有运动精彩移动模糊查询 -->
+    <select id="selectSportViconCount" resultType="int" parameterType="map">
+  		select count(*) from yh_sport_vicon
+  		<where>
+  			<if test="viconName != null and viconName != ''">
+				AND vicon_name LIKE CONCAT('%',#{viconName},'%')
+			</if>
+  		</where>
+  </select>
+  
+  
+  
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from yh_sport_vicon
+    where vicon_id = #{viconId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from yh_sport_vicon
+    where vicon_id = #{viconId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.yihe.system.domain.YhSportViconWeb" >
+    insert into yh_sport_vicon (vicon_id, vicon_type, vicon_video, 
+      vicon_name, vicon_img, vicon_strength, 
+      vicon_content, vicon_explain_img, vicon_muscle_img, 
+      is_del)
+    values (#{viconId,jdbcType=INTEGER}, #{viconType,jdbcType=VARCHAR}, #{viconVideo,jdbcType=VARCHAR}, 
+      #{viconName,jdbcType=VARCHAR}, #{viconImg,jdbcType=VARCHAR}, #{viconStrength,jdbcType=VARCHAR}, 
+      #{viconContent,jdbcType=VARCHAR}, #{viconExplainImg,jdbcType=VARCHAR}, #{viconMuscleImg,jdbcType=VARCHAR}, 
+      #{isDel,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.yihe.system.domain.YhSportViconWeb" >
+    insert into yh_sport_vicon
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="viconId != null" >
+        vicon_id,
+      </if>
+      <if test="viconType != null" >
+        vicon_type,
+      </if>
+      <if test="viconVideo != null" >
+        vicon_video,
+      </if>
+      <if test="viconName != null" >
+        vicon_name,
+      </if>
+      <if test="viconImg != null" >
+        vicon_img,
+      </if>
+      <if test="viconStrength != null" >
+        vicon_strength,
+      </if>
+      <if test="viconContent != null" >
+        vicon_content,
+      </if>
+      <if test="viconExplainImg != null" >
+        vicon_explain_img,
+      </if>
+      <if test="viconMuscleImg != null" >
+        vicon_muscle_img,
+      </if>
+      <if test="isDel != null" >
+        is_del,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="viconId != null" >
+        #{viconId,jdbcType=INTEGER},
+      </if>
+      <if test="viconType != null" >
+        #{viconType,jdbcType=VARCHAR},
+      </if>
+      <if test="viconVideo != null" >
+        #{viconVideo,jdbcType=VARCHAR},
+      </if>
+      <if test="viconName != null" >
+        #{viconName,jdbcType=VARCHAR},
+      </if>
+      <if test="viconImg != null" >
+        #{viconImg,jdbcType=VARCHAR},
+      </if>
+      <if test="viconStrength != null" >
+        #{viconStrength,jdbcType=VARCHAR},
+      </if>
+      <if test="viconContent != null" >
+        #{viconContent,jdbcType=VARCHAR},
+      </if>
+      <if test="viconExplainImg != null" >
+        #{viconExplainImg,jdbcType=VARCHAR},
+      </if>
+      <if test="viconMuscleImg != null" >
+        #{viconMuscleImg,jdbcType=VARCHAR},
+      </if>
+      <if test="isDel != null" >
+        #{isDel,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.yihe.system.domain.YhSportViconWeb" >
+    update yh_sport_vicon
+    <set >
+      <if test="viconType != null" >
+        vicon_type = #{viconType,jdbcType=VARCHAR},
+      </if>
+      <if test="viconVideo != null" >
+        vicon_video = #{viconVideo,jdbcType=VARCHAR},
+      </if>
+      <if test="viconName != null" >
+        vicon_name = #{viconName,jdbcType=VARCHAR},
+      </if>
+      <if test="viconImg != null" >
+        vicon_img = #{viconImg,jdbcType=VARCHAR},
+      </if>
+      <if test="viconStrength != null" >
+        vicon_strength = #{viconStrength,jdbcType=VARCHAR},
+      </if>
+      <if test="viconContent != null" >
+        vicon_content = #{viconContent,jdbcType=VARCHAR},
+      </if>
+      <if test="viconExplainImg != null" >
+        vicon_explain_img = #{viconExplainImg,jdbcType=VARCHAR},
+      </if>
+      <if test="viconMuscleImg != null" >
+        vicon_muscle_img = #{viconMuscleImg,jdbcType=VARCHAR},
+      </if>
+      <if test="isDel != null" >
+        is_del = #{isDel,jdbcType=INTEGER},
+      </if>
+    </set>
+    where vicon_id = #{viconId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.yihe.system.domain.YhSportViconWeb" >
+    update yh_sport_vicon
+    set vicon_type = #{viconType,jdbcType=VARCHAR},
+      vicon_video = #{viconVideo,jdbcType=VARCHAR},
+      vicon_name = #{viconName,jdbcType=VARCHAR},
+      vicon_img = #{viconImg,jdbcType=VARCHAR},
+      vicon_strength = #{viconStrength,jdbcType=VARCHAR},
+      vicon_content = #{viconContent,jdbcType=VARCHAR},
+      vicon_explain_img = #{viconExplainImg,jdbcType=VARCHAR},
+      vicon_muscle_img = #{viconMuscleImg,jdbcType=VARCHAR},
+      is_del = #{isDel,jdbcType=INTEGER}
+    where vicon_id = #{viconId,jdbcType=INTEGER}
+  </update>
+</mapper>

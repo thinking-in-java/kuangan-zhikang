@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yihe.system.mapper.YhFodClassifenergyWebMapper" >
+  <resultMap id="BaseResultMap" type="com.yihe.system.domain.YhFodClassifenergyWeb" >
+    <id column="F_ClassifEnergyId" property="fClassifenergyid" jdbcType="INTEGER" />
+    <result column="F_level" property="fLevel" jdbcType="VARCHAR" />
+    <result column="F_breakfast" property="fBreakfast" jdbcType="VARCHAR" />
+    <result column="F_lunch" property="fLunch" jdbcType="VARCHAR" />
+    <result column="F_dinner" property="fDinner" jdbcType="VARCHAR" />
+    <result column="F_extrameal" property="fExtrameal" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    F_ClassifEnergyId, F_level, F_breakfast, F_lunch, F_dinner, F_extrameal
+  </sql>
+  
+  <select id="findZaoFenInfo" resultType="java.lang.String">
+  select F_breakfast from yh_food_classifenergy where F_level=#{flevel} limit 1
+  </select>
+   <select id="findWuFenInfo"  resultType="java.lang.String">
+  select F_lunch from yh_food_classifenergy where F_level=#{flevel} limit 1
+  </select>
+  
+   <select id="findWanFenInfo"  resultType="java.lang.String">
+  select F_dinner from yh_food_classifenergy where F_level=#{flevel} limit 1
+  </select>
+  
+   <select id="findJiaFenInfo"  resultType="java.lang.String">
+  select F_extrameal from yh_food_classifenergy where F_level=#{flevel} limit 1
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from yh_food_classifenergy
+    <where>
+    <if test="fClassifenergyid != null">
+      F_ClassifEnergyId = #{fClassifenergyid,jdbcType=INTEGER}
+    </if>
+  
+    </where>
+     
+  </select>
+  <select id="findFenergyByFlevel"   resultMap="BaseResultMap">
+    select 
+   <include refid="Base_Column_List" />
+    from yh_food_classifenergy where F_level=#{flevel} limit 1
+  </select>
+  
+  <select id="findFenergyListAll"  resultType="java.lang.String">
+    select 
+   F_level
+    from yh_food_classifenergy
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from yh_food_classifenergy
+    where F_ClassifEnergyId = #{fClassifenergyid,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.yihe.system.domain.YhFodClassifenergyWeb" >
+    insert into yh_food_classifenergy (F_ClassifEnergyId, F_level, F_breakfast, 
+      F_lunch, F_dinner, F_extrameal
+      )
+    values (#{fClassifenergyid,jdbcType=INTEGER}, #{fLevel,jdbcType=VARCHAR}, #{fBreakfast,jdbcType=VARCHAR}, 
+      #{fLunch,jdbcType=VARCHAR}, #{fDinner,jdbcType=VARCHAR}, #{fExtrameal,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.yihe.system.domain.YhFodClassifenergyWeb" >
+    insert into yh_food_classifenergy
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="fClassifenergyid != null" >
+        F_ClassifEnergyId,
+      </if>
+      <if test="fLevel != null" >
+        F_level,
+      </if>
+      <if test="fBreakfast != null" >
+        F_breakfast,
+      </if>
+      <if test="fLunch != null" >
+        F_lunch,
+      </if>
+      <if test="fDinner != null" >
+        F_dinner,
+      </if>
+      <if test="fExtrameal != null" >
+        F_extrameal,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="fClassifenergyid != null" >
+        #{fClassifenergyid,jdbcType=INTEGER},
+      </if>
+      <if test="fLevel != null" >
+        #{fLevel,jdbcType=VARCHAR},
+      </if>
+      <if test="fBreakfast != null" >
+        #{fBreakfast,jdbcType=VARCHAR},
+      </if>
+      <if test="fLunch != null" >
+        #{fLunch,jdbcType=VARCHAR},
+      </if>
+      <if test="fDinner != null" >
+        #{fDinner,jdbcType=VARCHAR},
+      </if>
+      <if test="fExtrameal != null" >
+        #{fExtrameal,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.yihe.system.domain.YhFodClassifenergyWeb" >
+    update yh_food_classifenergy
+    <set >
+      <if test="fLevel != null" >
+        F_level = #{fLevel,jdbcType=VARCHAR},
+      </if>
+      <if test="fBreakfast != null" >
+        F_breakfast = #{fBreakfast,jdbcType=VARCHAR},
+      </if>
+      <if test="fLunch != null" >
+        F_lunch = #{fLunch,jdbcType=VARCHAR},
+      </if>
+      <if test="fDinner != null" >
+        F_dinner = #{fDinner,jdbcType=VARCHAR},
+      </if>
+      <if test="fExtrameal != null" >
+        F_extrameal = #{fExtrameal,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where F_ClassifEnergyId = #{fClassifenergyid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.yihe.system.domain.YhFodClassifenergyWeb" >
+    update yh_food_classifenergy
+    set F_level = #{fLevel,jdbcType=VARCHAR},
+      F_breakfast = #{fBreakfast,jdbcType=VARCHAR},
+      F_lunch = #{fLunch,jdbcType=VARCHAR},
+      F_dinner = #{fDinner,jdbcType=VARCHAR},
+      F_extrameal = #{fExtrameal,jdbcType=VARCHAR}
+    where F_ClassifEnergyId = #{fClassifenergyid,jdbcType=INTEGER}
+  </update>
+</mapper>

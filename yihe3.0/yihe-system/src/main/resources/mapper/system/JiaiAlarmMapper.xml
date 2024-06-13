@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yihe.system.mapper.JiaiAlarmMapper" >
+  <resultMap id="BaseResultMap" type="com.yihe.system.domain.JiaiAlarm" >
+    <result column="terminalId" property="terminalid" jdbcType="VARCHAR" />
+    <result column="type" property="type" jdbcType="VARCHAR" />
+    <result column="battery" property="battery" jdbcType="INTEGER" />
+    <result column="address" property="address" jdbcType="VARCHAR" />
+    <result column="longitude" property="longitude" jdbcType="VARCHAR" />
+    <result column="latitude" property="latitude" jdbcType="VARCHAR" />
+    <result column="establishTime" property="establishTime" jdbcType="VARCHAR" />
+  </resultMap>
+  <insert id="insert" parameterType="com.yihe.system.domain.JiaiAlarm" >
+    insert into jiai_alarm (terminalId, type, battery, 
+      address, longitude, latitude
+      )
+    values (#{terminalid,jdbcType=VARCHAR}, #{type,jdbcType=VARCHAR}, #{battery,jdbcType=INTEGER}, 
+      #{address,jdbcType=VARCHAR}, #{longitude,jdbcType=VARCHAR}, #{latitude,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.yihe.system.domain.JiaiAlarm" >
+    insert into jiai_alarm
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="terminalid != null" >
+        terminalId,
+      </if>
+      <if test="type != null" >
+        type,
+      </if>
+      <if test="battery != null" >
+        battery,
+      </if>
+      <if test="address != null" >
+        address,
+      </if>
+      <if test="longitude != null" >
+        longitude,
+      </if>
+      <if test="latitude != null" >
+        latitude,
+      </if>
+       <if test="establishTime != null" >
+      establishTime,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="terminalid != null" >
+        #{terminalid,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null" >
+        #{type,jdbcType=VARCHAR},
+      </if>
+      <if test="battery != null" >
+        #{battery,jdbcType=INTEGER},
+      </if>
+      <if test="address != null" >
+        #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="longitude != null" >
+        #{longitude,jdbcType=VARCHAR},
+      </if>
+      <if test="latitude != null" >
+        #{latitude,jdbcType=VARCHAR},
+      </if>
+       <if test="establishTime != null" >
+        #{establishTime,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+</mapper>

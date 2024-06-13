@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yihe.system.mapper.YhSystemUpdateMapper">
+		<select id="selectsystemupdate" resultType="com.yihe.system.domain.YhSystemUpdate">
+			select * from	yh_system_update where unix_timestamp((select  now()  from   dual)) &lt; update_begintime
+		</select>
+		<delete id="updatechexiao" parameterType="com.yihe.system.domain.YhSystemUpdate">
+			delete  from yh_system_update where update_id = #{update_id}
+		</delete>
+	<update id="updatedate" parameterType="com.yihe.system.domain.YhSystemUpdate">
+						
+			 	update yh_system_update
+			<set>
+		      <if test="brgin != null">
+		        update_begintime = #{brgin},
+		      </if>
+		      <if test="end != null">
+		        update_endtime = #{end},
+		      </if>
+		      <if test="update_title != null">
+		        update_title = #{update_title},
+		      </if>
+		      <if test="update_content != null">
+		        update_content = #{update_content},
+		      </if>
+				<if test="state == null">
+       			 		state=0,
+     			</if>
+    	</set>
+    		where update_id = #{update_id,jdbcType=INTEGER}
+	</update>
+	
+	 <insert id="insertupdate"  parameterType="com.yihe.system.domain.YhSystemUpdate">
+	 	insert into yh_system_update
+	 	    <trim prefix="(" suffix=")" suffixOverrides=",">
+	 <if test="update_id != null">
+        update_id,
+      </if>
+      <if test="brgin != null">
+        update_begintime,
+      </if>
+      <if test="end != null">
+        update_endtime,
+      </if>
+      <if test="update_title != null">
+        update_title,
+      </if>
+      <if test="update_content != null">
+        update_content,
+      </if>
+       <if test="state == null">
+        state,
+      </if>
+    </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="update_id != null">
+        #{update_id},
+      </if>
+      <if test="brgin != null">
+        #{brgin},
+      </if>
+      <if test="end != null">
+        #{end},
+      </if>
+       <if test="update_title != null">
+        #{update_title},
+      </if>
+       <if test="update_content != null">
+        #{update_content},
+      </if>
+       <if test="state == null">
+        0,
+      </if>
+    </trim>
+	 </insert>
+	 
+	 	<update id="updatedatefabu" parameterType="com.yihe.system.domain.YhSystemUpdate">
+						
+			 	update yh_system_update
+			<set>
+		      <if test="brgin != null">
+		        update_begintime = #{brgin},
+		      </if>
+		      <if test="end != null">
+		        update_endtime = #{end},
+		      </if>
+		      <if test="update_title != null">
+		        update_title = #{update_title},
+		      </if>
+		      <if test="update_content != null">
+		        update_content = #{update_content},
+		      </if>
+				<if test="state == null">
+       			 		state=1,
+     			</if>
+    	</set>
+    		where update_id = #{update_id,jdbcType=INTEGER}
+	</update>
+	
+	 <insert id="insertupdatefabu"  parameterType="com.yihe.system.domain.YhSystemUpdate">
+	 	insert into yh_system_update
+	 	    <trim prefix="(" suffix=")" suffixOverrides=",">
+	 <if test="update_id != null">
+        update_id,
+      </if>
+      <if test="brgin != null">
+        update_begintime,
+      </if>
+      <if test="end != null">
+        update_endtime,
+      </if>
+      <if test="update_title != null">
+        update_title,
+      </if>
+      <if test="update_content != null">
+        update_content,
+      </if>
+       <if test="state == null">
+        state,
+      </if>
+    </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="update_id != null">
+        #{update_id},
+      </if>
+      <if test="brgin != null">
+        #{brgin},
+      </if>
+      <if test="end != null">
+        #{end},
+      </if>
+       <if test="update_title != null">
+        #{update_title},
+      </if>
+       <if test="update_content != null">
+        #{update_content},
+      </if>
+       <if test="state == null">
+        1,
+      </if>
+    </trim>
+	 </insert>
+</mapper>

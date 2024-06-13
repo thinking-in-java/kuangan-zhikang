@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yihe.system.mapper.YhPainResolveMapper" >
+  <resultMap id="BaseResultMap" type="com.yihe.system.domain.YhPainResolve" >
+    <id column="resolve_id" property="resolveId" jdbcType="INTEGER" />
+    <result column="pain_id" property="painId" jdbcType="TINYINT" />
+    <result column="resolve_type" property="resolveType" jdbcType="INTEGER" />
+    <result column="resolve_estimate" property="resolveEstimate" jdbcType="VARCHAR" />
+    <result column="teach_video" property="teachVideo" jdbcType="VARCHAR" />
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="com.yihe.system.domain.YhPainResolveWithBLOBs" extends="BaseResultMap" >
+    <result column="resolve_name" property="resolveName" jdbcType="LONGVARCHAR" />
+    <result column="resolve_harm" property="resolveHarm" jdbcType="LONGVARCHAR" />
+    <result column="resolve_explain" property="resolveExplain" jdbcType="LONGVARCHAR" />
+    <result column="resolve_solution" property="resolveSolution" jdbcType="LONGVARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    resolve_id, pain_id, resolve_type, resolve_estimate, teach_video
+  </sql>
+  <sql id="Blob_Column_List" >
+    resolve_name, resolve_harm, resolve_explain, resolve_solution
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from yh_pain_resolve
+    where resolve_id = #{resolveId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from yh_pain_resolve
+    where resolve_id = #{resolveId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.yihe.system.domain.YhPainResolveWithBLOBs" >
+    insert into yh_pain_resolve (resolve_id, pain_id, resolve_type, 
+      resolve_estimate, teach_video, resolve_name, 
+      resolve_harm, resolve_explain, resolve_solution
+      )
+    values (#{resolveId,jdbcType=INTEGER}, #{painId,jdbcType=TINYINT}, #{resolveType,jdbcType=INTEGER}, 
+      #{resolveEstimate,jdbcType=VARCHAR}, #{teachVideo,jdbcType=VARCHAR}, #{resolveName,jdbcType=LONGVARCHAR}, 
+      #{resolveHarm,jdbcType=LONGVARCHAR}, #{resolveExplain,jdbcType=LONGVARCHAR}, #{resolveSolution,jdbcType=LONGVARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.yihe.system.domain.YhPainResolveWithBLOBs" >
+    insert into yh_pain_resolve
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="resolveId != null" >
+        resolve_id,
+      </if>
+      <if test="painId != null" >
+        pain_id,
+      </if>
+      <if test="resolveType != null" >
+        resolve_type,
+      </if>
+      <if test="resolveEstimate != null" >
+        resolve_estimate,
+      </if>
+      <if test="teachVideo != null" >
+        teach_video,
+      </if>
+      <if test="resolveName != null" >
+        resolve_name,
+      </if>
+      <if test="resolveHarm != null" >
+        resolve_harm,
+      </if>
+      <if test="resolveExplain != null" >
+        resolve_explain,
+      </if>
+      <if test="resolveSolution != null" >
+        resolve_solution,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="resolveId != null" >
+        #{resolveId,jdbcType=INTEGER},
+      </if>
+      <if test="painId != null" >
+        #{painId,jdbcType=TINYINT},
+      </if>
+      <if test="resolveType != null" >
+        #{resolveType,jdbcType=INTEGER},
+      </if>
+      <if test="resolveEstimate != null" >
+        #{resolveEstimate,jdbcType=VARCHAR},
+      </if>
+      <if test="teachVideo != null" >
+        #{teachVideo,jdbcType=VARCHAR},
+      </if>
+      <if test="resolveName != null" >
+        #{resolveName,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="resolveHarm != null" >
+        #{resolveHarm,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="resolveExplain != null" >
+        #{resolveExplain,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="resolveSolution != null" >
+        #{resolveSolution,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.yihe.system.domain.YhPainResolveWithBLOBs" >
+    update yh_pain_resolve
+    <set >
+      <if test="painId != null" >
+        pain_id = #{painId,jdbcType=TINYINT},
+      </if>
+      <if test="resolveType != null" >
+        resolve_type = #{resolveType,jdbcType=INTEGER},
+      </if>
+      <if test="resolveEstimate != null" >
+        resolve_estimate = #{resolveEstimate,jdbcType=VARCHAR},
+      </if>
+      <if test="teachVideo != null" >
+        teach_video = #{teachVideo,jdbcType=VARCHAR},
+      </if>
+      <if test="resolveName != null" >
+        resolve_name = #{resolveName,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="resolveHarm != null" >
+        resolve_harm = #{resolveHarm,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="resolveExplain != null" >
+        resolve_explain = #{resolveExplain,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="resolveSolution != null" >
+        resolve_solution = #{resolveSolution,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where resolve_id = #{resolveId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.yihe.system.domain.YhPainResolveWithBLOBs" >
+    update yh_pain_resolve
+    set pain_id = #{painId,jdbcType=TINYINT},
+      resolve_type = #{resolveType,jdbcType=INTEGER},
+      resolve_estimate = #{resolveEstimate,jdbcType=VARCHAR},
+      teach_video = #{teachVideo,jdbcType=VARCHAR},
+      resolve_name = #{resolveName,jdbcType=LONGVARCHAR},
+      resolve_harm = #{resolveHarm,jdbcType=LONGVARCHAR},
+      resolve_explain = #{resolveExplain,jdbcType=LONGVARCHAR},
+      resolve_solution = #{resolveSolution,jdbcType=LONGVARCHAR}
+    where resolve_id = #{resolveId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.yihe.system.domain.YhPainResolve" >
+    update yh_pain_resolve
+    set pain_id = #{painId,jdbcType=TINYINT},
+      resolve_type = #{resolveType,jdbcType=INTEGER},
+      resolve_estimate = #{resolveEstimate,jdbcType=VARCHAR},
+      teach_video = #{teachVideo,jdbcType=VARCHAR}
+    where resolve_id = #{resolveId,jdbcType=INTEGER}
+  </update>
+</mapper>

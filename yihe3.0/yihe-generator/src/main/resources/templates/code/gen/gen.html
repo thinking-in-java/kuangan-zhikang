@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html  lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>代码生成列表</title>
+    <link rel="stylesheet" th:href="@{/assets/libs/layui/css/layui.css}"/>
+    <link rel="stylesheet" th:href="@{/assets/module/admin.css}"/>
+</head>
+<style>
+
+.layui-layer-content {
+   width:100%;
+}
+.layui-code {
+   
+ border-left-width: 0px;
+
+}
+</style>
+<body>
+<!-- 页面加载loading -->
+<div class="page-loading">
+    <div class="ball-loader">
+        <span></span><span></span><span></span><span></span>
+    </div>
+</div>
+<!-- 正文开始 -->
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div class="layui-card-body">
+            <div class="layui-form toolbar">
+                <div class="layui-form-item">
+                    <div class="layui-inline">
+                        <label class="layui-form-label w-auto">表名称：</label>
+                        <div class="layui-input-inline mr0">
+                            <input name="tableName" class="layui-input" type="text" placeholder="表名称"/>
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label w-auto">表描述：</label>
+                        <div class="layui-input-inline mr0">
+                            <input name="tableComment" class="layui-input" type="text" placeholder="表描述"/>
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <button class="layui-btn icon-btn" lay-filter="formSubSearchJob" lay-submit>
+                            <i class="layui-icon">&#xe615;</i>查询
+                        </button>
+                    </div>
+                    
+                </div>
+            </div>
+
+            <table id="tableImport" lay-filter="tableImport"></table>
+        </div>
+    </div>
+</div>
+
+<!-- 表格操作列 -->
+<script type="text/html" id="tableBarUser">
+    <a class="layui-btn layui-btn-xs" lay-event="preview">预览</a>
+    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="edit">修改</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+    <a class="layui-btn layui-btn-xs" lay-event="addCode">生成代码</a>
+</script>
+
+<!-- 查看导入弹窗 -->
+<script type="text/html" id="demoEDImportModel">
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div class="layui-card-body">
+           <div class="layui-form toolbar">
+                <div class="layui-form-item">
+                    <div class="layui-inline">
+                        <label class="layui-form-label w-auto">表名称：</label>
+                        <div class="layui-input-inline mr0">
+                            <input name="tableName" class="layui-input" type="text" placeholder="表名称"/>
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label w-auto">表描述：</label>
+                        <div class="layui-input-inline mr0">
+                            <input name="tableComment" class="layui-input" type="text" placeholder="表描述"/>
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <button class="layui-btn icon-btn" lay-filter="formSubSearchImport" lay-submit>
+                            <i class="layui-icon">&#xe615;</i>查询
+                        </button>
+                    </div>
+                    
+                </div>
+            </div>
+
+           <table id="demoTableEDImport" lay-filter="demoTableEDImport" class="layui-hide"></table>
+           <div class="layui-form-item"></div>
+           <div class="layui-form-item text-right model-form-footer">
+               <button class="layui-btn layui-btn-primary" type="button" ew-event="closePageDialog">取消</button>
+               <button class="layui-btn" lay-filter="modelSubmitPtImport" lay-submit>确定</button>
+           </div>
+
+      </div>
+   </div>
+</div>
+</script>
+
+
+<!-- js部分 -->
+<script type="text/javascript" th:src="@{/assets/libs/layui/layui.js}"></script>
+<script type="text/javascript" th:src="@{/assets/js/common.js}"></script>
+<script th:inline="none">
+    layui.use(['layer', 'index','form', 'table', 'util', 'admin'], function () {
+        var $ = layui.jquery;
+        var layer = layui.layer;
+        var index = layui.index;
+        var form = layui.form;
+        var table = layui.table;
+        var util = layui.util;
+        var admin = layui.admin;
+        // 渲染表格
+        var insTb = table.render({
+            elem: '#tableImport',
+            url: '/code/gen/list',
+            request: {     
+                pageName: 'pageNum' //页码的参数名称，默认：page
+               ,limitName: 'pageSize' //每页数据量的参数名，默认：limit
+            },
+            toolbar: ['<p>',
+                '<button lay-event="add" class="layui-btn layui-btn-sm icon-btn"><i class="layui-icon">&#xe621;</i>生成</button>&nbsp;',
+                '<button lay-event="import" class="layui-btn layui-btn-sm layui-btn-danger icon-btn"><i class="layui-icon">&#xe681;</i>导入</button>&nbsp;',
+                '<button lay-event="del" class="layui-btn layui-btn-sm layui-btn-danger icon-btn"><i class="layui-icon">&#xe640;</i>删除</button>&nbsp;',
+                '</p>'].join(''),
+            page: true,
+            method:'post',
+            cellMinWidth: 100,
+            cols: [[
+            	{type: 'checkbox'},
+            	{type: 'numbers',visible: false},
+                {field: 'tableName', sort: true, title: '表名称'},
+                {field: 'tableComment', sort: true, title: '表描述'},
+                {field: 'className', sort: true, title: '实体类名'},
+                {field: 'createTime', sort: true, title: '创建时间'},
+                {
+		            field: 'updateTime',
+		            title: '更新时间',
+		            sort: true
+		        },
+                {align: 'center', toolbar: '#tableBarUser', title: '操作', minWidth: 200}
+            ]]
+        });
+
+        // 搜索
+        form.on('submit(formSubSearchJob)', function (data) {
+            insTb.reload({where: data.field}, 'data');
+        });
+
+        // 工具条点击事件
+        table.on('tool(tableImport)', function (obj) {
+            var data = obj.data;
+            var layEvent = obj.event;
+            if (layEvent === 'addCode') { 
+            	// 生成代码
+            	genCode(data.tableName);
+            }else if (obj.event === 'del') { 
+            	// 删除
+            	doDel(data);
+            }else if (layEvent === 'preview') { 
+            	// 预览
+            	showpreview(data.tableId);
+            }else if (layEvent === 'edit') { 
+            	// 修改
+            	showEaitView(data.tableId);
+            }
+        });
+
+        /* 表格头工具栏点击事件 */
+        table.on('toolbar(tableImport)', function (obj) {
+            if (obj.event === 'add') { // 生成
+            	var checkRows = table.checkStatus('tableImport');
+                if (checkRows.data.length === 0) {
+                    layer.msg('请选择要生成的数据', {icon: 2});
+                    return;
+                }
+                var ids = checkRows.data.map(function (d) {
+                    return d.tableId;
+                });
+            	batchGenCode({tableId: ids.join(',')});
+            } else if (obj.event === 'import') { 
+            	// 导入数据
+            	showImport();
+            } else if(obj.event === 'del'){
+            	 var checkRows = table.checkStatus('tableImport');
+                 if (checkRows.data.length === 0) {
+                     layer.msg('请选择要删除的数据', {icon: 2});
+                     return;
+                 }
+                 var ids = checkRows.data.map(function (d) {
+                     return d.tableId;
+                 });
+                 doDel({tableId: ids.join(',')});
+            }
+        });
+      
+        
+        //生成代码
+		function genCode(tableName) {
+			 location.href ="/code/gen/genCode/" + tableName;
+			 layer.msg("执行成功,正在生成代码请稍后…", {icon: 1});
+		}
+	
+		//批量生成代码
+		function batchGenCode(data) {
+			location.href = "/code/gen/batchGenCode/?tables=" + tableId;
+	        layer.msg('执行成功,正在生成代码请稍后…', { icon: 1 });
+		}
+		
+		//修改
+		function showEaitView(tableId){
+			index.openTab({
+			    title: '修改生成配置', 
+			    url: "/code/gen/edit/" + tableId,
+			    end: function() {
+			        // insTb.reload(); 
+			    }
+			})
+		}
+		
+        //预览
+        function showpreview(tableId) {
+        	$.get('/code/gen/preview/'+tableId, function (res) {
+                layer.closeAll('loading');
+                if (res.code == 200) {
+                	var items = [];
+                	$.each(res.data, function(index, value) {
+	                	value = value.replace(/</g, "&lt;");
+	                	value = value.replace(/>/g, "&gt;");
+	                    var templateName = index.substring(index.lastIndexOf("/") + 1, index.length).replace(/\.vm/g, "");
+	                    if("sql"!=templateName && "tree.html"!=templateName){
+		                    items.push({
+		                        title: templateName , content: "<pre class=\"layui-code\">" + value + "</pre>"
+		                    })
+	                    }
+	                });
+                	top.layer.tab({
+	                    area: ['90%', '90%'],
+	                    shadeClose: true,
+	                    tab: items
+	                });
+                } else {
+                    layer.msg(res.msg, {icon: 2});
+                }
+            }, 'json'); 
+        }
+        
+        // 查看导出表列表
+        function showImport() {
+            admin.open({
+                type: 1,
+                area: '900px',
+                offset: '65px',
+                title: '导入表结构',
+                content: $('#demoEDImportModel').html(),
+                success: function () {
+                    // 渲染表格
+                    var insTbCom = table.render({
+                        elem: '#demoTableEDImport',
+                        url: '/code/gen/db/list',
+                        page: true,
+                        request: {     
+                            pageName: 'pageNum' //页码的参数名称，默认：page
+                           ,limitName: 'pageSize' //每页数据量的参数名，默认：limit
+                        },
+                        height: 400,
+                        cellMinWidth: 100,
+                        cols: [[
+                        	{type: 'checkbox'},
+                            {type: 'numbers', title: '序号'},
+                            {field: 'tableName', sort: true, title: '表名称'},
+                            {field: 'tableComment', sort: true, title: '表描述'},
+                            {field: 'createTime', sort: true, title: '创建时间'},
+                            {
+            		            field: 'updateTime',
+            		            title: '更新时间',
+            		            sort: true
+            		        }
+                           
+                        ]]
+                    });
+                    
+                    // 搜索导出表
+                    form.on('submit(formSubSearchImport)', function (data) {
+                        insTbCom.reload({where: data.field}, 'data');
+                    });
+                }
+            });
+            
+        }
+       
+        // 导出
+        form.on('submit(modelSubmitPtImport)', function (data) {
+        	var checkRows = table.checkStatus('demoTableEDImport');
+            if (checkRows.data.length === 0) {
+                layer.msg('请选择至少一条要到导出数据', {icon: 2});
+                return;
+            }
+            var tableNames = checkRows.data.map(function (d) {
+                return d.tableName;
+            });
+            doImport({tableNames: tableNames});
+        });
+       
+        
+        /* 导入表结构-选择表结构-提交 */
+       function doImport(data) {
+                $.get('/code/gen/importTable', {tables:data.tableNames ? data.tableNames.join(',') : ''}, function (res) {
+                   layer.closeAll('loading');
+                   layer.closeAll();
+                   if (res.code == 200) {
+                       layer.msg(res.msg, {icon: 1});
+                       insTb.reload({}, 'data');
+                       admin.closeThisDialog();
+                   } else {
+                       layer.msg(res.msg, {icon: 2});
+                   }
+               }, 'json'); 
+        }
+
+     
+     
+        
+        // 删除
+        function doDel(obj) {
+             layer.confirm('确定要删除选中数据吗？', {
+                skin: 'layui-layer-admin',
+                shade: .1
+            }, function (i) {
+                layer.close(i);
+                layer.load(2);
+                $.post('/code/gen/remove', {
+                	ids: obj.tableId ? obj.tableId : ''
+                }, function (res) {
+                    layer.closeAll('loading');
+                    if (res.code == 200) {
+                        layer.msg(res.msg, {icon: 1});
+                        insTb.reload({}, 'data');
+                    } else {
+                        layer.msg(res.msg, {icon: 2});
+                    }
+                }, 'json');
+            }); 
+        }
+
+        
+    });
+</script>
+</body>
+</html>

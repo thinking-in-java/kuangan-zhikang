@@ -1,0 +1,361 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yihe.applet.api.mapper.YhWxUserAppMapper">
+  <resultMap id="BaseResultMap" type="com.yihe.applet.api.domain.YhWxUser">
+    <id column="user_id" jdbcType="VARCHAR" property="userId" />
+    <id column="oppen_id" jdbcType="VARCHAR" property="oppenId" />
+    <result column="username" jdbcType="VARCHAR" property="username" />
+    <result column="realname" jdbcType="VARCHAR" property="realname" />
+    <result column="password" jdbcType="VARCHAR" property="password" />
+    <result column="head_img" jdbcType="VARCHAR" property="headImg" />
+    <result column="add_time" jdbcType="VARCHAR" property="addTime" />
+    <result column="area_id" jdbcType="INTEGER" property="areaId" />
+    <result column="area_name" jdbcType="VARCHAR" property="areaName" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+    <result column="member_time" jdbcType="VARCHAR" property="memberTime" />
+  </resultMap>
+  
+  
+  <resultMap id="BaseResultMap2" type="com.yihe.applet.api.domain.YhUserReginfoApp" >
+    <id column="user_code" property="userCode" jdbcType="VARCHAR" />
+    <result column="User_Type" property="userType" jdbcType="INTEGER" />
+    <result column="user_name" property="userName" jdbcType="VARCHAR" />
+    <result column="user_pwd" property="userPwd" jdbcType="VARCHAR" />
+    <result column="gender" property="gender" jdbcType="INTEGER" />
+    <result column="birth_date" property="birthDate" jdbcType="TIMESTAMP" />
+    <result column="nation" property="nation" jdbcType="VARCHAR" />
+    <result column="email" property="email" jdbcType="VARCHAR" />
+    <result column="cardidentity" property="cardidentity" jdbcType="VARCHAR" />
+    <result column="province_id" property="provinceId" jdbcType="VARCHAR" />
+    <result column="city_id" property="cityId" jdbcType="VARCHAR" />
+    <result column="area_id" property="areaId" jdbcType="VARCHAR" />
+    <result column="reg_time" property="regTime" jdbcType="TIMESTAMP" />
+    <result column="Login_times" property="loginTimes" jdbcType="INTEGER" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="address" property="address" jdbcType="VARCHAR" />
+    <result column="permanentaddress" property="permanentaddress" jdbcType="VARCHAR" />
+    <result column="post_code" property="postCode" jdbcType="VARCHAR" />
+    <result column="relation" property="relation" jdbcType="VARCHAR" />
+    <result column="mobile" property="mobile" jdbcType="VARCHAR" />
+    <result column="occupation" property="occupation" jdbcType="VARCHAR" />
+    <result column="ed_background" property="edBackground" jdbcType="VARCHAR" />
+    <result column="marital_status" property="maritalStatus" jdbcType="VARCHAR" />
+    <result column="lock_flag" property="lockFlag" jdbcType="INTEGER" />
+    <result column="reg_source" property="regSource" jdbcType="INTEGER" />
+    <result column="Cert_Type" property="certType" jdbcType="INTEGER" />
+    <result column="Cert_NO" property="certNo" jdbcType="VARCHAR" />
+    <result column="Org_Code" property="orgCode" jdbcType="VARCHAR" />
+    <result column="Blood_Type" property="bloodType" jdbcType="VARCHAR" />
+    <result column="rhfeminine" property="rhfeminine" jdbcType="VARCHAR" />
+    <result column="Enrol_Card_Id" property="enrolCardId" jdbcType="VARCHAR" />
+    <result column="login_time" property="loginTime" jdbcType="TIMESTAMP" />
+    <result column="unit" property="unit" jdbcType="VARCHAR" />
+    <result column="is_association" property="isAssociation" jdbcType="INTEGER" />
+    <result column="association_name" property="associationName" jdbcType="VARCHAR" />
+    <result column="is_alone" property="isAlone" jdbcType="INTEGER" />
+    <result column="is_allergy" property="isAllergy" jdbcType="INTEGER" />
+    <result column="allergy_name" property="allergyName" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    user_id, oppen_id, username, realname, password, head_img, add_time, area_id, area_name, 
+    status, member_time
+  </sql>
+   
+  <select id="selectByPrimaryKey" parameterType="map" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from yh_wx_user
+    where user_id = #{userId,jdbcType=VARCHAR}
+      and oppen_id = #{oppenId,jdbcType=VARCHAR}
+  </select>
+  
+  <select id="selectRandomheandImg"  resultMap="BaseResultMap2">
+     select * from yh_user_reginfo as t1
+	 inner join yh_instrument_record t2
+	 on t1.user_code = t2.user_code
+	 order by t2.record_id desc limit #{num};
+  </select>
+  
+  
+  <update id="modifyWXuserStatusInfo">
+  UPDATE 
+   `yh_wx_user` 
+SET
+  
+  `status` = #{status}
+   
+WHERE `user_id` = #{usercode}
+  
+  </update>
+  
+  
+  <select id="selectHeadImgbyParam" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select * from yh_wx_user
+    where user_id = #{userId,jdbcType=VARCHAR}
+  </select>
+  
+  <delete id="deleteByPrimaryKey" parameterType="map">
+    delete from yh_wx_user
+    where user_id = #{userId,jdbcType=INTEGER}
+      and oppen_id = #{oppenId,jdbcType=VARCHAR}
+  </delete>
+  
+  <insert id="insert" parameterType="com.yihe.applet.api.domain.YhWxUser">
+    
+    insert into yh_wx_user (user_id,oppen_id, username, realname, 
+      password, head_img, add_time, 
+      area_id, area_name, status, 
+      member_time)
+    values (#{userId,jdbcType=VARCHAR},#{oppenId,jdbcType=VARCHAR}, #{username,jdbcType=VARCHAR}, #{realname,jdbcType=VARCHAR}, 
+      #{password,jdbcType=VARCHAR}, #{headImg,jdbcType=VARCHAR}, #{addTime,jdbcType=VARCHAR}, 
+      #{areaId,jdbcType=INTEGER}, #{areaName,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER}, 
+      #{memberTime,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.yihe.applet.api.domain.YhWxUser">
+     
+    insert into yh_wx_user
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+    
+      <if test="userId != null">
+        user_id,
+      </if>
+    
+      <if test="oppenId != null">
+        oppen_id,
+      </if>
+      <if test="username != null">
+        username,
+      </if>
+      <if test="realname != null">
+        realname,
+      </if>
+      <if test="password != null">
+        password,
+      </if>
+      <if test="headImg != null">
+        head_img,
+      </if>
+      <if test="addTime != null">
+        add_time,
+      </if>
+      <if test="areaId != null">
+        area_id,
+      </if>
+      <if test="areaName != null">
+        area_name,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+      <if test="memberTime != null">
+        member_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="userId != null">
+        #{userId,jdbcType=VARCHAR},
+      </if>
+      <if test="oppenId != null">
+        #{oppenId,jdbcType=VARCHAR},
+      </if>
+      <if test="username != null">
+        #{username,jdbcType=VARCHAR},
+      </if>
+      <if test="realname != null">
+        #{realname,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null">
+        #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="headImg != null">
+        #{headImg,jdbcType=VARCHAR},
+      </if>
+      <if test="addTime != null">
+        #{addTime,jdbcType=VARCHAR},
+      </if>
+      <if test="areaId != null">
+        #{areaId,jdbcType=INTEGER},
+      </if>
+      <if test="areaName != null">
+        #{areaName,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="memberTime != null">
+        #{memberTime,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+   
+  <update id="updateByExampleSelective" parameterType="map">
+    update yh_wx_user
+    <set>
+      <if test="record.userId != null">
+        user_id = #{record.userId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.oppenId != null">
+        oppen_id = #{record.oppenId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.username != null">
+        username = #{record.username,jdbcType=VARCHAR},
+      </if>
+      <if test="record.realname != null">
+        realname = #{record.realname,jdbcType=VARCHAR},
+      </if>
+      <if test="record.password != null">
+        password = #{record.password,jdbcType=VARCHAR},
+      </if>
+      <if test="record.headImg != null">
+        head_img = #{record.headImg,jdbcType=VARCHAR},
+      </if>
+      <if test="record.addTime != null">
+        add_time = #{record.addTime,jdbcType=VARCHAR},
+      </if>
+      <if test="record.areaId != null">
+        area_id = #{record.areaId,jdbcType=INTEGER},
+      </if>
+      <if test="record.areaName != null">
+        area_name = #{record.areaName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.status != null">
+        status = #{record.status,jdbcType=INTEGER},
+      </if>
+      <if test="record.memberTime != null">
+        member_time = #{record.memberTime,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update yh_wx_user
+    set user_id = #{record.userId,jdbcType=VARCHAR},
+      oppen_id = #{record.oppenId,jdbcType=VARCHAR},
+      username = #{record.username,jdbcType=VARCHAR},
+      realname = #{record.realname,jdbcType=VARCHAR},
+      password = #{record.password,jdbcType=VARCHAR},
+      head_img = #{record.headImg,jdbcType=VARCHAR},
+      add_time = #{record.addTime,jdbcType=VARCHAR},
+      area_id = #{record.areaId,jdbcType=INTEGER},
+      area_name = #{record.areaName,jdbcType=VARCHAR},
+      status = #{record.status,jdbcType=INTEGER},
+      member_time = #{record.memberTime,jdbcType=VARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.yihe.applet.api.domain.YhWxUser">
+    update yh_wx_user
+    <set>
+      <if test="username != null">
+        username = #{username,jdbcType=VARCHAR},
+      </if>
+      <if test="realname != null">
+        realname = #{realname,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null">
+        password = #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="headImg != null">
+        head_img = #{headImg,jdbcType=VARCHAR},
+      </if>
+      <if test="addTime != null">
+        add_time = #{addTime,jdbcType=VARCHAR},
+      </if>
+      <if test="areaId != null">
+        area_id = #{areaId,jdbcType=INTEGER},
+      </if>
+      <if test="areaName != null">
+        area_name = #{areaName,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="memberTime != null">
+        member_time = #{memberTime,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where 
+        user_id = #{userId,jdbcType=VARCHAR}
+  </update>
+ <!--  head_img = #{headImg,jdbcType=VARCHAR}, -->
+  <update id="updateByPrimaryKey" parameterType="com.yihe.applet.api.domain.YhWxUser">
+    update yh_wx_user
+    set username = #{username,jdbcType=VARCHAR},
+      realname = #{realname,jdbcType=VARCHAR},
+      password = #{password,jdbcType=VARCHAR},
+      
+      add_time = #{addTime,jdbcType=VARCHAR},
+      area_id = #{areaId,jdbcType=INTEGER},
+      area_name = #{areaName,jdbcType=VARCHAR},
+      status = #{status,jdbcType=INTEGER},
+      member_time = #{memberTime,jdbcType=VARCHAR}
+      
+    where  
+        user_id = #{userId,jdbcType=VARCHAR}
+  </update>
+  <select id="selectByUsercode" resultType="com.yihe.applet.api.domain.YhWxUser">
+  select * from yh_wx_user where user_id=#{usercode}
+  </select>
+</mapper>

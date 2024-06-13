@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yihe.applet.api.mapper.YhSportSetmealAppMapper">
+    <resultMap type="com.yihe.applet.api.domain.YhSportSetmealApp" id="YhSportSetmealResult">
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="disease_code" property="diseaseCode" jdbcType="INTEGER" />
+    <result column="setmeal_mame" property="setmealMame" jdbcType="VARCHAR" />
+    <result column="subject_id" property="subjectId" jdbcType="VARCHAR" />
+    <result column="setmeal_img" property="setmealImg" jdbcType="VARCHAR" />
+    <result column="oneself" property="oneself" jdbcType="INTEGER" />
+    <result column="describe" property="describe" jdbcType="VARCHAR" />
+    <result column="exercise_frequency" property="exerciseFrequency" jdbcType="INTEGER" />
+    <result column="recommend_benchmarks" property="recommendBenchmarks" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, disease_code, setmeal_mame, subject_id, setmeal_img, oneself, describe, exercise_frequency, 
+    recommend_benchmarks
+  </sql>
+  
+    <!--根据疾病id以及套餐id查询，默认oneself为1-->
+    <select id="selectYhSportSetmeal" resultMap="YhSportSetmealResult">
+        SELECT * FROM yh_sport_setmeal
+        where disease_code= #{diseaseCode}
+        AND exercise_frequency=#{exerciseFrequency}
+        AND oneself=1
+    </select>
+</mapper>

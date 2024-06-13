@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yihe.applet.api.mapper.YhSportRecommendRecordAppMapper">
+    <resultMap type="com.yihe.applet.api.domain.YhSportRecommendRecordApp" id="YhSportRecommendRecordResult">
+        <result property="id"    column="id"    />
+        <result property="recordData"    column="record_data"    />
+        <result property="userCode"    column="user_code"    />
+        <result property="diseaseid"    column="diseaseid"    />
+        <result property="setmealid"    column="setmealid"    />
+        <result property="number"    column="number"    />
+        <result property="finishid"    column="finishid"    />
+        <result property="recordType"    column="record_type"    />
+        <result property="recordKay"    column="record_kay"    />
+        <result property="recordMode"    column="record_mode"    />
+        <result property="standby"    column="standby"    />
+         <result property="sportName"    column="sport_name"    />
+    </resultMap>
+
+    <sql id="allColumn">
+        id, record_data, user_code, diseaseid, setmealid, number, finishid, record_type, record_kay, record_mode, standby
+    </sql>
+    <!--增-->
+    <insert id="insertYhSportRecommendRecord" parameterType="com.yihe.applet.api.domain.YhSportRecommendRecordApp" useGeneratedKeys="true" keyProperty="id">
+        insert into yh_sport_recommend_record
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="recordData != null ">record_data,</if>
+            <if test="userCode != null  and userCode != ''">user_code,</if>
+            <if test="diseaseid != null  and diseaseid != ''">diseaseid,</if>
+            <if test="setmealid != null  and setmealid != ''">setmealid,</if>
+            <if test="number != null  and number != ''">number,</if>
+            <if test="finishid != null  and finishid != ''">finishid,</if>
+            <if test="recordType != null ">record_type,</if>
+            <if test="recordKay != null ">record_kay,</if>
+            <if test="recordMode != null  and recordMode != ''">record_mode,</if>
+            <if test="standby != null  and standby != ''">standby,</if>
+             <if test="sportName != null  and sportName != ''">sport_name,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="recordData != null ">#{recordData},</if>
+            <if test="userCode != null  and userCode != ''">#{userCode},</if>
+            <if test="diseaseid != null  and diseaseid != ''">#{diseaseid},</if>
+            <if test="setmealid != null  and setmealid != ''">#{setmealid},</if>
+            <if test="number != null  and number != ''">#{number},</if>
+            <if test="finishid != null  and finishid != ''">#{finishid},</if>
+            <if test="recordType != null ">#{recordType},</if>
+            <if test="recordKay != null ">#{recordKay},</if>
+            <if test="recordMode != null  and recordMode != ''">#{recordMode},</if>
+            <if test="standby != null  and standby != ''">#{standby},</if>
+            <if test="sportName != null  and sportName != ''">#{sportName},</if>
+        </trim>
+    </insert>
+    <!--根据疾病id与userCode查询是否已存在推荐，存在则改为过期状态-->
+    <update id="uptYhSportRecommendRecord" parameterType="com.yihe.applet.api.domain.YhSportRecommendRecordApp">
+        UPDATE yh_sport_recommend_record SET record_type=2
+        WHERE user_code=#{userCode}
+    </update>
+    <!--根据疾病id与userCode查询是否已存在推荐-->
+    <select id="selYhSportRecordCount" resultType="int" parameterType="com.yihe.applet.api.domain.YhSportRecommendRecordApp">
+        SELECT count(1) FROM yh_sport_recommend_record
+        WHERE user_code=#{userCode} AND diseaseid=#{diseaseid}
+    </select>
+
+</mapper>

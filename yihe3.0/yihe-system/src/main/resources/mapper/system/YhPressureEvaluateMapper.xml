@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yihe.system.mapper.YhPressureEvaluateMapper">
+    
+    <resultMap type="YhPressureEvaluate" id="YhPressureEvaluateResult">
+        <result property="id"    column="Id"    />
+        <result property="evaluateData"    column="Evaluate_Data"    />
+        <result property="evaluateType"    column="Evaluate_Type"    />
+        <result property="evaluateScore"    column="Evaluate_Score"    />
+        <result property="userCode"    column="User_Code"    />
+        <result property="evaluateDate"    column="Evaluate_Date"    />
+        <result property="doDate"    column="Do_Date"    />
+        <result property="isDel"    column="Is_Del"    />
+        <result property="evaluateSelect"    column="Evaluate_select"    />
+    </resultMap>
+
+    <sql id="selectYhPressureEvaluateVo">
+        select Id, Evaluate_Data, Evaluate_Type, Evaluate_Score, User_Code, Evaluate_Date, Do_Date, Is_Del, Evaluate_select from yh_pressure_evaluate
+    </sql>
+    
+    
+    <select id="selectYhPressureEvaluateData" resultMap="YhPressureEvaluateResult" >
+    	 select *
+    from yh_pressure_evaluate
+    where User_Code=#{usercode} and Id=#{id}
+    </select>
+    
+    
+    <!-- 查询最近半年新增数据 -->
+    <select id="showEvaluateCount" resultType="int" >
+    	select count(*) from yh_pressure_evaluate where   DATE_FORMAT(Evaluate_Date, '%Y%m' ) = DATE_FORMAT( CURDATE( ) , '%Y%m' )
+    </select>
+    
+
+	<select id="findStressAssessment" resultType="com.yihe.system.domain.PressureVOJO">
+	   SELECT a.user_code AS usercode,a.user_name AS username,a.name,a.sex,COUNT(1) AS assessmentNum,a.Evaluate_Date AS assessmentNewTime FROM (
+      SELECT pe.*,ue.`user_name`,ue.`name`,CASE
+              WHEN ue.gender = 1 
+              THEN '男' 
+              ELSE '女' 
+            END AS sex FROM yh_pressure_evaluate AS pe
+		LEFT  JOIN  `yh_user_reginfo` AS ue    
+  		ON pe.User_code=ue.user_code
+ 		LEFT JOIN `yh_user_make_card` AS ma
+		 ON ma.user_code=ue.user_code
+		 WHERE 
+		 ma.doctor=(SELECT id FROM `yh_user_admin_info` WHERE user_code=#{usercode}) 
+		 <if test="orgid!=null and orgid!=''">
+		 AND   org_id=#{orgid} 
+		 </if>
+		 <if test="nameLike!=null and nameLike!=''">
+		 AND ue.name LIKE CONCAT('%',#{nameLike},'%')
+		 </if>
+       ORDER BY Evaluate_Date DESC 
+     ) AS a GROUP BY a.user_code  ORDER BY Evaluate_Date DESC 
+      
+	</select>
+	<select id="findPressureEvaluateByuserCodeForCount" resultType="java.lang.Integer">
+	 SELECT COUNT(1)FROM yh_pressure_evaluate WHERE user_code=#{usercode}
+	</select>
+	<select id="findStressAssessmentRecordByUser" resultType="com.yihe.system.domain.PressureVOJO">
+
+  SELECT  CASE
+              WHEN ue.gender = 1 
+              THEN '男' 
+              ELSE '女' 
+            END AS sex ,
+            CASE pe.Evaluate_Type 
+    WHEN 1  THEN 'A型性格'
+    WHEN 2 THEN 'PSTRI压力'
+    WHEN 3 THEN '心理健康'
+ELSE ''
+END AS assessmentContent, pe.Id as id,pe.Evaluate_Score AS evaluateScore ,pe.Evaluate_Date AS assessmentTime,pe.Evaluate_Type AS assessmentType FROM yh_pressure_evaluate AS pe
+INNER JOIN  `yh_user_reginfo` AS ue    
+   ON pe.User_code=ue.user_code
+ <where>
+ and pe.user_code=#{usercode}
+ <if test="strTime != null and strTime != '' and endTime != null and endTime != ''"> 
+  AND  pe.Evaluate_Date BETWEEN  #{strTime}  AND #{endTime}
+ </if>
+  <if test="type != null and type!=''"> 
+  AND pe.Evaluate_Type=#{type}
+ </if>
+ </where> 
+ 
+ ORDER BY pe.Evaluate_Date  DESC
+	
+	</select>
+	
+	<select id="findStressAssessmentRecord" resultType="com.yihe.system.domain.PressureVOJO">
+	 
+  SELECT ue.user_code AS usercode,ue.`user_name` AS username,ue.`name`,CASE
+              WHEN ue.gender = 1 
+              THEN '男' 
+              ELSE '女' 
+            END AS sex,
+            CASE pe.Evaluate_Type 
+    WHEN 1  THEN 'A型性格'
+    WHEN 2 THEN 'PSTRI压力'
+    WHEN 3 THEN '心理健康'
+ELSE ''
+END AS assessmentContent,pe.Evaluate_Score AS evaluateScore ,pe.Evaluate_Date AS assessmentTime,pe.Evaluate_Type AS assessmentType FROM yh_pressure_evaluate AS pe
+LEFT  JOIN  `yh_user_reginfo` AS ue    
+  ON pe.User_code=ue.user_code
+ LEFT JOIN `yh_user_make_card` AS ma
+ ON ma.user_code=ue.user_code
+ WHERE ma.doctor=(SELECT id FROM `yh_user_admin_info` WHERE user_code=#{usercode}) 
+ <if test="type!=null and type !=''">
+ AND pe.Evaluate_Type=#{type} 
+ </if>
+ <if test="nameLike!=null">
+  AND ue.name LIKE CONCAT('%',#{nameLike},'%')
+ </if>
+<if test="usernameLike!=null">
+  AND ue.user_name LIKE CONCAT('%',#{usernameLike},'%')
+ </if>
+ <if test="strTime!=null and strTime!='' and endTime!=null and endTime!=''">
+  AND pe.Evaluate_Date BETWEEN #{strTime}
+  AND #{endTime}
+ </if>
+        ORDER BY pe.Evaluate_Date  DESC
+ 
+      
+	</select>
+	
+	 <select id="selectYhPressureEvaluateListType"  resultType="java.lang.String">
+	  SELECT Evaluate_Score FROM yh_pressure_evaluate WHERE Evaluate_Type=#{type} AND user_code=#{usercode} ORDER BY Evaluate_Date DESC LIMIT 1
+	 </select>
+	 
+	 <select id="selectYhPressureEvaluateByTimeAndUserCode"  resultType="java.lang.String">
+	    SELECT Evaluate_Date FROM `yh_pressure_evaluate` WHERE user_code=#{usercode} ORDER BY Evaluate_Date DESC LIMIT 1
+	 </select>
+	 
+
+    <select id="selectYhPressureEvaluateList" parameterType="YhPressureEvaluate" resultMap="YhPressureEvaluateResult">
+        <include refid="selectYhPressureEvaluateVo"/>
+        <where>  
+            <if test="evaluateData != null  and evaluateData != ''"> and Evaluate_Data = #{evaluateData}</if>
+            <if test="evaluateType != null "> and Evaluate_Type = #{evaluateType}</if>
+            <if test="evaluateScore != null  and evaluateScore != ''"> and Evaluate_Score = #{evaluateScore}</if>
+            <if test="userCode != null  and userCode != ''"> and User_Code = #{userCode}</if>
+            <if test="evaluateDate != null  and evaluateDate != ''"> and Evaluate_Date = #{evaluateDate}</if>
+            <if test="doDate != null  and doDate != ''"> and Do_Date = #{doDate}</if>
+            <if test="isDel != null "> and Is_Del = #{isDel}</if>
+            <if test="evaluateSelect != null  and evaluateSelect != ''"> and Evaluate_select = #{evaluateSelect}</if>
+        </where>
+    </select>
+    
+    <select id="selectYhPressureEvaluateById" parameterType="Long" resultMap="YhPressureEvaluateResult">
+        <include refid="selectYhPressureEvaluateVo"/>
+        where Id = #{id}
+    </select>
+        
+    <insert id="insertYhPressureEvaluate" parameterType="YhPressureEvaluate" useGeneratedKeys="true" keyProperty="id">
+        insert into yh_pressure_evaluate
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="evaluateData != null  and evaluateData != ''">Evaluate_Data,</if>
+            <if test="evaluateType != null ">Evaluate_Type,</if>
+            <if test="evaluateScore != null  and evaluateScore != ''">Evaluate_Score,</if>
+            <if test="userCode != null  and userCode != ''">User_Code,</if>
+            <if test="evaluateDate != null  and evaluateDate != ''">Evaluate_Date,</if>
+            <if test="doDate != null  and doDate != ''">Do_Date,</if>
+            <if test="isDel != null ">Is_Del,</if>
+            <if test="evaluateSelect != null  and evaluateSelect != ''">Evaluate_select,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="evaluateData != null  and evaluateData != ''">#{evaluateData},</if>
+            <if test="evaluateType != null ">#{evaluateType},</if>
+            <if test="evaluateScore != null  and evaluateScore != ''">#{evaluateScore},</if>
+            <if test="userCode != null  and userCode != ''">#{userCode},</if>
+            <if test="evaluateDate != null  and evaluateDate != ''">#{evaluateDate},</if>
+            <if test="doDate != null  and doDate != ''">#{doDate},</if>
+            <if test="isDel != null ">#{isDel},</if>
+            <if test="evaluateSelect != null  and evaluateSelect != ''">#{evaluateSelect},</if>
+         </trim>
+    </insert>
+
+    <update id="updateYhPressureEvaluate" parameterType="YhPressureEvaluate">
+        update yh_pressure_evaluate
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="evaluateData != null  and evaluateData != ''">Evaluate_Data = #{evaluateData},</if>
+            <if test="evaluateType != null ">Evaluate_Type = #{evaluateType},</if>
+            <if test="evaluateScore != null  and evaluateScore != ''">Evaluate_Score = #{evaluateScore},</if>
+            <if test="userCode != null  and userCode != ''">User_Code = #{userCode},</if>
+            <if test="evaluateDate != null  and evaluateDate != ''">Evaluate_Date = #{evaluateDate},</if>
+            <if test="doDate != null  and doDate != ''">Do_Date = #{doDate},</if>
+            <if test="isDel != null ">Is_Del = #{isDel},</if>
+            <if test="evaluateSelect != null  and evaluateSelect != ''">Evaluate_select = #{evaluateSelect},</if>
+        </trim>
+        where Id = #{id}
+    </update>
+
+    <delete id="deleteYhPressureEvaluateById" parameterType="Long">
+        delete from yh_pressure_evaluate where Id = #{id}
+    </delete>
+
+    <delete id="deleteYhPressureEvaluateByIds" parameterType="String">
+        delete from yh_pressure_evaluate where Id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+</mapper>

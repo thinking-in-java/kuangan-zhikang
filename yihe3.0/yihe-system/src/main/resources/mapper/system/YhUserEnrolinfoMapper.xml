@@ -1,0 +1,689 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yihe.system.mapper.YhUserEnrolinfoMapper">
+  <resultMap id="BaseResultMap" type="com.yihe.system.domain.YhUserEnrolinfo">
+    <id column="E_User_Id" jdbcType="INTEGER" property="eUserId" />
+    <result column="Seq_Instrument" jdbcType="VARCHAR" property="seqInstrument" />
+    <result column="Doc_Ruserid" jdbcType="VARCHAR" property="docRuserid" />
+    <result column="Flag_Dgroup" jdbcType="VARCHAR" property="flagDgroup" />
+    <result column="Sex_Code" jdbcType="INTEGER" property="sexCode" />
+    <result column="Height" jdbcType="REAL" property="height" />
+    <result column="Weight" jdbcType="REAL" property="weight" />
+    <result column="Hw_Uptime" jdbcType="TIMESTAMP" property="hwUptime" />
+    <result column="Waistc" jdbcType="REAL" property="waistc" />
+    <result column="W_Uptime" jdbcType="TIMESTAMP" property="wUptime" />
+    <result column="Hipc" jdbcType="REAL" property="hipc" />
+    <result column="H_Uptime" jdbcType="TIMESTAMP" property="hUptime" />
+    <result column="Sbp" jdbcType="INTEGER" property="sbp" />
+    <result column="Dbp" jdbcType="INTEGER" property="dbp" />
+    <result column="Sd_Uptime" jdbcType="TIMESTAMP" property="sdUptime" />
+    <result column="Bs" jdbcType="REAL" property="bs" />
+    <result column="Bs_Uptime" jdbcType="TIMESTAMP" property="bsUptime" />
+    <result column="Cholesterin" jdbcType="REAL" property="cholesterin" />
+    <result column="Tring" jdbcType="REAL" property="tring" />
+    <result column="Hdl" jdbcType="REAL" property="hdl" />
+    <result column="Ldl" jdbcType="REAL" property="ldl" />
+    <result column="Bf_Uptime" jdbcType="TIMESTAMP" property="bfUptime" />
+    <result column="Fooddiary_Uptime" jdbcType="TIMESTAMP" property="fooddiaryUptime" />
+    <result column="sportdiary_uptime" jdbcType="TIMESTAMP" property="sportdiaryUptime" />
+    <result column="Foodmon_Uptime" jdbcType="TIMESTAMP" property="foodmonUptime" />
+    <result column="Energy_Uptime" jdbcType="TIMESTAMP" property="energyUptime" />
+    <result column="Lifestyle_Uptime" jdbcType="TIMESTAMP" property="lifestyleUptime" />
+    <result column="Health_Monitoring" jdbcType="TIMESTAMP" property="healthMonitoring" />
+    <result column="evaluateFlag_Uptime" jdbcType="TIMESTAMP" property="evaluateFlagUptime" />
+    <result column="Is_Del" jdbcType="INTEGER" property="isDel" />
+    <result column="user_code" jdbcType="VARCHAR" property="userCode" />
+    <result column="evaluateFlag" jdbcType="INTEGER" property="evaluateflag" />
+    <result column="L_Ventricular_Hype" jdbcType="INTEGER" property="lVentricularHype" />
+    <result column="measure_card" jdbcType="VARCHAR" property="measureCard" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    E_User_Id, Seq_Instrument, Doc_Ruserid, Flag_Dgroup, Sex_Code, Height, Weight, Hw_Uptime, 
+    Waistc, W_Uptime, Hipc, H_Uptime, Sbp, Dbp, Sd_Uptime, Bs, Bs_Uptime, Cholesterin, 
+    Tring, Hdl, Ldl, Bf_Uptime, Fooddiary_Uptime, sportdiary_uptime, Foodmon_Uptime, 
+    Energy_Uptime, Lifestyle_Uptime, Health_Monitoring, Is_Del, user_code, evaluateFlag, 
+    L_Ventricular_Hype, measure_card,evaluateFlag_Uptime
+  </sql>
+  
+  <select id="findUserEnergyUptimeInfo" resultType="java.lang.String">
+    SELECT Energy_Uptime FROM `yh_user_enrolinfo` WHERE user_code=#{usercode} LIMIT 1
+  </select>
+  <!-- 查询某健管师下所有用户的分组信息 -->
+  <select id="findUserEnrolinfoByDoctorInfo"  resultMap="BaseResultMap">
+  SELECT b.user_code,b.Flag_Dgroup FROM  yh_user_make_card AS a
+		INNER JOIN yh_user_enrolinfo AS b
+		ON a.user_code=b.user_code
+		WHERE
+		a.doctor=(SELECT id FROM `yh_user_admin_info` WHERE
+		user_code=#{doctor})
+		AND b.Flag_Dgroup LIKE CONCAT('%',#{ginfo},'%')
+  </select>
+  <select id="selectByExample" parameterType="com.yihe.system.domain.YhUserEnrolinfoExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from yh_user_enrolinfo
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from yh_user_enrolinfo
+    where E_User_Id = #{eUserId,jdbcType=INTEGER}
+  </select>
+  
+  <select id="selectByPrimaryKeyByUsercode" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from yh_user_enrolinfo
+    where user_code = #{usercode,jdbcType=VARCHAR} limit 1
+  </select>
+    
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from yh_user_enrolinfo
+    where E_User_Id = #{eUserId,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.yihe.system.domain.YhUserEnrolinfoExample">
+    delete from yh_user_enrolinfo
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.yihe.system.domain.YhUserEnrolinfo">
+    <selectKey keyProperty="eUserId" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into yh_user_enrolinfo (Seq_Instrument, Doc_Ruserid, Flag_Dgroup, 
+      Sex_Code, Height, Weight, 
+      Hw_Uptime, Waistc, W_Uptime, 
+      Hipc, H_Uptime, Sbp, 
+      Dbp, Sd_Uptime, Bs, Bs_Uptime, 
+      Cholesterin, Tring, Hdl, Ldl, 
+      Bf_Uptime, Fooddiary_Uptime, sportdiary_uptime, 
+      Foodmon_Uptime, Energy_Uptime, Lifestyle_Uptime, 
+      Health_Monitoring, Is_Del, user_code, 
+      evaluateFlag, L_Ventricular_Hype, measure_card
+      )
+    values (#{seqInstrument,jdbcType=VARCHAR}, #{docRuserid,jdbcType=VARCHAR}, #{flagDgroup,jdbcType=VARCHAR}, 
+      #{sexCode,jdbcType=INTEGER}, #{height,jdbcType=REAL}, #{weight,jdbcType=REAL}, 
+      #{hwUptime,jdbcType=TIMESTAMP}, #{waistc,jdbcType=REAL}, #{wUptime,jdbcType=TIMESTAMP}, 
+      #{hipc,jdbcType=REAL}, #{hUptime,jdbcType=TIMESTAMP}, #{sbp,jdbcType=INTEGER}, 
+      #{dbp,jdbcType=INTEGER}, #{sdUptime,jdbcType=TIMESTAMP}, #{bs,jdbcType=REAL}, #{bsUptime,jdbcType=TIMESTAMP}, 
+      #{cholesterin,jdbcType=REAL}, #{tring,jdbcType=REAL}, #{hdl,jdbcType=REAL}, #{ldl,jdbcType=REAL}, 
+      #{bfUptime,jdbcType=TIMESTAMP}, #{fooddiaryUptime,jdbcType=TIMESTAMP}, #{sportdiaryUptime,jdbcType=TIMESTAMP}, 
+      #{foodmonUptime,jdbcType=TIMESTAMP}, #{energyUptime,jdbcType=TIMESTAMP}, #{lifestyleUptime,jdbcType=TIMESTAMP}, 
+      #{healthMonitoring,jdbcType=TIMESTAMP}, #{isDel,jdbcType=INTEGER}, #{userCode,jdbcType=VARCHAR}, 
+      #{evaluateflag,jdbcType=INTEGER}, #{lVentricularHype,jdbcType=INTEGER}, #{measureCard,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.yihe.system.domain.YhUserEnrolinfo">
+    <selectKey keyProperty="eUserId" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into yh_user_enrolinfo
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="seqInstrument != null">
+        Seq_Instrument,
+      </if>
+      <if test="docRuserid != null">
+        Doc_Ruserid,
+      </if>
+      <if test="flagDgroup != null">
+        Flag_Dgroup,
+      </if>
+      <if test="sexCode != null">
+        Sex_Code,
+      </if>
+      <if test="height != null">
+        Height,
+      </if>
+      <if test="weight != null">
+        Weight,
+      </if>
+      <if test="hwUptime != null">
+        Hw_Uptime,
+      </if>
+      <if test="waistc != null">
+        Waistc,
+      </if>
+      <if test="wUptime != null">
+        W_Uptime,
+      </if>
+      <if test="hipc != null">
+        Hipc,
+      </if>
+      <if test="hUptime != null">
+        H_Uptime,
+      </if>
+      <if test="sbp != null">
+        Sbp,
+      </if>
+      <if test="dbp != null">
+        Dbp,
+      </if>
+      <if test="sdUptime != null">
+        Sd_Uptime,
+      </if>
+      <if test="bs != null">
+        Bs,
+      </if>
+      <if test="bsUptime != null">
+        Bs_Uptime,
+      </if>
+      <if test="cholesterin != null">
+        Cholesterin,
+      </if>
+      <if test="tring != null">
+        Tring,
+      </if>
+      <if test="hdl != null">
+        Hdl,
+      </if>
+      <if test="ldl != null">
+        Ldl,
+      </if>
+      <if test="bfUptime != null">
+        Bf_Uptime,
+      </if>
+      <if test="fooddiaryUptime != null">
+        Fooddiary_Uptime,
+      </if>
+      <if test="sportdiaryUptime != null">
+        sportdiary_uptime,
+      </if>
+      <if test="foodmonUptime != null">
+        Foodmon_Uptime,
+      </if>
+      <if test="energyUptime != null">
+        Energy_Uptime,
+      </if>
+      <if test="lifestyleUptime != null">
+        Lifestyle_Uptime,
+      </if>
+      <if test="healthMonitoring != null">
+        Health_Monitoring,
+      </if>
+      <if test="isDel != null">
+        Is_Del,
+      </if>
+      <if test="userCode != null">
+        user_code,
+      </if>
+      <if test="evaluateflag != null">
+        evaluateFlag,
+      </if>
+      <if test="lVentricularHype != null">
+        L_Ventricular_Hype,
+      </if>
+      <if test="measureCard != null">
+        measure_card,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="seqInstrument != null">
+        #{seqInstrument,jdbcType=VARCHAR},
+      </if>
+      <if test="docRuserid != null">
+        #{docRuserid,jdbcType=VARCHAR},
+      </if>
+      <if test="flagDgroup != null">
+        #{flagDgroup,jdbcType=VARCHAR},
+      </if>
+      <if test="sexCode != null">
+        #{sexCode,jdbcType=INTEGER},
+      </if>
+      <if test="height != null">
+        #{height,jdbcType=REAL},
+      </if>
+      <if test="weight != null">
+        #{weight,jdbcType=REAL},
+      </if>
+      <if test="hwUptime != null">
+        #{hwUptime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="waistc != null">
+        #{waistc,jdbcType=REAL},
+      </if>
+      <if test="wUptime != null">
+        #{wUptime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="hipc != null">
+        #{hipc,jdbcType=REAL},
+      </if>
+      <if test="hUptime != null">
+        #{hUptime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="sbp != null">
+        #{sbp,jdbcType=INTEGER},
+      </if>
+      <if test="dbp != null">
+        #{dbp,jdbcType=INTEGER},
+      </if>
+      <if test="sdUptime != null">
+        #{sdUptime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="bs != null">
+        #{bs,jdbcType=REAL},
+      </if>
+      <if test="bsUptime != null">
+        #{bsUptime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="cholesterin != null">
+        #{cholesterin,jdbcType=REAL},
+      </if>
+      <if test="tring != null">
+        #{tring,jdbcType=REAL},
+      </if>
+      <if test="hdl != null">
+        #{hdl,jdbcType=REAL},
+      </if>
+      <if test="ldl != null">
+        #{ldl,jdbcType=REAL},
+      </if>
+      <if test="bfUptime != null">
+        #{bfUptime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="fooddiaryUptime != null">
+        #{fooddiaryUptime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="sportdiaryUptime != null">
+        #{sportdiaryUptime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="foodmonUptime != null">
+        #{foodmonUptime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="energyUptime != null">
+        #{energyUptime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="lifestyleUptime != null">
+        #{lifestyleUptime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="healthMonitoring != null">
+        #{healthMonitoring,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isDel != null">
+        #{isDel,jdbcType=INTEGER},
+      </if>
+      <if test="userCode != null">
+        #{userCode,jdbcType=VARCHAR},
+      </if>
+      <if test="evaluateflag != null">
+        #{evaluateflag,jdbcType=INTEGER},
+      </if>
+      <if test="lVentricularHype != null">
+        #{lVentricularHype,jdbcType=INTEGER},
+      </if>
+      <if test="measureCard != null">
+        #{measureCard,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.yihe.system.domain.YhUserEnrolinfoExample" resultType="java.lang.Long">
+    select count(*) from yh_user_enrolinfo
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelectiveByusercode" parameterType="map">
+   update yh_user_enrolinfo set Flag_Dgroup= #{flagDgroup} where user_code=#{usercode}
+  </update>
+  <update id="updateByExampleSelective" parameterType="map">
+    update yh_user_enrolinfo
+    <set>
+      <if test="record.eUserId != null">
+        E_User_Id = #{record.eUserId,jdbcType=INTEGER},
+      </if>
+      <if test="record.seqInstrument != null">
+        Seq_Instrument = #{record.seqInstrument,jdbcType=VARCHAR},
+      </if>
+      <if test="record.docRuserid != null">
+        Doc_Ruserid = #{record.docRuserid,jdbcType=VARCHAR},
+      </if>
+      <if test="record.flagDgroup != null">
+        Flag_Dgroup = #{record.flagDgroup,jdbcType=VARCHAR},
+      </if>
+      <if test="record.sexCode != null">
+        Sex_Code = #{record.sexCode,jdbcType=INTEGER},
+      </if>
+      <if test="record.height != null">
+        Height = #{record.height,jdbcType=REAL},
+      </if>
+      <if test="record.weight != null">
+        Weight = #{record.weight,jdbcType=REAL},
+      </if>
+      <if test="record.hwUptime != null">
+        Hw_Uptime = #{record.hwUptime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.waistc != null">
+        Waistc = #{record.waistc,jdbcType=REAL},
+      </if>
+      <if test="record.wUptime != null">
+        W_Uptime = #{record.wUptime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.hipc != null">
+        Hipc = #{record.hipc,jdbcType=REAL},
+      </if>
+      <if test="record.hUptime != null">
+        H_Uptime = #{record.hUptime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.sbp != null">
+        Sbp = #{record.sbp,jdbcType=INTEGER},
+      </if>
+      <if test="record.dbp != null">
+        Dbp = #{record.dbp,jdbcType=INTEGER},
+      </if>
+      <if test="record.sdUptime != null">
+        Sd_Uptime = #{record.sdUptime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.bs != null">
+        Bs = #{record.bs,jdbcType=REAL},
+      </if>
+      <if test="record.bsUptime != null">
+        Bs_Uptime = #{record.bsUptime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.cholesterin != null">
+        Cholesterin = #{record.cholesterin,jdbcType=REAL},
+      </if>
+      <if test="record.tring != null">
+        Tring = #{record.tring,jdbcType=REAL},
+      </if>
+      <if test="record.hdl != null">
+        Hdl = #{record.hdl,jdbcType=REAL},
+      </if>
+      <if test="record.ldl != null">
+        Ldl = #{record.ldl,jdbcType=REAL},
+      </if>
+      <if test="record.bfUptime != null">
+        Bf_Uptime = #{record.bfUptime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.fooddiaryUptime != null">
+        Fooddiary_Uptime = #{record.fooddiaryUptime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.sportdiaryUptime != null">
+        sportdiary_uptime = #{record.sportdiaryUptime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.foodmonUptime != null">
+        Foodmon_Uptime = #{record.foodmonUptime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.energyUptime != null">
+        Energy_Uptime = #{record.energyUptime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.lifestyleUptime != null">
+        Lifestyle_Uptime = #{record.lifestyleUptime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.healthMonitoring != null">
+        Health_Monitoring = #{record.healthMonitoring,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.isDel != null">
+        Is_Del = #{record.isDel,jdbcType=INTEGER},
+      </if>
+      <if test="record.userCode != null">
+        user_code = #{record.userCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.evaluateflag != null">
+        evaluateFlag = #{record.evaluateflag,jdbcType=INTEGER},
+      </if>
+      <if test="record.lVentricularHype != null">
+        L_Ventricular_Hype = #{record.lVentricularHype,jdbcType=INTEGER},
+      </if>
+      <if test="record.measureCard != null">
+        measure_card = #{record.measureCard,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExampleByusercodeForEval" parameterType="map">
+    update yh_user_enrolinfo
+    set evaluateFlag = #{record.evaluateflag,jdbcType=INTEGER},
+     `evaluateFlag_Uptime` = NOW() 
+    where user_code=#{record.userCode}
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update yh_user_enrolinfo
+    set E_User_Id = #{record.eUserId,jdbcType=INTEGER},
+      Seq_Instrument = #{record.seqInstrument,jdbcType=VARCHAR},
+      Doc_Ruserid = #{record.docRuserid,jdbcType=VARCHAR},
+      Flag_Dgroup = #{record.flagDgroup,jdbcType=VARCHAR},
+      Sex_Code = #{record.sexCode,jdbcType=INTEGER},
+      Height = #{record.height,jdbcType=REAL},
+      Weight = #{record.weight,jdbcType=REAL},
+      Hw_Uptime = #{record.hwUptime,jdbcType=TIMESTAMP},
+      Waistc = #{record.waistc,jdbcType=REAL},
+      W_Uptime = #{record.wUptime,jdbcType=TIMESTAMP},
+      Hipc = #{record.hipc,jdbcType=REAL},
+      H_Uptime = #{record.hUptime,jdbcType=TIMESTAMP},
+      Sbp = #{record.sbp,jdbcType=INTEGER},
+      Dbp = #{record.dbp,jdbcType=INTEGER},
+      Sd_Uptime = #{record.sdUptime,jdbcType=TIMESTAMP},
+      Bs = #{record.bs,jdbcType=REAL},
+      Bs_Uptime = #{record.bsUptime,jdbcType=TIMESTAMP},
+      Cholesterin = #{record.cholesterin,jdbcType=REAL},
+      Tring = #{record.tring,jdbcType=REAL},
+      Hdl = #{record.hdl,jdbcType=REAL},
+      Ldl = #{record.ldl,jdbcType=REAL},
+      Bf_Uptime = #{record.bfUptime,jdbcType=TIMESTAMP},
+      Fooddiary_Uptime = #{record.fooddiaryUptime,jdbcType=TIMESTAMP},
+      sportdiary_uptime = #{record.sportdiaryUptime,jdbcType=TIMESTAMP},
+      Foodmon_Uptime = #{record.foodmonUptime,jdbcType=TIMESTAMP},
+      Energy_Uptime = #{record.energyUptime,jdbcType=TIMESTAMP},
+      Lifestyle_Uptime = #{record.lifestyleUptime,jdbcType=TIMESTAMP},
+      Health_Monitoring = #{record.healthMonitoring,jdbcType=TIMESTAMP},
+      Is_Del = #{record.isDel,jdbcType=INTEGER},
+      user_code = #{record.userCode,jdbcType=VARCHAR},
+      evaluateFlag = #{record.evaluateflag,jdbcType=INTEGER},
+      L_Ventricular_Hype = #{record.lVentricularHype,jdbcType=INTEGER},
+      measure_card = #{record.measureCard,jdbcType=VARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="modifyInfoByEva" parameterType="com.yihe.system.domain.YhUserEnrolinfo">
+  update yh_user_enrolinfo set Flag_Dgroup="",evaluateFlag=0 where user_code=#{userCode}
+  
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.yihe.system.domain.YhUserEnrolinfo">
+    update yh_user_enrolinfo
+    <set>
+      <if test="seqInstrument != null">
+        Seq_Instrument = #{seqInstrument,jdbcType=VARCHAR},
+      </if>
+      <if test="docRuserid != null">
+        Doc_Ruserid = #{docRuserid,jdbcType=VARCHAR},
+      </if>
+      <if test="flagDgroup != null">
+        Flag_Dgroup = #{flagDgroup,jdbcType=VARCHAR},
+      </if>
+      <if test="sexCode != null">
+        Sex_Code = #{sexCode,jdbcType=INTEGER},
+      </if>
+      <if test="height != null">
+        Height = #{height,jdbcType=REAL},
+      </if>
+      <if test="weight != null">
+        Weight = #{weight,jdbcType=REAL},
+      </if>
+      <if test="hwUptime != null">
+        Hw_Uptime = #{hwUptime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="waistc != null">
+        Waistc = #{waistc,jdbcType=REAL},
+      </if>
+      <if test="wUptime != null">
+        W_Uptime = #{wUptime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="hipc != null">
+        Hipc = #{hipc,jdbcType=REAL},
+      </if>
+      <if test="hUptime != null">
+        H_Uptime = #{hUptime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="sbp != null">
+        Sbp = #{sbp,jdbcType=INTEGER},
+      </if>
+      <if test="dbp != null">
+        Dbp = #{dbp,jdbcType=INTEGER},
+      </if>
+      <if test="sdUptime != null">
+        Sd_Uptime = #{sdUptime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="bs != null">
+        Bs = #{bs,jdbcType=REAL},
+      </if>
+      <if test="bsUptime != null">
+        Bs_Uptime = #{bsUptime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="cholesterin != null">
+        Cholesterin = #{cholesterin,jdbcType=REAL},
+      </if>
+      <if test="tring != null">
+        Tring = #{tring,jdbcType=REAL},
+      </if>
+      <if test="hdl != null">
+        Hdl = #{hdl,jdbcType=REAL},
+      </if>
+      <if test="ldl != null">
+        Ldl = #{ldl,jdbcType=REAL},
+      </if>
+      <if test="bfUptime != null">
+        Bf_Uptime = #{bfUptime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="fooddiaryUptime != null">
+        Fooddiary_Uptime = #{fooddiaryUptime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="sportdiaryUptime != null">
+        sportdiary_uptime = #{sportdiaryUptime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="foodmonUptime != null">
+        Foodmon_Uptime = #{foodmonUptime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="energyUptime != null">
+        Energy_Uptime = #{energyUptime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="lifestyleUptime != null">
+        Lifestyle_Uptime = #{lifestyleUptime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="healthMonitoring != null">
+        Health_Monitoring = #{healthMonitoring,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isDel != null">
+        Is_Del = #{isDel,jdbcType=INTEGER},
+      </if>
+      <if test="userCode != null">
+        user_code = #{userCode,jdbcType=VARCHAR},
+      </if>
+      <if test="evaluateflag != null">
+        evaluateFlag = #{evaluateflag,jdbcType=INTEGER},
+      </if>
+      <if test="lVentricularHype != null">
+        L_Ventricular_Hype = #{lVentricularHype,jdbcType=INTEGER},
+      </if>
+      <if test="measureCard != null">
+        measure_card = #{measureCard,jdbcType=VARCHAR},
+      </if>
+    </set>
+     where user_code = #{userCode,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.yihe.system.domain.YhUserEnrolinfo">
+    update yh_user_enrolinfo
+    set Seq_Instrument = #{seqInstrument,jdbcType=VARCHAR},
+      Doc_Ruserid = #{docRuserid,jdbcType=VARCHAR},
+      Flag_Dgroup = #{flagDgroup,jdbcType=VARCHAR},
+      Sex_Code = #{sexCode,jdbcType=INTEGER},
+      Height = #{height,jdbcType=REAL},
+      Weight = #{weight,jdbcType=REAL},
+      Hw_Uptime = #{hwUptime,jdbcType=TIMESTAMP},
+      Waistc = #{waistc,jdbcType=REAL},
+      W_Uptime = #{wUptime,jdbcType=TIMESTAMP},
+      Hipc = #{hipc,jdbcType=REAL},
+      H_Uptime = #{hUptime,jdbcType=TIMESTAMP},
+      Sbp = #{sbp,jdbcType=INTEGER},
+      Dbp = #{dbp,jdbcType=INTEGER},
+      Sd_Uptime = #{sdUptime,jdbcType=TIMESTAMP},
+      Bs = #{bs,jdbcType=REAL},
+      Bs_Uptime = #{bsUptime,jdbcType=TIMESTAMP},
+      Cholesterin = #{cholesterin,jdbcType=REAL},
+      Tring = #{tring,jdbcType=REAL},
+      Hdl = #{hdl,jdbcType=REAL},
+      Ldl = #{ldl,jdbcType=REAL},
+      Bf_Uptime = #{bfUptime,jdbcType=TIMESTAMP},
+      Fooddiary_Uptime = #{fooddiaryUptime,jdbcType=TIMESTAMP},
+      sportdiary_uptime = #{sportdiaryUptime,jdbcType=TIMESTAMP},
+      Foodmon_Uptime = #{foodmonUptime,jdbcType=TIMESTAMP},
+      Energy_Uptime = #{energyUptime,jdbcType=TIMESTAMP},
+      Lifestyle_Uptime = #{lifestyleUptime,jdbcType=TIMESTAMP},
+      Health_Monitoring = #{healthMonitoring,jdbcType=TIMESTAMP},
+      Is_Del = #{isDel,jdbcType=INTEGER},
+      user_code = #{userCode,jdbcType=VARCHAR},
+      evaluateFlag = #{evaluateflag,jdbcType=INTEGER},
+      L_Ventricular_Hype = #{lVentricularHype,jdbcType=INTEGER},
+      measure_card = #{measureCard,jdbcType=VARCHAR}
+    where E_User_Id = #{eUserId,jdbcType=INTEGER}
+  </update>
+</mapper>

@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>用户查看睡眠管理</title>
+   <link rel="stylesheet"  th:href="@{/assets/libs/layui/css/layui.css}" />
+    <link rel="stylesheet"  th:href="@{/assets/module/admin.css}"  />
+    <style type="text/css">
+.layui-elem-quote {
+    margin-bottom: 10px;
+    padding: 9px;
+    line-height: 3px;
+    border-left: 5px solid #009688;
+    border-radius: 0 2px 2px 0;
+    background-color: white;
+    margin-top: 20px;
+    float: left;
+    margin-left: 20px;
+}
+
+.layui-card {
+    margin-bottom: 15px;
+    border-radius: 2px;
+    background-color: #fff;
+    box-shadow: 0 0px 0px 0 rgba(0,0,0,.05);
+}
+
+</style>
+</head>
+<body style="margin: 7px;">
+ <!-- 页面加载loading -->
+<div class="page-loading">
+    <div class="ball-loader">
+        <span></span><span></span><span></span><span></span>
+    </div>
+</div>
+
+
+
+
+
+<div class="layui-fluid" style="padding:0">
+		<div class="layui-row" style="height: 600px;">
+		<div style="width: 100%; height:100%; background-color: #FFF; position: relative;">
+			
+			<div class="layui-tab layui-tab-brief" lay-filter="docDemoTabBrief" style="margin:0">
+			  <ul class="layui-tab-title">
+			   <li th:if="${type=='1'}"  class="layui-this" onclick="assess()">睡眠评估</li>
+			     <li th:if="${type!='1'}" onclick="assess()">睡眠评估</li>
+			    <li th:if="${type=='2'}"   class="layui-this" onclick="solo()">睡眠日记</li>
+			    <li th:if="${type!='2'}" onclick="solo()">睡眠日记</li>
+			    <li th:if="${type!='3'}" onclick="foodanalyze()">睡眠分析报告</li>
+			    <li th:if="${type=='3'}"   class="layui-this" onclick="foodanalyze()">睡眠分析报告</li>
+			    <!-- <li>商品管理</li>
+			    <li>订单管理</li> -->
+			  </ul>
+			  <div class="layui-tab-content" style="height: 100px;">
+			  <!-- 内容1 -->
+			    <div class="layui-tab-item" th:classappend="${type=='1'} ? 'layui-show' : ''">
+			    
+			   <div class="layui-fluid">
+		    <div class="layui-card">
+		        <div class="layui-card-body">
+		            <div class="layui-form toolbar">
+		                    <div class="demoTable">
+					  评估时间：
+					  <div class="layui-inline" style="width: 300px">
+					    <input type="text" class="layui-input" id="test6" placeholder=" - ">
+					  </div>
+					    评估结果：
+					     <div class="layui-inline">
+					   <select name="reportLevel" id="reportLevel" 	 lay-search="">
+				          <option value="">全部</option>
+				          <option value="差">差</option>
+				          <option value="一般">一般</option>
+				          <option value="良好">良好</option>
+				        </select>
+					  </div>
+        
+					  <button class="layui-btn" data-type="reload" onclick="assess()"><i class="layui-icon"></i>搜索</button>
+					  <button class="layui-btn layui-btn-primary" id="btnempty" lay-submit="" lay-filter="reset">清除</button>
+								
+		                </div>
+		            </div>
+		            </br>
+		            
+						<table id="LAY_table_user" lay-filter="demo"></table>
+		        </div>
+		    </div>
+		</div>
+			    
+			    
+			    </div>
+			    <!-- 内容2 -->
+			    <div  class="layui-tab-item" th:classappend="${type=='2'} ? 'layui-show' : ''">
+			    
+			    <div class="demoTable">
+					 日期：
+					  <div class="layui-inline">
+					    <input type="text" class="layui-input" id="test7" placeholder=" - ">
+					  </div>
+					  <button class="layui-btn" data-type="reload" onclick="solo()"><i class="layui-icon"></i>搜索</button>
+					  <button class="layui-btn layui-btn-primary" id="btnempty1" lay-submit="" lay-filter="reset">清除</button>
+								
+					</div>
+					
+					<div style="width: 100%;">
+						<div style="width: 40%;float: left">
+				   		<table class="layui-hide" id="test" lay-filter="test"></table>
+				   		</div>
+			   			<div style="width: 53%;float: left;margin-left: 3%;" id="table">
+			   				
+			   				
+			   				<!--  -->
+			   			
+			   				<table class="layui-table" lay-skin="line">
+							  <thead>
+							    <tr>
+							      <th>日记情况</th>
+							    </tr> 
+							  </thead>
+							  <tbody>
+							    <tr>
+							      <td align="center"><div style="height:280px;" id="chartmain"></div></td>
+							    </tr>
+							  </tbody>
+							</table>   
+         
+			   			
+			   			</div>
+			    	</div>
+			    	
+			    	
+			    	
+			    	<table class="layui-table" lay-skin="line" id="journal" style="margin-left: -10px;    margin-top: 21%;    width: 101%;">
+				  <colgroup>
+				    <col width="150">
+				    <col width="150">
+				    <col width="200">
+				    <col>
+				  </colgroup>
+				  <thead>
+				    <tr>
+				      <th>睡眠日记分析 <span id="ctime"></span></th>
+				    </tr> 
+				  </thead>
+				  <tbody>
+				    <tr>
+				      <td>
+				     	<div>
+				     		 <div style="text-align: center;">
+					     		 <i class="layui-icon layui-icon-circle-dot" style="color: rgba(56, 164, 255, 1);"></i>
+					     		 入睡时间&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id="sleepTime"></span> 
+					     		 <i class="layui-icon layui-icon-circle-dot" style="color: rgba(56, 164, 255, 1);padding-left: 50px;"></i>
+					     		 醒来时间&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id="wakeTime"></span>
+					     		 <span style="padding-left: 50px;color: rgba(56, 164, 255, 1);font-size: 20px;" id="duration"></span>
+				     		 </div>
+				     		 <div>
+				     		 <br>
+				     		 	<p>数据解读</p>
+				     		 	 <br>
+				     		 	<p>根据睡眠结果显示，您的睡眠情况<span id="diaryDesc"></span></p>
+				     		 </div>
+				     	</div>
+				      </td>
+				    </tr>
+				  </tbody>
+				</table>   
+				    
+    
+			    
+			    </div>
+			    <div class="layui-tab-item" th:classappend="${type=='3'} ? 'layui-show' : ''">
+			    
+					<table id="analyze" lay-filter="demonalyze"></table>
+						
+				</div>
+			  </div>
+			</div> 
+		</div>
+	</div>
+</div>
+
+</body>
+<script type="text/javascript" th:src="@{/assets/libs/layui/layui.js}"></script>
+<script type="text/javascript" th:src="@{/assets/js/common.js}"></script>
+<script type="text/javascript" th:src="@{/assets/js/jquery-1.11.1.js}"></script>
+<script th:src="@{/assets/libs/echarts/echarts.min.js}"></script>
+
+<script type="text/html" id="barDemo">
+ 	<a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="downloadReport">下载报告</a>
+	<a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="downloadQuestionnaire">下载问卷</a>
+    <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="edit">查看</a>
+</script>
+
+<script type="text/html" id="barDemo1">
+    <a href="#" lay-event="edit"><font color="#36A4FF">查看</font></a>
+</script>
+
+
+<script>
+
+//统计图
+function show(cTime,energyKcal){
+	
+	option = {
+		    color: ['#3398DB'],
+		    tooltip: {
+		        trigger: 'axis',
+		        axisPointer: {            // 坐标轴指示器，坐标轴触发有效
+		            type: 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+		        }
+		    },
+		    grid: {
+		        left: '3%',
+		        right: '4%',
+		        bottom: '3%',
+		        containLabel: true
+		    },
+		    xAxis: [
+		        {
+		            type: 'category',
+		            data: cTime,
+		            axisTick: {
+		                alignWithLabel: true
+		            }
+		        }
+		    ],
+		    yAxis: [
+		        {
+		            type: 'value'
+		        }
+		    ],
+		    series: [
+		        {
+		            name: '直接访问',
+		            type: 'bar',
+		            barWidth: '60%',
+		            data: energyKcal
+		        }
+		    ],
+		    dataZoom : [
+		        //1.横向使用滚动条
+		          {
+		            type: 'slider',//有单独的滑动条，用户在滑动条上进行缩放或漫游。inside是直接可以是在内部拖动显示
+		            show: true,//是否显示 组件。如果设置为 false，不会显示，但是数据过滤的功能还存在。
+		            start: 0,//数据窗口范围的起始百分比0-100
+		            end: 50,//数据窗口范围的结束百分比0-100
+		            xAxisIndex: [0],// 此处表示控制第一个xAxis，设置 dataZoom-slider 组件控制的 x轴 可是已数组[0,2]表示控制第一，三个；xAxisIndex: 2 ，表示控制第二个。yAxisIndex属性同理
+		            bottom:-10 //距离底部的距离
+		          },
+		      //2.在内部可以横向拖动
+		         {
+		             type: 'inside',// 内置于坐标系中
+		             start: 0,
+		             end: 30,
+		             xAxisIndex: [0]
+		          }
+		        ]
+		};
+	
+	var width = $("#table").width();
+	$("#chartmain").css('width',$("#table").width()); //给图设置固定宽度，div chart是第一个tab页面上面的某个图，宽度布局与map一致				   
+	
+		//获取dom容器
+		var myChart = echarts.init(document.getElementById('chartmain'));
+		// 使用刚指定的配置项和数据显示图表。
+		myChart.setOption(option);
+		 myChart.resize();
+}
+
+
+
+
+
+
+
+//导航栏
+layui.use('element', function() {
+	var $ = layui.jquery, element = layui.element; //Tab的切换功能，切换事件监听等，需要依赖element模块
+
+	$('.site-demo-active').on('click', function() {
+		var othis = $(this), type = othis.data('type');
+		active[type] ? active[type].call(this, othis) : '';
+	});
+
+});
+
+
+layui.use(['layer', 'form', 'admin', 'table','laydate', 'util'], function () {
+    var $ = layui.jquery;
+    var layer = layui.layer;
+    var form = layui.form;
+    var admin = layui.admin;
+    var util = layui.util;
+    var laydate = layui.laydate;
+    table = layui.table;
+    
+     setTimeout( function(){
+    	 tjt($("#test7").val());
+	}, 3 * 1000 );
+  //清除按钮
+    $("#btnempty").click(function(){
+    	window.location.reload();
+		$("#test6").val("");     
+    })
+     //清除按钮
+    $("#btnempty1").click(function(){
+		$("#test7").val("");     
+		table.reload('energyKcal', {
+	        where: { //设定异步数据接口的额外参数，任意设
+	        'sleepDiarytime':$("#test7").val()
+	       }
+	      });
+	     tjt($("#test7").val());
+    })
+    
+  //日期范围
+    laydate.render({
+      elem: '#test6'
+      ,range: true,
+		trigger: 'click'
+    });
+  
+    laydate.render({
+        elem: '#test7'
+        ,range: true,
+		trigger: 'click'
+      });
+
+    var usercode = [[${usercode}]];
+  
+    function tjt(ctime){
+    	var data2;
+    	if(ctime!=null || ctime!=""){
+    		data2 = {'usercode' :[[${usercode}]],'sleepDiarytime':ctime};
+    	}else{
+    		data2 = {'usercode' :[[${usercode}]]};
+    	}
+   	 $.ajax({
+    	 type: "post",
+         url: "/YhSleepUserDiaryController/selectSleepDiaryCtime",
+         dataType:"json",
+         data:data2,
+         success: function(data){
+        		show(data.cTime,data.energyKcal);
+         }   	
+    });
+   }
+   
+    $("#journal").hide();
+    
+    //内容2
+     table.render({
+    elem: '#test'
+    ,	url : '/YhSleepUserDiaryController/selectSleepDiary?usercode='+usercode
+    ,method:'post'
+    	 ,cellMinWidth: 500 //全局定义常规单元格的最小宽度，layui 2.2.1 新增
+        ,height: 340
+    ,cols: [ [
+      {field:'id', title:'ID',hide:true,width: 5}
+      ,{field:'sleepDiarytime', title:'日期',sort : true,width:'40%',
+			templet : "<div>{{layui.util.toDateString(d.sleepDiarytime, 'yyyy-MM-dd')}}</div>"}
+      ,{field:'duration', title:'睡眠时长', sort: true,width:'30%'}
+      ,{field:'result', title:'解读结果', sort: true,width:'30%'}
+    ] ]
+    ,id : 'energyKcal'
+    ,page: true
+  });
+    
+	 //搜索的方法
+	   solo=function(){
+		   tjt();
+	     table.reload('energyKcal', {
+	        where: { //设定异步数据接口的额外参数，任意设
+	        'sleepDiarytime':$("#test7").val()
+	       }
+	      });
+	     tjt($("#test7").val());
+	    }
+  
+  //监听行单击事件（双击事件为：rowDouble）
+  table.on('row(test)', function(obj){
+    var data = obj.data;
+    $("#ctime").html(data.sleepDiarytime.substring(0, 10));
+    $("#diaryDesc").html(data.diaryDesc);
+    $("#sleepTime").html(data.sleepTime);
+    $("#duration").html(data.duration);
+    $("#wakeTime").html(data.wakeTime);
+    
+    $("#journal").show();
+    
+    //标注选中样式
+    obj.tr.addClass('layui-table-click').siblings().removeClass('layui-table-click');
+  });
+  //内容2结束
+    
+    
+    
+    
+  var post_flag = false; 
+	table.on('tool(demo)', function(obj) { //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
+		var data = obj.data; //获得当前行数据
+		var layEvent = obj.event; //获得 lay-event 对应的值
+		var tr = obj.tr; //获得当前行 tr 的DOM对象
+		
+		 if (layEvent === 'edit') {
+			window.location.href="/manage/usertosee/sleepshow?id="+data.reportId;
+		}else if(layEvent === 'downloadQuestionnaire'){//下载问卷
+			var usercode = data.userCode;
+			var id = data.reportId;
+			window.location.href="/YhSleepReportController/SleepexportXls?usercode="+usercode+"&dictId="+id+"";
+		}else if(layEvent === 'downloadReport'){
+			//window.location.href="/manage/usertosee/sleepshowPdf?id="+data.reportId;
+			
+			//如果正在提交则直接返回，停止执行
+		    if(post_flag) return; 
+		    //标记当前状态为正在提交状态
+		    post_flag = true;
+		  //加载层
+
+		    var index = layer.load(0, {shade: false}); //0代表加载的风格，支持0-2
+	    	 $.ajax({
+		   		 type:'get',
+		   		 url:"/YhSleepReportController/SleepgaoxueyaDataInfo?id="+data.reportId+"&usercode="+data.userCode,
+		   		 data:{},
+		   		success : function(data){
+		   			console.log(data)
+		   			post_flag =false; //在提交成功之后将标志标记为可提交状态
+	
+		   			var sleep = function(time) {
+					    var startTime = new Date().getTime() + parseInt(time, 10);
+					    while(new Date().getTime() < startTime) {}
+					};
+	
+						sleep(1000); // 延时函数，单位ms
+	
+		   			 window.location.href="/YhSleepReportController/Sleepdownload?fileName="+data.data+".pdf";
+		   			sleep(1000); // 延时函数，单位ms
+		   			layer.close(index);    //返回数据关闭loading
+		   		},
+		        error: function(){
+		            post_flag =false; //AJAX失败也需要将标志标记为可提交状态
+		        }
+	
+	   		}) 
+	   		
+	   		
+		}
+	});
+	
+  //方法级渲染
+	table.render({
+		elem : '#LAY_table_user',
+		url : '/YhSleepReportController/selectSleep?usercode='+usercode,
+		method:'post',
+		cols : [ [ 
+			{type:'numbers'},
+        {
+            templet: function (d) {
+                return util.toDateString(d.qtime);
+            }, title: '评估时间', align: 'qtime',width:'20%'
+        }, {
+			field : 'result',
+			title : '评估结果',
+		},{
+			fixed : 'right',
+			title : '操作',
+			align : 'center',
+			width:'20%',
+			toolbar : '#barDemo'
+		} ] ],
+		id : 'assess',
+		page : true,
+		done: function(res, curr, count){
+	         if(count > 10) {
+	          $(".layui-table-page").show();
+	         }else {
+	          $(".layui-table-page").hide();
+	         }
+	       }
+	});
+
+
+	
+	   //搜索的方法
+		   assess=function(){
+		     table.reload('assess', {
+		        where: { //设定异步数据接口的额外参数，任意设
+		        'qtime':$("#test6").val(),
+		        'reportLevel':$("#reportLevel").val(),
+		       }
+		      });
+		    }
+
+ 
+
+			//分析报告
+		    table.render({
+		   elem: '#analyze'
+		   ,	url : '/YhSleepUserDiaryController/selectSleepsanalyze?usercode='+usercode
+		   ,method:'post'
+		   ,height: 430
+		   ,cols: [ [
+		     /* {field:'foodguideId', title:'ID',hide:true} */
+		   		{type:'numbers'}
+		     ,{field:'newlyTime', title:'报告生成日期'}
+		     ,{field:'source', title:'报告分析来源', sort: true}
+		     ,{
+					fixed : 'right',
+					title : '操作',
+					align : 'center',
+					toolbar : '#barDemo1'
+				}
+		   ] ]
+		   ,id : 'foodanalyze'
+		   ,page: true
+		 });
+		 
+			
+		  //搜索的方法
+			   foodanalyze=function(){
+			     table.reload('foodanalyze', {
+			        /* where: { //设定异步数据接口的额外参数，任意设
+			        'qtime':$("#test6").val()
+			       } */
+			      });
+			    }
+
+		    table.on('tool(demonalyze)', function(obj) { //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
+				var data = obj.data; //获得当前行数据
+				var layEvent = obj.event; //获得 lay-event 对应的值
+				var tr = obj.tr; //获得当前行 tr 的DOM对象
+				
+				 if (layEvent === 'edit') {
+					window.location.href="/manage/usertosee/Sleepanalyze?id="+data.sleepGuideId;
+				}
+			});
+
+
+  
+  
+});
+
+
+</script>
+</html>

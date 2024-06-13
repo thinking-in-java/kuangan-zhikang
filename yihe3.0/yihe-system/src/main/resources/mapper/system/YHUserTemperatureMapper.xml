@@ -1,0 +1,1742 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yihe.system.mapper.YHUserTemperatureMapper">
+    <resultMap id="BaseResultMap" type="com.yihe.system.domain.YHUserTemperature">
+        <id column="tid" property="tid" jdbcType="INTEGER"/>
+        <result column="temperature" property="temperature" jdbcType="REAL"/>
+        <result column="Entry_Time" property="entryTime" jdbcType="VARCHAR"/>
+        <result column="Is_Del" property="isDel" jdbcType="INTEGER"/>
+        <result column="E_User_Id" property="eUserId" jdbcType="INTEGER"/>
+        <result column="Data_Source" property="dataSource" jdbcType="VARCHAR"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+    tid, temperature, Entry_Time, Is_Del, E_User_Id, Data_Source
+  </sql>
+
+
+    <!-- 查询体温总数 -->
+    <select id="selectByTemperatureCount" resultType="int">
+    select count(*) from yh_user_temperature;
+  </select>
+
+
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select
+        <include refid="Base_Column_List"/>
+        from yh_user_temperature
+        where tid = #{tid,jdbcType=INTEGER}
+    </select>
+    <select id="selectByPrimaryKeyForInfoNameTiwen" resultType="com.yihe.system.domain.TestingVOJO">
+        <if test="TypeName=='体温'">
+            SELECT
+            b.user_code AS usercode,
+            b.user_name AS username,
+            b.name,
+            CASE
+            WHEN b.gender = 1
+            THEN '男'
+            ELSE '女'
+            END AS sex,
+            a.tid AS infoId,
+            CASE
+            WHEN 1 = 1
+            THEN '体温'
+            END AS InfoName,
+            a.temperature AS num1,
+            a.temperature AS num2,
+            a.temperature AS num3,
+            a.temperature AS num4,
+            a.`Entry_Time` AS InfoTime
+            FROM
+            yh_user_temperature AS a
+            LEFT JOIN yh_user_reginfo AS b
+            ON a.`E_User_Id` = b.user_code
+            LEFT JOIN yh_user_make_card AS c
+            ON c.user_code = a.E_User_Id
+            <where>
+                a.is_Del=2 and c.doctor IN (SELECT id FROM `yh_user_admin_info` WHERE user_code = #{usercode})
+                <if test="nameLike!=null">
+                    AND b.name LIKE CONCAT('%',#{nameLike},'%')
+                </if>
+                <if test="usernameLike!=null">
+                    AND b.user_name LIKE CONCAT('%',#{usernameLike},'%')
+                </if>
+                <if test="strTime!=null and endTime!=null   and strTime !=''  and endTime !=''">
+                    and a.Entry_Time BETWEEN #{strTime}
+                    AND #{endTime}
+                </if>
+            </where>
+            order by a.Entry_Time desc
+        </if>
+
+        <if test="TypeName=='血氧'">
+            SELECT
+            b.user_code AS usercode,
+            b.user_name AS username,
+            b.name,
+            CASE
+            WHEN b.gender = 1
+            THEN '男'
+            ELSE '女'
+            END AS sex,
+            a.`U_oxygen_Id` AS infoId,
+            CASE
+            WHEN 1 = 1
+            THEN '血氧'
+            END AS InfoName,
+            a.oxygen AS num1,
+            a.oxygen AS num2,
+            a.oxygen AS num3,
+            a.oxygen AS num4,
+            a.`Entry_Time` AS InfoTime
+            FROM
+            yh_user_oxygen AS a
+            LEFT JOIN yh_user_reginfo AS b
+            ON a.`E_User_Id` = b.user_code
+            LEFT JOIN yh_user_make_card AS c
+            ON c.user_code = a.E_User_Id
+            <where>
+                a.is_Del=2 and c.doctor IN (SELECT id FROM `yh_user_admin_info` WHERE user_code = #{usercode})
+                <if test="nameLike!=null">
+                    AND b.name LIKE CONCAT('%',#{nameLike},'%')
+                </if>
+                <if test="usernameLike!=null">
+                    AND b.user_name LIKE CONCAT('%',#{usernameLike},'%')
+                </if>
+                <if test="strTime!=null and endTime!=null   and strTime !=''  and endTime !=''">
+                    and a.Entry_Time BETWEEN #{strTime}
+                    AND #{endTime}
+                </if>
+            </where>
+            order by a.Entry_Time desc
+        </if>
+
+        <if test="TypeName=='BMI'">
+            SELECT
+            b.user_code AS usercode,
+            b.user_name AS username,
+            b.name,
+            CASE
+            WHEN b.gender = 1
+            THEN '男'
+            ELSE '女'
+            END AS sex,
+            a.`U_Bmi_Id` AS infoId,
+            CASE
+            WHEN 1 = 1
+            THEN 'BMI'
+            END AS InfoName,
+            a.U_Height AS num1,
+            a.U_Weight AS num2,
+            a.U_Weight AS num3,
+            a.U_Weight AS num4,
+            a.`Entry_Time` AS InfoTime
+            FROM
+            yh_user_bmi AS a
+            LEFT JOIN yh_user_reginfo AS b
+            ON a.`E_User_Id` = b.user_code
+            LEFT JOIN yh_user_make_card AS c
+            ON c.user_code = a.E_User_Id
+            <where>
+                a.is_Del=2 and c.doctor IN (SELECT id FROM `yh_user_admin_info` WHERE user_code = #{usercode})
+                <if test="nameLike!=null">
+                    AND b.name LIKE CONCAT('%',#{nameLike},'%')
+                </if>
+                <if test="usernameLike!=null">
+                    AND b.user_name LIKE CONCAT('%',#{usernameLike},'%')
+                </if>
+                <if test="strTime!=null and endTime!=null   and strTime !=''  and endTime !=''">
+                    and a.Entry_Time BETWEEN #{strTime}
+                    AND #{endTime}
+                </if>
+            </where>
+            order by a.Entry_Time desc
+
+        </if>
+
+        <if test="TypeName=='血压'">
+            SELECT
+            b.user_code AS usercode,
+            b.user_name AS username,
+            b.name,
+            CASE
+            WHEN b.gender = 1
+            THEN '男'
+            ELSE '女'
+            END AS sex,
+            a.`U_Bloodpressure_Id` AS infoId,
+            CASE
+            WHEN 1 = 1
+            THEN '血压'
+            END AS InfoName,
+            a.Sbp AS num1,
+            a.Dbp AS num2,
+            a.Dbp AS num3,
+            a.Dbp AS num4,
+            a.`Entry_Time` as InfoTime
+            FROM
+            yh_user_bloodpressure AS a
+            LEFT JOIN yh_user_reginfo AS b
+            ON a.`E_User_Id` = b.user_code
+            LEFT JOIN yh_user_make_card AS c
+            ON c.user_code = a.E_User_Id
+            <where>
+                a.is_Del=2 and c.doctor IN (SELECT id FROM `yh_user_admin_info` WHERE user_code = #{usercode})
+                <if test="nameLike!=null">
+                    AND b.name LIKE CONCAT('%',#{nameLike},'%')
+                </if>
+                <if test="usernameLike!=null">
+                    AND b.user_name LIKE CONCAT('%',#{usernameLike},'%')
+                </if>
+                <if test="strTime!=null and endTime!=null   and strTime !=''  and endTime !=''">
+                    and a.Entry_Time BETWEEN #{strTime}
+                    AND #{endTime}
+                </if>
+            </where>
+            order by a.Entry_Time desc
+
+        </if>
+
+
+        <if test="TypeName=='血糖'">
+            SELECT
+            b.user_code AS usercode,
+            b.user_name AS username,
+            b.name,
+            CASE
+            WHEN b.gender = 1
+            THEN '男'
+            ELSE '女'
+            END AS sex,
+            a.`U_Bloodsuger_Id` AS infoId,
+            CASE
+            WHEN 1 = 1
+            THEN '血糖'
+            END AS InfoName,
+            a.Bs AS num1,
+            a.Bs AS num2,
+            a.Bs AS num3,
+            a.Bs AS num4,
+            a.`Entry_Time` as InfoTime
+            FROM
+            yh_user_bloodsuger AS a
+            LEFT JOIN yh_user_reginfo AS b
+            ON a.`E_User_Id` = b.user_code
+            LEFT JOIN yh_user_make_card AS c
+            ON c.user_code = a.E_User_Id
+            <where>
+                a.is_Del=2 and c.doctor IN (SELECT id FROM `yh_user_admin_info` WHERE user_code = #{usercode})
+                <if test="nameLike!=null">
+                    AND b.name LIKE CONCAT('%',#{nameLike},'%')
+                </if>
+                <if test="usernameLike!=null">
+                    AND b.user_name LIKE CONCAT('%',#{usernameLike},'%')
+                </if>
+                <if test="strTime!=null and endTime!=null   and strTime !=''  and endTime !=''">
+                    and a.Entry_Time BETWEEN #{strTime}
+                    AND #{endTime}
+                </if>
+            </where>
+            order by a.Entry_Time desc
+        </if>
+
+
+        <if test="TypeName=='心率'">
+            SELECT
+            b.user_code AS usercode,
+            b.user_name AS username,
+            b.name,
+            CASE
+            WHEN b.gender = 1
+            THEN '男'
+            ELSE '女'
+            END AS sex,
+            a.rid AS infoId,
+            CASE
+            WHEN 1 = 1
+            THEN '心率'
+            END AS InfoName,
+            a.heart_rate AS num1,
+            a.heart_rate AS num2,
+            a.heart_rate AS num3,
+            a.heart_rate AS num4,
+            a.`Entry_Time` as InfoTime
+            FROM
+            yh_user_heart_rate AS a
+            LEFT JOIN yh_user_reginfo AS b
+            ON a.`E_User_Id` = b.user_code
+            LEFT JOIN yh_user_make_card AS c
+            ON c.user_code = a.E_User_Id
+            <where>
+                a.is_Del=2 and c.doctor IN (SELECT id FROM `yh_user_admin_info` WHERE user_code = #{usercode})
+                <if test="nameLike!=null">
+                    AND b.name LIKE CONCAT('%',#{nameLike},'%')
+                </if>
+                <if test="usernameLike!=null">
+                    AND b.user_name LIKE CONCAT('%',#{usernameLike},'%')
+                </if>
+                <if test="strTime!=null and endTime!=null   and strTime !=''  and endTime !=''">
+                    and a.Entry_Time BETWEEN #{strTime}
+                    AND #{endTime}
+                </if>
+            </where>
+            order by a.Entry_Time desc
+        </if>
+
+
+        <if test="TypeName=='体脂'">
+            SELECT
+            b.user_code AS usercode,
+            b.user_name AS username,
+            b.name,
+            CASE
+            WHEN b.gender = 1
+            THEN '男'
+            ELSE '女'
+            END AS sex,
+            a.wubf_id AS infoId,
+            CASE
+            WHEN 1 = 1
+            THEN '体脂'
+            END AS InfoName,
+            a.fat_rate AS num1,
+            a.fat_rate AS num2,
+            a.fat_rate AS num3,
+            a.fat_rate AS num4,
+            a.`Entry_Time` as InfoTime
+            FROM
+            yh_user_body_fat AS a
+            LEFT JOIN yh_user_reginfo AS b
+            ON a.`E_User_Id` = b.user_code
+            LEFT JOIN yh_user_make_card AS c
+            ON c.user_code = a.E_User_Id
+            <where>
+                a.is_Del=2 and c.doctor IN (SELECT id FROM `yh_user_admin_info` WHERE user_code = #{usercode})
+                <if test="nameLike!=null">
+                    AND b.name LIKE CONCAT('%',#{nameLike},'%')
+                </if>
+                <if test="usernameLike!=null">
+                    AND b.user_name LIKE CONCAT('%',#{usernameLike},'%')
+                </if>
+                <if test="strTime!=null and endTime!=null   and strTime !=''  and endTime !=''">
+                    and a.Entry_Time BETWEEN #{strTime}
+                    AND #{endTime}
+                </if>
+            </where>
+            order by a.Entry_Time desc
+        </if>
+
+
+        <if test="TypeName=='血脂'">
+            SELECT
+            b.user_code AS usercode,
+            b.user_name AS username,
+            b.name,
+            CASE
+            WHEN b.gender = 1
+            THEN '男'
+            ELSE '女'
+            END AS sex,
+            a.U_Bloodfat_Id AS infoId,
+            CASE
+            WHEN 1 = 1
+            THEN '血脂'
+            END AS InfoName,
+            a.Cholesterin AS num1,
+            a.Tring AS num2,
+            a.Hdl AS num3,
+            a.Ldl AS num4,
+            a.`Entry_Time` as InfoTime
+            FROM
+            yh_user_bloodfat AS a
+            LEFT JOIN yh_user_reginfo AS b
+            ON a.`E_User_Id` = b.user_code
+            LEFT JOIN yh_user_make_card AS c
+            ON c.user_code = a.E_User_Id
+            <where>
+                a.is_Del=2 and c.doctor IN (SELECT id FROM `yh_user_admin_info` WHERE user_code = #{usercode})
+                <if test="nameLike!=null">
+                    AND b.name LIKE CONCAT('%',#{nameLike},'%')
+                </if>
+                <if test="usernameLike!=null">
+                    AND b.user_name LIKE CONCAT('%',#{usernameLike},'%')
+                </if>
+                <if test="strTime!=null and endTime!=null   and strTime !=''  and endTime !=''">
+                    and a.Entry_Time BETWEEN #{strTime}
+                    AND #{endTime}
+                </if>
+            </where>
+            order by a.Entry_Time desc
+        </if>
+
+
+        <if test="TypeName=='肾功能'">
+            SELECT
+            b.user_code AS usercode,
+            b.user_name AS username,
+            b.name,
+            CASE
+            WHEN b.gender = 1
+            THEN '男'
+            ELSE '女'
+            END AS sex,
+            a.renalid AS infoId,
+            CASE
+            WHEN 1 = 1
+            THEN '肾功能'
+            END AS InfoName,
+            a.creatinine AS num1,
+            a.urea_nitrogen AS num2,
+            a.uric_acid AS num3,
+            a.uric_acid AS num4,
+            a.`inertTime` as InfoTime
+            FROM
+            yh_user_renalfunction AS a
+            LEFT JOIN yh_user_reginfo AS b
+            ON a.`user_id` = b.user_code
+            LEFT JOIN yh_user_make_card AS c
+            ON c.user_code = a.user_id
+            <where>
+                a.is_Del=2 and c.doctor IN (SELECT id FROM `yh_user_admin_info` WHERE user_code = #{usercode})
+                <if test="nameLike!=null">
+                    AND b.name LIKE CONCAT('%',#{nameLike},'%')
+                </if>
+                <if test="usernameLike!=null">
+                    AND b.user_name LIKE CONCAT('%',#{usernameLike},'%')
+                </if>
+                <if test="strTime!=null and endTime!=null   and strTime !=''  and endTime !=''">
+                    and a.inertTime BETWEEN #{strTime}
+                    AND #{endTime}
+                </if>
+            </where>
+            order by a.inertTime desc
+        </if>
+
+
+        <if test="TypeName=='肝功能'">
+            SELECT
+            b.user_code AS usercode,
+            b.user_name AS username,
+            b.name,
+            CASE
+            WHEN b.gender = 1
+            THEN '男'
+            ELSE '女'
+            END AS sex,
+            a.liverid AS infoId,
+            CASE
+            WHEN 1 = 1
+            THEN '肝功能'
+            END AS InfoName,
+            a.gu_Bing AS num1,
+            a.millet_straw AS num2,
+            a.serum_albumin AS num3,
+            a.serum_globulin AS num4,
+            a.`insertTime` as InfoTime
+            FROM
+            yh_user_liverfunction AS a
+            LEFT JOIN yh_user_reginfo AS b
+            ON a.`user_id` = b.user_code
+            LEFT JOIN yh_user_make_card AS c
+            ON c.user_code = a.user_id
+            <where>
+                a.is_Del=2 and c.doctor IN (SELECT id FROM `yh_user_admin_info` WHERE user_code = #{usercode})
+                <if test="nameLike!=null">
+                    AND b.name LIKE CONCAT('%',#{nameLike},'%')
+                </if>
+                <if test="usernameLike!=null">
+                    AND b.user_name LIKE CONCAT('%',#{usernameLike},'%')
+                </if>
+                <if test="strTime!=null and endTime!=null   and strTime !=''  and endTime !=''">
+                    and a.insertTime BETWEEN #{strTime}
+                    AND #{endTime}
+                </if>
+            </where>
+            order by a.insertTime desc
+
+        </if>
+
+
+        <if test="TypeName=='动脉硬化'">
+            SELECT
+            b.user_code AS usercode,
+            b.user_name AS username,
+            b.name,
+            CASE
+            WHEN b.gender = 1
+            THEN '男'
+            ELSE '女'
+            END AS sex,
+            a.`id` AS infoId,
+            CASE
+            WHEN 1 = 1
+            THEN '动脉硬化'
+            END AS InfoName,
+            a.avi AS num1,
+            a.api AS num2,
+
+
+            a.`time` AS InfoTime
+            FROM
+            yh_user_artery AS a
+            LEFT JOIN yh_user_reginfo AS b
+            ON a.`usesr_code` = b.user_code
+            LEFT JOIN yh_user_make_card AS c
+            ON c.user_code = a.usesr_code
+            <where>
+                a.is_Del=2 and c.doctor IN (SELECT id FROM `yh_user_admin_info` WHERE user_code = #{usercode})
+                <if test="nameLike!=null">
+                    AND b.name LIKE CONCAT('%',#{nameLike},'%')
+                </if>
+                <if test="usernameLike!=null">
+                    AND b.user_name LIKE CONCAT('%',#{usernameLike},'%')
+                </if>
+                <if test="strTime!=null and endTime!=null   and strTime !=''  and endTime !=''">
+                    and a.`time` BETWEEN #{strTime}
+                    AND #{endTime}
+                </if>
+            </where>
+            order by a.`time` desc
+
+        </if>
+
+
+        <if test="TypeName=='尿检'">
+            SELECT
+            b.user_code AS usercode,
+            b.user_name AS username,
+            b.name,
+            CASE
+            WHEN b.gender = 1
+            THEN '男'
+            ELSE '女'
+            END AS sex,
+            a.Uba_Id AS infoId,
+            CASE
+            WHEN 1 = 1
+            THEN '尿检'
+            END AS InfoName,
+            a.whiteBloodCell AS num1,
+            a.urineProtein AS num2,
+            a.ketone AS num3,
+            a.ketone AS num4,
+            a.`addDate` as InfoTime
+            FROM
+            yh_user_uba AS a
+            LEFT JOIN yh_user_reginfo AS b
+            ON a.`E_User_id` = b.user_code
+            LEFT JOIN yh_user_make_card AS c
+            ON c.user_code = a.E_User_id
+            <where>
+                a.is_Del=2 and c.doctor IN (SELECT id FROM `yh_user_admin_info` WHERE user_code = #{usercode})
+                <if test="nameLike!=null">
+                    AND b.name LIKE CONCAT('%',#{nameLike},'%')
+                </if>
+                <if test="usernameLike!=null">
+                    AND b.user_name LIKE CONCAT('%',#{usernameLike},'%')
+                </if>
+                <if test="strTime!=null and endTime!=null   and strTime !=''  and endTime !=''">
+                    and a.`addDate` BETWEEN #{strTime}
+                    AND #{endTime}
+                </if>
+            </where>
+            order by a.`addDate` desc
+
+        </if>
+
+        <if test="TypeName=='血红蛋白'">
+            SELECT
+            b.user_code AS usercode,
+            b.user_name AS username,
+            b.name,
+            CASE
+            WHEN b.gender = 1
+            THEN '男'
+            ELSE '女'
+            END AS sex,
+            a.id AS infoId,
+            CASE
+            WHEN 1 = 1
+            THEN '血红蛋白'
+            END AS InfoName,
+            a.he_hb AS num1,
+            a.he_data AS InfoTime
+            FROM
+            yh_user_hemoglobin AS a
+            LEFT JOIN yh_user_reginfo AS b
+            ON a.user_code = b.user_code
+            LEFT JOIN yh_user_make_card AS c
+            ON c.user_code = a.user_code
+            <where>
+                c.doctor IN (SELECT id FROM `yh_user_admin_info` WHERE user_code = #{usercode})
+                <if test="nameLike!=null">
+                    AND b.name LIKE CONCAT('%',#{nameLike},'%')
+                </if>
+                <if test="usernameLike!=null">
+                    AND b.user_name LIKE CONCAT('%',#{usernameLike},'%')
+                </if>
+                <if test="strTime!=null and endTime!=null   and strTime !=''  and endTime !=''">
+                    and a.he_data BETWEEN #{strTime}
+                    AND #{endTime}
+                </if>
+            </where>
+            order by a.he_data desc
+        </if>
+
+        <if test="TypeName=='其他功能'">
+            SELECT
+            b.user_code AS usercode,
+            b.user_name AS username,
+            b.name,
+            CASE
+            WHEN b.gender = 1
+            THEN '男'
+            ELSE '女'
+            END AS sex,
+            a.otherid AS infoId,
+            CASE
+            WHEN 1 = 1
+            THEN '其他功能'
+            END AS InfoName,
+            a.urine_microprotein AS num1,
+            a.glycosylated_hemoglobin AS num2,
+            a.hcy AS num3,
+            a.hcy AS num4,
+            a.`insertTime` as InfoTime
+            FROM
+            yh_user_otherfunction AS a
+            LEFT JOIN yh_user_reginfo AS b
+            ON a.user_id = b.user_code
+            LEFT JOIN yh_user_make_card AS c
+            ON c.user_code = a.user_id
+            <where>
+                a.is_Del=2 and c.doctor IN (SELECT id FROM `yh_user_admin_info` WHERE user_code = #{usercode})
+                <if test="nameLike!=null">
+                    AND b.name LIKE CONCAT('%',#{nameLike},'%')
+                </if>
+                <if test="usernameLike!=null">
+                    AND b.user_name LIKE CONCAT('%',#{usernameLike},'%')
+                </if>
+                <if test="strTime!=null and endTime!=null   and strTime !=''  and endTime !=''">
+                    and a.`insertTime` BETWEEN #{strTime}
+                    AND #{endTime}
+                </if>
+            </where>
+            order by a.`insertTime` desc
+        </if>
+
+
+        <if test="TypeName=='心电'">
+            SELECT
+            b.user_code AS usercode,
+            b.user_name AS username,
+            b.name,
+            CASE
+            WHEN b.gender = 1
+            THEN '男'
+            ELSE '女'
+            END AS sex,
+            a.U_ECG_Id AS infoId,
+            CASE
+            WHEN 1 = 1
+            THEN '心电'
+            END AS InfoName,
+            a.resurt_text AS num1,
+            a.resurt_text AS num2,
+            a.resurt_text AS num3,
+            a.resurt_text AS num4,
+            a.Entry_Time as InfoTime
+            FROM
+            yh_user_ecg AS a
+            LEFT JOIN yh_user_reginfo AS b
+            ON a.E_User_Id = b.user_code
+            LEFT JOIN yh_user_make_card AS c
+            ON c.user_code = a.E_User_Id
+            <where>
+                a.is_Del=2 and c.doctor IN (SELECT id FROM `yh_user_admin_info` WHERE user_code = #{usercode})
+                <if test="nameLike!=null  and nameLike !=''">
+                    AND b.name LIKE CONCAT('%',#{nameLike},'%')
+                </if>
+                <if test="usernameLike!=null  and usernameLike !=''">
+                    AND b.user_name LIKE CONCAT('%',#{usernameLike},'%')
+                </if>
+                <if test="strTime!=null and endTime!=null   and strTime !=''  and endTime !=''">
+                    and a.`Entry_Time` BETWEEN #{strTime}
+                    AND #{endTime}
+                </if>
+            </where>
+            order by a.`Entry_Time` desc
+        </if>
+
+
+    </select>
+
+
+    <select id="selectByPrimaryKeyForInfoName" resultType="com.yihe.system.domain.TestingVOJO">
+
+        SELECT tableInfo.user_code AS usercode,tableInfo.user_name AS username,tableInfo.name AS `name`,tableInfo.sex AS
+        sex,tableInfo.id AS infoId,tableInfo.InfoName AS infoName,tableInfo.num1 AS num1,
+        tableInfo.num2 AS num2,
+        tableInfo.num3 AS num3,
+        tableInfo.num4 AS num4,tableInfo.Entry_Time AS InfoTime FROM (
+
+        SELECT
+        b.user_code,
+        b.user_name,
+        b.name,
+        CASE
+        WHEN b.gender = 1
+        THEN '男'
+        ELSE '女'
+        END AS sex,
+        a.tid AS id,
+        CASE
+        WHEN 1 = 1
+        THEN '体温'
+        END AS InfoName,
+        a.temperature AS num1,
+        a.temperature AS num2,
+        a.temperature AS num3,
+        a.temperature AS num4,
+        a.`Entry_Time`
+        FROM
+        yh_user_temperature AS a
+        LEFT JOIN yh_user_reginfo AS b
+        ON a.`E_User_Id` = b.user_code
+        LEFT JOIN yh_user_make_card AS c
+        ON c.user_code = a.E_User_Id
+        <where>
+            a.is_Del=2 and c.doctor IN (SELECT id FROM `yh_user_admin_info` WHERE user_code = #{usercode})
+            <if test="nameLike!=null">
+                AND b.name LIKE CONCAT('%',#{nameLike},'%')
+            </if>
+            <if test="usernameLike!=null">
+                AND b.user_name LIKE CONCAT('%',#{usernameLike},'%')
+            </if>
+        </where>
+        UNION
+        SELECT
+        b.user_code,
+        b.user_name,
+        b.name,
+        CASE
+        WHEN b.gender = 1
+        THEN '男'
+        ELSE '女'
+        END AS sex,
+        a.`U_oxygen_Id` AS id,
+        CASE
+        WHEN 1 = 1
+        THEN '血氧'
+        END AS InfoName,
+        a.oxygen AS num1,
+        a.oxygen AS num2,
+        a.oxygen AS num3,
+        a.oxygen AS num4,
+        a.`Entry_Time`
+        FROM
+        yh_user_oxygen AS a
+        LEFT JOIN yh_user_reginfo AS b
+        ON a.`E_User_Id` = b.user_code
+        LEFT JOIN yh_user_make_card AS c
+        ON c.user_code = a.E_User_Id
+        <where>
+            a.is_Del=2 and c.doctor IN (SELECT id FROM `yh_user_admin_info` WHERE user_code = #{usercode})
+            <if test="nameLike!=null">
+                AND b.name LIKE CONCAT('%',#{nameLike},'%')
+            </if>
+            <if test="usernameLike!=null">
+                AND b.user_name LIKE CONCAT('%',#{usernameLike},'%')
+            </if>
+        </where>
+        UNION
+        SELECT
+        b.user_code,
+        b.user_name,
+        b.name,
+        CASE
+        WHEN b.gender = 1
+        THEN '男'
+        ELSE '女'
+        END AS sex,
+        a.`U_Bmi_Id` AS id,
+        CASE
+        WHEN 1 = 1
+        THEN 'BMI'
+        END AS InfoName,
+        a.U_Height AS num1,
+        a.U_Weight AS num2,
+        a.U_Weight AS num3,
+        a.U_Weight AS num4,
+        a.`Entry_Time`
+        FROM
+        yh_user_bmi AS a
+        LEFT JOIN yh_user_reginfo AS b
+        ON a.`E_User_Id` = b.user_code
+        LEFT JOIN yh_user_make_card AS c
+        ON c.user_code = a.E_User_Id
+        <where>
+            a.is_Del=2 and c.doctor IN (SELECT id FROM `yh_user_admin_info` WHERE user_code = #{usercode})
+            <if test="nameLike!=null">
+                AND b.name LIKE CONCAT('%',#{nameLike},'%')
+            </if>
+            <if test="usernameLike!=null">
+                AND b.user_name LIKE CONCAT('%',#{usernameLike},'%')
+            </if>
+        </where>
+        UNION
+        SELECT
+        b.user_code,
+        b.user_name,
+        b.name,
+        CASE
+        WHEN b.gender = 1
+        THEN '男'
+        ELSE '女'
+        END AS sex,
+        a.`U_Bloodpressure_Id` AS id,
+        CASE
+        WHEN 1 = 1
+        THEN '血压'
+        END AS InfoName,
+        a.Sbp AS num1,
+        a.Dbp AS num2,
+        a.Dbp AS num3,
+        a.Dbp AS num4,
+        a.`Entry_Time`
+        FROM
+        yh_user_bloodpressure AS a
+        LEFT JOIN yh_user_reginfo AS b
+        ON a.`E_User_Id` = b.user_code
+        LEFT JOIN yh_user_make_card AS c
+        ON c.user_code = a.E_User_Id
+        <where>
+            a.is_Del=2 and c.doctor IN (SELECT id FROM `yh_user_admin_info` WHERE user_code = #{usercode})
+            <if test="nameLike!=null">
+                AND b.name LIKE CONCAT('%',#{nameLike},'%')
+            </if>
+            <if test="usernameLike!=null">
+                AND b.user_name LIKE CONCAT('%',#{usernameLike},'%')
+            </if>
+        </where>
+        UNION
+        SELECT
+        b.user_code,
+        b.user_name,
+        b.name,
+        CASE
+        WHEN b.gender = 1
+        THEN '男'
+        ELSE '女'
+        END AS sex,
+        a.`U_Bloodsuger_Id` AS id,
+        CASE
+        WHEN 1 = 1
+        THEN '血糖'
+        END AS InfoName,
+        a.Bs AS num1,
+        a.Bs AS num2,
+        a.Bs AS num3,
+        a.Bs AS num4,
+        a.`Entry_Time`
+        FROM
+        yh_user_bloodsuger AS a
+        LEFT JOIN yh_user_reginfo AS b
+        ON a.`E_User_Id` = b.user_code
+        LEFT JOIN yh_user_make_card AS c
+        ON c.user_code = a.E_User_Id
+        <where>
+            a.is_Del=2 and c.doctor IN (SELECT id FROM `yh_user_admin_info` WHERE user_code = #{usercode})
+            <if test="nameLike!=null">
+                AND b.name LIKE CONCAT('%',#{nameLike},'%')
+            </if>
+            <if test="usernameLike!=null">
+                AND b.user_name LIKE CONCAT('%',#{usernameLike},'%')
+            </if>
+        </where>
+        UNION
+        SELECT
+        b.user_code,
+        b.user_name,
+        b.name,
+        CASE
+        WHEN b.gender = 1
+        THEN '男'
+        ELSE '女'
+        END AS sex,
+        a.rid AS id,
+        CASE
+        WHEN 1 = 1
+        THEN '心率'
+        END AS InfoName,
+        a.heart_rate AS num1,
+        a.heart_rate AS num2,
+        a.heart_rate AS num3,
+        a.heart_rate AS num4,
+        a.`Entry_Time`
+        FROM
+        yh_user_heart_rate AS a
+        LEFT JOIN yh_user_reginfo AS b
+        ON a.`E_User_Id` = b.user_code
+        LEFT JOIN yh_user_make_card AS c
+        ON c.user_code = a.E_User_Id
+        <where>
+            a.is_Del=2 and c.doctor IN (SELECT id FROM `yh_user_admin_info` WHERE user_code = #{usercode})
+            <if test="nameLike!=null">
+                AND b.name LIKE CONCAT('%',#{nameLike},'%')
+            </if>
+            <if test="usernameLike!=null">
+                AND b.user_name LIKE CONCAT('%',#{usernameLike},'%')
+            </if>
+        </where>
+        UNION
+        SELECT
+        b.user_code,
+        b.user_name,
+        b.name,
+        CASE
+        WHEN b.gender = 1
+        THEN '男'
+        ELSE '女'
+        END AS sex,
+        a.wubf_id AS id,
+        CASE
+        WHEN 1 = 1
+        THEN '体脂'
+        END AS InfoName,
+        a.fat_rate AS num1,
+        a.fat_rate AS num2,
+        a.fat_rate AS num3,
+        a.fat_rate AS num4,
+        a.`Entry_Time`
+        FROM
+        yh_user_body_fat AS a
+        LEFT JOIN yh_user_reginfo AS b
+        ON a.`E_User_Id` = b.user_code
+        LEFT JOIN yh_user_make_card AS c
+        ON c.user_code = a.E_User_Id
+        <where>
+            a.is_Del=2 and c.doctor IN (SELECT id FROM `yh_user_admin_info` WHERE user_code = #{usercode})
+            <if test="nameLike!=null">
+                AND b.name LIKE CONCAT('%',#{nameLike},'%')
+            </if>
+            <if test="usernameLike!=null">
+                AND b.user_name LIKE CONCAT('%',#{usernameLike},'%')
+            </if>
+        </where>
+        UNION
+        SELECT
+        b.user_code,
+        b.user_name,
+        b.name,
+        CASE
+        WHEN b.gender = 1
+        THEN '男'
+        ELSE '女'
+        END AS sex,
+        a.U_Bloodfat_Id AS id,
+        CASE
+        WHEN 1 = 1
+        THEN '血脂'
+        END AS InfoName,
+        a.Cholesterin AS num1,
+        a.Tring AS num2,
+        a.Hdl AS num3,
+        a.Ldl AS num4,
+        a.`Entry_Time`
+        FROM
+        yh_user_bloodfat AS a
+        LEFT JOIN yh_user_reginfo AS b
+        ON a.`E_User_Id` = b.user_code
+        LEFT JOIN yh_user_make_card AS c
+        ON c.user_code = a.E_User_Id
+        <where>
+            a.is_Del=2 and c.doctor IN (SELECT id FROM `yh_user_admin_info` WHERE user_code = #{usercode})
+            <if test="nameLike!=null">
+                AND b.name LIKE CONCAT('%',#{nameLike},'%')
+            </if>
+            <if test="usernameLike!=null">
+                AND b.user_name LIKE CONCAT('%',#{usernameLike},'%')
+            </if>
+        </where>
+        UNION
+        SELECT
+        b.user_code,
+        b.user_name,
+        b.name,
+        CASE
+        WHEN b.gender = 1
+        THEN '男'
+        ELSE '女'
+        END AS sex,
+        a.renalid AS id,
+        CASE
+        WHEN 1 = 1
+        THEN '肾功能'
+        END AS InfoName,
+        a.creatinine AS num1,
+        a.urea_nitrogen AS num2,
+        a.uric_acid AS num3,
+        a.uric_acid AS num4,
+        a.`inertTime`
+        FROM
+        yh_user_renalfunction AS a
+        LEFT JOIN yh_user_reginfo AS b
+        ON a.`user_id` = b.user_code
+        LEFT JOIN yh_user_make_card AS c
+        ON c.user_code = a.user_id
+        <where>
+            a.is_Del=2 and c.doctor IN (SELECT id FROM `yh_user_admin_info` WHERE user_code = #{usercode})
+            <if test="nameLike!=null">
+                AND b.name LIKE CONCAT('%',#{nameLike},'%')
+            </if>
+            <if test="usernameLike!=null">
+                AND b.user_name LIKE CONCAT('%',#{usernameLike},'%')
+            </if>
+        </where>
+        UNION
+        SELECT
+        b.user_code,
+        b.user_name,
+        b.name,
+        CASE
+        WHEN b.gender = 1
+        THEN '男'
+        ELSE '女'
+        END AS sex,
+        a.liverid AS id,
+        CASE
+        WHEN 1 = 1
+        THEN '肝功能'
+        END AS InfoName,
+        a.gu_Bing AS num1,
+        a.millet_straw AS num2,
+        a.serum_albumin AS num3,
+        a.serum_globulin AS num4,
+        a.`insertTime`
+        FROM
+        yh_user_liverfunction AS a
+        LEFT JOIN yh_user_reginfo AS b
+        ON a.`user_id` = b.user_code
+        LEFT JOIN yh_user_make_card AS c
+        ON c.user_code = a.user_id
+        <where>
+            a.is_Del=2 and c.doctor IN (SELECT id FROM `yh_user_admin_info` WHERE user_code = #{usercode})
+            <if test="nameLike!=null">
+                AND b.name LIKE CONCAT('%',#{nameLike},'%')
+            </if>
+            <if test="usernameLike!=null">
+                AND b.user_name LIKE CONCAT('%',#{usernameLike},'%')
+            </if>
+        </where>
+        UNION
+        SELECT
+        b.user_code,
+        b.user_name,
+        b.name,
+        CASE
+        WHEN b.gender = 1
+        THEN '男'
+        ELSE '女'
+        END AS sex,
+        a.Uba_Id AS id,
+        CASE
+        WHEN 1 = 1
+        THEN '尿检'
+        END AS InfoName,
+        a.whiteBloodCell AS num1,
+        a.urineProtein AS num2,
+        a.ketone AS num3,
+        a.ketone AS num4,
+        a.`addDate`
+        FROM
+        yh_user_uba AS a
+        LEFT JOIN yh_user_reginfo AS b
+        ON a.`E_User_id` = b.user_code
+        LEFT JOIN yh_user_make_card AS c
+        ON c.user_code = a.E_User_id
+        <where>
+            a.is_Del=2 and c.doctor IN (SELECT id FROM `yh_user_admin_info` WHERE user_code = #{usercode})
+            <if test="nameLike!=null">
+                AND b.name LIKE CONCAT('%',#{nameLike},'%')
+            </if>
+            <if test="usernameLike!=null">
+                AND b.user_name LIKE CONCAT('%',#{usernameLike},'%')
+            </if>
+        </where>
+        UNION
+        SELECT
+        b.user_code,
+        b.user_name,
+        b.name,
+        CASE
+        WHEN b.gender = 1
+        THEN '男'
+        ELSE '女'
+        END AS sex,
+        a.otherid AS id,
+        CASE
+        WHEN 1 = 1
+        THEN '其他功能'
+        END AS InfoName,
+        a.urine_microprotein AS num1,
+        a.glycosylated_hemoglobin AS num2,
+        a.hcy AS num3,
+        a.hcy AS num4,
+        a.`insertTime`
+        FROM
+        yh_user_otherfunction AS a
+        LEFT JOIN yh_user_reginfo AS b
+        ON a.user_id = b.user_code
+        LEFT JOIN yh_user_make_card AS c
+        ON c.user_code = a.user_id
+        <where>
+            a.is_Del=2 and c.doctor IN (SELECT id FROM `yh_user_admin_info` WHERE user_code = #{usercode})
+            <if test="nameLike!=null">
+                AND b.name LIKE CONCAT('%',#{nameLike},'%')
+            </if>
+            <if test="usernameLike!=null">
+                AND b.user_name LIKE CONCAT('%',#{usernameLike},'%')
+            </if>
+        </where>
+        UNION
+        SELECT
+        b.user_code,
+        b.user_name,
+        b.name,
+        CASE
+        WHEN b.gender = 1
+        THEN '男'
+        ELSE '女'
+        END AS sex,
+        a.U_ECG_Id AS id,
+        CASE
+        WHEN 1 = 1
+        THEN '心电'
+        END AS InfoName,
+        a.resurt_text AS num1,
+        a.resurt_text AS num2,
+        a.resurt_text AS num3,
+        a.resurt_text AS num4,
+        a.Entry_Time
+        FROM
+        yh_user_ecg AS a
+        LEFT JOIN yh_user_reginfo AS b
+        ON a.E_User_Id = b.user_code
+        LEFT JOIN yh_user_make_card AS c
+        ON c.user_code = a.E_User_Id
+        <where>
+            a.is_Del=2 and c.doctor IN (SELECT id FROM `yh_user_admin_info` WHERE user_code = #{usercode})
+            <if test="nameLike!=null  and nameLike !=''">
+                AND b.name LIKE CONCAT('%',#{nameLike},'%')
+            </if>
+            <if test="usernameLike!=null  and usernameLike !=''">
+                AND b.user_name LIKE CONCAT('%',#{usernameLike},'%')
+            </if>
+        </where>
+        ) AS tableInfo
+        <where>
+            <if test="strTime!=null and endTime!=null   and strTime !=''  and endTime !=''">
+                and tableInfo.Entry_Time BETWEEN #{strTime}
+                AND #{endTime}
+            </if>
+            <if test="TypeName!=null and TypeName !=''">
+                AND tableInfo.InfoName=#{TypeName}
+            </if>
+        </where>
+        ORDER BY tableInfo.Entry_Time DESC
+
+    </select>
+    <select id="selectByPrimaryKeyForInfoName2" resultType="com.yihe.system.domain.TestingVOJO">
+
+        SELECT tableInfo.user_code AS usercode,tableInfo.user_name AS username,tableInfo.name AS `name`,tableInfo.sex AS
+        sex,tableInfo.id AS infoId,tableInfo.InfoName AS infoName,tableInfo.num1 AS num1,
+        tableInfo.num2 AS num2,
+        tableInfo.num3 AS num3,
+        tableInfo.num4 AS num4,tableInfo.Entry_Time AS InfoTime FROM (
+
+        SELECT
+        b.user_code,
+        b.user_name,
+        b.name,
+        CASE
+        WHEN b.gender = 1
+        THEN '男'
+        ELSE '女'
+        END AS sex,
+        a.tid AS id,
+        CASE
+        WHEN 1 = 1
+        THEN '体温'
+        END AS InfoName,
+        a.temperature AS num1,
+        a.temperature AS num2,
+        a.temperature AS num3,
+        a.temperature AS num4,
+        a.`Entry_Time`
+        FROM
+        yh_user_temperature AS a
+        LEFT JOIN yh_user_reginfo AS b
+        ON a.`E_User_Id` = b.user_code
+        LEFT JOIN yh_user_make_card AS c
+        ON c.user_code = a.E_User_Id
+        <where>
+            a.is_Del=2 and c.doctor IN (SELECT id FROM `yh_user_admin_info` WHERE user_code = #{usercode})
+            <if test="nameLike!=null">
+                AND b.name LIKE CONCAT('%',#{nameLike},'%')
+            </if>
+            <if test="usernameLike!=null">
+                AND b.user_name LIKE CONCAT('%',#{usernameLike},'%')
+            </if>
+        </where>
+        UNION
+        SELECT
+        b.user_code,
+        b.user_name,
+        b.name,
+        CASE
+        WHEN b.gender = 1
+        THEN '男'
+        ELSE '女'
+        END AS sex,
+        a.`U_oxygen_Id` AS id,
+        CASE
+        WHEN 1 = 1
+        THEN '血氧'
+        END AS InfoName,
+        a.oxygen AS num1,
+        a.oxygen AS num2,
+        a.oxygen AS num3,
+        a.oxygen AS num4,
+        a.`Entry_Time`
+        FROM
+        yh_user_oxygen AS a
+        LEFT JOIN yh_user_reginfo AS b
+        ON a.`E_User_Id` = b.user_code
+        LEFT JOIN yh_user_make_card AS c
+        ON c.user_code = a.E_User_Id
+        <where>
+            a.is_Del=2 and c.doctor IN (SELECT id FROM `yh_user_admin_info` WHERE user_code = #{usercode})
+            <if test="nameLike!=null">
+                AND b.name LIKE CONCAT('%',#{nameLike},'%')
+            </if>
+            <if test="usernameLike!=null">
+                AND b.user_name LIKE CONCAT('%',#{usernameLike},'%')
+            </if>
+        </where>
+        UNION
+        SELECT
+        b.user_code,
+        b.user_name,
+        b.name,
+        CASE
+        WHEN b.gender = 1
+        THEN '男'
+        ELSE '女'
+        END AS sex,
+        a.`U_Bmi_Id` AS id,
+        CASE
+        WHEN 1 = 1
+        THEN 'BMI'
+        END AS InfoName,
+        a.U_Height AS num1,
+        a.U_Weight AS num2,
+        a.U_Weight AS num3,
+        a.U_Weight AS num4,
+        a.`Entry_Time`
+        FROM
+        yh_user_bmi AS a
+        LEFT JOIN yh_user_reginfo AS b
+        ON a.`E_User_Id` = b.user_code
+        LEFT JOIN yh_user_make_card AS c
+        ON c.user_code = a.E_User_Id
+        <where>
+            a.is_Del=2 and c.doctor IN (SELECT id FROM `yh_user_admin_info` WHERE user_code = #{usercode})
+            <if test="nameLike!=null">
+                AND b.name LIKE CONCAT('%',#{nameLike},'%')
+            </if>
+            <if test="usernameLike!=null">
+                AND b.user_name LIKE CONCAT('%',#{usernameLike},'%')
+            </if>
+        </where>
+        UNION
+        SELECT
+        b.user_code,
+        b.user_name,
+        b.name,
+        CASE
+        WHEN b.gender = 1
+        THEN '男'
+        ELSE '女'
+        END AS sex,
+        a.`U_Bloodpressure_Id` AS id,
+        CASE
+        WHEN 1 = 1
+        THEN '血压'
+        END AS InfoName,
+        a.Sbp AS num1,
+        a.Dbp AS num2,
+        a.Dbp AS num3,
+        a.Dbp AS num4,
+        a.`Entry_Time`
+        FROM
+        yh_user_bloodpressure AS a
+        LEFT JOIN yh_user_reginfo AS b
+        ON a.`E_User_Id` = b.user_code
+        LEFT JOIN yh_user_make_card AS c
+        ON c.user_code = a.E_User_Id
+        <where>
+            a.is_Del=2 and c.doctor IN (SELECT id FROM `yh_user_admin_info` WHERE user_code = #{usercode})
+            <if test="nameLike!=null">
+                AND b.name LIKE CONCAT('%',#{nameLike},'%')
+            </if>
+            <if test="usernameLike!=null">
+                AND b.user_name LIKE CONCAT('%',#{usernameLike},'%')
+            </if>
+        </where>
+        UNION
+        SELECT
+        b.user_code,
+        b.user_name,
+        b.name,
+        CASE
+        WHEN b.gender = 1
+        THEN '男'
+        ELSE '女'
+        END AS sex,
+        a.`U_Bloodsuger_Id` AS id,
+        CASE
+        WHEN 1 = 1
+        THEN '血糖'
+        END AS InfoName,
+        a.Bs AS num1,
+        a.Bs AS num2,
+        a.Bs AS num3,
+        a.Bs AS num4,
+        a.`Entry_Time`
+        FROM
+        yh_user_bloodsuger AS a
+        LEFT JOIN yh_user_reginfo AS b
+        ON a.`E_User_Id` = b.user_code
+        LEFT JOIN yh_user_make_card AS c
+        ON c.user_code = a.E_User_Id
+        <where>
+            a.is_Del=2 and c.doctor IN (SELECT id FROM `yh_user_admin_info` WHERE user_code = #{usercode})
+            <if test="nameLike!=null">
+                AND b.name LIKE CONCAT('%',#{nameLike},'%')
+            </if>
+            <if test="usernameLike!=null">
+                AND b.user_name LIKE CONCAT('%',#{usernameLike},'%')
+            </if>
+        </where>
+        UNION
+        SELECT
+        b.user_code,
+        b.user_name,
+        b.name,
+        CASE
+        WHEN b.gender = 1
+        THEN '男'
+        ELSE '女'
+        END AS sex,
+        a.rid AS id,
+        CASE
+        WHEN 1 = 1
+        THEN '心率'
+        END AS InfoName,
+        a.heart_rate AS num1,
+        a.heart_rate AS num2,
+        a.heart_rate AS num3,
+        a.heart_rate AS num4,
+        a.`Entry_Time`
+        FROM
+        yh_user_heart_rate AS a
+        LEFT JOIN yh_user_reginfo AS b
+        ON a.`E_User_Id` = b.user_code
+        LEFT JOIN yh_user_make_card AS c
+        ON c.user_code = a.E_User_Id
+        <where>
+            a.is_Del=2 and c.doctor IN (SELECT id FROM `yh_user_admin_info` WHERE user_code = #{usercode})
+            <if test="nameLike!=null">
+                AND b.name LIKE CONCAT('%',#{nameLike},'%')
+            </if>
+            <if test="usernameLike!=null">
+                AND b.user_name LIKE CONCAT('%',#{usernameLike},'%')
+            </if>
+        </where>
+        UNION
+        SELECT
+        b.user_code,
+        b.user_name,
+        b.name,
+        CASE
+        WHEN b.gender = 1
+        THEN '男'
+        ELSE '女'
+        END AS sex,
+        a.wubf_id AS id,
+        CASE
+        WHEN 1 = 1
+        THEN '体脂'
+        END AS InfoName,
+        a.fat_rate AS num1,
+        a.fat_rate AS num2,
+        a.fat_rate AS num3,
+        a.fat_rate AS num4,
+        a.`Entry_Time`
+        FROM
+        yh_user_body_fat AS a
+        LEFT JOIN yh_user_reginfo AS b
+        ON a.`E_User_Id` = b.user_code
+        LEFT JOIN yh_user_make_card AS c
+        ON c.user_code = a.E_User_Id
+        <where>
+            a.is_Del=2 and c.doctor IN (SELECT id FROM `yh_user_admin_info` WHERE user_code = #{usercode})
+            <if test="nameLike!=null">
+                AND b.name LIKE CONCAT('%',#{nameLike},'%')
+            </if>
+            <if test="usernameLike!=null">
+                AND b.user_name LIKE CONCAT('%',#{usernameLike},'%')
+            </if>
+        </where>
+        UNION
+        SELECT
+        b.user_code,
+        b.user_name,
+        b.name,
+        CASE
+        WHEN b.gender = 1
+        THEN '男'
+        ELSE '女'
+        END AS sex,
+        a.U_Bloodfat_Id AS id,
+        CASE
+        WHEN 1 = 1
+        THEN '血脂'
+        END AS InfoName,
+        a.Cholesterin AS num1,
+        a.Tring AS num2,
+        a.Hdl AS num3,
+        a.Ldl AS num4,
+        a.`Entry_Time`
+        FROM
+        yh_user_bloodfat AS a
+        LEFT JOIN yh_user_reginfo AS b
+        ON a.`E_User_Id` = b.user_code
+        LEFT JOIN yh_user_make_card AS c
+        ON c.user_code = a.E_User_Id
+        <where>
+            a.is_Del=2 and c.doctor IN (SELECT id FROM `yh_user_admin_info` WHERE user_code = #{usercode})
+            <if test="nameLike!=null">
+                AND b.name LIKE CONCAT('%',#{nameLike},'%')
+            </if>
+            <if test="usernameLike!=null">
+                AND b.user_name LIKE CONCAT('%',#{usernameLike},'%')
+            </if>
+        </where>
+        UNION
+        SELECT
+        b.user_code,
+        b.user_name,
+        b.name,
+        CASE
+        WHEN b.gender = 1
+        THEN '男'
+        ELSE '女'
+        END AS sex,
+        a.renalid AS id,
+        CASE
+        WHEN 1 = 1
+        THEN '肾功能'
+        END AS InfoName,
+        a.creatinine AS num1,
+        a.urea_nitrogen AS num2,
+        a.uric_acid AS num3,
+        a.uric_acid AS num4,
+        a.`inertTime`
+        FROM
+        yh_user_renalfunction AS a
+        LEFT JOIN yh_user_reginfo AS b
+        ON a.`user_id` = b.user_code
+        LEFT JOIN yh_user_make_card AS c
+        ON c.user_code = a.user_id
+        <where>
+            a.is_Del=2 and c.doctor IN (SELECT id FROM `yh_user_admin_info` WHERE user_code = #{usercode})
+            <if test="nameLike!=null">
+                AND b.name LIKE CONCAT('%',#{nameLike},'%')
+            </if>
+            <if test="usernameLike!=null">
+                AND b.user_name LIKE CONCAT('%',#{usernameLike},'%')
+            </if>
+        </where>
+        UNION
+        SELECT
+        b.user_code,
+        b.user_name,
+        b.name,
+        CASE
+        WHEN b.gender = 1
+        THEN '男'
+        ELSE '女'
+        END AS sex,
+        a.liverid AS id,
+        CASE
+        WHEN 1 = 1
+        THEN '肝功能'
+        END AS InfoName,
+        a.gu_Bing AS num1,
+        a.millet_straw AS num2,
+        a.serum_albumin AS num3,
+        a.serum_globulin AS num4,
+        a.`insertTime`
+        FROM
+        yh_user_liverfunction AS a
+        LEFT JOIN yh_user_reginfo AS b
+        ON a.`user_id` = b.user_code
+        LEFT JOIN yh_user_make_card AS c
+        ON c.user_code = a.user_id
+        <where>
+            a.is_Del=2 and c.doctor IN (SELECT id FROM `yh_user_admin_info` WHERE user_code = #{usercode})
+            <if test="nameLike!=null">
+                AND b.name LIKE CONCAT('%',#{nameLike},'%')
+            </if>
+            <if test="usernameLike!=null">
+                AND b.user_name LIKE CONCAT('%',#{usernameLike},'%')
+            </if>
+        </where>
+        UNION
+        SELECT
+        b.user_code,
+        b.user_name,
+        b.name,
+        CASE
+        WHEN b.gender = 1
+        THEN '男'
+        ELSE '女'
+        END AS sex,
+        a.Uba_Id AS id,
+        CASE
+        WHEN 1 = 1
+        THEN '尿检'
+        END AS InfoName,
+        a.whiteBloodCell AS num1,
+        a.urineProtein AS num2,
+        a.ketone AS num3,
+        a.ketone AS num4,
+        a.`addDate`
+        FROM
+        yh_user_uba AS a
+        LEFT JOIN yh_user_reginfo AS b
+        ON a.`E_User_id` = b.user_code
+        LEFT JOIN yh_user_make_card AS c
+        ON c.user_code = a.E_User_id
+        <where>
+            a.is_Del=2 and c.doctor IN (SELECT id FROM `yh_user_admin_info` WHERE user_code = #{usercode})
+            <if test="nameLike!=null">
+                AND b.name LIKE CONCAT('%',#{nameLike},'%')
+            </if>
+            <if test="usernameLike!=null">
+                AND b.user_name LIKE CONCAT('%',#{usernameLike},'%')
+            </if>
+        </where>
+        UNION
+        SELECT
+        b.user_code,
+        b.user_name,
+        b.name,
+        CASE
+        WHEN b.gender = 1
+        THEN '男'
+        ELSE '女'
+        END AS sex,
+        a.otherid AS id,
+        CASE
+        WHEN 1 = 1
+        THEN '其他功能'
+        END AS InfoName,
+        a.urine_microprotein AS num1,
+        a.glycosylated_hemoglobin AS num2,
+        a.hcy AS num3,
+        a.hcy AS num4,
+        a.`insertTime`
+        FROM
+        yh_user_otherfunction AS a
+        LEFT JOIN yh_user_reginfo AS b
+        ON a.user_id = b.user_code
+        LEFT JOIN yh_user_make_card AS c
+        ON c.user_code = a.user_id
+        <where>
+            a.is_Del=2 and c.doctor IN (SELECT id FROM `yh_user_admin_info` WHERE user_code = #{usercode})
+            <if test="nameLike!=null">
+                AND b.name LIKE CONCAT('%',#{nameLike},'%')
+            </if>
+            <if test="usernameLike!=null">
+                AND b.user_name LIKE CONCAT('%',#{usernameLike},'%')
+            </if>
+        </where>
+        UNION
+        SELECT
+        b.user_code,
+        b.user_name,
+        b.name,
+        CASE
+        WHEN b.gender = 1
+        THEN '男'
+        ELSE '女'
+        END AS sex,
+        a.U_ECG_Id AS id,
+        CASE
+        WHEN 1 = 1
+        THEN '心电'
+        END AS InfoName,
+        a.resurt_text AS num1,
+        a.resurt_text AS num2,
+        a.resurt_text AS num3,
+        a.resurt_text AS num4,
+        a.Entry_Time
+        FROM
+        yh_user_ecg AS a
+        LEFT JOIN yh_user_reginfo AS b
+        ON a.E_User_Id = b.user_code
+        LEFT JOIN yh_user_make_card AS c
+        ON c.user_code = a.E_User_Id
+        <where>
+            a.is_Del=2 and c.doctor IN (SELECT id FROM `yh_user_admin_info` WHERE user_code = #{usercode})
+            <if test="nameLike!=null  and nameLike !=''">
+                AND b.name LIKE CONCAT('%',#{nameLike},'%')
+            </if>
+            <if test="usernameLike!=null  and usernameLike !=''">
+                AND b.user_name LIKE CONCAT('%',#{usernameLike},'%')
+            </if>
+        </where>
+        ) AS tableInfo
+        <where>
+            <if test="strTime!=null and endTime!=null   and strTime !=''  and endTime !=''">
+                and tableInfo.Entry_Time BETWEEN #{strTime}
+                AND #{endTime}
+            </if>
+            <if test="TypeName!=null and TypeName !=''">
+                AND tableInfo.InfoName=#{TypeName}
+            </if>
+        </where>
+        ORDER BY tableInfo.Entry_Time DESC
+        limit #{pageNum},#{pageSize}
+    </select>
+    <select id="selectByPrimaryKeyByUsercodeLimit" resultMap="BaseResultMap" parameterType="java.lang.String">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM yh_user_temperature WHERE E_user_id=#{usercode} and is_Del=2 ORDER BY Entry_Time DESC LIMIT 1
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from yh_user_temperature
+    where tid = #{tid,jdbcType=INTEGER}
+  </delete>
+    <insert id="insert" parameterType="com.yihe.system.domain.YHUserTemperature">
+    insert into yh_user_temperature (tid, temperature, Entry_Time, 
+      Is_Del, E_User_Id, Data_Source
+      )
+    values (#{tid,jdbcType=INTEGER}, #{temperature,jdbcType=REAL}, #{entryTime,jdbcType=VARCHAR}, 
+      #{isDel,jdbcType=INTEGER}, #{eUserId,jdbcType=INTEGER}, #{dataSource,jdbcType=VARCHAR}
+      )
+  </insert>
+    <insert id="insertSelective" parameterType="com.yihe.system.domain.YHUserTemperature">
+        insert into yh_user_temperature
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="tid != null">
+                tid,
+            </if>
+            <if test="temperature != null">
+                temperature,
+            </if>
+            <if test="entryTime != null">
+                Entry_Time,
+            </if>
+            <if test="isDel != null">
+                Is_Del,
+            </if>
+            <if test="eUserId != null">
+                E_User_Id,
+            </if>
+            <if test="dataSource != null">
+                Data_Source,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="tid != null">
+                #{tid,jdbcType=INTEGER},
+            </if>
+            <if test="temperature != null">
+                #{temperature,jdbcType=REAL},
+            </if>
+            <if test="entryTime != null">
+                #{entryTime,jdbcType=VARCHAR},
+            </if>
+            <if test="isDel != null">
+                #{isDel,jdbcType=INTEGER},
+            </if>
+            <if test="eUserId != null">
+                #{eUserId,jdbcType=INTEGER},
+            </if>
+            <if test="dataSource != null">
+                #{dataSource,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.yihe.system.domain.YHUserTemperature">
+        update yh_user_temperature
+        <set>
+            <if test="temperature != null">
+                temperature = #{temperature,jdbcType=REAL},
+            </if>
+            <if test="entryTime != null">
+                Entry_Time = #{entryTime,jdbcType=VARCHAR},
+            </if>
+            <if test="isDel != null">
+                Is_Del = #{isDel,jdbcType=INTEGER},
+            </if>
+            <if test="eUserId != null">
+                E_User_Id = #{eUserId,jdbcType=INTEGER},
+            </if>
+            <if test="dataSource != null">
+                Data_Source = #{dataSource,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where tid = #{tid,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.yihe.system.domain.YHUserTemperature">
+    update yh_user_temperature
+    set temperature = #{temperature,jdbcType=REAL},
+      Entry_Time = #{entryTime,jdbcType=VARCHAR},
+      Is_Del = #{isDel,jdbcType=INTEGER},
+      E_User_Id = #{eUserId,jdbcType=INTEGER},
+      Data_Source = #{dataSource,jdbcType=VARCHAR}
+    where tid = #{tid,jdbcType=INTEGER}
+  </update>
+    <!--  查询用户体温 -->
+    <select id="selectUserAnimalHeat" resultType="map" parameterType="java.lang.String">
+    select  tw.temperature,
+	(select count(1) from yh_user_temperature where E_User_Id=#{ eUserId,jdbcType=INTEGER} and Is_Del = 2) as num,
+	tw.Data_Source,tw.Entry_Time
+	from yh_user_reginfo as reg 
+	inner join yh_user_temperature tw
+	on reg.user_code = tw.E_User_Id 
+	and tw.tid= (select tid from yh_user_temperature where E_User_Id=#{ eUserId,jdbcType=INTEGER} and Is_Del = 2 order by Entry_Time desc limit 1 )
+  </select>
+    <select id="selectPageByParam" resultMap="BaseResultMap" parameterType="java.lang.String">
+   select  tw.temperature,tw.Entry_Time
+		from yh_user_reginfo as reg 
+		inner join yh_user_temperature tw
+		on reg.user_code = tw.E_User_Id 
+		where reg.user_code  = #{ eUserId,jdbcType=INTEGER}
+		and Is_Del = 2
+  		 order by tw.Entry_Time desc 
+  </select>
+    <select id="selectTemperature" resultMap="BaseResultMap" parameterType="java.lang.String">
+    select  tw.temperature,tw.Entry_Time
+	from yh_user_reginfo as reg 
+	inner join yh_user_temperature tw
+	on reg.user_code = tw.E_User_Id 
+	and Is_Del = 2
+	 where reg.user_code=#{ eUserId,jdbcType=INTEGER} order by Entry_Time desc 
+  </select>
+</mapper>

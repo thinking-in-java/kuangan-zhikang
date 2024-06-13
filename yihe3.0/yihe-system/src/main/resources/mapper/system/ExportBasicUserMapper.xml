@@ -1,0 +1,868 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yihe.system.mapper.ExportBasicUserMapper">
+    <resultMap type="com.yihe.system.domain.YhFoodUserDiary" id="YhFoodUserDiaryResult">
+        <result property="uFdId"    column="U_Fd_Id"    />
+        <result property="cTime"    column="C_Time"    />
+        <result property="energyLevel"    column="Energy_Level"    />
+        <result property="dataSources"    column="Data_Sources"    />
+        <result property="rId"    column="R_Id"    />
+        <result property="fat"    column="Fat"    />
+        <result property="cho"    column="Cho"    />
+        <result property="cholesterol"    column="Cholesterol"    />
+        <result property="energyKcal"    column="Energy_Kcal"    />
+        <result property="fElements"    column="F_Elements"    />
+        <result property="acElements"    column="Ac_Elements"    />
+        <result property="isDel"    column="Is_Del"    />
+        <result property="userCode"    column="user_code"    />
+        <result property="protein"    column="Protein"    />
+        <result property="alvol"    column="Alvol"    />
+        <result property="cellulose"    column="Cellulose"    />
+        <result column="user_name" property="userName" jdbcType="VARCHAR" />
+        <result column="gender" property="gender" jdbcType="INTEGER" />
+        <result column="birth_date" property="birthdate" jdbcType="TIMESTAMP" />
+    </resultMap>
+
+    <resultMap type="com.yihe.system.domain.YhSportDiary" id="YhSportDiaryResult">
+        <result property="uSportId"    column="u_sport_id"    />
+        <result property="entryTime"    column="Entry_Time"    />
+        <result property="uweight"    column="Uweight"    />
+        <result property="tenergy"    column="Tenergy"    />
+        <result property="diaryDetails"    column="Diary_Details"    />
+        <result column="Diary_Boutique" property="diaryBoutique" jdbcType="VARCHAR" />
+        <result column="Diary_Recommend" property="diaryRecommend" jdbcType="VARCHAR" />
+        <result property="userCode"    column="user_code"    />
+        <result property="remark"    column="remark"    />
+        <result property="number"    column="number"    />
+        <result property="userName"    column="userName"    />
+        <result property="gender"    column="gender"    />
+    </resultMap>
+
+    <select id="jiankangfengxiandatanouser" resultType="com.yihe.system.domain.AssessmentOfTotalTable" parameterType="com.yihe.system.domain.BasicUser">
+        select *,count(a.newtime)as
+        healthAssessment from (select reg.user_code as usercode,reg.name as name,reg.gender as sex,repot.qtime as newtime,reg.Org_Code from yh_user_reginfo reg
+        left join yh_disease_assess_total_report2 repot on repot.user_code=reg.user_code
+        LEFT JOIN yh_user_role_power power ON reg.user_code=power.userId
+        LEFT JOIN yh_user_role urole ON urole.role_id=power.roleId
+        <where>
+            urole.role_type=3
+            <if test="begantime != null and begantime !='' and yonghu == 1">
+                and repot.qtime &gt; #{begantime}
+            </if>
+            <if test="endtime != null and endtime !='' and yonghu == 1">
+                and repot.qtime &lt; #{endtime}
+            </if>
+            <if test="orgcode != null and orgcode !='' ">
+                and reg.Org_Code like concat('%', #{orgcode}, '%')
+            </if>
+            <if test="yonghu == 1">and repot.qtime is not null
+            </if>
+            <if test="yonghu != 1" >
+                 and repot.qtime is  null
+            </if>
+        </where>
+        order by repot.qtime DESC
+        ) a
+        GROUP BY
+        a.usercode
+    </select>
+
+
+    <select id="chagjianzhengzhuang" resultType="com.yihe.system.domain.AssessmentOfTotalTable" parameterType="com.yihe.system.domain.BasicUser">
+        select *,count(a.newtime)as
+        healthAssessment from (select reg.user_code as usercode,reg.name as name,reg.gender as sex,repot.result_time   as newtime,reg.Org_Code from yh_user_reginfo reg
+        left join  yh_pain_total_report_record repot on repot.user_code=reg.user_code
+        LEFT JOIN yh_user_role_power power ON reg.user_code=power.userId
+        LEFT JOIN yh_user_role urole ON urole.role_id=power.roleId
+        <where>
+            urole.role_type=3
+            <if test="begantime != null and begantime !='' and yonghu == 1" >
+                and repot.result_time &gt; #{begantime}
+            </if>
+            <if test="endtime != null and endtime !='' and yonghu == 1" >
+                and repot.result_time &lt; #{endtime}
+            </if>
+            <if test="orgcode != null and orgcode !='' " >
+                and reg.Org_Code like concat('%', #{orgcode}, '%')
+            </if>
+            <if test="yonghu == 1" >
+                and repot.result_time is not null
+            </if>
+            <if test="yonghu != 1" >
+                and repot.result_time is  null
+            </if>
+        </where>
+        order by repot.result_time DESC
+        ) a
+        GROUP BY
+        a.usercode
+    </select>
+
+    <select id="axingdata" resultType="com.yihe.system.domain.AssessmentOfTotalTable" parameterType="com.yihe.system.domain.BasicUser">
+        select *,count(a.newtime)as healthAssessment from (select reg.user_code as usercode,reg.name as name,reg.gender as sex,repot.Evaluate_Date  as newtime,reg.Org_Code from yh_user_reginfo reg
+        left join  yh_pressure_evaluate repot on repot.User_Code=reg.user_code
+        LEFT JOIN yh_user_role_power power ON reg.user_code=power.userId
+        LEFT JOIN yh_user_role urole ON urole.role_id=power.roleId
+        <where>
+            urole.role_type=3
+            <if test="begantime != null and begantime !='' and yonghu == 1" >
+                and date(repot.Evaluate_Date) &gt; #{begantime}
+            </if>
+            <if test="endtime != null and endtime !='' and yonghu == 1" >
+                and date(repot.Evaluate_Date) &lt; #{endtime}
+            </if>
+            <if test="orgcode != null and orgcode !='' " >
+                and reg.Org_Code like concat('%', #{orgcode}, '%')
+            </if>
+            <if test="yonghu == 1" >
+                and repot.Evaluate_Data is not null and repot.Evaluate_Type=1
+            </if>
+            <if test="yonghu != 1" >
+                and repot.Evaluate_Data is  null
+            </if>
+        </where>
+        order by date(repot.Evaluate_Date) DESC
+        ) a
+        GROUP BY
+        a.usercode
+    </select>
+
+    <select id="pstridata" resultType="com.yihe.system.domain.AssessmentOfTotalTable" parameterType="com.yihe.system.domain.BasicUser">
+        select *,count(a.newtime)as healthAssessment from (select reg.user_code as usercode,reg.name as name,reg.gender as sex,repot.Evaluate_Date  as newtime,reg.Org_Code from yh_user_reginfo reg
+        left join  yh_pressure_evaluate repot on repot.User_Code=reg.user_code
+        LEFT JOIN yh_user_role_power power ON reg.user_code=power.userId
+        LEFT JOIN yh_user_role urole ON urole.role_id=power.roleId
+        <where>
+            urole.role_type=3
+            <if test="begantime != null and begantime !='' and yonghu == 1" >
+                and date(repot.Evaluate_Date) &gt; #{begantime}
+            </if>
+            <if test="endtime != null and endtime !='' and yonghu == 1" >
+                and date(repot.Evaluate_Date) &lt; #{endtime}
+            </if>
+            <if test="orgcode != null and orgcode !='' " >
+                and reg.Org_Code like concat('%', #{orgcode}, '%')
+            </if>
+            <if test="yonghu == 1" >
+                and repot.Evaluate_Data is not null and repot.Evaluate_Type=2
+            </if>
+            <if test="yonghu != 1" >
+                and repot.Evaluate_Data is  null
+            </if>
+        </where>
+        order by date(repot.Evaluate_Date) DESC
+        ) a
+        GROUP BY
+        a.usercode
+    </select>
+
+
+    <select id="xinlijiankangdata" resultType="com.yihe.system.domain.AssessmentOfTotalTable" parameterType="com.yihe.system.domain.BasicUser">
+        select *,count(a.newtime)as healthAssessment from (select reg.user_code as usercode,reg.name as name,reg.gender as sex,repot.Evaluate_Date  as newtime,reg.Org_Code from yh_user_reginfo reg
+        left join  yh_pressure_evaluate repot on repot.User_Code=reg.user_code
+        LEFT JOIN yh_user_role_power power ON reg.user_code=power.userId
+        LEFT JOIN yh_user_role urole ON urole.role_id=power.roleId
+        <where>
+            urole.role_type=3
+            <if test="begantime != null and begantime !=''  and yonghu == 1" >
+                and date(repot.Evaluate_Date) &gt; #{begantime}
+            </if>
+            <if test="endtime != null and endtime !='' and yonghu == 1" >
+                and date(repot.Evaluate_Date) &lt; #{endtime}
+            </if>
+            <if test="orgcode != null and orgcode !=''" >
+                and reg.Org_Code like concat('%', #{orgcode}, '%')
+            </if>
+            <if test="yonghu == 1" >
+                and repot.Evaluate_Data is not null and repot.Evaluate_Type=3
+            </if>
+            <if test="yonghu != 1" >
+                and repot.Evaluate_Data is  null
+            </if>
+        </where>
+        order by date(repot.Evaluate_Date) DESC
+        ) a
+        GROUP BY
+        a.usercode
+    </select>
+
+    <select id="shuimiandata" resultType="com.yihe.system.domain.AssessmentOfTotalTable" parameterType="com.yihe.system.domain.BasicUser">
+        select *,count(a.newtime)as healthAssessment from (select reg.user_code as usercode,reg.name as name,reg.gender as sex,repot.Evaluate_Date  as newtime,reg.Org_Code from yh_user_reginfo reg
+        left join  yh_pressure_evaluate repot on repot.User_Code=reg.user_code
+        LEFT JOIN yh_user_role_power power ON reg.user_code=power.userId
+        LEFT JOIN yh_user_role urole ON urole.role_id=power.roleId
+        <where>
+            urole.role_type=3
+            <if test="begantime != null and begantime !='' and yonghu == 1" >
+                and date(repot.Evaluate_Date) &gt; #{begantime}
+            </if>
+            <if test="endtime != null and endtime !='' and yonghu == 1" >
+                and date(repot.Evaluate_Date) &lt; #{endtime}
+            </if>
+            <if test="orgcode != null and orgcode !='' " >
+                and reg.Org_Code like concat('%', #{orgcode}, '%')
+            </if>
+            <if test="yonghu == 1" >
+                and repot.Evaluate_Data is not null
+            </if>
+            <if test="yonghu != 1" >
+                and repot.Evaluate_Data is  null
+            </if>
+        </where>
+        order by date(repot.Evaluate_Date) DESC
+        ) a
+        GROUP BY
+        a.usercode
+    </select>
+
+
+    <select id="jiankangxiguandata" resultType="com.yihe.system.domain.AssessmentOfTotalTable" parameterType="com.yihe.system.domain.BasicUser">
+        select *,count(a.newtime)as healthAssessment from (select reg.user_code as usercode,reg.name as name,reg.gender as sex,repot.Dict_time  as newtime,reg.Org_Code from yh_user_reginfo reg
+        left join  yh_life_habit_improvement_dict repot on repot.user_code=reg.user_code
+        LEFT JOIN yh_user_role_power power ON reg.user_code=power.userId
+        LEFT JOIN yh_user_role urole ON urole.role_id=power.roleId
+        <where>
+            urole.role_type=3
+            <if test="begantime != null and begantime !='' and yonghu == 1" >
+                and repot.Dict_time &gt; #{begantime}
+            </if>
+            <if test="endtime != null and endtime !='' and yonghu == 1" >
+                and repot.Dict_time &lt; #{endtime}
+            </if>
+            <if test="orgcode != null and orgcode !='' " >
+                and reg.Org_Code like concat('%', #{orgcode}, '%')
+            </if>
+            <if test="yonghu == 1" >
+                and repot.Dict_time is not null
+            </if>
+            <if test="yonghu != 1" >
+                and repot.Dict_time is  null
+            </if>
+        </where>
+        order by repot.Dict_time DESC
+        ) a
+        GROUP BY
+        a.usercode
+    </select>
+
+
+    <select id="tiwen" resultType="com.yihe.system.domain.AssessmentOfTotalTable" parameterType="com.yihe.system.domain.BasicUser">
+        select *,count(a.newtime)as healthAssessment from (select reg.user_code as usercode,reg.name as name,reg.gender as sex,repot.Entry_Time  as newtime,reg.Org_Code from yh_user_reginfo reg
+        left join  yh_user_temperature repot on repot.E_User_Id=reg.user_code
+        LEFT JOIN yh_user_role_power power ON reg.user_code=power.userId
+        LEFT JOIN yh_user_role urole ON urole.role_id=power.roleId
+        <where>
+            urole.role_type=3
+            <if test="begantime != null and begantime !='' and yonghu == 1" >
+                and date(repot.Entry_Time) &gt; #{begantime}
+            </if>
+            <if test="endtime != null and endtime !='' and yonghu == 1" >
+                and date(repot.Entry_Time) &lt; #{endtime}
+            </if>
+            <if test="orgcode != null and orgcode !='' " >
+                and reg.Org_Code like concat('%', #{orgcode}, '%')
+            </if>
+            <if test="yonghu == 1" >
+                and repot.Entry_Time is not null
+            </if>
+            <if test="yonghu != 1" >
+                and repot.Entry_Time is  null
+            </if>
+        </where>
+        order by date(repot.Entry_Time) DESC
+        ) a
+        GROUP BY
+        a.usercode
+    </select>
+
+    <select id="tizhong" resultType="com.yihe.system.domain.AssessmentOfTotalTable" parameterType="com.yihe.system.domain.BasicUser">
+        select *,count(a.newtime)as healthAssessment from (select reg.user_code as usercode,reg.name as name,reg.gender as sex,repot.Entry_Time  as newtime,reg.Org_Code from yh_user_reginfo reg
+        left join  yh_user_bmi repot on repot.E_User_Id=reg.user_code
+        LEFT JOIN yh_user_role_power power ON reg.user_code=power.userId
+        LEFT JOIN yh_user_role urole ON urole.role_id=power.roleId
+        <where>
+            urole.role_type=3
+            <if test="begantime != null and begantime !='' and yonghu == 1" >
+                and date(repot.Entry_Time) &gt; #{begantime}
+            </if>
+            <if test="endtime != null and endtime !='' and yonghu == 1" >
+                and date(repot.Entry_Time) &lt; #{endtime}
+            </if>
+            <if test="orgcode != null and orgcode !='' " >
+                and reg.Org_Code like concat('%', #{orgcode}, '%')
+            </if>
+            <if test="yonghu == 1" >
+                and repot.Entry_Time is not null
+            </if>
+            <if test="yonghu != 1" >
+                and repot.Entry_Time is  null
+            </if>
+        </where>
+        order by date(repot.Entry_Time) DESC
+        ) a
+        GROUP BY
+        a.usercode
+    </select>
+
+    <select id="xueya" resultType="com.yihe.system.domain.AssessmentOfTotalTable" parameterType="com.yihe.system.domain.BasicUser">
+        select *,count(a.newtime)as healthAssessment from (select reg.user_code as usercode,reg.name as name,reg.gender as sex,repot.Entry_Time  as newtime,reg.Org_Code from yh_user_reginfo reg
+        left join  yh_user_bloodpressure repot on repot.E_User_Id=reg.user_code
+        LEFT JOIN yh_user_role_power power ON reg.user_code=power.userId
+        LEFT JOIN yh_user_role urole ON urole.role_id=power.roleId
+        <where>
+            urole.role_type=3
+            <if test="begantime != null and begantime !='' and yonghu == 1" >
+                and repot.Entry_Time &gt;= #{begantime}
+            </if>
+            <if test="endtime != null and endtime !='' and yonghu == 1" >
+                and repot.Entry_Time &lt;= #{endtime}
+            </if>
+            <if test="orgcode != null and orgcode !='' " >
+                and reg.Org_Code like concat('%', #{orgcode}, '%')
+            </if>
+            <if test="yonghu == 1" >
+                and repot.Entry_Time is not null
+            </if>
+            <if test="yonghu != 1" >
+                and repot.Entry_Time is  null
+            </if>
+        </where>
+        order by repot.Entry_Time DESC
+        ) a
+        GROUP BY
+        a.usercode
+    </select>
+
+    <select id="xuetang" resultType="com.yihe.system.domain.AssessmentOfTotalTable" parameterType="com.yihe.system.domain.BasicUser">
+        select *,count(a.newtime)as healthAssessment from (select reg.user_code as usercode,reg.name as name,reg.gender as sex,repot.Entry_Time  as newtime,reg.Org_Code from yh_user_reginfo reg
+        left join  yh_user_bloodsuger repot on repot.E_User_Id=reg.user_code
+        LEFT JOIN yh_user_role_power power ON reg.user_code=power.userId
+        LEFT JOIN yh_user_role urole ON urole.role_id=power.roleId
+        <where>
+            urole.role_type=3
+            <if test="begantime != null and begantime !='' and yonghu == 1" >
+                and date(repot.Entry_Time) &gt; #{begantime}
+            </if>
+            <if test="endtime != null and endtime !='' and yonghu == 1" >
+                and date(repot.Entry_Time) &lt; #{endtime}
+            </if>
+            <if test="orgcode != null and orgcode !='' " >
+                and reg.Org_Code like concat('%', #{orgcode}, '%')
+            </if>
+            <if test="yonghu == 1" >
+                and repot.Entry_Time is not null
+            </if>
+            <if test="yonghu != 1" >
+                and repot.Entry_Time is  null
+            </if>
+        </where>
+        order by date(repot.Entry_Time) DESC
+        ) a
+        GROUP BY
+        a.usercode
+    </select>
+
+    <select id="xueyang" resultType="com.yihe.system.domain.AssessmentOfTotalTable" parameterType="com.yihe.system.domain.BasicUser">
+        select *,count(a.newtime)as healthAssessment from (select reg.user_code as usercode,reg.name as name,reg.gender as sex,repot.Entry_Time  as newtime,reg.Org_Code from yh_user_reginfo reg
+        left join  yh_user_oxygen repot on repot.E_User_Id=reg.user_code
+        LEFT JOIN yh_user_role_power power ON reg.user_code=power.userId
+        LEFT JOIN yh_user_role urole ON urole.role_id=power.roleId
+        <where>
+            urole.role_type=3
+            <if test="begantime != null and begantime !='' and yonghu == 1" >
+                and date(repot.Entry_Time) &gt; #{begantime}
+            </if>
+            <if test="endtime != null and endtime !='' and yonghu == 1" >
+                and date(repot.Entry_Time) &lt; #{endtime}
+            </if>
+            <if test="orgcode != null and orgcode !='' " >
+                and reg.Org_Code like concat('%', #{orgcode}, '%')
+            </if>
+            <if test="yonghu == 1" >
+                and repot.Entry_Time is not null
+            </if>
+            <if test="yonghu != 1" >
+                and repot.Entry_Time is  null
+            </if>
+        </where>
+        order by date(repot.Entry_Time) DESC
+        ) a
+        GROUP BY
+        a.usercode
+    </select>
+
+    <select id="xinlv" resultType="com.yihe.system.domain.AssessmentOfTotalTable" parameterType="com.yihe.system.domain.BasicUser">
+        select *,count(a.newtime)as healthAssessment from (select reg.user_code as usercode,reg.name as name,reg.gender as sex,repot.Entry_Time  as newtime,reg.Org_Code from yh_user_reginfo reg
+        left join  yh_user_heart_rate repot on repot.E_User_Id=reg.user_code
+        LEFT JOIN yh_user_role_power power ON reg.user_code=power.userId
+        LEFT JOIN yh_user_role urole ON urole.role_id=power.roleId
+        <where>
+            urole.role_type=3
+            <if test="begantime != null and begantime !='' and yonghu == 1" >
+                and date(repot.Entry_Time) &gt; #{begantime}
+            </if>
+            <if test="endtime != null and endtime !='' and yonghu == 1" >
+                and date(repot.Entry_Time) &lt; #{endtime}
+            </if>
+            <if test="orgcode != null and orgcode !='' " >
+                and reg.Org_Code like concat('%', #{orgcode}, '%')
+            </if>
+            <if test="yonghu == 1" >
+                and repot.Entry_Time is not null
+            </if>
+            <if test="yonghu != 1" >
+                and repot.Entry_Time is  null
+            </if>
+        </where>
+        order by date(repot.Entry_Time) DESC
+        ) a
+        GROUP BY
+        a.usercode
+    </select>
+
+    <select id="tizhi" resultType="com.yihe.system.domain.AssessmentOfTotalTable" parameterType="com.yihe.system.domain.BasicUser">
+        select *,count(a.newtime)as healthAssessment from (select reg.user_code as usercode,reg.name as name,reg.gender as sex,repot.Entry_Time  as newtime,reg.Org_Code from yh_user_reginfo reg
+        left join  yh_user_body_fat repot on repot.E_User_Id=reg.user_code
+        LEFT JOIN yh_user_role_power power ON reg.user_code=power.userId
+        LEFT JOIN yh_user_role urole ON urole.role_id=power.roleId
+        <where>
+            urole.role_type=3
+            <if test="begantime != null and begantime !='' and yonghu == 1" >
+                and date(repot.Entry_Time) &gt; #{begantime}
+            </if>
+            <if test="endtime != null and endtime !='' and yonghu == 1" >
+                and date(repot.Entry_Time) &lt; #{endtime}
+            </if>
+            <if test="orgcode != null and orgcode !='' " >
+                and reg.Org_Code like concat('%', #{orgcode}, '%')
+            </if>
+            <if test="yonghu == 1" >
+                and repot.Entry_Time is not null
+            </if>
+            <if test="yonghu != 1" >
+                and repot.Entry_Time is  null
+            </if>
+        </where>
+        order by date(repot.Entry_Time) DESC
+        ) a
+        GROUP BY
+        a.usercode
+    </select>
+
+    <select id="xuezhisixiang" resultType="com.yihe.system.domain.AssessmentOfTotalTable" parameterType="com.yihe.system.domain.BasicUser">
+        select *,count(a.newtime)as healthAssessment from (select reg.user_code as usercode,reg.name as name,reg.gender as sex,repot.Entry_Time  as newtime,reg.Org_Code from yh_user_reginfo reg
+        left join  yh_user_bloodfat repot on repot.E_User_Id=reg.user_code
+        LEFT JOIN yh_user_role_power power ON reg.user_code=power.userId
+        LEFT JOIN yh_user_role urole ON urole.role_id=power.roleId
+        <where>
+            urole.role_type=3
+            <if test="begantime != null and begantime !='' and yonghu == 1" >
+                and date(repot.Entry_Time) &gt; #{begantime}
+            </if>
+            <if test="endtime != null and endtime !='' and yonghu == 1" >
+                and date(repot.Entry_Time) &lt; #{endtime}
+            </if>
+            <if test="orgcode != null and orgcode !='' " >
+                and reg.Org_Code like concat('%', #{orgcode}, '%')
+            </if>
+            <if test="yonghu == 1" >
+                and repot.Entry_Time is not null
+            </if>
+            <if test="yonghu != 1" >
+                and repot.Entry_Time is  null
+            </if>
+        </where>
+        order by date(repot.Entry_Time) DESC
+        ) a
+        GROUP BY
+        a.usercode
+    </select>
+
+    <select id="shengongneng" resultType="com.yihe.system.domain.AssessmentOfTotalTable" parameterType="com.yihe.system.domain.BasicUser">
+        select *,count(a.newtime)as healthAssessment from (select reg.user_code as usercode,reg.name as name,reg.gender as sex,repot.inertTime  as newtime,reg.Org_Code from yh_user_reginfo reg
+        left join  yh_user_renalfunction repot on repot.user_id=reg.user_code
+        LEFT JOIN yh_user_role_power power ON reg.user_code=power.userId
+        LEFT JOIN yh_user_role urole ON urole.role_id=power.roleId
+        <where>
+            urole.role_type=3
+            <if test="begantime != null and begantime !='' and yonghu == 1" >
+                and date(repot.inertTime) &gt; #{begantime}
+            </if>
+            <if test="endtime != null and endtime !='' and yonghu == 1" >
+                and date(repot.inertTime) &lt; #{endtime}
+            </if>
+            <if test="orgcode != null and orgcode !='' " >
+                and reg.Org_Code like concat('%', #{orgcode}, '%')
+            </if>
+            <if test="yonghu == 1" >
+                and repot.inertTime is not null
+            </if>
+            <if test="yonghu != 1" >
+                and repot.inertTime is  null
+            </if>
+        </where>
+        order by date(repot.inertTime) DESC
+        ) a
+        GROUP BY
+        a.usercode
+    </select>
+
+    <select id="gangongneng" resultType="com.yihe.system.domain.AssessmentOfTotalTable" parameterType="com.yihe.system.domain.BasicUser">
+        select *,count(a.newtime)as healthAssessment from (select reg.user_code as usercode,reg.name as name,reg.gender as sex,repot.insertTime  as newtime,reg.Org_Code from yh_user_reginfo reg
+        left join  yh_user_liverfunction repot on repot.user_id=reg.user_code
+        LEFT JOIN yh_user_role_power power ON reg.user_code=power.userId
+        LEFT JOIN yh_user_role urole ON urole.role_id=power.roleId
+        <where>
+            urole.role_type=3
+            <if test="begantime != null and begantime !='' and yonghu == 1" >
+                and date(repot.insertTime) &gt; #{begantime}
+            </if>
+            <if test="endtime != null and endtime !='' and yonghu == 1" >
+                and date(repot.insertTime) &lt; #{endtime}
+            </if>
+            <if test="orgcode != null and orgcode !='' " >
+                and reg.Org_Code like concat('%', #{orgcode}, '%')
+            </if>
+            <if test="yonghu == 1" >
+                and repot.insertTime is not null
+            </if>
+            <if test="yonghu != 1" >
+                and repot.insertTime is  null
+            </if>
+        </where>
+        order by date(repot.insertTime) DESC
+        ) a
+        GROUP BY
+        a.usercode
+    </select>
+
+    <select id="xindaintu" resultType="com.yihe.system.domain.AssessmentOfTotalTable" parameterType="com.yihe.system.domain.BasicUser">
+        select *,count(a.newtime)as healthAssessment from (select reg.user_code as usercode,reg.name as name,reg.gender as sex,repot.Entry_Time  as newtime,reg.Org_Code from yh_user_reginfo reg
+        left join  yh_user_ecg repot on repot.E_User_Id=reg.user_code
+        LEFT JOIN yh_user_role_power power ON reg.user_code=power.userId
+        LEFT JOIN yh_user_role urole ON urole.role_id=power.roleId
+        <where>
+            urole.role_type=3
+            <if test="begantime != null and begantime !='' and yonghu == 1" >
+                and date(repot.Entry_Time) &gt; #{begantime}
+            </if>
+            <if test="endtime != null and endtime !='' and yonghu == 1" >
+                and date(repot.Entry_Time) &lt; #{endtime}
+            </if>
+            <if test="orgcode != null and orgcode !='' " >
+                and reg.Org_Code like concat('%', #{orgcode}, '%')
+            </if>
+            <if test="yonghu == 1" >
+                and repot.Entry_Time is not null
+            </if>
+            <if test="yonghu != 1" >
+                and repot.Entry_Time is  null
+            </if>
+        </where>
+        order by date(repot.Entry_Time) DESC
+        ) a
+        GROUP BY
+        a.usercode
+    </select>
+
+    <select id="niaojian" resultType="com.yihe.system.domain.AssessmentOfTotalTable" parameterType="com.yihe.system.domain.BasicUser">
+        select *,count(a.newtime)as healthAssessment from (select reg.user_code as usercode,reg.name as name,reg.gender as sex,repot.addDate  as newtime,reg.Org_Code from yh_user_reginfo reg
+        left join  yh_user_uba repot on repot.E_User_Id=reg.user_code
+        LEFT JOIN yh_user_role_power power ON reg.user_code=power.userId
+        LEFT JOIN yh_user_role urole ON urole.role_id=power.roleId
+        <where>
+            urole.role_type=3
+            <if test="begantime != null and begantime !='' and yonghu == 1" >
+                and date(repot.addDate) &gt; #{begantime}
+            </if>
+            <if test="endtime != null and endtime !='' and yonghu == 1" >
+                and date(repot.addDate) &lt; #{endtime}
+            </if>
+            <if test="orgcode != null and orgcode !='' " >
+                and reg.Org_Code like concat('%', #{orgcode}, '%')
+            </if>
+            <if test="yonghu == 1" >
+                and repot.addDate is not null
+            </if>
+            <if test="yonghu != 1" >
+                and repot.addDate is  null
+            </if>
+        </where>
+        order by date(repot.addDate) DESC
+        ) a
+        GROUP BY
+        a.usercode
+    </select>
+
+    <select id="qitazhibiao" resultType="com.yihe.system.domain.AssessmentOfTotalTable" parameterType="com.yihe.system.domain.BasicUser">
+        select *,count(a.newtime)as healthAssessment from (select reg.user_code as usercode,reg.name as name,reg.gender as sex,repot.insertTime  as newtime,reg.Org_Code from yh_user_reginfo reg
+        left join  yh_user_otherfunction repot on repot.user_id=reg.user_code
+        LEFT JOIN yh_user_role_power power ON reg.user_code=power.userId
+        LEFT JOIN yh_user_role urole ON urole.role_id=power.roleId
+        <where>
+            urole.role_type=3
+            <if test="begantime != null and begantime !='' and yonghu == 1" >
+                and date(repot.insertTime) &gt; #{begantime}
+            </if>
+            <if test="endtime != null and endtime !='' and yonghu == 1" >
+                and date(repot.insertTime) &lt; #{endtime}
+            </if>
+            <if test="orgcode != null and orgcode !='' " >
+                and reg.Org_Code like concat('%', #{orgcode}, '%')
+            </if>
+            <if test="yonghu == 1" >
+                and repot.insertTime is not null
+            </if>
+            <if test="yonghu != 1" >
+                and repot.insertTime is  null
+            </if>
+        </where>
+        order by date(repot.insertTime) DESC
+        ) a
+        GROUP BY
+        a.usercode
+    </select>
+
+
+    <select id="yinshiriji" resultMap="YhFoodUserDiaryResult" parameterType="com.yihe.system.domain.BasicUser">
+        select reg.name as user_name,reg.gender as gender,repot.U_Fd_Id,repot.C_Time,repot.Energy_Level,repot.Data_Sources,repot.R_Id,repot.Fat,repot.Cho
+        ,repot.Cholesterol,repot.Energy_Kcal,repot.F_Elements,repot.Is_Del ,repot.Ac_Elements,repot.Protein,repot.Alvol,repot.Cellulose,repot.Data_Source
+        ,reg.Org_Code,reg.user_code from yh_user_reginfo reg
+        left join  yh_food_user_diary repot on repot.user_code=reg.user_code
+        LEFT JOIN yh_user_role_power power ON reg.user_code=power.userId
+        LEFT JOIN yh_user_role urole ON urole.role_id=power.roleId
+        <where>
+            urole.role_type=3
+            <if test="begantime != null and begantime !='' and yonghu == 1" >
+                and date(repot.C_Time) between #{begantime} and #{endtime}
+            </if>
+            <if test="orgcode != null and orgcode !='' " >
+                and reg.Org_Code like concat('%', #{orgcode}, '%')
+            </if>
+            <if test="yonghu == 1" >
+                and repot.Data_Source is not null
+            </if>
+            <if test="yonghu != 1" >
+                and repot.Data_Source is  null
+            </if>
+        </where>
+
+    </select>
+
+    <select id="selectYhpory" resultMap="YhSportDiaryResult" parameterType="com.yihe.system.domain.BasicUser">
+        select reg.name as userName,reg.gender as gender,repot.u_sport_id ,repot.Entry_Time,repot.Uweight,repot.Tenergy,repot.Diary_Details,repot.Diary_Boutique,repot.Diary_Recommend,repot.remark,repot.number,repot.Data_Source,reg.Org_Code,reg.user_code from yh_user_reginfo reg
+        left join  yh_sport_diary repot on repot.user_code=reg.user_code
+        LEFT JOIN yh_user_role_power power ON reg.user_code=power.userId
+        LEFT JOIN yh_user_role urole ON urole.role_id=power.roleId
+        <where>
+            urole.role_type=3
+            <if test="begantime != null and begantime !='' and yonghu == 1" >
+                and date(repot.Entry_Time) between #{begantime} and #{endtime}
+            </if>
+
+            <if test="orgcode != null and orgcode !='' " >
+                and reg.Org_Code like concat('%', #{orgcode}, '%')
+            </if>
+            <if test="yonghu == 1" >
+                and repot.Entry_Time is not null
+            </if>
+            <if test="yonghu != 1" >
+                and repot.Entry_Time is  null
+            </if>
+        </where>
+
+    </select>
+
+    <select id="shuimian" resultType="com.yihe.system.domain.AssessmentOfTotalTable" parameterType="com.yihe.system.domain.BasicUser">
+        select reg.user_code as usercode,reg.name as name,reg.gender as sex,count(repot.sleep_diarytime)as healthAssessment,repot.sleep_diarytime  as newtime,reg.Org_Code from yh_user_reginfo reg
+        left join  yh_sleep_user_diary repot on repot.user_code=reg.user_code
+        LEFT JOIN yh_user_role_power power ON reg.user_code=power.userId
+        LEFT JOIN yh_user_role urole ON urole.role_id=power.roleId
+        <where>
+            urole.role_type=3
+            <if test="begantime != null and begantime !='' and yonghu == 1" >
+                and repot.sleep_diarytime between #{begantime} and #{endtime}
+            </if>
+
+            <if test="orgcode != null and orgcode !='' " >
+                and reg.Org_Code like concat('%', #{orgcode}, '%')
+            </if>
+            <if test="yonghu == 1" >
+                and repot.sleep_diarytime is not null
+            </if>
+            <if test="yonghu != 1" >
+                and repot.sleep_diarytime is  null
+            </if>
+        </where>
+        GROUP BY
+        reg.user_code
+
+    </select>
+
+    <select id="gaoxueyariji" resultType="com.yihe.system.domain.AssessmentOfTotalTable" parameterType="com.yihe.system.domain.BasicUser">
+    select a.* from (    select reg.user_code as usercode,reg.name as name,reg.gender as sex,repot.plan_unique as healthAssessment,repot.plan_startdate  as newtime,repot.plan_day as zong,repot.plan_state as zao ,reg.Org_Code from yh_user_reginfo reg
+        left join  yh_user_healthy_plan repot on repot.user_code=reg.user_code
+        LEFT JOIN yh_user_role_power power ON reg.user_code=power.userId
+        LEFT JOIN yh_user_role urole ON urole.role_id=power.roleId
+        <where>
+            urole.role_type=3 and repot.plandetail_id is not null and (repot.plan_id=1 or repot.plan_id=5 )
+            <if test="begantime != null and begantime !='' and yonghu == 1" >
+                and repot.plan_startdate between #{begantime} and #{endtime}
+            </if>
+
+            <if test="orgcode != null and orgcode !='' " >
+                and reg.Org_Code like concat('%', #{orgcode}, '%')
+            </if>
+            <if test="yonghu == 1" >
+                and repot.plan_startdate is not null
+            </if>
+            <if test="yonghu != 1" >
+                and repot.plan_startdate is  null
+            </if>
+            ORDER BY  repot.plan_startdate DESC
+        </where>) a
+        GROUP BY
+        a.usercode
+
+    </select>
+
+
+
+    <select id="gaoxuetangriji" resultType="com.yihe.system.domain.AssessmentOfTotalTable" parameterType="com.yihe.system.domain.BasicUser">
+        select a.* from (    select reg.user_code as usercode,reg.name as name,reg.gender as sex,repot.plan_unique as healthAssessment,repot.plan_startdate  as newtime,repot.plan_day as zong,repot.plan_state as zao ,reg.Org_Code from yh_user_reginfo reg
+        left join  yh_user_healthy_plan repot on repot.user_code=reg.user_code
+        LEFT JOIN yh_user_role_power power ON reg.user_code=power.userId
+        LEFT JOIN yh_user_role urole ON urole.role_id=power.roleId
+        <where>
+            urole.role_type=3 and repot.plandetail_id is not null and (repot.plan_id=2 or repot.plan_id=6 )
+            <if test="begantime != null and begantime !='' and yonghu == 1" >
+                and repot.plan_startdate between #{begantime} and #{endtime}
+            </if>
+
+            <if test="orgcode != null and orgcode !='' " >
+                and reg.Org_Code like concat('%', #{orgcode}, '%')
+            </if>
+            <if test="yonghu == 1" >
+                and repot.plan_startdate is not null
+            </if>
+            <if test="yonghu != 1" >
+                and repot.plan_startdate is  null
+            </if>
+            ORDER BY  repot.plan_startdate DESC
+        </where>) a
+        GROUP BY
+        a.usercode
+
+    </select>
+
+    <select id="gaoxuezhiriji" resultType="com.yihe.system.domain.AssessmentOfTotalTable" parameterType="com.yihe.system.domain.BasicUser">
+        select a.* from (    select reg.user_code as usercode,reg.name as name,reg.gender as sex,repot.plan_unique as healthAssessment,repot.plan_startdate  as newtime,repot.plan_day as zong,repot.plan_state as zao ,reg.Org_Code from yh_user_reginfo reg
+        left join  yh_user_healthy_plan repot on repot.user_code=reg.user_code
+        LEFT JOIN yh_user_role_power power ON reg.user_code=power.userId
+        LEFT JOIN yh_user_role urole ON urole.role_id=power.roleId
+        <where>
+            urole.role_type=3 and repot.plandetail_id is not null and (repot.plan_id=4 or repot.plan_id=7 )
+            <if test="begantime != null and begantime !='' and yonghu == 1" >
+                and repot.plan_startdate between #{begantime} and #{endtime}
+            </if>
+
+            <if test="orgcode != null and orgcode !='' " >
+                and reg.Org_Code like concat('%', #{orgcode}, '%')
+            </if>
+            <if test="yonghu == 1" >
+                and repot.plan_startdate is not null
+            </if>
+            <if test="yonghu != 1" >
+                and repot.plan_startdate is  null
+            </if>
+            ORDER BY  repot.plan_startdate DESC
+        </where>) a
+        GROUP BY
+        a.usercode
+
+    </select>
+
+    <select id="gaoniansuanriji" resultType="com.yihe.system.domain.AssessmentOfTotalTable" parameterType="com.yihe.system.domain.BasicUser">
+        select a.* from (    select reg.user_code as usercode,reg.name as name,reg.gender as sex,repot.plan_unique as healthAssessment,repot.plan_startdate  as newtime,repot.plan_day as zong,repot.plan_state as zao ,reg.Org_Code from yh_user_reginfo reg
+        left join  yh_user_healthy_plan repot on repot.user_code=reg.user_code
+        LEFT JOIN yh_user_role_power power ON reg.user_code=power.userId
+        LEFT JOIN yh_user_role urole ON urole.role_id=power.roleId
+        <where>
+            urole.role_type=3 and repot.plandetail_id is not null and (repot.plan_id=9 )
+            <if test="begantime != null and begantime !='' and yonghu == 1" >
+                and repot.plan_startdate between #{begantime} and #{endtime}
+            </if>
+
+            <if test="orgcode != null and orgcode !='' " >
+                and reg.Org_Code like concat('%', #{orgcode}, '%')
+            </if>
+            <if test="yonghu == 1" >
+                and repot.plan_startdate is not null
+            </if>
+            <if test="yonghu != 1" >
+                and repot.plan_startdate is  null
+            </if>
+            ORDER BY  repot.plan_startdate DESC
+        </where>) a
+        GROUP BY
+        a.usercode
+
+    </select>
+
+    <select id="jianzhiriji" resultType="com.yihe.system.domain.AssessmentOfTotalTable" parameterType="com.yihe.system.domain.BasicUser">
+        select a.* from (    select reg.user_code as usercode,reg.name as name,reg.gender as sex,repot.plan_unique healthAssessment,repot.plan_startdate  as newtime,repot.plan_day as zong,repot.plan_state as zao ,reg.Org_Code from yh_user_reginfo reg
+        left join  yh_user_healthy_plan repot on repot.user_code=reg.user_code
+        LEFT JOIN yh_user_role_power power ON reg.user_code=power.userId
+        LEFT JOIN yh_user_role urole ON urole.role_id=power.roleId
+        <where>
+            urole.role_type=3 and repot.plandetail_id is not null and (repot.plan_id=8 )
+            <if test="begantime != null and begantime !='' and yonghu == 1" >
+                and repot.plan_startdate between #{begantime}  and #{endtime}
+            </if>
+
+            <if test="orgcode != null and orgcode !='' " >
+                and reg.Org_Code like concat('%', #{orgcode}, '%')
+            </if>
+            <if test="yonghu == 1" >
+                and repot.plan_startdate is not null
+            </if>
+            <if test="yonghu != 1" >
+                and repot.plan_startdate is  null
+            </if>
+            ORDER BY  repot.plan_startdate DESC
+        </where>) a
+        GROUP BY
+        a.usercode
+
+    </select>
+
+    <select id="jiankangxiguanriji" resultType="com.yihe.system.domain.AssessmentOfTotalTable" parameterType="com.yihe.system.domain.BasicUser">
+        select reg.name as name,reg.gender as sex,repot.increase_time as newtime ,reg.user_code as usercode,repot.habit_id from yh_user_reginfo reg
+        left join  yh_life_habit_sign repot on repot.user_code=reg.user_code
+        LEFT JOIN yh_user_role_power power ON reg.user_code=power.userId
+        LEFT JOIN yh_user_role urole ON urole.role_id=power.roleId
+        <where>
+            urole.role_type=3
+            <if test="begantime != null and begantime !='' and yonghu == 1" >
+                and repot.signId_date between #{begantime} and #{endtime}
+            </if>
+
+            <if test="orgcode != null and orgcode !='' " >
+                and reg.Org_Code like concat('%', #{orgcode}, '%')
+            </if>
+            <if test="yonghu == 1" >
+                and repot.signId_date is not null
+            </if>
+            <if test="yonghu != 1" >
+                and repot.signId_date is  null
+            </if>
+        </where>
+        GROUP BY usercode,signId_date,habit_id
+    </select>
+
+    <select id="chazhaoshijian" parameterType="integer" resultType="string">
+       select  plan_startdate from yh_user_healthy_plan where  plan_unique=9 ORDER BY plan_startdate DESC LIMIT 1
+    </select>
+</mapper>

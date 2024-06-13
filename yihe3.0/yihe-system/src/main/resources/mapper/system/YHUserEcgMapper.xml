@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yihe.system.mapper.YHUserEcgMapper" >
+  <resultMap id="BaseResultMap" type="com.yihe.system.domain.YHUserEcg" >
+    <id column="U_ECG_Id" property="uEcgId" jdbcType="INTEGER" />
+    <result column="test_hj" property="testHj" jdbcType="VARCHAR" />
+    <result column="sr" property="sr" jdbcType="INTEGER" />
+    <result column="tr" property="tr" jdbcType="INTEGER" />
+    <result column="Pulse" property="pulse" jdbcType="INTEGER" />
+    <result column="ResultCode" property="resultcode" jdbcType="INTEGER" />
+    <result column="xd_Value" property="xdValue" jdbcType="VARCHAR" />
+    <result column="Entry_Time" property="entryTime" jdbcType="VARCHAR" />
+    <result column="Is_Del" property="isDel" jdbcType="INTEGER" />
+    <result column="E_User_Id" property="eUserId" jdbcType="INTEGER" />
+    <result column="pig_path" property="pigPath" jdbcType="VARCHAR" />
+    <result column="resurt_text" property="resurtText" jdbcType="VARCHAR" />
+    <result column="Data_Source" property="dataSource" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    U_ECG_Id, test_hj, sr, tr, Pulse, ResultCode, xd_Value, Entry_Time, Is_Del, E_User_Id, 
+    pig_path, resurt_text, Data_Source
+  </sql>
+  
+  <!-- 心电图总数 -->
+   <select id="selectByEcgCount" resultType="int" >
+  	select count(*) from yh_user_ecg
+  </select>
+  
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from yh_user_ecg
+    where U_ECG_Id = #{uEcgId,jdbcType=INTEGER}
+  </select>
+  <select id="selectByPrimaryKeyByUsercodeLimit" resultMap="BaseResultMap" parameterType="java.lang.String" >
+   SELECT   <include refid="Base_Column_List" /> FROM yh_user_ecg WHERE E_user_id=#{usercode} and is_Del=2  ORDER BY Entry_Time DESC LIMIT 1
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from yh_user_ecg
+    where U_ECG_Id = #{uEcgId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.yihe.system.domain.YHUserEcg" >
+    insert into yh_user_ecg (U_ECG_Id, test_hj, sr, 
+      tr, Pulse, ResultCode, 
+      xd_Value, Entry_Time, Is_Del, 
+      E_User_Id, pig_path, resurt_text, 
+      Data_Source)
+    values (#{uEcgId,jdbcType=INTEGER}, #{testHj,jdbcType=VARCHAR}, #{sr,jdbcType=INTEGER}, 
+      #{tr,jdbcType=INTEGER}, #{pulse,jdbcType=INTEGER}, #{resultcode,jdbcType=INTEGER}, 
+      #{xdValue,jdbcType=VARCHAR}, #{entryTime,jdbcType=VARCHAR}, #{isDel,jdbcType=INTEGER}, 
+      #{eUserId,jdbcType=INTEGER}, #{pigPath,jdbcType=VARCHAR}, #{resurtText,jdbcType=VARCHAR}, 
+      #{dataSource,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.yihe.system.domain.YHUserEcg" >
+    insert into yh_user_ecg
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="uEcgId != null" >
+        U_ECG_Id,
+      </if>
+      <if test="testHj != null" >
+        test_hj,
+      </if>
+      <if test="sr != null" >
+        sr,
+      </if>
+      <if test="tr != null" >
+        tr,
+      </if>
+      <if test="pulse != null" >
+        Pulse,
+      </if>
+      <if test="resultcode != null" >
+        ResultCode,
+      </if>
+      <if test="xdValue != null" >
+        xd_Value,
+      </if>
+      <if test="entryTime != null" >
+        Entry_Time,
+      </if>
+      <if test="isDel != null" >
+        Is_Del,
+      </if>
+      <if test="eUserId != null" >
+        E_User_Id,
+      </if>
+      <if test="pigPath != null" >
+        pig_path,
+      </if>
+      <if test="resurtText != null" >
+        resurt_text,
+      </if>
+      <if test="dataSource != null" >
+        Data_Source,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="uEcgId != null" >
+        #{uEcgId,jdbcType=INTEGER},
+      </if>
+      <if test="testHj != null" >
+        #{testHj,jdbcType=VARCHAR},
+      </if>
+      <if test="sr != null" >
+        #{sr,jdbcType=INTEGER},
+      </if>
+      <if test="tr != null" >
+        #{tr,jdbcType=INTEGER},
+      </if>
+      <if test="pulse != null" >
+        #{pulse,jdbcType=INTEGER},
+      </if>
+      <if test="resultcode != null" >
+        #{resultcode,jdbcType=INTEGER},
+      </if>
+      <if test="xdValue != null" >
+        #{xdValue,jdbcType=VARCHAR},
+      </if>
+      <if test="entryTime != null" >
+        #{entryTime,jdbcType=VARCHAR},
+      </if>
+      <if test="isDel != null" >
+        #{isDel,jdbcType=INTEGER},
+      </if>
+      <if test="eUserId != null" >
+        #{eUserId,jdbcType=INTEGER},
+      </if>
+      <if test="pigPath != null" >
+        #{pigPath,jdbcType=VARCHAR},
+      </if>
+      <if test="resurtText != null" >
+        #{resurtText,jdbcType=VARCHAR},
+      </if>
+      <if test="dataSource != null" >
+        #{dataSource,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.yihe.system.domain.YHUserEcg" >
+    update yh_user_ecg
+    <set >
+      <if test="testHj != null" >
+        test_hj = #{testHj,jdbcType=VARCHAR},
+      </if>
+      <if test="sr != null" >
+        sr = #{sr,jdbcType=INTEGER},
+      </if>
+      <if test="tr != null" >
+        tr = #{tr,jdbcType=INTEGER},
+      </if>
+      <if test="pulse != null" >
+        Pulse = #{pulse,jdbcType=INTEGER},
+      </if>
+      <if test="resultcode != null" >
+        ResultCode = #{resultcode,jdbcType=INTEGER},
+      </if>
+      <if test="xdValue != null" >
+        xd_Value = #{xdValue,jdbcType=VARCHAR},
+      </if>
+      <if test="entryTime != null" >
+        Entry_Time = #{entryTime,jdbcType=VARCHAR},
+      </if>
+      <if test="isDel != null" >
+        Is_Del = #{isDel,jdbcType=INTEGER},
+      </if>
+      <if test="eUserId != null" >
+        E_User_Id = #{eUserId,jdbcType=INTEGER},
+      </if>
+      <if test="pigPath != null" >
+        pig_path = #{pigPath,jdbcType=VARCHAR},
+      </if>
+      <if test="resurtText != null" >
+        resurt_text = #{resurtText,jdbcType=VARCHAR},
+      </if>
+      <if test="dataSource != null" >
+        Data_Source = #{dataSource,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where U_ECG_Id = #{uEcgId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.yihe.system.domain.YHUserEcg" >
+    update yh_user_ecg
+    set test_hj = #{testHj,jdbcType=VARCHAR},
+      sr = #{sr,jdbcType=INTEGER},
+      tr = #{tr,jdbcType=INTEGER},
+      Pulse = #{pulse,jdbcType=INTEGER},
+      ResultCode = #{resultcode,jdbcType=INTEGER},
+      xd_Value = #{xdValue,jdbcType=VARCHAR},
+      Entry_Time = #{entryTime,jdbcType=VARCHAR},
+      Is_Del = #{isDel,jdbcType=INTEGER},
+      E_User_Id = #{eUserId,jdbcType=INTEGER},
+      pig_path = #{pigPath,jdbcType=VARCHAR},
+      resurt_text = #{resurtText,jdbcType=VARCHAR},
+      Data_Source = #{dataSource,jdbcType=VARCHAR}
+    where U_ECG_Id = #{uEcgId,jdbcType=INTEGER}
+  </update>
+  <!--  查询用户心电图 -->
+  <select id="selectYHUserEcg" resultType="map" parameterType="java.lang.String" >
+    select yue.pig_path,yue.resurt_text,
+	(select count(1) from yh_user_ecg where E_User_Id=#{eUserId,jdbcType=INTEGER} and Is_Del = 2) as num,
+	yue.Data_Source,yue.Entry_Time
+	from yh_user_reginfo as reg 
+	left join yh_user_ecg yue
+	on reg.user_code = yue.E_User_Id
+	where yue.U_ECG_Id = (select U_ECG_Id from yh_user_ecg where E_User_Id= #{eUserId,jdbcType=INTEGER} and Is_Del = 2 order by Entry_Time desc limit 1)
+  </select>
+  <select id="selectPageByParam" resultMap="BaseResultMap" parameterType="java.lang.String"  >
+  select  yue.pig_path,yue.resurt_text,yue.Entry_Time
+	from yh_user_reginfo as reg 
+	inner join yh_user_ecg yue
+	on reg.user_code = yue.E_User_Id
+	 where reg.user_code=#{eUserId,jdbcType=INTEGER} and Is_Del = 2 order by Entry_Time desc 
+  </select>
+  
+</mapper>

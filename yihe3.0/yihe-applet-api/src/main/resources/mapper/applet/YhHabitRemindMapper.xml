@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yihe.applet.api.mapper.YhHabitRemindMapper" >
+  <resultMap id="BaseResultMap" type="com.yihe.applet.api.domain.YhHabitRemind" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="ha_id" property="haId" jdbcType="VARCHAR" />
+    <result column="ha_time" property="haTime" jdbcType="TIMESTAMP" />
+    <result column="user_code" property="userCode" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, ha_id, ha_time, user_code
+  </sql>
+  
+  <!-- 根据code查询是否大于3条记录 -->
+  <select id="showremindCount" resultType="int" parameterType="java.lang.String">
+  	select count(*) from yh_habit_remind where user_code=#{userCode,jdbcType=VARCHAR}
+  </select>
+  
+  
+    <delete id="deleteremind"  parameterType="com.yihe.applet.api.domain.YhHabitRemind"  >
+    delete from yh_habit_remind
+    where ha_id = #{haId,jdbcType=VARCHAR} and user_code=#{userCode,jdbcType=VARCHAR}
+  </delete>
+  
+  
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from yh_habit_remind
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from yh_habit_remind
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.yihe.applet.api.domain.YhHabitRemind" >
+    insert into yh_habit_remind (id, ha_id, ha_time, 
+      user_code)
+    values (#{id,jdbcType=INTEGER}, #{haId,jdbcType=VARCHAR}, #{haTime,jdbcType=TIMESTAMP}, 
+      #{userCode,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.yihe.applet.api.domain.YhHabitRemind" >
+    insert into yh_habit_remind
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="haId != null" >
+        ha_id,
+      </if>
+      <if test="haTime != null" >
+        ha_time,
+      </if>
+      <if test="userCode != null" >
+        user_code,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="haId != null" >
+        #{haId,jdbcType=VARCHAR},
+      </if>
+      <if test="haTime != null" >
+        #{haTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="userCode != null" >
+        #{userCode,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.yihe.applet.api.domain.YhHabitRemind" >
+    update yh_habit_remind
+    <set >
+      <if test="haId != null" >
+        ha_id = #{haId,jdbcType=VARCHAR},
+      </if>
+      <if test="haTime != null" >
+        ha_time = #{haTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="userCode != null" >
+        user_code = #{userCode,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.yihe.applet.api.domain.YhHabitRemind" >
+    update yh_habit_remind
+    set ha_id = #{haId,jdbcType=VARCHAR},
+      ha_time = #{haTime,jdbcType=TIMESTAMP},
+      user_code = #{userCode,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

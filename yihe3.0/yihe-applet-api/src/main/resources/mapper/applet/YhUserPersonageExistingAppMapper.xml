@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yihe.applet.api.mapper.YhUserPersonageExistingAppMapper" >
+  <resultMap id="BaseResultMap" type="com.yihe.applet.api.domain.YhUserPersonageExistingApp" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="user_code" property="userCode" jdbcType="VARCHAR" />
+    <result column="bloodvessel" property="bloodvessel" jdbcType="VARCHAR" />
+    <result column="kidney" property="kidney" jdbcType="VARCHAR" />
+    <result column="heart" property="heart" jdbcType="VARCHAR" />
+    <result column="blooddisease" property="blooddisease" jdbcType="VARCHAR" />
+    <result column="ocular" property="ocular" jdbcType="VARCHAR" />
+    <result column="rests" property="rests" jdbcType="VARCHAR" />
+    <result column="nervoussystem" property="nervoussystem" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, user_code, bloodvessel, kidney, heart, blooddisease, ocular, rests, nervoussystem
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from yh_user_personage_existing
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from yh_user_personage_existing
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.yihe.applet.api.domain.YhUserPersonageExistingApp" >
+    insert into yh_user_personage_existing (id, user_code, bloodvessel, 
+      kidney, heart, blooddisease, 
+      ocular, rests, nervoussystem
+      )
+    values (#{id,jdbcType=INTEGER}, #{userCode,jdbcType=VARCHAR}, #{bloodvessel,jdbcType=VARCHAR}, 
+      #{kidney,jdbcType=VARCHAR}, #{heart,jdbcType=VARCHAR}, #{blooddisease,jdbcType=VARCHAR}, 
+      #{ocular,jdbcType=VARCHAR}, #{rests,jdbcType=VARCHAR}, #{nervoussystem,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.yihe.applet.api.domain.YhUserPersonageExistingApp" >
+    insert into yh_user_personage_existing
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="userCode != null" >
+        user_code,
+      </if>
+      <if test="bloodvessel != null" >
+        bloodvessel,
+      </if>
+      <if test="kidney != null" >
+        kidney,
+      </if>
+      <if test="heart != null" >
+        heart,
+      </if>
+      <if test="blooddisease != null" >
+        blooddisease,
+      </if>
+      <if test="ocular != null" >
+        ocular,
+      </if>
+      <if test="rests != null" >
+        rests,
+      </if>
+      <if test="nervoussystem != null" >
+        nervoussystem,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="userCode != null" >
+        #{userCode,jdbcType=VARCHAR},
+      </if>
+      <if test="bloodvessel != null" >
+        #{bloodvessel,jdbcType=VARCHAR},
+      </if>
+      <if test="kidney != null" >
+        #{kidney,jdbcType=VARCHAR},
+      </if>
+      <if test="heart != null" >
+        #{heart,jdbcType=VARCHAR},
+      </if>
+      <if test="blooddisease != null" >
+        #{blooddisease,jdbcType=VARCHAR},
+      </if>
+      <if test="ocular != null" >
+        #{ocular,jdbcType=VARCHAR},
+      </if>
+      <if test="rests != null" >
+        #{rests,jdbcType=VARCHAR},
+      </if>
+      <if test="nervoussystem != null" >
+        #{nervoussystem,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.yihe.applet.api.domain.YhUserPersonageExistingApp" >
+    update yh_user_personage_existing
+    <set >
+      <if test="userCode != null" >
+        user_code = #{userCode,jdbcType=VARCHAR},
+      </if>
+      <if test="bloodvessel != null" >
+        bloodvessel = #{bloodvessel,jdbcType=VARCHAR},
+      </if>
+      <if test="kidney != null" >
+        kidney = #{kidney,jdbcType=VARCHAR},
+      </if>
+      <if test="heart != null" >
+        heart = #{heart,jdbcType=VARCHAR},
+      </if>
+      <if test="blooddisease != null" >
+        blooddisease = #{blooddisease,jdbcType=VARCHAR},
+      </if>
+      <if test="ocular != null" >
+        ocular = #{ocular,jdbcType=VARCHAR},
+      </if>
+      <if test="rests != null" >
+        rests = #{rests,jdbcType=VARCHAR},
+      </if>
+      <if test="nervoussystem != null" >
+        nervoussystem = #{nervoussystem,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.yihe.applet.api.domain.YhUserPersonageExistingApp" >
+    update yh_user_personage_existing
+    set user_code = #{userCode,jdbcType=VARCHAR},
+      bloodvessel = #{bloodvessel,jdbcType=VARCHAR},
+      kidney = #{kidney,jdbcType=VARCHAR},
+      heart = #{heart,jdbcType=VARCHAR},
+      blooddisease = #{blooddisease,jdbcType=VARCHAR},
+      ocular = #{ocular,jdbcType=VARCHAR},
+      rests = #{rests,jdbcType=VARCHAR},
+      nervoussystem = #{nervoussystem,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+     <!-- 根据code查询现存问题-->
+  <select id="showexisting" parameterType="java.lang.String" resultMap="BaseResultMap">
+  	select * from yh_user_personage_existing where user_code=#{userCode,jdbcType=VARCHAR}
+  </select>
+</mapper>

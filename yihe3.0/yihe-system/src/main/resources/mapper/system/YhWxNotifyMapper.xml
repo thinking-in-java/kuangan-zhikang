@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yihe.system.mapper.YhWxNotifyMapper">
+    <resultMap id="BaseResultMap" type="com.yihe.system.domain.yhWxNotify" >
+        <id column="wx_notify_id" property="wxNotifyId" jdbcType="INTEGER" />
+        <result column="wx_notify_content" property="wxNotifyContent" jdbcType="VARCHAR" />
+        <result column="wx_notify_file" property="wxNotifyFile" jdbcType="VARCHAR" />
+        <result column="wx_notify_backup" property="wxNotifyBackup" jdbcType="VARCHAR" />
+        <result column="wx_notify_backup2" property="wxNotifyBackup2" jdbcType="VARCHAR" />
+        <result column="send_date" property="send_date" jdbcType="VARCHAR" />
+        <result column="wx_notify_type" property="wx_notify_type" jdbcType="VARCHAR" />
+        <result column="count" property="count" jdbcType="INTEGER" />
+    </resultMap>
+    <sql id="Base_Column_List" >
+        wx_notify_id, wx_notify_content, wx_notify_file, wx_notify_backup, wx_notify_backup2
+    </sql>
+    <insert id="insertyhnotify" useGeneratedKeys="true" keyProperty="wxNotifyId" parameterType="com.yihe.system.domain.yhWxNotify">
+        insert into yh_wx_notify
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="wxNotifyContent != null" >
+                wx_notify_content,
+            </if>
+            <if test="wxNotifyFile != null" >
+                wx_notify_file,
+            </if>
+            <if test="wxNotifyBackup != null" >
+                wx_notify_backup,
+            </if>
+            <if test="wxNotifyBackup2 != null" >
+                wx_notify_backup2,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="wxNotifyContent != null" >
+                #{wxNotifyContent,jdbcType=VARCHAR},
+            </if>
+            <if test="wxNotifyFile != null" >
+                #{wxNotifyFile,jdbcType=VARCHAR},
+            </if>
+            <if test="wxNotifyBackup != null" >
+                #{wxNotifyBackup,jdbcType=VARCHAR},
+            </if>
+            <if test="wxNotifyBackup2 != null" >
+                #{wxNotifyBackup2,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+    <select id="selectyhweno" parameterType="com.yihe.system.domain.yhWxNotify" resultMap="BaseResultMap">
+      SELECT * from yh_wx_notify WHERE wx_notify_id=#{wxNotifyId}
+    </select>
+
+    <select id="selectznxbyusercode" parameterType="com.yihe.system.domain.yhWxNotify" resultMap="BaseResultMap">
+         SELECT wxntf.*,yuntf.send_date,(select count(*) from yh_wx_notify wxntf left join yh_user_notify yuntf on yuntf.news_id=wxntf.wx_notify_id
+         WHERE yuntf.user_id=#{Usercode} and yuntf.to_service_id=5) as `count` from yh_wx_notify wxntf left join yh_user_notify yuntf on yuntf.news_id=wxntf.wx_notify_id
+         WHERE yuntf.user_id=#{Usercode} and yuntf.to_service_id=5
+         ORDER BY  send_date DESC
+         LIMIT #{start},10
+    </select>
+
+    <update id="changedate" parameterType="com.yihe.system.domain.yhWxNotify">
+        update  yh_user_notify set  is_read=1 where  to_service_id=5 and user_id=#{Usercode}
+    </update>
+</mapper>

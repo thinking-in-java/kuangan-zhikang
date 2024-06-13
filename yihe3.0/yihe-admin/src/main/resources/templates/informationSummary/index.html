@@ -1,0 +1,1159 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, maximum-scale=1">
+<title>信息概要</title>
+<link rel="stylesheet" th:href="@{/assets/libs/layui/css/layui.css}" />
+<link rel="stylesheet" th:href="@{/assets/module/admin.css}" />
+<!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+<style>
+/** 应用快捷块样式 */
+.console-app-group {
+	padding: 16px;
+	border-radius: 4px;
+	text-align: center;
+	background-color: #fff;
+	cursor: pointer;
+}
+
+.console-app-group .console-app-icon {
+	width: 32px;
+	height: 32px;
+	line-height: 32px;
+	margin-bottom: 6px;
+	display: inline-block;
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+	font-size: 32px;
+	color: #69c0ff;
+}
+
+.console-app-group:hover {
+	box-shadow: 0 0 15px rgba(0, 0, 0, .08);
+}
+
+/** //应用快捷块样式 */
+
+/** 小组成员 */
+.console-user-group {
+	position: relative;
+	padding: 10px 0 10px 60px;
+}
+
+.console-user-group .console-user-group-head {
+	width: 32px;
+	height: 32px;
+	position: absolute;
+	top: 50%;
+	left: 12px;
+	margin-top: -16px;
+}
+
+.console-user-group .layui-badge {
+	position: absolute;
+	top: 50%;
+	right: 8px;
+	margin-top: -10px;
+}
+
+.console-user-group .console-user-group-name {
+	line-height: 1.2;
+}
+
+.console-user-group .console-user-group-desc {
+	color: #8c8c8c;
+	line-height: 1;
+	font-size: 12px;
+	margin-top: 5px;
+}
+
+/** 卡片轮播图样式 */
+.admin-carousel .layui-carousel-ind {
+	position: absolute;
+	top: -41px;
+	text-align: right;
+}
+
+.admin-carousel .layui-carousel-ind ul {
+	background: 0 0;
+}
+
+.admin-carousel .layui-carousel-ind li {
+	background-color: #e2e2e2;
+}
+
+.admin-carousel .layui-carousel-ind li.layui-this {
+	background-color: #999;
+}
+
+/** 广告位轮播图 */
+.admin-news .layui-carousel-ind {
+	height: 45px;
+}
+
+.admin-news a {
+	display: block;
+	line-height: 60px;
+	text-align: center;
+	border-radius: 4px;
+}
+
+.basicInfo-left {
+	width: 60px;
+	height: 60px;
+}
+
+.basicInfo-left img {
+	width: 100%;
+	height: 100%;
+	border-radius: 50px;
+}
+
+.juzhong {
+	padding-bottom: 20px;
+	line-height: 2.2;
+	align-items: center;
+}
+
+.fengxiandengji {
+	margin: 0px 35px;
+	border-radius: 30px;
+	margin-bottom: 15px;
+}
+
+.layui-form-switch {
+	margin-top: 0px
+}
+
+.layui-col-space1>* {
+	padding: 18.5px;
+}
+</style>
+</head>
+<body>
+	<!-- 正文开始 -->
+	<div class="layui-fluid ew-console-wrapper">
+		<!-- 快捷方式 -->
+		<div class="layui-row layui-col-space15 juzhong">
+			<div class="layui-col-sm6" style="padding-bottom: 0;">
+				<div class="layui-row layui-col-space15">
+					<!-- <div class="layui-col-xs6 layui-col-sm3">
+						<div class="console-app-group">
+
+							<table border="" cellspacing="" cellpadding="" frame="void"
+								rules="none" style="text-align: left">
+								<tr><th>Header</th></tr>
+								<tr>
+									<td rowspan="2" style="padding-right: 15px;">
+										<div class='basicInfo-left'>
+											<img src='../../assets/images/head.png'>
+										</div>
+									</td>
+									<td>[[${selectUserInfo.user_code}]]</td>
+								</tr>
+								<tr>
+									<td>[[${selectUserInfo.user_name}]]
+										[[${selectUserInfo.age}]]岁</td>
+								</tr>
+							</table>
+
+						</div>
+					</div> -->
+					<div class="layui-col-xs6 layui-col-sm3">
+						<div class="console-app-group">
+							<div id="">最近健康风险评估</div>
+							<div class="console-app-name"
+								th:utext="${selectUserInfo.assessTime!=null? selectUserInfo.assessTime:'--'}"></div>
+						</div>
+					</div>
+					<div class="layui-col-xs6 layui-col-sm3">
+						<div class="console-app-group">
+							<div id="">最近健康数据监测</div>
+							<div class="console-app-name"
+								th:utext="${selectUserInfo.monitorTime!=null? selectUserInfo.monitorTime:'--'}"></div>
+						</div>
+					</div>
+					<div class="layui-col-xs6 layui-col-sm3">
+						<div class="console-app-group">
+							<div id="">最近睡眠评估</div>
+							<div class="console-app-name"
+								th:utext="${selectUserInfo.sleepNewTime!=null? selectUserInfo.sleepNewTime:'--'}"></div>
+						</div>
+					</div>
+					<div class="layui-col-xs6 layui-col-sm3">
+						<div class="console-app-group">
+							<div id="">最近习惯评估</div>
+							<div class="console-app-name" th:utext="${selectUserInfo.habitTime!=null? selectUserInfo.habitTime:'--'}"></div>
+						</div>
+					</div>
+
+				</div>
+			</div>
+			<div class="layui-col-sm6" style="padding-bottom: 0;">
+				<div class="layui-row layui-col-space15">
+
+					<div class="layui-col-xs6 layui-col-sm3">
+						<div class="console-app-group">
+							<div id="">最近压力评估</div>
+							<div class="console-app-name"
+								th:utext="${selectUserInfo.pressureTime!=null? selectUserInfo.pressureTime:'--'}"></div>
+						</div>
+					</div>
+					 <div class="layui-col-xs6 layui-col-sm3">
+						<div class="console-app-group">
+							<div id="">最近咨询</div>
+							<div class="console-app-name" th:utext="${selectUserInfo.consult!=null? selectUserInfo.consult:'--'}"></div>
+						</div>
+					</div> 
+					<div class="layui-col-xs6 layui-col-sm3">
+						<div class="console-app-group">
+							<div id="">档案更新时间</div>
+							<div class="console-app-name">--</div>
+						</div>
+					</div>
+					<div class="layui-col-xs6 layui-col-sm3">
+						<div class="console-app-group">
+							注册时间
+							<div class="console-app-name"
+								th:utext="${selectUserInfo.registerTime!=null? selectUserInfo.registerTime:'--'}"></div>
+						</div>
+					</div>
+
+				</div>
+			</div>
+		</div>
+
+	 
+		<div  th:if="${selectUserInfo.goodList.size()>0||selectUserInfo.nogoodList.size()>0}"  class="layui-row layui-col-space15" style="    padding: 7.5px;">
+			<div class="layui-col-sm12" style="background-color: #fff;padding:15px">
+			<div>
+				存在可逆危险因素：
+				<block th:each="goodList:${selectUserInfo.goodList}"> <span>[[${goodList}]]</span>
+				</block>
+			</div>
+
+
+			<div>
+				存在不可逆危险因素：
+				<block th:each="nogoodList:${selectUserInfo.nogoodList}">
+				[[${nogoodList}]] </block>
+			</div>
+		 </div>
+		</div>
+
+
+
+		<div class="layui-row layui-col-space15">
+
+
+
+			<div class="layui-col-xs12 layui-col-sm6 layui-col-md6">
+				<div class="layui-card">
+					<div class="layui-card-header">最新健康评估</div>
+					<div class="layui-card-body">
+						<div id="testData" style="height: 380px;"></div>
+					</div>
+
+				</div>
+			</div>
+
+			<div class="layui-col-xs12 layui-col-sm6 layui-col-md6">
+				<div class="layui-card">
+					<div class="layui-card-header" style="font-size: 20px;">整体使用概况</div>
+					<div class="layui-card-body" style="line-height: 45px;">
+						<div class="layui-row layui-col-space1"
+							style="text-align: center;">
+							<div class="layui-col-md3">
+								<div class="grid-demo grid-demo-bg1"
+									th:utext="${selectUserInfo.assesscount!=null? selectUserInfo.assesscount:'--'}"></div>
+								<div class="grid-demo grid-demo-bg1">次健康风险评估</div>
+
+							</div>
+							<div class="layui-col-md3">
+								<div class="grid-demo grid-demo-bg1"
+									th:utext="${selectUserInfo.planTypeCount!=null? selectUserInfo.planTypeCount:'--'}"></div>
+								<div class="grid-demo grid-demo-bg1">种健康计划</div>
+							</div>
+							<div class="layui-col-md3">
+								<div class="grid-demo grid-demo-bg1"
+									th:utext="${selectUserInfo.sleepcount!=null? selectUserInfo.sleepcount:'--'}"></div>
+								<div class="grid-demo grid-demo-bg1">次健康睡眠评估</div>
+							</div>
+							<div class="layui-col-md3">
+								<div class="grid-demo grid-demo-bg1"
+									th:utext="${selectUserInfo.pressurecount!=null? selectUserInfo.pressurecount:'--'}"></div>
+								<div class="grid-demo grid-demo-bg1">次压力评估</div>
+							</div>
+
+						</div>
+						<div class="layui-row layui-col-space1"
+							style="text-align: center;">
+
+							<div class="layui-col-md3">
+								<div class="grid-demo grid-demo-bg1"
+									th:utext="${selectUserInfo.foodDiarycount!=null? selectUserInfo.foodDiarycount:'--'}"></div>
+								<div class="grid-demo grid-demo-bg1">天饮食日记</div>
+							</div>
+							<div class="layui-col-md3">
+								<div class="grid-demo grid-demo-bg1"
+									th:utext="${selectUserInfo.sportDiarycount!=null? selectUserInfo.sportDiarycount:'--'}"></div>
+								<div class="grid-demo grid-demo-bg1">天运动日记</div>
+							</div>
+							<div class="layui-col-md3">
+								<div class="grid-demo grid-demo-bg1"
+									th:utext="${selectUserInfo.planDairyCount!=null? selectUserInfo.planDairyCount:'--'}"></div>
+								<div class="grid-demo grid-demo-bg1">天健康计划日记</div>
+							</div>
+							<div class="layui-col-md3">
+								<div class="grid-demo grid-demo-bg1"
+									th:utext="${selectUserInfo.sleepDiarycount!=null? selectUserInfo.sleepDiarycount:'--'}"></div>
+								<div class="grid-demo grid-demo-bg1">天睡眠日记</div>
+							</div>
+						</div>
+						<div class="layui-row layui-col-space1"
+							style="text-align: center;">
+
+							<div class="layui-col-md3">
+								<div class="grid-demo grid-demo-bg1" th:utext="${selectUserInfo.classcount!=null? selectUserInfo.classcount:'--'}"></div>
+								<div class="grid-demo grid-demo-bg1">个课堂学习</div>
+							</div>
+							<div class="layui-col-md3">
+								<div class="grid-demo grid-demo-bg1"
+									th:utext="${selectUserInfo.commentcount!=null? selectUserInfo.commentcount:'--'}"></div>
+								<div class="grid-demo grid-demo-bg1">条评论和回复</div>
+							</div>
+							<div class="layui-col-md3">
+								<div class="grid-demo grid-demo-bg1"
+									th:utext="${selectUserInfo.foodTypeCount!=null? selectUserInfo.foodTypeCount:'--'}"></div>
+								<div class="grid-demo grid-demo-bg1">种食物记录</div>
+							</div>
+							<div class="layui-col-md3">
+								<div class="grid-demo grid-demo-bg1"
+									th:utext="${selectUserInfo.sportTypeCount!=null? selectUserInfo.sportTypeCount:'--'}"></div>
+								<div class="grid-demo grid-demo-bg1">种运动记录</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+		</div>
+
+		<!-- 
+			<div th:if="${#lists.isEmpty(selectUserInfo.assessMap)}"
+				class="layui-col-xs12 layui-col-sm6 layui-col-md6">
+				<div class="layui-card">
+					<div class="layui-card-header">
+						最新健康评估<span class="pull-right">
+							<form class="layui-form" action="">
+								<div class="layui-form-item">
+									<label class="layui-form-label">暂无评估</label>
+									<div class="layui-input-block"></div>
+								</div>
+							</form>
+						</span>
+					</div>
+
+				</div>
+			</div>
+
+			<div class="layui-col-xs12 layui-col-sm6 layui-col-md6">
+				<div class="layui-card">
+					<div class="layui-card-header" style="font-size: 20px;">整体使用概况</div>
+					<div class="layui-card-body" style="line-height: 45px;">
+						<div class="layui-row layui-col-space1"
+							style="text-align: center;">
+							<div class="layui-col-md2">
+								<div class="grid-demo grid-demo-bg1">[[${selectUserInfo.assesscount}]]</div>
+								<div class="grid-demo grid-demo-bg1">次健康风险评估</div>
+
+							</div>
+							<div class="layui-col-md2">
+								<div class="grid-demo grid-demo-bg1">--</div>
+								<div class="grid-demo grid-demo-bg1">次健康习惯评估</div>
+							</div>
+							<div class="layui-col-md2">
+								<div class="grid-demo grid-demo-bg1">[[${selectUserInfo.Sleepcount}]]</div>
+								<div class="grid-demo grid-demo-bg1">次健康睡眠评估</div>
+							</div>
+							<div class="layui-col-md2">
+								<div class="grid-demo grid-demo-bg1">[[${selectUserInfo.pressurecount}]]</div>
+								<div class="grid-demo grid-demo-bg1">次压力评估</div>
+							</div>
+							<div class="layui-col-md2">
+								<div class="grid-demo grid-demo-bg1">[[${selectUserInfo.foodDiarycount}]]</div>
+								<div class="grid-demo grid-demo-bg1">天饮食日记</div>
+							</div>
+							<div class="layui-col-md2">
+								<div class="grid-demo grid-demo-bg1">[[${selectUserInfo.sportDiarycount}]]</div>
+								<div class="grid-demo grid-demo-bg1">天运动日记</div>
+							</div>
+						</div>
+						<div class="layui-row layui-col-space1"
+							style="text-align: center;">
+							<div class="layui-col-md2">
+								<div class="grid-demo grid-demo-bg1">--</div>
+								<div class="grid-demo grid-demo-bg1">天习惯日记</div>
+
+							</div>
+							<div class="layui-col-md2">
+								<div class="grid-demo grid-demo-bg1">[[${selectUserInfo.SleepDiarycount}]]</div>
+								<div class="grid-demo grid-demo-bg1">天睡眠日记</div>
+							</div>
+							<div class="layui-col-md2">
+								<div class="grid-demo grid-demo-bg1">--</div>
+								<div class="grid-demo grid-demo-bg1">个课堂学习</div>
+							</div>
+							<div class="layui-col-md2">
+								<div class="grid-demo grid-demo-bg1">[[${selectUserInfo.commentcount}]]</div>
+								<div class="grid-demo grid-demo-bg1">条评论和恢复</div>
+							</div>
+							<div class="layui-col-md2">
+								<div class="grid-demo grid-demo-bg1">[[${selectUserInfo.foodTypeCount}]]</div>
+								<div class="grid-demo grid-demo-bg1">种食物记录</div>
+							</div>
+							<div class="layui-col-md2">
+								<div class="grid-demo grid-demo-bg1">[[${selectUserInfo.sportTypeCount}]]</div>
+								<div class="grid-demo grid-demo-bg1">种运动记录</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+		</div>
+ -->
+
+		<div class="layui-col-xs12" style="padding-top: 20px;">
+			<div class="layui-card">
+				<div class="layui-card-header" style="font-size: 20px;">日记变化数据趋势</div>
+				<div class="layui-card-body">
+
+					<div class="layui-tab layui-tab-brief" lay-filter="tabZZT">
+						<ul class="layui-tab-title">
+							<li class="layui-this">周</li>
+							<li>月</li>
+							<li>年</li>
+						</ul>
+						<div class="layui-tab-content">
+							<div class="layui-tab-item layui-show">
+								<div class="layui-row layui-col-space30">
+									<div class="layui-col-xs12 layui-col-md12">
+										<span class="layui-breadcrumb" lay-separator="|">
+
+											<button id="shangzhou" type="button"
+												class="layui-btn layui-btn-primary layui-btn-xs weekBtn">上周</button>
+											<button id="benzhou"
+												style="background-color: #01AAED; color: #fff" type="button"
+												class="layui-btn layui-btn-primary layui-btn-xs weekBtn">本周</button>
+
+										</span>
+										<div id="xse2" style="height: 300px; margin-top: 20px;"></div>
+									</div>
+
+								</div>
+							</div>
+							<div class="layui-tab-item">
+								<div class="layui-row layui-col-space30">
+									<div class="layui-col-xs12 layui-col-md12">
+										<span class="layui-breadcrumb" lay-separator="|">
+
+											<button id="shangyue" type="button"
+												class="layui-btn layui-btn-primary layui-btn-xs monthBtn">上月</button>
+											<button id="benyue"
+												style="background-color: #01AAED; color: #fff" type="button"
+												class="layui-btn layui-btn-primary layui-btn-xs monthBtn">本月</button>
+
+										</span>
+										<div id="fwl" style="height: 300px; margin-top: 20px;"></div>
+									</div>
+
+								</div>
+							</div>
+							<div class="layui-tab-item">
+								<div class="layui-row layui-col-space30">
+									<div class="layui-col-xs12 layui-col-md12">
+										<span class="layui-breadcrumb" lay-separator="|">
+											<button id="jinnian" type="button"
+												class="layui-btn layui-btn-primary layui-btn-xs yearBtn">去年</button>
+											<button id="qunian"
+												style="background-color: #01AAED; color: #fff" type="button"
+												class="layui-btn layui-btn-primary layui-btn-xs yearBtn">今年</button>
+
+										</span>
+										<div id="xse" style="height: 300px; margin-top: 20px;"></div>
+									</div>
+
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+
+	</div>
+
+	<!-- js部分 -->
+
+	<script type="text/javascript" th:src="@{/assets/libs/layui/layui.js}"></script>
+	<script type="text/javascript" th:src="@{/assets/js/common.js}"></script>
+	<script th:src="@{/assets/libs/echarts/echarts.min.js}"></script>
+	<script th:src="@{/assets/libs/echarts/echartsTheme.js}"></script>
+	<script th:inline="javascript">
+		 /*<![CDATA[*/
+			layui.use(['layer', 'element', 'form', 'layedit', 'laydate'], function() {
+				var $ = layui.jquery;
+				var layer = layui.layer;
+				var element = layui.element;
+				var form = layui.form;
+				var layedit = layui.layedit
+				var laydate = layui.laydate;
+				
+				var usercode = [[${usercode}]];
+				form.on('switch(encrypt)', function(data){
+					  
+					  console.log(data.elem.checked); //开关是否开启，true或者false
+					   
+
+						var yesorno = data.elem.checked;
+
+						$.post("/YhUserEnrolinfo/modifyGY",
+								{
+									usercode : usercode,
+									yesOrNo : yesorno
+								}, function(result) {
+										
+								});
+					  
+					});  
+				
+				
+				 //表单取值
+				  layui.$('#LAY-component-form-getval').on('click', function(){
+				    var data = form.val('example');
+				    alert(JSON.stringify(data));
+				    $.post("/YhUserEnrolinfo/modifyGYInfo",
+				    		{
+						usercode : data.usercode,
+						gid : data.gid
+					}, function(result) {
+						window.location.reload()//刷新页面,不重复提交页面
+							});
+				  });
+
+				
+				var testData1 = echarts.init(document.getElementById('testData'));
+				var testData = [
+
+					{
+						name: [[${selectUserInfo.gaofxInfo}]],
+						value: 22.52,
+						itemStyle: {
+							color: {
+								type: 'linear',
+								x: 1,
+								y: 1,
+								x2: 0,
+								y2: 0,
+								colorStops: [{
+									offset: 0,
+									color: '#F8A26D' // 0% 处的颜色
+								}, {
+									offset: 1,
+									color: '#D43838' // 100% 处的颜色
+								}],
+
+								globalCoord: false // 缺省为 false
+							}
+						},
+					},
+					{
+						name: [[${selectUserInfo.zhongfxInfo}]],
+						value: 20,
+						itemStyle: {
+							color: {
+								type: 'linear',
+								x: 1,
+								y: 1,
+								x2: 0,
+								y2: 0,
+								colorStops: [{
+									offset: 0,
+									color: '#FFBF4A' // 0% 处的颜色
+								}, {
+									offset: 1,
+									color: '#FFBF4A' // 100% 处的颜色
+								}],
+								globalCoord: false // 缺省为 false
+							}
+						},
+					},
+					{
+						name: [[${selectUserInfo.huanInfo}]],
+						itemStyle: {
+							color: {
+								type: 'linear',
+								x: 1,
+								y: 1,
+								x2: 0,
+								y2: 0,
+								colorStops: [{
+									offset: 0,
+									color: '#00C1F4' // 0% 处的颜色
+								}, {
+									offset: 1,
+									color: '#3A91FF' // 100% 处的颜色
+								}],
+								globalCoord: false // 缺省为 false
+							}
+						},
+						value: 22.5,
+
+					},
+				]
+
+				testData1.setOption(option = {
+					calculable: false,
+					series: [{
+						type: 'treemap',
+						left: '0',
+						right: '0',
+						top: '0',
+						bottom: 'o',
+						label: {
+							show: true,
+							formatter: '{b}',
+							fontSize: 17,
+							ellipsis: true
+						},
+						breadcrumb: {
+							show: false
+						},
+						itemStyle: {
+
+							normal: {
+								//borderColor: '#EFEFEF',
+								borderColor: {
+									type: 'linear',
+									x: 0,
+									y: 0,
+									x2: 1,
+									y2: 1,
+									colorStops: [{
+										offset: 0,
+										color: '#F8F8F8' // 0% 处的颜色
+									}, {
+										offset: 1,
+										color: '#EFEFEF' // 100% 处的颜色
+									}],
+									globalCoord: false // 缺省为 false
+								},
+								borderWidth: 8,
+								shadowColor: '#18AEF9',
+								shadowOffsetX: 2,
+								shadowOffsetY: 2,
+								shadowBlur: 4,
+							}
+						},
+						data: testData,
+						roam: false,
+						nodeClick: false,
+						breadcrumb: {
+							show: false
+						},
+					}]
+				});
+				
+				
+
+
+				// 渲染销售额图表
+				var myCharts3 = echarts.init(document.getElementById('xse'), myEchartsTheme);
+				var options3 = {
+					tooltip: {
+						trigger: 'axis',
+						axisPointer: {
+							lineStyle: {
+								color: '#E0E0E0'
+							}
+						},
+					},
+					color: ['#10B4E8', '#FFA800', '#CAE1FF'],
+					legend: {
+						orient: 'vertical',
+						right: '0px',
+						top: '0px',
+						data: ['连续饮食日记', '连续运动日记', '连续睡眠日记'],
+						textStyle: {
+							color: '#595959'
+						}
+					},
+					grid: {
+						top: '75px',
+						left: '35px',
+						right: '55px',
+						bottom: '40px'
+					},
+					xAxis: {
+						
+						type: 'category',
+						data: [
+							 '1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'
+							 
+						],
+						axisLine: {
+							
+							symbol: ['none', 'arrow'],
+							symbolOffset: [0, 10]
+						},
+						axisTick: {
+							alignWithLabel: true
+						}
+					},
+					yAxis: {
+						
+						type: 'value',
+						boundaryGap: ['0', '20%'],
+						axisTick: {
+							show: false
+						},
+						axisLine: {
+							lineStyle: {
+								color: '#E0E0E0'
+							},
+							symbol: ['none', 'arrow'],
+							symbolOffset: [0, 10]
+						},
+						axisLabel: {
+							color: '#8c8c8c'
+						},
+						splitLine: {
+							show: false
+						},
+						splitArea: {
+							show: false
+						},
+						minInterval: 1
+					},
+					series: [{
+							name: '连续饮食日记',
+							type: 'line',
+							smooth: true
+						},
+						{
+							name: '连续运动日记',
+							type: 'line',
+							smooth: true
+						},
+						 
+						{
+							name: '连续睡眠日记',
+							type: 'line',
+							smooth: true
+						}
+				
+					]
+				};
+				myCharts3.setOption(options3);
+				// 赋值
+				myCharts3.setOption({
+					series: [{
+							data: [[${selectUserInfo.fooddatayear}]]
+						},
+						{
+							data: [[${selectUserInfo.sportdatayear}]]
+						},
+						 
+						{
+							data: [[${selectUserInfo.sleepdatayear}]]
+						 
+						}
+					]
+				});
+				
+
+
+
+				// 渲染访问量图表
+				var myCharts4 = echarts.init(document.getElementById('fwl'), myEchartsTheme);
+				var options4 = {
+					tooltip: {
+						trigger: 'axis',
+						axisPointer: {
+							lineStyle: {
+								color: '#E0E0E0'
+							}
+						},
+					},
+					color: ['#10B4E8', '#FFA800', '#D15FEE', '#CAE1FF'],
+					legend: {
+						orient: 'vertical',
+						right: '0px',
+						top: '0px',
+						data: ['连续饮食日记', '连续运动日记', '连续睡眠日记'],
+						textStyle: {
+							color: '#595959'
+						}
+					},
+					grid: {
+						top: '75px',
+						left: '35px',
+						right: '55px',
+						bottom: '40px'
+					},
+					xAxis: {
+					 
+						nameTextStyle: {
+							color: '#595959'
+						},
+						type: 'category',
+						data:[[${selectUserInfo.fooddatamonthTime}]],
+						axisLine: {
+							
+							symbol: ['none', 'arrow'],
+							symbolOffset: [0, 10]
+						},
+						axisTick: {
+							alignWithLabel: true
+						}
+					},
+					yAxis: {
+						 
+						nameTextStyle: {
+							color: '#595959'
+						},
+						type: 'value',
+						boundaryGap: ['0', '20%'],
+						axisTick: {
+							show: false
+						},
+						axisLine: {
+							lineStyle: {
+								color: '#E0E0E0'
+							},
+							symbol: ['none', 'arrow'],
+							symbolOffset: [0, 10]
+						},
+						axisLabel: {
+							color: '#8c8c8c'
+						},
+						splitLine: {
+							show: false
+						},
+						splitArea: {
+							show: false
+						},
+						minInterval: 1
+					},
+					series: [{
+							name: '连续饮食日记',
+							type: 'line',
+							smooth: true
+						},
+						{
+							name: '连续运动日记',
+							type: 'line',
+							smooth: true
+						},
+						
+						{
+							name: '连续睡眠日记',
+							type: 'line',
+							smooth: true
+						}
+
+					]
+				};
+				myCharts4.setOption(options4);
+				// 赋值
+				myCharts4.setOption({
+					series: [{
+							data: [[${selectUserInfo.fooddatamonth}]]
+						},
+						{
+							data: [[${selectUserInfo.sportdatamonth}]]
+						},
+						
+						{
+							data: [[${selectUserInfo.sleepdatamonth}]]
+							 
+						}
+					]
+				});
+
+
+				// 渲染周签到图表
+				var myCharts2 = echarts.init(document.getElementById('xse2'));
+				var options2 = {
+					tooltip: {
+						trigger: 'axis',
+						axisPointer: {
+							lineStyle: {
+								color: '#E0E0E0'
+							}
+						}
+					},
+					color: ['#10B4E8', '#FFA800', '#D15FEE', '#CAE1FF'],
+					legend: {
+						orient: 'vertical',
+						right: '0px',
+						top: '0px',
+						data: ['连续饮食日记', '连续运动日记', '连续睡眠日记'],
+						textStyle: {
+							color: '#595959'
+						}
+					},
+					grid: {
+						top: '75px',
+						left: '35px',
+						right: '55px',
+						bottom: '40px'
+					},
+					xAxis: {
+						 
+						 
+						type: 'category',
+						data: ['周一', '周二', '周三', '周四', '周五', '周六', '周日'],
+						axisLine: {
+							
+							symbol: ['none', 'arrow'],
+							symbolOffset: [0, 10]
+						},
+						axisTick: {
+							alignWithLabel: true
+						}
+					},
+					yAxis: {
+						
+						type: 'value',
+						boundaryGap: ['0', '20%'],
+						axisTick: {
+							show: false
+						},
+						axisLine: {
+							lineStyle: {
+								color: '#E0E0E0'
+							},
+							symbol: ['none', 'arrow'],
+							symbolOffset: [0, 10]
+						},
+						axisLabel: {
+							color: '#8c8c8c'
+						},
+						splitLine: {
+							show: false
+						},
+						splitArea: {
+							show: false
+						},
+						minInterval: 1
+					},
+					series: [{
+							name: '连续饮食日记',
+							type: 'line',
+							smooth: true
+						},
+						{
+							name: '连续运动日记',
+							type: 'line',
+							smooth: true
+						},
+						
+						{
+							name: '连续睡眠日记',
+							type: 'line',
+							smooth: true
+						}
+
+					]
+				};
+				
+				
+				myCharts2.setOption(options2);
+				// 赋值
+				myCharts2.setOption({
+					series: [{
+							data: [[${selectUserInfo.fooddataweek}]]
+						},
+						{
+							data: [[${selectUserInfo.sportdataweek}]]
+						},
+						
+						{
+							data:  [[${selectUserInfo.sleepdataweek}]]
+						}
+					]
+				});
+				
+					
+						 
+					/* for(var i=0;i<data.length;i++){
+						alert(data[i])
+					} */
+					
+					$('.weekBtn').click(function() {
+						$('.weekBtn').css("background-color", "#fff");
+						$('.weekBtn').css("color", "#595959");
+						
+						//点击后变色
+						$(this).css("background-color", "#01AAED");
+						$(this).css("color", "#fff");
+						})
+						
+						$('.monthBtn').click(function() {
+						$('.monthBtn').css("background-color", "#fff");
+						$('.monthBtn').css("color", "#595959");
+						//点击后变色
+						$(this).css("background-color", "#01AAED");
+						$(this).css("color", "#fff");
+						})
+						
+						$('.yearBtn').click(function() {
+						$('.yearBtn').css("background-color", "#fff");
+						$('.yearBtn').css("color", "#595959");
+						//点击后变色
+						$(this).css("background-color", "#01AAED");
+						$(this).css("color", "#fff");
+						})
+					
+					
+					
+					$('#shangzhou').click(function() {
+						
+						 $.post("/system/diary/findFoodDiaryByWeekDay",
+								{
+									usercode : [[${usercode}]],
+									type : '1'
+								}, function(result) {
+										console.log(result.data)
+										
+									 options2.series[0].data=result.data.food;
+									options2.series[1].data=result.data.sport;
+									options2.series[2].data=result.data.sleep;
+										myCharts2.setOption(options2);
+										 
+								}); 
+					})
+							
+					$('#benzhou').click(function() {
+				
+						 $.post("/system/diary/findFoodDiaryByWeekDay",
+								{
+									usercode : [[${usercode}]],
+									type : '0'
+								}, function(result) {
+									console.log(result)
+									
+									options2.series[0].data=result.data.food;
+									options2.series[1].data=result.data.sport;
+									options2.series[2].data=result.data.sleep;
+									myCharts2.setOption(options2); 
+								}); 
+					})
+							
+					$('#shangyue').click(function() {
+						
+						 $.post("/system/diary/findFoodDiaryByMonth",
+								{
+									usercode : [[${usercode}]],
+									type : '1'
+								}, function(result) {
+										console.log(result.data)
+											options4.series[0].data=result.data.food;
+										options4.series[1].data=result.data.sport;
+										options4.series[2].data=result.data.sleep;
+										 
+										myCharts4.setOption(options4);
+										 
+								}); 
+					})
+							
+					$('#benyue').click(function() {
+				
+						 $.post("/system/diary/findFoodDiaryByMonth",
+								{
+									usercode : [[${usercode}]],
+									type : '0'
+								}, function(result) {
+									console.log(result)
+								options4.series[0].data=result.data.food;
+										options4.series[1].data=result.data.sport;
+										options4.series[2].data=result.data.sleep;
+									myCharts4.setOption(options4);
+								}); 
+					})
+							
+					
+					$('#jinnian').click(function() {
+						
+						 $.post("/system/diary/findFoodDiaryByYear",
+								{
+									usercode : [[${usercode}]],
+									type : '1'
+								}, function(result) {
+										console.log(result.data)
+										
+										options3.series[0].data=result.data.food;
+										options3.series[1].data=result.data.sport;
+										options3.series[2].data=result.data.sleep;
+										myCharts3.setOption(options3);
+										 
+								}); 
+					})
+							
+					$('#qunian').click(function() {
+				
+						 $.post("/system/diary/findFoodDiaryByYear",
+								{
+									usercode : [[${usercode}]],
+									type : '0'
+								}, function(result) {
+									console.log(result)
+									options3.series[0].data=result.data.food;
+										options3.series[1].data=result.data.sport;
+										options3.series[2].data=result.data.sleep;
+									myCharts3.setOption(options3);
+								}); 
+					})
+							
+					
+					
+
+				// 切换选项卡重新渲染
+				element.on('tab(tabZZT)', function(data) {
+					if (data.index == 0) {
+						myCharts2.resize();
+
+					} else if (data.index == 1) {
+						myCharts4.resize();
+					} else {
+						myCharts3.resize();
+
+					}
+				});
+
+				
+
+				// 窗口大小改变事件
+				window.onresize = function() {
+					myCharts2.resize();
+					myCharts3.resize();
+					myCharts4.resize();
+					testData1.resize();
+				};
+
+			});
+			   /*]]>*/
+		</script>
+</body>
+
+</html>

@@ -1,0 +1,308 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yihe.system.mapper.YHUserUbaMapper" >
+  <resultMap id="BaseResultMap" type="com.yihe.system.domain.YHUserUba" >
+    <id column="Uba_Id" property="ubaId" jdbcType="INTEGER" />
+    <result column="addDate" property="adddate" jdbcType="VARCHAR" />
+    <result column="env" property="env" jdbcType="VARCHAR" />
+    <result column="glucose" property="glucose" jdbcType="VARCHAR" />
+    <result column="bilirubin" property="bilirubin" jdbcType="VARCHAR" />
+    <result column="ketone" property="ketone" jdbcType="VARCHAR" />
+    <result column="proportion" property="proportion" jdbcType="VARCHAR" />
+    <result column="redBloodCell" property="redbloodcell" jdbcType="VARCHAR" />
+    <result column="ph" property="ph" jdbcType="VARCHAR" />
+    <result column="urineProtein" property="urineprotein" jdbcType="VARCHAR" />
+    <result column="urobilinogen" property="urobilinogen" jdbcType="VARCHAR" />
+    <result column="nitrite" property="nitrite" jdbcType="VARCHAR" />
+    <result column="whiteBloodCell" property="whitebloodcell" jdbcType="VARCHAR" />
+    <result column="E_User_id" property="eUserId" jdbcType="INTEGER" />
+    <result column="Data_Source" property="dataSource" jdbcType="VARCHAR" />
+    <result column="creatinine" property="creatinine" jdbcType="VARCHAR" />
+    <result column="Microalbumin" property="microalbumin" jdbcType="VARCHAR" />
+    <result column="calcium_ion" property="calciumIon" jdbcType="VARCHAR" />
+    <result column="vitamin" property="vitamin" jdbcType="VARCHAR" />
+    <result column="Result" property="result" jdbcType="VARCHAR" />
+    <result column="Is_Del" property="isDel" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    Uba_Id, addDate, env, glucose, bilirubin, ketone, proportion, redBloodCell, ph, urineProtein, 
+    urobilinogen, nitrite, whiteBloodCell, E_User_id, Data_Source, creatinine, Microalbumin, 
+    calcium_ion, vitamin, Result, Is_Del
+  </sql>
+  <!-- 尿检总数 -->
+   <select id="selectByUbaCount" resultType="int" >
+  	select count(*) from yh_user_uba
+  </select>
+  
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from yh_user_uba
+    where Uba_Id = #{ubaId,jdbcType=INTEGER}
+  </select>
+  <select id="selectByPrimaryKeyByUsercodeLimit" resultMap="BaseResultMap" parameterType="java.lang.String" >
+   SELECT  <include refid="Base_Column_List" /> FROM yh_user_uba WHERE E_user_id=#{usercode} and is_Del=2  ORDER BY `addDate` DESC LIMIT 1
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from yh_user_uba
+    where Uba_Id = #{ubaId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.yihe.system.domain.YHUserUba" >
+    insert into yh_user_uba (Uba_Id, addDate, env, 
+      glucose, bilirubin, ketone, 
+      proportion, redBloodCell, ph, 
+      urineProtein, urobilinogen, nitrite, 
+      whiteBloodCell, E_User_id, Data_Source, 
+      creatinine, Microalbumin, calcium_ion, 
+      vitamin, Result, Is_Del
+      )
+    values (#{ubaId,jdbcType=INTEGER}, #{adddate,jdbcType=VARCHAR}, #{env,jdbcType=VARCHAR}, 
+      #{glucose,jdbcType=VARCHAR}, #{bilirubin,jdbcType=VARCHAR}, #{ketone,jdbcType=VARCHAR}, 
+      #{proportion,jdbcType=VARCHAR}, #{redbloodcell,jdbcType=VARCHAR}, #{ph,jdbcType=VARCHAR}, 
+      #{urineprotein,jdbcType=VARCHAR}, #{urobilinogen,jdbcType=VARCHAR}, #{nitrite,jdbcType=VARCHAR}, 
+      #{whitebloodcell,jdbcType=VARCHAR}, #{eUserId,jdbcType=INTEGER}, #{dataSource,jdbcType=VARCHAR}, 
+      #{creatinine,jdbcType=VARCHAR}, #{microalbumin,jdbcType=VARCHAR}, #{calciumIon,jdbcType=VARCHAR}, 
+      #{vitamin,jdbcType=VARCHAR}, #{result,jdbcType=VARCHAR}, #{isDel,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.yihe.system.domain.YHUserUba" >
+    insert into yh_user_uba
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="ubaId != null" >
+        Uba_Id,
+      </if>
+      <if test="adddate != null" >
+        addDate,
+      </if>
+      <if test="env != null" >
+        env,
+      </if>
+      <if test="glucose != null" >
+        glucose,
+      </if>
+      <if test="bilirubin != null" >
+        bilirubin,
+      </if>
+      <if test="ketone != null" >
+        ketone,
+      </if>
+      <if test="proportion != null" >
+        proportion,
+      </if>
+      <if test="redbloodcell != null" >
+        redBloodCell,
+      </if>
+      <if test="ph != null" >
+        ph,
+      </if>
+      <if test="urineprotein != null" >
+        urineProtein,
+      </if>
+      <if test="urobilinogen != null" >
+        urobilinogen,
+      </if>
+      <if test="nitrite != null" >
+        nitrite,
+      </if>
+      <if test="whitebloodcell != null" >
+        whiteBloodCell,
+      </if>
+      <if test="eUserId != null" >
+        E_User_id,
+      </if>
+      <if test="dataSource != null" >
+        Data_Source,
+      </if>
+      <if test="creatinine != null" >
+        creatinine,
+      </if>
+      <if test="microalbumin != null" >
+        Microalbumin,
+      </if>
+      <if test="calciumIon != null" >
+        calcium_ion,
+      </if>
+      <if test="vitamin != null" >
+        vitamin,
+      </if>
+      <if test="result != null" >
+        Result,
+      </if>
+      <if test="isDel != null" >
+        Is_Del,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="ubaId != null" >
+        #{ubaId,jdbcType=INTEGER},
+      </if>
+      <if test="adddate != null" >
+        #{adddate,jdbcType=VARCHAR},
+      </if>
+      <if test="env != null" >
+        #{env,jdbcType=VARCHAR},
+      </if>
+      <if test="glucose != null" >
+        #{glucose,jdbcType=VARCHAR},
+      </if>
+      <if test="bilirubin != null" >
+        #{bilirubin,jdbcType=VARCHAR},
+      </if>
+      <if test="ketone != null" >
+        #{ketone,jdbcType=VARCHAR},
+      </if>
+      <if test="proportion != null" >
+        #{proportion,jdbcType=VARCHAR},
+      </if>
+      <if test="redbloodcell != null" >
+        #{redbloodcell,jdbcType=VARCHAR},
+      </if>
+      <if test="ph != null" >
+        #{ph,jdbcType=VARCHAR},
+      </if>
+      <if test="urineprotein != null" >
+        #{urineprotein,jdbcType=VARCHAR},
+      </if>
+      <if test="urobilinogen != null" >
+        #{urobilinogen,jdbcType=VARCHAR},
+      </if>
+      <if test="nitrite != null" >
+        #{nitrite,jdbcType=VARCHAR},
+      </if>
+      <if test="whitebloodcell != null" >
+        #{whitebloodcell,jdbcType=VARCHAR},
+      </if>
+      <if test="eUserId != null" >
+        #{eUserId,jdbcType=INTEGER},
+      </if>
+      <if test="dataSource != null" >
+        #{dataSource,jdbcType=VARCHAR},
+      </if>
+      <if test="creatinine != null" >
+        #{creatinine,jdbcType=VARCHAR},
+      </if>
+      <if test="microalbumin != null" >
+        #{microalbumin,jdbcType=VARCHAR},
+      </if>
+      <if test="calciumIon != null" >
+        #{calciumIon,jdbcType=VARCHAR},
+      </if>
+      <if test="vitamin != null" >
+        #{vitamin,jdbcType=VARCHAR},
+      </if>
+      <if test="result != null" >
+        #{result,jdbcType=VARCHAR},
+      </if>
+      <if test="isDel != null" >
+        #{isDel,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.yihe.system.domain.YHUserUba" >
+    update yh_user_uba
+    <set >
+      <if test="adddate != null" >
+        addDate = #{adddate,jdbcType=VARCHAR},
+      </if>
+      <if test="env != null" >
+        env = #{env,jdbcType=VARCHAR},
+      </if>
+      <if test="glucose != null" >
+        glucose = #{glucose,jdbcType=VARCHAR},
+      </if>
+      <if test="bilirubin != null" >
+        bilirubin = #{bilirubin,jdbcType=VARCHAR},
+      </if>
+      <if test="ketone != null" >
+        ketone = #{ketone,jdbcType=VARCHAR},
+      </if>
+      <if test="proportion != null" >
+        proportion = #{proportion,jdbcType=VARCHAR},
+      </if>
+      <if test="redbloodcell != null" >
+        redBloodCell = #{redbloodcell,jdbcType=VARCHAR},
+      </if>
+      <if test="ph != null" >
+        ph = #{ph,jdbcType=VARCHAR},
+      </if>
+      <if test="urineprotein != null" >
+        urineProtein = #{urineprotein,jdbcType=VARCHAR},
+      </if>
+      <if test="urobilinogen != null" >
+        urobilinogen = #{urobilinogen,jdbcType=VARCHAR},
+      </if>
+      <if test="nitrite != null" >
+        nitrite = #{nitrite,jdbcType=VARCHAR},
+      </if>
+      <if test="whitebloodcell != null" >
+        whiteBloodCell = #{whitebloodcell,jdbcType=VARCHAR},
+      </if>
+      <if test="eUserId != null" >
+        E_User_id = #{eUserId,jdbcType=INTEGER},
+      </if>
+      <if test="dataSource != null" >
+        Data_Source = #{dataSource,jdbcType=VARCHAR},
+      </if>
+      <if test="creatinine != null" >
+        creatinine = #{creatinine,jdbcType=VARCHAR},
+      </if>
+      <if test="microalbumin != null" >
+        Microalbumin = #{microalbumin,jdbcType=VARCHAR},
+      </if>
+      <if test="calciumIon != null" >
+        calcium_ion = #{calciumIon,jdbcType=VARCHAR},
+      </if>
+      <if test="vitamin != null" >
+        vitamin = #{vitamin,jdbcType=VARCHAR},
+      </if>
+      <if test="result != null" >
+        Result = #{result,jdbcType=VARCHAR},
+      </if>
+      <if test="isDel != null" >
+        Is_Del = #{isDel,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where Uba_Id = #{ubaId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.yihe.system.domain.YHUserUba" >
+    update yh_user_uba
+    set addDate = #{adddate,jdbcType=VARCHAR},
+      env = #{env,jdbcType=VARCHAR},
+      glucose = #{glucose,jdbcType=VARCHAR},
+      bilirubin = #{bilirubin,jdbcType=VARCHAR},
+      ketone = #{ketone,jdbcType=VARCHAR},
+      proportion = #{proportion,jdbcType=VARCHAR},
+      redBloodCell = #{redbloodcell,jdbcType=VARCHAR},
+      ph = #{ph,jdbcType=VARCHAR},
+      urineProtein = #{urineprotein,jdbcType=VARCHAR},
+      urobilinogen = #{urobilinogen,jdbcType=VARCHAR},
+      nitrite = #{nitrite,jdbcType=VARCHAR},
+      whiteBloodCell = #{whitebloodcell,jdbcType=VARCHAR},
+      E_User_id = #{eUserId,jdbcType=INTEGER},
+      Data_Source = #{dataSource,jdbcType=VARCHAR},
+      creatinine = #{creatinine,jdbcType=VARCHAR},
+      Microalbumin = #{microalbumin,jdbcType=VARCHAR},
+      calcium_ion = #{calciumIon,jdbcType=VARCHAR},
+      vitamin = #{vitamin,jdbcType=VARCHAR},
+      Result = #{result,jdbcType=VARCHAR},
+      Is_Del = #{isDel,jdbcType=VARCHAR}
+    where Uba_Id = #{ubaId,jdbcType=INTEGER}
+  </update>
+  <!--  查询用户尿检 -->
+  <select id="selectYHUserUba" resultType="map" parameterType="java.lang.String" >
+    select yuu.redBloodCell,yuu.whiteBloodCell,yuu.urineProtein,yuu.ketone,
+	(select count(1) from yh_user_uba where E_User_Id=#{ eUserId,jdbcType=INTEGER} and Is_Del = 2) as num,
+	yuu.Data_Source,yuu.addDate
+	from yh_user_reginfo as reg 
+	left join yh_user_uba yuu
+	on reg.user_code = yuu.E_User_Id
+	where yuu.Uba_Id = (select Uba_Id from yh_user_uba where E_User_Id=#{ eUserId,jdbcType=INTEGER} and Is_Del = 2 order by addDate desc limit 1)
+  </select>
+    <select id="selectPageByParam" resultMap="BaseResultMap" parameterType="java.lang.String"  >
+	   select  yuu.redBloodCell,yuu.whiteBloodCell,yuu.urineProtein,yuu.ketone,yuu.addDate
+		from yh_user_reginfo as reg 
+		inner join yh_user_uba yuu
+		on reg.user_code = yuu.E_User_Id
+		 where reg.user_code=#{ eUserId,jdbcType=INTEGER} and Is_Del = 2 order by addDate desc
+  </select>
+</mapper>

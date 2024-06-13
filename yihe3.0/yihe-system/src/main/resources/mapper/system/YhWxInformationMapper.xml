@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yihe.system.mapper.YhWxInformationMapper" >
+  <resultMap id="BaseResultMap" type="com.yihe.system.domain.YhWxInformation" >
+    <id column="wx_id" property="wxId" jdbcType="INTEGER" />
+    <result column="gz_appid" property="gzAppid" jdbcType="VARCHAR" />
+    <result column="gz_appsecret" property="gzAppsecret" jdbcType="VARCHAR" />
+    <result column="xc_appid" property="xcAppid" jdbcType="VARCHAR" />
+    <result column="xc_appsecret" property="xcAppsecret" jdbcType="VARCHAR" />
+    <result column="board_id" property="boardId" jdbcType="VARCHAR" />
+    <result column="variate1" property="variate1" jdbcType="VARCHAR" />
+    <result column="variate2" property="variate2" jdbcType="VARCHAR" />
+    <result column="variate3" property="variate3" jdbcType="VARCHAR" />
+    <result column="variate4" property="variate4" jdbcType="VARCHAR" />
+    <result column="variate5" property="variate5" jdbcType="VARCHAR" />
+    <result column="wx_type" property="wxType" jdbcType="VARCHAR" />
+    <result column="mb_name" property="mbName" jdbcType="VARCHAR" />
+    <result column="info_type" property="infoType" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    wx_id, gz_appid, gz_appsecret, xc_appid, xc_appsecret, board_id, variate1, variate2, 
+    variate3, variate4, variate5, wx_type, mb_name, info_type
+  </sql>
+  
+   <select id="selectbyWxINfo" resultMap="BaseResultMap">
+  	select * from yh_wx_information
+  </select>
+  
+  <select id="selectbyWxType" resultMap="BaseResultMap" parameterType="java.lang.String">
+  	select * from yh_wx_information where wx_type=#{wxType,jdbcType=VARCHAR}
+  </select>
+  
+  
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from yh_wx_information
+    where wx_id = #{wxId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from yh_wx_information
+    where wx_id = #{wxId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.yihe.system.domain.YhWxInformation" >
+    insert into yh_wx_information (wx_id, gz_appid, gz_appsecret, 
+      xc_appid, xc_appsecret, board_id, 
+      variate1, variate2, variate3, 
+      variate4, variate5, wx_type, 
+      mb_name, info_type)
+    values (#{wxId,jdbcType=INTEGER}, #{gzAppid,jdbcType=VARCHAR}, #{gzAppsecret,jdbcType=VARCHAR}, 
+      #{xcAppid,jdbcType=VARCHAR}, #{xcAppsecret,jdbcType=VARCHAR}, #{boardId,jdbcType=VARCHAR}, 
+      #{variate1,jdbcType=VARCHAR}, #{variate2,jdbcType=VARCHAR}, #{variate3,jdbcType=VARCHAR}, 
+      #{variate4,jdbcType=VARCHAR}, #{variate5,jdbcType=VARCHAR}, #{wxType,jdbcType=VARCHAR}, 
+      #{mbName,jdbcType=VARCHAR}, #{infoType,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.yihe.system.domain.YhWxInformation" >
+    insert into yh_wx_information
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="wxId != null" >
+        wx_id,
+      </if>
+      <if test="gzAppid != null" >
+        gz_appid,
+      </if>
+      <if test="gzAppsecret != null" >
+        gz_appsecret,
+      </if>
+      <if test="xcAppid != null" >
+        xc_appid,
+      </if>
+      <if test="xcAppsecret != null" >
+        xc_appsecret,
+      </if>
+      <if test="boardId != null" >
+        board_id,
+      </if>
+      <if test="variate1 != null" >
+        variate1,
+      </if>
+      <if test="variate2 != null" >
+        variate2,
+      </if>
+      <if test="variate3 != null" >
+        variate3,
+      </if>
+      <if test="variate4 != null" >
+        variate4,
+      </if>
+      <if test="variate5 != null" >
+        variate5,
+      </if>
+      <if test="wxType != null" >
+        wx_type,
+      </if>
+      <if test="mbName != null" >
+        mb_name,
+      </if>
+      <if test="infoType != null" >
+        info_type,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="wxId != null" >
+        #{wxId,jdbcType=INTEGER},
+      </if>
+      <if test="gzAppid != null" >
+        #{gzAppid,jdbcType=VARCHAR},
+      </if>
+      <if test="gzAppsecret != null" >
+        #{gzAppsecret,jdbcType=VARCHAR},
+      </if>
+      <if test="xcAppid != null" >
+        #{xcAppid,jdbcType=VARCHAR},
+      </if>
+      <if test="xcAppsecret != null" >
+        #{xcAppsecret,jdbcType=VARCHAR},
+      </if>
+      <if test="boardId != null" >
+        #{boardId,jdbcType=VARCHAR},
+      </if>
+      <if test="variate1 != null" >
+        #{variate1,jdbcType=VARCHAR},
+      </if>
+      <if test="variate2 != null" >
+        #{variate2,jdbcType=VARCHAR},
+      </if>
+      <if test="variate3 != null" >
+        #{variate3,jdbcType=VARCHAR},
+      </if>
+      <if test="variate4 != null" >
+        #{variate4,jdbcType=VARCHAR},
+      </if>
+      <if test="variate5 != null" >
+        #{variate5,jdbcType=VARCHAR},
+      </if>
+      <if test="wxType != null" >
+        #{wxType,jdbcType=VARCHAR},
+      </if>
+      <if test="mbName != null" >
+        #{mbName,jdbcType=VARCHAR},
+      </if>
+      <if test="infoType != null" >
+        #{infoType,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.yihe.system.domain.YhWxInformation" >
+    update yh_wx_information
+    <set >
+      <if test="gzAppid != null" >
+        gz_appid = #{gzAppid,jdbcType=VARCHAR},
+      </if>
+      <if test="gzAppsecret != null" >
+        gz_appsecret = #{gzAppsecret,jdbcType=VARCHAR},
+      </if>
+      <if test="xcAppid != null" >
+        xc_appid = #{xcAppid,jdbcType=VARCHAR},
+      </if>
+      <if test="xcAppsecret != null" >
+        xc_appsecret = #{xcAppsecret,jdbcType=VARCHAR},
+      </if>
+      <if test="boardId != null" >
+        board_id = #{boardId,jdbcType=VARCHAR},
+      </if>
+      <if test="variate1 != null" >
+        variate1 = #{variate1,jdbcType=VARCHAR},
+      </if>
+      <if test="variate2 != null" >
+        variate2 = #{variate2,jdbcType=VARCHAR},
+      </if>
+      <if test="variate3 != null" >
+        variate3 = #{variate3,jdbcType=VARCHAR},
+      </if>
+      <if test="variate4 != null" >
+        variate4 = #{variate4,jdbcType=VARCHAR},
+      </if>
+      <if test="variate5 != null" >
+        variate5 = #{variate5,jdbcType=VARCHAR},
+      </if>
+      <if test="wxType != null" >
+        wx_type = #{wxType,jdbcType=VARCHAR},
+      </if>
+      <if test="mbName != null" >
+        mb_name = #{mbName,jdbcType=VARCHAR},
+      </if>
+      <if test="infoType != null" >
+        info_type = #{infoType,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where wx_id = #{wxId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.yihe.system.domain.YhWxInformation" >
+    update yh_wx_information
+    set gz_appid = #{gzAppid,jdbcType=VARCHAR},
+      gz_appsecret = #{gzAppsecret,jdbcType=VARCHAR},
+      xc_appid = #{xcAppid,jdbcType=VARCHAR},
+      xc_appsecret = #{xcAppsecret,jdbcType=VARCHAR},
+      board_id = #{boardId,jdbcType=VARCHAR},
+      variate1 = #{variate1,jdbcType=VARCHAR},
+      variate2 = #{variate2,jdbcType=VARCHAR},
+      variate3 = #{variate3,jdbcType=VARCHAR},
+      variate4 = #{variate4,jdbcType=VARCHAR},
+      variate5 = #{variate5,jdbcType=VARCHAR},
+      wx_type = #{wxType,jdbcType=VARCHAR},
+      mb_name = #{mbName,jdbcType=VARCHAR},
+      info_type = #{infoType,jdbcType=VARCHAR}
+    where wx_id = #{wxId,jdbcType=INTEGER}
+  </update>
+</mapper>

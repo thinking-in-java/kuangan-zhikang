@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yihe.system.mapper.YhHealthHeadlineMapper" >
+  <resultMap id="BaseResultMap" type="com.yihe.system.domain.YhHealthHeadline" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="he_title" property="heTitle" jdbcType="VARCHAR" />
+    <result column="he_content" property="heContent" jdbcType="VARCHAR" />
+    <result column="he_img" property="heImg" jdbcType="VARCHAR" />
+    <result column="he_time" property="heTime" jdbcType="VARCHAR" />
+    <result column="he_author" property="heAuthor" jdbcType="VARCHAR" />
+    <result column="he_count" property="heCount" jdbcType="INTEGER" />
+    <result column="standby" property="standby" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, he_title, he_content, he_img, he_time, he_author, he_count, standby
+  </sql>
+  
+   <select id="selectByExample" resultMap="BaseResultMap" >
+    select * from yh_health_headline
+  </select>
+  
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from yh_health_headline
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from yh_health_headline
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.yihe.system.domain.YhHealthHeadline" >
+    insert into yh_health_headline (id, he_title, he_content, 
+      he_img, he_time, he_author, 
+      he_count, standby)
+    values (#{id,jdbcType=INTEGER}, #{heTitle,jdbcType=VARCHAR}, #{heContent,jdbcType=VARCHAR}, 
+      #{heImg,jdbcType=VARCHAR}, #{heTime,jdbcType=VARCHAR}, #{heAuthor,jdbcType=VARCHAR}, 
+      #{heCount,jdbcType=INTEGER}, #{standby,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.yihe.system.domain.YhHealthHeadline" >
+    insert into yh_health_headline
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="heTitle != null" >
+        he_title,
+      </if>
+      <if test="heContent != null" >
+        he_content,
+      </if>
+      <if test="heImg != null" >
+        he_img,
+      </if>
+      <if test="heTime != null" >
+        he_time,
+      </if>
+      <if test="heAuthor != null" >
+        he_author,
+      </if>
+      <if test="heCount != null" >
+        he_count,
+      </if>
+      <if test="standby != null" >
+        standby,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="heTitle != null" >
+        #{heTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="heContent != null" >
+        #{heContent,jdbcType=VARCHAR},
+      </if>
+      <if test="heImg != null" >
+        #{heImg,jdbcType=VARCHAR},
+      </if>
+      <if test="heTime != null" >
+        #{heTime,jdbcType=VARCHAR},
+      </if>
+      <if test="heAuthor != null" >
+        #{heAuthor,jdbcType=VARCHAR},
+      </if>
+      <if test="heCount != null" >
+        #{heCount,jdbcType=INTEGER},
+      </if>
+      <if test="standby != null" >
+        #{standby,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.yihe.system.domain.YhHealthHeadline" >
+    update yh_health_headline
+    <set >
+      <if test="heTitle != null" >
+        he_title = #{heTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="heContent != null" >
+        he_content = #{heContent,jdbcType=VARCHAR},
+      </if>
+      <if test="heImg != null" >
+        he_img = #{heImg,jdbcType=VARCHAR},
+      </if>
+      <if test="heTime != null" >
+        he_time = #{heTime,jdbcType=VARCHAR},
+      </if>
+      <if test="heAuthor != null" >
+        he_author = #{heAuthor,jdbcType=VARCHAR},
+      </if>
+      <if test="heCount != null" >
+        he_count = #{heCount,jdbcType=INTEGER},
+      </if>
+      <if test="standby != null" >
+        standby = #{standby,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.yihe.system.domain.YhHealthHeadline" >
+    update yh_health_headline
+    set he_title = #{heTitle,jdbcType=VARCHAR},
+      he_content = #{heContent,jdbcType=VARCHAR},
+      he_img = #{heImg,jdbcType=VARCHAR},
+      he_time = #{heTime,jdbcType=VARCHAR},
+      he_author = #{heAuthor,jdbcType=VARCHAR},
+      he_count = #{heCount,jdbcType=INTEGER},
+      standby = #{standby,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

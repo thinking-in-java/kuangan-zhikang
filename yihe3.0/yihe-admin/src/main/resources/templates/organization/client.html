@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>客户信息管理</title>
+    <link rel="stylesheet" th:href="@{/assets/libs/layui/css/layui.css}"/>
+    <link rel="stylesheet" th:href="@{/assets/module/admin.css}"/>
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body>
+<!-- 页面加载loading -->
+<div class="page-loading">
+    <div class="ball-loader">
+        <span></span><span></span><span></span><span></span>
+    </div>
+</div>
+<!-- 正文开始 -->
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div class="layui-card-body">
+            <div class="layui-form toolbar">
+                <div class="layui-form-item">
+                    <div class="layui-inline">
+                        <label class="layui-form-label w-auto">搜索：</label>
+                        <div class="layui-input-inline mr0">
+                            <!-- <input  type="text" id="tree" name="tree" lay-filter="tree" class="layui-input">
+                             <input  type="text" id="treeid" name="treeid"  class="layui-input"> -->
+                            <input id="edtSearchAuth" class="layui-input" placeholder="输入关键字"/>
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <button id="btnSearchAuth" class="layui-btn icon-btn"><i class="layui-icon">&#xe615;</i>搜索
+                        </button>
+
+                        <button class="layui-btn layui-btn-primary" id="btnempty" lay-submit="" lay-filter="reset">清除
+                        </button>
+                    </div>
+                    <div class="layui-inline" style="float: right;" id="frontpage">
+                        <a target="_self" href="/manage/guest/clientinformationadd?id=0">
+                            <button class="layui-btn icon-btn"><i class="layui-icon">&#xe654;</i>添加</button>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <table id="tableAuth"></table>
+            <div style="height: 300px;"></div>
+        </div>
+    </div>
+</div>
+
+<!-- 表格操作列 -->
+<script type="text/html" id="tableBarAuth">
+    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="edit">新增子节点</a>
+    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="del">修改</a>
+    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="copylink">复制链接</a>
+    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="facility">注册设备管理</a>
+</script>
+<!-- js部分 -->
+<script type="text/javascript" th:src="@{/assets/libs/layui/layui.js}"></script>
+<script type="text/javascript" th:src="@{/assets/js/common.js}"></script>
+<script>
+
+
+    layui.use(['layer', 'form', 'admin', 'treeTable', 'util', 'treeSelect', 'table'], function () {
+        var $ = layui.jquery;
+        var layer = layui.layer;
+        var form = layui.form;
+        var admin = layui.admin;
+        var treeTable = layui.treeTable;
+        var util = layui.util;
+        var treeSelect = layui.treeSelect;
+        var table = layui.table;
+
+
+        //清除按钮
+        $("#btnempty").click(function () {
+            window.location.reload();
+        })
+
+
+        /* treeSelect.render({
+            // 选择器
+            elem: '#tree',
+            // 数据
+            data: '/YhOrgTree/showPullDownTree',
+            // 异步加载方式：get/post，默认get
+            type: 'get',
+            // 占位符
+            placeholder: '全部',
+            // 是否开启搜索功能：true/false，默认false
+            search: true,
+            // 点击回调
+            click: function(d){
+                console.log(d);
+                $("#treeid").val(d.current.id);
+            },
+            // 加载完成后的回调函数
+            success: function (d) {
+                console.log(d);
+//                选中节点，根据id筛选
+              // treeSelect.checkNode('tree', 1000010000);
+
+//                获取zTree对象，可以调用zTree方法
+//                var treeObj = treeSelect.zTree('tree');
+//                console.log(treeObj);
+
+//                刷新树结构
+//                treeSelect.refresh();
+            }
+        }); */
+
+
+        // 渲染表格
+        var insTb = treeTable.render({
+            elem: '#tableAuth',
+            tree: {
+                iconIndex: 1,  // 折叠图标显示在第几列
+                idName: 'orgCode',  // 自定义id字段的名称
+                pidName: 'superOrgCode',  // 自定义标识是否还有子节点的字段名称
+                isPidData: true, // 是否是pid形式数据
+            },
+            cellMinWidth: 100,
+            cols: [
+                {type: 'numbers'},
+
+                {
+                    field: 'orgName', title: '名称', width: 300,
+                    template: function (item) {
+                        return '<span style="color:#aaa;">' + item.orgName + '</span>';
+                    }
+                },
+
+                {field: 'node', title: '子节点', width: 100},
+                {field: 'stuck', title: '注册卡(已用/总数)'},
+                {field: 'doctor', title: '健管师', width: 100},
+                {
+                    title: '管理员', templet: function (d) {
+                        var ss = "";
+                        if (d.userName == null || d.userName == "") {
+                            ss = "--";
+                        } else {
+                            ss = d.userName;
+                        }
+                        return ss;
+                    }, align: 'userName', width: 100
+                }, {
+                    title: '有效期', templet: function (d) {
+                        var thetime = layui.util.toDateString(d.addDate, 'yyyy-MM-dd');
+                        var date = new Date(Date.parse(thetime.replace(/-/g, "/")));
+                        var addDate = d.addDate;
+                        var curDate = new Date();
+                        var time = (new Date).getTime() - 24 * 60 * 60 * 1000;
+                        var yesterday = new Date(time);
+                        var ss = "";
+                        if (addDate == null || addDate == "" || date >= yesterday) {
+                            ss = "正常";
+                        } else if (date < yesterday) {
+                            ss = "已过期";
+                        }
+                        return ss;
+                    }, align: 'thetime', width: 100
+                },
+                {
+                    title: '有效期限', templet: function (d) {
+                        var thetime = layui.util.toDateString(d.addDate, 'yyyy-MM-dd');
+                        var addDate = d.addDate;
+                        var ss = "";
+                        if (addDate == null || addDate == "") {
+                            ss = "--";
+                        } else {
+                            ss = thetime;
+                        }
+                        return ss;
+                    }, align: 'addDate', width: 150
+                },
+
+                {templet: '#tableBarAuth', title: '操作', align: 'center'}
+            ],
+            id: 'tableBank',
+            reqData: function (data, callback) {
+                //$.get('${basePath}/yihe-upms-server/resources/yihe-static-file/json/authorities.json', function (res) {
+                $.post('/YhOrgTree/showlistTree', function (res) {
+                    console.log(res.data)
+                    callback(res.data);
+                });
+            }
+        });
+
+
+        // 搜索
+        $('#btnSearchAuth').click(function () {
+            var keyword = $('#edtSearchAuth').val();
+            if (keyword) {
+                insTb.filterData(keyword);
+            } else {
+                insTb.clearFilter();
+            }
+        });
+
+
+        // 工具条点击事件
+        treeTable.on('tool(tableAuth)', function (obj) {
+            var data = obj.data;
+            var layEvent = obj.event;
+            if (layEvent === 'edit') { // 修改
+                window.location.href = "/manage/guest/clientinformationadd?id=" + data.orgCode;
+            } else if (layEvent === 'del') { // 删除
+                window.location.href = "/manage/guest/clientamend?id=" + data.orgCode;
+            } else if (layEvent === 'facility') {//注册设备管理
+                window.location.href = "/manage/guest/facility?id=" + data.orgCode + "&orgName=" + data.orgName;
+            } else if (layEvent === 'copylink') {
+                copyToClipboard("http://www.guyijk.com/login?org=" + data.orgCode);
+            }
+        });
+
+        function copyToClipboard(text) {
+            /* 创建一个临时的文本区域 */
+            var textArea = document.createElement("textarea");
+            /* 设置文本区域的值为你想要复制的文本 */
+            textArea.value = text;
+            /* 将文本区域添加到文档中 */
+            document.body.appendChild(textArea);
+            /* 选中文本 */
+            textArea.select();
+            /* 执行复制命令 */
+            document.execCommand("copy");
+            /* 从文档中移除临时文本区域 */
+            document.body.removeChild(textArea);
+            layer.msg('复制链接成功', {icon: 6});
+        }
+    });
+</script>
+</body>
+</html>

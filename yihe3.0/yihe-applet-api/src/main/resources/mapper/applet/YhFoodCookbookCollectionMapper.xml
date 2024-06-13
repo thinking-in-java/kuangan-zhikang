@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yihe.applet.api.mapper.YhFoodCookbookCollectionMapper" >
+  <resultMap id="BaseResultMap" type="com.yihe.applet.api.domain.YhFoodCookbookCollection" >
+    <id column="cid" property="cid" jdbcType="INTEGER" />
+    <result column="foodid" property="foodid" jdbcType="INTEGER" />
+    <result column="usercode" property="usercode" jdbcType="VARCHAR" />
+    <result column="insertTime" property="inserttime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    cid, foodid, usercode, insertTime
+  </sql>
+ <!-- 查询是否收藏 -->
+ <select id="findCookBookByFoodid" resultType="java.lang.Integer">
+ SELECT COUNT(1) FROM yh_food_cookbook_collection WHERE  foodid=#{foodid} AND  usercode=#{usercode}
+ </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from yh_food_cookbook_collection
+    where cid = #{cid,jdbcType=INTEGER}
+  </select>
+  <delete id="delInfoByFoodidAndUserCode">
+   delete from yh_food_cookbook_collection WHERE  foodid=#{foodid} AND  usercode=#{usercode}
+  </delete>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from yh_food_cookbook_collection
+    where cid = #{cid,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.yihe.applet.api.domain.YhFoodCookbookCollection" >
+    insert into yh_food_cookbook_collection (cid, foodid, usercode, 
+      insertTime)
+    values (#{cid,jdbcType=INTEGER}, #{foodid,jdbcType=INTEGER}, #{usercode,jdbcType=VARCHAR}, 
+      #{inserttime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.yihe.applet.api.domain.YhFoodCookbookCollection" >
+    insert into yh_food_cookbook_collection
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="cid != null" >
+        cid,
+      </if>
+      <if test="foodid != null" >
+        foodid,
+      </if>
+      <if test="usercode != null" >
+        usercode,
+      </if>
+      <if test="inserttime != null" >
+        insertTime,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="cid != null" >
+        #{cid,jdbcType=INTEGER},
+      </if>
+      <if test="foodid != null" >
+        #{foodid,jdbcType=INTEGER},
+      </if>
+      <if test="usercode != null" >
+        #{usercode,jdbcType=VARCHAR},
+      </if>
+      <if test="inserttime != null" >
+       now(),
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.yihe.applet.api.domain.YhFoodCookbookCollection" >
+    update yh_food_cookbook_collection
+    <set >
+      <if test="foodid != null" >
+        foodid = #{foodid,jdbcType=INTEGER},
+      </if>
+      <if test="usercode != null" >
+        usercode = #{usercode,jdbcType=VARCHAR},
+      </if>
+      <if test="inserttime != null" >
+        insertTime = #{inserttime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where cid = #{cid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.yihe.applet.api.domain.YhFoodCookbookCollection" >
+    update yh_food_cookbook_collection
+    set foodid = #{foodid,jdbcType=INTEGER},
+      usercode = #{usercode,jdbcType=VARCHAR},
+      insertTime = #{inserttime,jdbcType=TIMESTAMP}
+    where cid = #{cid,jdbcType=INTEGER}
+  </update>
+</mapper>

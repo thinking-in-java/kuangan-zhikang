@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yihe.system.mapper.YHUserHeartRateMapper" >
+  <resultMap id="BaseResultMap" type="com.yihe.system.domain.YHUserHeartRate" >
+    <id column="rid" property="rid" jdbcType="INTEGER" />
+    <result column="heart_rate" property="heartRate" jdbcType="INTEGER" />
+    <result column="Entry_Time" property="entryTime" jdbcType="VARCHAR" />
+    <result column="Is_Del" property="isDel" jdbcType="INTEGER" />
+    <result column="Env" property="env" jdbcType="VARCHAR" />
+    <result column="Data_Source" property="dataSource" jdbcType="VARCHAR" />
+    <result column="E_User_Id" property="eUserId" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    rid, heart_rate, Entry_Time, Is_Del, Env, Data_Source, E_User_Id
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from yh_user_heart_rate
+    where rid = #{rid,jdbcType=INTEGER}
+  </select>
+  
+  <select id="selectHeartRate" resultType="map" parameterType="java.lang.String">
+  select 
+(select count(*) from yh_user_heart_rate where E_User_Id=#{eUserId,jdbcType=INTEGER} and Is_Del = 2) as num,
+	xy.Data_Source,xy.Entry_Time,xy.heart_rate
+	from yh_user_reginfo as reg 
+	left join yh_user_heart_rate xy
+	on reg.user_code = xy.E_User_Id
+	where xy.rid = (select rid from yh_user_heart_rate where E_User_Id=#{eUserId,jdbcType=INTEGER} and Is_Del = 2 order by Entry_Time desc limit 1);
+  </select>
+  
+  
+  <select id="selectByPrimaryKeyByUsercodeLimit" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    SELECT   <include refid="Base_Column_List" /> FROM yh_user_heart_rate WHERE E_user_id=#{usercode} and is_Del=2  ORDER BY Entry_Time DESC LIMIT 1
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from yh_user_heart_rate
+    where rid = #{rid,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.yihe.system.domain.YHUserHeartRate" >
+    insert into yh_user_heart_rate (rid, heart_rate, Entry_Time, 
+      Is_Del, Env, Data_Source, 
+      E_User_Id)
+    values (#{rid,jdbcType=INTEGER}, #{heartRate,jdbcType=INTEGER}, #{entryTime,jdbcType=VARCHAR}, 
+      #{isDel,jdbcType=INTEGER}, #{env,jdbcType=VARCHAR}, #{dataSource,jdbcType=VARCHAR}, 
+      #{eUserId,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.yihe.system.domain.YHUserHeartRate" >
+    insert into yh_user_heart_rate
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="rid != null" >
+        rid,
+      </if>
+      <if test="heartRate != null" >
+        heart_rate,
+      </if>
+      <if test="entryTime != null" >
+        Entry_Time,
+      </if>
+      <if test="isDel != null" >
+        Is_Del,
+      </if>
+      <if test="env != null" >
+        Env,
+      </if>
+      <if test="dataSource != null" >
+        Data_Source,
+      </if>
+      <if test="eUserId != null" >
+        E_User_Id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="rid != null" >
+        #{rid,jdbcType=INTEGER},
+      </if>
+      <if test="heartRate != null" >
+        #{heartRate,jdbcType=INTEGER},
+      </if>
+      <if test="entryTime != null" >
+        #{entryTime,jdbcType=VARCHAR},
+      </if>
+      <if test="isDel != null" >
+        #{isDel,jdbcType=INTEGER},
+      </if>
+      <if test="env != null" >
+        #{env,jdbcType=VARCHAR},
+      </if>
+      <if test="dataSource != null" >
+        #{dataSource,jdbcType=VARCHAR},
+      </if>
+      <if test="eUserId != null" >
+        #{eUserId,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.yihe.system.domain.YHUserHeartRate" >
+    update yh_user_heart_rate
+    <set >
+      <if test="heartRate != null" >
+        heart_rate = #{heartRate,jdbcType=INTEGER},
+      </if>
+      <if test="entryTime != null" >
+        Entry_Time = #{entryTime,jdbcType=VARCHAR},
+      </if>
+      <if test="isDel != null" >
+        Is_Del = #{isDel,jdbcType=INTEGER},
+      </if>
+      <if test="env != null" >
+        Env = #{env,jdbcType=VARCHAR},
+      </if>
+      <if test="dataSource != null" >
+        Data_Source = #{dataSource,jdbcType=VARCHAR},
+      </if>
+      <if test="eUserId != null" >
+        E_User_Id = #{eUserId,jdbcType=INTEGER},
+      </if>
+    </set>
+    where rid = #{rid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.yihe.system.domain.YHUserHeartRate" >
+    update yh_user_heart_rate
+    set heart_rate = #{heartRate,jdbcType=INTEGER},
+      Entry_Time = #{entryTime,jdbcType=VARCHAR},
+      Is_Del = #{isDel,jdbcType=INTEGER},
+      Env = #{env,jdbcType=VARCHAR},
+      Data_Source = #{dataSource,jdbcType=VARCHAR},
+      E_User_Id = #{eUserId,jdbcType=INTEGER}
+    where rid = #{rid,jdbcType=INTEGER}
+  </update>
+</mapper>

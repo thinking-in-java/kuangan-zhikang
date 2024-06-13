@@ -1,0 +1,320 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yihe.applet.api.mapper.YhUserBloodfatAppMapper">
+  <resultMap id="BaseResultMap" type="com.yihe.applet.api.domain.YhUserBloodfatApp">
+    <id column="U_Bloodfat_Id" jdbcType="INTEGER" property="uBloodfatId" />
+    <result column="Cholesterin" jdbcType="REAL" property="cholesterin" />
+    <result column="Tring" jdbcType="REAL" property="tring" />
+    <result column="Hdl" jdbcType="REAL" property="hdl" />
+    <result column="Ldl" jdbcType="REAL" property="ldl" />
+    <result column="Entry_Time" jdbcType="VARCHAR" property="entryTime" />
+    <result column="Is_Del" jdbcType="INTEGER" property="isDel" />
+    <result column="E_User_Id" jdbcType="INTEGER" property="eUserId" />
+    <result column="Data_Source" jdbcType="VARCHAR" property="dataSource" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    U_Bloodfat_Id, Cholesterin, Tring, Hdl, Ldl, Entry_Time, Is_Del, E_User_Id, Data_Source
+  </sql>
+  <select id="findBloodfatAllByUserCode" resultMap="BaseResultMap">
+    select * from yh_user_bloodfat where is_del=2 AND E_User_Id=#{usercode}
+    <if test="timetype==0">
+      AND Entry_Time &gt;=  #{strTime} AND Entry_Time &lt;= #{endTime}
+    </if>
+    <if test="timetype==1">
+      AND Entry_Time LIKE CONCAT('',#{strTime},'%')
+    </if>
+    <if test="timetype==2">
+      AND YEAR(Entry_Time) =#{strTime}
+    </if>
+  </select>
+  <!--查询体温某年数据-->
+  <select id="findTemperatureByYear" resultMap="BaseResultMap">
+    SELECT * FROM yh_user_bloodfat WHERE  YEAR(Entry_Time) =#{time} AND is_del=2 AND E_User_Id=#{usercode} LIMIT #{page}, #{pagesize}
+  </select>
+  <!--查询体温某月记录-->
+  <select id="findTemperatureByMonth" resultMap="BaseResultMap">
+  SELECT * FROM yh_user_bloodfat WHERE Entry_Time LIKE CONCAT('',#{month},'%') AND is_del=2 AND E_User_Id=#{usercode}  LIMIT #{page}, #{pagesize}
+</select>
+  <!--查询体温某周数据-->
+  <select id="findTemperatureByWeek" resultMap="BaseResultMap">
+    SELECT * FROM yh_user_bloodfat WHERE   Entry_Time &gt;=  #{strTime} AND Entry_Time &lt;= #{endTime}  AND is_del=2 AND E_User_Id=#{usercode}  LIMIT #{page}, #{pagesize}
+  </select>
+
+
+<select id="findBingTuInfo" resultMap="BaseResultMap">
+  SELECT * FROM `yh_user_bloodfat` WHERE `E_User_Id`=#{usercode} AND Is_Del=2
+
+  <if test="timetype==0">
+    AND Entry_Time &gt;=  #{strTime} AND Entry_Time &lt;= #{endTime}
+  </if>
+  <if test="timetype==1">
+    AND Entry_Time LIKE CONCAT('',#{strTime},'%')
+  </if>
+  <if test="timetype==2">
+    AND YEAR(Entry_Time) =#{strTime}
+  </if>
+
+  LIMIT #{page}
+
+</select>
+
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from yh_user_bloodfat
+    where U_Bloodfat_Id = #{uBloodfatId,jdbcType=INTEGER}
+  </select>
+   <select id="selectByPrimaryKeyFindEntryTime" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    Entry_Time
+    from yh_user_bloodfat
+    where E_User_Id = #{E_User_Id} and  Is_Del=2
+    
+  </select>
+  
+   <select id="selectByPrimaryKeyFindEntryTimeAnduserid"   resultMap="BaseResultMap">
+   SELECT 
+	<include refid="Base_Column_List" />
+	FROM `yh_user_bloodfat` WHERE Entry_Time LIKE concat(concat('',#{time}),'%') AND E_User_Id=#{usercode} and  Is_Del=2 order by Entry_Time desc
+    
+  </select>
+  <select id="selectByPrimaryKeyNewest" parameterType="java.lang.String"
+		resultMap="BaseResultMap">
+		SELECT
+		<include refid="Base_Column_List" />
+		FROM `yh_user_bloodfat` WHERE Is_Del=2 AND E_User_Id=#{eid}
+		ORDER BY Entry_Time DESC LIMIT 1
+	</select>
+    <select id="selectByPrimaryKeyBYeid" parameterType="java.lang.String" resultMap="BaseResultMap">
+    SELECT 
+    <include refid="Base_Column_List" />
+    FROM yh_user_bloodfat
+    WHERE  E_User_Id=#{eid} AND Is_Del=2 order by Entry_Time DESC limit 7
+  </select>
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from yh_user_bloodfat
+    where U_Bloodfat_Id = #{uBloodfatId,jdbcType=INTEGER}
+  </delete>
+   
+  <insert id="insert" parameterType="com.yihe.applet.api.domain.YhUserBloodfatApp">
+    <selectKey keyProperty="uBloodfatId" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into yh_user_bloodfat (Cholesterin, Tring, Hdl, 
+      Ldl, Entry_Time, Is_Del, 
+      E_User_Id, Data_Source)
+    values (#{cholesterin,jdbcType=REAL}, #{tring,jdbcType=REAL}, #{hdl,jdbcType=REAL}, 
+      #{ldl,jdbcType=REAL}, #{entryTime,jdbcType=VARCHAR}, #{isDel,jdbcType=INTEGER}, 
+      #{eUserId,jdbcType=INTEGER}, #{dataSource,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.yihe.applet.api.domain.YhUserBloodfatApp">
+    <selectKey keyProperty="uBloodfatId" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into yh_user_bloodfat
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="cholesterin != null">
+        Cholesterin,
+      </if>
+      <if test="tring != null">
+        Tring,
+      </if>
+      <if test="hdl != null">
+        Hdl,
+      </if>
+      <if test="ldl != null">
+        Ldl,
+      </if>
+      <if test="entryTime != null">
+        Entry_Time,
+      </if>
+      <if test="isDel != null">
+        Is_Del,
+      </if>
+      <if test="eUserId != null">
+        E_User_Id,
+      </if>
+      <if test="dataSource != null">
+        Data_Source,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="cholesterin != null">
+        #{cholesterin,jdbcType=REAL},
+      </if>
+      <if test="tring != null">
+        #{tring,jdbcType=REAL},
+      </if>
+      <if test="hdl != null">
+        #{hdl,jdbcType=REAL},
+      </if>
+      <if test="ldl != null">
+        #{ldl,jdbcType=REAL},
+      </if>
+      <if test="entryTime != null">
+        #{entryTime,jdbcType=VARCHAR},
+      </if>
+      <if test="isDel != null">
+        #{isDel,jdbcType=INTEGER},
+      </if>
+      <if test="eUserId != null">
+        #{eUserId,jdbcType=INTEGER},
+      </if>
+      <if test="dataSource != null">
+        #{dataSource,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+   
+  <update id="updateByExampleSelective" parameterType="map">
+    update yh_user_bloodfat
+    <set>
+      <if test="record.uBloodfatId != null">
+        U_Bloodfat_Id = #{record.uBloodfatId,jdbcType=INTEGER},
+      </if>
+      <if test="record.cholesterin != null">
+        Cholesterin = #{record.cholesterin,jdbcType=REAL},
+      </if>
+      <if test="record.tring != null">
+        Tring = #{record.tring,jdbcType=REAL},
+      </if>
+      <if test="record.hdl != null">
+        Hdl = #{record.hdl,jdbcType=REAL},
+      </if>
+      <if test="record.ldl != null">
+        Ldl = #{record.ldl,jdbcType=REAL},
+      </if>
+      <if test="record.entryTime != null">
+        Entry_Time = #{record.entryTime,jdbcType=VARCHAR},
+      </if>
+      <if test="record.isDel != null">
+        Is_Del = #{record.isDel,jdbcType=INTEGER},
+      </if>
+      <if test="record.eUserId != null">
+        E_User_Id = #{record.eUserId,jdbcType=INTEGER},
+      </if>
+      <if test="record.dataSource != null">
+        Data_Source = #{record.dataSource,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update yh_user_bloodfat
+    set U_Bloodfat_Id = #{record.uBloodfatId,jdbcType=INTEGER},
+      Cholesterin = #{record.cholesterin,jdbcType=REAL},
+      Tring = #{record.tring,jdbcType=REAL},
+      Hdl = #{record.hdl,jdbcType=REAL},
+      Ldl = #{record.ldl,jdbcType=REAL},
+      Entry_Time = #{record.entryTime,jdbcType=VARCHAR},
+      Is_Del = #{record.isDel,jdbcType=INTEGER},
+      E_User_Id = #{record.eUserId,jdbcType=INTEGER},
+      Data_Source = #{record.dataSource,jdbcType=VARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.yihe.applet.api.domain.YhUserBloodfatApp">
+    update yh_user_bloodfat
+    <set>
+      <if test="cholesterin != null">
+        Cholesterin = #{cholesterin,jdbcType=REAL},
+      </if>
+      <if test="tring != null">
+        Tring = #{tring,jdbcType=REAL},
+      </if>
+      <if test="hdl != null">
+        Hdl = #{hdl,jdbcType=REAL},
+      </if>
+      <if test="ldl != null">
+        Ldl = #{ldl,jdbcType=REAL},
+      </if>
+      <if test="entryTime != null">
+        Entry_Time = #{entryTime,jdbcType=VARCHAR},
+      </if>
+      <if test="isDel != null">
+        Is_Del = #{isDel,jdbcType=INTEGER},
+      </if>
+      <if test="eUserId != null">
+        E_User_Id = #{eUserId,jdbcType=INTEGER},
+      </if>
+      <if test="dataSource != null">
+        Data_Source = #{dataSource,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where U_Bloodfat_Id = #{uBloodfatId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.yihe.applet.api.domain.YhUserBloodfatApp">
+    update yh_user_bloodfat
+    set Cholesterin = #{cholesterin,jdbcType=REAL},
+      Tring = #{tring,jdbcType=REAL},
+      Hdl = #{hdl,jdbcType=REAL},
+      Ldl = #{ldl,jdbcType=REAL},
+      Entry_Time = #{entryTime,jdbcType=VARCHAR},
+      Is_Del = #{isDel,jdbcType=INTEGER},
+      E_User_Id = #{eUserId,jdbcType=INTEGER},
+      Data_Source = #{dataSource,jdbcType=VARCHAR}
+    where U_Bloodfat_Id = #{uBloodfatId,jdbcType=INTEGER}
+  </update>
+</mapper>

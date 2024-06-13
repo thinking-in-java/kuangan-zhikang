@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+	<title>中医体质辨识结果</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet"  th:href="@{/assets/libs/layui/css/layui.css}" />
+	<link rel="stylesheet"  th:href="@{/assets/module/admin.css}"  />
+	<style type="text/css">
+		.layui-table th{
+			background-color: #EDF4FF;
+		}
+		.layui-elem-quote {
+			margin-bottom: 10px;
+			padding: 15px;
+			line-height: 22px;
+			border-radius: 0 2px 2px 0;
+			background-color: #E6F7FF;
+		}
+		.pure-table {
+			border-collapse: collapse;
+			border-spacing: 0;
+			empty-cells: show;
+			border: 1px solid #cbcbcb;
+			margin-top: 60px;
+		}
+		.pure-table td,
+		.pure-table th {
+			border-left: 1px solid #cbcbcb;
+			border-width: 0 0 0 1px;
+			font-size: inherit;
+			margin: 0;
+			overflow: visible;
+			padding: 0.6em 1.2em;
+			text-align: center;
+		}
+		.pure-table thead {
+			background-color: #c9e3fa;
+			color: #000;
+			text-align: center;
+			vertical-align: bottom;
+		}
+		.pure-table td {
+			background-color: transparent;
+		}
+
+		.pure-table-bordered td {
+			border-bottom: 1px solid #cbcbcb;
+			min-width: 6.25rem;
+		}
+
+		.pure-table-bordered tbody>tr:last-child>td {
+			border-bottom-width: 0;
+		}
+
+
+		.title{
+			width: 98%;
+			padding: 0.9375rem 0 0.9375rem 0.9375rem;
+			font-weight: 600;
+			background-color: #BFEFFF;
+			margin-top: 30px;
+		}
+		thead { display: table-header-group; }
+		tfoot { display: table-row-group; }
+		tr { page-break-inside: avoid; }
+	</style>
+</head>
+<body>
+<div class="layui-container" style="background-color: #ffffff;">
+
+	<div class="layui-row">
+		<div class="layui-col-xs6">
+			<div class="grid-demo grid-demo-bg1" style="padding-top: 20px;"><h1>中医体质辨识结果</h1></div>
+		</div>
+		<div class="layui-col-xs6">
+			<div class="grid-demo" style="float: right;"><img style="height="420px"; width="300px";" th:src="${getrepotimg}"></div>
+		</div>
+	</div>
+
+
+	<table class="layui-table" lay-size="lg">
+		<thead>
+		<tr>
+			<th>用户编码</th>
+			<th>姓名</th>
+			<th>性别</th>
+			<th>评估时年龄</th>
+			<th>评估日期</th>
+		</tr>
+		</thead>
+
+		<tbody>
+		<tr>
+			<td>[[${totalReport.userCode}]]</td>
+			<td>[[${totalReport.name}]]</td>
+			<td>[[${totalReport.sex}]]</td>
+			<td>[[${totalReport.times}]]</td>
+			<td>[[${totalReport.time}]]</td>
+		</tr>
+
+		</tbody>
+	</table>
+
+	<table class="pure-table pure-table-bordered">
+		<thead>
+		<tr>
+			<th>体质辨识</th>
+			<th>结果</th>
+		</tr>
+		</thead>
+
+		<tbody>
+		<tr>
+			<td>平和质（A型）</td>
+			<td>[[${totalReport.aIstype}  == 1 ?'是':'' ]][[${totalReport.aIstype}  == 2 ?'基本是':'' ]][[${totalReport.aIstype}  == 3 ?'不是':'' ]]</td>
+		</tr>
+		<tr>
+			<td>气虚质（B型）</td>
+			<td>[[${totalReport.bIstype}  == 1 ?'是':'' ]][[${totalReport.bIstype}  == 2 ?'倾向是':'' ]][[${totalReport.bIstype}  == 3 ?'不是':'' ]]</td>
+		</tr>
+		<tr>
+			<td>阳虚质（C型）</td>
+			<td>[[${totalReport.cIstype}  == 1 ?'是':'' ]][[${totalReport.cIstype}  == 2 ?'倾向是':'' ]][[${totalReport.cIstype}  == 3 ?'不是':'' ]]</td>
+		</tr>
+		<tr>
+			<td>阴虚质（D型）</td>
+			<td>[[${totalReport.dIstype}  == 1 ?'是':'' ]][[${totalReport.dIstype}  == 2 ?'倾向是':'' ]][[${totalReport.dIstype}  == 3 ?'不是':'' ]]</td>
+		</tr>
+		<tr>
+			<td>痰湿质（E型）</td>
+			<td>[[${totalReport.eIstype}  == 1 ?'是':'' ]][[${totalReport.eIstype}  == 2 ?'倾向是':'' ]][[${totalReport.eIstype}  == 3 ?'不是':'' ]]</td>
+		</tr>
+		<tr>
+			<td>湿热质（F型）</td>
+			<td>[[${totalReport.fIstype}  == 1 ?'是':'' ]][[${totalReport.fIstype}  == 2 ?'倾向是':'' ]][[${totalReport.fIstype}  == 3 ?'不是':'' ]]</td>
+		</tr>
+		<tr>
+			<td>血瘀质（G型）</td>
+			<td>[[${totalReport.gIstype}  == 1 ?'是':'' ]][[${totalReport.gIstype}  == 2 ?'倾向是':'' ]][[${totalReport.gIstype}  == 3 ?'不是':'' ]]</td>
+		</tr>
+		<tr>
+			<td>气郁质（H型）</td>
+			<td>[[${totalReport.hIstype}  == 1 ?'是':'' ]][[${totalReport.hIstype}  == 2 ?'倾向是':'' ]][[${totalReport.hIstype}  == 3 ?'不是':'' ]]</td>
+		</tr>
+		<tr>
+			<td>特禀质（I型）</td>
+			<td>[[${totalReport.iIstype}  == 1 ?'是':'' ]][[${totalReport.iIstype}  == 2 ?'倾向是':'' ]][[${totalReport.iIstype}  == 3 ?'不是':'' ]]</td>
+		</tr>
+		</tbody>
+	</table>
+
+
+	<div th:each="glist:${yhChineseAnwser2.tabData}">
+
+		<div class="title">
+			[[${glist.name}]](<text>[[${glist.state}]]</text>)
+		</div>
+
+		<table class="pure-table pure-table-bordered">
+			<thead>
+			<tr>
+				<th>体质特征</th>
+				<th>内容</th>
+			</tr>
+			</thead>
+
+			<tbody >
+
+			<tr th:each="alist:${glist.zong}">
+				<td>[[${alist.title}]]</td>
+				<td style="text-align: left;width: 100%;">[[${alist.txt}]]</td>
+			</tr>
+
+
+			</tbody>
+		</table>
+
+		<table class="pure-table pure-table-bordered">
+			<thead>
+			<tr>
+				<th>中医药保健指导</th>
+				<th>内容</th>
+			</tr>
+			</thead>
+
+			<tbody>
+			<tr th:each="blist:${glist.zhong}">
+				<td>[[${blist.title}]]</td>
+				<td style="text-align: left;width:100%">[[${blist.txt}]]</td>
+			</tr>
+
+			</tbody>
+		</table>
+
+
+	</div>
+</div>
+</div>
+</body>
+</html>

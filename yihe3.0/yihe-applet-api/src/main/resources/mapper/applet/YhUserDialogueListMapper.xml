@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yihe.applet.api.mapper.YhUserDialogueListMapper" >
+  <resultMap id="BaseResultMap" type="com.yihe.applet.api.domain.YhUserDialogueList" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="user_code" property="userCode" jdbcType="VARCHAR" />
+    <result column="to_user_code" property="toUserCode" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, name, user_code, to_user_code
+  </sql>
+  <select id="findListInfo" resultMap="BaseResultMap">
+  SELECT  <include refid="Base_Column_List" /> FROM `yh_user_dialogue_list` WHERE to_user_code=#{usercode}
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from yh_user_dialogue_list
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from yh_user_dialogue_list
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.yihe.applet.api.domain.YhUserDialogueList" >
+    insert into yh_user_dialogue_list (id, name, user_code, 
+      to_user_code)
+    values (#{id,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{userCode,jdbcType=VARCHAR}, 
+      #{toUserCode,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.yihe.applet.api.domain.YhUserDialogueList" >
+    insert into yh_user_dialogue_list
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="name != null" >
+        name,
+      </if>
+      <if test="userCode != null" >
+        user_code,
+      </if>
+      <if test="toUserCode != null" >
+        to_user_code,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="userCode != null" >
+        #{userCode,jdbcType=VARCHAR},
+      </if>
+      <if test="toUserCode != null" >
+        #{toUserCode,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.yihe.applet.api.domain.YhUserDialogueList" >
+    update yh_user_dialogue_list
+    <set >
+      <if test="name != null" >
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="userCode != null" >
+        user_code = #{userCode,jdbcType=VARCHAR},
+      </if>
+      <if test="toUserCode != null" >
+        to_user_code = #{toUserCode,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.yihe.applet.api.domain.YhUserDialogueList" >
+    update yh_user_dialogue_list
+    set name = #{name,jdbcType=VARCHAR},
+      user_code = #{userCode,jdbcType=VARCHAR},
+      to_user_code = #{toUserCode,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

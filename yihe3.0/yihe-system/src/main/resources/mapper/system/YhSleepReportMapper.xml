@@ -1,0 +1,296 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yihe.system.mapper.YhSleepReportMapper" >
+  <resultMap id="BaseResultMap" type="com.yihe.system.domain.YhSleepReport" >
+    <id column="report_id" property="reportId" jdbcType="INTEGER" />
+    <result column="user_code" property="userCode" jdbcType="VARCHAR" />
+    <result column="report_desc" property="reportDesc" jdbcType="VARCHAR" />
+    <result column="report_score" property="reportScore" jdbcType="INTEGER" />
+    <result column="report_level" property="reportLevel" jdbcType="VARCHAR" />
+    <result column="report_queselect" property="reportQueselect" jdbcType="VARCHAR" />
+    <result column="qtime" property="qtime" jdbcType="TIMESTAMP" />
+    <result column="name" property="userName" jdbcType="VARCHAR" />
+    <result column="gender" property="gender" jdbcType="INTEGER" />
+     <result column="birth_date" property="birthdate" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    report_id, user_code, report_desc, report_score, report_level, report_queselect, 
+    qtime
+  </sql>
+    
+    
+   <select id="assessRecordShow" resultType="com.yihe.system.domain.YhSleepReportVojo" parameterType="map">
+   	SELECT a.birth_date AS birthDate,a.user_code AS usercode,a.user_name AS username,a.name,
+	CASE
+	 WHEN a.gender = 1 
+              THEN '男' 
+              ELSE '女' 
+            END AS sex,
+		c.report_desc AS reportDesc,c.report_score AS reportScore,c.report_level AS reportLevel,c.qtime AS qtime   FROM yh_user_reginfo AS a
+	INNER JOIN yh_user_make_card AS b
+	ON a.user_code=b.user_code
+	INNER JOIN yh_sleep_report AS c
+	ON a.user_code=c.user_code 
+	where b.doctor=(SELECT id FROM yh_user_admin_info WHERE user_code=#{userCode,jdbcType=VARCHAR}) 
+	<if test="reportLevel!=null and reportLevel !=''">
+  			 and c.report_level=#{reportLevel}
+  			</if>
+  			<if test="name!=null and name !=''">
+  			 and a.name LIKE CONCAT('%',#{name},'%')
+  			</if>
+  			<if test="userName!=null and userName !=''">
+  			 and a.user_name LIKE CONCAT('%',#{userName},'%')
+  			</if>
+  			<if test="qtime!=null and qtime !=''">
+  			and qtime between #{qtime} and #{qtime1}
+  			</if>
+  			order by qtime desc LIMIT  #{page},#{limit}
+   </select>
+   
+   
+   
+     <select id="assessRecordShowCount" resultType="int" parameterType="map">
+ 	SELECT count(*)   FROM yh_user_reginfo AS a
+	INNER JOIN yh_user_make_card AS b
+	ON a.user_code=b.user_code
+	INNER JOIN yh_sleep_report AS c
+	ON a.user_code=c.user_code 
+	where b.doctor=(SELECT id FROM yh_user_admin_info WHERE user_code=#{userCode,jdbcType=VARCHAR}) 
+	<if test="reportLevel!=null and reportLevel !=''">
+  			 and c.report_level=#{reportLevel}
+  			</if>
+  			<if test="name!=null and name !=''">
+  			 and a.name LIKE CONCAT('%',#{name},'%')
+  			</if>
+  			<if test="userName!=null and userName !=''">
+  			 and a.user_name LIKE CONCAT('%',#{userName},'%')
+  			</if>
+  			<if test="qtime!=null and qtime !=''">
+  			and qtime between #{qtime} and #{qtime1}
+  			</if>
+   </select>
+   
+   
+    
+        
+  <select id="showSleepAssessUserCount" resultType="int" parameterType="java.lang.String">
+  	select count(*) from yh_sleep_report where user_code=#{userCode,jdbcType=VARCHAR}
+  </select>
+  
+  
+  
+  <!-- 查询所有睡眠评估总数 -->
+  <select id="showSleepAssess" resultType="int">
+  	select count(*) from yh_sleep_report
+  </select>
+  
+   <!-- 查询180天睡眠评估总数 -->
+  <select id="showSleepAssessTian" resultType="int" >
+  	select count(*) from yh_sleep_report where   DATE_FORMAT(qtime, '%Y%m' ) = DATE_FORMAT( CURDATE( ) , '%Y%m' )
+  </select>
+  
+
+  <!-- 根据id查询详情 -->
+  <select id="showSleepDetail" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+  	select re.*,fo.name,fo.gender,fo.birth_date from yh_sleep_report re,yh_user_reginfo fo where re.user_code=fo.user_code  and re.report_id=#{reportId,jdbcType=INTEGER}
+  </select>
+  
+  
+  
+  <select id="sleepAdministration" resultType="com.yihe.system.domain.YhSleepReportVojo" parameterType="map">
+  	select * from (SELECT a.birth_date AS birthDate,a.user_code AS usercode,a.user_name AS username,a.name,
+	CASE
+	 WHEN a.gender = 1 
+              THEN '男' 
+              ELSE '女' 
+            END AS sex,
+		c.report_desc AS reportDesc,c.report_score AS reportScore,c.report_level AS reportLevel,c.qtime AS qtime   FROM yh_user_reginfo AS a
+	INNER JOIN yh_user_make_card AS b
+	ON a.user_code=b.user_code
+	INNER JOIN yh_sleep_report AS c
+	ON a.user_code=c.user_code
+	<where>
+  		b.doctor=(SELECT id FROM yh_user_admin_info WHERE user_code=#{userCode,jdbcType=VARCHAR})
+  			<if test="reportLevel!=null and reportLevel !=''">
+  			 and c.report_level=#{reportLevel}
+  			</if>
+  			<if test="name!=null and name !=''">
+  			 and a.name LIKE CONCAT('%',#{name},'%')
+  			</if>
+  			<if test="orgCode!=null and orgCode !=''">
+  			 and a.org_code LIKE CONCAT('%',#{orgCode},'%')
+  			</if>
+  	</where>
+	) w group by usercode  order by qtime desc LIMIT  #{page},#{limit}
+  </select>
+  
+  <select id="sleepAdministrationCount" resultType="com.yihe.system.domain.YhSleepReportVojo" parameterType="map">
+  	select * from (SELECT a.birth_date AS birthDate,a.user_code AS usercode,a.user_name AS username,a.name,
+	CASE
+	 WHEN a.gender = 1 
+              THEN '男' 
+              ELSE '女' 
+            END AS sex,
+		c.report_desc AS reportDesc,c.report_score AS reportScore,c.report_level AS reportLevel,c.qtime AS qtime   FROM yh_user_reginfo AS a
+	INNER JOIN yh_user_make_card AS b
+	ON a.user_code=b.user_code
+	INNER JOIN yh_sleep_report AS c
+	ON a.user_code=c.user_code
+	<where>
+  		b.doctor=(SELECT id FROM yh_user_admin_info WHERE user_code=#{userCode,jdbcType=VARCHAR})
+  			<if test="reportLevel!=null and reportLevel !=''">
+  			 and c.report_level=#{reportLevel}
+  			</if>
+  			<if test="name!=null and name !=''">
+  			 and a.name LIKE CONCAT('%',#{name},'%')
+  			</if>
+  			<if test="orgCode!=null and orgCode !=''">
+  			 and a.org_code LIKE CONCAT('%',#{orgCode},'%')
+  			</if>
+  	</where>
+	) w group by usercode  order by qtime desc
+  </select>
+  
+  
+	<!-- 查询所以睡眠内容 -->
+    <select id="selectSleep" resultMap="BaseResultMap" parameterType="map">
+  		select * from yh_sleep_report
+  		<where>
+  		user_code=#{userCode,jdbcType=VARCHAR}
+  			<if test="qtime!=null and qtime !=''">
+  			and qtime between #{qtime} and #{qtime1}
+  			</if>
+  			<if test="reportLevel!=null and reportLevel !=''">
+  			and report_level=#{reportLevel,jdbcType=VARCHAR}
+  			</if>
+  		</where>
+  		order by qtime desc LIMIT  #{page},#{limit}
+  </select>
+  
+  
+  <!-- 查询所以睡眠内容总行数 -->
+    <select id="selectSleepConut" resultType="int" parameterType="map">
+  		select count(*) from yh_sleep_report
+  		<where>
+  		user_code=#{userCode,jdbcType=VARCHAR}
+  			<if test="qtime!=null and qtime !=''">
+  			and qtime between #{qtime} and #{qtime1}
+  			</if>
+  			<if test="reportLevel!=null and reportLevel !=''">
+  			and report_level=#{reportLevel,jdbcType=VARCHAR}
+  			</if>
+  		</where>
+  		order by qtime desc
+  </select>
+  
+  <select id="selectSleepReportByuserCodeForCount" resultType="int" parameterType="map">
+  
+SELECT COUNT(1) FROM `yh_sleep_report` WHERE user_code=#{userCode}
+  </select>
+  
+  <select id="selectSleepReportByuserCodeForNewTime" resultType="java.lang.String" parameterType="map">
+  SELECT qtime FROM `yh_sleep_report` WHERE user_code=#{userCode} ORDER BY qtime DESC LIMIT 1
+  </select>
+  
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from yh_sleep_report
+    where report_id = #{reportId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from yh_sleep_report
+    where report_id = #{reportId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.yihe.system.domain.YhSleepReport" >
+    insert into yh_sleep_report (report_id, user_code, report_desc, 
+      report_score, report_level, report_queselect, 
+      qtime)
+    values (#{reportId,jdbcType=INTEGER}, #{userCode,jdbcType=VARCHAR}, #{reportDesc,jdbcType=VARCHAR}, 
+      #{reportScore,jdbcType=INTEGER}, #{reportLevel,jdbcType=VARCHAR}, #{reportQueselect,jdbcType=VARCHAR}, 
+      #{qtime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.yihe.system.domain.YhSleepReport" >
+    insert into yh_sleep_report
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="reportId != null" >
+        report_id,
+      </if>
+      <if test="userCode != null" >
+        user_code,
+      </if>
+      <if test="reportDesc != null" >
+        report_desc,
+      </if>
+      <if test="reportScore != null" >
+        report_score,
+      </if>
+      <if test="reportLevel != null" >
+        report_level,
+      </if>
+      <if test="reportQueselect != null" >
+        report_queselect,
+      </if>
+      <if test="qtime != null" >
+        qtime,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="reportId != null" >
+        #{reportId,jdbcType=INTEGER},
+      </if>
+      <if test="userCode != null" >
+        #{userCode,jdbcType=VARCHAR},
+      </if>
+      <if test="reportDesc != null" >
+        #{reportDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="reportScore != null" >
+        #{reportScore,jdbcType=INTEGER},
+      </if>
+      <if test="reportLevel != null" >
+        #{reportLevel,jdbcType=VARCHAR},
+      </if>
+      <if test="reportQueselect != null" >
+        #{reportQueselect,jdbcType=VARCHAR},
+      </if>
+      <if test="qtime != null" >
+        #{qtime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.yihe.system.domain.YhSleepReport" >
+    update yh_sleep_report
+    <set >
+      <if test="userCode != null" >
+        user_code = #{userCode,jdbcType=VARCHAR},
+      </if>
+      <if test="reportDesc != null" >
+        report_desc = #{reportDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="reportScore != null" >
+        report_score = #{reportScore,jdbcType=INTEGER},
+      </if>
+      <if test="reportLevel != null" >
+        report_level = #{reportLevel,jdbcType=VARCHAR},
+      </if>
+      <if test="reportQueselect != null" >
+        report_queselect = #{reportQueselect,jdbcType=VARCHAR},
+      </if>
+      <if test="qtime != null" >
+        qtime = #{qtime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where report_id = #{reportId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.yihe.system.domain.YhSleepReport" >
+    update yh_sleep_report
+    set user_code = #{userCode,jdbcType=VARCHAR},
+      report_desc = #{reportDesc,jdbcType=VARCHAR},
+      report_score = #{reportScore,jdbcType=INTEGER},
+      report_level = #{reportLevel,jdbcType=VARCHAR},
+      report_queselect = #{reportQueselect,jdbcType=VARCHAR},
+      qtime = #{qtime,jdbcType=TIMESTAMP}
+    where report_id = #{reportId,jdbcType=INTEGER}
+  </update>
+</mapper>

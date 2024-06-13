@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>新增</title>
+    <link rel="stylesheet"  th:href="@{/assets/libs/layui/css/layui.css}" />
+    <link rel="stylesheet"  th:href="@{/assets/module/admin.css}"  />
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body>
+<!-- 页面加载loading -->
+<div class="page-loading">
+    <div class="ball-loader">
+        <span></span><span></span><span></span><span></span>
+    </div>
+</div>
+
+<!-- 正文开始 -->
+<input id="guishu" type="hidden" value="">
+<div class="layui-fluid">
+    <div style="width: 98%;height: 650px;background-color: #FFF; position:relative;">
+        <div style="position: absolute;width: 120px;height: 30px;margin-top:25px; margin-left: 34px;font-size: 20px;line-height: 150%;text-align: left;font-weight: bold;">新增</div>
+        <div style="position: absolute;margin-top: 70px;margin-left: 20px">
+            <div class="layui-card-body" style="width: 900px;">
+                <form class="layui-form" style="max-width: 800px;">
+                    <div class="layui-form-item">
+                        <label style="padding-right: 0px;" class="layui-form-label w-auto layui-form-required">服务对象:</label><br/><br/>
+                        <div id="xianzhi" class="layui-input-block" style="margin-left:20px;width: 20%;">
+                            加载中...
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <div class="layui-form-item">
+                            <label style="padding-right: 0px;" class="layui-form-label w-auto layui-form-required">服务方式：</label><br/><br/>
+                            <div class="layui-input-block" style="margin-left:20px;width: 80%;">
+
+                                <select id="selecttime" name="quiz" lay-search>
+                                    <option value="">服务方式</option>
+                                    <option value="1">电话回访</option>
+                                    <option value="5">短信回访</option>
+                                    <option value="3">小程序站内信回访</option>
+                                    <option value="4">上门回访</option>
+                                    <option value="6">小程序订阅通知回访</option>
+                                    <option value="7">公众号通知回访</option>
+                                </select>
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="layui-inline">
+                        <div class="layui-form-item">
+                            <label style="padding-right: 0px;" class="layui-form-label w-auto layui-form-required">计划服务日期：</label><br/><br/>
+                            <div class="layui-input-block" style="margin-left:20px;width: 80%;">
+
+                                <input name="time" type="text" class="layui-input" id="test1">
+
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="layui-form-item">
+                        <label  style="padding-right: 0px;" class="layui-form-label w-auto layui-form-required">服务类型:</label><br/><br/>
+                        <div class="layui-input-block" style="margin-left:20px;width: 80%;">
+                            <input id="miaoshu"   name="fuwuleixing" placeholder="请填写，最大限制20个字符 ，例如：心理咨询" class="layui-input"></input>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label  style="padding-right: 0px;" class="layui-form-label w-auto layui-form-required">服务内容:</label><br/><br/>
+                        <div class="layui-input-block" style="margin-left:20px;width: 80%;">
+                            <input id="neirong"   name="fuwuneirong" placeholder="请填写，最大限制100个字符" class="layui-input"></input>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label  style="padding-right: 0px;" class="layui-form-label w-auto layui-form-required">关键信息:</label><br/><br/>
+                        <div class="layui-input-block" style="margin-left:20px;width: 80%;">
+                            <input id="guanjianxinxi"   name="guanjianxinxi" placeholder="请填写，最大限制100个字符" class="layui-input"></input>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-input-block" >
+                            <button style="background-color:#2a9ce4" class="layui-btn" lay-filter="formSubmitBas" lay-submit>&emsp;保存&emsp;</button>
+                            <button type="reset" onclick="quxiao()" class="layui-btn layui-btn-primary">&emsp;取消&emsp;</button>
+                        </div>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript" th:src="@{/assets/libs/layui/layui.js}"></script>
+<script type="text/javascript" th:src="@{/assets/js/common.js}"></script>
+<script th:inline="none">
+    layui.use([ 'layer', 'form', 'step', 'xmSelect', 'laydate', 'notice' ],
+        function() {
+            var $ = layui.jquery;
+            var layer = layui.layer;
+            var form = layui.form;
+            var step = layui.step;
+            var laydate = layui.laydate;
+            var notice = layui.notice;
+            var date1=null;
+            var date2=null;
+            laydate.render({
+                elem: '#test1',
+                min:minDate(), //指定元素
+                value:minDate(),
+                trigger: 'click'
+            });
+            $.ajax({
+                type: "POST",
+                url: "/YhAcceptserviceController/selectusername",
+                dataType: "json",
+                success: function(data){
+                    $("#xianzhi").empty();
+                    // 渲染多选下拉
+                    xmSelect.render({
+                        el : '#xianzhi',
+                        data :data.data,
+                        filterable:true
+                    });
+                }
+            });
+            // 设置最小可选的日期
+            function minDate(){
+                var now = new Date();
+                return now.getFullYear()+"-" + (now.getMonth()+1) + "-" + now.getDate();
+            }
+            form.on('submit(formSubmitBas)', function (data) {
+                var nowtiem=CurentTime();
+                if(data.field.select==""){
+                    notice.error({
+                        title: '消息通知',
+                        message: '请选择服务对象!'
+                    });
+                    return false;
+                }
+                if(data.field.quiz==""){
+                    notice.error({
+                        title: '消息通知',
+                        message: '请选择服务方式!'
+                    });
+                    return false;
+                }
+                if(data.field.time==""){
+                    notice.error({
+                        title: '消息通知',
+                        message: '请选择服务日期!'
+                    });
+                    return false;
+                }
+
+                if(data.field.fuwuleixing==""){
+                    notice.error({
+                        title: '消息通知',
+                        message: '请选择服务类型!'
+                    });
+                    return false;
+                }
+                if(GetLength(data.field.fuwuleixing)>20){
+                    notice.error({
+                        title: '消息通知',
+                        message: '服务类型不能超过20个字符!'
+                    });
+                    return false;
+                }
+                if(data.field.fuwuneirong==""){
+                    notice.error({
+                        title: '消息通知',
+                        message: '请选择服务内容!'
+                    });
+                    return false;
+                }
+                if(GetLength(data.field.fuwuneirong)>100){
+                    notice.error({
+                        title: '消息通知',
+                        message: '服务类型不能超过100个字符!'
+                    });
+                    return false;
+                }
+                if(data.field.guanjianxinxi==""){
+                    notice.error({
+                        title: '消息通知',
+                        message: '请选择关键信息!'
+                    });
+                    return false;
+                }
+                if(GetLength(data.field.guanjianxinxi)>100){
+                    notice.error({
+                        title: '消息通知',
+                        message: '服务类型不能超过100个字符!'
+                    });
+                    return false;
+                }
+
+                $.ajax({
+                    type:"POST",
+                    data:{serviceSubtitle:data.field.fuwuleixing,serviceContent:data.field.fuwuneirong,serviceRecord:data.field.guanjianxinxi,select:data.field.select,returnvisit:data.field.quiz,nowtime:nowtiem,datetime:data.field.time,lintime:data.field.xiaoshi},
+                    url:"/YhAcceptserviceController/insertserviceplan",
+                    dataType:"json",
+                    success:function(data){
+                            notice.success({
+                                title: '消息通知',
+                                message: '创建服务提醒成功!'
+                            });
+                        test();
+
+                    }
+                });
+                return false;
+            });
+            GetLength = function(str) {
+                return str.replace(/[\u0391-\uFFE5]/g,"aa").length;   //先把中文替换成两个字节的英文，在计算长度
+            };
+            function CurentTime()
+            {
+                var now = new Date();
+
+                var year = now.getFullYear();       //年
+                var month = now.getMonth() + 1;     //月
+                var day = now.getDate();            //日
+
+                var hh = now.getHours();            //时
+                var mm = now.getMinutes();          //分
+
+                var clock = year + "-";
+
+                if(month < 10)
+                    clock += "0";
+
+                clock += month + "-";
+
+                if(day < 10)
+                    clock += "0";
+
+                clock += day;
+                return(clock);
+            }
+            quxiao=function(){
+                window.history.go(-1);
+            };
+            function sleep(millisecond) {
+                return new Promise(resolve => {
+                    setTimeout(() => {
+                        resolve()
+                    }, millisecond)
+                })
+            }
+            async function test() {
+                await sleep(2000);
+                // window.location.href="/manage/task/service"
+                window.history.go(-1);
+            }
+        });
+</script>
+</body>
+</html>

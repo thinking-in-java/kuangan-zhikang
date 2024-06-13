@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yihe.system.mapper.YhExprotPDFMapper">
+  <resultMap id="exprotresult" type="com.yihe.system.domain.YhExportHealthAssess">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="result_serialNum" jdbcType="VARCHAR" property="result_serialNum" />
+    <result column="request_serialNum" jdbcType="VARCHAR" property="request_serialNum" />
+    <result column="user_code" jdbcType="VARCHAR" property="user_code" />
+    <result column="qtime" jdbcType="TIMESTAMP" property="qtime" />
+    <result column="gender" jdbcType="INTEGER" property="gender" />
+    <result column="age" jdbcType="INTEGER" property="age" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+   	<collection  property="yhexpotriskresult" column="request_serialNum" ofType="com.yihe.system.domain.YhExportRiskResult" javaType="java.util.ArrayList">
+   		<id column="rid" jdbcType="INTEGER" property="rid" />
+   		<result column="diseaseId" jdbcType="VARCHAR" property="diseaseId" />
+	    <result column="user_code" jdbcType="VARCHAR" property="user_code" />
+	    <result column="request_serialNum" jdbcType="VARCHAR" property="request_serialize" />
+	    <result column="qname" jdbcType="VARCHAR" property="qname" />
+	    <result column="qcode" jdbcType="VARCHAR" property="qcode" />
+	    <result column="qvalue" jdbcType="VARCHAR" property="qvalue" />
+	    <result column="last_value" jdbcType="VARCHAR" property="last_value" />
+	    <result column="changes" jdbcType="VARCHAR" property="changes" />
+	    <result column="optimal" jdbcType="VARCHAR" property="optimal" />
+	    <result column="remark" jdbcType="VARCHAR" property="remark" />
+	    <result column="qtime" jdbcType="TIMESTAMP" property="qtime" />
+	    <result column="isRadar" jdbcType="INTEGER" property="isRadar" />
+	</collection>
+  </resultMap>
+  <resultMap id="exprotdiseasestatistical" type="com.yihe.system.domain.YhExportHealthAssess">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="result_serialNum" jdbcType="VARCHAR" property="result_serialNum" />
+    <result column="request_serialNum" jdbcType="VARCHAR" property="request_serialNum" />
+    <result column="user_code" jdbcType="VARCHAR" property="user_code" />
+    <result column="qtime" jdbcType="TIMESTAMP" property="qtime" />
+    <result column="gender" jdbcType="INTEGER" property="gender" />
+    <result column="age" jdbcType="INTEGER" property="age" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+   	 <collection  property="assessreport" column="request_serialNum" ofType="com.yihe.system.domain.YhExportAssessReport" javaType="java.util.ArrayList">
+				<id column="aid" jdbcType="INTEGER" property="aid" />
+				<result column="user_code" jdbcType="VARCHAR" property="user_code" />
+				<result column="result_serialNum" jdbcType="VARCHAR" property="result_serialNum" />
+				<result column="request_serialNum" jdbcType="VARCHAR" property="request_serialNum" />
+				<result column="diseasId" jdbcType="TIMESTAMP" property="diseasId" />
+				<result column="risk_level" jdbcType="VARCHAR" property="risk_level" />
+       </collection>
+  </resultMap>
+	<resultMap id="exprotresult2" type="com.yihe.system.domain.YhExportHealthAssess">
+		<id column="id" jdbcType="INTEGER" property="id" />
+		<result column="request_serialNum" jdbcType="VARCHAR" property="request_serialNum" />
+		<result column="user_code" jdbcType="VARCHAR" property="user_code" />
+		<result column="qtime" jdbcType="TIMESTAMP" property="qtime" />
+		<result column="gender" jdbcType="INTEGER" property="gender" />
+		<result column="ages" jdbcType="INTEGER" property="age" />
+		<result column="name" jdbcType="VARCHAR" property="name" />
+		<collection  property="yhDiseaseRiskResult2s" column="request_serialNum" ofType="com.yihe.system.domain.YhDiseaseRiskResult2" javaType="java.util.ArrayList">
+			<result column="diseaseId" jdbcType="VARCHAR" property="diseaseid" />
+			<result column="user_code" jdbcType="VARCHAR" property="userCode" />
+			<result column="request_serialNum" jdbcType="VARCHAR" property="requestSerialize" />
+			<result column="age" jdbcType="VARCHAR" property="age" />
+			<result column="hdlc" jdbcType="VARCHAR" property="hdlc" />
+			<result column="ldlc" jdbcType="VARCHAR" property="ldlc" />
+			<result column="food" jdbcType="VARCHAR" property="food" />
+			<result column="sport" jdbcType="VARCHAR" property="sport" />
+			<result column="b4" jdbcType="TIMESTAMP" property="b4" />
+			<result column="smoke" jdbcType="INTEGER" property="smoke" />
+			<result column="drink" jdbcType="VARCHAR" property="drink" />
+			<result column="hw_check" jdbcType="VARCHAR" property="hwCheck" />
+			<result column="BMI" jdbcType="VARCHAR" property="bmi" />
+			<result column="waist" jdbcType="VARCHAR" property="waist" />
+			<result column="diab_his" jdbcType="VARCHAR" property="diabHis" />
+			<result column="hbp_his" jdbcType="TIMESTAMP" property="hbpHis" />
+			<result column="FBG" jdbcType="VARCHAR" property="fbg" />
+			<result column="sbp" jdbcType="TIMESTAMP" property="sbp" />
+			<result column="cholesterol" jdbcType="INTEGER" property="cholesterol" />
+			<result column="TG" jdbcType="VARCHAR" property="tg" />
+			<result column="BF" jdbcType="VARCHAR" property="bf" />
+			<result column="dbp" jdbcType="VARCHAR" property="dbp" />
+			<result column="HBPS" jdbcType="VARCHAR" property="hbps" />
+			<result column="HFS" jdbcType="VARCHAR" property="hfs" />
+			<result column="hf_his" jdbcType="TIMESTAMP" property="hfHis" />
+			<result column="C1" jdbcType="INTEGER" property="c1" />
+			<result column="milk" jdbcType="INTEGER" property="milk" />
+			<result column="tfa" jdbcType="VARCHAR" property="tfa" />
+			<result column="chds" jdbcType="VARCHAR" property="chds" />
+			<result column="dms" jdbcType="VARCHAR" property="dms" />
+			<result column="smoke_sencod" jdbcType="VARCHAR" property="smokeSencod" />
+			<result column="lungs" jdbcType="VARCHAR" property="lungs" />
+			<result column="emphy_his" jdbcType="TIMESTAMP" property="emphyHis" />
+			<result column="asbestos_contact_his" jdbcType="INTEGER" property="asbestosContactHis" />
+			<result column="decorate_house" jdbcType="INTEGER" property="decorateHouse" />
+			<result column="psy_nervous" jdbcType="VARCHAR" property="psyNervous" />
+			<result column="bronch_his" jdbcType="VARCHAR" property="bronchHis" />
+			<result column="lampblack_contact" jdbcType="VARCHAR" property="lampblackContact" />
+			<result column="gouts" jdbcType="VARCHAR" property="gouts" />
+			<result column="tea" jdbcType="VARCHAR" property="tea" />
+			<result column="food_purine" jdbcType="TIMESTAMP" property="foodPurine" />
+			<result column="chd_his" jdbcType="INTEGER" property="chdHis" />
+			<result column="bua" jdbcType="INTEGER" property="bua" />
+			<result column="med_use_pill" jdbcType="VARCHAR" property="medUsePill" />
+			<result column="breast_plastic_surgery" jdbcType="VARCHAR" property="breastPlasticSurgery" />
+			<result column="BCS" jdbcType="VARCHAR" property="bcs" />
+			<result column="begind_breast_his" jdbcType="VARCHAR" property="begindBreastHis" />
+			<result column="female_menstruation" jdbcType="VARCHAR" property="femaleMenstruation" />
+			<result column="female_tire" jdbcType="TIMESTAMP" property="femaleTire" />
+			<result column="female_breast_time" jdbcType="INTEGER" property="femaleBreastTime" />
+			<result column="female_menopause_age" jdbcType="VARCHAR" property="femaleMenopauseAge" />
+			<result column="has_med_ert" jdbcType="TIMESTAMP" property="hasMedErt" />
+			<result column="CSS" jdbcType="INTEGER" property="css" />
+			<result column="card_his" jdbcType="INTEGER" property="cardHis" />
+			<result column="lvd_his" jdbcType="VARCHAR" property="lvdHis" />
+			<result column="af_his" jdbcType="VARCHAR" property="afHis" />
+			<result column="PCS" jdbcType="VARCHAR" property="pcs" />
+			<result column="prostate_disease" jdbcType="VARCHAR" property="prostateDisease" />
+			<result column="urinary_tract_infection" jdbcType="VARCHAR" property="urinaryTractInfection" />
+			<result column="urine_symptom" jdbcType="TIMESTAMP" property="urineSymptom" />
+			<result column="t_score" jdbcType="INTEGER" property="tScore" />
+			<result column="ra_his" jdbcType="VARCHAR" property="raHis" />
+			<result column="living_envir" jdbcType="VARCHAR" property="livingEnvir" />
+			<result column="food_drink_beer" jdbcType="TIMESTAMP" property="foodDrinkBeer" />
+			<result column="remark" jdbcType="INTEGER" property="remark" />
+			<result column="stroke_his" jdbcType="INTEGER" property="strokeHis" />
+			<result column="qtime" jdbcType="INTEGER" property="qtime" />
+		</collection>
+	</resultMap>
+    <sql id="Base_Column_List">
+    Org_Code, Org_Name, Super_Org_Code, Is_Del, Add_Date, Class_Number, User_Code, Docdor_Code, 
+    org_tree_upload_id, org_customer_code
+  </sql>
+  <select id="selectdiseaseriskresult" parameterType="com.yihe.system.domain.YhExportPDFData" resultMap="exprotresult2">
+	  SELECT repo.id,repo.request_serialNum,repo.user_code,repo.gender,repo.age as ages,drr.id AS did,drr.*,regi.`name`
+	  FROM( SELECT * FROM (SELECT  * from yh_disease_assess_total_report2  order by qtime desc ) a GROUP BY user_code) repo
+	  LEFT JOIN yh_disease_risk_result2  drr
+	  ON repo.request_serialNum=drr.request_serialize
+	  LEFT JOIN yh_user_reginfo regi
+	  ON regi.user_code=repo.user_code
+	  LEFT JOIN yh_org_tree orgtree
+	  on regi.Org_Code=orgtree.Org_Code
+		<where>
+			orgtree.Org_Code like CONCAT('%',#{nowselect},'%')
+			 <if test="begintime!=null">
+			 	and repo.qtime between #{begintime} and #{endtime}
+			 </if>		
+  		</where>
+  </select>
+  <select id="selectdiseasestatistical" parameterType="com.yihe.system.domain.YhExportPDFData" resultMap="exprotdiseasestatistical">
+  		SELECT repo.*,drr.id AS did,drr.diseasId,drr.risk_level FROM( SELECT * FROM (SELECT  * from yh_disease_assess_total_report2  order by qtime desc ) a GROUP BY user_code) repo
+		LEFT JOIN yh_disease_assess_report  drr
+		ON repo.request_serialNum=drr.request_serialNum
+		LEFT JOIN yh_user_reginfo regi
+		ON regi.user_code=repo.user_code
+		LEFT JOIN yh_org_tree orgtree
+		on regi.Org_Code=orgtree.Org_Code
+		<where>
+			orgtree.Org_Code like CONCAT('%',#{nowselect},'%')
+			 <if test="begintime!=null">
+			 	and repo.qtime between #{begintime} and #{endtime}
+			 </if>		
+  		</where>
+  </select>
+</mapper>

@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>一体机信息</title>
+    <link rel="stylesheet" th:href="@{/assets/libs/layui/css/layui.css}"/>
+    <link rel="stylesheet" th:href="@{/assets/module/admin.css}"/>
+</head>
+<body>
+<div class="layui-form">
+    <table id="demo" lay-filter="demo"></table>
+</div>
+</body>
+<script type="text/html" id="tableBar">
+    <a class="layui-btn layui-btn-xs" lay-event="edit">查看</a>
+</script>
+<script type="text/javascript" th:src="@{/assets/js/jquery-1.11.1.js}"></script>
+<script type="text/javascript" th:src="@{/assets/libs/layui/layui.js}"></script>
+<script type="text/javascript" th:src="@{/assets/js/common.js}"></script>
+<script type="text/javascript" th:inline="javascript">
+    layui.use(['layer', 'form', 'notice', 'table'], function () {
+        var $ = layui.jquery;
+        var layer = layui.layer;
+        var notice = layui.notice;
+        var form = layui.form;
+        var table = layui.table;
+        var userCode = [[${userCode}]];
+
+        //第一个实例
+        table.render({
+            id: 'answerList',
+            elem: '#demo',
+            url: '/TOnemachineData/queryOnemachine',  //数据接口
+            method: 'get',
+            where: {userCode: userCode}, // 你额外要携带数据，以键值对的方式存入
+            page: true, //开启分页
+            limit: 10,// 每页显示的条数
+            limits: [5, 10, 20, 50, 100], // 每页条数的选择项
+            loading: true, // 是否显示加载条(切换分页的时候显示）
+            cellMinWidth: 80, // 全局定义所有常规单元格的最小宽度（默认：60）
+            sort: true,
+            cols: [
+                [
+                    {type: 'numbers', title: '序号', align: 'center', width: 50},
+                    {field: 'gmtCreate', title: '检测时间', align: 'center'},
+                    {title: '操作', toolbar: '#tableBar', align: 'center', width: 100}
+                ]
+            ],
+            done: function (res, curr, count) {
+                if (count > 20) {
+                    $(".layui-table-page").show();
+                } else {
+                    $(".layui-table-page").hide();
+                }
+            },
+            parseData: function (res) { // res 即为原始返回的数据
+                console.log(res, "parseData")
+            }
+        });
+
+        table.on('tool(demo)', function (obj) { //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
+            var data = obj.data;
+            var layEvent = obj.event;
+            if (layEvent === 'edit') { // 查看
+                layer.open({
+                    type: 2,
+                    skin: 'layui-layer-rim', //加上边框
+                    // r表示right,b表示bottom
+                    offset: 'rb',
+                    // anim 特效 0-平滑放大 1-从上掉落 2-从底部往上滑入 3-从左滑入 4-从左翻转 5-渐显 5-抖动
+                    anim: 2,
+                    shadeClose: true,
+                    title: "体检详情",
+                    area: ['80%', '100%'],
+                    content: `/TOnemachineData/selectByPrimaryKey?id=${data.id}`,
+                });
+            }
+        });
+    })
+</script>
+</html>

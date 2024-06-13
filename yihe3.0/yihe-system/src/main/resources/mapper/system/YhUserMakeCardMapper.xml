@@ -1,0 +1,1512 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yihe.system.mapper.YhUserMakeCardMapper">
+	<resultMap id="BaseResultMap" type="com.yihe.system.domain.YhUserMakeCard">
+		<id column="Enrol_Card_Id" jdbcType="VARCHAR" property="enrolCardId" />
+		<result column="Enrol_Card_Code" jdbcType="VARCHAR" property="enrolCardCode" />
+		<result column="Enrol_Time" jdbcType="TIMESTAMP" property="enrolTime" />
+		<result column="Enrol_User_Id" jdbcType="VARCHAR" property="enrolUserId" />
+		<result column="Card_Type" jdbcType="INTEGER" property="cardType" />
+		<result column="Begin_Time" jdbcType="TIMESTAMP" property="beginTime" />
+		<result column="End_Time" jdbcType="TIMESTAMP" property="endTime" />
+		<result column="Org_Id" jdbcType="VARCHAR" property="orgId" />
+		<result column="Is_Del" jdbcType="INTEGER" property="isDel" />
+		<result column="User_Code" jdbcType="VARCHAR" property="userCode" />
+		<result column="User_Type" jdbcType="INTEGER" property="userType" />
+		<result column="doctor" jdbcType="INTEGER" property="doctor" />
+		<result column="ev_amount" jdbcType="INTEGER" property="evAmount" />
+		<result column="key" jdbcType="VARCHAR" property="key" />
+	</resultMap>
+	<sql id="Example_Where_Clause">
+		<where>
+			<foreach collection="oredCriteria" item="criteria" separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" prefixOverrides="and" suffix=")">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value}
+									and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach close=")" collection="criterion.value" item="listItem"
+										open="(" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Update_By_Example_Where_Clause">
+		<where>
+			<foreach collection="example.oredCriteria" item="criteria"
+				separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" prefixOverrides="and" suffix=")">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value}
+									and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach close=")" collection="criterion.value" item="listItem"
+										open="(" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Base_Column_List">
+		Enrol_Card_Id, Enrol_Card_Code, Enrol_Time, Enrol_User_Id,
+		Card_Type, Begin_Time,
+		End_Time, Org_Id, Is_Del, User_Code, User_Type,
+		doctor, ev_amount
+	</sql>
+
+
+	<select id="showCountDoctor" resultType="int">
+		select count(*) from yh_user_make_card where doctor=#{doctor} and Org_Id=#{orgCode} and  User_Code is null and `key` is null AND (DATE_FORMAT(End_Time,'%Y-%m-%d') <![CDATA[ >= ]]>  DATE_FORMAT(NOW(),'%Y-%m-%d') OR End_Time IS NULL);
+	</select>
+	
+	<select id="selectOrgSurplusCard" resultType="int">
+		select COUNT(card.Enrol_Card_Id)
+		from yh_user_make_card as card
+		inner JOIN yh_org_tree as tree
+		on card.Org_Id=tree.Org_Code
+		LEFT JOIN yh_user_reginfo as regin
+		on regin.user_code=card.User_Code
+		LEFT JOIN yh_user_admin_info as yuai
+		on yuai.id=card.doctor
+		where yuai.user_code=#{userCode}
+		and (card.User_Code is null or card.User_Code='')
+		and (card.key is null or card.key='')
+		and tree.Org_Code=#{orgCode}
+		and (card.End_Time > current_date or card.End_Time is null)
+	</select>
+	
+	
+	<!-- 查询当前机构下有健康师的注册卡 -->
+	<select id="selctByOrgDoctorCardId" resultType="java.lang.String"  parameterType="java.lang.String">
+		select Enrol_Card_Id from yh_user_make_card where Org_Id=#{orgId,jdbcType=VARCHAR} and User_Code is null and doctor != ''
+		 AND (DATE_FORMAT(End_Time,'%Y-%m-%d') >= DATE_FORMAT(NOW(),'%Y-%m-%d') OR End_Time IS NULL) limit 1;
+	</select>
+	
+	<!-- 查询当前机构下是否还有注册卡 -->
+	<select id="showByOrgIdMakeCar" parameterType="java.lang.String" resultMap="BaseResultMap">
+		select * from yh_user_make_card where Org_Id=#{orgId,jdbcType=VARCHAR} and User_Code is null
+		AND (DATE_FORMAT(End_Time,'%Y-%m-%d') >= DATE_FORMAT(NOW(),'%Y-%m-%d') OR End_Time IS NULL) limit 1;
+	</select>
+	
+	<!-- 查询该机构下没有分配医生的未用注册卡 -->
+	<select id="showByOrgCardId" resultMap="BaseResultMap"  parameterType="java.lang.String">
+		select Enrol_Card_Id from yh_user_make_card where Org_Id=#{orgId,jdbcType=VARCHAR} and User_Code is null and doctor is null
+		AND (DATE_FORMAT(End_Time,'%Y-%m-%d') >= DATE_FORMAT(NOW(),'%Y-%m-%d') OR End_Time IS NULL) limit 1;
+	</select>
+	
+	<!-- 查询当前医生下未使用注册卡 -->
+	<select id="showByCardId" resultType="java.lang.String"  parameterType="java.lang.String">
+		select Enrol_Card_Id from yh_user_make_card where doctor=#{doctor} and User_Code is null
+		AND (DATE_FORMAT(End_Time,'%Y-%m-%d') >= DATE_FORMAT(NOW(),'%Y-%m-%d') OR End_Time IS NULL) limit 1;
+	</select>
+	
+	<select id="selectcard1" resultType="java.lang.String" parameterType="java.lang.String">
+		select Enrol_Card_Id from yh_user_make_card where User_Code is null and Org_Id=#{orgId,jdbcType=VARCHAR} limit 1
+	</select>
+
+	<select id="selectcard2" resultType="java.lang.String" parameterType="java.lang.String">
+		select Enrol_Card_Id from yh_user_make_card where User_Code is null and Org_Id = #{orgId,jdbcType=VARCHAR} and doctor = #{doctor} limit 1
+	</select>
+	
+    <select id="selectcard" resultType="java.lang.String">
+ 	select Enrol_Card_Id from yh_user_make_card where User_Code is null limit 1
+  </select>
+	
+	<!-- 根据医生code查询已用多少注册卡 -->
+	<select id="doctorcard" resultType="int" parameterType="java.lang.String">
+		select count(*) from yh_user_make_card card,yh_user_admin_info info where card.doctor=info.id  and info.user_code=#{usercode} and card.User_Code is	not null and card.User_Code!='';
+	</select>
+	
+	<!-- 根据医生code查询总共多少注册卡 -->
+	<select id="doctorcardCount" resultType="int" parameterType="java.lang.String">
+		select count(*) from yh_user_make_card card,yh_user_admin_info info where card.doctor=info.id  and info.user_code=#{usercode}
+	</select> 
+	
+	 <select id="selectOrgIdbyParam" resultMap="BaseResultMap"  parameterType="java.lang.String">
+  	select * from yh_user_make_card a where user_code=#{usercode};
+  </select>
+	
+  <select id="selectUnspentRegCard" resultMap="BaseResultMap">
+  		select card.*
+        from yh_user_make_card as card
+		inner JOIN yh_user_admin_info as info
+		on card.doctor = info.id
+		inner JOIN yh_org_tree as tree
+		on card.Org_Id =tree.Org_Code
+		where info.user_name = '医生'
+		and tree.Org_Code = '10000'
+		and card.User_Code  is  null order by card.Enrol_Time desc limit 1
+  </select>
+	
+	
+	<!-- 查询未用注册卡 -->
+  <select id="showMakeCardcount" resultType="int">
+  	select count(*) from yh_user_make_card a where (a.User_Code is null or a.User_Code='');
+  </select>
+  
+   <!-- 查询已用注册卡 -->
+  <select id="showMakeCardcountDispose" resultType="int">
+  	select count(*) from yh_user_make_card a where a.User_Code is	not null and a.User_Code!=''
+  </select>
+	
+	
+	<!-- 查询过去12个月注册数据 -->
+	<select id="findRegInfoByuserCodeForYearInfo" resultType="com.yihe.system.domain.doctorConsoleVOJO">
+
+		SELECT regMonthTime, MAX(regMonthNum) AS regMonthNum
+		FROM (
+		SELECT
+		DATE_FORMAT(t.reg_time,'%Y-%m') AS regMonthTime,COUNT(1) regMonthNum
+		FROM yh_user_reginfo t
+
+		WHERE DATE_FORMAT(t.reg_time,'%Y-%m')>
+		DATE_FORMAT(DATE_SUB(CURDATE(), INTERVAL 12 MONTH),'%Y-%m')
+		AND user_code IN (
+		SELECT user_code FROM `yh_user_make_card` WHERE doctor=(SELECT id FROM
+		`yh_user_admin_info` WHERE user_code=#{usercode}) AND user_code != '' AND
+		user_code IS NOT NULL
+		)
+		GROUP BY regMonthTime
+		UNION
+		SELECT * FROM (
+		SELECT DATE_FORMAT(DATE_SUB(CURDATE(), INTERVAL 11 MONTH),'%Y-%m')
+		regMonthTime, 0 regMonthNum
+		UNION
+		SELECT DATE_FORMAT(DATE_SUB(CURDATE(), INTERVAL 10 MONTH),'%Y-%m'), 0
+		UNION
+		SELECT DATE_FORMAT(DATE_SUB(CURDATE(), INTERVAL 9 MONTH),'%Y-%m'), 0
+		UNION
+		SELECT DATE_FORMAT(DATE_SUB(CURDATE(), INTERVAL 8 MONTH),'%Y-%m'), 0
+		UNION
+		SELECT DATE_FORMAT(DATE_SUB(CURDATE(), INTERVAL 7 MONTH),'%Y-%m'), 0
+		UNION
+		SELECT DATE_FORMAT(DATE_SUB(CURDATE(), INTERVAL 6 MONTH),'%Y-%m'), 0
+		UNION
+		SELECT DATE_FORMAT(DATE_SUB(CURDATE(), INTERVAL 5 MONTH),'%Y-%m'), 0
+		UNION
+		SELECT DATE_FORMAT(DATE_SUB(CURDATE(), INTERVAL 4 MONTH),'%Y-%m'), 0
+		UNION
+		SELECT DATE_FORMAT(DATE_SUB(CURDATE(), INTERVAL 3 MONTH),'%Y-%m'), 0
+		UNION
+		SELECT DATE_FORMAT(DATE_SUB(CURDATE(), INTERVAL 2 MONTH),'%Y-%m'), 0
+		UNION
+		SELECT DATE_FORMAT(DATE_SUB(CURDATE(), INTERVAL 1 MONTH),'%Y-%m'), 0
+		UNION
+		SELECT DATE_FORMAT(DATE_SUB(CURDATE(), INTERVAL 0 MONTH),'%Y-%m'), 0
+		) b
+		)c
+		GROUP BY regMonthTime
+
+
+	</select>
+	<!-- 查询12周注册数据 -->
+	<select id="findRegInfoByUserCodeForWeek" resultType="java.lang.Integer">
+		SELECT
+		IF
+		(COUNT(1) IS NULL, 0, COUNT(1)) AS num
+		FROM yh_user_reginfo AS osr
+		WHERE
+		YEARWEEK(DATE_FORMAT(osr.reg_time,'%Y-%m-%d'), 1) =
+		YEARWEEK(NOW(), 1)+#{num}
+		AND user_code IN (
+		SELECT user_code FROM
+		`yh_user_make_card` WHERE doctor=(SELECT id FROM
+		`yh_user_admin_info`
+		WHERE user_code=#{usercode}) AND user_code != '' AND
+		user_code IS NOT
+		NULL
+		)
+	</select>
+
+	<!-- 查询近15天注册数据 -->
+	<select id="findRegInfoBy15Day" resultType="com.yihe.system.domain.doctorConsoleVOJO">
+		SELECT DATE_FORMAT(
+		reg_time,'%Y-%m-%d') AS regtime,COUNT(*) AS regnum FROM
+		yh_user_reginfo WHERE DATE_SUB(CURDATE(), INTERVAL 14 DAY) &lt;=
+		DATE(DATE_FORMAT( reg_time,'%Y-%m-%d'))
+		AND user_code IN (
+		SELECT
+		user_code FROM `yh_user_make_card` WHERE doctor=(SELECT id FROM
+		`yh_user_admin_info` WHERE user_code=#{usercode}) AND user_code != ''
+		AND user_code IS NOT NULL
+		)
+
+		GROUP BY DATE_FORMAT( reg_time,'%Y-%m-%d')
+
+	</select>
+	<!-- 健康评估 按日 -->
+	<select id="findAssessTotalByTime"  resultType="java.lang.Integer">
+	SELECT count(1) FROM `yh_disease_assess_total_report2` WHERE   user_code IN (
+		SELECT user_code FROM
+		`yh_user_make_card` WHERE doctor=(SELECT id FROM
+		`yh_user_admin_info`
+		WHERE user_code=#{usercode}) AND user_code != ''
+		AND user_code IS NOT
+		NULL
+		)
+		AND DATE_FORMAT(qtime,'%Y-%m-%d') &lt;=
+		DATE_FORMAT(#{time},'%Y-%m-%d')
+	</select>
+	<!-- 健康评估 按日 -->
+	<select id="findAssessTotalByMonth"  resultType="java.lang.Integer">
+	SELECT count(1) FROM `yh_disease_assess_total_report2` WHERE   user_code IN (
+		SELECT user_code FROM
+		`yh_user_make_card` WHERE doctor=(SELECT id FROM
+		`yh_user_admin_info`
+		WHERE user_code=#{usercode}) AND user_code != ''
+		AND user_code IS NOT
+		NULL
+		)
+		AND
+		DATE_FORMAT(qtime, '%Y-%m-%d') &lt; DATE_FORMAT(#{time}, '%Y-%m-%d')
+	</select>
+	<!-- 压力评估按日 -->
+	<select id="findPressureByDayAndDoctor"  resultType="java.lang.Integer">
+	
+ 	SELECT count(1) FROM `yh_pressure_evaluate` WHERE  user_code IN (
+		SELECT user_code FROM
+		`yh_user_make_card` WHERE doctor=(SELECT id FROM
+		`yh_user_admin_info`
+		WHERE user_code=#{usercode}) AND user_code != ''
+		AND user_code IS NOT
+		NULL
+		)
+		AND  DATE_FORMAT(Evaluate_Date,'%Y-%m-%d') &lt;=
+		DATE_FORMAT(#{time},'%Y-%m-%d')
+	</select>
+	<!-- 压力评估按月-->
+	<select id="findPressureByMonthAndDoctor"  resultType="java.lang.Integer">
+	
+ 	SELECT count(1) FROM `yh_pressure_evaluate` WHERE  user_code IN (
+		SELECT user_code FROM
+		`yh_user_make_card` WHERE doctor=(SELECT id FROM
+		`yh_user_admin_info`
+		WHERE user_code=#{usercode}) AND user_code != ''
+		AND user_code IS NOT
+		NULL
+		)
+		AND
+		DATE_FORMAT(Evaluate_Date, '%Y-%m-%d') &lt; DATE_FORMAT(#{time}, '%Y-%m-%d')
+	</select>
+		<!-- 睡眠评估按日 -->
+	<select id="findSleepReportByDayAndDoctor"  resultType="java.lang.Integer">
+	
+ 	SELECT count(1) FROM `yh_sleep_report` WHERE  user_code IN (
+		SELECT user_code FROM
+		`yh_user_make_card` WHERE doctor=(SELECT id FROM
+		`yh_user_admin_info`
+		WHERE user_code=#{usercode}) AND user_code != ''
+		AND user_code IS NOT
+		NULL
+		)
+		AND  DATE_FORMAT(qtime,'%Y-%m-%d') &lt;=
+		DATE_FORMAT(#{time},'%Y-%m-%d')
+	</select>
+	<!-- 睡眠评估按月-->
+	<select id="findSleepReportByMonthAndDoctor"  resultType="java.lang.Integer">
+	
+ 	SELECT count(1) FROM `yh_sleep_report` WHERE  user_code IN (
+		SELECT user_code FROM
+		`yh_user_make_card` WHERE doctor=(SELECT id FROM
+		`yh_user_admin_info`
+		WHERE user_code=#{usercode}) AND user_code != ''
+		AND user_code IS NOT
+		NULL
+		)
+		AND
+		DATE_FORMAT(qtime, '%Y-%m-%d') &lt; DATE_FORMAT(#{time}, '%Y-%m-%d')
+	</select>
+	
+		<!-- 运动日记按日 -->
+	<select id="findSportDiaryByDayAndDoctor"  resultType="java.lang.Integer">
+	
+ 	SELECT count(1) FROM `yh_sport_diary` WHERE  user_code IN (
+		SELECT user_code FROM
+		`yh_user_make_card` WHERE doctor=(SELECT id FROM
+		`yh_user_admin_info`
+		WHERE user_code=#{usercode}) AND user_code != ''
+		AND user_code IS NOT
+		NULL
+		)
+		AND  DATE_FORMAT(Entry_Time,'%Y-%m-%d') &lt;=
+		DATE_FORMAT(#{time},'%Y-%m-%d')
+	</select>
+	<!-- 运动日记按月-->
+	<select id="findSportDiaryByMonthAndDoctor"  resultType="java.lang.Integer">
+	
+ 	SELECT count(1) FROM `yh_sport_diary` WHERE  user_code IN (
+		SELECT user_code FROM
+		`yh_user_make_card` WHERE doctor=(SELECT id FROM
+		`yh_user_admin_info`
+		WHERE user_code=#{usercode}) AND user_code != ''
+		AND user_code IS NOT
+		NULL
+		)
+		AND
+		DATE_FORMAT(Entry_Time, '%Y-%m-%d') &lt; DATE_FORMAT(#{time}, '%Y-%m-%d')
+	</select>
+	
+	
+		<!-- 运动日记按日 -->
+	<select id="findFoodDiaryByDayAndDoctor"  resultType="java.lang.Integer">
+	
+ 	SELECT count(1) FROM `yh_food_user_diary` WHERE  user_code IN (
+		SELECT user_code FROM
+		`yh_user_make_card` WHERE doctor=(SELECT id FROM
+		`yh_user_admin_info`
+		WHERE user_code=#{usercode}) AND user_code != ''
+		AND user_code IS NOT
+		NULL
+		)
+		AND  DATE_FORMAT(C_Time,'%Y-%m-%d') &lt;=
+		DATE_FORMAT(#{time},'%Y-%m-%d')
+	</select>
+	<!-- 运动日记按月-->
+	<select id="findFoodDiaryByMonthAndDoctor"  resultType="java.lang.Integer">
+	
+ 	SELECT count(1) FROM `yh_food_user_diary` WHERE  user_code IN (
+		SELECT user_code FROM
+		`yh_user_make_card` WHERE doctor=(SELECT id FROM
+		`yh_user_admin_info`
+		WHERE user_code=#{usercode}) AND user_code != ''
+		AND user_code IS NOT
+		NULL
+		)
+		AND
+		DATE_FORMAT(C_Time, '%Y-%m-%d') &lt; DATE_FORMAT(#{time}, '%Y-%m-%d')
+	</select>
+		<!-- 睡眠日记按日 -->
+	<select id="findSleepDiaryByDayAndDoctor"  resultType="java.lang.Integer">
+	
+ 	SELECT count(1) FROM `yh_sleep_user_diary` WHERE  user_code IN (
+		SELECT user_code FROM
+		`yh_user_make_card` WHERE doctor=(SELECT id FROM
+		`yh_user_admin_info`
+		WHERE user_code=#{usercode}) AND user_code != ''
+		AND user_code IS NOT
+		NULL
+		)
+		AND DATE_FORMAT(sleep_diarytime,'%Y-%m-%d')  &lt;=
+		DATE_FORMAT(#{time},'%Y-%m-%d')
+	</select>
+	<!-- 睡眠日记按月-->
+	<select id="findSleepDiaryByMonthAndDoctor"  resultType="java.lang.Integer">
+	
+ 	SELECT count(1) FROM `yh_sleep_user_diary` WHERE  user_code IN (
+		SELECT user_code FROM
+		`yh_user_make_card` WHERE doctor=(SELECT id FROM
+		`yh_user_admin_info`
+		WHERE user_code=#{usercode}) AND user_code != ''
+		AND user_code IS NOT
+		NULL
+		)
+		AND
+		DATE_FORMAT(sleep_diarytime, '%Y-%m-%d') &lt; DATE_FORMAT(#{time}, '%Y-%m-%d')
+	</select>
+	
+	<!-- 健康计划按日 -->
+	<select id="findHealthyPlanByDayAndDoctor"  resultType="java.lang.Integer">
+	
+ 	SELECT count(1) FROM `yh_user_healthy_plan` WHERE  user_code IN (
+		SELECT user_code FROM
+		`yh_user_make_card` WHERE doctor=(SELECT id FROM
+		`yh_user_admin_info`
+		WHERE user_code=#{usercode}) AND user_code != ''
+		AND user_code IS NOT
+		NULL
+		)
+		AND  DATE_FORMAT(plan_startdate,'%Y-%m-%d') &lt;=
+		DATE_FORMAT(#{time},'%Y-%m-%d')
+	</select>
+	<!-- 健康计划按月-->
+	<select id="findHealthyPlanByMonthAndDoctor"  resultType="java.lang.Integer">
+	
+ 	SELECT count(1) FROM `yh_user_healthy_plan` WHERE  user_code IN (
+		SELECT user_code FROM
+		`yh_user_make_card` WHERE doctor=(SELECT id FROM
+		`yh_user_admin_info`
+		WHERE user_code=#{usercode}) AND user_code != ''
+		AND user_code IS NOT
+		NULL
+		)
+		AND
+		DATE_FORMAT(plan_startdate, '%Y-%m-%d') &lt; DATE_FORMAT(#{time}, '%Y-%m-%d')
+	</select>
+	
+	<!-- 习惯评估按日 -->
+	<select id="findHealthyHabitByDayAndDoctor"  resultType="java.lang.Integer">
+	
+ 	SELECT count(1) FROM `yh_life_habit_improvement_dict` WHERE  user_code IN (
+		SELECT user_code FROM
+		`yh_user_make_card` WHERE doctor=(SELECT id FROM
+		`yh_user_admin_info`
+		WHERE user_code=#{usercode}) AND user_code != ''
+		AND user_code IS NOT
+		NULL
+		)
+		AND  DATE_FORMAT(Dict_time,'%Y-%m-%d') &lt;=
+		DATE_FORMAT(#{time},'%Y-%m-%d')
+	</select>
+	
+		<!-- 习惯评估按月 -->
+	<select id="findHealthyHabitByMonthAndDoctor"  resultType="java.lang.Integer">
+	SELECT count(1) FROM `yh_life_habit_improvement_dict` WHERE  user_code IN (
+		SELECT user_code FROM
+		`yh_user_make_card` WHERE doctor=(SELECT id FROM
+		`yh_user_admin_info`
+		WHERE user_code=#{usercode}) AND user_code != ''
+		AND user_code IS NOT
+		NULL
+		)
+		AND
+		DATE_FORMAT(Dict_time, '%Y-%m-%d') &lt; DATE_FORMAT(#{time}, '%Y-%m-%d')
+	</select>
+	
+	<!-- 习惯日记数按日 -->
+	<select id="findHealthyHabitDiaryByDayAndDoctor"  resultType="java.lang.Integer">
+	
+ 	
+		SELECT COUNT(1) FROM (
+SELECT * FROM `yh_life_habit_sign` GROUP BY signId_date,user_code		
+		) AS a
+		WHERE a.user_code IN 
+		( SELECT user_code FROM `yh_user_make_card` WHERE doctor=(SELECT id FROM `yh_user_admin_info` WHERE user_code=#{usercode}) 
+		AND user_code != '' AND user_code IS NOT NULL ) 
+		AND DATE_FORMAT(a.signId_date, '%Y-%m-%d') &lt;= DATE_FORMAT(#{time}, '%Y-%m-%d') 
+	</select>
+	
+		<!-- 习惯日记数按月 -->
+	<select id="findHealthyHabitDiaryByMonthAndDoctor"  resultType="java.lang.Integer">
+	SELECT COUNT(1) FROM (
+SELECT * FROM `yh_life_habit_sign` GROUP BY signId_date,user_code		
+		) AS a
+		WHERE a.user_code IN 
+		( SELECT user_code FROM `yh_user_make_card` WHERE doctor=(SELECT id FROM `yh_user_admin_info` WHERE user_code=#{usercode}) 
+		AND user_code != '' AND user_code IS NOT NULL ) 
+		AND DATE_FORMAT(a.signId_date, '%Y-%m-%d') &lt; DATE_FORMAT(#{time}, '%Y-%m-%d') 
+	</select>
+	
+	
+	<!-- 注册人数按日 -->
+	<select id="findRegInfoByTime" resultType="java.lang.Integer">
+	SELECT COUNT(1) FROM yh_user_reginfo
+		WHERE user_code IN (
+		SELECT
+		user_code FROM `yh_user_make_card` WHERE doctor=(SELECT id FROM
+		`yh_user_admin_info` WHERE user_code=#{usercode}) AND user_code != ''
+		AND user_code IS NOT NULL
+		)
+		AND DATE_FORMAT( reg_time,'%Y-%m-%d') &lt;=
+		DATE_FORMAT( #{time},'%Y-%m-%d')
+	</select>
+	<!-- 注册人数 按月 -->
+	<select id="findRegInfoByTimeMonth"  resultType="java.lang.Integer">
+	 
+		SELECT COUNT(1)  FROM yh_user_reginfo
+		WHERE user_code IN (
+		SELECT
+		user_code FROM `yh_user_make_card` WHERE doctor=(SELECT id FROM
+		`yh_user_admin_info` WHERE user_code=#{usercode}) AND user_code != ''
+		AND user_code IS NOT NULL
+		)
+		AND
+		DATE_FORMAT(reg_time, '%Y-%m-%d') &lt; DATE_FORMAT(#{time}, '%Y-%m-%d')
+	</select>
+	<!-- 饮食日记数 -->
+	<select id="findFoodDiaryNumByUserCode" resultType="java.lang.Integer">
+		SELECT
+		COUNT(1) FROM `yh_food_user_diary` WHERE TO_DAYS(C_Time) =
+		TO_DAYS(NOW()) AND user_code IN (
+		SELECT user_code FROM
+		`yh_user_make_card` WHERE doctor=(SELECT id FROM
+		`yh_user_admin_info`
+		WHERE user_code=#{usercode}) AND user_code != ''
+		AND user_code IS NOT
+		NULL
+		)
+
+	</select>
+	<select id="findUserHealthyPlanByDoctor" resultType="java.lang.Integer">
+	SELECT
+		COUNT(1) FROM `yh_user_healthy_plan` WHERE TO_DAYS(plan_startdate) =
+		TO_DAYS(NOW()) 
+		AND user_code IN (
+		SELECT user_code FROM
+		`yh_user_make_card` WHERE doctor=(SELECT id FROM
+		`yh_user_admin_info`
+		WHERE user_code=#{usercode}) AND user_code != ''
+		AND user_code IS NOT
+		NULL
+		)
+	</select>
+	<!-- 运动日记数 -->
+	<select id="findSportDiaryNumByUserCode" resultType="java.lang.Integer">
+		SELECT
+		COUNT(1) FROM `yh_sport_diary` WHERE TO_DAYS(Entry_Time) =
+		TO_DAYS(NOW()) AND user_code IN (
+		SELECT user_code FROM
+		`yh_user_make_card` WHERE doctor=(SELECT id FROM
+		`yh_user_admin_info`
+		WHERE user_code=#{usercode}) AND user_code != ''
+		AND user_code IS NOT
+		NULL
+		)
+
+	</select>
+
+	<!-- 压力评估 -->
+	<select id="findPressureEvaLuateNumByuserCode" resultType="java.lang.Integer">
+
+		SELECT COUNT(1) FROM `yh_pressure_evaluate` WHERE
+		TO_DAYS(Evaluate_Date) = TO_DAYS(NOW()) AND user_code IN (
+		SELECT
+		user_code FROM `yh_user_make_card` WHERE doctor=(SELECT id FROM
+		`yh_user_admin_info` WHERE user_code=#{usercode}) AND user_code != ''
+		AND user_code IS NOT NULL
+		)
+	</select>
+	<!-- 集今日习惯评估次数 -->
+	<select id="findHabitDictNumByuserCode" resultType="java.lang.Integer">
+
+		SELECT COUNT(1) FROM `yh_life_habit_improvement_dict` WHERE
+		TO_DAYS(Dict_time) = TO_DAYS(NOW()) AND user_code IN (
+		SELECT
+		user_code FROM `yh_user_make_card` WHERE doctor=(SELECT id FROM
+		`yh_user_admin_info` WHERE user_code=#{usercode}) AND user_code != ''
+		AND user_code IS NOT NULL
+		)
+	</select>
+	<!-- 集今日习惯日记次数 -->
+	<select id="findHabitDiaryNumByuserCode" resultType="java.lang.Integer">
+
+		
+	SELECT COUNT(1) FROM (
+SELECT * FROM `yh_life_habit_sign` GROUP BY signId_date,user_code	
+		) AS a
+		WHERE a.user_code IN 
+		( SELECT user_code FROM `yh_user_make_card` WHERE doctor=(SELECT id FROM `yh_user_admin_info` WHERE user_code=#{usercode}) 
+		AND user_code != '' AND user_code IS NOT NULL ) 
+		 
+		AND TO_DAYS(signId_date) = TO_DAYS(NOW()) 
+		
+		 
+	</select>
+	<!-- 根据医生查询他有多少张注册卡 -->
+	<select id="findMakeCardNumByDoctor" resultType="java.lang.Integer">
+		SELECT COUNT(1)
+		FROM `yh_user_make_card` WHERE doctor=(SELECT id FROM
+		`yh_user_admin_info` WHERE user_code=#{usercode})
+
+	</select>
+	<!-- 医生下的告警数 -->
+	<select id="findDoctorAlarmNum" resultType="java.lang.Integer">
+SELECT COUNT(1) FROM `yh_he_threshold_alarm` AS a
+INNER JOIN yh_user_make_card AS b
+ON a.MEMBER_ID=b.user_code
+WHERE b.doctor = 
+    (SELECT 
+      id 
+    FROM
+      `yh_user_admin_info` 
+    WHERE user_code = #{usercode}) 
+	</select>
+	<!--评估人数-->
+	<select id="findAssessmentNum" resultType="java.lang.Integer">
+			SELECT COUNT(1) FROM (  SELECT user_code FROM yh_disease_assess_total_report2 WHERE user_code  IN (
+		  SELECT b.user_code
+		FROM
+		`yh_user_make_card` AS a
+		INNER JOIN `yh_user_reginfo` AS b
+		ON
+		a.user_code=b.user_code
+		WHERE a.doctor=(SELECT id FROM
+		`yh_user_admin_info` WHERE
+		user_code=#{usercode}) AND a.user_code != ''
+		AND a.user_code IS NOT NULL)
+		 GROUP BY user_code
+		  ) AS a
+	</select>
+	<!--未评估人数-->
+	<select id="findNotAssessmentNum" resultType="java.lang.Integer">
+		SELECT COUNT(1) FROM (   SELECT b.user_code
+		FROM
+		`yh_user_make_card` AS a
+		INNER JOIN `yh_user_reginfo` AS b
+		ON
+		a.user_code=b.user_code
+		LEFT JOIN yh_disease_assess_total_report2 AS c
+		ON a.user_code=c.user_code
+		WHERE a.doctor=(SELECT id FROM
+		`yh_user_admin_info` WHERE
+		user_code=#{usercode}) AND a.user_code != ''
+		AND a.user_code IS NOT NULL
+		AND c.id IS NULL) AS a
+	</select>
+	<!--已患人数-->
+	<select id="findYiHuanNumInfo" resultType="java.lang.Integer">
+		SELECT COUNT(1) FROM (
+SELECT b.request_serialNum AS requestNum,a.`user_code` AS usercode,a.`name`,CASE
+              WHEN a.gender = 1
+              THEN '男'
+              ELSE '女'
+            END AS sex ,b.`times`,b.qtime,MAX(b.id) AS reid,b.df_names AS bfnames,b.`sk_names` AS sknames,b.`ld_names` AS ldnames,b.`lr_names` AS lrnames,d.`Flag_Dgroup` AS flagDgroup
+
+
+             FROM yh_user_reginfo AS a
+INNER JOIN `yh_user_make_card` AS c
+ON a.`user_code`=c.`User_Code`
+LEFT JOIN `yh_user_enrolinfo` AS d
+ON a.`user_code`=d.`user_code`
+LEFT JOIN yh_disease_assess_total_report2 AS b
+ON a.`user_code`=b.`user_code`
+		INNER JOIN
+		(
+		SELECT *, MAX(id) AS max_chat_time FROM yh_disease_assess_total_report2 GROUP BY user_code
+		) AS e
+		ON b.user_code=e.user_code AND b.id=e.max_chat_time
+		WHERE
+			 c.doctor=(SELECT id FROM `yh_user_admin_info` WHERE
+		user_code=#{usercode})
+
+		GROUP BY b.user_code
+) AS a
+		 WHERE a.sknames IS NOT NULL
+	</select>
+	<!--已患人数-->
+	<select id="findNotYiHuanNumInfo" resultType="java.lang.Integer">
+		SELECT COUNT(1) FROM (
+SELECT b.request_serialNum AS requestNum,a.`user_code` AS usercode,a.`name`,CASE
+              WHEN a.gender = 1
+              THEN '男'
+              ELSE '女'
+            END AS sex ,b.`times`,b.qtime,MAX(b.id) AS reid,b.df_names AS bfnames,b.`sk_names` AS sknames,b.`ld_names` AS ldnames,b.`lr_names` AS lrnames,d.`Flag_Dgroup` AS flagDgroup
+
+
+             FROM yh_user_reginfo AS a
+INNER JOIN `yh_user_make_card` AS c
+ON a.`user_code`=c.`User_Code`
+LEFT JOIN `yh_user_enrolinfo` AS d
+ON a.`user_code`=d.`user_code`
+LEFT JOIN yh_disease_assess_total_report2 AS b
+ON a.`user_code`=b.`user_code`
+		INNER JOIN
+		(
+		SELECT *, MAX(id) AS max_chat_time FROM yh_disease_assess_total_report2 GROUP BY user_code
+		) AS e
+		ON b.user_code=e.user_code AND b.id=e.max_chat_time
+		WHERE
+			 c.doctor=(SELECT id FROM `yh_user_admin_info` WHERE
+		user_code=#{usercode})
+
+		GROUP BY b.user_code
+) AS a
+		 WHERE a.sknames IS  NULL
+	</select>
+	<!--高风险人群-->
+	<select id="findGaofenxNumInfo" resultType="java.lang.Integer">
+
+SELECT COUNT(1) FROM (
+SELECT b.request_serialNum AS requestNum,a.`user_code` AS usercode,a.`name`,CASE
+              WHEN a.gender = 1
+              THEN '男'
+              ELSE '女'
+            END AS sex ,b.`times`,b.qtime,MAX(b.id) AS reid,b.df_names AS bfnames,b.`sk_names` AS sknames,b.`ld_names` AS ldnames,b.`lr_names` AS lrnames,d.`Flag_Dgroup` AS flagDgroup
+
+
+             FROM yh_user_reginfo AS a
+INNER JOIN `yh_user_make_card` AS c
+ON a.`user_code`=c.`User_Code`
+LEFT JOIN `yh_user_enrolinfo` AS d
+ON a.`user_code`=d.`user_code`
+LEFT JOIN yh_disease_assess_total_report2 AS b
+ON a.`user_code`=b.`user_code`
+		INNER JOIN
+		(
+		SELECT *, MAX(id) AS max_chat_time FROM yh_disease_assess_total_report2 GROUP BY user_code
+		) AS e
+		ON b.user_code=e.user_code AND b.id=e.max_chat_time
+		WHERE
+			 c.doctor=(SELECT id FROM `yh_user_admin_info` WHERE
+		user_code=#{usercode})
+
+		GROUP BY b.user_code
+) AS a
+		 WHERE a.sknames IS  NULL AND  a.bfnames IS NOT   NULL
+
+	</select>
+	<!--高风险人群-->
+	<select id="findNotGaofenxNumInfo" resultType="java.lang.Integer">
+
+SELECT COUNT(1) FROM (
+SELECT b.request_serialNum AS requestNum,a.`user_code` AS usercode,a.`name`,CASE
+              WHEN a.gender = 1
+              THEN '男'
+              ELSE '女'
+            END AS sex ,b.`times`,b.qtime,MAX(b.id) AS reid,b.df_names AS bfnames,b.`sk_names` AS sknames,b.`ld_names` AS ldnames,b.`lr_names` AS lrnames,d.`Flag_Dgroup` AS flagDgroup
+
+
+             FROM yh_user_reginfo AS a
+INNER JOIN `yh_user_make_card` AS c
+ON a.`user_code`=c.`User_Code`
+LEFT JOIN `yh_user_enrolinfo` AS d
+ON a.`user_code`=d.`user_code`
+LEFT JOIN yh_disease_assess_total_report2 AS b
+ON a.`user_code`=b.`user_code`
+		INNER JOIN
+		(
+		SELECT *, MAX(id) AS max_chat_time FROM yh_disease_assess_total_report2 GROUP BY user_code
+		) AS e
+		ON b.user_code=e.user_code AND b.id=e.max_chat_time
+		WHERE
+			 c.doctor=(SELECT id FROM `yh_user_admin_info` WHERE
+		user_code=#{usercode})
+
+		GROUP BY b.user_code
+) AS a
+		 WHERE a.bfnames IS   NULL AND a.sknames IS  NULL
+
+	</select>
+	<!-- 医生已经注册的用户 -->
+	<select id="findUserInfoByDoctor" resultType="com.yihe.system.domain.doctorConsoleVOJO">
+		SELECT b.user_code
+		AS usercode,b.gender,b.`birth_date` AS birthDate FROM
+		`yh_user_make_card` AS a
+		INNER JOIN `yh_user_reginfo` AS b
+		ON
+		a.user_code=b.user_code
+		WHERE a.doctor=(SELECT id FROM
+		`yh_user_admin_info` WHERE
+		user_code=#{usercode}) AND a.user_code != ''
+		AND a.user_code IS NOT NULL
+	</select>
+	<!-- 今日注册人数 -->
+	<select id="findRegInfoToDayByUserCode" resultType="java.lang.Integer">
+		SELECT
+		COUNT(1) FROM `yh_user_reginfo` WHERE TO_DAYS(reg_time) =
+		TO_DAYS(NOW()) AND user_code IN (
+		SELECT user_code FROM
+		`yh_user_make_card` WHERE doctor=(SELECT id FROM
+		`yh_user_admin_info`
+		WHERE user_code=#{usercode}) AND user_code != ''
+		AND user_code IS NOT
+		NULL
+		)
+	</select>
+	
+	<select id="findSleepUserDiaryToDayByUserCode" resultType="java.lang.Integer">
+	SELECT
+		COUNT(1) FROM `yh_sleep_user_diary` WHERE TO_DAYS(sleep_diarytime) =
+		TO_DAYS(NOW()) AND user_code IN (
+		SELECT user_code FROM
+		`yh_user_make_card` WHERE doctor=(SELECT id FROM
+		`yh_user_admin_info`
+		WHERE user_code=#{usercode}) AND user_code != ''
+		AND user_code IS NOT
+		NULL
+		)
+	</select>
+
+	<!-- 今日健康评估人数 -->
+	<select id="findAssessTotalByToDayNum" resultType="java.lang.Integer">
+		SELECT
+		COUNT(1) FROM `yh_disease_assess_total_report2` WHERE TO_DAYS(qtime) =
+		TO_DAYS(NOW()) AND user_code IN (
+		SELECT user_code FROM
+		`yh_user_make_card` WHERE doctor=(SELECT id FROM
+		`yh_user_admin_info`
+		WHERE user_code=#{usercode}) AND user_code != ''
+		AND user_code IS NOT
+		NULL
+		)
+	</select>
+
+	<!-- 医生所属用户数据监测今日新增数 -->
+	<select id="findHealtJianCeByUserCode" resultType="java.lang.Integer">
+		SELECT (SELECT
+		COUNT(1) FROM yh_user_temperature WHERE TO_DAYS(Entry_Time) =
+		TO_DAYS(NOW()) AND E_User_Id IN (
+		SELECT user_code FROM
+		`yh_user_make_card` WHERE doctor=(SELECT id FROM
+		`yh_user_admin_info`
+		WHERE user_code=#{usercode}) AND user_code != ''
+		AND user_code IS NOT
+		NULL
+		))
+		+(SELECT COUNT(1) FROM yh_user_oxygen WHERE TO_DAYS(Entry_Time)
+		=
+		TO_DAYS(NOW()) AND E_User_Id IN (
+		SELECT user_code FROM
+		`yh_user_make_card` WHERE doctor=(SELECT id FROM
+		`yh_user_admin_info`
+		WHERE user_code=#{usercode}) AND user_code != ''
+		AND user_code IS NOT
+		NULL
+		))
+		+( SELECT COUNT(1) FROM yh_user_bmi WHERE TO_DAYS(Entry_Time) =
+		TO_DAYS(NOW()) AND E_User_Id IN (
+		SELECT user_code FROM
+		`yh_user_make_card` WHERE doctor=(SELECT id FROM
+		`yh_user_admin_info`
+		WHERE user_code=#{usercode}) AND user_code != ''
+		AND user_code IS NOT
+		NULL
+		))
+		+(SELECT COUNT(1) FROM yh_user_bloodpressure WHERE
+		TO_DAYS(Entry_Time) =
+		TO_DAYS(NOW()) AND E_User_Id IN (
+		SELECT user_code
+		FROM `yh_user_make_card` WHERE doctor=(SELECT id FROM
+		`yh_user_admin_info` WHERE user_code=#{usercode}) AND user_code != ''
+		AND user_code IS NOT NULL
+		))
+		+( SELECT COUNT(1) FROM yh_user_bloodsuger
+		WHERE TO_DAYS(Entry_Time) =
+		TO_DAYS(NOW()) AND E_User_Id IN (
+		SELECT
+		user_code FROM `yh_user_make_card` WHERE doctor=(SELECT id FROM
+		`yh_user_admin_info` WHERE user_code=#{usercode}) AND user_code != ''
+		AND user_code IS NOT NULL
+		))
+		+( SELECT COUNT(1) FROM yh_user_heart_rate
+		WHERE TO_DAYS(Entry_Time) =
+		TO_DAYS(NOW()) AND E_User_Id IN (
+		SELECT
+		user_code FROM `yh_user_make_card` WHERE doctor=(SELECT id FROM
+		`yh_user_admin_info` WHERE user_code=#{usercode}) AND user_code != ''
+		AND user_code IS NOT NULL
+		))
+		+(SELECT COUNT(1) FROM yh_user_body_fat
+		WHERE TO_DAYS(Entry_Time) =
+		TO_DAYS(NOW()) AND E_User_Id IN (
+		SELECT
+		user_code FROM `yh_user_make_card` WHERE doctor=(SELECT id FROM
+		`yh_user_admin_info` WHERE user_code=#{usercode}) AND user_code != ''
+		AND user_code IS NOT NULL
+		))
+		+( SELECT COUNT(1) FROM yh_user_bloodfat
+		WHERE TO_DAYS(Entry_Time) =
+		TO_DAYS(NOW()) AND E_User_Id IN (
+		SELECT
+		user_code FROM `yh_user_make_card` WHERE doctor=(SELECT id FROM
+		`yh_user_admin_info` WHERE user_code=#{usercode}) AND user_code != ''
+		AND user_code IS NOT NULL
+		))
+		+( SELECT COUNT(1) FROM
+		yh_user_renalfunction WHERE TO_DAYS(inertTime) =
+		TO_DAYS(NOW()) AND
+		user_id IN (
+		SELECT user_code FROM `yh_user_make_card` WHERE
+		doctor=(SELECT id FROM
+		`yh_user_admin_info` WHERE
+		user_code=#{usercode}) AND user_code != ''
+		AND user_code IS NOT NULL
+		))
+		+(SELECT COUNT(1) FROM yh_user_liverfunction WHERE TO_DAYS(insertTime)
+		=
+		TO_DAYS(NOW()) AND user_id IN (
+		SELECT user_code FROM
+		`yh_user_make_card` WHERE doctor=(SELECT id FROM
+		`yh_user_admin_info`
+		WHERE user_code=#{usercode}) AND user_code != ''
+		AND user_code IS NOT
+		NULL
+		))
+		+( SELECT COUNT(1) FROM yh_user_ecg WHERE TO_DAYS(Entry_Time) =
+		TO_DAYS(NOW()) AND E_User_Id IN (
+		SELECT user_code FROM
+		`yh_user_make_card` WHERE doctor=(SELECT id FROM
+		`yh_user_admin_info`
+		WHERE user_code=#{usercode}) AND user_code != ''
+		AND user_code IS NOT
+		NULL
+		))
+		+( SELECT COUNT(1) FROM yh_user_uba WHERE TO_DAYS(`addDate`) =
+		TO_DAYS(NOW()) AND E_User_Id IN (
+		SELECT user_code FROM
+		`yh_user_make_card` WHERE doctor=(SELECT id FROM
+		`yh_user_admin_info`
+		WHERE user_code=#{usercode}) AND user_code != ''
+		AND user_code IS NOT
+		NULL
+		))
+		+( SELECT COUNT(1) FROM yh_user_otherfunction WHERE
+		TO_DAYS(`insertTime`) = TO_DAYS(NOW()) AND user_id IN (
+		SELECT
+		user_code FROM `yh_user_make_card` WHERE doctor=(SELECT id FROM
+		`yh_user_admin_info` WHERE user_code=#{usercode}) AND user_code != ''
+		AND user_code IS NOT NULL
+		))
+
+		AS num FROM DUAL
+	</select>
+
+	<!-- 根据结构id查询 -->
+	<select id="selectByOrgStuck" parameterType="java.lang.String"
+		resultMap="BaseResultMap">
+		select * from yh_user_make_card where
+		Org_Id=#{orgId,jdbcType=VARCHAR}
+	</select>
+	<!-- 分页 -->
+	<select id="selectByOrgStuckByNameAndEvaAndOrgidAndDoctor"
+		resultMap="BaseResultMap">
+		SELECT c.* FROM yh_user_reginfo AS a
+		LEFT JOIN `yh_user_enrolinfo` AS b
+		ON a.`user_code`=b.`user_code`
+		LEFT JOIN `yh_user_make_card` AS c
+		ON
+		a.`user_code`=c.`user_code`
+		<where>
+			<if test="doctor!=null">
+				and c.doctor=#{doctor}
+			</if>
+			<if test="name != null">
+				and a.`name` LIKE '%${name}%'
+			</if>
+			<if test="eva != null">
+				AND b.evaluateFlag LIKE '%${eva}%'
+			</if>
+			<if test="orgid != null">
+				AND c.Org_id LIKE '%${orgid}%'
+			</if>
+			and c.user_code is not null
+			and c.user_code !=""
+		</where>
+
+	</select>
+
+
+
+	<select id="selectByExample" parameterType="com.yihe.system.domain.YhUserMakeCardExample"
+		resultMap="BaseResultMap">
+		select
+		<if test="distinct">
+			distinct
+		</if>
+		<include refid="Base_Column_List" />
+		from yh_user_make_card
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+		<if test="orderByClause != null">
+			order by ${orderByClause}
+		</if>
+	</select>
+	<select id="selectByPrimaryKey" parameterType="java.lang.String"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from yh_user_make_card
+		where Enrol_Card_Id =
+		#{enrolCardId,jdbcType=VARCHAR}
+	</select>
+	<select id="selectByPrimaryKeyByuserCode" parameterType="java.lang.String"
+		resultMap="BaseResultMap">
+
+		select
+		<include refid="Base_Column_List" />
+		from `yh_user_make_card` where
+		doctor=(select id from
+		`yh_user_admin_info` where user_code= #{usercode})
+		and User_Code is not
+		null
+
+
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+		delete from
+		yh_user_make_card
+		where Enrol_Card_Id = #{enrolCardId,jdbcType=VARCHAR}
+	</delete>
+	<delete id="deleteByExample" parameterType="com.yihe.system.domain.YhUserMakeCardExample">
+		delete from yh_user_make_card
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</delete>
+	<insert id="insert" parameterType="com.yihe.system.domain.YhUserMakeCard">
+		<selectKey keyProperty="enrolCardId" order="AFTER"
+			resultType="java.lang.String">
+			SELECT LAST_INSERT_ID()
+		</selectKey>
+		insert into yh_user_make_card (Enrol_Card_Code, Enrol_Time,
+		Enrol_User_Id,
+		Card_Type, Begin_Time, End_Time,
+		Org_Id, Is_Del,
+		User_Code,
+		User_Type, doctor, ev_amount
+		)
+		values
+		(#{enrolCardCode,jdbcType=VARCHAR}, #{enrolTime,jdbcType=TIMESTAMP},
+		#{enrolUserId,jdbcType=VARCHAR},
+		#{cardType,jdbcType=INTEGER},
+		#{beginTime,jdbcType=TIMESTAMP}, #{endTime,jdbcType=TIMESTAMP},
+		#{orgId,jdbcType=VARCHAR}, #{isDel,jdbcType=INTEGER},
+		#{userCode,jdbcType=VARCHAR},
+		#{userType,jdbcType=INTEGER},
+		#{doctor,jdbcType=INTEGER}, #{evAmount,jdbcType=INTEGER}
+		)
+	</insert>
+	<insert id="insertSelective" parameterType="com.yihe.system.domain.YhUserMakeCard">
+		<selectKey keyProperty="enrolCardId" order="AFTER"
+			resultType="java.lang.String">
+			SELECT LAST_INSERT_ID()
+		</selectKey>
+		insert into yh_user_make_card
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="enrolCardCode != null">
+				Enrol_Card_Code,
+			</if>
+			<if test="enrolTime != null">
+				Enrol_Time,
+			</if>
+			<if test="enrolUserId != null">
+				Enrol_User_Id,
+			</if>
+			<if test="cardType != null">
+				Card_Type,
+			</if>
+			<if test="beginTime != null">
+				Begin_Time,
+			</if>
+			<if test="endTime != null">
+				End_Time,
+			</if>
+			<if test="orgId != null">
+				Org_Id,
+			</if>
+			<if test="isDel != null">
+				Is_Del,
+			</if>
+			<if test="userCode != null">
+				User_Code,
+			</if>
+			<if test="userType != null">
+				User_Type,
+			</if>
+			<if test="doctor != null">
+				doctor,
+			</if>
+			<if test="evAmount != null">
+				ev_amount,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="enrolCardCode != null">
+				#{enrolCardCode,jdbcType=VARCHAR},
+			</if>
+			<if test="enrolTime != null">
+				#{enrolTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="enrolUserId != null">
+				#{enrolUserId,jdbcType=VARCHAR},
+			</if>
+			<if test="cardType != null">
+				#{cardType,jdbcType=INTEGER},
+			</if>
+			<if test="beginTime != null">
+				#{beginTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="endTime != null">
+				#{endTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="orgId != null">
+				#{orgId,jdbcType=VARCHAR},
+			</if>
+			<if test="isDel != null">
+				#{isDel,jdbcType=INTEGER},
+			</if>
+			<if test="userCode != null">
+				#{userCode,jdbcType=VARCHAR},
+			</if>
+			<if test="userType != null">
+				#{userType,jdbcType=INTEGER},
+			</if>
+			<if test="doctor != null">
+				#{doctor,jdbcType=INTEGER},
+			</if>
+			<if test="evAmount != null">
+				#{evAmount,jdbcType=INTEGER},
+			</if>
+		</trim>
+	</insert>
+	<select id="countByExample" parameterType="com.yihe.system.domain.YhUserMakeCardExample"
+		resultType="java.lang.Long">
+		select count(*) from yh_user_make_card
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</select>
+	<update id="updateByExampleSelective" parameterType="map">
+		update yh_user_make_card
+		<set>
+			<if test="record.enrolCardId != null">
+				Enrol_Card_Id = #{record.enrolCardId,jdbcType=VARCHAR},
+			</if>
+			<if test="record.enrolCardCode != null">
+				Enrol_Card_Code =
+				#{record.enrolCardCode,jdbcType=VARCHAR},
+			</if>
+			<if test="record.enrolTime != null">
+				Enrol_Time = #{record.enrolTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="record.enrolUserId != null">
+				Enrol_User_Id = #{record.enrolUserId,jdbcType=VARCHAR},
+			</if>
+			<if test="record.cardType != null">
+				Card_Type = #{record.cardType,jdbcType=INTEGER},
+			</if>
+			<if test="record.beginTime != null">
+				Begin_Time = #{record.beginTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="record.endTime != null">
+				End_Time = #{record.endTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="record.orgId != null">
+				Org_Id = #{record.orgId,jdbcType=VARCHAR},
+			</if>
+			<if test="record.isDel != null">
+				Is_Del = #{record.isDel,jdbcType=INTEGER},
+			</if>
+			<if test="record.userCode != null">
+				User_Code = #{record.userCode,jdbcType=VARCHAR},
+			</if>
+			<if test="record.userType != null">
+				User_Type = #{record.userType,jdbcType=INTEGER},
+			</if>
+			<if test="record.doctor != null">
+				doctor = #{record.doctor,jdbcType=INTEGER},
+			</if>
+			<if test="record.evAmount != null">
+				ev_amount = #{record.evAmount,jdbcType=INTEGER},
+			</if>
+		</set>
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByExample" parameterType="map">
+		update yh_user_make_card
+		set Enrol_Card_Id =
+		#{record.enrolCardId,jdbcType=VARCHAR},
+		Enrol_Card_Code =
+		#{record.enrolCardCode,jdbcType=VARCHAR},
+		Enrol_Time =
+		#{record.enrolTime,jdbcType=TIMESTAMP},
+		Enrol_User_Id =
+		#{record.enrolUserId,jdbcType=VARCHAR},
+		Card_Type =
+		#{record.cardType,jdbcType=INTEGER},
+		Begin_Time =
+		#{record.beginTime,jdbcType=TIMESTAMP},
+		End_Time =
+		#{record.endTime,jdbcType=TIMESTAMP},
+		Org_Id =
+		#{record.orgId,jdbcType=VARCHAR},
+		Is_Del =
+		#{record.isDel,jdbcType=INTEGER},
+		User_Code =
+		#{record.userCode,jdbcType=VARCHAR},
+		User_Type =
+		#{record.userType,jdbcType=INTEGER},
+		doctor =
+		#{record.doctor,jdbcType=INTEGER},
+		ev_amount =
+		#{record.evAmount,jdbcType=INTEGER}
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByPrimaryKeySelective" parameterType="com.yihe.system.domain.YhUserMakeCard">
+		update yh_user_make_card
+		<set>
+			<if test="enrolCardCode != null">
+				Enrol_Card_Code = #{enrolCardCode,jdbcType=VARCHAR},
+			</if>
+			<if test="enrolTime != null">
+				Enrol_Time = #{enrolTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="enrolUserId != null">
+				Enrol_User_Id = #{enrolUserId,jdbcType=VARCHAR},
+			</if>
+			<if test="cardType != null">
+				Card_Type = #{cardType,jdbcType=INTEGER},
+			</if>
+			<if test="beginTime != null">
+				Begin_Time = #{beginTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="endTime != null">
+				End_Time = #{endTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="orgId != null">
+				Org_Id = #{orgId,jdbcType=VARCHAR},
+			</if>
+			<if test="isDel != null">
+				Is_Del = #{isDel,jdbcType=INTEGER},
+			</if>
+			<if test="userCode != null">
+				User_Code = #{userCode,jdbcType=VARCHAR},
+			</if>
+			<if test="userType != null">
+				User_Type = #{userType,jdbcType=INTEGER},
+			</if>
+			<if test="doctor != null">
+				doctor = #{doctor,jdbcType=INTEGER},
+			</if>
+			<if test="evAmount != null">
+				ev_amount = #{evAmount,jdbcType=INTEGER},
+			</if>
+		</set>
+		where Enrol_Card_Id = #{enrolCardId,jdbcType=VARCHAR}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.yihe.system.domain.YhUserMakeCard">
+		update
+		yh_user_make_card
+		set Enrol_Card_Code =
+		#{enrolCardCode,jdbcType=VARCHAR},
+		Enrol_Time =
+		#{enrolTime,jdbcType=TIMESTAMP},
+		Enrol_User_Id =
+		#{enrolUserId,jdbcType=VARCHAR},
+		Card_Type =
+		#{cardType,jdbcType=INTEGER},
+		Begin_Time =
+		#{beginTime,jdbcType=TIMESTAMP},
+		End_Time =
+		#{endTime,jdbcType=TIMESTAMP},
+		Org_Id = #{orgId,jdbcType=VARCHAR},
+		Is_Del = #{isDel,jdbcType=INTEGER},
+		User_Code =
+		#{userCode,jdbcType=VARCHAR},
+		User_Type = #{userType,jdbcType=INTEGER},
+		doctor = #{doctor,jdbcType=INTEGER},
+		ev_amount =
+		#{evAmount,jdbcType=INTEGER}
+		where Enrol_Card_Id =
+		#{enrolCardId,jdbcType=VARCHAR}
+	</update>
+	<!-- 分页注册管理 -->
+	<select id="selectYhUserMakeCardPageByParam" parameterType="map"
+		resultType="map">
+		select
+		card.User_Code,card.Enrol_Card_Id,regin.name,regin.user_name,tree.Org_Code,card.End_Time as Add_Date,card.Org_Id,card.key
+		from yh_user_make_card as card
+		LEFT JOIN yh_org_tree as tree
+		ON
+		card.Org_Id=tree.Org_Code
+		LEFT JOIN yh_user_reginfo as regin
+		on
+		regin.user_code=card.User_Code
+		LEFT JOIN yh_user_admin_info as yuai
+		ON
+		yuai.id=card.doctor
+		where yuai.user_code=#{userCode,jdbcType=VARCHAR}
+		
+		<if test="orgCodes != null and orgCodes.size()>0">
+			and card.Org_Id in
+			<foreach collection="orgCodes" item="item" open="(" close=")"
+				separator=",">
+				#{item}
+			</foreach>
+		</if>
+
+	
+		
+		
+		<if test="status != null and status =='2'.toString()">
+			and card.User_Code is not null and card.User_Code !=''
+			 and regin.user_code NOT IN(select userId from yh_user_role_power where roleId = 1)
+		</if>
+		<if test="status != null and status =='3'.toString()">
+			and (card.User_Code is null or card.User_Code='')
+			and card.key !=''
+		</if>
+		<if test="status != null and status =='1'.toString()">
+			and (card.User_Code is null or card.User_Code='')
+			and (card.key is null or card.key ='')
+		</if>
+		
+		<if test="validity != null and validity =='Y'.toString()">
+			and (card.End_Time &gt; current_date
+			or card.End_Time is null)
+		</if>
+		<if test="validity != null and validity =='N'.toString()">
+			and card.End_Time &lt; current_date
+		</if>
+
+	</select>
+	<select id="selectYhUserMakeCardCount" parameterType="String"
+		resultType="java.lang.Integer">
+		select count(*)
+		from yh_user_admin_info as info
+		inner join
+		yh_user_make_card as card
+		on info.id=card.doctor
+		where
+		info.user_code=#{userName,jdbcType=VARCHAR}
+	</select>
+
+	<select id="selectYhUserMakeCardEmploy" parameterType="String"
+		resultType="java.lang.Integer">
+		select count(*)
+		from yh_user_admin_info as info
+		inner join
+		yh_user_make_card as card
+		on info.id=card.doctor
+		where card.User_Code is
+		not null and card.User_Code!=''
+		and
+		info.user_code=#{userName,jdbcType=VARCHAR}
+	</select>  
+
+	<select id="selectYhUserMakeCardSurplus" parameterType="String"
+		resultType="java.lang.Integer">
+		select count(*)
+		from yh_user_admin_info as info
+		inner join
+		yh_user_make_card as card
+		on info.id=card.doctor
+		where (card.User_Code
+		is null or card.User_Code='')
+		and
+		info.user_code=#{userName,jdbcType=VARCHAR}
+	</select>
+
+
+	<select id="findUserInfoBydoctorForPlan" resultType="com.yihe.system.domain.HealthPlanVOJO">
+		SELECT * FROM (SELECT b.user_code as usercode,b.user_name as username,plan.plan_startdate,b.name,  CASE
+              WHEN b.gender = 1 
+              THEN '男' 
+              ELSE '女' 
+            END AS sex FROM
+		`yh_user_make_card` AS  a
+		INNER JOIN `yh_user_reginfo` AS b
+		ON a.`user_code`=b.user_code
+		LEFT JOIN yh_user_healthy_plan plan ON a.user_code=plan.user_code
+		<where>
+		 a.doctor=(SELECT id FROM
+		`yh_user_admin_info`
+		WHERE user_code=#{usercode}) AND a.user_code != ''
+		AND a.user_code IS NOT
+		NULL
+		AND  ((plan_state=1 and plan_day=1)  OR plan_startdate is NULL)
+			<if test="orgid !=null and orgid != ''">
+				AND a.Org_Id=#{orgid}
+			</if>
+			<if test="nameLike != null and nameLike !=''">
+				AND b.name LIKE CONCAT('%',#{nameLike},'%')
+			</if>
+		ORDER BY plan_startdate
+
+		</where>
+		)s GROUP BY s.usercode ORDER BY s.plan_startdate DESC
+	</select>
+
+	<select id="findUserInfoBydoctorForPlan2" resultType="com.yihe.system.domain.HealthPlanVOJO">
+		SELECT * FROM (SELECT b.user_code as usercode,b.user_name as username,plan.plan_startdate,b.name,  CASE
+		WHEN b.gender = 1
+		THEN '男'
+		ELSE '女'
+		END AS sex FROM
+		`yh_user_make_card` AS  a
+		INNER JOIN `yh_user_reginfo` AS b
+		ON a.`user_code`=b.user_code
+		LEFT JOIN yh_user_healthy_plan plan ON a.user_code=plan.user_code
+		<where>
+			a.doctor=(SELECT id FROM
+			`yh_user_admin_info`
+			WHERE user_code=#{usercode}) AND a.user_code != ''
+			AND a.user_code IS NOT
+			NULL
+			AND  ((plan_state=1 and plan_day=1)  OR plan_startdate is NULL OR (plan_state=0 AND plan_day=1))
+			<if test="orgid !=null and orgid != ''">
+				AND a.Org_Id=#{orgid}
+			</if>
+			<if test="nameLike != null and nameLike !=''">
+				AND b.name LIKE CONCAT('%',#{nameLike},'%')
+			</if>
+			ORDER BY plan_startdate
+
+		</where>
+		)s GROUP BY s.usercode ORDER BY s.plan_startdate DESC
+	</select>
+
+
+
+	<select id="findUserInfoBydoctorForPlanByjilv" resultType="com.yihe.system.domain.HealthPlanVOJO">
+	SELECT b.user_code AS usercode,b.user_name AS username,b.name,CASE
+              WHEN b.gender = 1 
+              THEN '男' 
+              ELSE '女' 
+            END AS sex,d.plan_name AS planName,CASE 
+		WHEN a.plan_state = '1' THEN '已开始' 
+		WHEN a.plan_state = '2' THEN '已结束' 
+		WHEN a.plan_state = '3' THEN '已取消' 
+		ELSE '未开始' END AS planState,a.`plan_unique`,a.`plan_startdate` AS planStrTime FROM `yh_user_healthy_plan` AS a
+		INNER JOIN `yh_user_reginfo` AS b
+		ON a.user_code=b.user_code
+		 INNER JOIN `yh_user_make_card` AS c
+		 ON c.user_code=b.user_code
+		 INNER JOIN `yh_healthy_plan` AS d
+		 ON a.`plan_id`=d.`id`
+		
+		<where>
+		 c.doctor=(SELECT id FROM
+		`yh_user_admin_info` WHERE
+		user_code=#{usercode}) AND c.user_code != ''
+		AND c.user_code IS NOT NULL
+		 
+		<if test="nameLike != null">
+		AND b.name LIKE CONCAT('%',#{nameLike},'%')
+		</if>
+		
+		<if test="usernameLike !=null">
+		AND b.user_name LIKE CONCAT('%',#{usernameLike},'%')
+		</if>
+		
+		<if test="planName !=null">
+		AND d.plan_name LIKE CONCAT('%',#{planName},'%')
+		</if>
+		
+		<if test="strTime !=null and strTime !='' and endTime !=null and endTime !=''">
+		AND a.`plan_startdate` BETWEEN  #{strTime}  AND #{endTime}
+		</if>
+		
+		</where>
+		GROUP BY a.`plan_unique` HAVING a.`plan_startdate`
+	</select>
+</mapper>

@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yihe.system.mapper.YhPsychologicalAssessmentMapper" >
+  <resultMap id="BaseResultMap" type="com.yihe.system.domain.YhPsychologicalAssessment" >
+    <id column="Pa_Id" property="paId" jdbcType="INTEGER" />
+    <result column="Pa_Que" property="paQue" jdbcType="VARCHAR" />
+    <result column="Pa_Del" property="paDel" jdbcType="INTEGER" />
+    <result column="Pa_Often" property="paOften" jdbcType="INTEGER" />
+    <result column="Pa_Occasional" property="paOccasional" jdbcType="INTEGER" />
+    <result column="Pa_Rare" property="paRare" jdbcType="INTEGER" />
+    <result column="Pa_Never" property="paNever" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    Pa_Id, Pa_Que, Pa_Del, Pa_Often, Pa_Occasional, Pa_Rare, Pa_Never
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from yh_psychological_assessment
+    where Pa_Id = #{paId,jdbcType=INTEGER}
+  </select>
+  
+   <select id="selectAllmentalMentalHealth" resultMap="BaseResultMap">
+    select * from yh_psychological_assessment
+  </select>
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from yh_psychological_assessment
+    where Pa_Id = #{paId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.yihe.system.domain.YhPsychologicalAssessment" >
+    insert into yh_psychological_assessment (Pa_Id, Pa_Que, Pa_Del, 
+      Pa_Often, Pa_Occasional, Pa_Rare, 
+      Pa_Never)
+    values (#{paId,jdbcType=INTEGER}, #{paQue,jdbcType=VARCHAR}, #{paDel,jdbcType=INTEGER}, 
+      #{paOften,jdbcType=INTEGER}, #{paOccasional,jdbcType=INTEGER}, #{paRare,jdbcType=INTEGER}, 
+      #{paNever,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.yihe.system.domain.YhPsychologicalAssessment" >
+    insert into yh_psychological_assessment
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="paId != null" >
+        Pa_Id,
+      </if>
+      <if test="paQue != null" >
+        Pa_Que,
+      </if>
+      <if test="paDel != null" >
+        Pa_Del,
+      </if>
+      <if test="paOften != null" >
+        Pa_Often,
+      </if>
+      <if test="paOccasional != null" >
+        Pa_Occasional,
+      </if>
+      <if test="paRare != null" >
+        Pa_Rare,
+      </if>
+      <if test="paNever != null" >
+        Pa_Never,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="paId != null" >
+        #{paId,jdbcType=INTEGER},
+      </if>
+      <if test="paQue != null" >
+        #{paQue,jdbcType=VARCHAR},
+      </if>
+      <if test="paDel != null" >
+        #{paDel,jdbcType=INTEGER},
+      </if>
+      <if test="paOften != null" >
+        #{paOften,jdbcType=INTEGER},
+      </if>
+      <if test="paOccasional != null" >
+        #{paOccasional,jdbcType=INTEGER},
+      </if>
+      <if test="paRare != null" >
+        #{paRare,jdbcType=INTEGER},
+      </if>
+      <if test="paNever != null" >
+        #{paNever,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.yihe.system.domain.YhPsychologicalAssessment" >
+    update yh_psychological_assessment
+    <set >
+      <if test="paQue != null" >
+        Pa_Que = #{paQue,jdbcType=VARCHAR},
+      </if>
+      <if test="paDel != null" >
+        Pa_Del = #{paDel,jdbcType=INTEGER},
+      </if>
+      <if test="paOften != null" >
+        Pa_Often = #{paOften,jdbcType=INTEGER},
+      </if>
+      <if test="paOccasional != null" >
+        Pa_Occasional = #{paOccasional,jdbcType=INTEGER},
+      </if>
+      <if test="paRare != null" >
+        Pa_Rare = #{paRare,jdbcType=INTEGER},
+      </if>
+      <if test="paNever != null" >
+        Pa_Never = #{paNever,jdbcType=INTEGER},
+      </if>
+    </set>
+    where Pa_Id = #{paId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.yihe.system.domain.YhPsychologicalAssessment" >
+    update yh_psychological_assessment
+    set Pa_Que = #{paQue,jdbcType=VARCHAR},
+      Pa_Del = #{paDel,jdbcType=INTEGER},
+      Pa_Often = #{paOften,jdbcType=INTEGER},
+      Pa_Occasional = #{paOccasional,jdbcType=INTEGER},
+      Pa_Rare = #{paRare,jdbcType=INTEGER},
+      Pa_Never = #{paNever,jdbcType=INTEGER}
+    where Pa_Id = #{paId,jdbcType=INTEGER}
+  </update>
+</mapper>

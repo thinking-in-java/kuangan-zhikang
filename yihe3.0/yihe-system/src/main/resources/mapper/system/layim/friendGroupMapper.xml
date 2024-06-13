@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.yihe.system.mapper.layim.FriendGroupMapper">
+    <resultMap id="friendGroupMap" type="com.yihe.system.domain.layim.FriendGroup">
+        <result column="name" property="groupname" />
+    </resultMap>
+    <select id="getGroupsByUserId" parameterType="String" resultMap="friendGroupMap">
+        select id,name from layim_friend_group where uid=#{id}
+    </select>
+</mapper>

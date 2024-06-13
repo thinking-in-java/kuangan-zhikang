@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper
+	namespace="com.yihe.applet.api.mapper.YhHomeinfoConfigAppMapper">
+	<resultMap type="com.yihe.applet.api.domain.YhHomeinfoConfigApp"
+		id="YhHomeinfoConfigResult">
+		<result property="id" column="id" />
+		<result property="infoType" column="info_type" />
+		<result property="infoImg" column="info_img" />
+		<result property="infoTitle" column="info_title" />
+		<result property="infoTime" column="info_time" />
+		<result property="infoStatus" column="info_status" />
+		<result property="infoSource" column="info_source" />
+		<result property="infoContent" column="info_content" />
+		<result property="infoTip" column="info_tip" />
+	</resultMap>
+	<sql id="allColumn">
+		id, info_type, info_img, info_title, info_time, info_status, info_source,
+		info_content, info_tip
+	</sql>
+	<!-- 查询所有轮播图 -->
+	<select id="selAllData" resultMap="YhHomeinfoConfigResult">
+		SELECT
+		<include refid="allColumn" />
+		FROM yh_homeinfo_config 
+		WHERE info_status=1
+		ORDER BY info_tip
+	</select>
+</mapper>

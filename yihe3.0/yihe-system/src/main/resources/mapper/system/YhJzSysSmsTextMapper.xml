@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yihe.system.mapper.YhJzSysSmsTextMapper" >
+  <resultMap id="BaseResultMap" type="com.yihe.system.domain.YhJzSysSmsText" >
+    <id column="T_id" property="tId" jdbcType="INTEGER" />
+    <result column="T_smsid" property="tSmsid" jdbcType="INTEGER" />
+    <result column="T_text" property="tText" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    T_id, T_smsid, T_text
+  </sql>
+  
+  <!-- 根据短信id查询模板内容 -->
+  <select id="selectSmsId" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+  	select * from yh_jz_sys_sms_text where T_smsid=#{tSmsid,jdbcType=INTEGER}
+  </select>
+  
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from yh_jz_sys_sms_text
+    where T_id = #{tId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from yh_jz_sys_sms_text
+    where T_id = #{tId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.yihe.system.domain.YhJzSysSmsText" >
+    insert into yh_jz_sys_sms_text (T_id, T_smsid, T_text
+      )
+    values (#{tId,jdbcType=INTEGER}, #{tSmsid,jdbcType=INTEGER}, #{tText,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.yihe.system.domain.YhJzSysSmsText" >
+    insert into yh_jz_sys_sms_text
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="tId != null" >
+        T_id,
+      </if>
+      <if test="tSmsid != null" >
+        T_smsid,
+      </if>
+      <if test="tText != null" >
+        T_text,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="tId != null" >
+        #{tId,jdbcType=INTEGER},
+      </if>
+      <if test="tSmsid != null" >
+        #{tSmsid,jdbcType=INTEGER},
+      </if>
+      <if test="tText != null" >
+        #{tText,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.yihe.system.domain.YhJzSysSmsText" >
+    update yh_jz_sys_sms_text
+    <set >
+      <if test="tSmsid != null" >
+        T_smsid = #{tSmsid,jdbcType=INTEGER},
+      </if>
+      <if test="tText != null" >
+        T_text = #{tText,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where T_id = #{tId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.yihe.system.domain.YhJzSysSmsText" >
+    update yh_jz_sys_sms_text
+    set T_smsid = #{tSmsid,jdbcType=INTEGER},
+      T_text = #{tText,jdbcType=VARCHAR}
+    where T_id = #{tId,jdbcType=INTEGER}
+  </update>
+</mapper>

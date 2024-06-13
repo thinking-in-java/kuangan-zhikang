@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<html>
+	<head>
+		  <script type="text/javascript" src="https://cdn-hangzhou.goeasy.io/goeasy.js"></script>
+		<script type="text/javascript">
+			var goeasy = new GoEasy({
+				appkey: 'BC-263ee595e9cf42d1a74c8ef3148a91c5'
+			});
+
+			function publishMessage() {
+				var publishMessage = document.getElementById("content").value;
+				goeasy.publish({
+					channel: '10086',
+					message: publishMessage,
+					onFailed: function (error) {
+						alert(error.code+" : "+error.content);
+					},
+					onSuccess: function(){
+						document.getElementById("content").value='';
+					}
+				});
+			}
+
+
+
+		</script>
+	</head>
+	<body>
+	<textarea rows="3" cols="20" id="content">
+
+	</textarea>
+	<button id="fasong" onclick="publishMessage()">Send</button>

@@ -1,0 +1,581 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yihe.applet.api.mapper.YhUserReginfoAppMapper" >
+  <resultMap id="BaseResultMap" type="com.yihe.applet.api.domain.YhUserReginfoApp" >
+    <id column="user_code" property="userCode" jdbcType="VARCHAR" />
+    <result column="User_Type" property="userType" jdbcType="INTEGER" />
+    <result column="user_name" property="userName" jdbcType="VARCHAR" />
+    <result column="user_pwd" property="userPwd" jdbcType="VARCHAR" />
+    <result column="gender" property="gender" jdbcType="INTEGER" />
+    <result column="birth_date" property="birthDate" jdbcType="TIMESTAMP" />
+    <result column="nation" property="nation" jdbcType="VARCHAR" />
+    <result column="email" property="email" jdbcType="VARCHAR" />
+    <result column="cardidentity" property="cardidentity" jdbcType="VARCHAR" />
+    <result column="province_id" property="provinceId" jdbcType="VARCHAR" />
+    <result column="city_id" property="cityId" jdbcType="VARCHAR" />
+    <result column="area_id" property="areaId" jdbcType="VARCHAR" />
+    <result column="reg_time" property="regTime" jdbcType="TIMESTAMP" />
+    <result column="Login_times" property="loginTimes" jdbcType="INTEGER" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="address" property="address" jdbcType="VARCHAR" />
+    <result column="permanentaddress" property="permanentaddress" jdbcType="VARCHAR" />
+    <result column="post_code" property="postCode" jdbcType="VARCHAR" />
+    <result column="relation" property="relation" jdbcType="VARCHAR" />
+    <result column="mobile" property="mobile" jdbcType="VARCHAR" />
+    <result column="occupation" property="occupation" jdbcType="VARCHAR" />
+    <result column="ed_background" property="edBackground" jdbcType="VARCHAR" />
+    <result column="marital_status" property="maritalStatus" jdbcType="VARCHAR" />
+    <result column="lock_flag" property="lockFlag" jdbcType="INTEGER" />
+    <result column="reg_source" property="regSource" jdbcType="INTEGER" />
+    <result column="Cert_Type" property="certType" jdbcType="INTEGER" />
+    <result column="Cert_NO" property="certNo" jdbcType="VARCHAR" />
+    <result column="Org_Code" property="orgCode" jdbcType="VARCHAR" />
+    <result column="Blood_Type" property="bloodType" jdbcType="VARCHAR" />
+    <result column="rhfeminine" property="rhfeminine" jdbcType="VARCHAR" />
+    <result column="Enrol_Card_Id" property="enrolCardId" jdbcType="VARCHAR" />
+    <result column="login_time" property="loginTime" jdbcType="TIMESTAMP" />
+    <result column="unit" property="unit" jdbcType="VARCHAR" />
+    <result column="is_association" property="isAssociation" jdbcType="INTEGER" />
+    <result column="association_name" property="associationName" jdbcType="VARCHAR" />
+    <result column="is_alone" property="isAlone" jdbcType="INTEGER" />
+    <result column="is_allergy" property="isAllergy" jdbcType="INTEGER" />
+    <result column="allergy_name" property="allergyName" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    user_code, User_Type, user_name, user_pwd, gender, birth_date, nation, email, cardidentity, 
+    province_id, city_id, area_id, reg_time, Login_times, name, address, permanentaddress, 
+    post_code, relation, mobile, occupation, ed_background, marital_status, lock_flag, 
+    reg_source, Cert_Type, Cert_NO, Org_Code, Blood_Type, rhfeminine, Enrol_Card_Id, 
+    login_time, unit, is_association, association_name, is_alone, is_allergy, allergy_name
+  </sql>
+  <select id="findUserRole" resultType="java.lang.Integer">
+    SELECT roleId FROM
+    `yh_user_role_power` WHERE userId=#{usercode} limit 1
+  </select>
+    <select id="findUserCodeByOrgIsExist" resultType="java.lang.Integer" parameterType="java.lang.String" >
+      SELECT COUNT(1) FROM `yh_user_make_card` WHERE End_Time &lt; DATE(NOW()) AND user_code=#{usercode}
+  </select>
+   <select id="finddoctorHderer" parameterType="java.lang.String" resultMap="BaseResultMap">
+     select * from yh_user_reginfo as reg where reg.user_code=(  
+  	select info.user_code from yh_user_admin_info as info 
+  	where id=( select card.doctor
+  	from yh_user_reginfo as reg
+ 	 inner join yh_user_make_card as card
+ 	 on reg.user_code = card.User_Code
+  	where reg.user_code=#{userCode})
+  )
+  </select>
+  
+  <select id="findDoctorForUserInfo" resultMap="BaseResultMap" parameterType="java.lang.String">
+SELECT a.user_code FROM   `yh_user_reginfo` AS a
+   INNER JOIN yh_user_make_card AS b
+   ON a.user_code=b.user_code
+   WHERE b.doctor=(SELECT id FROM  `yh_user_admin_info` WHERE user_code=#{usercode})
+
+
+
+  </select>
+   <select id="findUserNameExist" resultType="java.lang.Integer" parameterType="java.lang.String" >
+    select 
+   count(1)
+    from yh_user_reginfo
+    where user_name = #{username}
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from yh_user_reginfo
+    where user_code = #{userCode,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from yh_user_reginfo
+    where user_code = #{userCode,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.yihe.applet.api.domain.YhUserReginfoApp" >
+    insert into yh_user_reginfo (user_code, User_Type, user_name, 
+      user_pwd, gender, birth_date, 
+      nation, email, cardidentity, 
+      province_id, city_id, area_id, 
+      reg_time, Login_times, name, 
+      address, permanentaddress, post_code, 
+      relation, mobile, occupation, 
+      ed_background, marital_status, lock_flag, 
+      reg_source, Cert_Type, Cert_NO, 
+      Org_Code, Blood_Type, rhfeminine, 
+      Enrol_Card_Id, login_time, unit, 
+      is_association, association_name, is_alone, 
+      is_allergy, allergy_name)
+    values (#{userCode,jdbcType=VARCHAR}, #{userType,jdbcType=INTEGER}, #{userName,jdbcType=VARCHAR}, 
+      #{userPwd,jdbcType=VARCHAR}, #{gender,jdbcType=INTEGER}, #{birthDate,jdbcType=TIMESTAMP}, 
+      #{nation,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR}, #{cardidentity,jdbcType=VARCHAR}, 
+      #{provinceId,jdbcType=VARCHAR}, #{cityId,jdbcType=VARCHAR}, #{areaId,jdbcType=VARCHAR}, 
+      #{regTime,jdbcType=TIMESTAMP}, #{loginTimes,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, 
+      #{address,jdbcType=VARCHAR}, #{permanentaddress,jdbcType=VARCHAR}, #{postCode,jdbcType=VARCHAR}, 
+      #{relation,jdbcType=VARCHAR}, #{mobile,jdbcType=VARCHAR}, #{occupation,jdbcType=VARCHAR}, 
+      #{edBackground,jdbcType=VARCHAR}, #{maritalStatus,jdbcType=VARCHAR}, #{lockFlag,jdbcType=INTEGER}, 
+      #{regSource,jdbcType=INTEGER}, #{certType,jdbcType=INTEGER}, #{certNo,jdbcType=VARCHAR}, 
+      #{orgCode,jdbcType=VARCHAR}, #{bloodType,jdbcType=VARCHAR}, #{rhfeminine,jdbcType=VARCHAR}, 
+      #{enrolCardId,jdbcType=VARCHAR}, #{loginTime,jdbcType=TIMESTAMP}, #{unit,jdbcType=VARCHAR}, 
+      #{isAssociation,jdbcType=INTEGER}, #{associationName,jdbcType=VARCHAR}, #{isAlone,jdbcType=INTEGER}, 
+      #{isAllergy,jdbcType=INTEGER}, #{allergyName,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.yihe.applet.api.domain.YhUserReginfoApp" >
+    insert into yh_user_reginfo
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="userCode != null" >
+        user_code,
+      </if>
+      <if test="userType != null" >
+        User_Type,
+      </if>
+      <if test="userName != null" >
+        user_name,
+      </if>
+      <if test="userPwd != null" >
+        user_pwd,
+      </if>
+      <if test="gender != null" >
+        gender,
+      </if>
+      <if test="birthDate != null" >
+        birth_date,
+      </if>
+      <if test="nation != null" >
+        nation,
+      </if>
+      <if test="email != null" >
+        email,
+      </if>
+      <if test="cardidentity != null" >
+        cardidentity,
+      </if>
+      <if test="provinceId != null" >
+        province_id,
+      </if>
+      <if test="cityId != null" >
+        city_id,
+      </if>
+      <if test="areaId != null" >
+        area_id,
+      </if>
+      <if test="regTime != null" >
+        reg_time,
+      </if>
+      <if test="loginTimes != null" >
+        Login_times,
+      </if>
+      <if test="name != null" >
+        name,
+      </if>
+      <if test="address != null" >
+        address,
+      </if>
+      <if test="permanentaddress != null" >
+        permanentaddress,
+      </if>
+      <if test="postCode != null" >
+        post_code,
+      </if>
+      <if test="relation != null" >
+        relation,
+      </if>
+      <if test="mobile != null" >
+        mobile,
+      </if>
+      <if test="occupation != null" >
+        occupation,
+      </if>
+      <if test="edBackground != null" >
+        ed_background,
+      </if>
+      <if test="maritalStatus != null" >
+        marital_status,
+      </if>
+      <if test="lockFlag != null" >
+        lock_flag,
+      </if>
+      <if test="regSource != null" >
+        reg_source,
+      </if>
+      <if test="certType != null" >
+        Cert_Type,
+      </if>
+      <if test="certNo != null" >
+        Cert_NO,
+      </if>
+      <if test="orgCode != null" >
+        Org_Code,
+      </if>
+      <if test="bloodType != null" >
+        Blood_Type,
+      </if>
+      <if test="rhfeminine != null" >
+        rhfeminine,
+      </if>
+      <if test="enrolCardId != null" >
+        Enrol_Card_Id,
+      </if>
+      <if test="loginTime != null" >
+        login_time,
+      </if>
+      <if test="unit != null" >
+        unit,
+      </if>
+      <if test="isAssociation != null" >
+        is_association,
+      </if>
+      <if test="associationName != null" >
+        association_name,
+      </if>
+      <if test="isAlone != null" >
+        is_alone,
+      </if>
+      <if test="isAllergy != null" >
+        is_allergy,
+      </if>
+      <if test="allergyName != null" >
+        allergy_name,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="userCode != null" >
+        #{userCode,jdbcType=VARCHAR},
+      </if>
+      <if test="userType != null" >
+        #{userType,jdbcType=INTEGER},
+      </if>
+      <if test="userName != null" >
+        #{userName,jdbcType=VARCHAR},
+      </if>
+      <if test="userPwd != null" >
+        #{userPwd,jdbcType=VARCHAR},
+      </if>
+      <if test="gender != null" >
+        #{gender,jdbcType=INTEGER},
+      </if>
+      <if test="birthDate != null" >
+        #{birthDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="nation != null" >
+        #{nation,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null" >
+        #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="cardidentity != null" >
+        #{cardidentity,jdbcType=VARCHAR},
+      </if>
+      <if test="provinceId != null" >
+        #{provinceId,jdbcType=VARCHAR},
+      </if>
+      <if test="cityId != null" >
+        #{cityId,jdbcType=VARCHAR},
+      </if>
+      <if test="areaId != null" >
+        #{areaId,jdbcType=VARCHAR},
+      </if>
+      <if test="regTime != null" >
+        #{regTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="loginTimes != null" >
+        #{loginTimes,jdbcType=INTEGER},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null" >
+        #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="permanentaddress != null" >
+        #{permanentaddress,jdbcType=VARCHAR},
+      </if>
+      <if test="postCode != null" >
+        #{postCode,jdbcType=VARCHAR},
+      </if>
+      <if test="relation != null" >
+        #{relation,jdbcType=VARCHAR},
+      </if>
+      <if test="mobile != null" >
+        #{mobile,jdbcType=VARCHAR},
+      </if>
+      <if test="occupation != null" >
+        #{occupation,jdbcType=VARCHAR},
+      </if>
+      <if test="edBackground != null" >
+        #{edBackground,jdbcType=VARCHAR},
+      </if>
+      <if test="maritalStatus != null" >
+        #{maritalStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="lockFlag != null" >
+        #{lockFlag,jdbcType=INTEGER},
+      </if>
+      <if test="regSource != null" >
+        #{regSource,jdbcType=INTEGER},
+      </if>
+      <if test="certType != null" >
+        #{certType,jdbcType=INTEGER},
+      </if>
+      <if test="certNo != null" >
+        #{certNo,jdbcType=VARCHAR},
+      </if>
+      <if test="orgCode != null" >
+        #{orgCode,jdbcType=VARCHAR},
+      </if>
+      <if test="bloodType != null" >
+        #{bloodType,jdbcType=VARCHAR},
+      </if>
+      <if test="rhfeminine != null" >
+        #{rhfeminine,jdbcType=VARCHAR},
+      </if>
+      <if test="enrolCardId != null" >
+        #{enrolCardId,jdbcType=VARCHAR},
+      </if>
+      <if test="loginTime != null" >
+        #{loginTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="unit != null" >
+        #{unit,jdbcType=VARCHAR},
+      </if>
+      <if test="isAssociation != null" >
+        #{isAssociation,jdbcType=INTEGER},
+      </if>
+      <if test="associationName != null" >
+        #{associationName,jdbcType=VARCHAR},
+      </if>
+      <if test="isAlone != null" >
+        #{isAlone,jdbcType=INTEGER},
+      </if>
+      <if test="isAllergy != null" >
+        #{isAllergy,jdbcType=INTEGER},
+      </if>
+      <if test="allergyName != null" >
+        #{allergyName,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.yihe.applet.api.domain.YhUserReginfoApp" >
+    update yh_user_reginfo
+    <set >
+      <if test="userType != null" >
+        User_Type = #{userType,jdbcType=INTEGER},
+      </if>
+      <if test="userName != null" >
+        user_name = #{userName,jdbcType=VARCHAR},
+      </if>
+      <if test="userPwd != null" >
+        user_pwd = #{userPwd,jdbcType=VARCHAR},
+      </if>
+      <if test="gender != null" >
+        gender = #{gender,jdbcType=INTEGER},
+      </if>
+      <if test="birthDate != null" >
+        birth_date = #{birthDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="nation != null" >
+        nation = #{nation,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null" >
+        email = #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="cardidentity != null" >
+        cardidentity = #{cardidentity,jdbcType=VARCHAR},
+      </if>
+      <if test="provinceId != null" >
+        province_id = #{provinceId,jdbcType=VARCHAR},
+      </if>
+      <if test="cityId != null" >
+        city_id = #{cityId,jdbcType=VARCHAR},
+      </if>
+      <if test="areaId != null" >
+        area_id = #{areaId,jdbcType=VARCHAR},
+      </if>
+      <if test="regTime != null" >
+        reg_time = #{regTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="loginTimes != null" >
+        Login_times = #{loginTimes,jdbcType=INTEGER},
+      </if>
+      <if test="name != null" >
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null" >
+        address = #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="permanentaddress != null" >
+        permanentaddress = #{permanentaddress,jdbcType=VARCHAR},
+      </if>
+      <if test="postCode != null" >
+        post_code = #{postCode,jdbcType=VARCHAR},
+      </if>
+      <if test="relation != null" >
+        relation = #{relation,jdbcType=VARCHAR},
+      </if>
+      <if test="mobile != null" >
+        mobile = #{mobile,jdbcType=VARCHAR},
+      </if>
+      <if test="occupation != null" >
+        occupation = #{occupation,jdbcType=VARCHAR},
+      </if>
+      <if test="edBackground != null" >
+        ed_background = #{edBackground,jdbcType=VARCHAR},
+      </if>
+      <if test="maritalStatus != null" >
+        marital_status = #{maritalStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="lockFlag != null" >
+        lock_flag = #{lockFlag,jdbcType=INTEGER},
+      </if>
+      <if test="regSource != null" >
+        reg_source = #{regSource,jdbcType=INTEGER},
+      </if>
+      <if test="certType != null" >
+        Cert_Type = #{certType,jdbcType=INTEGER},
+      </if>
+      <if test="certNo != null" >
+        Cert_NO = #{certNo,jdbcType=VARCHAR},
+      </if>
+      <if test="orgCode != null" >
+        Org_Code = #{orgCode,jdbcType=VARCHAR},
+      </if>
+      <if test="bloodType != null" >
+        Blood_Type = #{bloodType,jdbcType=VARCHAR},
+      </if>
+      <if test="rhfeminine != null" >
+        rhfeminine = #{rhfeminine,jdbcType=VARCHAR},
+      </if>
+      <if test="enrolCardId != null" >
+        Enrol_Card_Id = #{enrolCardId,jdbcType=VARCHAR},
+      </if>
+      <if test="loginTime != null" >
+        login_time = #{loginTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="unit != null" >
+        unit = #{unit,jdbcType=VARCHAR},
+      </if>
+      <if test="isAssociation != null" >
+        is_association = #{isAssociation,jdbcType=INTEGER},
+      </if>
+      <if test="associationName != null" >
+        association_name = #{associationName,jdbcType=VARCHAR},
+      </if>
+      <if test="isAlone != null" >
+        is_alone = #{isAlone,jdbcType=INTEGER},
+      </if>
+      <if test="isAllergy != null" >
+        is_allergy = #{isAllergy,jdbcType=INTEGER},
+      </if>
+      <if test="allergyName != null" >
+        allergy_name = #{allergyName,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where user_code = #{userCode,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.yihe.applet.api.domain.YhUserReginfoApp" >
+    update yh_user_reginfo
+    set User_Type = #{userType,jdbcType=INTEGER},
+      user_name = #{userName,jdbcType=VARCHAR},
+      user_pwd = #{userPwd,jdbcType=VARCHAR},
+      gender = #{gender,jdbcType=INTEGER},
+      birth_date = #{birthDate,jdbcType=TIMESTAMP},
+      nation = #{nation,jdbcType=VARCHAR},
+      email = #{email,jdbcType=VARCHAR},
+      cardidentity = #{cardidentity,jdbcType=VARCHAR},
+      province_id = #{provinceId,jdbcType=VARCHAR},
+      city_id = #{cityId,jdbcType=VARCHAR},
+      area_id = #{areaId,jdbcType=VARCHAR},
+      reg_time = #{regTime,jdbcType=TIMESTAMP},
+      Login_times = #{loginTimes,jdbcType=INTEGER},
+      name = #{name,jdbcType=VARCHAR},
+      address = #{address,jdbcType=VARCHAR},
+      permanentaddress = #{permanentaddress,jdbcType=VARCHAR},
+      post_code = #{postCode,jdbcType=VARCHAR},
+      relation = #{relation,jdbcType=VARCHAR},
+      mobile = #{mobile,jdbcType=VARCHAR},
+      occupation = #{occupation,jdbcType=VARCHAR},
+      ed_background = #{edBackground,jdbcType=VARCHAR},
+      marital_status = #{maritalStatus,jdbcType=VARCHAR},
+      lock_flag = #{lockFlag,jdbcType=INTEGER},
+      reg_source = #{regSource,jdbcType=INTEGER},
+      Cert_Type = #{certType,jdbcType=INTEGER},
+      Cert_NO = #{certNo,jdbcType=VARCHAR},
+      Org_Code = #{orgCode,jdbcType=VARCHAR},
+      Blood_Type = #{bloodType,jdbcType=VARCHAR},
+      rhfeminine = #{rhfeminine,jdbcType=VARCHAR},
+      Enrol_Card_Id = #{enrolCardId,jdbcType=VARCHAR},
+      login_time = #{loginTime,jdbcType=TIMESTAMP},
+      unit = #{unit,jdbcType=VARCHAR},
+      is_association = #{isAssociation,jdbcType=INTEGER},
+      association_name = #{associationName,jdbcType=VARCHAR},
+      is_alone = #{isAlone,jdbcType=INTEGER},
+      is_allergy = #{isAllergy,jdbcType=INTEGER},
+      allergy_name = #{allergyName,jdbcType=VARCHAR}
+    where user_code = #{userCode,jdbcType=VARCHAR}
+  </update>
+  
+  	<!-- 查询用户信息 -->
+    <select id="findYhUserReginfo" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from yh_user_reginfo
+    where user_code = #{userCode,jdbcType=VARCHAR}
+  </select>
+  <!-- 查询用户密码 -->
+  <select id="selectUserPwd" parameterType="java.lang.String" resultMap="BaseResultMap">
+   select user_pwd from yh_user_reginfo where user_code = #{userCode,jdbcType=VARCHAR} and user_pwd=#{userPwd,jdbcType=VARCHAR} 
+  </select>
+  
+ <!--  修改密码 -->
+  <update id="updatePwd" parameterType="com.yihe.applet.api.domain.YhUserReginfoApp">
+  		update yh_user_reginfo set user_pwd=#{userPwd,jdbcType=VARCHAR} where user_code = #{userCode,jdbcType=VARCHAR}
+  </update>
+  
+   <select id="selectByUserNameAndUserPwd" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from yh_user_reginfo
+    where user_name = #{userName,jdbcType=VARCHAR}
+    and user_pwd=#{userPwd,jdbcType=VARCHAR}
+    limit 1
+  </select>
+
+<select id="selectByshoujiAndUsername" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from yh_user_reginfo
+    where  1=1 
+    <if test="userName != null and userName != ''">
+    and user_name = #{userName,jdbcType=VARCHAR}
+  </if> 
+      <if test="mobile != null and mobile != ''">
+    and mobile=#{mobile,jdbcType=VARCHAR}
+  </if> 
+    
+    limit 1
+  </select>
+
+  <update id="updateByUsernameAndMobile" parameterType="com.yihe.applet.api.domain.YhUserReginfoApp">
+  UPDATE 
+  `yh_user_reginfo`
+	SET
+  
+  user_pwd = #{userPwd}
+   
+WHERE user_name = #{userName} AND mobile=#{mobile}
+  
+  </update>
+
+
+ <update id="updateByUsercodeAndLoginTime" parameterType="map">
+  update yh_user_reginfo
+  set 
+  Login_times = #{record.loginTimes,jdbcType=INTEGER},
+  login_time = #{record.loginTime,jdbcType=TIMESTAMP}
+  where user_code = #{record.userCode,jdbcType=VARCHAR}
+  </update>
+  <select id="findUserCodeByUserTypeFor5" resultType="java.lang.String">
+  
+	SELECT user_code FROM `yh_user_reginfo` WHERE User_Type=5
+  
+  </select>
+</mapper>

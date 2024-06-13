@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yihe.applet.api.mapper.YhDiseaseAssessReportAppMapper">
+    <resultMap type="com.yihe.system.domain.YhDiseaseAssessReport" id="YhDiseaseAssessReportResult">
+        <result property="id" column="id"/>
+        <result property="userCode" column="user_code"/>
+        <result property="resultSerialnum" column="result_serialNum"/>
+        <result property="qtime" column="qtime"/>
+        <result property="requestSerialnum" column="request_serialNum"/>
+        <result property="diseasid" column="diseasId"/>
+        <result property="riskLevel" column="risk_level"/>
+        <result property="riskDesc" column="risk_desc"/>
+        <result property="nowRiskDesc" column="now_risk_desc"/>
+        <result property="nowRiskValue" column="now_risk_value"/>
+        <result property="nowRiskLevel" column="now_risk_level"/>
+        <result property="nowRiskLastValue" column="now_risk_last_value"/>
+        <result property="idealRiskLevel" column="ideal_risk_level"/>
+        <result property="idealRiskDesc" column="ideal_risk_desc"/>
+        <result property="lastTime" column="last_time"/>
+        <result property="ageForecastR20" column="age_forecast_r20"/>
+        <result property="ageForecastR30" column="age_forecast_r30"/>
+        <result property="ageForecastR40" column="age_forecast_r40"/>
+        <result property="ageForecastR50" column="age_forecast_r50"/>
+        <result property="ageForecastR60" column="age_forecast_r60"/>
+        <result property="ageForecastR70" column="age_forecast_r70"/>
+        <result property="ageForecastR80" column="age_forecast_r80"/>
+        <result property="ageOpForecastR20Op" column="age_op_forecast_r20_op"/>
+        <result property="ageOpForecastR30Op" column="age_op_forecast_r30_op"/>
+        <result property="ageOpForecastR40Op" column="age_op_forecast_r40_op"/>
+        <result property="ageOpForecastR50Op" column="age_op_forecast_r50_op"/>
+        <result property="ageOpForecastR60Op" column="age_op_forecast_r60_op"/>
+        <result property="ageOpForecastR70Op" column="age_op_forecast_r70_op"/>
+        <result property="ageOpForecastR80Op" column="age_op_forecast_r80_op"/>
+    </resultMap>
+    <sql id="selectYhDiseaseAssessReportVo">
+        id, user_code, result_serialNum, qtime, request_serialNum, diseasId, risk_level, risk_desc, now_risk_desc, now_risk_value, now_risk_level, now_risk_last_value, ideal_risk_level, ideal_risk_desc, last_time, age_forecast_r20, age_forecast_r30, age_forecast_r40, age_forecast_r50, age_forecast_r60, age_forecast_r70, age_forecast_r80, age_op_forecast_r20_op, age_op_forecast_r30_op, age_op_forecast_r40_op, age_op_forecast_r50_op, age_op_forecast_r60_op, age_op_forecast_r70_op, age_op_forecast_r80_op
+    </sql>
+    <insert id="insertYhDiseaseAssessReport" parameterType="com.yihe.system.domain.YhDiseaseAssessReport"
+            useGeneratedKeys="true" keyProperty="id">
+        insert into yh_disease_assess_report
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="userCode != null  and userCode != ''">user_code,</if>
+            <if test="resultSerialnum != null  and resultSerialnum != ''">result_serialNum,</if>
+            <if test="qtime != null ">qtime,</if>
+            <if test="requestSerialnum != null  and requestSerialnum != ''">request_serialNum,</if>
+            <if test="diseasid != null ">diseasId,</if>
+            <if test="riskLevel != null  and riskLevel != ''">risk_level,</if>
+            <if test="riskDesc != null  and riskDesc != ''">risk_desc,</if>
+            <if test="nowRiskDesc != null  and nowRiskDesc != ''">now_risk_desc,</if>
+            <if test="nowRiskValue != null  and nowRiskValue != ''">now_risk_value,</if>
+            <if test="nowRiskLevel != null  and nowRiskLevel != ''">now_risk_level,</if>
+            <if test="nowRiskLastValue != null  and nowRiskLastValue != ''">now_risk_last_value,</if>
+            <if test="idealRiskLevel != null  and idealRiskLevel != ''">ideal_risk_level,</if>
+            <if test="idealRiskDesc != null  and idealRiskDesc != ''">ideal_risk_desc,</if>
+            <if test="lastTime != null  and lastTime != ''">last_time,</if>
+            <if test="ageForecastR20 != null  and ageForecastR20 != ''">age_forecast_r20,</if>
+            <if test="ageForecastR30 != null  and ageForecastR30 != ''">age_forecast_r30,</if>
+            <if test="ageForecastR40 != null  and ageForecastR40 != ''">age_forecast_r40,</if>
+            <if test="ageForecastR50 != null  and ageForecastR50 != ''">age_forecast_r50,</if>
+            <if test="ageForecastR60 != null  and ageForecastR60 != ''">age_forecast_r60,</if>
+            <if test="ageForecastR70 != null  and ageForecastR70 != ''">age_forecast_r70,</if>
+            <if test="ageForecastR80 != null  and ageForecastR80 != ''">age_forecast_r80,</if>
+            <if test="ageOpForecastR20Op != null  and ageOpForecastR20Op != ''">age_op_forecast_r20_op,</if>
+            <if test="ageOpForecastR30Op != null  and ageOpForecastR30Op != ''">age_op_forecast_r30_op,</if>
+            <if test="ageOpForecastR40Op != null  and ageOpForecastR40Op != ''">age_op_forecast_r40_op,</if>
+            <if test="ageOpForecastR50Op != null  and ageOpForecastR50Op != ''">age_op_forecast_r50_op,</if>
+            <if test="ageOpForecastR60Op != null  and ageOpForecastR60Op != ''">age_op_forecast_r60_op,</if>
+            <if test="ageOpForecastR70Op != null  and ageOpForecastR70Op != ''">age_op_forecast_r70_op,</if>
+            <if test="ageOpForecastR80Op != null  and ageOpForecastR80Op != ''">age_op_forecast_r80_op,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="userCode != null  and userCode != ''">#{userCode},</if>
+            <if test="resultSerialnum != null  and resultSerialnum != ''">#{resultSerialnum},</if>
+            <if test="qtime != null ">#{qtime},</if>
+            <if test="requestSerialnum != null  and requestSerialnum != ''">#{requestSerialnum},</if>
+            <if test="diseasid != null ">#{diseasid},</if>
+            <if test="riskLevel != null  and riskLevel != ''">#{riskLevel},</if>
+            <if test="riskDesc != null  and riskDesc != ''">#{riskDesc},</if>
+            <if test="nowRiskDesc != null  and nowRiskDesc != ''">#{nowRiskDesc},</if>
+            <if test="nowRiskValue != null  and nowRiskValue != ''">#{nowRiskValue},</if>
+            <if test="nowRiskLevel != null  and nowRiskLevel != ''">#{nowRiskLevel},</if>
+            <if test="nowRiskLastValue != null  and nowRiskLastValue != ''">#{nowRiskLastValue},</if>
+            <if test="idealRiskLevel != null  and idealRiskLevel != ''">#{idealRiskLevel},</if>
+            <if test="idealRiskDesc != null  and idealRiskDesc != ''">#{idealRiskDesc},</if>
+            <if test="lastTime != null  and lastTime != ''">#{lastTime},</if>
+            <if test="ageForecastR20 != null  and ageForecastR20 != ''">#{ageForecastR20},</if>
+            <if test="ageForecastR30 != null  and ageForecastR30 != ''">#{ageForecastR30},</if>
+            <if test="ageForecastR40 != null  and ageForecastR40 != ''">#{ageForecastR40},</if>
+            <if test="ageForecastR50 != null  and ageForecastR50 != ''">#{ageForecastR50},</if>
+            <if test="ageForecastR60 != null  and ageForecastR60 != ''">#{ageForecastR60},</if>
+            <if test="ageForecastR70 != null  and ageForecastR70 != ''">#{ageForecastR70},</if>
+            <if test="ageForecastR80 != null  and ageForecastR80 != ''">#{ageForecastR80},</if>
+            <if test="ageOpForecastR20Op != null  and ageOpForecastR20Op != ''">#{ageOpForecastR20Op},</if>
+            <if test="ageOpForecastR30Op != null  and ageOpForecastR30Op != ''">#{ageOpForecastR30Op},</if>
+            <if test="ageOpForecastR40Op != null  and ageOpForecastR40Op != ''">#{ageOpForecastR40Op},</if>
+            <if test="ageOpForecastR50Op != null  and ageOpForecastR50Op != ''">#{ageOpForecastR50Op},</if>
+            <if test="ageOpForecastR60Op != null  and ageOpForecastR60Op != ''">#{ageOpForecastR60Op},</if>
+            <if test="ageOpForecastR70Op != null  and ageOpForecastR70Op != ''">#{ageOpForecastR70Op},</if>
+            <if test="ageOpForecastR80Op != null  and ageOpForecastR80Op != ''">#{ageOpForecastR80Op},</if>
+        </trim>
+    </insert>
+    <!--查询评估次数-->
+    <select id="selMyAssessCount" resultType="int">
+        SELECT COUNT(1) FROM yh_disease_assess_total_report2 WHERE user_code=#{userCode}
+    </select>
+    
+    
+    <select id="selectAssessReport" resultMap="YhDiseaseAssessReportResult">
+            select 
+            <include refid="selectYhDiseaseAssessReportVo" />
+		    from yh_disease_assess_report
+		    where diseasId = #{diseaseid,jdbcType=INTEGER} AND request_serialNum =  #{requestNum}
+    </select>
+</mapper>

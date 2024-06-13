@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yihe.system.mapper.YhDivisionsettingMapper">
+		<select id="selectallservice" resultType="com.yihe.system.domain.YhJzService">
+			SELECT * from yh_jz_service_switch sw
+			LEFT JOIN   yh_jz_service_type  ty
+			ON sw.service_type=ty.id   where sw.id=1 OR sw.id=2 OR sw.id=5 OR sw.id=7	OR sw.id=8 OR sw.id=9 OR sw.id=10	OR sw.id=11
+		</select>
+		<update id="updateservice" parameterType="com.yihe.system.domain.YhJzService">
+				update	yh_jz_service_switch
+				set service_date=#{service_date},
+				service_content=#{service_content},
+				isopen=#{isopen},
+				return_id=#{return_id}
+				where	id=#{id}
+		</update>
+		
+		<select id="selectbodyswitch" resultType="com.yihe.system.domain.YhJzServiceBodydataSwitch">
+			SELECT * from yh_jz_service_bodydata_switch 
+		</select>
+		
+		<update id="updatebodyswitch" parameterType="com.yihe.system.domain.YhJzServiceBodydataSwitch">
+				update	yh_jz_service_bodydata_switch
+				<set>
+					<if test="name!=null">
+						name=#{name},
+					</if>
+					<if test="first_switch!=null">
+						first_switch=#{first_switch},
+					</if>
+					<if test="every_switch!=null">
+						every_switch=#{every_switch},
+					</if>
+					<if test="long_time_no_switch!=null">
+						long_time_no_switch=#{long_time_no_switch},
+					</if>
+					<if test="long_time_no_intervaltime!=null">
+						long_time_no_intervaltime=#{long_time_no_intervaltime},
+					</if>
+				</set>
+				where id=#{id}
+		</update>
+		
+		<update id="updateassessmentswitch" parameterType="com.yihe.system.domain.YhJzServiceAssessmentSwitch">
+				update	yh_jz_service_assessment_switch
+				<set>
+					<if test="name!=null">
+						name=#{name},
+					</if>
+					<if test="long_time_no_switch!=null">
+						long_time_no_switch=#{long_time_no_switch},
+					</if>
+					<if test="long_time_no_intervaltime!=null">
+						long_time_no_intervaltime=#{long_time_no_intervaltime},
+					</if>
+					<if test="long_time_no_remindtime!=null">
+						long_time_no_remindtime=#{long_time_no_remindtime},
+					</if>
+					<if test="every_division_switch!=null">
+						every_division_switch=#{every_division_switch},
+					</if>
+					<if test="first_switch!=null">
+						first_switch=#{first_switch},
+					</if>
+					<if test="every_switch!=null">
+						every_switch=#{every_switch},
+					</if>
+				</set>
+				where id=#{id}
+		</update>
+		
+		<select id="selectassessmentswitch" resultType="com.yihe.system.domain.YhJzServiceAssessmentSwitch">
+			select * from yh_jz_service_assessment_switch
+		</select>
+</mapper>

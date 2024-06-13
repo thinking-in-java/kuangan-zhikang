@@ -1,0 +1,511 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yihe.system.mapper.YhHealthLectureInfoMapper">
+  <resultMap id="BaseResultMap" type="com.yihe.system.domain.YhHealthLectureInfo">
+    <id column="infoId" property="infoid" jdbcType="INTEGER" />
+    <result column="tips" property="tips" jdbcType="VARCHAR" />
+    <result column="category_id" property="categoryId" jdbcType="INTEGER" />
+    <result column="typeid" property="typeid" jdbcType="INTEGER" />
+    <result column="thumbnail_url" property="thumbnailUrl" jdbcType="VARCHAR" />
+    <result column="listbox_url" property="listboxUrl" jdbcType="VARCHAR" />
+    <result column="detail_content_url" property="detailContentUrl" jdbcType="VARCHAR" />
+    <result column="video_url" property="videoUrl" jdbcType="VARCHAR" />
+    <result column="audio_url" property="audioUrl" jdbcType="VARCHAR" />
+    <result column="update_date" property="updateDate" jdbcType="TIMESTAMP" />
+    <result column="title" property="title" jdbcType="VARCHAR" />
+    <result column="author" property="author" jdbcType="VARCHAR" />
+    <result column="instruction" property="instruction" jdbcType="VARCHAR" />
+    <result column="read_count" property="readCount" jdbcType="INTEGER" />
+    <result column="addInfoTime" property="addinfotime" jdbcType="VARCHAR" />
+    <result column="usercode" property="usercode" jdbcType="VARCHAR" />
+    <result column="state" property="state" jdbcType="INTEGER" />
+    <result column="speaker" property="speaker" jdbcType="VARCHAR" />
+    <result column="user_code" property="userCode" jdbcType="VARCHAR" />
+    
+     <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="parent_id" jdbcType="VARCHAR" property="parentId" />
+    <result column="type_name" jdbcType="VARCHAR" property="typeName" />
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="com.yihe.system.domain.YhHealthLectureInfo" extends="BaseResultMap" >
+    <result column="instructionMd" property="instructionmd" jdbcType="LONGVARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    infoId, tips, category_id, typeid, thumbnail_url, listbox_url, detail_content_url, 
+    video_url, audio_url, update_date, title, author, instruction, read_count, addInfoTime, 
+    usercode, state, speaker, user_code
+  </sql>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Blob_Column_List" >
+    instructionMd
+  </sql>
+  
+   <select id="selctTitleRepetition"  parameterType="map" resultType="int">
+	  select count(*) from yh_health_lecture_info where title=#{title} and infoId!=#{infoid}
+  </select>
+  
+  
+   <!-- 查询所有课堂模糊查询 -->
+    <select id="selectLectureInfo" resultMap="BaseResultMap" parameterType="map">
+ 		select info.author,info.speaker,info.tips,info.infoId,info.title,ca.name,ca.parent_id,info.addInfoTime,info.read_count,info.state,info.thumbnail_url,info.category_id,info.typeid,info.infoId,info.video_url,info.user_code
+ 		 <if test="null!=orgCode2">,
+            CASE
+            WHEN (
+            SELECT
+            count(1)
+            FROM
+            yh_user_reginfo reg
+            WHERE
+            reg.Org_Code LIKE CONCAT('%', #{orgCode2}, '%')
+            AND reg.user_code = info.user_code
+            ) THEN
+            '1'
+            ELSE
+            '0'
+            END 'quanxian'
+          </if>
+      ,
+      (select count(*) from yh_health_lecture_comment where lectureInfoId=info.infoId) as num,
+      (select count(*) from yh_health_lecture_watch t1,yh_health_lecture_info t2 where t1.class_id = t2.infoId and t1.class_id= info.infoId) as watch
+ 		 from  yh_health_lecture_info info left join
+	yh_health_lecture_category ca on  info.category_id=ca.categoryId
+      left join yh_org_tree as org on info.user_code=org.User_Code
+	<where>
+
+
+	        <if test="null!=orgCode">
+              (
+              org.user_code = #{orgCode}
+              OR org.Super_Org_Code LIKE concat(
+              '',
+              (
+              SELECT
+              Org_code
+              FROM
+              yh_org_tree
+              WHERE
+              user_code = #{orgCode}
+              ),
+              '%'
+              )
+              )
+            </if>
+  			<if test="title!=null and title !=''">
+  			AND
+  			(
+  				info.title like CONCAT('%',#{title},'%' )
+  			)
+  			</if>
+  			
+  			<if test="author!=null and author !=''">
+  			AND
+  			(
+  				info.author like CONCAT('%',#{author},'%' )
+  			)
+  			</if>
+  			
+  			
+  			<if test="categoryId !=null and categoryId !=''">
+  			and
+  			info.category_id = #{categoryId,jdbcType=INTEGER}
+  			</if>
+  			<if test="superaddition !=null and superaddition !=''">
+  			${superaddition}
+  			</if>
+  			<if test="doctors !=null and doctors !=''">
+  			and ca.name is null
+  			</if>
+  			<if test="typeid !=null and typeid !=''">
+  			and typeid=#{typeid}
+  			</if>
+  			
+  		</where>
+  		order by info.addInfoTime desc LIMIT  #{page},#{limit}
+  </select>
+  
+  
+   <!-- 查询所有课堂模糊查询总行数 -->
+    <select id="selectLectureInfoConut" resultType="int" parameterType="map">
+  	    select count(*) from  yh_health_lecture_info info
+  		left join yh_health_lecture_category ca on  info.category_id=ca.categoryId
+        left join yh_org_tree as org on info.user_code=org.User_Code
+  		<where>
+          <if test="null!=orgCode">
+            (
+            org.user_code = #{orgCode}
+            OR org.Super_Org_Code LIKE concat(
+            '',
+            (
+            SELECT
+            Org_code
+            FROM
+            yh_org_tree
+            WHERE
+            user_code = #{orgCode}
+            ),
+            '%'
+            )
+            )
+          </if>
+  			<if test="title!=null and title !=''">
+  			AND
+  			(
+  				info.title like CONCAT('%',#{title},'%' )
+  			)
+  			</if>
+  			
+  			<if test="author!=null and author !=''">
+  			AND
+  			(
+  				info.author like CONCAT('%',#{author},'%' )
+  			)
+  			</if>
+  			
+  			
+  			<if test="categoryId !=null and categoryId !=''">
+  			and
+  			info.category_id = #{categoryId,jdbcType=INTEGER}
+  			</if>
+  			<if test="superaddition !=null and superaddition !=''">
+  			${superaddition}
+  			</if>
+  			<if test="doctors !=null and doctors !=''">
+  			and ca.name is null
+  			</if>
+  			<if test="typeid !=null and typeid !=''">
+  			and typeid=#{typeid}
+  			</if>
+  		</where>
+  		order by info.addInfoTime desc
+  </select>
+  
+  
+    <!-- 根据类型id查询课堂次数 -->
+   <select id="selectBylectureCount" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+    select count(*) from yh_health_lecture_info where category_id=#{categoryId,jdbcType=INTEGER} 
+  </select>
+  
+  <select id="selectByExample" resultMap="BaseResultMap">
+    select * from yh_health_lecture_info
+  </select>
+  
+  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from yh_health_lecture_info
+    where infoId = #{infoid,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from yh_health_lecture_info
+    where infoId = #{infoid,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.yihe.system.domain.YhHealthLectureInfo" >
+    insert into yh_health_lecture_info (infoId, tips, category_id, 
+      typeid, thumbnail_url, listbox_url, 
+      detail_content_url, video_url, audio_url, 
+      update_date, title, author, 
+      instruction, read_count, addInfoTime, 
+      usercode, state, speaker, 
+      user_code, instructionMd)
+    values (#{infoid,jdbcType=INTEGER}, #{tips,jdbcType=VARCHAR}, #{categoryId,jdbcType=INTEGER}, 
+      #{typeid,jdbcType=INTEGER}, #{thumbnailUrl,jdbcType=VARCHAR}, #{listboxUrl,jdbcType=VARCHAR}, 
+      #{detailContentUrl,jdbcType=VARCHAR}, #{videoUrl,jdbcType=VARCHAR}, #{audioUrl,jdbcType=VARCHAR}, 
+      #{updateDate,jdbcType=TIMESTAMP}, #{title,jdbcType=VARCHAR}, #{author,jdbcType=VARCHAR}, 
+      #{instruction,jdbcType=VARCHAR}, #{readCount,jdbcType=INTEGER}, #{addinfotime,jdbcType=VARCHAR}, 
+      #{usercode,jdbcType=VARCHAR}, #{state,jdbcType=INTEGER}, #{speaker,jdbcType=VARCHAR}, 
+      #{userCode,jdbcType=VARCHAR}, #{instructionmd,jdbcType=LONGVARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.yihe.system.domain.YhHealthLectureInfo" >
+    insert into yh_health_lecture_info
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="infoid != null" >
+        infoId,
+      </if>
+      <if test="tips != null" >
+        tips,
+      </if>
+      <if test="categoryId != null" >
+        category_id,
+      </if>
+      <if test="typeid != null" >
+        typeid,
+      </if>
+      <if test="thumbnailUrl != null" >
+        thumbnail_url,
+      </if>
+      <if test="listboxUrl != null" >
+        listbox_url,
+      </if>
+      <if test="detailContentUrl != null" >
+        detail_content_url,
+      </if>
+      <if test="videoUrl != null" >
+        video_url,
+      </if>
+      <if test="audioUrl != null" >
+        audio_url,
+      </if>
+      <if test="updateDate != null" >
+        update_date,
+      </if>
+      <if test="title != null" >
+        title,
+      </if>
+      <if test="author != null" >
+        author,
+      </if>
+      <if test="instruction != null" >
+        instruction,
+      </if>
+      <if test="readCount != null" >
+        read_count,
+      </if>
+      <if test="addinfotime != null" >
+        addInfoTime,
+      </if>
+      <if test="usercode != null" >
+        usercode,
+      </if>
+      <if test="state != null" >
+        state,
+      </if>
+      <if test="speaker != null" >
+        speaker,
+      </if>
+      <if test="userCode != null" >
+        user_code,
+      </if>
+      <if test="instructionmd != null" >
+        instructionMd,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="infoid != null" >
+        #{infoid,jdbcType=INTEGER},
+      </if>
+      <if test="tips != null" >
+        #{tips,jdbcType=VARCHAR},
+      </if>
+      <if test="categoryId != null" >
+        #{categoryId,jdbcType=INTEGER},
+      </if>
+      <if test="typeid != null" >
+        #{typeid,jdbcType=INTEGER},
+      </if>
+      <if test="thumbnailUrl != null" >
+        #{thumbnailUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="listboxUrl != null" >
+        #{listboxUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="detailContentUrl != null" >
+        #{detailContentUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="videoUrl != null" >
+        #{videoUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="audioUrl != null" >
+        #{audioUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="updateDate != null" >
+        #{updateDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="title != null" >
+        #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="author != null" >
+        #{author,jdbcType=VARCHAR},
+      </if>
+      <if test="instruction != null" >
+        #{instruction,jdbcType=VARCHAR},
+      </if>
+      <if test="readCount != null" >
+        #{readCount,jdbcType=INTEGER},
+      </if>
+      <if test="addinfotime != null" >
+        #{addinfotime,jdbcType=VARCHAR},
+      </if>
+      <if test="usercode != null" >
+        #{usercode,jdbcType=VARCHAR},
+      </if>
+      <if test="state != null" >
+        #{state,jdbcType=INTEGER},
+      </if>
+      <if test="speaker != null" >
+        #{speaker,jdbcType=VARCHAR},
+      </if>
+      <if test="userCode != null" >
+        #{userCode,jdbcType=VARCHAR},
+      </if>
+      <if test="instructionmd != null" >
+        #{instructionmd,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.yihe.system.domain.YhHealthLectureInfo" >
+    update yh_health_lecture_info
+    <set >
+      <if test="tips != null" >
+        tips = #{tips,jdbcType=VARCHAR},
+      </if>
+      <if test="categoryId != null" >
+        category_id = #{categoryId,jdbcType=INTEGER},
+      </if>
+      <if test="typeid != null" >
+        typeid = #{typeid,jdbcType=INTEGER},
+      </if>
+      <if test="thumbnailUrl != null" >
+        thumbnail_url = #{thumbnailUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="listboxUrl != null" >
+        listbox_url = #{listboxUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="detailContentUrl != null" >
+        detail_content_url = #{detailContentUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="videoUrl != null" >
+        video_url = #{videoUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="audioUrl != null" >
+        audio_url = #{audioUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="updateDate != null" >
+        update_date = #{updateDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="title != null" >
+        title = #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="author != null" >
+        author = #{author,jdbcType=VARCHAR},
+      </if>
+      <if test="instruction != null" >
+        instruction = #{instruction,jdbcType=VARCHAR},
+      </if>
+      <if test="readCount != null" >
+        read_count = #{readCount,jdbcType=INTEGER},
+      </if>
+      <if test="addinfotime != null" >
+        addInfoTime = #{addinfotime,jdbcType=VARCHAR},
+      </if>
+      <if test="usercode != null" >
+        usercode = #{usercode,jdbcType=VARCHAR},
+      </if>
+      <if test="state != null" >
+        state = #{state,jdbcType=INTEGER},
+      </if>
+      <if test="speaker != null" >
+        speaker = #{speaker,jdbcType=VARCHAR},
+      </if>
+      <if test="userCode != null" >
+        user_code = #{userCode,jdbcType=VARCHAR},
+      </if>
+      <if test="instructionmd != null" >
+        instructionMd = #{instructionmd,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where infoId = #{infoid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.yihe.system.domain.YhHealthLectureInfo" >
+    update yh_health_lecture_info
+    set tips = #{tips,jdbcType=VARCHAR},
+      category_id = #{categoryId,jdbcType=INTEGER},
+      typeid = #{typeid,jdbcType=INTEGER},
+      thumbnail_url = #{thumbnailUrl,jdbcType=VARCHAR},
+      listbox_url = #{listboxUrl,jdbcType=VARCHAR},
+      detail_content_url = #{detailContentUrl,jdbcType=VARCHAR},
+      video_url = #{videoUrl,jdbcType=VARCHAR},
+      audio_url = #{audioUrl,jdbcType=VARCHAR},
+      update_date = #{updateDate,jdbcType=TIMESTAMP},
+      title = #{title,jdbcType=VARCHAR},
+      author = #{author,jdbcType=VARCHAR},
+      instruction = #{instruction,jdbcType=VARCHAR},
+      read_count = #{readCount,jdbcType=INTEGER},
+      addInfoTime = #{addinfotime,jdbcType=VARCHAR},
+      usercode = #{usercode,jdbcType=VARCHAR},
+      state = #{state,jdbcType=INTEGER},
+      speaker = #{speaker,jdbcType=VARCHAR},
+      user_code = #{userCode,jdbcType=VARCHAR},
+      instructionMd = #{instructionmd,jdbcType=LONGVARCHAR}
+    where infoId = #{infoid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.yihe.system.domain.YhHealthLectureInfo" >
+    update yh_health_lecture_info
+    set tips = #{tips,jdbcType=VARCHAR},
+      category_id = #{categoryId,jdbcType=INTEGER},
+      typeid = #{typeid,jdbcType=INTEGER},
+      thumbnail_url = #{thumbnailUrl,jdbcType=VARCHAR},
+      listbox_url = #{listboxUrl,jdbcType=VARCHAR},
+      detail_content_url = #{detailContentUrl,jdbcType=VARCHAR},
+      video_url = #{videoUrl,jdbcType=VARCHAR},
+      audio_url = #{audioUrl,jdbcType=VARCHAR},
+      update_date = #{updateDate,jdbcType=TIMESTAMP},
+      title = #{title,jdbcType=VARCHAR},
+      author = #{author,jdbcType=VARCHAR},
+      instruction = #{instruction,jdbcType=VARCHAR},
+      read_count = #{readCount,jdbcType=INTEGER},
+      addInfoTime = #{addinfotime,jdbcType=VARCHAR},
+      usercode = #{usercode,jdbcType=VARCHAR},
+      state = #{state,jdbcType=INTEGER},
+      speaker = #{speaker,jdbcType=VARCHAR},
+      user_code = #{userCode,jdbcType=VARCHAR}
+    where infoId = #{infoid,jdbcType=INTEGER}
+  </update>
+</mapper>

@@ -1,0 +1,437 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yihe.applet.api.mapper.YhUserBmiAppMapper">
+	<resultMap id="BaseResultMap" type="com.yihe.applet.api.domain.YhUserBmiApp">
+		<id column="U_Bmi_Id" jdbcType="INTEGER" property="uBmiId" />
+		<result column="U_Height" jdbcType="REAL" property="uHeight" />
+		<result column="U_Weight" jdbcType="REAL" property="uWeight" />
+		<result column="Entry_Time" jdbcType="VARCHAR" property="entryTime" />
+		<result column="Is_Del" jdbcType="INTEGER" property="isDel" />
+		<result column="E_User_Id" jdbcType="INTEGER" property="eUserId" />
+		<result column="Env" jdbcType="VARCHAR" property="env" />
+		<result column="Data_Source" jdbcType="VARCHAR" property="dataSource" />
+	</resultMap>
+	<sql id="Example_Where_Clause">
+		<where>
+			<foreach collection="oredCriteria" item="criteria" separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" prefixOverrides="and" suffix=")">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value} and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach close=")" collection="criterion.value" item="listItem"
+										open="(" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Update_By_Example_Where_Clause">
+		<where>
+			<foreach collection="example.oredCriteria" item="criteria"
+				separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" prefixOverrides="and" suffix=")">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value} and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach close=")" collection="criterion.value" item="listItem"
+										open="(" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Base_Column_List">
+		U_Bmi_Id, U_Height, U_Weight, Entry_Time, Is_Del, E_User_Id, Env, Data_Source
+	</sql>
+<select id="findBmiInfoAllByUsercode" resultMap="BaseResultMap">
+	select * from yh_user_bmi where   is_del=2 AND E_User_Id=#{usercode}
+	<if test="timetype==0">
+		AND Entry_Time &gt;=  #{strTime} AND Entry_Time &lt;= #{endTime}
+	</if>
+	<if test="timetype==1">
+		AND Entry_Time LIKE CONCAT('',#{strTime},'%')
+	</if>
+	<if test="timetype==2">
+		AND YEAR(Entry_Time) =#{strTime}
+	</if>
+
+</select>
+	<!--查询体温某年数据-->
+	<select id="findWeightByYear" resultMap="BaseResultMap">
+    SELECT * FROM yh_user_bmi WHERE  YEAR(Entry_Time) =#{time} AND is_del=2 AND E_User_Id=#{usercode} LIMIT #{page}, #{pagesize}
+  </select>
+	<!--查询体温某月记录-->
+	<select id="findWeightByMonth" resultMap="BaseResultMap">
+  SELECT * FROM yh_user_bmi WHERE Entry_Time LIKE CONCAT('',#{month},'%') AND is_del=2 AND E_User_Id=#{usercode}  LIMIT #{page}, #{pagesize}
+</select>
+	<!--查询体温某周数据-->
+	<select id="findWeightByWeek" resultMap="BaseResultMap">
+    SELECT * FROM yh_user_bmi WHERE   Entry_Time &gt;=  #{strTime} AND Entry_Time &lt;= #{endTime}  AND is_del=2 AND E_User_Id=#{usercode}  LIMIT #{page}, #{pagesize}
+  </select>
+
+
+	<!-- 查询当前用户全部数据 -->
+	<select id="findUserBmiByUserCodeAll" resultMap="BaseResultMap">
+	
+SELECT * FROM `yh_user_bmi` WHERE E_user_Id=#{usercode}  AND Is_Del=2 
+	</select>
+
+
+	<select id="findWeightTimeFenBuYear" resultType="java.lang.Integer">
+  SELECT COUNT(1) FROM (SELECT * FROM `yh_user_bmi` WHERE `E_User_Id`=#{usercode} AND YEAR(Entry_Time) =#{time} AND is_del=2 LIMIT #{page}) AS a
+WHERE 	 HOUR(a.Entry_Time)&gt;=5 AND HOUR(a.Entry_Time)&lt;8
+		UNION ALL
+		SELECT COUNT(1) FROM (SELECT * FROM `yh_user_bmi` WHERE `E_User_Id`=#{usercode} AND YEAR(Entry_Time) =#{time} AND is_del=2 LIMIT #{page}) AS a
+WHERE 	HOUR(a.Entry_Time)&gt;=8 AND HOUR(a.Entry_Time) &lt;12
+		UNION ALL
+		SELECT COUNT(1) FROM (SELECT * FROM `yh_user_bmi` WHERE `E_User_Id`=#{usercode} AND YEAR(Entry_Time) =#{time} AND is_del=2 LIMIT #{page}) AS a
+WHERE 	 HOUR(a.Entry_Time)&gt;=12 AND HOUR(a.Entry_Time) &lt;14
+		UNION ALL
+		SELECT COUNT(1) FROM (SELECT * FROM `yh_user_bmi` WHERE `E_User_Id`=#{usercode} AND YEAR(Entry_Time) =#{time} AND is_del=2 LIMIT #{page}) AS a
+WHERE 	 HOUR(a.Entry_Time) &gt;=14 AND HOUR(a.Entry_Time)&lt;18
+		UNION ALL
+		SELECT COUNT(1) FROM (SELECT * FROM `yh_user_bmi` WHERE `E_User_Id`=#{usercode} AND YEAR(Entry_Time) =#{time} AND is_del=2 LIMIT #{page}) AS a
+WHERE 	 HOUR(a.Entry_Time)&gt;=18 AND HOUR(a.Entry_Time)&lt;22
+		UNION ALL
+		SELECT COUNT(1) FROM (SELECT * FROM `yh_user_bmi` WHERE `E_User_Id`=#{usercode} AND YEAR(Entry_Time) =#{time} AND is_del=2 LIMIT #{page}) AS a
+WHERE 	 HOUR(a.Entry_Time)&gt;=22 AND HOUR(a.Entry_Time)&lt;24
+		UNION ALL
+		SELECT COUNT(1) FROM (SELECT * FROM `yh_user_bmi` WHERE `E_User_Id`=#{usercode} AND YEAR(Entry_Time) =#{time} AND is_del=2 LIMIT #{page}) AS a
+WHERE 	 HOUR(a.Entry_Time)&gt;=0 AND HOUR(a.Entry_Time)&lt;5
+ </select>
+
+	<select id="findWeightTimeFenBuMonth" resultType="java.lang.Integer">
+  SELECT COUNT(1) FROM (SELECT * FROM `yh_user_bmi` WHERE `E_User_Id`=#{usercode} AND Entry_Time LIKE CONCAT('',#{month},'%')  AND is_del=2 LIMIT #{page}) AS a
+WHERE 	 HOUR(a.Entry_Time)&gt;=5 AND HOUR(a.Entry_Time)&lt;8
+		UNION ALL
+		SELECT COUNT(1) FROM (SELECT * FROM `yh_user_bmi` WHERE `E_User_Id`=#{usercode} AND Entry_Time LIKE CONCAT('',#{month},'%')  AND is_del=2 LIMIT #{page}) AS a
+WHERE 	HOUR(a.Entry_Time)&gt;=8 AND HOUR(a.Entry_Time) &lt;12
+		UNION ALL
+		SELECT COUNT(1) FROM (SELECT * FROM `yh_user_bmi` WHERE `E_User_Id`=#{usercode} AND Entry_Time LIKE CONCAT('',#{month},'%')  AND is_del=2 LIMIT #{page}) AS a
+WHERE 	 HOUR(a.Entry_Time)&gt;=12 AND HOUR(a.Entry_Time) &lt;14
+		UNION ALL
+		SELECT COUNT(1) FROM (SELECT * FROM `yh_user_bmi` WHERE `E_User_Id`=#{usercode} AND Entry_Time LIKE CONCAT('',#{month},'%')  AND is_del=2 LIMIT #{page}) AS a
+WHERE 	 HOUR(a.Entry_Time) &gt;=14 AND HOUR(a.Entry_Time)&lt;18
+		UNION ALL
+		SELECT COUNT(1) FROM (SELECT * FROM `yh_user_bmi` WHERE `E_User_Id`=#{usercode} AND Entry_Time LIKE CONCAT('',#{month},'%')  AND is_del=2 LIMIT #{page}) AS a
+WHERE 	 HOUR(a.Entry_Time)&gt;=18 AND HOUR(a.Entry_Time)&lt;22
+		UNION ALL
+		SELECT COUNT(1) FROM (SELECT * FROM `yh_user_bmi` WHERE `E_User_Id`=#{usercode} AND Entry_Time LIKE CONCAT('',#{month},'%')  AND is_del=2 LIMIT #{page}) AS a
+WHERE 	 HOUR(a.Entry_Time)&gt;=22 AND HOUR(a.Entry_Time)&lt;24
+		UNION ALL
+		SELECT COUNT(1) FROM (SELECT * FROM `yh_user_bmi` WHERE `E_User_Id`=#{usercode} AND Entry_Time LIKE CONCAT('',#{month},'%')  AND is_del=2 LIMIT #{page}) AS a
+WHERE 	 HOUR(a.Entry_Time)&gt;=0 AND HOUR(a.Entry_Time)&lt;5
+ </select>
+
+	<select id="findWeightTimeFenBuWeek" resultType="java.lang.Integer">
+  SELECT COUNT(1) FROM (SELECT * FROM `yh_user_bmi` WHERE `E_User_Id`=#{usercode} AND  Entry_Time &gt;=  #{strTime} AND Entry_Time &lt;= #{endTime} AND is_del=2  LIMIT #{page}) AS a
+WHERE 	 HOUR(a.Entry_Time)&gt;=5 AND HOUR(a.Entry_Time)&lt;8
+		UNION ALL
+		SELECT COUNT(1) FROM (SELECT * FROM `yh_user_bmi` WHERE `E_User_Id`=#{usercode} AND Entry_Time &gt;=  #{strTime} AND Entry_Time &lt;= #{endTime} AND is_del=2  LIMIT #{page}) AS a
+WHERE 	HOUR(a.Entry_Time)&gt;=8 AND HOUR(a.Entry_Time) &lt;12
+		UNION ALL
+		SELECT COUNT(1) FROM (SELECT * FROM `yh_user_bmi` WHERE `E_User_Id`=#{usercode} AND Entry_Time &gt;=  #{strTime} AND Entry_Time &lt;= #{endTime} AND is_del=2  LIMIT #{page}) AS a
+WHERE 	 HOUR(a.Entry_Time)&gt;=12 AND HOUR(a.Entry_Time) &lt;14
+		UNION ALL
+		SELECT COUNT(1) FROM (SELECT * FROM `yh_user_bmi` WHERE `E_User_Id`=#{usercode} AND Entry_Time &gt;=  #{strTime} AND Entry_Time &lt;= #{endTime} AND is_del=2  LIMIT #{page}) AS a
+WHERE 	 HOUR(a.Entry_Time) &gt;=14 AND HOUR(a.Entry_Time)&lt;18
+		UNION ALL
+		SELECT COUNT(1) FROM (SELECT * FROM `yh_user_bmi` WHERE `E_User_Id`=#{usercode} AND Entry_Time &gt;=  #{strTime} AND Entry_Time &lt;= #{endTime} AND is_del=2  LIMIT #{page}) AS a
+WHERE 	 HOUR(a.Entry_Time)&gt;=18 AND HOUR(a.Entry_Time)&lt;22
+		UNION ALL
+		SELECT COUNT(1) FROM (SELECT * FROM `yh_user_bmi` WHERE `E_User_Id`=#{usercode} AND Entry_Time &gt;=  #{strTime} AND Entry_Time &lt;= #{endTime} AND is_del=2  LIMIT #{page}) AS a
+WHERE 	 HOUR(a.Entry_Time)&gt;=22 AND HOUR(a.Entry_Time)&lt;24
+		UNION ALL
+		SELECT COUNT(1) FROM (SELECT * FROM `yh_user_bmi` WHERE `E_User_Id`=#{usercode} AND Entry_Time &gt;=  #{strTime} AND Entry_Time &lt;= #{endTime} AND is_del=2  LIMIT #{page}) AS a
+WHERE 	 HOUR(a.Entry_Time)&gt;=0 AND HOUR(a.Entry_Time)&lt;5
+ </select>
+
+
+
+
+
+	 <select id="findtemperatureTimeFenBu" resultType="java.lang.Integer">
+  SELECT COUNT(1) FROM (SELECT * FROM `yh_user_bmi` WHERE `E_User_Id`=#{usercode} AND Is_Del=2 ORDER BY `Entry_Time` DESC LIMIT 7) AS a 
+WHERE 	 HOUR(a.Entry_Time)&gt;=5 AND HOUR(a.Entry_Time)&lt;8 
+		UNION ALL
+		SELECT COUNT(1) FROM (SELECT * FROM `yh_user_bmi` WHERE `E_User_Id`=#{usercode} AND Is_Del=2 ORDER BY `Entry_Time` DESC LIMIT 7) AS a 
+WHERE 	HOUR(a.Entry_Time)&gt;=8 AND HOUR(a.Entry_Time) &lt;12 
+		UNION ALL
+		SELECT COUNT(1) FROM (SELECT * FROM `yh_user_bmi` WHERE `E_User_Id`=#{usercode} AND Is_Del=2 ORDER BY `Entry_Time` DESC LIMIT 7) AS a 
+WHERE 	 HOUR(a.Entry_Time)&gt;=12 AND HOUR(a.Entry_Time) &lt;14 
+		UNION ALL
+		SELECT COUNT(1) FROM (SELECT * FROM `yh_user_bmi` WHERE `E_User_Id`=#{usercode} AND Is_Del=2 ORDER BY `Entry_Time` DESC LIMIT 7) AS a 
+WHERE 	 HOUR(a.Entry_Time) &gt;=14 AND HOUR(a.Entry_Time)&lt;18 
+		UNION ALL
+		SELECT COUNT(1) FROM (SELECT * FROM `yh_user_bmi` WHERE `E_User_Id`=#{usercode} AND Is_Del=2 ORDER BY `Entry_Time` DESC LIMIT 7) AS a 
+WHERE 	 HOUR(a.Entry_Time)&gt;=18 AND HOUR(a.Entry_Time)&lt;22 
+		UNION ALL
+		SELECT COUNT(1) FROM (SELECT * FROM `yh_user_bmi` WHERE `E_User_Id`=#{usercode} AND Is_Del=2 ORDER BY `Entry_Time` DESC LIMIT 7) AS a 
+WHERE 	 HOUR(a.Entry_Time)&gt;=22 AND HOUR(a.Entry_Time)&lt;24  
+		UNION ALL
+		SELECT COUNT(1) FROM (SELECT * FROM `yh_user_bmi` WHERE `E_User_Id`=#{usercode} AND Is_Del=2 ORDER BY `Entry_Time` DESC LIMIT 7) AS a 
+WHERE 	 HOUR(a.Entry_Time)&gt;=0 AND HOUR(a.Entry_Time)&lt;5  
+ </select>
+  
+	 <update id="updateByExampleSelective2">
+	 UPDATE 
+   `yh_user_bmi` 
+SET
+  
+  `Is_Del` = '1',
+  
+WHERE `U_Bmi_Id` =#{uBmiId}
+	 
+	 </update>
+	<select id="selectByPrimaryKeyNewest" parameterType="java.lang.String"
+		resultMap="BaseResultMap">
+		SELECT
+		<include refid="Base_Column_List" />
+		FROM `yh_user_bmi` WHERE Is_Del=2 AND E_User_Id=#{eid}
+		ORDER BY Entry_Time DESC LIMIT 1
+	</select>
+	<select id="selectByPrimaryKey" parameterType="java.lang.Integer"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from yh_user_bmi
+		where U_Bmi_Id = #{uBmiId,jdbcType=INTEGER}
+	</select>
+	<select id="selectByPrimaryKeyFindEntryTime" parameterType="java.lang.String"
+		resultType="java.lang.String">
+		select
+		Entry_Time
+		from yh_user_bmi
+		where E_User_Id = #{E_User_Id,jdbcType=INTEGER} and  Is_Del=2
+	</select>
+	
+	<select id="selectByPrimaryKeyFindEntryTimeAnduserid"   resultMap="BaseResultMap">
+   SELECT 
+	<include refid="Base_Column_List" />
+	FROM `yh_user_bmi` WHERE Entry_Time LIKE concat(concat('',#{time}),'%') AND E_User_Id=#{usercode} and Is_Del=2 order by Entry_Time desc
+    
+  </select>
+ 
+	<select id="selectByPrimaryKeyBYeid"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from yh_user_bmi
+		where E_User_Id=#{usercode} AND Is_Del=2
+		<if test="timetype==0">
+			AND  Entry_Time &gt;=  #{strTime} AND Entry_Time &lt;= #{endTime}
+		</if>
+		<if test="timetype==1">
+			AND  Entry_Time LIKE CONCAT('',#{strTime},'%')
+		</if>
+		<if test="timetype==2">
+			AND YEAR(Entry_Time) =#{strTime}
+		</if>
+
+		LIMIT #{page}
+
+	</select>
+
+	<select id="selectByPrimaryKeyByUserIdLimit7" parameterType="java.lang.String"
+		resultMap="BaseResultMap">
+		SELECT a.* FROM (SELECT * FROM `yh_user_bmi` WHERE `E_User_Id`=#{eid} AND Is_Del=2 ORDER BY `Entry_Time` DESC LIMIT 7) AS a ORDER BY a.Entry_Time
+ 
+	</select>
+	<select id="selectByPrimaryKeyByMonthInfo" resultMap="BaseResultMap">
+		SELECT
+		*
+		FROM
+		yh_user_bmi t
+		WHERE E_User_Id=#{eid} AND Is_Del=2 AND DATE_FORMAT(#{shijian},
+		'%Y%m')=DATE_FORMAT(t.Entry_Time, '%Y%m')
+	</select>
+
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+		delete from yh_user_bmi
+		where U_Bmi_Id = #{uBmiId,jdbcType=INTEGER}
+	</delete>
+	 
+	<insert id="insert" parameterType="com.yihe.applet.api.domain.YhUserBmiApp">
+		<selectKey keyProperty="uBmiId" order="AFTER" resultType="java.lang.Integer">
+			SELECT LAST_INSERT_ID()
+		</selectKey>
+		insert into yh_user_bmi (U_Height, U_Weight, Entry_Time,
+		Is_Del, E_User_Id, Env,
+		Data_Source)
+		values (#{uHeight,jdbcType=REAL}, #{uWeight,jdbcType=REAL},
+		#{entryTime,jdbcType=VARCHAR},
+		#{isDel,jdbcType=INTEGER}, #{eUserId,jdbcType=INTEGER}, #{env,jdbcType=VARCHAR},
+		#{dataSource,jdbcType=VARCHAR})
+	</insert>
+	<insert id="insertSelective" parameterType="com.yihe.applet.api.domain.YhUserBmiApp">
+		<selectKey keyProperty="uBmiId" order="AFTER" resultType="java.lang.Integer">
+			SELECT LAST_INSERT_ID()
+		</selectKey>
+		insert into yh_user_bmi
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="uHeight != null">
+				U_Height,
+			</if>
+			<if test="uWeight != null">
+				U_Weight,
+			</if>
+			<if test="entryTime != null">
+				Entry_Time,
+			</if>
+			<if test="isDel != null">
+				Is_Del,
+			</if>
+			<if test="eUserId != null">
+				E_User_Id,
+			</if>
+			<if test="env != null">
+				Env,
+			</if>
+			<if test="dataSource != null">
+				Data_Source,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="uHeight != null">
+				#{uHeight,jdbcType=REAL},
+			</if>
+			<if test="uWeight != null">
+				#{uWeight,jdbcType=REAL},
+			</if>
+			<if test="entryTime != null">
+				#{entryTime,jdbcType=VARCHAR},
+			</if>
+			<if test="isDel != null">
+				#{isDel,jdbcType=INTEGER},
+			</if>
+			<if test="eUserId != null">
+				#{eUserId,jdbcType=INTEGER},
+			</if>
+			<if test="env != null">
+				#{env,jdbcType=VARCHAR},
+			</if>
+			<if test="dataSource != null">
+				#{dataSource,jdbcType=VARCHAR},
+			</if>
+		</trim>
+	</insert>
+	 
+	<update id="updateByExampleSelective" parameterType="map">
+		update yh_user_bmi
+		<set>
+			<if test="record.uBmiId != null">
+				U_Bmi_Id = #{record.uBmiId,jdbcType=INTEGER},
+			</if>
+			<if test="record.uHeight != null">
+				U_Height = #{record.uHeight,jdbcType=REAL},
+			</if>
+			<if test="record.uWeight != null">
+				U_Weight = #{record.uWeight,jdbcType=REAL},
+			</if>
+			<if test="record.entryTime != null">
+				Entry_Time = #{record.entryTime,jdbcType=VARCHAR},
+			</if>
+			<if test="record.isDel != null">
+				Is_Del = #{record.isDel,jdbcType=INTEGER},
+			</if>
+			<if test="record.eUserId != null">
+				E_User_Id = #{record.eUserId,jdbcType=INTEGER},
+			</if>
+			<if test="record.env != null">
+				Env = #{record.env,jdbcType=VARCHAR},
+			</if>
+			<if test="record.dataSource != null">
+				Data_Source = #{record.dataSource,jdbcType=VARCHAR},
+			</if>
+		</set>
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByExample" parameterType="map">
+		update yh_user_bmi
+		set U_Bmi_Id = #{record.uBmiId,jdbcType=INTEGER},
+		U_Height = #{record.uHeight,jdbcType=REAL},
+		U_Weight = #{record.uWeight,jdbcType=REAL},
+		Entry_Time = #{record.entryTime,jdbcType=VARCHAR},
+		Is_Del = #{record.isDel,jdbcType=INTEGER},
+		E_User_Id = #{record.eUserId,jdbcType=INTEGER},
+		Env = #{record.env,jdbcType=VARCHAR},
+		Data_Source = #{record.dataSource,jdbcType=VARCHAR}
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByPrimaryKeySelective" parameterType="com.yihe.applet.api.domain.YhUserBmiApp">
+		update yh_user_bmi
+		<set>
+			<if test="uHeight != null">
+				U_Height = #{uHeight,jdbcType=REAL},
+			</if>
+			<if test="uWeight != null">
+				U_Weight = #{uWeight,jdbcType=REAL},
+			</if>
+			<if test="entryTime != null">
+				Entry_Time = #{entryTime,jdbcType=VARCHAR},
+			</if>
+			<if test="isDel != null">
+				Is_Del = #{isDel,jdbcType=INTEGER},
+			</if>
+			<if test="eUserId != null">
+				E_User_Id = #{eUserId,jdbcType=INTEGER},
+			</if>
+			<if test="env != null">
+				Env = #{env,jdbcType=VARCHAR},
+			</if>
+			<if test="dataSource != null">
+				Data_Source = #{dataSource,jdbcType=VARCHAR},
+			</if>
+		</set>
+		where U_Bmi_Id = #{uBmiId,jdbcType=INTEGER}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.yihe.applet.api.domain.YhUserBmiApp">
+		update yh_user_bmi
+		set U_Height = #{uHeight,jdbcType=REAL},
+		U_Weight = #{uWeight,jdbcType=REAL},
+		Entry_Time = #{entryTime,jdbcType=VARCHAR},
+		Is_Del = #{isDel,jdbcType=INTEGER},
+		E_User_Id = #{eUserId,jdbcType=INTEGER},
+		Env = #{env,jdbcType=VARCHAR},
+		Data_Source = #{dataSource,jdbcType=VARCHAR}
+		where U_Bmi_Id = #{uBmiId,jdbcType=INTEGER}
+	</update>
+</mapper>

@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, maximum-scale=1">
+<title>附件上传</title>
+<link rel="stylesheet" th:href="@{/assets/libs/layui/css/layui.css}" />
+<link rel="stylesheet" th:href="@{/assets/module/admin.css}" />
+<style type="text/css">
+.theme-colorful{
+background-color: white;
+}
+
+</style>
+</head>
+<body style="margin: 20px;">
+	<div>
+		<span style="color: rgba(42, 130, 228, 1);font-weight: bold;font-size: 22px;" id="file">附件管理</span>
+		<span>/</span><span id="wenjian"> </span>
+	</div>
+
+		<div style="text-align: right;margin-top: -27px;">
+			<button type="button" class="layui-btn layui-btn-radius layui-btn-normal" id="test1">
+  				<i class="layui-icon">&#xe67c;</i>上传文件
+			</button>
+		</div>
+		
+		  
+<table id="demo" lay-filter="demo"></table>
+
+
+</body>	
+
+<script type="text/html" id="tableBar">
+ 		<a href="#" style="color:#36A4FF" lay-event="delete">删除</a>
+ 		<a href="#" style="color:#36A4FF" lay-event="updateName">重命名</a>
+<a href="" class="links" download="" style="color:#36A4FF"  lay-event="download">预览</a>
+	
+	</script>
+
+	<form class="layui-form" id="addfolder" lay-filter="fileForm" style="display: none;">
+	
+			  <div class="layui-form-item" style="display: block;margin-top: 38px;">
+	  			  <label class="layui-form-label">名称</label>
+	    			<div class="layui-input-inline" style="width: 250px;">
+	     				 <input type="text" name="fileName" lay-verify="fileName"  lay-reqtext="不能为空"  placeholder="请输入名称，最大限制10个字符" autocomplete="off" class="layui-input">
+	    			</div>
+	 		 </div>
+	 		 
+	 		 <div class="layui-form-item">
+						<div class="layui-input-block">
+							<button style="width: 100px; margin-left: 14px;" class="layui-btn layui-btn-normal"
+								lay-submit='' lay-filter="fileSubmit" type="button">保存</button>
+							<button style="width: 100px;" type="reset" id="cancel"  class="layui-btn layui-btn-primary">取消</button>
+						</div>
+				</div>
+	</form>
+<script type="text/javascript" th:src="@{/assets/libs/layui/layui.js}"></script>
+<script type="text/javascript" th:src="@{/assets/js/common.js}"></script>
+<script type="text/javascript" th:src="@{/assets/js/jquery-1.11.1.js}"></script>
+<script th:src="@{/assets/libs/echarts/echarts.min.js}"></script>
+<script type="text/javascript" th:inline="javascript">
+	var userCode = [[${userCode}]]; 
+	var fileParentFolder=[[${folderId}]];
+	var filesUrl = "";
+	console.log("用户"+userCode+"ID"+fileParentFolder)
+	layui.use([ 'layer', 'form', 'laydate', 'notice','table','upload' ],function() {
+		var $ = layui.jquery;
+		var layer = layui.layer;
+		var form = layui.form;
+		var laydate = layui.laydate;
+		var notice = layui.notice;
+		var table = layui.table;
+		var upload = layui.upload;
+		
+		$.ajax({
+    		url: '/YhUserFolderWeb/selectFolderNameByparam',
+    		data:{folderId:fileParentFolder},
+    		success: function (data) {
+				console.log(data)
+				if(data.code==20000){
+					document.getElementById("wenjian").innerText = data.data.folderName;
+						
+					
+				}
+			}
+    	})
+		
+		$("#file").on('click',function(){
+			 window.location.href="/manage/accessory/upload?userCode="+userCode;
+		})
+		
+		$("#cancel").on('click',function(){
+			layer.closeAll();
+		})
+		
+		
+			upload.render({
+				  elem: '#test1' 
+				  ,url: '/YhUserFile/upload' //必填项
+				  ,size:104857600
+				  ,accept:'file'
+				  ,data: {fileParentFolder:fileParentFolder,userCode:userCode} //可选项。额外的参数，如：{id: 123, abc: 'xxx'}
+				   ,before: function () {
+					               layer.msg('上传中', {
+					                   icon: 16,
+					                  shade: 0.01
+					               }); //上传loading
+					           }
+				  ,done: function(res,index,upload){
+					  console.log("上传返回",res)
+					  filesUrl = res.files;
+					  //上传完毕回调
+		               layer.close(layer.index); //关闭loading
+		               if (parseInt(res.code) === 0) {
+		            	   parent.layer.msg("上传成功！");
+		          		 table.reload('YhUserFolderTab',{
+		     		    	url:'/YhUserFile/UserFilePage?userCode='+userCode+'&fileParentFolder='+fileParentFolder   //数据接口
+		     			}) 
+		                   location.reload();
+		                   
+		              } 
+		          }
+				    	
+				    
+				  ,error : function(index,upload){
+					  
+				  }
+			});      
+		
+		
+		function Modal(fileId){
+			//页面层
+			
+			layer.open({
+			  title:'重命名',
+			  type: 1,
+			  skin: 'layui-layer-rim', //加上边框
+			  area: ['420px', '200px'], //宽高
+			  content: $("#addfolder"),
+			});
+		}
+		
+			
+		 
+		  //第一个实例
+			var YhUserFolderTab = table.render({
+			  id : 'YhUserFolderTab',
+		    elem: '#demo'
+		    ,url: '/YhUserFile/UserFilePage?userCode='+userCode+'&fileParentFolder='+fileParentFolder  //数据接口
+		     ,method : 'get'
+		    ,where : {} // 你额外要携带数据，以键值对的方式存入
+		    ,page: true //开启分页
+		    ,limit : 20// 每页显示的条数
+			,limits : [ 5, 10, 20, 50, 100 ] // 每页条数的选择项
+			,loading : true // 是否显示加载条(切换分页的时候显示）
+			,cellMinWidth : 80 // 全局定义所有常规单元格的最小宽度（默认：60）
+			 ,sort:true
+		    ,cols: [ //表头
+		    	[
+		        {field:'fileName', title:'名称', align: 'center'}
+		        ,{field:'fileSize', title:'大小', align: 'center'}
+		        ,{field:'fileUrl', title:'地址', align: 'center', hide:true}
+		        ,{field: 'fileCreateDate', title: '修改时间', align: 'center'}
+		        
+		        ,{ title: '操作', toolbar : '#tableBar',align: 'center', width:310}
+		        
+		      ]
+		      ],
+		      done: function(res, curr, count){
+			        if(count > 20) {
+			        	$(".layui-table-page").show();
+			        }else {
+			        	$(".layui-table-page").hide();
+			        }
+			      }
+		  });
+		    
+		    
+		  table.on('tool(demo)', function(obj) { //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
+			  var data = obj.data;
+			  fileId = obj.data.fileId;
+			  fileUrl = obj.data.fileUrl;
+			  fileName = obj.data.fileName;
+	           form.val('fileForm', {
+	        	     'fileName':fileName
+	        	    });
+	        	  
+	          console.log(fileId + fileName + fileUrl)
+	            var layEvent = obj.event;
+	            if (layEvent === 'delete') { //删除
+	            	layer.confirm('是否确认删除？', {
+	            		  btn: [ '确认', '取消'] //可以无限个按钮
+	            		  ,btn3: function(index, layero){
+	            		    //按钮【按钮三】的回调
+	            		  }
+	            		},function(index){
+	            		  //按钮【按钮二】的回调
+	            		$.ajax({
+	            		url: '/YhUserFile/deletefile',
+	            		data:{fileId:fileId},
+	            		success: function (data) {
+							console.log(data,"删除")
+							if(data.code==20000){
+								parent.layer.msg('操作成功');
+								layer.closeAll();
+								 location.reload();
+							}else{
+								parent.layer.msg('操作失败');
+							}
+						}
+	            	})
+	            });
+	            	
+	           
+	         }
+	           if(layEvent === 'updateName'){
+	        	   Modal(fileId);
+	           }
+	           if( layEvent ==='download'){
+	        	   
+	        	   //downloadIamge(fileUrl, fileName);
+	        	   /* window.location.href='/YhUserFile/downloadFile2?fileUrl='+fileUrl; */
+	        	   $('.links').attr('href',fileUrl);
+	        	   $('.links').attr('download',fileName); 
+	        	  // window.open(fileUrl);
+	        	  // window.location.href=fileUrl
+	        	   /* var alink = document.createElement("a");
+	        	   alink.href = fileUrl;
+	        	   alink.download = fileName;
+	        	   alink.click(); */
+	        	  
+	        	        //var img = document.getElementById('girlImg'); // 获取要下载的图片
+	        	       /*  var url = fileUrl;                            // 获取图片地址
+	        	        var a = document.createElement('a');          // 创建一个a节点插入的document
+	        	        var event = new MouseEvent('click')           // 模拟鼠标click点击事件
+	        	        a.download = 'beautifulGirl'                  // 设置a节点的download属性值
+	        	        a.href = url;                                 // 将图片的src赋值给a节点的href
+	        	        a.dispatchEvent(event)           */              // 触发鼠标点击事件
+	        	  
+
+	        	
+	        	  /*  window.location.href = fileUrl;
+	        	     var request = new XMLHttpRequest();
+	               request.responseType = "blob";
+	               request.open("GET", fileUrl);
+	               debugger
+	               request.onload = function() {
+	            	   debugger
+	                   var url = window.URL.createObjectURL(this.response);
+	                   var a = document.createElement("a");
+	                   document.body.appendChild(a);
+	                   a.href = url;
+	                   a.download = fileName
+	                   a.click();
+	               }
+	               request.send();   */
+	        	   //downloadIamge(); debugger
+	        	   //document.getElementById("links").href="111111111111111";
+	           }
+	           if( layEvent ==='lookOver'){
+	        		
+	           }
+	     });
+		  
+		  function downloadImgByBase64(url) {
+			    var img = new Image()
+			    img.onload = function() {
+			        var canvas = document.createElement('canvas')
+			        canvas.width = img.width
+			        canvas.height = img.height
+			        var ctx = canvas.getContext('2d')
+			        // 将img中的内容画到画布上
+			        ctx.drawImage(img, 0, 0, canvas.width, canvas.height)
+			        // 将画布内容转换为base64
+			        var base64 = canvas.toDataURL()
+			        // 创建a链接
+			        var a = document.createElement('a')
+			        a.href = base64
+			        a.download = ''
+			        // 触发a链接点击事件，浏览器开始下载文件
+			        a.click()
+			    }
+			    img.src = url
+			    // 必须设置，否则canvas中的内容无法转换为base64
+			    img.setAttribute('crossOrigin', 'Anonymous')
+			}
+
+		  function downloadIamge(imgsrc, name) {
+			  //下载图片地址和图片名
+			  let image = new Image();
+			  // 解决跨域 Canvas 污染问题
+			  image.setAttribute("crossOrigin", "anonymous");
+			  image.onload = function() {
+			    let canvas = document.createElement("canvas");
+			    canvas.width = image.width;
+			    canvas.height = image.height;
+			    let context = canvas.getContext("2d");
+			    context.drawImage(image, 0, 0, image.width, image.height);
+			    let url = canvas.toDataURL("image/png"); //得到图片的base64编码数据
+			    let a = document.createElement("a"); // 生成一个a元素
+			    let event = new MouseEvent("click"); // 创建一个单击事件
+			    a.download = name || "photo"; // 设置图片名称
+			    a.href = url; // 将生成的URL设置为a.href属性
+			    a.dispatchEvent(event); // 触发a的单击事件
+			  };
+			  image.src = imgsrc;
+			}
+		
+		  
+		/*   function downloadImage(path,imgName) {
+	            var _OBJECT_URL;
+	            var request = new XMLHttpRequest();
+	            request.addEventListener('readystatechange', function (e) {
+	                if (request.readyState == 4) {
+	                    _OBJECT_URL = URL.createObjectURL(request.response);
+	                    var $a = $("<a></a>").attr("href", _OBJECT_URL).attr("download", imgName);
+	                    $a[0].click();
+	                }
+	            });
+	            
+	            request.responseType = 'blob';
+	            request.open('get', path);
+	            request.send();
+	        } */
+			 
+		
+		  
+
+		  
+		//监听提交
+		form.on('submit(fileSubmit)', function (dataYh) {
+			var fileName = $("input[name=fileName]").val();
+			
+			console.log("输入框的值"+fileName)
+			$.ajax({
+				type: 'GET',
+				url: '/YhUserFile/selectFileName',
+				 async: false,
+				data: {
+					userCode: userCode,
+					fileName: fileName
+				},
+				success: function (data) {
+					console.log("后台返回的对象：", data)
+					//debugger
+					if (data.data != null) {
+							layer.msg('文件夹已存在');
+							return 
+					}
+					dataYh.field.userCode = userCode;
+					dataYh.field.fileId = fileId;
+					console.log(JSON.stringify(dataYh.field))
+				 	$.ajax({
+						type: 'post',
+						url: '/YhUserFile/updateFileName',
+						data: dataYh.field,
+						success: function (data) {
+							console.log(data,"fhui")
+							if(data.code==20000){
+								parent.layer.msg('操作成功');
+								layer.closeAll();
+								 location.reload();
+							}else{
+								parent.layer.msg('操作失败');
+							}
+						}
+
+					});  
+				}
+
+			});
+			return false;
+		});
+		 form.verify({
+			 fileName: function(value){
+				 
+				 var userName2 = $("input[name=fileName]").val();
+		    	    if (userName2.indexOf(" ") == -1) {
+		    	       // alert("没有空格");
+		    	    } else {
+		    	    	 return '文件名存在非法字符';
+		    	    }
+				 
+				 console.log(value+"值")
+				 var name = 0;
+				  for(var i = 0; i<value.length;i++){
+					  if (escape(value[i]).indexOf("%u")!=-1) {
+						  name = name + 2;
+					  }else{
+						  name = name + 1;
+					  }
+				  }
+				 if(name<=0){
+					 return '不能为空';
+				  }else if(name>10){
+					  return '最大限制10个字符'; 
+				  } 
+			 },
+			 
+		 })
+
+});
+</script>

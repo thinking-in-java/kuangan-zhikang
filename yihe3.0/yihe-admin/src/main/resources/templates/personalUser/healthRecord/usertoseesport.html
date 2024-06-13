@@ -1,0 +1,1210 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>用户查看运动管理</title>
+   <link rel="stylesheet"  th:href="@{/assets/libs/layui/css/layui.css}" />
+    <link rel="stylesheet"  th:href="@{/assets/module/admin.css}"  />
+    <style type="text/css">
+.layui-elem-quote {
+    margin-bottom: 10px;
+    padding: 9px;
+    line-height: 3px;
+    border-left: 5px solid #009688;
+    border-radius: 0 2px 2px 0;
+    background-color: white;
+    margin-top: 20px;
+    float: left;
+    margin-left: 20px;
+}
+
+.layui-card {
+    margin-bottom: 15px;
+    border-radius: 2px;
+    background-color: #fff;
+    box-shadow: 0 0px 0px 0 rgba(0,0,0,.05);
+}
+.yishiname {
+    display: inline-block;
+    margin-left: 20px;
+}	
+li {
+    margin-top: 10px;
+}
+</style>
+</head>
+<body style="margin: 7px;">
+ <!-- 页面加载loading -->
+<div class="page-loading">
+    <div class="ball-loader">
+        <span></span><span></span><span></span><span></span>
+    </div>
+</div>
+
+
+
+
+
+
+<div class="layui-row"  style="padding: 0px;background-color: white;">
+			<div class="layui-card">
+			<div class="layui-tab layui-tab-brief" lay-filter="docDemoTabBrief">
+			  <ul class="layui-tab-title">
+			  	
+			    <li th:if="${type=='1'}"  class="layui-this">推荐课程</li>
+			     <li th:if="${type!='1'}">推荐课程</li>
+			    <li th:if="${type=='2'}"   class="layui-this" onclick="solo()">运动日记</li>
+			    <li th:if="${type!='2'}" onclick="solo()">运动日记</li>
+			    <li th:if="${type=='3'}"   class="layui-this">运动分析报告</li>
+			     <li th:if="${type!='3'}"  >运动分析报告</li>
+			     <!--<li>商品管理</li>
+			    <li>订单管理</li> -->
+			  </ul>
+			  <div class="layui-tab-content">
+			  <!-- 内容1 -->
+			    <div class="layui-tab-item" th:classappend="${type=='1'} ? 'layui-show' : ''">
+			    
+		    <div class="layui-card">
+		        <div class="layui-card-body">
+		            <div class="layui-form toolbar">
+		                <div class="layui-form-item">
+		                 运动频率：
+					  <div class="layui-inline" style="    margin-top: 10px;">
+					    	<span id="week"></span>
+					  </div>
+		                    <div class="layui-inline" style="float: right;">
+		                      
+		                        
+		                        <button id="frontpage"
+											style="line-height: 32px; width: 92px; height: 32px; float: right; margin-right: 16px; text-align: center; margin-top: 5px; background-color: #2d8cf0; color: #fff;"
+											class="layui-btn layui-btn-primary">更换套餐</button>
+											<button id="frequency"
+											style="line-height: 32px; width: 92px; height: 32px; float: right; margin-right: 16px; text-align: center; margin-top: 5px; background-color: #fff; color: #2d8cf0;"
+											class="layui-btn layui-btn-primary">更换频率</button>
+											
+		                    </div>
+		                </div>
+		            </div>
+		            
+						<table id="LAY_table_user" lay-filter="demo"></table>
+		        </div>
+		    </div>
+			    
+			    
+			    </div>
+			    <!-- 内容2 -->
+			    <div class="layui-tab-item" th:classappend="${type=='2'} ? 'layui-show' : ''">
+			    
+			    <div class="demoTable">
+					  日期：
+					  <div class="layui-inline">
+					    <input type="text" class="layui-input" id="test6" placeholder=" - ">
+					  </div>
+					  
+					  运动达标：
+					     <div class="layui-inline">
+					     <form class="layui-form">
+					   <select name="reportLevel" id="standard" 	 lay-search="">
+				          <option value="">全部</option>
+				          <option value="1">是</option>
+				          <option value="2">否</option>
+				        </select>
+				        </form>
+					  </div>
+					  
+					  <button class="layui-btn" data-type="reload" onclick="solo()"><i class="layui-icon"></i>搜索</button>
+					  <button class="layui-btn layui-btn-primary" id="btnempty" lay-submit="" lay-filter="reset">清除</button>
+					</div>
+					
+					<div style="width: 100%;">
+						<div style="width: 40%;float: left">
+				   		<table class="layui-hide" id="test" lay-filter="test"></table>
+				   		</div>
+			   			<div style="width: 53%;float: left;margin-left: 3%;" id="table">
+			   				
+			   				<!--  -->
+			   			
+			   				<table class="layui-table" lay-skin="line">
+							  <thead>
+							    <tr>
+							      <th>日记情况</th>
+							    </tr> 
+							  </thead>
+							  <tbody>
+							    <tr>
+							      <td align="center"><div style="width:100%;height:280px;" id="chartmain"></div></td>
+							    </tr>
+							  </tbody>
+							</table>   
+         
+			   			
+			   			</div>
+			    	</div>
+			    	
+			    	
+			    	
+			    	<table class="layui-table" lay-skin="line" id="journal">
+				  <colgroup>
+				    <col width="150">
+				    <col width="150">
+				    <col width="200">
+				    <col>
+				  </colgroup>
+				  <thead>
+				    <tr>
+				      <th>运动日记分析 <span id="ctime"></span></th>
+				    </tr> 
+				  </thead>
+				  <tbody>
+				    <tr>
+				      <td>
+				      <div style="width:100%">
+				      		<div style="width:20%;float: left" id="chartmain1width">
+						      <div style="height:400px;" id="chartmain1"></div>
+						    </div>
+					      	<div style="width:40%;float: left" id="chartmain2width">
+						      <div style="height:300px;" id="chartmain2"></div>
+						      
+						      
+						      <div class="layui-row">
+							    <div class="layui-col-xs6" style="text-align: center;">
+							      <div class="grid-demo grid-demo-bg1"> <span class="layui-badge-dot" style="background-color:rgba(255, 211, 166, 1);margin-right: 10px;"></span>无氧运动</div>
+							    </div>
+							    <div class="layui-col-xs6" style="text-align: center;">
+							      <div class="grid-demo" id="anaerobicpercent"></div>
+							    </div>
+							  </div>
+							  <hr style="margin-left: 20px;margin-right: 20px;">
+							  
+							  <div class="layui-row">
+							    <div class="layui-col-xs6" style="text-align: center;">
+							      <div class="grid-demo grid-demo-bg1"><span class="layui-badge-dot" style="background-color:rgba(253, 159, 154, 1);margin-right: 10px;"></span>有氧运动</div>
+							    </div>
+							    <div class="layui-col-xs6" style="text-align: center;">
+							      <div class="grid-demo" id="aerobicpercent"></div>
+							    </div>
+							  </div>
+							  <hr style="margin-left: 20px;margin-right: 20px;">
+							  
+							  <div class="layui-row">
+							    <div class="layui-col-xs6" style="text-align: center;">
+							      <div class="grid-demo grid-demo-bg1"><span class="layui-badge-dot" style="background-color:rgba(176, 178, 255, 1);margin-right: 10px;"></span>柔韧运动</div>
+							    </div>
+							    <div class="layui-col-xs6" style="text-align: center;">
+							      <div class="grid-demo" id="pliablepercent"></div>
+							    </div>
+							  </div>
+							  <hr style="margin-left: 20px;margin-right: 20px;">
+							  
+							  <div class="layui-row">
+							    <div class="layui-col-xs6" style="text-align: center;">
+							      <div class="grid-demo grid-demo-bg1"><span class="layui-badge-dot" style="background-color:rgba(253, 214, 81, 1);margin-right: 10px;"></span>关节活动</div>
+							    </div>
+							    <div class="layui-col-xs6" style="text-align: center;">
+							      <div class="grid-demo" id="arthrosispercent"></div>
+							    </div>
+							  </div>
+							  
+						      
+						    </div>
+					      	<div style="width:40%;float: left" id="chartmain3width">
+					      		<div style="height:300px;" id="chartmain3"></div>
+					      		
+					      		<div class="layui-row">
+							    <div class="layui-col-xs6" style="text-align: center;">
+							      <div class="grid-demo grid-demo-bg1"> <span class="layui-badge-dot" style="background-color:rgba(38, 165, 246, 1);margin-right: 10px;"></span>步行</div>
+							    </div>
+							    <div class="layui-col-xs6" style="text-align: center;">
+							      <div class="grid-demo" id="walkpercent"></div>
+							    </div>
+							  </div>
+							  <hr style="margin-left: 20px;margin-right: 20px;">
+							  
+							  <div class="layui-row">
+							    <div class="layui-col-xs6" style="text-align: center;">
+							      <div class="grid-demo grid-demo-bg1"><span class="layui-badge-dot" style="background-color:rgba(22, 209, 164, 1);margin-right: 10px;"></span>运动计划</div>
+							    </div>
+							    <div class="layui-col-xs6" style="text-align: center;">
+							      <div class="grid-demo" id="recommendpercent"></div>
+							    </div>
+							  </div>
+							  <hr style="margin-left: 20px;margin-right: 20px;">
+							  
+							  <div class="layui-row">
+							    <div class="layui-col-xs6" style="text-align: center;">
+							      <div class="grid-demo grid-demo-bg1"><span class="layui-badge-dot" style="background-color:rgba(255, 163, 0, 1);margin-right: 10px;"></span>精品课程</div>
+							    </div>
+							    <div class="layui-col-xs6" style="text-align: center;">
+							      <div class="grid-demo" id="boutiquepercent"></div>
+							    </div>
+							  </div>
+							  <hr style="margin-left: 20px;margin-right: 20px;">
+							  
+							  <div class="layui-row">
+							    <div class="layui-col-xs6" style="text-align: center;">
+							      <div class="grid-demo grid-demo-bg1"><span class="layui-badge-dot" style="background-color:rgba(255, 203, 5, 1);margin-right: 10px;"></span>其它运动</div>
+							    </div>
+							    <div class="layui-col-xs6" style="text-align: center;">
+							      <div class="grid-demo" id="restspercent"></div>
+							    </div>
+							  </div>
+							  
+							  
+					    	</div>  
+					    </div>
+				      </td>
+				    </tr>
+				    <tr>
+				      <td>
+				      		 <div id="scheme">
+		   						
+		   					</div>
+				      </td>
+				    </tr>
+				   
+				  </tbody>
+				</table>   
+				    
+    
+			    
+			    </div>
+			    <div class="layui-tab-item" th:classappend="${type=='3'} ? 'layui-show' : ''">
+			    		
+			    	<table id="analyze" lay-filter="demonalyze"></table>
+			    </div>
+			  </div>
+			</div> 
+		</div>
+	</div>
+
+</body>
+<script type="text/javascript" th:src="@{/assets/libs/layui/layui.js}"></script>
+<script type="text/javascript" th:src="@{/assets/js/common.js}"></script>
+<script type="text/javascript" th:src="@{/assets/js/jquery-1.11.1.js}"></script>
+<script th:src="@{/assets/libs/echarts/echarts.min.js}"></script>
+<script th:src="@{/assets/libs/echarts/echarts-liquidfill.min.js}"></script>
+<script type="text/html" id="barDemo">
+ {{# if(d.oneself == 1) { }}
+ --
+{{# } else { }}
+   <a href="#" lay-event="edit"><font color="#36A4FF">查看</font></a>
+{{# } }}
+</script>
+
+<script type="text/html" id="barDemo1">
+    <a href="#" lay-event="edit"><font color="#36A4FF">查看</font></a>
+</script>
+
+
+<!-- 表单弹窗运动频率 -->
+<script type="text/html" id="sportfrequency">
+<form id="express"  class="layui-form">
+<input id="period" name="period" type="hidden" value="">
+
+<label class="layui-form-label" style='width: 90px;'><span  onclick='checkAll()'>全选</span> &nbsp; | &nbsp; <span onclick='SelectionAll()'>反选</span></label>
+
+
+				<div class="layui-form-item">
+			    <div class="layui-inline">
+				   <div class="layui-input-block">
+				   <div class="layui-row" style="margin-left: -89px;">
+				      <input type="checkbox" name="like1" id="week1" value="一"  lay-filter="week" title="周一"  lay-skin='primary' >
+				      <input type="checkbox" name="like1"  id="week2" value="二" lay-filter="week" title="周二"  lay-skin='primary' >
+				       <input type="checkbox" name="like1" id="week3" value="三" lay-filter="week" title="周三"  lay-skin='primary' >
+				      <input type="checkbox" name="like1" id="week4" value="四" lay-filter="week" title="周四"  lay-skin='primary' >
+				       <input type="checkbox" name="like1" id="week5" value="五"   lay-filter="week" title="周五"  lay-skin='primary' >
+				      <input type="checkbox" name="like1" id="week6" value="六" lay-filter="week" title="周六"  lay-skin='primary' >
+				       <input type="checkbox" name="like1" id="week7" value="日" lay-filter="week" title="周日"  lay-skin='primary'>
+				   	</div>
+				   </div>
+			    </div>
+			  </div>	
+
+
+ <div class="layui-form-item text-right" style="    text-align: center;    padding-top: 10px;">
+            <button class="layui-btn layui-btn-primary" type="button" ew-event="closePageDialog">取消</button>
+            <button class="layui-btn" lay-filter="changeFrequency" lay-submit>保存</button>
+        </div>
+ </form>
+    
+</script>
+
+
+
+<!-- 表单弹窗 -->
+<script type="text/html" id="toutiao">
+
+
+
+<div class='layui-inline' style='margin-top:14px;float:left '><label class='layui-form-label w-auto'>课程名称：</label><div class='layui-input-inline mr0'><input id='setmealMame' style='width: 160px;' class='layui-input' placeholder='请输入课程名称'/></div></div>
+<input id='guishujishu' type='hidden' value=''>
+      <button id='selectyishi' style='margin-top:14px;margin-left:10px;background-color: #5a9ae2'  class='layui-btn icon-btn'>查询</button>
+<div style='background-color:#e6f7ff;width: 550px;height:193px;margin-top:20px;margin-left:15px;border-radius:4px;overflow:auto'>
+<form id="RoleForm" lay-filter="RoleForm" class="layui-form">
+<ul id='changedoctor'>
+<li style='margin-left: 20px;'><input type='checkbox'  lay-filter='filter' value='1' name='like1' lay-skin='primary'><label  class='yishiname'>啦啦啦啦</label><label class='killOrder1'>正常       使用啦啦啦啦患者</label><label  style='color: red;margin-left: 50px'>执行中</label></li>
+<li style='margin-left: 20px;'><input type='checkbox'  lay-filter='filter' value='2' name='like1' lay-skin='primary'><label  class='yishiname'>啦啦啦啦2</label><label class='killOrder1'>正常       使用啦啦啦啦患者</label></li>
+</ul>
+</div>
+
+		<input id="userCode1" name="userCode" type="hidden" value="">
+
+        <input id="pitch" name="pitch" type="hidden" value="">
+    
+
+        <div class="layui-form-item text-right" style="    text-align: center;    padding-top: 10px;">
+            <button class="layui-btn layui-btn-primary" type="button" ew-event="closePageDialog">取消</button>
+            <button class="layui-btn" lay-filter="SubmitRole" lay-submit>保存</button>
+        </div>
+    </form>
+    
+</script>
+
+
+<script>
+//水球图
+function water(num,colour,energyKcal){
+	option = {
+			 title: {
+			    	text: '推荐能耗完成统计',
+			    	 subtext: energyKcal,
+			        left: 'center'
+			    },
+		    series: [ {
+		        type: 'liquidFill',
+		        radius: '50%',
+		        data: num,
+		        color: colour,
+		        outline: {
+		            itemStyle: {
+		                borderColor: colour,
+		                borderWidth: 2
+		            }
+		        },
+		        backgroundStyle: {
+		            color: '#dcddf8'
+		        }
+		    } ]
+
+		};
+	
+	/* var chartmain1width = $("#chartmain1width").width();
+	$("#chartmain1").css('width',$("#chartmain1width").width()); //给图设置固定宽度，div chart是第一个tab页面上面的某个图，宽度布局与map一致				   
+	 */
+	//获取dom容器
+	var myChart = echarts.init(document.getElementById('chartmain1'));
+	// 使用刚指定的配置项和数据显示图表。
+	myChart.setOption(option);
+	 myChart.resize();
+}
+
+
+function nenghao1(val){
+	option = {
+		    title: {
+		    	text: '锻炼方式的分类',
+		        left: 'center'
+		    },
+		  
+		    tooltip: {
+		        trigger: 'item',
+		        formatter: '{a} <br/>{b} : {c} ({d}%)'
+		    },
+		    color:["rgba(38, 165, 246, 1)","rgba(22, 209, 164, 1)","rgba(255, 163, 0, 1)","rgba(255, 203, 5, 1)"],
+		    series: [
+		        {
+		            name: '',
+		            type: 'pie',
+		            radius: '50%',
+		            center: ['50%', '50%'],
+		            label: {
+		                normal: {
+                        show: false,
+                        position: 'inside',
+                        formatter:"{b}:{d}%"
+                        },
+		            },
+		            data:val,
+		            emphasis: {
+		                itemStyle: {
+		                    shadowBlur: 10,
+		                    shadowOffsetX: 0,
+		                    shadowColor: 'rgba(0, 0, 0, 0.5)'
+		                }
+		            }
+		        }
+		    ]
+		};
+	/* var chartmain2width = $("#chartmain3width").width();
+	$("#chartmain3").css('width',$("#chartmain3width").width()); //给图设置固定宽度，div chart是第一个tab页面上面的某个图，宽度布局与map一致				   
+	 */
+	//获取dom容器
+	var myChart = echarts.init(document.getElementById('chartmain3'));
+	// 使用刚指定的配置项和数据显示图表。
+	myChart.setOption(option);
+	 myChart.resize();
+}
+
+
+
+function nenghao(val){
+	option = {
+		    title: {
+		    	text: '运动能耗的分类比例',
+		        left: 'center'
+		    },
+		  
+		    tooltip: {
+		        trigger: 'item',
+		        formatter: '{a} <br/>{b} : {c} ({d}%)'
+		    },
+		    color:["rgba(255, 211, 166, 1)","rgba(253, 159, 154, 1)","rgba(176, 178, 255, 1)","rgba(253, 214, 81, 1)"],
+		    series: [
+		        {
+		            name: '',
+		            type: 'pie',
+		            radius: '50%',
+		            center: ['50%', '50%'],
+		            label: {
+		                normal: {
+                        show: false,
+                        position: 'inside',
+                        formatter:"{b}:{d}%"
+                        },
+		            },
+		            data:val,
+		            emphasis: {
+		                itemStyle: {
+		                    shadowBlur: 10,
+		                    shadowOffsetX: 0,
+		                    shadowColor: 'rgba(0, 0, 0, 0.5)'
+		                }
+		            }
+		        }
+		    ]
+		};
+/* 	var chartmain2width = $("#chartmain2width").width();
+	$("#chartmain2").css('width',$("#chartmain2width").width()); //给图设置固定宽度，div chart是第一个tab页面上面的某个图，宽度布局与map一致				   
+	 */
+	//获取dom容器
+	var myChart = echarts.init(document.getElementById('chartmain2'));
+	// 使用刚指定的配置项和数据显示图表。
+	myChart.setOption(option);
+	 myChart.resize();
+}
+
+
+//统计图
+function show(cTime,energyLevel,energyKcal){
+	//指定图表的配置项和数据
+	option = {
+title : {
+    text: '运动日记统图',
+},
+tooltip : {
+    trigger: 'axis'
+},
+legend: {
+    data:['推荐能耗','实际能耗']
+},
+toolbox: {
+    show : true,
+    feature : {
+        dataView : {show: true, readOnly: false},
+        magicType : {show: true, type: ['line', 'bar']},
+        restore : {show: true},
+        saveAsImage : {show: true}
+    }
+},
+color:["rgba(222, 250, 250, 1)","rgba(0, 186, 173, 1)"],
+calculable : true,
+xAxis : [
+    {
+        type : 'category',
+        data : cTime,
+    }
+],
+yAxis : [
+    {
+        type : 'value'
+    }
+],
+series : [
+    {
+        name:'推荐能耗',
+        type:'bar',
+        data:energyLevel,
+    },
+    {
+        name:'实际能耗',
+        type:'bar',
+        data:energyKcal,
+    }
+],
+dataZoom : [
+    //1.横向使用滚动条
+      {
+        type: 'slider',//有单独的滑动条，用户在滑动条上进行缩放或漫游。inside是直接可以是在内部拖动显示
+        show: true,//是否显示 组件。如果设置为 false，不会显示，但是数据过滤的功能还存在。
+        start: 0,//数据窗口范围的起始百分比0-100
+        end: 50,//数据窗口范围的结束百分比0-100
+        xAxisIndex: [0],// 此处表示控制第一个xAxis，设置 dataZoom-slider 组件控制的 x轴 可是已数组[0,2]表示控制第一，三个；xAxisIndex: 2 ，表示控制第二个。yAxisIndex属性同理
+        bottom:-10 //距离底部的距离
+      },
+  //2.在内部可以横向拖动
+     {
+         type: 'inside',// 内置于坐标系中
+         start: 0,
+         end: 30,
+         xAxisIndex: [0]
+      }
+    ]
+};
+	/* var width = $("#table").width();
+	$("#chartmain").css('width',$("#table").width()); //给图设置固定宽度，div chart是第一个tab页面上面的某个图，宽度布局与map一致		 */		   
+		//获取dom容器
+		var myChart = echarts.init(document.getElementById('chartmain'));
+		// 使用刚指定的配置项和数据显示图表。
+		myChart.setOption(option);
+      // 设置宽度自适应
+		 myChart.resize();
+}
+
+
+
+
+//导航栏
+layui.use('element', function() {
+	var $ = layui.jquery, element = layui.element; //Tab的切换功能，切换事件监听等，需要依赖element模块
+
+	$('.site-demo-active').on('click', function() {
+		var othis = $(this), type = othis.data('type');
+		active[type] ? active[type].call(this, othis) : '';
+	});
+
+});
+
+
+layui.use(['layer', 'form', 'admin', 'table','laydate', 'util'], function () {
+    var $ = layui.jquery;
+    var layer = layui.layer;
+    var form = layui.form;
+    var admin = layui.admin;
+    var util = layui.util;
+    var laydate = layui.laydate;
+    table = layui.table;
+    
+    
+    form.on('checkbox(week)', function(data){
+  	  console.log(data.elem); //得到checkbox原始DOM对象
+  	  console.log(data.elem.checked); //是否被选中，true或者false
+  	  console.log(data.value); //复选框value值，也可以通过data.elem.value得到
+  	  console.log(data.othis); //得到美化后的DOM对象
+  	  
+  	  var idnum = data.elem.id; //得到dom的id 
+
+  	  var chk_value =[]; 
+  	  
+  	/*   var pitc=$("#pitch").val();
+  	  if(pitc!=null){
+  		  chk_value=pitc;
+  	  } */
+
+  	  $('input[name="like1"]:checked').each(function(){ 
+  	  chk_value.push($(this).val()); 
+  	  }); 
+  	//  layer.msg(chk_value.toString());
+  	  $("#period").val(chk_value.toString());
+  	  form.render('checkbox');
+  	  
+  	}); 
+    
+    
+	//全选
+	checkAll=function(){
+		$("input[name='like1']").prop("checked", true);
+		 $("#period").val("一,二,三,四,五,六,日");
+        form.render('checkbox');
+	}
+	
+	//反选
+	SelectionAll=function(){
+		$("input[name='like1']").prop("checked", false);
+		 $("#period").val("");
+        form.render('checkbox');
+	}
+	
+    //
+    
+ /*    setTimeout( function(){
+    	tjt($("#test6").val(),$("#standard").val());
+	}, 3 * 1000 ); */
+    
+    $(document).on('click', '#selectyishi', function() {
+    	$("#changedoctor").empty().append("");
+    	var setmealMame=$("#setmealMame").val();
+    	var d ={"setmealMame":setmealMame};
+   	 $.ajax({
+    	 type: "post",
+         url: "/YhSportRecommendRecordController/selectSetmealshow?userCode="+usercode,
+         dataType:"json",
+         data:d,
+         success: function(data){
+  	       	var item=data.data;
+  	     	var htmld="";
+  	        for (var i = 0; i < item.length; i++) {
+  	        	var setmealMame = item[i].setmealMame.substring(0,item[i].setmealMame.length-5);
+  	        	var strs= new Array(); //定义一数组 
+  	        	strs=item[i].subjectId.split(","); //字符分割 
+	        		
+	        		 if(item[i].oneself=="1"){
+	        			
+	        			 htmld+="<li style='margin-left: 20px;margin-top: 10px;'><input type='checkbox' checked='' lay-filter='filter' value="+item[i].id+" name='like1' lay-skin='primary'><label  class='yishiname' style='width: 30%;'>"+item[i].setmealMame+"</label><label class='yishiname' style='width: 20%;'>"+setmealMame+"</label><label class='yishiname' style='width: 10%;'>"+(strs.length-1)+"天</label><label  class='yishiname'  style='color: red;margin-left: 25px'>执行中</label></li>";
+	        		 }else{
+	        			 htmld+="<li style='margin-left: 20px;margin-top: 10px;'><input type='checkbox'  lay-filter='filter' value="+item[i].id+" name='like1' lay-skin='primary'><label  class='yishiname' style='width: 30%;'>"+item[i].setmealMame+"</label><label class='yishiname' style='width: 20%;'>"+setmealMame+"</label><label class='yishiname' style='width: 10%;'>"+(strs.length-1)+"天</label></li>";
+	        		 }
+  	        }
+  	     $("#changedoctor").empty().append(htmld);
+  	     $("#userCode1").val(usercode);
+  	        form.render();
+         }   	
+    });
+    });
+    
+    
+  //清除按钮
+    $("#btnempty").click(function(){
+		$("#test6").val("");  
+		$("#standard").val(""); 
+	    form.render("select");
+		table.reload('energyKcal', {
+	        where: { //设定异步数据接口的额外参数，任意设
+	        'entryTime':$("#test6").val(),
+	        'standard':$("#standard").val(),
+	       }
+	      });
+		     tjt($("#test6").val(),$("#standard").val());
+    })
+    
+  //日期范围
+    laydate.render({
+      elem: '#test6'
+      ,range: true,
+		trigger: 'click'
+    });
+    
+    var usercode = [[${usercode}]];
+    
+    if([[${type}]]==2){
+    	tjt($("#test6").val(),$("#standard").val());
+    }
+    if(usercode!=null){
+    	weekshow();
+    }
+    
+    function weekshow(){
+    	var  data2 = {'userCode' :[[${usercode}]]};
+      	 $.ajax({
+       	 type: "post",
+            url: "/YhSportRecommendRecordController/showUserFrequency",
+            dataType:"json",
+            data:data2,
+            success: function(data){
+            	if(data.data==null || data.data==""){
+            		$("#week").html("--");
+            	}else{
+            		$("#week").html(data.data);
+            	}
+           		
+           		
+            }   	
+       });
+    }
+    
+    $("#journal").hide();
+    function tjt(ctime,standard){
+    	var data2;
+    	if(ctime!=null && ctime!=""){
+    		data2 = {'usercode' :[[${usercode}]],'entryTime':ctime,'standard':standard};
+    	}else{
+    		data2 = {'usercode' :[[${usercode}]],'standard':standard};
+    	}
+   	 $.ajax({
+    	 type: "post",
+         url: "/system/SportDiary/selectSportDiaryCtime",
+         dataType:"json",
+         data:data2,
+         success: function(data){
+        		show(data.cTime,data.energyLevel,data.energyKcal);
+         }   	
+    });
+   }
+    //内容2
+     table.render({
+    elem: '#test'
+    ,	url : '/system/SportDiary/selectSportDiary?usercode='+usercode
+    ,method:'post'
+        ,height: 340
+        ,cellMinWidth: 500 //全局定义常规单元格的最小宽度，layui 2.2.1 新增
+    ,cols: [ [
+      {field:'uSportId', title:'ID',hide:true}
+      ,{field:'entryTime', title:'日期', width:'40%'}
+      ,{field:'tenergy', title:'能耗能量(千卡)', sort: true, width:'30%'}
+      ,{
+          title: '能耗达标', templet: function (d) {
+              var strs = [
+                  '是',
+                  '否'
+              ];
+              if(Number(d.tenergy)>Number(d.uweight)){
+                  return strs[0];
+              }else{
+              	return strs[1];
+              }
+          }, align: 'uweight', width:'30%'
+      }
+    ] ]
+    ,id : 'energyKcal'
+    ,page: true
+  });
+    
+   //搜索的方法
+	   solo=function(){
+	     table.reload('energyKcal', {
+	        where: { //设定异步数据接口的额外参数，任意设
+	        'entryTime':$("#test6").val(),
+	        'standard':$("#standard").val(),
+	       }
+	      });	
+	     tjt($("#test6").val(),$("#standard").val());
+	    }
+  
+  //监听行单击事件（双击事件为：rowDouble）
+  table.on('row(test)', function(obj){
+	  $("#journal").show();
+	    
+	    //标注选中样式
+	    obj.tr.addClass('layui-table-click').siblings().removeClass('layui-table-click');
+    var data = obj.data;
+   
+    var ctime=data.entryTime;
+    $("#ctime").html(ctime);
+  
+    var uweight=data.uweight;//推荐能耗
+    var tenergy=data.tenergy;//实际能耗
+    var number=data.number;//步数
+    var diaryDetails=data.diaryDetails;
+    var num=[tenergy/uweight];
+    var colour='';
+    if(num>1){
+    	colour='rgba(236, 8, 8, 0.99)';
+    }else{
+    	colour='rgba(67,209,100,1)';
+    }
+    
+    var energyKcal="推荐"+Math.floor(data.uweight * 100) / 100+"千卡";
+    water(num,colour,energyKcal);
+    
+    
+    var data2 = {
+			'userCode' :usercode,
+			'entryTime' :ctime
+		};
+	 $.ajax({
+	 type: "post",
+     url: "/YhSportReportWeb/showReportDaily",
+     dataType:"json",
+     data:data2,
+     success: function(data){
+    	 var bzt=[{value:Math.floor(data.data.anaerobic * 100) / 100, name: '无氧运动'},{value:Math.floor(data.data.aerobic * 100) / 100 , name: '有氧运动'},{value:Math.floor(data.data.pliable * 100) / 100, name: '柔韧运动'},{value:Math.floor(data.data.arthrosis * 100) / 100, name: '关节运动'}];
+    	 nenghao(bzt);
+    	 
+    	 var fenl=[{value:data.data.walk, name: '步数'},{value:Math.floor(data.data.recommend * 100) / 100 , name: '推荐运动'},{value:Math.floor(data.data.boutique * 100) / 100  , name: '精品课程'},{value:Math.floor(data.data.rests * 100) / 100  , name: '其他运动'}];
+    	 nenghao1(fenl);
+    	 
+    	 $("#aerobicpercent").html(data.data.aerobicpercent+"%");
+    	 $("#anaerobicpercent").html(data.data.anaerobicpercent+"%");
+    	 $("#pliablepercent").html(data.data.pliablepercent+"%");
+    	 $("#arthrosispercent").html(data.data.arthrosispercent+"%");
+    	 $("#walkpercent").html(data.data.walkpercent+"%");
+    	 $("#recommendpercent").html(data.data.recommendpercent+"%");
+    	 $("#boutiquepercent").html(data.data.boutiquepercent+"%");
+    	 $("#restspercent").html(data.data.restspercent+"%");
+    	 
+     }   	
+});
+   
+    
+   
+		
+	 
+	    var number=0;//步数
+		var bushu=0;
+	    if(data.number!=null){
+	    	var bu=data.number.split('=');
+	        	number=bu[0];
+	        	bushu=bu[1];
+	    }
+	 
+    
+    
+	 $.ajax({
+	 type: "post",
+     url: "/YhSportReportWeb/showsky",
+     dataType:"json",
+     data:data2,
+     success: function(data){
+    	 
+    	 
+			
+			var details="";//其他运动
+			var tenergy=0;//其他运动总千卡
+			if(data.data.details!=null){//其他运动
+				for(var j=0;j<data.data.details.length;j++){
+					tenergy=data.data.details[0].kcalTotal2;
+					details+="<br><dt><div style='float: left;width: 50%;'>"+data.data.details[j].sportName+"</div><div>"+data.data.details[j].time+"</div></dt>"
+				}
+			}
+			
+			var recomSport="";//康复训练
+			var recomSporttenergy=0;//康复训练总千卡
+			if(data.data.recomSport!=null){//其他运动
+				for(var j=0;j<data.data.recomSport.length;j++){
+					recomSporttenergy=data.data.recomSport[0].kcalTotal2;
+					recomSport+="<br><dt><div style='float: left;width: 50%;'>"+data.data.recomSport[j].sportName+"</div><div>"+data.data.recomSport[j].time+"</div></dt>"
+				}
+			}
+			
+			var boutique="";//精品课程
+			var boutiquetenergy=0;//精品课程总千卡
+			if(data.data.boutique!=null){//其他运动
+				for(var j=0;j<data.data.boutique.length;j++){
+					boutiquetenergy=data.data.boutique[0].kcalTotal2;
+					boutique+="<br><dt><div style='float: left;width: 50%;'>"+data.data.boutique[j].sportName+"</div><div>"+data.data.boutique[j].time+"</div></dt>"
+				}
+			}
+				
+			
+			
+			
+			$("#scheme").html("<p>运动日记内容</p><br><div class='layui-row'><div class='layui-col-xs3'><div class='grid-demo grid-demo-bg1'>步数("+Math.floor(bushu * 100) / 100+" 千卡)"+
+					"<dl>"+number+"步</dl> </div></div><div class='layui-col-xs3'><div class='grid-demo'>康复训练("+Math.floor(recomSporttenergy * 100) / 100+" 千卡)<dl>"+recomSport+"</dl> </div></div><div class='layui-col-xs3'><div class='grid-demo grid-demo-bg1'>精品课程("+Math.floor(boutiquetenergy * 100) / 100+"千卡)"+
+					"<dl>"+boutique+"</dl> </div></div><div class='layui-col-xs3'><div class='grid-demo grid-demo-bg1'>其他运动("+Math.floor(tenergy * 100) / 100+"千卡)<dl>"+details+"</dl></div></div></div>");
+			
+			
+     }   	
+});
+    
+    
+   
+  });
+  //内容2结束
+    
+    
+    
+    
+    //更换运动频率
+		        $('#frequency').click(function () {
+		        	frequencyshowheadline();
+		        	var strs = new Array(); //定义一数组
+		        	strs = $("#week").html().split(","); //字符分割
+					var period="";
+		        	for (i=0; i<strs.length; i++ ){
+		        		if(strs[i].charAt(strs[i].length-1)=="一"){
+		        			if(strs[i]==i){
+		        				period+="一";
+		        			}else{
+		        				period+="一,";
+		        			}
+		        			$("#week1").prop("checked",true);
+		        		}else if(strs[i].charAt(strs[i].length-1)=="二"){
+		        			if(strs[i]==i){
+		        				period+="二";
+		        			}else{
+		        				period+="二,";
+		        			}
+		        			$("#week2").prop("checked",true);
+		        		}else if(strs[i].charAt(strs[i].length-1)=="三"){
+		        			if(strs[i]==i){
+		        				period+="三";
+		        			}else{
+		        				period+="三,";
+		        			}
+		        			$("#week3").prop("checked",true);
+		        		}else if(strs[i].charAt(strs[i].length-1)=="四"){
+		        			if(strs[i]==i){
+		        				period+="四";
+		        			}else{
+		        				period+="四,";
+		        			}
+		        			$("#week4").prop("checked",true);
+		        		}else if(strs[i].charAt(strs[i].length-1)=="五"){
+		        			if(strs[i]==i){
+		        				period+="五";
+		        			}else{
+		        				period+="五,";
+		        			}
+		        			$("#week5").prop("checked",true);
+		        		}else if(strs[i].charAt(strs[i].length-1)=="六"){
+		        			if(strs[i]==i){
+		        				period+="六";
+		        			}else{
+		        				period+="六,";
+		        			}
+		        			$("#week6").prop("checked",true);
+		        		}else if(strs[i].charAt(strs[i].length-1)=="日"){
+		        			if(strs[i]==i){
+		        				period+="日";
+		        			}else{
+		        				period+="日,";
+		        			}
+		        			$("#week7").prop("checked",true);
+		        		}
+		        	}
+		        	
+		        	 $("#period").val(period);
+		        	 
+		        	form.render();
+		        });
+    
+    
+		        //显示编辑弹窗运动课程
+		        function frequencyshowheadline(mRole) {
+		            admin.open({
+		                type: 1,
+		                title: '更换频率',
+		                content: $('#sportfrequency').html(),
+		                area: ['590px', '250px'],
+		                success: function (layero, dIndex) {
+		                    var url = '';
+		                    // 表单提交事件
+		                    form.on('submit(changeFrequency)', function (data) {
+			                   
+		                        var period= $("#period").val();
+		                        if(period==null || period==""){
+		                        	 layer.msg("请选择至少一天");
+		                        	 return false;
+		                        }else{
+		                        	layer.load(2);
+		                        	var  data2 = {'period' :period,"usercode":[[${usercode}]]};
+		                        	 $.ajax({
+		                            	 type: "post",
+		                                 url: "/yhSportFrequencyWebController/batchinsertIndividual",
+		                                 dataType:"json",
+		                                 data:data2,
+		                                 success: function(data){
+		                                	 if(data.data==1){
+												 layer.closeAll();
+												layer.msg("成功");
+												weekshow();
+											}
+		                                 }   	
+		                            });
+
+		                               return false;
+		                        }
+		                        
+		                     
+		                    });
+		                }
+		            });
+		        }
+		      
+    
+    
+    
+  //添加头条
+    $('#frontpage').click(function () {
+    	showhealth();
+        showheadline();
+    });
+  
+    function showhealth(){
+   	 var d ="";
+    	 $.ajax({
+     	 type: "post",
+          url: "/YhSportRecommendRecordController/selectSetmealshow?userCode="+usercode,
+          dataType:"json",
+          data:d,
+          success: function(data){
+        	  var item=data.data;
+   	     	var htmld="";
+   	        for (var i = 0; i < item.length; i++) {
+   	        	var setmealMame = item[i].setmealMame.substring(0,item[i].setmealMame.length-5);
+      	      	var strs= new Array(); //定义一数组 
+  	        	strs=item[i].subjectId.split(","); //字符分割 
+	        		
+	        		 if(item[i].oneself=="1"){
+	        			
+	        			 htmld+="<li style='margin-left: 20px;margin-top: 10px;'><input type='checkbox' checked='' lay-filter='filter' value="+item[i].id+" name='like1' lay-skin='primary'><label  class='yishiname' style='width: 30%;'>"+item[i].setmealMame+"</label><label class='yishiname' style='width: 20%;'>"+setmealMame+"</label><label class='yishiname' style='width: 10%;'>"+(strs.length-1)+"天</label><label  class='yishiname'  style='color: red;margin-left: 25px'>执行中</label></li>";
+	        		 }else{
+	        			 htmld+="<li style='margin-left: 20px;margin-top: 10px;'><input type='checkbox'  lay-filter='filter' value="+item[i].id+" name='like1' lay-skin='primary'><label  class='yishiname' style='width: 30%;'>"+item[i].setmealMame+"</label><label class='yishiname' style='width: 20%;'>"+setmealMame+"</label><label class='yishiname' style='width: 10%;'>"+(strs.length-1)+"天</label></li>";
+	        		 }
+   	       }
+   	     $("#changedoctor").empty().append(htmld);
+   	     $("#userCode1").val(usercode);
+   	        form.render();
+        	  
+          }
+     });
+   }
+    
+    form.on('checkbox(filter)', function(data){
+    	  console.log(data.elem); //得到checkbox原始DOM对象
+    	  console.log(data.elem.checked); //是否被选中，true或者false
+    	  console.log(data.value); //复选框value值，也可以通过data.elem.value得到
+    	  console.log(data.othis); //得到美化后的DOM对象
+    	  
+    	  var idnum = data.elem.id; //得到dom的id 
+
+    	  var chk_value =[]; 
+    	  
+    	/*   var pitc=$("#pitch").val();
+    	  if(pitc!=null){
+    		  chk_value=pitc;
+    	  } */
+
+    	  $('input[name="like1"]:checked').each(function(){ 
+    	  chk_value.push($(this).val()); 
+    	  }); 
+    	//  layer.msg(chk_value.toString());
+    	  $("#pitch").val(chk_value.toString());
+    	  form.render('checkbox');
+    	  
+    	  
+    	}); 
+    
+  //显示编辑弹窗头条
+    function showheadline(mRole) {
+    	
+        admin.open({
+            type: 1,
+            title: '更换课程',
+            content: $('#toutiao').html(),
+            area: ['650px', '400px'],
+            success: function (layero, dIndex) {
+                var url = '/YhSportRecommendRecordController/insertSelective';
+                // 表单提交事件
+                form.on('submit(SubmitRole)', function (data) {
+                    
+                    var pitch=$("#pitch").val();
+                    var d ={"pitch":pitch,'userCode' :usercode};
+                    if(pitch==null || pitch==""){
+                    	 layer.msg("请选择1个课程");
+                    }else{
+                    	layer.load(2);
+                    	   $.post(url, d, function (res) {
+                           	
+                           	  table.reload('tableBank');
+             					layer.msg("成功");
+             					 layer.closeAll();
+                             }, 'json');
+
+                           return false;
+                    }
+                    
+                 
+                });
+            }
+        });
+    }
+
+    
+  
+	table.on('tool(demo)', function(obj) { //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
+		var data = obj.data; //获得当前行数据
+		var layEvent = obj.event; //获得 lay-event 对应的值
+		var tr = obj.tr; //获得当前行 tr 的DOM对象
+		
+		 if (layEvent === 'edit') {
+			window.location.href="/manage/usertosee/sportshow?id="+data.setmealid;
+		}
+	});
+	
+  //方法级渲染
+	table.render({
+		elem : '#LAY_table_user',
+		url : '/YhSportRecommendRecordController/selectPersonageSport?usercode='+usercode,
+		method:'post',
+		cols : [ [ {type:'numbers'},
+        {
+            templet: function (d) {
+                return util.toDateString(d.recordData);
+            }, title: '推荐时间', align: 'recordData'
+        }, {
+			field : 'sportName',
+			title : '课程',
+		},  {
+			field : 'evolve',
+			title : '推进进展',
+		},{
+            title: '状态', templet: function (d) {
+                var strs = [
+                    '<span class="layui-badge layui-badge-green">执行中</span>',
+                    '<span class="layui-badge layui-badge-red">已完成</span>'
+                ];
+                if(d.recordType==1 || d.recordType=="1"){
+                    return strs[0];
+                }else{
+                    return strs[1];
+                }
+            }, align: 'recordType', width: 100
+        },  {
+			field : 'recordMode',
+			title : '推荐方式',
+		},{
+			fixed : 'right',
+			title : '操作',
+			align : 'center',
+			toolbar : '#barDemo'
+		} ] ],
+		id : 'tableBank',
+		page : true,
+	});
+
+
+
+	//分析报告
+    table.render({
+   elem: '#analyze'
+   ,	url : '/system/SportDiary/selectSportsanalyze?usercode='+usercode
+   ,method:'post'
+   ,cols: [ [
+     /* {field:'foodguideId', title:'ID',hide:true} */
+     {type:'numbers'}
+     ,{field:'newlyTime', title:'报告生成日期'}
+     ,{field:'source', title:'报告分析来源', sort: true}
+     ,{
+			fixed : 'right',
+			title : '操作',
+			align : 'center',
+			toolbar : '#barDemo1'
+		}
+   ] ]
+   ,id : 'foodanalyze'
+   ,page: true
+ });
+ 
+
+    table.on('tool(demonalyze)', function(obj) { //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
+		var data = obj.data; //获得当前行数据
+		var layEvent = obj.event; //获得 lay-event 对应的值
+		var tr = obj.tr; //获得当前行 tr 的DOM对象
+		
+		 if (layEvent === 'edit') {
+			window.location.href="/manage/usertosee/sportanalyze?id="+data.sportsGuideId;
+		}
+	});
+
+    
+
+  
+  
+});
+
+
+</script>
+</html>

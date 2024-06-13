@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yihe.system.mapper.YHUserLiverfunctionMapper" >
+  <resultMap id="BaseResultMap" type="com.yihe.system.domain.YHUserLiverfunction" >
+    <id column="liverid" property="liverid" jdbcType="INTEGER" />
+    <result column="gu_Bing" property="guBing" jdbcType="VARCHAR" />
+    <result column="millet_straw" property="milletStraw" jdbcType="VARCHAR" />
+    <result column="serum_albumin" property="serumAlbumin" jdbcType="VARCHAR" />
+    <result column="serum_globulin" property="serumGlobulin" jdbcType="VARCHAR" />
+    <result column="user_id" property="userId" jdbcType="INTEGER" />
+    <result column="insertTime" property="inserttime" jdbcType="VARCHAR" />
+    <result column="Is_Del" property="isDel" jdbcType="INTEGER" />
+    <result column="Data_Source" property="dataSource" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    liverid, gu_Bing, millet_straw, serum_albumin, serum_globulin, user_id, insertTime, 
+    Is_Del, Data_Source
+  </sql>
+  
+  <!-- 肝功能总数 -->
+   <select id="selectByLiverfunctionCount" resultType="int" >
+  	select count(*) from yh_user_liverfunction
+  </select>
+  
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from yh_user_liverfunction
+    where liverid = #{liverid,jdbcType=INTEGER}
+  </select>
+  <select id="selectByPrimaryKeyByUsercodeLimit" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    SELECT  <include refid="Base_Column_List" /> FROM yh_user_liverfunction WHERE user_id=#{usercode} and is_Del=2  ORDER BY insertTime DESC LIMIT 1
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from yh_user_liverfunction
+    where liverid = #{liverid,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.yihe.system.domain.YHUserLiverfunction" >
+    insert into yh_user_liverfunction (liverid, gu_Bing, millet_straw, 
+      serum_albumin, serum_globulin, user_id, 
+      insertTime, Is_Del, Data_Source
+      )
+    values (#{liverid,jdbcType=INTEGER}, #{guBing,jdbcType=VARCHAR}, #{milletStraw,jdbcType=VARCHAR}, 
+      #{serumAlbumin,jdbcType=VARCHAR}, #{serumGlobulin,jdbcType=VARCHAR}, #{userId,jdbcType=INTEGER}, 
+      #{inserttime,jdbcType=VARCHAR}, #{isDel,jdbcType=INTEGER}, #{dataSource,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.yihe.system.domain.YHUserLiverfunction" >
+    insert into yh_user_liverfunction
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="liverid != null" >
+        liverid,
+      </if>
+      <if test="guBing != null" >
+        gu_Bing,
+      </if>
+      <if test="milletStraw != null" >
+        millet_straw,
+      </if>
+      <if test="serumAlbumin != null" >
+        serum_albumin,
+      </if>
+      <if test="serumGlobulin != null" >
+        serum_globulin,
+      </if>
+      <if test="userId != null" >
+        user_id,
+      </if>
+      <if test="inserttime != null" >
+        insertTime,
+      </if>
+      <if test="isDel != null" >
+        Is_Del,
+      </if>
+      <if test="dataSource != null" >
+        Data_Source,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="liverid != null" >
+        #{liverid,jdbcType=INTEGER},
+      </if>
+      <if test="guBing != null" >
+        #{guBing,jdbcType=VARCHAR},
+      </if>
+      <if test="milletStraw != null" >
+        #{milletStraw,jdbcType=VARCHAR},
+      </if>
+      <if test="serumAlbumin != null" >
+        #{serumAlbumin,jdbcType=VARCHAR},
+      </if>
+      <if test="serumGlobulin != null" >
+        #{serumGlobulin,jdbcType=VARCHAR},
+      </if>
+      <if test="userId != null" >
+        #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="inserttime != null" >
+        #{inserttime,jdbcType=VARCHAR},
+      </if>
+      <if test="isDel != null" >
+        #{isDel,jdbcType=INTEGER},
+      </if>
+      <if test="dataSource != null" >
+        #{dataSource,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.yihe.system.domain.YHUserLiverfunction" >
+    update yh_user_liverfunction
+    <set >
+      <if test="guBing != null" >
+        gu_Bing = #{guBing,jdbcType=VARCHAR},
+      </if>
+      <if test="milletStraw != null" >
+        millet_straw = #{milletStraw,jdbcType=VARCHAR},
+      </if>
+      <if test="serumAlbumin != null" >
+        serum_albumin = #{serumAlbumin,jdbcType=VARCHAR},
+      </if>
+      <if test="serumGlobulin != null" >
+        serum_globulin = #{serumGlobulin,jdbcType=VARCHAR},
+      </if>
+      <if test="userId != null" >
+        user_id = #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="inserttime != null" >
+        insertTime = #{inserttime,jdbcType=VARCHAR},
+      </if>
+      <if test="isDel != null" >
+        Is_Del = #{isDel,jdbcType=INTEGER},
+      </if>
+      <if test="dataSource != null" >
+        Data_Source = #{dataSource,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where liverid = #{liverid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.yihe.system.domain.YHUserLiverfunction" >
+    update yh_user_liverfunction
+    set gu_Bing = #{guBing,jdbcType=VARCHAR},
+      millet_straw = #{milletStraw,jdbcType=VARCHAR},
+      serum_albumin = #{serumAlbumin,jdbcType=VARCHAR},
+      serum_globulin = #{serumGlobulin,jdbcType=VARCHAR},
+      user_id = #{userId,jdbcType=INTEGER},
+      insertTime = #{inserttime,jdbcType=VARCHAR},
+      Is_Del = #{isDel,jdbcType=INTEGER},
+      Data_Source = #{dataSource,jdbcType=VARCHAR}
+    where liverid = #{liverid,jdbcType=INTEGER}
+  </update>
+  <!--  查询用户肝功能-->
+  <select id="selectYHUserLiverfunction" resultType="map" parameterType="java.lang.String" >
+   select yul.gu_Bing,yul.millet_straw,yul.serum_albumin,yul.serum_globulin,
+(select count(1) from yh_user_liverfunction where user_id=#{userId,jdbcType=INTEGER} and Is_Del = 2) as num,
+yul.Data_Source,yul.insertTime
+from yh_user_reginfo as reg 
+left join yh_user_liverfunction yul
+on reg.user_code = yul.user_id
+where yul.liverid = (select liverid from yh_user_liverfunction where user_id= #{userId,jdbcType=INTEGER} and Is_Del = 2 order by insertTime desc limit 1)
+  </select>
+  
+  <select id="selectPageByParam" resultMap="BaseResultMap" parameterType="java.lang.String"  >
+   select  yul.gu_Bing,yul.millet_straw,yul.serum_albumin,yul.serum_globulin,yul.insertTime
+	from yh_user_reginfo as reg 
+	inner join yh_user_liverfunction yul
+	on reg.user_code = yul.user_id
+	 where reg.user_code=#{userId,jdbcType=INTEGER} and Is_Del = 2 order by insertTime desc 
+  </select>
+  
+</mapper>

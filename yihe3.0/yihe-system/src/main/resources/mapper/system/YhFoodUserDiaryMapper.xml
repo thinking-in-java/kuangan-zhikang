@@ -1,0 +1,579 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yihe.system.mapper.YhFoodUserDiaryMapper">
+    
+    <resultMap type="YhFoodUserDiary" id="YhFoodUserDiaryResult">
+        <result property="uFdId"    column="U_Fd_Id"    />
+        <result property="cTime"    column="C_Time"    />
+        <result property="energyLevel"    column="Energy_Level"    />
+        <result property="dataSources"    column="Data_Sources"    />
+        <result property="rId"    column="R_Id"    />
+        <result property="fat"    column="Fat"    />
+        <result property="cho"    column="Cho"    />
+        <result property="cholesterol"    column="Cholesterol"    />
+        <result property="energyKcal"    column="Energy_Kcal"    />
+        <result property="fElements"    column="F_Elements"    />
+        <result property="acElements"    column="Ac_Elements"    />
+        <result property="isDel"    column="Is_Del"    />
+        <result property="userCode"    column="user_code"    />
+        <result property="protein"    column="Protein"    />
+        <result property="alvol"    column="Alvol"    />
+        <result property="cellulose"    column="Cellulose"    />
+        <result column="user_name" property="userName" jdbcType="VARCHAR" />
+	    <result column="gender" property="gender" jdbcType="INTEGER" />
+	     <result column="birth_date" property="birthdate" jdbcType="TIMESTAMP" />
+    </resultMap>
+
+    <sql id="selectYhFoodUserDiaryVo">
+        select U_Fd_Id, C_Time, Energy_Level, Data_Sources, R_Id, Fat, Cho, Cholesterol, Energy_Kcal, F_Elements, Ac_Elements, Is_Del, user_code, Protein, Alvol, Cellulose from yh_food_user_diary
+    </sql>
+    <!-- 本月记录 -->
+    <select id="showfoodformatMonth" resultType="java.lang.String">
+    	SELECT user_code FROM yh_food_user_diary WHERE DATE_FORMAT( C_Time, '%Y%m' ) = DATE_FORMAT( CURDATE( ) , '%Y%m' ) GROUP BY user_code
+    </select>
+    <!-- 季度记录 -->
+    <select id="showfoodQujilu" resultType="java.lang.String">
+    	SELECT user_code FROM yh_food_user_diary WHERE QUARTER(C_Time) = QUARTER(now()) GROUP BY user_code
+    </select>
+    
+       <!-- 年度记录 -->
+    <select id="showfoodNianjilu" resultType="java.lang.String">
+    	select user_code from yh_food_user_diary where  YEAR(C_Time)=YEAR(NOW()) GROUP BY user_code
+    </select>
+    
+    <!-- 本月记录 -->
+    <select id="showfoodMonthUser" resultMap="YhFoodUserDiaryResult">
+    	SELECT * 
+		FROM yh_food_user_diary
+		WHERE 
+		 user_code=#{usercode} and
+		DATE_FORMAT( C_Time, '%Y%m' ) = DATE_FORMAT( CURDATE( ) , '%Y%m' )
+    </select>
+    
+     <!-- 季度记录 -->
+    <select id="showfoodQuarter" resultMap="YhFoodUserDiaryResult">
+    	select * from yh_food_user_diary where  user_code=#{usercode} and QUARTER(C_Time)=QUARTER(now());
+    </select>
+    
+     <!-- 年度记录 -->
+    <select id="showfoodYear" resultMap="YhFoodUserDiaryResult">
+    	select * from yh_food_user_diary where user_code=#{usercode} and  YEAR(C_Time)=YEAR(NOW());
+    </select>
+    
+    
+    <select id="findFoodDiaryAll" resultMap="YhFoodUserDiaryResult">
+    SELECT * FROM `yh_food_user_diary`    WHERE F_Elements != '' AND F_Elements IS NOT NULL AND Energy_Kcal=0 
+    </select>
+    <select id="findFoodDiaryLimit1Time" resultType="java.lang.String">
+	SELECT C_time FROM `yh_food_user_diary` ORDER BY c_time LIMIT 1
+    </select>
+    <select id="findFoodDiaryListUser" resultType="java.lang.String">
+	SELECT user_code FROM yh_food_user_diary GROUP BY user_code
+    </select>
+    <select id="findFoodDiaryList" resultMap="YhFoodUserDiaryResult">
+	SELECT * FROM `yh_food_user_diary`   WHERE C_Time &gt;= #{strtime} AND C_Time &lt;=#{endtime} and user_code=#{usercode}
+    </select>
+    <select id="findWeekInfoForUserCode" resultType="java.lang.String">
+    
+	SELECT user_code 
+	FROM yh_food_user_diary
+	WHERE 
+	 
+	YEARWEEK(DATE_FORMAT(C_Time,'%Y-%m-%d'),1) = YEARWEEK(NOW(),1)
+
+	  GROUP BY user_code
+    </select>
+    
+     <!-- 查询本周信息 -->
+<select id="findWeekInfo" resultMap="YhFoodUserDiaryResult">
+
+SELECT * 
+FROM yh_food_user_diary
+WHERE 
+ user_code=#{usercode} and
+YEARWEEK(DATE_FORMAT(C_Time,'%Y-%m-%d'),1) = YEARWEEK(NOW(),1)
+</select>    
+
+<select id="findWeekInfoByTimeAndUsercode" resultMap="YhFoodUserDiaryResult">
+
+SELECT * 
+FROM yh_food_user_diary
+WHERE 
+ user_code=#{usercode} and
+ C_Time &gt;= #{statime} and C_Time &lt;= #{endtime}
+</select>     
+  <select id="foodtransfer" resultMap="YhFoodUserDiaryResult">
+     
+  select 
+    U_Fd_Id,F_Elements from 
+     yh_food_user_diary
+  </select>
+     <select id="findToExamine" resultType="java.lang.Integer">
+     
+  SELECT state FROM `yh_dic_to_examine`
+  </select>
+    <!--  根据用户和日期查询饮食日记-->
+    <select id="selectByUserCodeAndTime"  resultMap="YhFoodUserDiaryResult">
+    select 
+    * from 
+     yh_food_user_diary
+     
+    where user_code = #{usercode,jdbcType=INTEGER}
+    and C_Time=#{diaryData} order by C_Time desc limit 1
+  </select>
+    <!-- 小程序3.1api 用户饮食日记集合 -->
+    <select id="findFoodUserDiaryForTimeList" resultType="java.lang.String">
+    SELECT C_Time FROM  `yh_food_user_diary` WHERE user_code=#{usercode} AND F_Elements !='' AND F_Elements IS NOT NULL
+    </select>
+    <!-- 小程序api查询用户当月膳食日记集合 -->
+    <select id="findFoodUserDiaryByusercodeAndTime" resultMap="YhFoodUserDiaryResult">
+    SELECT * FROM yh_food_user_diary WHERE user_code=#{usercode}  AND C_Time LIKE #{time} and is_Del=2 order by C_Time
+    </select>
+    
+    <!-- 小程序api首页膳食根据usercode查询当日膳食日记信息 -->
+    <select id="findFoodUserDiaryInfoByUserCodeForNow" resultMap="YhFoodUserDiaryResult">
+     select * from yh_food_user_diary WHERE user_code=#{usercode} AND  TO_DAYS(C_Time) = TO_DAYS(NOW()) limit 1
+    </select>
+    
+    <!-- 根据当前时间获取近七天的膳食数据，去重usercode -->
+    <select id="HebdomadRecordFood" resultMap="YhFoodUserDiaryResult">
+    SELECT * FROM(select * from yh_food_user_diary  where DATE_SUB(CURDATE(), INTERVAL 7 DAY) &lt;= date(C_Time)) AS b GROUP BY b.user_code;
+    </select>
+    
+     <!-- 根据时间查询记录分析报告 -->
+  <select id="showRecordAnalyze" resultMap="YhFoodUserDiaryResult" parameterType="map">
+  	select di.*,info.user_name,info.gender,info.birth_date from yh_food_user_diary di,yh_user_reginfo info where di.user_code=info.user_code and di.user_code=#{userCode} and C_Time between #{cTime} and #{cTime1};
+  </select>
+  
+    
+    <!-- 查询膳食总记录数 -->
+    <select id="showFoodSum" resultType="int">
+    	select count(*) from yh_food_user_diary
+    </select>
+    
+    <!-- 查询膳食每天总记录数 -->
+    <select id="showFoodTian" resultType="int">
+    select count(*) from yh_food_user_diary where  DATE_FORMAT(C_Time, '%Y%m' ) = DATE_FORMAT( CURDATE( ) , '%Y%m' )
+    </select>
+    
+    
+    
+      <!-- 查询所有食物记录模糊查询统计图 -->
+    <select id="selectDiaryCtime" resultMap="YhFoodUserDiaryResult" parameterType="map">
+  		select * from yh_food_user_diary
+  		<where>
+  		user_code=#{userCode,jdbcType=VARCHAR}
+  			<if test="cTime!=null and cTime !=''">
+  			and C_Time between #{cTime} and #{cTime1}
+  			</if>
+  			<if test="cTime==null or cTime ==''">
+  				order by C_Time asc  
+  			</if>
+  		</where>
+  </select>
+
+
+  
+     <!-- 查询所有食物记录模糊查询 -->
+    <select id="selectDiary" resultMap="YhFoodUserDiaryResult" parameterType="map">
+  		select * from yh_food_user_diary
+  		<where>
+  		user_code=#{userCode,jdbcType=VARCHAR}
+  		and Energy_Kcal>0
+  			<if test="cTime!=null and cTime !=''">
+  			and C_Time between #{cTime} and #{cTime1}
+  			</if>
+  			<if test="reportLevel ==1 and reportLevel!=null and reportLevel!=''">
+  			 and Energy_Kcal &gt;= Energy_Level
+  			</if>
+  			<if test="reportLevel ==2 and reportLevel!=null and reportLevel!=''">
+  		    and Energy_Kcal &lt;= Energy_Level
+  			</if>
+  		</where>
+  		order by C_Time desc LIMIT  #{page},#{limit}
+  </select>
+  
+  
+  <!-- 查询所有食物记录模糊查询总行数 -->
+    <select id="selectDiaryConut" resultType="int" parameterType="map">
+  		select count(*) from yh_food_user_diary
+  		<where>
+  		user_code=#{userCode,jdbcType=VARCHAR}
+            and Energy_Kcal>0
+            <if test="cTime!=null and cTime !=''">
+  			and C_Time between #{cTime} and #{cTime1}
+  			</if>
+  			<if test="reportLevel ==1 and reportLevel!=null and reportLevel!=''">
+  			 and Energy_Kcal &gt;= Energy_Level
+  			</if>
+  			<if test="reportLevel ==2 and reportLevel!=null and reportLevel!=''">
+  		    and Energy_Kcal &lt;= Energy_Level
+  			</if>
+  		</where>
+  		order by C_Time desc
+  </select>
+  
+    
+
+<select id="findFoodUserDiaRyBYusercodeForElements" resultType="java.lang.String">
+SELECT F_Elements FROM `yh_food_user_diary` WHERE user_code=#{usercode}
+</select>
+
+<!-- 根据时间段和用户查询日记信息 -->
+<select id="findFoodInfoByTimeAnduserCodeForReport" resultMap="YhFoodUserDiaryResult">
+
+SELECT * FROM `yh_food_user_diary` WHERE C_Time BETWEEN  #{strTime} AND #{endTime} AND user_code=#{usercode}  
+</select>
+<!-- 本周数据 -->
+<select id="findFoodDiaryThisWeekInfo" resultMap="YhFoodUserDiaryResult">
+SELECT * FROM yh_food_user_diary WHERE YEARWEEK(DATE_FORMAT(C_Time,'%Y-%m-%d'), 1) = YEARWEEK(NOW(), 1) and user_code=#{usercode}
+</select>
+<!-- 上周数据 -->
+<select id="findFoodDiaryLastWeekInfo" resultMap="YhFoodUserDiaryResult">
+SELECT * FROM yh_food_user_diary WHERE YEARWEEK(DATE_FORMAT(C_Time,'%Y-%m-%d'), 1) = YEARWEEK(NOW(), 1)-1
+		 and user_code=#{usercode}
+</select>
+<!-- 本月 -->
+<select id="findFoodDiaryThisMonthInfo" resultMap="YhFoodUserDiaryResult">
+SELECT * FROM yh_food_user_diary WHERE DATE_FORMAT(C_Time,'%Y%m')=DATE_FORMAT(CURDATE(),'%Y%m')
+		 and user_code=#{usercode}
+</select>
+<!-- 上月 -->
+<select id="findFoodDiaryLastMonthInfo" resultMap="YhFoodUserDiaryResult">
+SELECT * FROM yh_food_user_diary WHERE PERIOD_DIFF( DATE_FORMAT( NOW( ) , '%Y%m' ) , DATE_FORMAT( C_Time, '%Y%m' ) ) =1 and user_code=#{usercode}
+	 and user_code=#{usercode}
+</select>
+<!-- 本年 -->
+<select id="findFoodDiaryThisYearInfo" resultMap="YhFoodUserDiaryResult">
+SELECT * FROM `yh_food_user_diary` WHERE YEAR(C_Time)=YEAR(NOW())  and user_code=#{usercode}
+		
+</select>
+<select id="findFoodDiaryLastYearInfo" resultMap="YhFoodUserDiaryResult">
+
+		SELECT * FROM `yh_food_user_diary` WHERE YEAR(C_Time)=YEAR(DATE_SUB(NOW(),INTERVAL 1 YEAR))
+		 and user_code=#{usercode}
+</select>
+
+<select id="findFoodUserDuary" resultType="com.yihe.system.domain.InformationSummary">
+SELECT DAY, MAX(num) AS daynum
+FROM (
+    SELECT 
+       WEEKDAY(osr.C_Time)+1 AS DAY, 
+       IF (COUNT(1) IS NULL, 0, COUNT(1)) AS num 
+    FROM yh_food_user_diary AS osr
+    
+    WHERE 
+        osr.user_code=#{usercode} AND
+        YEARWEEK(DATE_FORMAT(osr.C_Time,'%Y-%m-%d'), 1) = YEARWEEK(NOW(), 1)
+    GROUP BY WEEKDAY(osr.C_Time)
+    UNION
+    SELECT * FROM (
+        SELECT 1 DAY, 0 num
+        UNION
+        SELECT 2, 0  
+        UNION
+        SELECT 3, 0  
+        UNION
+        SELECT 4, 0  
+        UNION
+        SELECT 5, 0  
+        UNION
+        SELECT 6, 0
+        UNION
+        SELECT 7, 0  
+    ) b
+) c 
+GROUP BY DAY
+
+</select>
+
+
+<select id="findFoodUserDuaryLastWeek" resultType="com.yihe.system.domain.InformationSummary">
+
+SELECT DAY, MAX(num) AS daynum
+FROM (
+    SELECT 
+       WEEKDAY(osr.C_Time)+1 AS DAY, 
+       IF (COUNT(1) IS NULL, 0, COUNT(1)) AS num 
+    FROM yh_food_user_diary AS osr
+    
+    WHERE 
+        osr.user_code=#{usercode} AND
+        YEARWEEK(DATE_FORMAT(osr.C_Time,'%Y-%m-%d'), 1) = YEARWEEK(NOW(), 1)-1
+    GROUP BY WEEKDAY(osr.C_Time)
+    UNION
+    SELECT * FROM (
+        SELECT 1 DAY, 0 num
+        UNION
+        SELECT 2, 0  
+        UNION
+        SELECT 3, 0  
+        UNION
+        SELECT 4, 0  
+        UNION
+        SELECT 5, 0  
+        UNION
+        SELECT 6, 0
+        UNION
+        SELECT 7, 0  
+    ) b
+) c 
+GROUP BY DAY
+
+</select>
+
+
+<select id="findFoodUserDuaryYue" resultType="map">
+SELECT 
+SUM(CASE DAY(C_Time) WHEN '1' THEN 1 ELSE 0 END) AS '1',
+SUM(CASE DAY(C_Time) WHEN '2' THEN 1 ELSE 0 END) AS '2',
+SUM(CASE DAY(C_Time) WHEN '3' THEN 1 ELSE 0 END) AS '3',
+SUM(CASE DAY(C_Time) WHEN '4' THEN 1 ELSE 0 END) AS '4',
+SUM(CASE DAY(C_Time) WHEN '5' THEN 1 ELSE 0 END) AS '5',
+SUM(CASE DAY(C_Time) WHEN '6' THEN 1 ELSE 0 END) AS '6',
+SUM(CASE DAY(C_Time) WHEN '7' THEN 1 ELSE 0 END) AS '7',
+SUM(CASE DAY(C_Time) WHEN '8' THEN 1 ELSE 0 END) AS '8',
+SUM(CASE DAY(C_Time) WHEN '9' THEN 1 ELSE 0 END) AS '9',
+SUM(CASE DAY(C_Time) WHEN '10' THEN 1 ELSE 0 END) AS '10',
+SUM(CASE DAY(C_Time) WHEN '11' THEN 1 ELSE 0 END) AS '11',
+SUM(CASE DAY(C_Time) WHEN '12' THEN 1 ELSE 0 END) AS '12',
+SUM(CASE DAY(C_Time) WHEN '13' THEN 1 ELSE 0 END) AS '13',
+SUM(CASE DAY(C_Time) WHEN '14' THEN 1 ELSE 0 END) AS '14',
+SUM(CASE DAY(C_Time) WHEN '15' THEN 1 ELSE 0 END) AS '15',
+SUM(CASE DAY(C_Time) WHEN '16' THEN 1 ELSE 0 END) AS '16',
+SUM(CASE DAY(C_Time) WHEN '17' THEN 1 ELSE 0 END) AS '17',
+SUM(CASE DAY(C_Time) WHEN '18' THEN 1 ELSE 0 END) AS '18',
+SUM(CASE DAY(C_Time) WHEN '19' THEN 1 ELSE 0 END) AS '19',
+SUM(CASE DAY(C_Time) WHEN '20' THEN 1 ELSE 0 END) AS '20',
+SUM(CASE DAY(C_Time) WHEN '21' THEN 1 ELSE 0 END) AS '21',
+SUM(CASE DAY(C_Time) WHEN '22' THEN 1 ELSE 0 END) AS '22',
+SUM(CASE DAY(C_Time) WHEN '23' THEN 1 ELSE 0 END) AS '23',
+SUM(CASE DAY(C_Time) WHEN '24' THEN 1 ELSE 0 END) AS '24',
+SUM(CASE DAY(C_Time) WHEN '25' THEN 1 ELSE 0 END) AS '25',
+SUM(CASE DAY(C_Time) WHEN '26' THEN 1 ELSE 0 END) AS '26',
+SUM(CASE DAY(C_Time) WHEN '27' THEN 1 ELSE 0 END) AS '27',
+SUM(CASE DAY(C_Time) WHEN '28' THEN 1 ELSE 0 END) AS '28',
+SUM(CASE DAY(C_Time) WHEN '29' THEN 1 ELSE 0 END) AS '29',
+SUM(CASE DAY(C_Time) WHEN '30' THEN 1 ELSE 0 END) AS '30',
+SUM(CASE DAY(C_Time) WHEN '31' THEN 1 ELSE 0 END) AS '31',
+MONTH(C_Time) AS MONTH,
+YEAR(C_Time) AS YEAR
+FROM yh_food_user_diary
+WHERE MONTH(`C_Time`) IN(#{month}) AND YEAR(C_Time) IN(#{year})AND user_code=#{usercode} GROUP BY  MONTH 
+
+</select>
+
+<select id="findFoodUserDiaryByYear" resultType="map">
+SELECT 
+SUM(CASE MONTH(C_Time) WHEN '1' THEN 1 ELSE 0 END) AS '1',
+SUM(CASE MONTH(C_Time) WHEN '2' THEN 1 ELSE 0 END) AS '2',
+SUM(CASE MONTH(C_Time) WHEN '3' THEN 1 ELSE 0 END) AS '3',
+SUM(CASE MONTH(C_Time) WHEN '4' THEN 1 ELSE 0 END) AS '4',
+SUM(CASE MONTH(C_Time) WHEN '5' THEN 1 ELSE 0 END) AS '5',
+SUM(CASE MONTH(C_Time) WHEN '6' THEN 1 ELSE 0 END) AS '6',
+SUM(CASE MONTH(C_Time) WHEN '7' THEN 1 ELSE 0 END) AS '7',
+SUM(CASE MONTH(C_Time) WHEN '8' THEN 1 ELSE 0 END) AS '8',
+SUM(CASE MONTH(C_Time) WHEN '9' THEN 1 ELSE 0 END) AS '9',
+SUM(CASE MONTH(C_Time) WHEN '10' THEN 1 ELSE 0 END) AS '10',
+SUM(CASE MONTH(C_Time) WHEN '11' THEN 1 ELSE 0 END) AS '11',
+SUM(CASE MONTH(C_Time) WHEN '12' THEN 1 ELSE 0 END) AS '12',
+YEAR(C_Time) AS YEAR
+FROM yh_food_user_diary elr
+WHERE user_code=#{usercode} AND  YEAR(C_Time) IN(#{year})  GROUP BY  YEAR
+ 
+</select>
+
+<select id="findFoodUserDiaryByYear2" resultType="map">
+SELECT 
+YEAR(C_Time) AS YEAR,
+SUM(CASE MONTH(C_Time) WHEN '1' THEN 1 ELSE 0 END) AS '1',
+SUM(CASE MONTH(C_Time) WHEN '2' THEN 1 ELSE 0 END) AS '2',
+SUM(CASE MONTH(C_Time) WHEN '3' THEN 1 ELSE 0 END) AS '3',
+SUM(CASE MONTH(C_Time) WHEN '4' THEN 1 ELSE 0 END) AS '4',
+SUM(CASE MONTH(C_Time) WHEN '5' THEN 1 ELSE 0 END) AS '5',
+SUM(CASE MONTH(C_Time) WHEN '6' THEN 1 ELSE 0 END) AS '6',
+SUM(CASE MONTH(C_Time) WHEN '7' THEN 1 ELSE 0 END) AS '7',
+SUM(CASE MONTH(C_Time) WHEN '8' THEN 1 ELSE 0 END) AS '8',
+SUM(CASE MONTH(C_Time) WHEN '9' THEN 1 ELSE 0 END) AS '9',
+SUM(CASE MONTH(C_Time) WHEN '10' THEN 1 ELSE 0 END) AS '10',
+SUM(CASE MONTH(C_Time) WHEN '11' THEN 1 ELSE 0 END) AS '11',
+SUM(CASE MONTH(C_Time) WHEN '12' THEN 1 ELSE 0 END) AS '12'
+
+FROM yh_food_user_diary elr
+WHERE user_code=#{usercode} AND  YEAR(C_Time) IN(#{year})  AND MONTH(C_Time) IN (#{month})  GROUP BY  YEAR
+ 
+</select>
+
+
+<select id="findFlldUserDiaryByusercodeForCount" resultType="java.lang.Integer">
+SELECT COUNT(1) FROM yh_food_user_diary WHERE user_code=#{usercode}
+</select>
+
+<select id="findUserFoodDiaryInfo" resultType="com.yihe.system.domain.YHUserFoodDiaryVOJO">
+SELECT a.user_code as usercode,a.user_name AS username,a.name,a.gender  AS sex,c.Energy_Level as energyLevel,
+c.C_Time AS cTime,c.F_Elements AS felements FROM yh_user_reginfo AS a
+INNER JOIN yh_user_make_card AS b
+ON a.user_code=b.user_code
+INNER JOIN `yh_food_user_diary` AS c
+ON a.user_code=c.user_code
+WHERE b.doctor=(SELECT id FROM `yh_user_admin_info` WHERE user_code=#{usercode})
+<if test="nameLike!=null">
+AND a.name LIKE CONCAT('%',#{nameLike},'%')
+</if>
+<if test="usernameLike!=null">
+AND a.user_name LIKE CONCAT('%',#{usernameLike},'%')
+</if>
+<if test="strTime!='' and strTime!=null and endTime!='' and endTime!=null">
+AND c.C_Time BETWEEN  DATE_FORMAT(#{strTime},'%Y-%m-%d')  AND  DATE_FORMAT(#{endTime},'%Y-%m-%d')
+</if>
+<if test='standard =="1".toString()'>
+AND c.`Energy_Kcal` &gt; c.`Energy_Level`
+
+</if>
+<if test='standard =="2".toString()'>
+AND c.`Energy_Kcal` &lt;= c.`Energy_Level`
+</if>
+ ORDER BY c.C_Time  DESC
+</select>
+    <select id="selectYhFoodUserDiaryList" parameterType="YhFoodUserDiary" resultMap="YhFoodUserDiaryResult">
+        <include refid="selectYhFoodUserDiaryVo"/>
+        <where>  
+            <if test="cTime != null  and cTime != ''"> and C_Time = #{cTime}</if>
+            <if test="energyLevel != null "> and Energy_Level = #{energyLevel}</if>
+            <if test="dataSources != null "> and Data_Sources = #{dataSources}</if>
+            <if test="rId != null "> and R_Id = #{rId}</if>
+            <if test="fat != null "> and Fat = #{fat}</if>
+            <if test="cho != null "> and Cho = #{cho}</if>
+            <if test="cholesterol != null "> and Cholesterol = #{cholesterol}</if>
+            <if test="energyKcal != null "> and Energy_Kcal = #{energyKcal}</if>
+            <if test="fElements != null  and fElements != ''"> and F_Elements = #{fElements}</if>
+            <if test="acElements != null  and acElements != ''"> and Ac_Elements = #{acElements}</if>
+            <if test="isDel != null "> and Is_Del = #{isDel}</if>
+            <if test="userCode != null "> and user_code = #{userCode}</if>
+            <if test="protein != null "> and Protein = #{protein}</if>
+            <if test="alvol != null "> and Alvol = #{alvol}</if>
+            <if test="cellulose != null "> and Cellulose = #{cellulose}</if>
+        </where>
+    </select>
+    
+    <select id="selectYhFoodUserDiaryById" parameterType="Long" resultMap="YhFoodUserDiaryResult">
+        <include refid="selectYhFoodUserDiaryVo"/>
+        where U_Fd_Id = #{uFdId}
+    </select>
+        <select id="findFoodDiaryinfoNewTime" resultType="java.lang.String">
+
+
+	SELECT C_Time FROM `yh_food_user_diary`   WHERE user_code=#{usercode} AND Data_Source IS NOT NULL AND TO_DAYS(NOW( )) =TO_DAYS( Data_Source)  ORDER BY Data_Source DESC LIMIT 1
+
+
+        </select>
+    <select id="findFoodDiaryinfoNewCanci" resultType="java.lang.String">
+
+
+SELECT F_Elements FROM `yh_food_user_diary`   WHERE user_code=#{usercode} AND Data_Source IS NOT NULL AND TO_DAYS(NOW( )) =TO_DAYS( Data_Source)  ORDER BY Data_Source DESC LIMIT 1
+
+        </select>
+    <insert id="insertYhFoodUserDiary" parameterType="YhFoodUserDiary" useGeneratedKeys="true" keyProperty="uFdId">
+        insert into yh_food_user_diary
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="cTime != null  and cTime != ''">C_Time,</if>
+            <if test="energyLevel != null ">Energy_Level,</if>
+            <if test="dataSources != null ">Data_Sources,</if>
+            <if test="rId != null ">R_Id,</if>
+            <if test="fat != null ">Fat,</if>
+            <if test="cho != null ">Cho,</if>
+            <if test="cholesterol != null ">Cholesterol,</if>
+            <if test="energyKcal != null ">Energy_Kcal,</if>
+            <if test="fElements != null  and fElements != ''">F_Elements,</if>
+            <if test="acElements != null  and acElements != ''">Ac_Elements,</if>
+            <if test="isDel != null ">Is_Del,</if>
+            <if test="userCode != null ">user_code,</if>
+            <if test="protein != null ">Protein,</if>
+            <if test="alvol != null ">Alvol,</if>
+            <if test="cellulose != null ">Cellulose,</if>
+            <if test="dataSource != null ">data_Source,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="cTime != null  and cTime != ''">#{cTime},</if>
+            <if test="energyLevel != null ">#{energyLevel},</if>
+            <if test="dataSources != null ">#{dataSources},</if>
+            <if test="rId != null ">#{rId},</if>
+            <if test="fat != null ">#{fat},</if>
+            <if test="cho != null ">#{cho},</if>
+            <if test="cholesterol != null ">#{cholesterol},</if>
+            <if test="energyKcal != null ">#{energyKcal},</if>
+            <if test="fElements != null  and fElements != ''">#{fElements},</if>
+            <if test="acElements != null  and acElements != ''">#{acElements},</if>
+            <if test="isDel != null ">#{isDel},</if>
+            <if test="userCode != null ">#{userCode},</if>
+            <if test="protein != null ">#{protein},</if>
+            <if test="alvol != null ">#{alvol},</if>
+            <if test="cellulose != null ">#{cellulose},</if>
+            <if test="dataSource != null ">#{dataSource},</if>
+         </trim>
+    </insert>
+    
+    <update id="updateYhFoodUserDiary2" parameterType="YhFoodUserDiary">
+     update yh_food_user_diary set F_Elements = #{fElements} where  U_Fd_Id = #{uFdId} 
+    </update>
+
+    <update id="updateYhFoodUserDiary" parameterType="YhFoodUserDiary">
+        update yh_food_user_diary
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="cTime != null  and cTime != ''">C_Time = #{cTime},</if>
+            <if test="energyLevel != null ">Energy_Level = #{energyLevel},</if>
+            <if test="dataSources != null ">Data_Sources = #{dataSources},</if>
+            <if test="rId != null ">R_Id = #{rId},</if>
+            <if test="fat != null ">Fat = #{fat},</if>
+            <if test="cho != null ">Cho = #{cho},</if>
+            <if test="cholesterol != null ">Cholesterol = #{cholesterol},</if>
+            <if test="energyKcal != null ">Energy_Kcal = #{energyKcal},</if>
+            <if test="fElements != null  and fElements != ''">F_Elements = #{fElements},</if>
+            <if test="acElements != null  and acElements != ''">Ac_Elements = #{acElements},</if>
+            <if test="isDel != null ">Is_Del = #{isDel},</if>
+            <if test="userCode != null ">user_code = #{userCode},</if>
+            <if test="protein != null ">Protein = #{protein},</if>
+            <if test="alvol != null ">Alvol = #{alvol},</if>
+            <if test="cellulose != null ">Cellulose = #{cellulose},</if>
+            <if test="dataSource != null ">data_Source = #{dataSource},</if>
+        </trim>
+        where U_Fd_Id = #{uFdId}
+    </update>
+    
+     <update id="updateYhFoodUserDiaryDel" parameterType="YhFoodUserDiary">
+        update yh_food_user_diary
+        <trim prefix="SET" suffixOverrides=",">
+             
+            <if test="energyLevel != null ">Energy_Level = #{energyLevel},</if>
+            <if test="dataSources != null ">Data_Sources = #{dataSources},</if>
+            <if test="rId != null ">R_Id = #{rId},</if>
+            <if test="fat != null ">Fat = #{fat},</if>
+            <if test="cho != null ">Cho = #{cho},</if>
+            <if test="cholesterol != null ">Cholesterol = #{cholesterol},</if>
+            <if test="energyKcal != null ">Energy_Kcal = #{energyKcal},</if>
+            <if test="fElements != null">F_Elements = #{fElements},</if>
+            <if test="acElements != null  and acElements != ''">Ac_Elements = #{acElements},</if>
+            <if test="isDel != null ">Is_Del = #{isDel},</if>
+           
+            <if test="protein != null ">Protein = #{protein},</if>
+            <if test="alvol != null ">Alvol = #{alvol},</if>
+            <if test="cellulose != null ">Cellulose = #{cellulose},</if>
+            <if test="dataSource != null ">Data_Source = #{dataSource},</if>
+        </trim>
+        where user_code = #{userCode} and C_Time=#{cTime}
+    </update>
+
+    <delete id="deleteYhFoodUserDiaryById" parameterType="Long">
+        delete from yh_food_user_diary where U_Fd_Id = #{uFdId}
+    </delete>
+
+    <delete id="deleteYhFoodUserDiaryByIds" parameterType="String">
+        delete from yh_food_user_diary where U_Fd_Id in 
+        <foreach item="uFdId" collection="array" open="(" separator="," close=")">
+            #{uFdId}
+        </foreach>
+    </delete>
+    
+</mapper>

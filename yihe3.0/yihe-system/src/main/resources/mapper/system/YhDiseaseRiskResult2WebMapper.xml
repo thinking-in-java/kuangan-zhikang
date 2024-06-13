@@ -1,0 +1,868 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yihe.system.mapper.YhDiseaseRiskResult2WebMapper" >
+  <resultMap id="BaseResultMap" type="com.yihe.system.domain.YhDiseaseRiskResult2Web" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="diseaseId" property="diseaseid" jdbcType="VARCHAR" />
+    <result column="user_code" property="userCode" jdbcType="VARCHAR" />
+    <result column="request_serialize" property="requestSerialize" jdbcType="VARCHAR" />
+    <result column="age" property="age" jdbcType="VARCHAR" />
+    <result column="hdlc" property="hdlc" jdbcType="VARCHAR" />
+    <result column="ldlc" property="ldlc" jdbcType="VARCHAR" />
+    <result column="food" property="food" jdbcType="VARCHAR" />
+    <result column="sport" property="sport" jdbcType="VARCHAR" />
+    <result column="b4" property="b4" jdbcType="VARCHAR" />
+    <result column="smoke" property="smoke" jdbcType="VARCHAR" />
+    <result column="drink" property="drink" jdbcType="VARCHAR" />
+    <result column="hw_check" property="hwCheck" jdbcType="VARCHAR" />
+    <result column="BMI" property="bmi" jdbcType="VARCHAR" />
+    <result column="waist" property="waist" jdbcType="VARCHAR" />
+    <result column="diab_his" property="diabHis" jdbcType="VARCHAR" />
+    <result column="hbp_his" property="hbpHis" jdbcType="VARCHAR" />
+    <result column="FBG" property="fbg" jdbcType="VARCHAR" />
+    <result column="sbp" property="sbp" jdbcType="VARCHAR" />
+    <result column="cholesterol" property="cholesterol" jdbcType="VARCHAR" />
+    <result column="TG" property="tg" jdbcType="VARCHAR" />
+    <result column="BF" property="bf" jdbcType="VARCHAR" />
+    <result column="dbp" property="dbp" jdbcType="VARCHAR" />
+    <result column="HBPS" property="hbps" jdbcType="VARCHAR" />
+    <result column="HFS" property="hfs" jdbcType="VARCHAR" />
+    <result column="hf_his" property="hfHis" jdbcType="VARCHAR" />
+    <result column="C1" property="c1" jdbcType="VARCHAR" />
+    <result column="milk" property="milk" jdbcType="VARCHAR" />
+    <result column="tfa" property="tfa" jdbcType="VARCHAR" />
+    <result column="chds" property="chds" jdbcType="VARCHAR" />
+    <result column="dms" property="dms" jdbcType="VARCHAR" />
+    <result column="smoke_sencod" property="smokeSencod" jdbcType="VARCHAR" />
+    <result column="lungs" property="lungs" jdbcType="VARCHAR" />
+    <result column="emphy_his" property="emphyHis" jdbcType="VARCHAR" />
+    <result column="asbestos_contact_his" property="asbestosContactHis" jdbcType="VARCHAR" />
+    <result column="" property="decorateHouse" jdbcType="VARCHAR" />
+    <result column="psy_nervous" property="psyNervous" jdbcType="VARCHAR" />
+    <result column="bronch_his" property="bronchHis" jdbcType="VARCHAR" />
+    <result column="lampblack_contact" property="lampblackContact" jdbcType="VARCHAR" />
+    <result column="gouts" property="gouts" jdbcType="VARCHAR" />
+    <result column="tea" property="tea" jdbcType="VARCHAR" />
+    <result column="food_purine" property="foodPurine" jdbcType="VARCHAR" />
+    <result column="chd_his" property="chdHis" jdbcType="VARCHAR" />
+    <result column="bua" property="bua" jdbcType="VARCHAR" />
+    <result column="med_use_pill" property="medUsePill" jdbcType="VARCHAR" />
+    <result column="breast_plastic_surgery" property="breastPlasticSurgery" jdbcType="VARCHAR" />
+    <result column="BCS" property="bcs" jdbcType="VARCHAR" />
+    <result column="begind_breast_his" property="begindBreastHis" jdbcType="VARCHAR" />
+    <result column="female_menstruation" property="femaleMenstruation" jdbcType="VARCHAR" />
+    <result column="female_tire" property="femaleTire" jdbcType="VARCHAR" />
+    <result column="female_breast_time" property="femaleBreastTime" jdbcType="VARCHAR" />
+    <result column="female_menopause_age" property="femaleMenopauseAge" jdbcType="VARCHAR" />
+    <result column="has_med_ert" property="hasMedErt" jdbcType="VARCHAR" />
+    <result column="CSS" property="css" jdbcType="VARCHAR" />
+    <result column="card_his" property="cardHis" jdbcType="VARCHAR" />
+    <result column="lvd_his" property="lvdHis" jdbcType="VARCHAR" />
+    <result column="af_his" property="afHis" jdbcType="VARCHAR" />
+    <result column="PCS" property="pcs" jdbcType="VARCHAR" />
+    <result column="prostate_disease" property="prostateDisease" jdbcType="VARCHAR" />
+    <result column="urinary_tract_infection" property="urinaryTractInfection" jdbcType="VARCHAR" />
+    <result column="urine_symptom" property="urineSymptom" jdbcType="VARCHAR" />
+    <result column="t_score" property="tScore" jdbcType="VARCHAR" />
+    <result column="ra_his" property="raHis" jdbcType="VARCHAR" />
+    <result column="living_envir" property="livingEnvir" jdbcType="VARCHAR" />
+    <result column="food_drink_beer" property="foodDrinkBeer" jdbcType="VARCHAR" />
+    <result column="female_menstruation_regular" property="femaleMenstruationRegular" jdbcType="VARCHAR" />
+    <result column="chemical_occupation" property="chemicalOccupation" jdbcType="VARCHAR" />
+    <result column="food_vegetables" property="foodVegetables" jdbcType="VARCHAR" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="qtime" property="qtime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, diseaseId, user_code, request_serialize, age, hdlc, ldlc, food, sport, b4, smoke, 
+    drink, hw_check, BMI, waist, diab_his, hbp_his, FBG, sbp, cholesterol, TG, BF, dbp, 
+    HBPS, HFS, hf_his, C1, milk, tfa, chds, dms, smoke_sencod, lungs, emphy_his, asbestos_contact_his, 
+    decorate_house, psy_nervous, bronch_his, lampblack_contact, gouts, tea, food_purine, chd_his, bua, med_use_pill,
+    breast_plastic_surgery, BCS, begind_breast_his, female_menstruation, female_tire, 
+    female_breast_time, female_menopause_age, has_med_ert, CSS, card_his, lvd_his, af_his, 
+    PCS, prostate_disease, urinary_tract_infection, urine_symptom, t_score, ra_his, living_envir, 
+    food_drink_beer, female_menstruation_regular, chemical_occupation, food_vegetables, 
+    remark, qtime
+  </sql>
+  <select id="selectByPrimaryByRs" resultMap="BaseResultMap" >
+    select 
+    <include refid="Base_Column_List" />
+    from yh_disease_risk_result2
+    where request_serialize = #{rs}
+  </select>
+  
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from yh_disease_risk_result2
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectUserDiseaseRiskByParam" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    SELECT * from yh_disease_risk_result2 where user_code=#{userCode} ORDER BY qtime DESC limit 1 
+  </select>
+  
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from yh_disease_risk_result2
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.yihe.system.domain.YhDiseaseRiskResult2Web" >
+    insert into yh_disease_risk_result2 (id, diseaseId, user_code, 
+      request_serialize, age, hdlc, 
+      ldlc, food, sport, 
+      b4, smoke, drink, hw_check, 
+      BMI, waist, diab_his, 
+      hbp_his, FBG, sbp, cholesterol, 
+      TG, BF, dbp, HBPS, 
+      HFS, hf_his, C1, milk, 
+      tfa, chds, dms, smoke_sencod, 
+      lungs, emphy_his, asbestos_contact_his,
+      decorate_house, psy_nervous, bronch_his,
+      lampblack_contact, gouts, tea, food_purine,
+      chd_his, bua, med_use_pill, 
+      breast_plastic_surgery, BCS, begind_breast_his, 
+      female_menstruation, female_tire, female_breast_time, 
+      female_menopause_age, has_med_ert, CSS, 
+      card_his, lvd_his, af_his, 
+      PCS, prostate_disease, urinary_tract_infection, 
+      urine_symptom, t_score, ra_his, 
+      living_envir, food_drink_beer, female_menstruation_regular, 
+      chemical_occupation, food_vegetables, remark, 
+      qtime)
+    values (#{id,jdbcType=INTEGER}, #{diseaseid,jdbcType=VARCHAR}, #{userCode,jdbcType=VARCHAR}, 
+      #{requestSerialize,jdbcType=VARCHAR}, #{age,jdbcType=VARCHAR}, #{hdlc,jdbcType=VARCHAR}, 
+      #{ldlc,jdbcType=VARCHAR}, #{food,jdbcType=VARCHAR}, #{sport,jdbcType=VARCHAR}, 
+      #{b4,jdbcType=VARCHAR}, #{smoke,jdbcType=VARCHAR}, #{drink,jdbcType=VARCHAR}, #{hwCheck,jdbcType=VARCHAR}, 
+      #{bmi,jdbcType=VARCHAR}, #{waist,jdbcType=VARCHAR}, #{diabHis,jdbcType=VARCHAR}, 
+      #{hbpHis,jdbcType=VARCHAR}, #{fbg,jdbcType=VARCHAR}, #{sbp,jdbcType=VARCHAR}, #{cholesterol,jdbcType=VARCHAR}, 
+      #{tg,jdbcType=VARCHAR}, #{bf,jdbcType=VARCHAR}, #{dbp,jdbcType=VARCHAR}, #{hbps,jdbcType=VARCHAR}, 
+      #{hfs,jdbcType=VARCHAR}, #{hfHis,jdbcType=VARCHAR}, #{c1,jdbcType=VARCHAR}, #{milk,jdbcType=VARCHAR}, 
+      #{tfa,jdbcType=VARCHAR}, #{chds,jdbcType=VARCHAR}, #{dms,jdbcType=VARCHAR}, #{smokeSencod,jdbcType=VARCHAR}, 
+      #{lungs,jdbcType=VARCHAR}, #{emphyHis,jdbcType=VARCHAR}, #{asbestosContactHis,jdbcType=VARCHAR}, 
+      #{decorateHouse,jdbcType=VARCHAR}, #{psyNervous,jdbcType=VARCHAR}, #{bronchHis,jdbcType=VARCHAR},
+      #{lampblackContact,jdbcType=VARCHAR}, #{gouts,jdbcType=VARCHAR}, #{tea,jdbcType=VARCHAR}, #{foodPurine,jdbcType=VARCHAR},
+      #{chdHis,jdbcType=VARCHAR}, #{bua,jdbcType=VARCHAR}, #{medUsePill,jdbcType=VARCHAR}, 
+      #{breastPlasticSurgery,jdbcType=VARCHAR}, #{bcs,jdbcType=VARCHAR}, #{begindBreastHis,jdbcType=VARCHAR}, 
+      #{femaleMenstruation,jdbcType=VARCHAR}, #{femaleTire,jdbcType=VARCHAR}, #{femaleBreastTime,jdbcType=VARCHAR}, 
+      #{femaleMenopauseAge,jdbcType=VARCHAR}, #{hasMedErt,jdbcType=VARCHAR}, #{css,jdbcType=VARCHAR}, 
+      #{cardHis,jdbcType=VARCHAR}, #{lvdHis,jdbcType=VARCHAR}, #{afHis,jdbcType=VARCHAR}, 
+      #{pcs,jdbcType=VARCHAR}, #{prostateDisease,jdbcType=VARCHAR}, #{urinaryTractInfection,jdbcType=VARCHAR}, 
+      #{urineSymptom,jdbcType=VARCHAR}, #{tScore,jdbcType=VARCHAR}, #{raHis,jdbcType=VARCHAR}, 
+      #{livingEnvir,jdbcType=VARCHAR}, #{foodDrinkBeer,jdbcType=VARCHAR}, #{femaleMenstruationRegular,jdbcType=VARCHAR}, 
+      #{chemicalOccupation,jdbcType=VARCHAR}, #{foodVegetables,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, 
+      #{qtime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.yihe.system.domain.YhDiseaseRiskResult2Web" >
+    insert into yh_disease_risk_result2
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="diseaseid != null" >
+        diseaseId,
+      </if>
+      <if test="userCode != null" >
+        user_code,
+      </if>
+      <if test="requestSerialize != null" >
+        request_serialize,
+      </if>
+      <if test="age != null" >
+        age,
+      </if>
+      <if test="hdlc != null" >
+        hdlc,
+      </if>
+      <if test="ldlc != null" >
+        ldlc,
+      </if>
+      <if test="food != null" >
+        food,
+      </if>
+      <if test="sport != null" >
+        sport,
+      </if>
+      <if test="b4 != null" >
+        b4,
+      </if>
+      <if test="smoke != null" >
+        smoke,
+      </if>
+      <if test="drink != null" >
+        drink,
+      </if>
+      <if test="hwCheck != null" >
+        hw_check,
+      </if>
+      <if test="bmi != null" >
+        BMI,
+      </if>
+      <if test="waist != null" >
+        waist,
+      </if>
+      <if test="diabHis != null" >
+        diab_his,
+      </if>
+      <if test="hbpHis != null" >
+        hbp_his,
+      </if>
+      <if test="fbg != null" >
+        FBG,
+      </if>
+      <if test="sbp != null" >
+        sbp,
+      </if>
+      <if test="cholesterol != null" >
+        cholesterol,
+      </if>
+      <if test="tg != null" >
+        TG,
+      </if>
+      <if test="bf != null" >
+        BF,
+      </if>
+      <if test="dbp != null" >
+        dbp,
+      </if>
+      <if test="hbps != null" >
+        HBPS,
+      </if>
+      <if test="hfs != null" >
+        HFS,
+      </if>
+      <if test="hfHis != null" >
+        hf_his,
+      </if>
+      <if test="c1 != null" >
+        C1,
+      </if>
+      <if test="milk != null" >
+        milk,
+      </if>
+      <if test="tfa != null" >
+        tfa,
+      </if>
+      <if test="chds != null" >
+        chds,
+      </if>
+      <if test="dms != null" >
+        dms,
+      </if>
+      <if test="smokeSencod != null" >
+        smoke_sencod,
+      </if>
+      <if test="lungs != null" >
+        lungs,
+      </if>
+      <if test="emphyHis != null" >
+        emphy_his,
+      </if>
+      <if test="asbestosContactHis != null" >
+        asbestos_contact_his,
+      </if>
+      <if test="decorateHouse != null" >
+        decorate_house,
+      </if>
+      <if test="psyNervous != null" >
+        psy_nervous,
+      </if>
+      <if test="bronchHis != null" >
+        bronch_his,
+      </if>
+      <if test="lampblackContact != null" >
+        lampblack_contact,
+      </if>
+      <if test="gouts != null" >
+        gouts,
+      </if>
+      <if test="tea != null" >
+        tea,
+      </if>
+      <if test="foodPurine != null" >
+        food_purine,
+      </if>
+      <if test="chdHis != null" >
+        chd_his,
+      </if>
+      <if test="bua != null" >
+        bua,
+      </if>
+      <if test="medUsePill != null" >
+        med_use_pill,
+      </if>
+      <if test="breastPlasticSurgery != null" >
+        breast_plastic_surgery,
+      </if>
+      <if test="bcs != null" >
+        BCS,
+      </if>
+      <if test="begindBreastHis != null" >
+        begind_breast_his,
+      </if>
+      <if test="femaleMenstruation != null" >
+        female_menstruation,
+      </if>
+      <if test="femaleTire != null" >
+        female_tire,
+      </if>
+      <if test="femaleBreastTime != null" >
+        female_breast_time,
+      </if>
+      <if test="femaleMenopauseAge != null" >
+        female_menopause_age,
+      </if>
+      <if test="hasMedErt != null" >
+        has_med_ert,
+      </if>
+      <if test="css != null" >
+        CSS,
+      </if>
+      <if test="cardHis != null" >
+        card_his,
+      </if>
+      <if test="lvdHis != null" >
+        lvd_his,
+      </if>
+      <if test="afHis != null" >
+        af_his,
+      </if>
+      <if test="pcs != null" >
+        PCS,
+      </if>
+      <if test="prostateDisease != null" >
+        prostate_disease,
+      </if>
+      <if test="urinaryTractInfection != null" >
+        urinary_tract_infection,
+      </if>
+      <if test="urineSymptom != null" >
+        urine_symptom,
+      </if>
+      <if test="tScore != null" >
+        t_score,
+      </if>
+      <if test="raHis != null" >
+        ra_his,
+      </if>
+      <if test="livingEnvir != null" >
+        living_envir,
+      </if>
+      <if test="foodDrinkBeer != null" >
+        food_drink_beer,
+      </if>
+      <if test="femaleMenstruationRegular != null" >
+        female_menstruation_regular,
+      </if>
+      <if test="chemicalOccupation != null" >
+        chemical_occupation,
+      </if>
+      <if test="foodVegetables != null" >
+        food_vegetables,
+      </if>
+      <if test="remark != null" >
+        remark,
+      </if>
+      <if test="qtime != null" >
+        qtime,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="diseaseid != null" >
+        #{diseaseid,jdbcType=VARCHAR},
+      </if>
+      <if test="userCode != null" >
+        #{userCode,jdbcType=VARCHAR},
+      </if>
+      <if test="requestSerialize != null" >
+        #{requestSerialize,jdbcType=VARCHAR},
+      </if>
+      <if test="age != null" >
+        #{age,jdbcType=VARCHAR},
+      </if>
+      <if test="hdlc != null" >
+        #{hdlc,jdbcType=VARCHAR},
+      </if>
+      <if test="ldlc != null" >
+        #{ldlc,jdbcType=VARCHAR},
+      </if>
+      <if test="food != null" >
+        #{food,jdbcType=VARCHAR},
+      </if>
+      <if test="sport != null" >
+        #{sport,jdbcType=VARCHAR},
+      </if>
+      <if test="b4 != null" >
+        #{b4,jdbcType=VARCHAR},
+      </if>
+      <if test="smoke != null" >
+        #{smoke,jdbcType=VARCHAR},
+      </if>
+      <if test="drink != null" >
+        #{drink,jdbcType=VARCHAR},
+      </if>
+      <if test="hwCheck != null" >
+        #{hwCheck,jdbcType=VARCHAR},
+      </if>
+      <if test="bmi != null" >
+        #{bmi,jdbcType=VARCHAR},
+      </if>
+      <if test="waist != null" >
+        #{waist,jdbcType=VARCHAR},
+      </if>
+      <if test="diabHis != null" >
+        #{diabHis,jdbcType=VARCHAR},
+      </if>
+      <if test="hbpHis != null" >
+        #{hbpHis,jdbcType=VARCHAR},
+      </if>
+      <if test="fbg != null" >
+        #{fbg,jdbcType=VARCHAR},
+      </if>
+      <if test="sbp != null" >
+        #{sbp,jdbcType=VARCHAR},
+      </if>
+      <if test="cholesterol != null" >
+        #{cholesterol,jdbcType=VARCHAR},
+      </if>
+      <if test="tg != null" >
+        #{tg,jdbcType=VARCHAR},
+      </if>
+      <if test="bf != null" >
+        #{bf,jdbcType=VARCHAR},
+      </if>
+      <if test="dbp != null" >
+        #{dbp,jdbcType=VARCHAR},
+      </if>
+      <if test="hbps != null" >
+        #{hbps,jdbcType=VARCHAR},
+      </if>
+      <if test="hfs != null" >
+        #{hfs,jdbcType=VARCHAR},
+      </if>
+      <if test="hfHis != null" >
+        #{hfHis,jdbcType=VARCHAR},
+      </if>
+      <if test="c1 != null" >
+        #{c1,jdbcType=VARCHAR},
+      </if>
+      <if test="milk != null" >
+        #{milk,jdbcType=VARCHAR},
+      </if>
+      <if test="tfa != null" >
+        #{tfa,jdbcType=VARCHAR},
+      </if>
+      <if test="chds != null" >
+        #{chds,jdbcType=VARCHAR},
+      </if>
+      <if test="dms != null" >
+        #{dms,jdbcType=VARCHAR},
+      </if>
+      <if test="smokeSencod != null" >
+        #{smokeSencod,jdbcType=VARCHAR},
+      </if>
+      <if test="lungs != null" >
+        #{lungs,jdbcType=VARCHAR},
+      </if>
+      <if test="emphyHis != null" >
+        #{emphyHis,jdbcType=VARCHAR},
+      </if>
+      <if test="asbestosContactHis != null" >
+        #{asbestosContactHis,jdbcType=VARCHAR},
+      </if>
+      <if test="decorateHouse != null" >
+        #{decorate_house,jdbcType=VARCHAR},
+      </if>
+      <if test="psyNervous != null" >
+        #{psyNervous,jdbcType=VARCHAR},
+      </if>
+      <if test="bronchHis != null" >
+        #{bronchHis,jdbcType=VARCHAR},
+      </if>
+      <if test="lampblackContact != null" >
+        #{lampblackContact,jdbcType=VARCHAR},
+      </if>
+      <if test="gouts != null" >
+        #{gouts,jdbcType=VARCHAR},
+      </if>
+      <if test="tea != null" >
+        #{tea,jdbcType=VARCHAR},
+      </if>
+      <if test="foodPurine != null" >
+        #{foodPurine,jdbcType=VARCHAR},
+      </if>
+      <if test="chdHis != null" >
+        #{chdHis,jdbcType=VARCHAR},
+      </if>
+      <if test="bua != null" >
+        #{bua,jdbcType=VARCHAR},
+      </if>
+      <if test="medUsePill != null" >
+        #{medUsePill,jdbcType=VARCHAR},
+      </if>
+      <if test="breastPlasticSurgery != null" >
+        #{breastPlasticSurgery,jdbcType=VARCHAR},
+      </if>
+      <if test="bcs != null" >
+        #{bcs,jdbcType=VARCHAR},
+      </if>
+      <if test="begindBreastHis != null" >
+        #{begindBreastHis,jdbcType=VARCHAR},
+      </if>
+      <if test="femaleMenstruation != null" >
+        #{femaleMenstruation,jdbcType=VARCHAR},
+      </if>
+      <if test="femaleTire != null" >
+        #{femaleTire,jdbcType=VARCHAR},
+      </if>
+      <if test="femaleBreastTime != null" >
+        #{femaleBreastTime,jdbcType=VARCHAR},
+      </if>
+      <if test="femaleMenopauseAge != null" >
+        #{femaleMenopauseAge,jdbcType=VARCHAR},
+      </if>
+      <if test="hasMedErt != null" >
+        #{hasMedErt,jdbcType=VARCHAR},
+      </if>
+      <if test="css != null" >
+        #{css,jdbcType=VARCHAR},
+      </if>
+      <if test="cardHis != null" >
+        #{cardHis,jdbcType=VARCHAR},
+      </if>
+      <if test="lvdHis != null" >
+        #{lvdHis,jdbcType=VARCHAR},
+      </if>
+      <if test="afHis != null" >
+        #{afHis,jdbcType=VARCHAR},
+      </if>
+      <if test="pcs != null" >
+        #{pcs,jdbcType=VARCHAR},
+      </if>
+      <if test="prostateDisease != null" >
+        #{prostateDisease,jdbcType=VARCHAR},
+      </if>
+      <if test="urinaryTractInfection != null" >
+        #{urinaryTractInfection,jdbcType=VARCHAR},
+      </if>
+      <if test="urineSymptom != null" >
+        #{urineSymptom,jdbcType=VARCHAR},
+      </if>
+      <if test="tScore != null" >
+        #{tScore,jdbcType=VARCHAR},
+      </if>
+      <if test="raHis != null" >
+        #{raHis,jdbcType=VARCHAR},
+      </if>
+      <if test="livingEnvir != null" >
+        #{livingEnvir,jdbcType=VARCHAR},
+      </if>
+      <if test="foodDrinkBeer != null" >
+        #{foodDrinkBeer,jdbcType=VARCHAR},
+      </if>
+      <if test="femaleMenstruationRegular != null" >
+        #{femaleMenstruationRegular,jdbcType=VARCHAR},
+      </if>
+      <if test="chemicalOccupation != null" >
+        #{chemicalOccupation,jdbcType=VARCHAR},
+      </if>
+      <if test="foodVegetables != null" >
+        #{foodVegetables,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="qtime != null" >
+        #{qtime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.yihe.system.domain.YhDiseaseRiskResult2Web" >
+    update yh_disease_risk_result2
+    <set >
+      <if test="diseaseid != null" >
+        diseaseId = #{diseaseid,jdbcType=VARCHAR},
+      </if>
+      <if test="userCode != null" >
+        user_code = #{userCode,jdbcType=VARCHAR},
+      </if>
+      <if test="requestSerialize != null" >
+        request_serialize = #{requestSerialize,jdbcType=VARCHAR},
+      </if>
+      <if test="age != null" >
+        age = #{age,jdbcType=VARCHAR},
+      </if>
+      <if test="hdlc != null" >
+        hdlc = #{hdlc,jdbcType=VARCHAR},
+      </if>
+      <if test="ldlc != null" >
+        ldlc = #{ldlc,jdbcType=VARCHAR},
+      </if>
+      <if test="food != null" >
+        food = #{food,jdbcType=VARCHAR},
+      </if>
+      <if test="sport != null" >
+        sport = #{sport,jdbcType=VARCHAR},
+      </if>
+      <if test="b4 != null" >
+        b4 = #{b4,jdbcType=VARCHAR},
+      </if>
+      <if test="smoke != null" >
+        smoke = #{smoke,jdbcType=VARCHAR},
+      </if>
+      <if test="drink != null" >
+        drink = #{drink,jdbcType=VARCHAR},
+      </if>
+      <if test="hwCheck != null" >
+        hw_check = #{hwCheck,jdbcType=VARCHAR},
+      </if>
+      <if test="bmi != null" >
+        BMI = #{bmi,jdbcType=VARCHAR},
+      </if>
+      <if test="waist != null" >
+        waist = #{waist,jdbcType=VARCHAR},
+      </if>
+      <if test="diabHis != null" >
+        diab_his = #{diabHis,jdbcType=VARCHAR},
+      </if>
+      <if test="hbpHis != null" >
+        hbp_his = #{hbpHis,jdbcType=VARCHAR},
+      </if>
+      <if test="fbg != null" >
+        FBG = #{fbg,jdbcType=VARCHAR},
+      </if>
+      <if test="sbp != null" >
+        sbp = #{sbp,jdbcType=VARCHAR},
+      </if>
+      <if test="cholesterol != null" >
+        cholesterol = #{cholesterol,jdbcType=VARCHAR},
+      </if>
+      <if test="tg != null" >
+        TG = #{tg,jdbcType=VARCHAR},
+      </if>
+      <if test="bf != null" >
+        BF = #{bf,jdbcType=VARCHAR},
+      </if>
+      <if test="dbp != null" >
+        dbp = #{dbp,jdbcType=VARCHAR},
+      </if>
+      <if test="hbps != null" >
+        HBPS = #{hbps,jdbcType=VARCHAR},
+      </if>
+      <if test="hfs != null" >
+        HFS = #{hfs,jdbcType=VARCHAR},
+      </if>
+      <if test="hfHis != null" >
+        hf_his = #{hfHis,jdbcType=VARCHAR},
+      </if>
+      <if test="c1 != null" >
+        C1 = #{c1,jdbcType=VARCHAR},
+      </if>
+      <if test="milk != null" >
+        milk = #{milk,jdbcType=VARCHAR},
+      </if>
+      <if test="tfa != null" >
+        tfa = #{tfa,jdbcType=VARCHAR},
+      </if>
+      <if test="chds != null" >
+        chds = #{chds,jdbcType=VARCHAR},
+      </if>
+      <if test="dms != null" >
+        dms = #{dms,jdbcType=VARCHAR},
+      </if>
+      <if test="smokeSencod != null" >
+        smoke_sencod = #{smokeSencod,jdbcType=VARCHAR},
+      </if>
+      <if test="lungs != null" >
+        lungs = #{lungs,jdbcType=VARCHAR},
+      </if>
+      <if test="emphyHis != null" >
+        emphy_his = #{emphyHis,jdbcType=VARCHAR},
+      </if>
+      <if test="asbestosContactHis != null" >
+        asbestos_contact_his = #{asbestosContactHis,jdbcType=VARCHAR},
+      </if>
+      <if test="decorateHouse != null" >
+        decorate_house = #{decorateHouse,jdbcType=VARCHAR},
+      </if>
+      <if test="psyNervous != null" >
+        psy_nervous = #{psyNervous,jdbcType=VARCHAR},
+      </if>
+      <if test="bronchHis != null" >
+        bronch_his = #{bronchHis,jdbcType=VARCHAR},
+      </if>
+      <if test="lampblackContact != null" >
+        lampblack_contact = #{lampblackContact,jdbcType=VARCHAR},
+      </if>
+      <if test="gouts != null" >
+        gouts = #{gouts,jdbcType=VARCHAR},
+      </if>
+      <if test="tea != null" >
+        tea = #{tea,jdbcType=VARCHAR},
+      </if>
+      <if test="foodPurine != null" >
+        food_purine = #{foodPurine,jdbcType=VARCHAR},
+      </if>
+      <if test="chdHis != null" >
+        chd_his = #{chdHis,jdbcType=VARCHAR},
+      </if>
+      <if test="bua != null" >
+        bua = #{bua,jdbcType=VARCHAR},
+      </if>
+      <if test="medUsePill != null" >
+        med_use_pill = #{medUsePill,jdbcType=VARCHAR},
+      </if>
+      <if test="breastPlasticSurgery != null" >
+        breast_plastic_surgery = #{breastPlasticSurgery,jdbcType=VARCHAR},
+      </if>
+      <if test="bcs != null" >
+        BCS = #{bcs,jdbcType=VARCHAR},
+      </if>
+      <if test="begindBreastHis != null" >
+        begind_breast_his = #{begindBreastHis,jdbcType=VARCHAR},
+      </if>
+      <if test="femaleMenstruation != null" >
+        female_menstruation = #{femaleMenstruation,jdbcType=VARCHAR},
+      </if>
+      <if test="femaleTire != null" >
+        female_tire = #{femaleTire,jdbcType=VARCHAR},
+      </if>
+      <if test="femaleBreastTime != null" >
+        female_breast_time = #{femaleBreastTime,jdbcType=VARCHAR},
+      </if>
+      <if test="femaleMenopauseAge != null" >
+        female_menopause_age = #{femaleMenopauseAge,jdbcType=VARCHAR},
+      </if>
+      <if test="hasMedErt != null" >
+        has_med_ert = #{hasMedErt,jdbcType=VARCHAR},
+      </if>
+      <if test="css != null" >
+        CSS = #{css,jdbcType=VARCHAR},
+      </if>
+      <if test="cardHis != null" >
+        card_his = #{cardHis,jdbcType=VARCHAR},
+      </if>
+      <if test="lvdHis != null" >
+        lvd_his = #{lvdHis,jdbcType=VARCHAR},
+      </if>
+      <if test="afHis != null" >
+        af_his = #{afHis,jdbcType=VARCHAR},
+      </if>
+      <if test="pcs != null" >
+        PCS = #{pcs,jdbcType=VARCHAR},
+      </if>
+      <if test="prostateDisease != null" >
+        prostate_disease = #{prostateDisease,jdbcType=VARCHAR},
+      </if>
+      <if test="urinaryTractInfection != null" >
+        urinary_tract_infection = #{urinaryTractInfection,jdbcType=VARCHAR},
+      </if>
+      <if test="urineSymptom != null" >
+        urine_symptom = #{urineSymptom,jdbcType=VARCHAR},
+      </if>
+      <if test="tScore != null" >
+        t_score = #{tScore,jdbcType=VARCHAR},
+      </if>
+      <if test="raHis != null" >
+        ra_his = #{raHis,jdbcType=VARCHAR},
+      </if>
+      <if test="livingEnvir != null" >
+        living_envir = #{livingEnvir,jdbcType=VARCHAR},
+      </if>
+      <if test="foodDrinkBeer != null" >
+        food_drink_beer = #{foodDrinkBeer,jdbcType=VARCHAR},
+      </if>
+      <if test="femaleMenstruationRegular != null" >
+        female_menstruation_regular = #{femaleMenstruationRegular,jdbcType=VARCHAR},
+      </if>
+      <if test="chemicalOccupation != null" >
+        chemical_occupation = #{chemicalOccupation,jdbcType=VARCHAR},
+      </if>
+      <if test="foodVegetables != null" >
+        food_vegetables = #{foodVegetables,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="qtime != null" >
+        qtime = #{qtime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.yihe.system.domain.YhDiseaseRiskResult2Web" >
+    update yh_disease_risk_result2
+    set diseaseId = #{diseaseid,jdbcType=VARCHAR},
+      user_code = #{userCode,jdbcType=VARCHAR},
+      request_serialize = #{requestSerialize,jdbcType=VARCHAR},
+      age = #{age,jdbcType=VARCHAR},
+      hdlc = #{hdlc,jdbcType=VARCHAR},
+      ldlc = #{ldlc,jdbcType=VARCHAR},
+      food = #{food,jdbcType=VARCHAR},
+      sport = #{sport,jdbcType=VARCHAR},
+      b4 = #{b4,jdbcType=VARCHAR},
+      smoke = #{smoke,jdbcType=VARCHAR},
+      drink = #{drink,jdbcType=VARCHAR},
+      hw_check = #{hwCheck,jdbcType=VARCHAR},
+      BMI = #{bmi,jdbcType=VARCHAR},
+      waist = #{waist,jdbcType=VARCHAR},
+      diab_his = #{diabHis,jdbcType=VARCHAR},
+      hbp_his = #{hbpHis,jdbcType=VARCHAR},
+      FBG = #{fbg,jdbcType=VARCHAR},
+      sbp = #{sbp,jdbcType=VARCHAR},
+      cholesterol = #{cholesterol,jdbcType=VARCHAR},
+      TG = #{tg,jdbcType=VARCHAR},
+      BF = #{bf,jdbcType=VARCHAR},
+      dbp = #{dbp,jdbcType=VARCHAR},
+      HBPS = #{hbps,jdbcType=VARCHAR},
+      HFS = #{hfs,jdbcType=VARCHAR},
+      hf_his = #{hfHis,jdbcType=VARCHAR},
+      C1 = #{c1,jdbcType=VARCHAR},
+      milk = #{milk,jdbcType=VARCHAR},
+      tfa = #{tfa,jdbcType=VARCHAR},
+      chds = #{chds,jdbcType=VARCHAR},
+      dms = #{dms,jdbcType=VARCHAR},
+      smoke_sencod = #{smokeSencod,jdbcType=VARCHAR},
+      lungs = #{lungs,jdbcType=VARCHAR},
+      emphy_his = #{emphyHis,jdbcType=VARCHAR},
+      asbestos_contact_his = #{asbestosContactHis,jdbcType=VARCHAR},
+        decorate_house = #{decorateHouse,jdbcType=VARCHAR},
+      psy_nervous = #{psyNervous,jdbcType=VARCHAR},
+      bronch_his = #{bronchHis,jdbcType=VARCHAR},
+      lampblack_contact = #{lampblackContact,jdbcType=VARCHAR},
+      gouts = #{gouts,jdbcType=VARCHAR},
+      tea = #{tea,jdbcType=VARCHAR},
+      food_purine = #{foodPurine,jdbcType=VARCHAR},
+      chd_his = #{chdHis,jdbcType=VARCHAR},
+      bua = #{bua,jdbcType=VARCHAR},
+      med_use_pill = #{medUsePill,jdbcType=VARCHAR},
+      breast_plastic_surgery = #{breastPlasticSurgery,jdbcType=VARCHAR},
+      BCS = #{bcs,jdbcType=VARCHAR},
+      begind_breast_his = #{begindBreastHis,jdbcType=VARCHAR},
+      female_menstruation = #{femaleMenstruation,jdbcType=VARCHAR},
+      female_tire = #{femaleTire,jdbcType=VARCHAR},
+      female_breast_time = #{femaleBreastTime,jdbcType=VARCHAR},
+      female_menopause_age = #{femaleMenopauseAge,jdbcType=VARCHAR},
+      has_med_ert = #{hasMedErt,jdbcType=VARCHAR},
+      CSS = #{css,jdbcType=VARCHAR},
+      card_his = #{cardHis,jdbcType=VARCHAR},
+      lvd_his = #{lvdHis,jdbcType=VARCHAR},
+      af_his = #{afHis,jdbcType=VARCHAR},
+      PCS = #{pcs,jdbcType=VARCHAR},
+      prostate_disease = #{prostateDisease,jdbcType=VARCHAR},
+      urinary_tract_infection = #{urinaryTractInfection,jdbcType=VARCHAR},
+      urine_symptom = #{urineSymptom,jdbcType=VARCHAR},
+      t_score = #{tScore,jdbcType=VARCHAR},
+      ra_his = #{raHis,jdbcType=VARCHAR},
+      living_envir = #{livingEnvir,jdbcType=VARCHAR},
+      food_drink_beer = #{foodDrinkBeer,jdbcType=VARCHAR},
+      female_menstruation_regular = #{femaleMenstruationRegular,jdbcType=VARCHAR},
+      chemical_occupation = #{chemicalOccupation,jdbcType=VARCHAR},
+      food_vegetables = #{foodVegetables,jdbcType=VARCHAR},
+      remark = #{remark,jdbcType=VARCHAR},
+      qtime = #{qtime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

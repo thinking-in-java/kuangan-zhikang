@@ -1,0 +1,291 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yihe.applet.api.mapper.YhHealthLectureCommentAppMapper" >
+  <resultMap id="BaseResultMap" type="com.yihe.applet.api.domain.YhHealthLectureCommentApp" >
+    <id column="commentId" property="commentid" jdbcType="INTEGER" />
+    <result column="pid" property="pid" jdbcType="INTEGER" />
+    <result column="lectureInfoId" property="lectureinfoid" jdbcType="INTEGER" />
+    <result column="usercode" property="usercode" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="TINYINT" />
+    <result column="commentTime" property="commenttime" jdbcType="VARCHAR" />
+    <result column="comImg" property="comimg" jdbcType="VARCHAR" />
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="com.yihe.applet.api.domain.YhHealthLectureCommentApp" extends="BaseResultMap" >
+    <result column="commentInfo" property="commentinfo" jdbcType="LONGVARCHAR" />
+  </resultMap>
+  <resultMap id="YhLifeHabitPersonDictApp" type="com.yihe.applet.api.domain.YhLifeHabitPersonDictApp">
+    <result column="total_day" property="totalDay"/>
+  </resultMap>
+
+  <sql id="Base_Column_List" >
+    commentId, pid, lectureInfoId, usercode, status, commentTime, comImg
+  </sql>
+  <sql id="Blob_Column_List" >
+    commentInfo
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Integer" >
+    select
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from yh_health_lecture_comment
+    where commentId = #{commentid,jdbcType=INTEGER}
+  </select>
+
+  <select id="selectAllparam" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+    select * from yh_health_lecture_comment  where lectureInfoId = #{categoryId,jdbcType=INTEGER}
+  </select>
+
+    <select id="findCommentPuserCodeByParam" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+   select * from yh_health_lecture_comment where  commentId = #{pid} and pid=0
+  </select>
+
+
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from yh_health_lecture_comment
+    where commentId = #{commentid,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.yihe.applet.api.domain.YhHealthLectureCommentApp" >
+    insert into yh_health_lecture_comment (commentId, pid, lectureInfoId,
+      usercode, status, commentTime,
+      comImg, commentInfo)
+    values (#{commentid,jdbcType=INTEGER}, #{pid,jdbcType=INTEGER}, #{lectureinfoid,jdbcType=INTEGER},
+      #{usercode,jdbcType=INTEGER}, #{status,jdbcType=TINYINT}, #{commenttime,jdbcType=VARCHAR},
+      #{comimg,jdbcType=VARCHAR}, #{commentinfo,jdbcType=LONGVARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.yihe.applet.api.domain.YhHealthLectureCommentApp"  useGeneratedKeys="true" keyProperty="commentid">
+    insert into yh_health_lecture_comment
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="commentid != null" >
+        commentId,
+      </if>
+      <if test="pid != null" >
+        pid,
+      </if>
+      <if test="lectureinfoid != null" >
+        lectureInfoId,
+      </if>
+      <if test="usercode != null" >
+        usercode,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="commenttime != null" >
+        commentTime,
+      </if>
+      <if test="comimg != null" >
+        comImg,
+      </if>
+      <if test="commentinfo != null" >
+        commentInfo,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="commentid != null" >
+        #{commentid,jdbcType=INTEGER},
+      </if>
+      <if test="pid != null" >
+        #{pid,jdbcType=INTEGER},
+      </if>
+      <if test="lectureinfoid != null" >
+        #{lectureinfoid,jdbcType=INTEGER},
+      </if>
+      <if test="usercode != null" >
+        #{usercode,jdbcType=INTEGER},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=TINYINT},
+      </if>
+      <if test="commenttime != null" >
+        #{commenttime,jdbcType=VARCHAR},
+      </if>
+      <if test="comimg != null" >
+        #{comimg,jdbcType=VARCHAR},
+      </if>
+      <if test="commentinfo != null" >
+        #{commentinfo,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.yihe.applet.api.domain.YhHealthLectureCommentApp" >
+    update yh_health_lecture_comment
+    <set >
+      <if test="pid != null" >
+        pid = #{pid,jdbcType=INTEGER},
+      </if>
+      <if test="lectureinfoid != null" >
+        lectureInfoId = #{lectureinfoid,jdbcType=INTEGER},
+      </if>
+      <if test="usercode != null" >
+        usercode = #{usercode,jdbcType=INTEGER},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=TINYINT},
+      </if>
+      <if test="commenttime != null" >
+        commentTime = #{commenttime,jdbcType=VARCHAR},
+      </if>
+      <if test="comimg != null" >
+        comImg = #{comimg,jdbcType=VARCHAR},
+      </if>
+      <if test="commentinfo != null" >
+        commentInfo = #{commentinfo,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where commentId = #{commentid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.yihe.applet.api.domain.YhHealthLectureCommentApp" >
+    update yh_health_lecture_comment
+    set pid = #{pid,jdbcType=INTEGER},
+      lectureInfoId = #{lectureinfoid,jdbcType=INTEGER},
+      usercode = #{usercode,jdbcType=INTEGER},
+      status = #{status,jdbcType=TINYINT},
+      commentTime = #{commenttime,jdbcType=VARCHAR},
+      comImg = #{comimg,jdbcType=VARCHAR},
+      commentInfo = #{commentinfo,jdbcType=LONGVARCHAR}
+    where commentId = #{commentid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.yihe.applet.api.domain.YhHealthLectureCommentApp" >
+    update yh_health_lecture_comment
+    set pid = #{pid,jdbcType=INTEGER},
+      lectureInfoId = #{lectureinfoid,jdbcType=INTEGER},
+      usercode = #{usercode,jdbcType=INTEGER},
+      status = #{status,jdbcType=TINYINT},
+      commentTime = #{commenttime,jdbcType=VARCHAR},
+      comImg = #{comimg,jdbcType=VARCHAR}
+    where commentId = #{commentid,jdbcType=INTEGER}
+  </update>
+  <select id="ifclock" parameterType="com.yihe.applet.api.domain.YhHealthLectureCommentApp" resultMap="BaseResultMap">
+    select <include refid="Base_Column_List"/>
+    from yh_health_lecture_comment
+    where lectureInfoId = #{lectureinfoid,jdbcType=INTEGER}
+    and usercode = #{usercode,jdbcType=INTEGER}
+    and DATE_FORMAT(commentTime,'%Y-%m-%d')=CURDATE()
+    and status=2
+    limit 1
+  </select>
+  <update id="updClock" parameterType="com.yihe.applet.api.domain.YhHealthLectureCommentApp">
+    update yh_health_lecture_comment
+    set commentInfo = #{commentinfo,jdbcType=LONGVARCHAR}
+    <if test="comimg != null">
+      ,comImg = #{comimg,jdbcType=VARCHAR}
+    </if>
+    where commentId = #{commentid,jdbcType=INTEGER}
+  </update>
+
+   <select id="findCommentBylId" resultType="com.yihe.applet.api.domain.YhHealthLectureCommentApp">
+  SELECT a.commentId, a.pid, a.lectureInfoId, a.usercode, a.status, a.commentTime, a.comImg , a.commentInfo ,b.`name`,c.`head_img` AS headImg
+
+FROM yh_health_lecture_comment AS a
+ INNER JOIN `yh_user_reginfo` AS b
+ ON a.`usercode`=b.`user_code`
+ LEFT JOIN `yh_wx_user` AS c
+ ON a.`usercode`=c.`user_id`
+
+WHERE ( a.lectureInfoId = #{lid} AND a.pid = 0 ) and a.`status`=#{status,jdbcType=TINYINT}
+order by a.commentTime  desc
+
+
+  </select>
+
+
+
+    <!-- 查询父评论 -->
+  <select id="findCommentBylId1" resultType="com.yihe.applet.api.domain.YhHealthLectureCommentApp" parameterType="map">
+  SELECT a.commentId, a.pid, a.lectureInfoId, a.usercode, a.status, a.commentTime, a.comImg , a.commentInfo ,b.`name`,b.post_code AS headImg
+
+FROM yh_health_lecture_comment AS a
+ INNER JOIN `yh_user_reginfo` AS b
+ ON a.`usercode`=b.`user_code`
+ LEFT JOIN `yh_wx_user` AS c
+ ON a.`usercode`=c.`user_id`
+
+WHERE ( a.lectureInfoId = #{lid} AND a.pid = 0 ) and a.`status`=#{status,jdbcType=TINYINT}
+order by a.commentTime  desc   limit #{curPage},#{pageSize}
+
+
+  </select>
+  <!-- 查询楼中楼评论 -->
+    <select id="findCommentByPid"  resultType="com.yihe.applet.api.domain.YhHealthLectureCommentApp">
+  SELECT a.commentId, a.pid, a.lectureInfoId, a.usercode, a.status, a.commentTime, a.comImg , a.commentInfo ,b.name as `name`,b.post_code AS headImg
+	FROM yh_health_lecture_comment AS a
+	 INNER JOIN `yh_user_reginfo` AS b
+	 ON a.`usercode`=b.`user_code`
+	 LEFT JOIN `yh_wx_user` AS c
+	 ON a.`usercode`=c.`user_id`
+	WHERE (  a.pid = #{pid} )
+	order by a.commentTime  desc
+
+  </select>
+
+
+  <!-- 查询楼中楼评论 -->
+  <select id="findCommentByPid2"  resultType="com.yihe.applet.api.domain.YhHealthLectureCommentApp">
+  SELECT a.commentId, a.pid, a.lectureInfoId, a.usercode, a.status, a.comImg , a.commentInfo ,b.name as `name`,b.post_code AS headImg,
+	b.gender, ify.title,ify.content,ify.id,ify.is_read as isRead,ify.to_service_id as toServiceId,ify.send_date as `sendDate`,info.typeid
+	FROM yh_health_lecture_comment AS a
+	 INNER JOIN `yh_user_reginfo` AS b
+	 ON a.`usercode`=b.`user_code`
+	 inner join yh_user_notify as ify
+	 on a.commentId = ify.standby1
+	 inner join yh_health_lecture_info as info
+	 on info.infoId = ify.lectureInfoId
+	WHERE (  a.pid = #{pid} )
+	order by a.commentTime  desc
+
+  </select>
+
+  <!-- 查询楼中楼评论 习惯-->
+  <select id="findCommentByPid1"  resultType="com.yihe.applet.api.domain.YhHealthLectureCommentApp">
+  SELECT a.commentId, c.id as pid, a.lectureInfoId, a.usercode, a.status, a.comImg , a.commentInfo ,b.name as `name`,b.post_code AS headImg,
+	b.gender, ify.title,ify.content,ify.id,ify.is_read as isRead,ify.to_service_id as toServiceId,ify.send_date as `sendDate`,lhd.habit_type as typeid
+	FROM yh_health_lecture_comment AS a
+	 INNER JOIN `yh_user_reginfo` AS b
+	 ON a.`usercode`=b.`user_code`
+	 inner join yh_user_notify as ify
+	 on a.commentId = ify.standby1
+	 inner join yh_life_habit_dict as lhd
+	 on lhd.id = ify.lectureInfoId
+	 INNER JOIN yh_life_habit_person_dict c
+	 ON c.habit_id=lhd.id AND c.user_code=b.user_code
+	WHERE (  a.pid = #{pid} )
+	order by a.commentTime  desc
+  </select>
+
+    <select id="selecTcontAndName"  resultType="com.yihe.applet.api.domain.YhHealthLectureCommentApp">
+		SELECT a.commentInfo,b.user_name as name
+		FROM yh_health_lecture_comment AS a
+		 inner JOIN `yh_user_reginfo` AS b
+		 ON a.`usercode`=b.`user_code`
+		 where a.commentId = #{commentid}
+
+  </select>
+  <!-- 修改评论 习惯-->
+  <update id="updateSelective" parameterType="com.yihe.applet.api.domain.YhHealthLectureCommentApp" >
+    update yh_health_lecture_comment
+    <set >
+      <if test="comimg != null" >
+        comImg = #{comimg,jdbcType=VARCHAR},
+      </if>
+      <if test="commentinfo != null" >
+        commentInfo = #{commentinfo,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where lectureInfoId=#{lectureinfoid}  AND usercode=#{usercode} AND DATE_FORMAT(commentTime,'%Y%m%d') = DATE_FORMAT(#{commenttime},'%Y%m%d')
+
+  </update>
+
+  <update id="updateTotalDay" parameterType="com.yihe.applet.api.domain.YhLifeHabitPersonDictApp">
+     update yh_life_habit_person_dict set total_day= #{totalDay} where user_code = #{userCode} and habit_id=#{habitId}
+  </update>
+
+  <select id="selectTotalDay" resultMap="YhLifeHabitPersonDictApp">
+    select * from yh_life_habit_person_dict where user_code = #{userCode} and habit_id=#{habitId}
+  </select>
+  <select id="selectCurrentDay" resultType="java.lang.Integer">
+    select count(1) from yh_life_habit_sign where user_code = #{userCode} and habit_id=#{habitId} and increase_time >= DATE_FORMAT(now(),'%Y-%m-%d')
+  </select>
+
+</mapper>

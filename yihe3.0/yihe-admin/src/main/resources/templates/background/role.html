@@ -1,0 +1,422 @@
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+        <title>角色管理</title>
+        <link rel="stylesheet"  th:href="@{/assets/libs/layui/css/layui.css}" />
+        <link rel="stylesheet"  th:href="@{/assets/module/admin.css}"  />
+        <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+        <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+        <![endif]-->
+    </head>
+    <body>
+
+        <!-- 页面加载loading -->
+        <div class="page-loading">
+            <div class="ball-loader">
+                <span></span><span></span><span></span><span></span>
+            </div>
+        </div>
+        <!-- 正文开始 -->
+        <div class="layui-fluid">
+            <div class="layui-tab layui-tab-brief" lay-filter="docDemoTabBrief">
+                <span id="istab" style="display: none" th:text="${totab}"></span>
+                <ul class="layui-tab-title">
+                    <li class="layui-this">管理员</li>
+                    <li lay-id='2'>健管师</li>
+                </ul>
+
+                <div class="layui-tab-content" style="height: 100px;">
+                    <div class="layui-tab-item layui-show layui-form-item">
+                        <div class="layui-card">
+                            <div class="layui-card-body">
+                                <div class="layui-form toolbar">
+                                    <div class="">
+                                        <div class="layui-inline" style="width: 100%">
+                                            使用方法：Step1.创建角色→Step2.配置角色权限范围→Step3.前往“账号管理”配置各管理员对应角色
+                                            <button id="btnAddRole" style="float: right" class="layui-btn icon-btn"><i class="layui-icon">&#xe654;</i>新建角色</button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <table id="tableRole" lay-filter="tableRole"></table>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="layui-tab-item">
+                        <div class="layui-card">
+                            <div class="layui-card-body">
+                                <div class="layui-form toolbar">
+                                    <div class="">
+                                        <div class="layui-inline" style="width: 100%">
+                                            使用方法：Step1.创建角色→Step2.配置角色权限范围→Step3.指定各管理员角色可分配的健管师权限→Step4.前往“账号管理”配置健管师的角色
+                                            <button id="btnAdddoctorRole" style="float: right" class="layui-btn icon-btn"><i class="layui-icon">&#xe654;</i>新建角色</button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <table id="tabledoctorRole" lay-filter="tabledoctorRole"></table>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+
+
+                    </div>
+
+
+
+                </div>
+
+
+
+
+                <!-- 表格操作列 -->
+                <!-- <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a> -->
+                <script type="text/html" id="tableBarRole" th:inline="none">
+                    {{# if(d.ishava == true) { }}
+                    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="edit">修改</a>
+
+                    <a class="layui-btn layui-btn-xs" lay-event="auth">查看权限</a>
+
+                    <a style="color: rgba(166, 166, 166, 1);background-color: rgba(255, 255, 255, 1);box-shadow: rgba(166, 166, 166, 1);" class="layui-btn layui-btn-primary  layui-btn-xs" lay-event="tiaozhuan">账号管理</a>
+                    {{# } else { }}
+                    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="edit">修改</a>
+
+                    <a class="layui-btn layui-btn-xs" lay-event="auth">权限分配</a>
+
+                    <a style="color: rgba(166, 166, 166, 1);background-color: rgba(255, 255, 255, 1);box-shadow: rgba(166, 166, 166, 1);" class="layui-btn layui-btn-primary  layui-btn-xs" lay-event="tiaozhuan">账号管理</a>
+
+                    {{# } }}
+                </script>
+
+                <script type="text/html" id="tableBardoctorRole" th:inline="none">
+                    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="edit">修改</a>
+
+                    <a class="layui-btn layui-btn-xs" lay-event="auth">权限分配</a>
+                </script>
+                <!-- 表单弹窗 -->
+                <script type="text/html" id="modelRole" th:inline="none">
+                    <form id="modelRoleForm" lay-filter="modelRoleForm" class="layui-form model-form">
+                        <input name="roleId" type="hidden"/>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label layui-form-required">角色名</label>
+                            <div class="layui-input-block">
+                                <input name="roleName" placeholder="请输入角色名" type="text" class="layui-input" maxlength="20"
+                                       lay-verType="tips" lay-verify="required" required/>
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">备注</label>
+                            <div class="layui-input-block">
+                                <textarea name="roleDescription" placeholder="请输入内容" class="layui-textarea" maxlength="200"></textarea>
+                            </div>
+                        </div>
+                        <div class="layui-form-item text-right">
+                            <button class="layui-btn layui-btn-primary" type="button" ew-event="closePageDialog">取消</button>
+                            <button class="layui-btn" lay-filter="modelSubmitRole" lay-submit>保存</button>
+                        </div>
+                    </form>
+                </script>
+                <!-- js部分 -->
+                <script type="text/javascript" th:src="@{/assets/libs/layui/layui.js}"></script>
+                <script type="text/javascript" th:src="@{/assets/js/common.js}"></script>
+                <script th:inline="none" >
+                    layui.use(['layer', 'form', 'table', 'util', 'admin', 'zTree','element'], function () {
+                        var $ = layui.jquery;
+                        var layer = layui.layer;
+                        var form = layui.form;
+                        var table = layui.table;
+                        var util = layui.util;
+                        var admin = layui.admin;
+                        var element = layui.element;
+                        // 渲染表格
+                        var flagStr = $("#istab").html();
+                        var insTbs = table.render({
+                            elem: '#tableRole',
+                            url: '/YhUserManage/selectallrole',
+                            cellMinWidth: 100
+                            ,where : {
+                                roletype:1
+                            },
+                            cols: [[
+                                {type: 'numbers',title:"序号"},
+                                {field: 'roleName', sort: true, title: '角色名'},
+                                {field: 'roleDescription', sort: true, title: '备注'},
+                                {field:"count",sort:true,title:"数量"},
+                                {align: 'center', toolbar: '#tableBarRole', title: '操作', minWidth: 200}
+                            ]]
+                        });
+
+                        // 渲染表格
+                        var insTb = table.render({
+                            elem: '#tabledoctorRole',
+                            url: '/YhUserManage/selecdoctorrole',
+                            cellMinWidth: 100
+                            ,where : {
+                                roletype:2
+                            },
+                            cols: [[
+                                {type: 'numbers',title:"序号"},
+                                {field: 'roleName', sort: true, title: '角色名'},
+                                {field: 'roleDescription', sort: true, title: '备注'},
+                                {field:"count",sort:true,title:"数量"},
+                                {field: 'manage_roleid', sort: true, title: '指定下级管理员的可分配健管师权限',event: 'setSign',templet:function(d){
+                                        if(d.manage_roleid==null|| d.manage_roleid==''){
+                                            return  '<i class="layui-icon layui-icon-edit"  >';
+                                        }else{
+                                            return d.manage_roleid + '<i class="layui-icon layui-icon-edit"  >'    ;
+                                        }
+                                    }},
+                                {align: 'center', toolbar: '#tableBardoctorRole', title: '操作', minWidth: 200}
+                            ]]
+                        });
+
+                        // 添加
+                        $('#btnAddRole').click(function () {
+                            showEditModel({roletype:1,roleCtime:null});
+                        });
+                        $("#btnAdddoctorRole").click(function(){
+                            showEditModel({roletype:2,roleCtime:null});
+                        });
+
+                        // 搜索
+                        form.on('submit(formSubSearchRole)', function (data) {
+                            insTb.reload({where: data.field}, 'data');
+                        });
+
+                        // 工具条点击事件
+                        table.on('tool(tabledoctorRole)', function (obj) {
+                            var data = obj.data;
+                            var layEvent = obj.event;
+                            console.log(obj);
+                            if (layEvent === 'edit') { // 修改
+                                data.roletype=2;
+                                showEditModel(data);
+                            } else if (layEvent === 'del') { // 删除
+                                doDel(obj);
+                            } else if (layEvent === 'auth') {  // 权限管理
+                                showPermModeldoctor(data.roleId);
+                            }else if(layEvent === 'setSign'){
+                                var roleId =obj.data.roleId;
+                                var nespase= layer.open({
+                                    type: 2,
+                                    area: ['700px', '450px'],
+                                    fixed: false, //不固定
+                                    maxmin: true,
+                                    title:'角色',
+                                    content: '/manage/rolemanage/rolemanagepage?roleid='+roleId,
+                                    end:function () {
+                                        window.location.href = "/manage/role/index?totab=2";
+                                    }
+                                });
+                            }else if(layEvent="tiaozhuan"){
+                                alert(1);
+                                window.location.href="/manage/guest/accountinformation";
+                                console.log("/manage/guest/accountinformation123456")
+                            }
+                        });
+
+                        console.log("------------------------"+flagStr);
+                        if('2'==flagStr){
+                            element.tabChange('docDemoTabBrief', 2);
+                        }
+                        // 工具条点击事件
+                        table.on('tool(tableRole)', function (obj) {
+                            var data = obj.data;
+                            var layEvent = obj.event;
+                            console.log(obj);
+                            if (layEvent === 'edit') { // 修改
+                                data.roletype=1;
+                                showEditModel(data);
+                            } else if (layEvent === 'del') { // 删除
+                                doDel(obj);
+                            } else if (layEvent === 'auth') {  // 权限管理
+                                showPermModel(data.roleId);
+                            }else if(layEvent="tiaozhuan"){
+
+                                var parent$ = window.parent.parent.layui.jquery;
+                                parent$(".layui-side .layui-nav span li").removeClass("layui-this");
+
+                                //     var len = parent$("span li").length;
+                                //     for(var i = 0; i < len; i++) {
+                                //         var a = parent$("span li ")[i].html();
+                                // }
+                                // alert(a);
+                                parent$("span span").each(function() {
+                                    var spa = $(this).text();
+                                    if(spa=="客户管理"){
+                                        $(this).parent().parent().parent().addClass("layui-this");
+                                    }
+                                })
+
+                                // parent$(".layui-side .layui-nav span:nth-of-type(14) li").addClass("layui-this");
+                                parent$(".layui-body .show .layui-body-header-title").text("客户管理");
+                                parent.location.href="/manage/total/permissions?id=1031&tianzhuan="+2;
+
+                            }
+                        });
+
+                        // 删除
+                        function doDel(obj) {
+                            layer.confirm('确定要删除“' + obj.data.roleName + '”角色吗？', {
+                                skin: 'layui-layer-admin',
+                                shade: .1
+                            }, function (i) {
+                                layer.close(i);
+                                layer.load(2);
+                                $.get('/YhUserManage/deleterole', {
+                                    roleId: obj.data.roleId
+                                }, function (res) {
+                                    console.log(res.message)
+                                    layer.closeAll('loading');
+                                    if (res.code == 20000) {
+                                        layer.msg(res.message, {icon: 1});
+                                        obj.del();
+                                    } else {
+                                        layer.msg(res.message, {icon: 2});
+                                    }
+                                }, 'json');
+                            });
+                        }
+
+                        // 显示编辑弹窗
+                        function showEditModel(mRole) {
+                            console.log(mRole);
+                            admin.open({
+                                type: 1,
+                                title: (mRole.roleCtime ? '修改' : '添加') + '角色',
+                                content: $('#modelRole').html(),
+                                success: function (layero, dIndex) {
+                                    var url = mRole.roleCtime  ? '/YhUserManage/updateallrole' : '/YhUserManage/addallrole';
+                                    form.val('modelRoleForm', mRole);  // 回显数据
+                                    // 表单提交事件
+                                    form.on('submit(modelSubmitRole)', function (data) {
+                                        layer.load(2);
+                                        data.field.roletype=mRole.roletype;
+                                        $.get(url, data.field, function (res) {
+                                            console.log(res);
+                                            layer.closeAll('loading');
+                                            if (res.code == 20000) {
+                                                layer.close(dIndex);
+                                                layer.msg(res.message, {icon: 1});
+                                                insTb.reload({}, 'data');
+                                                insTbs.reload({}, 'data');
+                                            } else {
+                                                layer.msg(res.message, {icon: 2});
+                                            }
+                                        }, 'json');
+                                        return false;
+                                    });
+                                }
+                            });
+                        }
+
+                        // 管理员权限管理
+                        function showPermModel(roleId) {
+                            admin.open({
+                                title: '权限分配',
+                                btn: ['保存', '取消'],
+                                content: '<ul id="treeAuth" class="ztree"></ul>',
+                                success: function (layero, index) {
+                                    $(layero).children('.layui-layer-content').css({'max-height': '300px', 'overflow': 'auto'});
+                                    var loadIndex=layer.load(2);
+                                    var setting = {check: {enable: true}, data:{simpleData: {enable: true, idKey: "permissionId",pIdKey: "pid"}}};
+                                    $.get('/YhUserManage/selectrolepower', {
+                                        roleId: roleId
+                                    }, function (res) {
+                                        layer.close(loadIndex);
+                                        console.log(res);
+                                        if(!res.data.isshow){
+                                            setting = {data:{simpleData: {enable: true, idKey: "permissionId",pIdKey: "pid"}}};
+                                        }
+                                        if (20000 === res.code) {
+                                            $.fn.zTree.init($('#treeAuth'),setting,res.data.allpermission);
+                                        } else {
+                                            layer.msg(res.msg, {icon: 2});
+                                        }
+                                    }, 'json');
+                                    $(layero).children('.layui-layer-content').css({'max-height': '300px', 'overflow': 'auto'});
+                                },
+                                yes: function (index) {
+                                    layer.load(2);
+                                    var treeObj = $.fn.zTree.getZTreeObj('treeAuth');
+                                    var nodes = treeObj.getCheckedNodes(true);
+                                    var ids = new Array();
+                                    for (var i = 0; i < nodes.length; i++) {
+                                        ids[i] = nodes[i].permissionId;
+                                    }
+                                    $.get('/YhUserManage/changerolepowerbyroleid', {
+                                        roleId: roleId,
+                                        authIds: JSON.stringify(ids)
+                                    }, function (res) {
+                                        layer.closeAll('loading');
+                                        if (20000 == res.code) {
+                                            layer.msg(res.message, {icon: 1});
+                                            layer.close(index);
+                                        } else {
+                                            layer.msg(res.message, {icon: 2});
+                                        }
+                                    }, 'json');
+                                }
+                            });
+                        }
+
+                        //健管师权限的管理
+                        function showPermModeldoctor(roleId) {
+                            admin.open({
+                                title: '权限分配',
+                                btn: ['保存', '取消'],
+                                content: '<ul id="treeAuth" class="ztree"></ul>',
+                                success: function (layero, index) {
+                                    $(layero).children('.layui-layer-content').css({'max-height': '300px', 'overflow': 'auto'});
+                                    var loadIndex=layer.load(2);
+                                    var setting = {check: {enable: true}, data:{simpleData: {enable: true, idKey: "permissionId",pIdKey: "pid"}}};
+                                    $.get('/YhUserManage/selectdoctorrolepower', {
+                                        roleId: roleId
+                                    }, function (res) {
+                                        layer.close(loadIndex);
+                                        console.log(res);
+                                        if(!res.data.isshow){
+                                            setting = {data:{simpleData: {enable: true, idKey: "permissionId",pIdKey: "pid"}}};
+                                        }
+                                        if (20000 === res.code) {
+                                            $.fn.zTree.init($('#treeAuth'),setting,res.data.allpermission);
+                                        } else {
+                                            layer.msg(res.msg, {icon: 2});
+                                        }
+                                    }, 'json');
+                                    $(layero).children('.layui-layer-content').css({'max-height': '300px', 'overflow': 'auto'});
+                                },
+                                yes: function (index) {
+                                    layer.load(2);
+                                    var treeObj = $.fn.zTree.getZTreeObj('treeAuth');
+                                    var nodes = treeObj.getCheckedNodes(true);
+                                    var ids = new Array();
+                                    for (var i = 0; i < nodes.length; i++) {
+                                        ids[i] = nodes[i].permissionId;
+                                    }
+                                    $.get('/YhUserManage/changerolepowerbyroleid', {
+                                        roleId: roleId,
+                                        authIds: JSON.stringify(ids)
+                                    }, function (res) {
+                                        layer.closeAll('loading');
+                                        if (20000 == res.code) {
+                                            layer.msg(res.message, {icon: 1});
+                                            layer.close(index);
+                                        } else {
+                                            layer.msg(res.message, {icon: 2});
+                                        }
+                                    }, 'json');
+                                }
+                            });
+                        }
+                    });
+                </script>
+
+    </body>
+</html>

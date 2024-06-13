@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>定位管理</title>
+    <link rel="stylesheet" th:href="@{/assets/libs/layui/css/layui.css}" />
+    <link rel="stylesheet" th:href="@{/assets/module/admin.css}" />
+    <style>
+        #container{
+            height:  600px
+        }
+        .amap-icon img,
+        .amap-marker-content img{
+            width: 25px;
+            height: 34px;
+        }
+    </style>
+    <link rel="stylesheet" th:href="@{/assets/libs/layui/css/layui.css}"/>
+    <link rel="stylesheet" th:href="@{/assets/module/admin.css}"/>
+</head>
+<body>
+<!-- 加载动画 -->
+<div class="page-loading">
+    <div class="ball-loader">
+        <span></span><span></span><span></span><span></span>
+    </div>
+</div>
+<div style="padding: 15px 30px 15px 30px;background-color: #fff;margin-bottom: 15px">
+    <span  style="padding-right: 30px;padding-left: 17px;">[[${name}]]</span>
+    <span  style="padding-right: 30px;">[[${sex}]]</span>
+    <span  style="padding-right: 30px;">[[${age}]]</span>
+    <span style="padding-right: 30px;">智能手环</span>
+    <span>[[${tid}]]</span>
+    <span style="float: right;padding-right: 56px;" onclick="window.history.back(-1);" >← 返回</span>
+
+</div>
+
+<div class="">
+    <div class="layui-row">
+        <div class="layui-col-md9" id="container">
+
+        </div>
+        <div class="layui-col-md3">
+            <div class="layui-tab layui-tab-card">
+                <ul class="layui-tab-title">
+                    <li class="layui-this">围栏</li>
+
+                </ul>
+                <div class="layui-tab-content">
+                    <div class="layui-tab-item layui-show"  style="height: 600px;">
+                        <block  id="cunzai" th:if="${null!=enclosureNewInfo}">
+                            <input id='lnglat2' type="hidden"  name="lnglat" value=''>
+                            <div style="padding: 15px">
+                                电子围栏地址:<span id="address2"></span>
+                            </div>
+                            <div style="padding: 15px">
+                               半径：<span id="banjing">[[${enclosureNewInfo.radius}]]米</span>
+                           </div>
+                            <div style="padding: 15px">
+                                <button class="layui-btn" id="del">删除</button>
+                                <button class="layui-btn"  id="edit">编辑</button>
+                            </div>
+
+
+                        </block>
+                        <block   id="weicunzai">
+                            <form class="layui-form" action="">
+                                <input id='lnglat' type="hidden"  name="lnglat" value=''>
+
+                                <div class="layui-inline" style="padding-bottom: 15px;">
+                                    <label class="layui-form-label" style="padding-left: 0px;text-align: left;">围栏半径:</label>
+                                    <div class="layui-input-inline" >
+                                        <input type="number" name="radius" lay-verify="required|integer" placeholder="请输入半径" autocomplete="off" class="layui-input">
+                                    </div>
+                                    <span style="color: #999 !important;">（米）</span>
+                                </div>
+                                <div style="padding-bottom: 15px">
+                                    地址:<span id="address"></span>
+                                </div>
+                                <div class="layui-inline">
+                                    <div class="layui-input-block">
+                                        <button class="layui-btn" lay-submit lay-filter="formDemo">设置</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </block>
+
+
+
+                    </div>
+                    <div class="layui-tab-item"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- js部分 -->
+<script type="text/javascript" th:src="@{/assets/libs/layui/layui.js}"></script>
+<script type="text/javascript" th:src="@{/assets/js/common.js}"></script>
+<script type="text/javascript" src="https://webapi.amap.com/maps?v=2.0Beta&key=fc9b038a0796a0dda5e501bc7469fe35&plugin=AMap.Geocoder"></script>
+
+<script  type="text/javascript"  th:inline="javascript">
+
+    layui
+        .use(
+            ['layer', 'form', 'table',
+                'laypage', 'treeSelect', 'admin', 'element', 'laydate'
+            ],
+            function () {
+                var $ = layui.jquery;
+                var layer = layui.layer;
+                var form = layui.form;
+                var table = layui.table;
+                var laypage = layui.laypage;
+                var element = layui.element;
+                var admin = layui.admin;
+                var form = layui.form;
+                var laydate = layui.laydate;
+                var geocoder = new AMap.Geocoder({
+                    city: "010", //城市设为北京，默认：“全国”
+                    radius: 1000 //范围，默认：500
+                });
+
+                form.verify({
+                    integer: [
+                        /^[1-9]\d*$/
+                        , '只能输入正整数'
+                    ]
+                });
+
+
+                var usercode = [[${usercode}]];
+                var tid = [[${tid}]];
+                var enclosureNewInfo = [[${enclosureNewInfo}]];
+                if(null!=enclosureNewInfo){
+                    $("#cunzai").show();
+                    var lnglat=  (enclosureNewInfo.longitude+","+enclosureNewInfo.latitude).split(',');
+                    geocoder.getAddress(lnglat, function(status, result) {
+                        if (status === 'complete'&&result.regeocode) {
+                            var address = result.regeocode.formattedAddress;
+                            $("#address2").html(address);
+                            return address;
+                        }else{
+                            return ('根据经纬度查询地址失败');
+                        }
+                    });
+
+
+                    $("#weicunzai").hide();
+                }else{
+                    $("#cunzai").hide();
+                    $("#weicunzai").show();
+                }
+
+                $("#edit").click(function(){
+                    $("#cunzai").hide();
+                    $("#weicunzai").show();
+                });
+                $("#del").click(function(){
+                    $("#cunzai").hide();
+                    $("#weicunzai").show();
+                    var mapinfo=map.getAllOverlays('circle')
+                    map.remove(mapinfo);
+                    $.ajax({
+                        url: '/SmartWatchJiAi/delEnclosure',
+                        type: "post",
+                        data: {
+                            imei: tid
+                        },
+                        success: function (regdata) {
+
+                        }
+                    })
+                });
+
+                var newLocate = [[${newLocate}]];
+                console.log("用户"+usercode);
+                console.log("用户"+tid);
+                console.log("用户"+enclosureNewInfo);
+                console.log("用户"+newLocate);
+                if(null!=newLocate){
+                    //初始化地图对象，加载地图
+                    var map = new AMap.Map("container", {
+                        resizeEnable: true,
+                        center: [newLocate.lon, newLocate.lat], //初始化地图中心点
+                        zoom: 14
+                    });
+                    var m1 = new AMap.Marker({
+                        map: map,
+                        draggable:true,
+                        position: new AMap.LngLat(newLocate.lon, newLocate.lat)
+                    });
+                }else{
+                    //初始化地图对象，加载地图
+                    //初始化地图时，若center属性缺省，地图默认定位到用户所在城市的中心
+                    var map = new AMap.Map('container', {
+                        resizeEnable: true
+                    });
+                    var m1 = new AMap.Marker({
+                        map: map,
+                        draggable:true,
+                        position: map.getCenter()
+                    });
+                }
+
+                function computeDis(){
+
+                    var p1 = m1.getPosition();
+                    var p2 = new AMap.LngLat(enclosureNewInfo.longitude, enclosureNewInfo.latitude);
+                    var distance = Math.round(p1.distance(p2));
+                    if(distance>enclosureNewInfo.radius){
+                        console.log("大于"+enclosureNewInfo.radius)
+
+                    }
+                }
+                // 构造矢量圆形
+                if(null!=enclosureNewInfo){
+
+                    circleInfo(enclosureNewInfo.longitude, enclosureNewInfo.latitude,enclosureNewInfo.radius);
+                   if(null!=newLocate){
+                       computeDis();
+                   }
+                }
+
+                function  circleInfo(longitude,latitude,radius){
+                    // 构造矢量圆形
+                    var  circle = new AMap.Circle({
+                        center: new AMap.LngLat(longitude, latitude), // 圆心位置
+                        radius: radius, //半径
+                        strokeColor: "#F33", //线颜色
+                        strokeOpacity: 1, //线透明度
+                        strokeWeight: 3, //线粗细度
+                        fillColor: "#ee2200", //填充颜色
+                        fillOpacity: 0.35 //填充透明度
+                    });
+                    map.add(circle);
+
+                    circle.on('click',  function(e) {
+                        map.remove(markers);
+                        var marker2 = new AMap.Marker({
+                            position: [e.lnglat.lng, e.lnglat.lat], //标记当前的坐标
+                            offset: new AMap.Pixel(-13, -30),
+                            icon:'//a.amap.com/jsapi_demos/static/demo-center/icons/poi-marker-red.png'
+                        });
+                        map.add([marker2]);
+                        markers.push(marker2);
+                        console.log(e.lnglat.getLng() + ',' + e.lnglat.getLat())
+                        enclosureNewInfoLon=e.lnglat.getLng();
+                        enclosureNewInfolat=e.lnglat.getLat();
+                        document.getElementById('lnglat').value = e.lnglat;
+                        regeoCode(marker2);
+                    });
+                }
+
+                var enclosureNewInfoLon=0;
+                var enclosureNewInfolat=0;
+                //地图上标点 标记当前位置 删除上一个标记点
+                var markers = []; //创建一个空数组存储每次标记的marker
+                map.on('click', function(e) {
+                    map.remove(markers);
+                    var marker2 = new AMap.Marker({
+                        position: [e.lnglat.lng, e.lnglat.lat], //标记当前的坐标
+                        offset: new AMap.Pixel(-13, -30),
+                        icon:'//a.amap.com/jsapi_demos/static/demo-center/icons/poi-marker-red.png'
+                    });
+                    map.add([marker2]);
+                    markers.push(marker2);
+                    console.log(e.lnglat.getLng() + ',' + e.lnglat.getLat())
+                    enclosureNewInfoLon=e.lnglat.getLng();
+                    enclosureNewInfolat=e.lnglat.getLat();
+                    document.getElementById('lnglat').value = e.lnglat;
+                    regeoCode(marker2);
+                })
+
+
+                function regeoCode(marker2) {
+                    var lnglat  = document.getElementById('lnglat').value.split(',');
+                    map.add(marker2);
+                    marker2.setPosition(lnglat);
+                    geocoder.getAddress(lnglat, function(status, result) {
+                        if (status === 'complete'&&result.regeocode) {
+                            var address = result.regeocode.formattedAddress;
+
+                            $("#address").html(address);
+                            return address;
+                        }else{
+                            return ('根据经纬度查询地址失败');
+                        }
+                    });
+
+                }
+
+                //围栏
+                form.on('submit(formDemo)', function (data) {
+                    if(""==data.field.lnglat){
+                        layer.msg("请点选地图选择围栏中心点");
+                        return false;
+                    }
+                    $.ajax({
+                        url: '/SmartWatchJiAi/enclosure',
+                        type: "post",
+                        data: {
+                            lnglat: data.field.lnglat,
+                            radius: data.field.radius,
+                            imei: tid
+                        },
+                        success: function (regdata) {
+                            console.log("data", regdata)
+                            layer.msg("设置成功！");
+                            if(null!=regdata.data){
+                                var mapinfo=map.getAllOverlays('circle')
+                                map.remove(mapinfo);
+                                console.log("mapinfo",mapinfo)
+                                circleInfo(regdata.data.longitude,regdata.data.latitude,regdata.data.radius);
+                                $("#cunzai").show();
+
+                                geocoder.getAddress((regdata.data.longitude+","+regdata.data.latitude).split(','), function(status, result) {
+                                    if (status === 'complete'&&result.regeocode) {
+                                        var address = result.regeocode.formattedAddress;
+                                        $("#address2").html(address);
+                                        return address;
+                                    }else{
+                                        return ('根据经纬度查询地址失败');
+                                    }
+                                });
+                                $("#banjing").html(regdata.data.radius+"米");
+                                $("#weicunzai").hide();
+                            }
+                        }
+                    })
+                    return false;
+                });
+
+
+
+            });
+</script>
+</body>
+
+</html>

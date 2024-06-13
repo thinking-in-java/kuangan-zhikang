@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>告警信息详情</title>
+    <link rel="stylesheet" th:href="@{/assets/libs/layui/css/layui.css}" />
+<link rel="stylesheet" th:href="@{/assets/module/admin.css}" />
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    
+</head>
+<body>
+
+<!-- 加载动画 -->
+<div class="page-loading">
+    <div class="ball-loader">
+        <span></span><span></span><span></span><span></span>
+    </div>
+</div>
+
+<!-- 正文开始 -->
+<div class="layui-fluid">
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-sm12 layui-col-md8">
+            <div class="layui-card">
+                <div class="layui-card-header">健康检测</div>
+                <div class="layui-card-body" style="padding: 50px 20px 77px 20px;">
+                     <table class="layui-table" lay-even lay-skin="nob"  style="padding: 0px 20px 0px 20px;">
+                       <colgroup>
+                         <col width="150">
+                         <col width="200">
+                         <col>
+                       </colgroup>
+                       <thead>
+                         <tr>
+                           <th>姓名</th>
+                           <th>性别</th>
+                           <th>年龄</th>
+						   <th>手机号</th>
+						   <th>用户编号</th>
+                         </tr> 
+                       </thead>
+                       <tbody>
+                         <tr>
+                           <td>[[${data.name}]]</td>
+                           <td>[[${data.sex}]]</td>
+                           <td>[[${data.age}]]</td>
+						   <td>[[${data.mobile}]]</td>
+						   <td>[[${data.usercode}]]</td>
+                         </tr>
+                       </tbody>
+                     </table>
+					 <div class="layui-card-header">
+					 	告警阈值：<br>
+					 	[[${data.content}]]
+					 </div>
+					 <div class="layui-card-header">
+					 	 
+					 </div>
+					 <table class="layui-table" lay-even lay-skin="nob">
+					   <colgroup>
+					     <col width="150">
+					     <col width="200">
+					     <col>
+					   </colgroup>
+					   <thead>
+					     <tr>
+					       <th>设备类型</th>
+					       <th>设备序列号</th>
+					       <th>设备手机号</th>
+					     </tr> 
+					   </thead>
+					   <tbody>
+					     <tr>
+					       <td>[[${data.devicename}]]</td>
+					        <td>[[${data.terminalId}]]</td>
+					         <td>[[${data.sosNos}]]</td>
+					     </tr>
+					   </tbody>
+					 </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-col-sm12 layui-col-md4">
+            <div class="layui-card">
+                <div class="layui-card-header">受理详情</div>
+				<div id=""style="position:absolute;top:20px;right:40px" >
+					<span id="deng" class="layui-badge-dot" style="position: relative; top: -2px; left: -3px;"></span>
+					<span id="tishiInfo">等待处理</span>
+				</div>
+				<div class="layui-card-body text-center" style="padding: 50px 20px 57px 20px;">
+                 <form class="layui-form" action="">
+                 <input name="id" id="id" type="hidden" th:value="${data.id}"/>
+                 <input name="status" id="status" type="hidden"/>
+                 <input name="acceptUsercode" id="acceptUsercode" type="hidden"/>
+					 <div class="layui-form-item">
+					   <label class="layui-form-label">受理人：</label>
+					   <div class="layui-input-block">
+					     <input type="text" id="acceptUsername" style= "border:0;" value="--" name="acceptUsername" disabled="" required lay-verify="required"  autocomplete="off" class="layui-input">
+					   </div>
+					 </div>
+					<div class="layui-form-item">
+					  <label class="layui-form-label">受理时间：</label>
+					  <div class="layui-input-block">
+					    <input type="text" id="acceptTime" style= "border:0;" value="--" name="acceptTime" disabled="" required lay-verify="required"  autocomplete="off" class="layui-input">
+					  </div>
+					</div>
+					<div class="layui-form-item">
+					  <label class="layui-form-label">受理情况：</label>
+					  <div class="layui-input-block">
+					    <input type="text" id="acceptInfo"  value="--" name="acceptInfo" disabled="" required lay-verify="required"  autocomplete="off" class="layui-input">
+					  </div>
+					</div>
+					<div class="layui-form-item">
+					  <label class="layui-form-label">归档时间：</label>
+					  <div class="layui-input-block">
+					    <input type="text" id="archiveTime" style= "border:0;" value="--" name="archiveTime" disabled="" required lay-verify="required"  autocomplete="off" class="layui-input">
+					  </div>
+					</div>
+					<div class="layui-form-item">
+					    <div class="layui-input-block">
+							<button type="button" class="layui-btn layui-btn-primary">用户查看</button>
+					      <button th:if="${data.status=='0'}" class="layui-btn" id="subbtn" lay-submit lay-filter="formDemo">立即受理</button>
+					      <button th:if="${data.status=='1'}" class="layui-btn" id="subbtn" lay-submit lay-filter="formDemo">告警归档</button>
+					      <button th:if="${data.status=='2'}" class="layui-btn" id="subbtn" lay-submit lay-filter="formDemo">已归档</button>
+					    </div>
+					  </div>
+				 </form>
+				 </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- js部分 -->
+	<script type="text/javascript" th:src="@{/assets/libs/layui/layui.js}"></script>
+	<script type="text/javascript" th:src="@{/assets/js/common.js}"></script>
+<script>
+    layui.use(['form'], function () {
+        var $ = layui.jquery;
+        var form = layui.form;
+       //监听提交
+	   $("#acceptInfo").css("border",'0');
+	   if($("#subbtn").html()=='告警归档'){
+		   $("#subbtn").html("告警归档")
+		   //设置受理医生姓名
+		  $("#acceptUsername").val("[[${data.acceptUsername}]]");
+		  $("#acceptUsercode").val("[[${data.acceptUsercode}]]");
+			
+		   //设置受理时间
+		  $("#acceptTime").val("[[${data.acceptTime}]]");
+		   $("#acceptInfo").css("border",'');
+		   $('#acceptInfo').removeAttr("disabled");
+		   $('#acceptInfo').val("");
+		   $('#acceptInfo').attr("placeholder","请输入受理情况");
+		   $("#deng").addClass('layui-bg-blue');
+		   $("#tishiInfo").html("正在处理");
+	   }
+	    if($("#subbtn").html()=='已归档'){
+			//设置受理人
+			$("#acceptUsername").val("[[${data.acceptUsername}]]");
+			$("#acceptUsercode").val("[[${data.acceptUsercode}]]");
+			//设置受理时间
+			$("#acceptTime").val("[[${data.acceptTime}]]");
+			//设置受理情况
+			$('#acceptInfo').val("[[${data.acceptInfo}]]");
+			//设置归档时间
+			$("#archiveTime").val("[[${data.archiveTime}]]");
+			//按钮禁用
+			$("#subbtn").addClass('layui-btn-disabled');
+			$("#deng").addClass("layui-bg-green");
+			$("#deng").removeClass('layui-bg-blue');
+			$("#tishiInfo").html("完成处理");
+			}
+	   
+	   
+         form.on('submit(formDemo)', function(data){
+           //layer.msg(JSON.stringify(data.field));
+		   if($("#subbtn").html()=='立即受理'){
+			   $("#subbtn").html("告警归档")
+			   $("#status").val("1");
+			   //设置当前医生
+			   $("#acceptUsername").val("[[${principal.userName}]]");
+			   $("#acceptUsercode").val("[[${principal.userCode}]]");
+			   //设置当前时间
+			   
+			  //判断是否在前面加0
+			            function getNow(s) {
+			            return s < 10 ? '0' + s: s;
+			            }
+			   
+			            var myDate = new Date();             
+			   
+			            var year=myDate.getFullYear();        //获取当前年
+			            var month=myDate.getMonth()+1;   //获取当前月
+			            var date=myDate.getDate();            //获取当前日
+			   
+			   
+			            var h=myDate.getHours();              //获取当前小时数(0-23)
+			            var m=myDate.getMinutes();          //获取当前分钟数(0-59)
+			            var s=myDate.getSeconds();
+			   
+			            var now=year+'-'+getNow(month)+"-"+getNow(date)+" "+getNow(h)+':'+getNow(m)+":"+getNow(s);
+			   $("#acceptTime").val(now);
+			   $("#acceptInfo").css("border",'');
+			   $('#acceptInfo').removeAttr("disabled");
+			   $('#acceptInfo').val("");
+			   $('#acceptInfo').attr("placeholder","请输入受理情况");
+			   $("#deng").addClass('layui-bg-blue');
+			   $("#tishiInfo").html("正在处理");
+			   //修改告警日志状态为正在处理 修改受理人 和受理时间	
+			   layer.msg(JSON.stringify({"id":$("#id").val(),"status":$("#status").val(),"acceptUsercode":$("#acceptUsercode").val(),"acceptTime":$("#acceptTime").val(),"acceptInfo":$("#acceptInfo").val(),"archiveTime":$("#archiveTime").val()}));
+			   $.ajax({
+						type:"post",
+						url:"/YhHeThresholdAlarm/modifyInfo",
+						contentType:'application/json;charset=UTF-8',	//发送信息至服务器时内容编码类型
+						traditional:true,	//传统的方式来序列化数据
+						data:JSON.stringify({"id":$("#id").val(),"status":$("#status").val(),"acceptUsercode":$("#acceptUsercode").val(),"acceptTime":$("#acceptTime").val(),"acceptInfo":$("#acceptInfo").val(),"archiveTime":$("#archiveTime").val()}),
+						success:function(data){
+							if(data.flag){
+								 //
+								  
+							}
+							
+						} 
+					}); 
+			    return false;
+		   }
+		   if($("#subbtn").html()=='告警归档'){
+		   			   $("#subbtn").html("已归档")
+		   			    $("#status").val("2");
+					   $("#subbtn").addClass('layui-btn-disabled');
+					   $('#acceptInfo').attr("disabled","disabled");
+					   //判断是否在前面加0
+			            function getNow(s) {
+			            return s < 10 ? '0' + s: s;
+			            }
+			   
+			            var myDate = new Date();             
+			   
+			            var year=myDate.getFullYear();        //获取当前年
+			            var month=myDate.getMonth()+1;   //获取当前月
+			            var date=myDate.getDate();            //获取当前日
+			   
+			   
+			            var h=myDate.getHours();              //获取当前小时数(0-23)
+			            var m=myDate.getMinutes();          //获取当前分钟数(0-59)
+			            var s=myDate.getSeconds();
+			   
+			            var now=year+'-'+getNow(month)+"-"+getNow(date)+" "+getNow(h)+':'+getNow(m)+":"+getNow(s);
+					   //设置当前时间
+					    $("#archiveTime").val(now);
+						$("#acceptInfo").css("border",'0');
+						$("#deng").addClass("layui-bg-green");
+						$("#deng").removeClass('layui-bg-blue');
+						
+						$("#tishiInfo").html("完成处理");
+						//修改告警日志状态为完成处理 修改归档时间
+						layer.msg(JSON.stringify({"id":$("#id").val(),"status":$("#status").val(),"acceptUsercode":$("#acceptUsercode").val(),"acceptTime":$("#acceptTime").val(),"acceptInfo":$("#acceptInfo").val(),"archiveTime":$("#archiveTime").val()}));
+			  
+						 $.ajax({
+						type:"post",
+						url:"/YhHeThresholdAlarm/modifyInfo",
+						contentType:'application/json;charset=UTF-8',	//发送信息至服务器时内容编码类型
+						traditional:true,	//传统的方式来序列化数据
+						data:JSON.stringify({"id":$("#id").val(),"status":$("#status").val(),"acceptUsercode":$("#acceptUsercode").val(),"acceptTime":$("#acceptTime").val(),"acceptInfo":$("#acceptInfo").val(),"archiveTime":$("#archiveTime").val()}),
+						success:function(data){
+							if(data.flag){
+								 //
+								  
+							}
+							
+						} 
+					}); 
+					     return false;
+		   }
+		    
+          return false;
+         });
+         
+         
+       
+	 
+         
+
+    });
+</script>
+</body>
+</html>

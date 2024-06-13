@@ -1,0 +1,756 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yihe.system.mapper.YhExprotDataMapper">
+ 	<resultMap id="BaseResultMap" type="com.yihe.system.domain.YhOrgTree">
+    <id column="Org_Code" jdbcType="VARCHAR" property="orgCode" />
+    <result column="Org_Name" jdbcType="VARCHAR" property="orgName" />
+    <result column="Super_Org_Code" jdbcType="VARCHAR" property="superOrgCode" />
+    <result column="Is_Del" jdbcType="INTEGER" property="isDel" />
+    <result column="Add_Date" jdbcType="TIMESTAMP" property="addDate" />
+    <result column="Class_Number" jdbcType="INTEGER" property="classNumber" />
+    <result column="User_Code" jdbcType="VARCHAR" property="userCode" />
+    <result column="Docdor_Code" jdbcType="VARCHAR" property="docdorCode" />
+    <result column="org_tree_upload_id" jdbcType="INTEGER" property="orgTreeUploadId" />
+    <result column="org_customer_code" jdbcType="VARCHAR" property="orgCustomerCode" />
+    <result column="user_name" jdbcType="VARCHAR" property="userName" />
+  </resultMap>
+  
+  
+  <resultMap id="yhorgtreevojo" type="com.yihe.system.domain.YhOrgTreeVojo">
+    <id column="Org_Code" jdbcType="VARCHAR" property="id" />
+    <result column="Org_Name" jdbcType="VARCHAR" property="name" />
+    <result column="Org_Code" jdbcType="VARCHAR" property="value" />
+    <result column="Super_Org_Code" jdbcType="VARCHAR" property="superOrgCode" />
+  </resultMap>
+  
+  
+  <resultMap id="exprotresult" type="com.yihe.system.domain.YhExportHealthAssess">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="result_serialNum" jdbcType="VARCHAR" property="result_serialNum" />
+    <result column="request_serialNum" jdbcType="VARCHAR" property="request_serialNum" />
+    <result column="user_code" jdbcType="VARCHAR" property="user_code" />
+    <result column="qtime" jdbcType="TIMESTAMP" property="qtime" />
+    <result column="gender" jdbcType="INTEGER" property="gender" />
+    <result column="age" jdbcType="INTEGER" property="age" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+     <result column="Org_Name" jdbcType="VARCHAR" property="Org_Name" />
+   	<collection  property="yhexpotriskresult" column="request_serialNum" ofType="com.yihe.system.domain.YhExportRiskResult" javaType="java.util.ArrayList">
+   		<id column="rid" jdbcType="INTEGER" property="rid" />
+   		<result column="diseaseId" jdbcType="VARCHAR" property="diseaseId" />
+	    <result column="user_code" jdbcType="VARCHAR" property="user_code" />
+	    <result column="request_serialNum" jdbcType="VARCHAR" property="request_serialize" />
+	    <result column="qname" jdbcType="VARCHAR" property="qname" />
+	    <result column="qcode" jdbcType="VARCHAR" property="qcode" />
+	    <result column="qvalue" jdbcType="VARCHAR" property="qvalue" />
+	    <result column="last_value" jdbcType="VARCHAR" property="last_value" />
+	    <result column="changes" jdbcType="VARCHAR" property="changes" />
+	    <result column="optimal" jdbcType="VARCHAR" property="optimal" />
+	    <result column="remark" jdbcType="VARCHAR" property="remark" />
+	    <result column="qtime" jdbcType="TIMESTAMP" property="qtime" />
+	    <result column="isRadar" jdbcType="INTEGER" property="isRadar" />
+	    <collection  property="assessreport" column="request_serialNum" ofType="com.yihe.system.domain.YhExportAssessReport" javaType="java.util.ArrayList">
+				<id column="aid" jdbcType="INTEGER" property="aid" />
+				<result column="user_code" jdbcType="VARCHAR" property="user_code" />
+				<result column="result_serialNum" jdbcType="VARCHAR" property="result_serialNum" />
+				<result column="request_serialNum" jdbcType="VARCHAR" property="request_serialNum" />
+				<result column="diseasId" jdbcType="TIMESTAMP" property="diseasId" />
+				<result column="risk_level" jdbcType="VARCHAR" property="risk_level" />
+				<result column="risk_desc" jdbcType="VARCHAR" property="risk_desc" />
+				<result column="now_risk_value" jdbcType="VARCHAR" property="now_risk_value" />
+				<result column="ideal_risk_level" jdbcType="VARCHAR" property="ideal_risk_level" />
+				<result column="ideal_risk_desc" jdbcType="VARCHAR" property="ideal_risk_desc" />
+				<result column="age_forecast_r20" jdbcType="VARCHAR" property="age_forecast_r20" />
+				<result column="age_forecast_r30" jdbcType="VARCHAR" property="age_forecast_r30" />
+				<result column="age_forecast_r40" jdbcType="VARCHAR" property="age_forecast_r40" />
+				<result column="age_forecast_r50" jdbcType="VARCHAR" property="age_forecast_r50" />
+				<result column="age_forecast_r60" jdbcType="VARCHAR" property="age_forecast_r60" />
+				<result column="age_forecast_r70" jdbcType="VARCHAR" property="age_forecast_r70" />
+				<result column="age_forecast_r80" jdbcType="VARCHAR" property="age_forecast_r80" />
+				<result column="age_op_forecast_r20_op" jdbcType="VARCHAR" property="age_op_forecast_r20_op" />
+				<result column="age_op_forecast_r30_op" jdbcType="VARCHAR" property="age_op_forecast_r30_op" />
+				<result column="age_op_forecast_r40_op" jdbcType="VARCHAR" property="age_op_forecast_r40_op" />
+				<result column="age_op_forecast_r50_op" jdbcType="VARCHAR" property="age_op_forecast_r50_op" />
+				<result column="age_op_forecast_r60_op" jdbcType="VARCHAR" property="age_op_forecast_r60_op" />
+				<result column="age_op_forecast_r70_op" jdbcType="VARCHAR" property="age_op_forecast_r70_op" />
+				<result column="age_op_forecast_r80_op" jdbcType="VARCHAR" property="age_op_forecast_r80_op" />
+       </collection>
+	</collection>
+  </resultMap>
+
+
+	<resultMap id="exprotresult2" type="com.yihe.system.domain.yhDiseaseAssessTotalReport2">
+		<id column="id" jdbcType="INTEGER" property="id" />
+		<result column="request_serialNum" jdbcType="VARCHAR" property="requestSerialnum" />
+		<result column="user_code" jdbcType="VARCHAR" property="userCode" />
+		<result column="qtime" jdbcType="TIMESTAMP" property="qtime" />
+		<result column="gender" jdbcType="INTEGER" property="gender" />
+		<result column="age" jdbcType="INTEGER" property="age" />
+		<result column="name" jdbcType="VARCHAR" property="userName" />
+		<result column="Org_Name" jdbcType="VARCHAR" property="orgname" />
+		<collection  property="yhDiseaseRiskResult2s" column="request_serialNum" ofType="com.yihe.system.domain.YhDiseaseRiskResult2" javaType="java.util.ArrayList">
+			<result column="diseaseId" jdbcType="VARCHAR" property="diseaseid" />
+			<result column="user_code" jdbcType="VARCHAR" property="userCode" />
+			<result column="request_serialNum" jdbcType="VARCHAR" property="requestSerialize" />
+			<result column="age" jdbcType="VARCHAR" property="age" />
+			<result column="hdlc" jdbcType="VARCHAR" property="hdlc" />
+			<result column="ldlc" jdbcType="VARCHAR" property="ldlc" />
+			<result column="food" jdbcType="VARCHAR" property="food" />
+			<result column="sport" jdbcType="VARCHAR" property="sport" />
+			<result column="b4" jdbcType="TIMESTAMP" property="b4" />
+			<result column="smoke" jdbcType="INTEGER" property="smoke" />
+			<result column="drink" jdbcType="VARCHAR" property="drink" />
+			<result column="hw_check" jdbcType="VARCHAR" property="hwCheck" />
+			<result column="BMI" jdbcType="VARCHAR" property="bmi" />
+			<result column="waist" jdbcType="VARCHAR" property="waist" />
+			<result column="diab_his" jdbcType="VARCHAR" property="diabHis" />
+			<result column="hbp_his" jdbcType="TIMESTAMP" property="hbpHis" />
+			<result column="sbp" jdbcType="TIMESTAMP" property="sbp" />
+			<result column="cholesterol" jdbcType="INTEGER" property="cholesterol" />
+			<result column="TG" jdbcType="VARCHAR" property="tg" />
+			<result column="BF" jdbcType="VARCHAR" property="bf" />
+			<result column="dbp" jdbcType="VARCHAR" property="dbp" />
+			<result column="HBPS" jdbcType="VARCHAR" property="hbps" />
+			<result column="HFS" jdbcType="VARCHAR" property="hfs" />
+			<result column="hf_his" jdbcType="TIMESTAMP" property="hfHis" />
+			<result column="C1" jdbcType="INTEGER" property="c1" />
+			<result column="milk" jdbcType="INTEGER" property="milk" />
+			<result column="tfa" jdbcType="VARCHAR" property="tfa" />
+			<result column="chds" jdbcType="VARCHAR" property="chds" />
+			<result column="dms" jdbcType="VARCHAR" property="dms" />
+			<result column="smoke_sencod" jdbcType="VARCHAR" property="smokeSencod" />
+			<result column="lungs" jdbcType="VARCHAR" property="lungs" />
+			<result column="emphy_his" jdbcType="TIMESTAMP" property="emphyHis" />
+			<result column="asbestos_contact_his" jdbcType="INTEGER" property="asbestosContactHis" />
+			<result column="decorate_house" jdbcType="INTEGER" property="decorateHouse" />
+			<result column="psy_nervous" jdbcType="VARCHAR" property="psyNervous" />
+			<result column="bronch_his" jdbcType="VARCHAR" property="bronchHis" />
+			<result column="lampblack_contact" jdbcType="VARCHAR" property="lampblackContact" />
+			<result column="gouts" jdbcType="VARCHAR" property="gouts" />
+			<result column="tea" jdbcType="VARCHAR" property="tea" />
+			<result column="food_purine" jdbcType="TIMESTAMP" property="foodPurine" />
+			<result column="chd_his" jdbcType="INTEGER" property="chdHis" />
+			<result column="bua" jdbcType="INTEGER" property="bua" />
+			<result column="med_use_pill" jdbcType="VARCHAR" property="medUsePill" />
+			<result column="breast_plastic_surgery" jdbcType="VARCHAR" property="breastPlasticSurgery" />
+			<result column="BCS" jdbcType="VARCHAR" property="bcs" />
+			<result column="begind_breast_his" jdbcType="VARCHAR" property="begindBreastHis" />
+			<result column="female_menstruation" jdbcType="VARCHAR" property="femaleMenstruation" />
+			<result column="female_tire" jdbcType="TIMESTAMP" property="femaleTire" />
+			<result column="female_breast_time" jdbcType="INTEGER" property="femaleBreastTime" />
+			<result column="female_menopause_age" jdbcType="VARCHAR" property="femaleMenopauseAge" />
+			<result column="has_med_ert" jdbcType="TIMESTAMP" property="hasMedErt" />
+			<result column="CSS" jdbcType="INTEGER" property="css" />
+			<result column="card_his" jdbcType="INTEGER" property="cardHis" />
+			<result column="lvd_his" jdbcType="VARCHAR" property="lvdHis" />
+			<result column="af_his" jdbcType="VARCHAR" property="afHis" />
+			<result column="PCS" jdbcType="VARCHAR" property="pcs" />
+			<result column="prostate_disease" jdbcType="VARCHAR" property="prostateDisease" />
+			<result column="urinary_tract_infection" jdbcType="VARCHAR" property="urinaryTractInfection" />
+			<result column="urine_symptom" jdbcType="TIMESTAMP" property="urineSymptom" />
+			<result column="t_score" jdbcType="INTEGER" property="tScore" />
+			<result column="ra_his" jdbcType="VARCHAR" property="raHis" />
+			<result column="living_envir" jdbcType="VARCHAR" property="livingEnvir" />
+			<result column="food_drink_beer" jdbcType="TIMESTAMP" property="foodDrinkBeer" />
+			<result column="remark" jdbcType="INTEGER" property="remark" />
+			<result column="qtime" jdbcType="INTEGER" property="qtime" />
+		</collection>
+		<collection  property="yhExportAssessReports" column="request_serialNum" ofType="com.yihe.system.domain.YhExportAssessReport" javaType="java.util.ArrayList">
+                <id column="aid" jdbcType="INTEGER" property="aid" />
+			<result column="user_code" jdbcType="VARCHAR" property="user_code" />
+			<result column="result_serialNum" jdbcType="VARCHAR" property="result_serialNum" />
+			<result column="request_serialNum" jdbcType="VARCHAR" property="request_serialNum" />
+			<result column="diseasId" jdbcType="TIMESTAMP" property="diseasId" />
+			<result column="risk_level" jdbcType="VARCHAR" property="risk_level" />
+			<result column="risk_desc" jdbcType="VARCHAR" property="risk_desc" />
+			<result column="now_risk_value" jdbcType="VARCHAR" property="now_risk_value" />
+			<result column="ideal_risk_level" jdbcType="VARCHAR" property="ideal_risk_level" />
+			<result column="ideal_risk_desc" jdbcType="VARCHAR" property="ideal_risk_desc" />
+			<result column="age_forecast_r20" jdbcType="VARCHAR" property="age_forecast_r20" />
+			<result column="age_forecast_r30" jdbcType="VARCHAR" property="age_forecast_r30" />
+			<result column="age_forecast_r40" jdbcType="VARCHAR" property="age_forecast_r40" />
+			<result column="age_forecast_r50" jdbcType="VARCHAR" property="age_forecast_r50" />
+			<result column="age_forecast_r60" jdbcType="VARCHAR" property="age_forecast_r60" />
+			<result column="age_forecast_r70" jdbcType="VARCHAR" property="age_forecast_r70" />
+			<result column="age_forecast_r80" jdbcType="VARCHAR" property="age_forecast_r80" />
+			<result column="age_op_forecast_r20_op" jdbcType="VARCHAR" property="age_op_forecast_r20_op" />
+			<result column="age_op_forecast_r30_op" jdbcType="VARCHAR" property="age_op_forecast_r30_op" />
+			<result column="age_op_forecast_r40_op" jdbcType="VARCHAR" property="age_op_forecast_r40_op" />
+			<result column="age_op_forecast_r50_op" jdbcType="VARCHAR" property="age_op_forecast_r50_op" />
+			<result column="age_op_forecast_r60_op" jdbcType="VARCHAR" property="age_op_forecast_r60_op" />
+			<result column="age_op_forecast_r70_op" jdbcType="VARCHAR" property="age_op_forecast_r70_op" />
+			<result column="age_op_forecast_r80_op" jdbcType="VARCHAR" property="age_op_forecast_r80_op" />
+		</collection>
+	</resultMap>
+
+   <sql id="Base_Column_List">
+    Org_Code, Org_Name, Super_Org_Code, Is_Del, Add_Date, Class_Number, User_Code, Docdor_Code, 
+    org_tree_upload_id, org_customer_code
+  </sql>
+  <select id="selectorg" parameterType="String" resultMap="yhorgtreevojo">
+  		select
+  		<include refid="Base_Column_List"/>
+  		from yh_org_tree where  Org_Code=#{code}  or Super_Org_Code=#{code}
+  </select>
+  
+  <select id="selectreginbyorg" parameterType="com.yihe.system.domain.YhExportData" resultType="com.yihe.system.domain.YhUserReginfoVOJO">
+  		SELECT re.user_code,re.name as user_name,re.gender,re.birth_date,re.mobile,tr.Org_Name,re.reg_time from yh_user_reginfo re LEFT JOIN yh_org_tree  tr ON re.Org_Code=tr.Org_Code
+	  	LEFT JOIN `yh_user_make_card` AS card ON card.user_code = re.user_code
+  		<where>
+			re.Org_Code like CONCAT('%',#{nowselect},'%')
+			and re.Enrol_Card_Id is not null
+			 <if test="begintime!=null">
+			 	and re.reg_time between #{begintime} and #{endtime}
+			 </if>
+			<if test="userCode != null">
+				and card.doctor =( SELECT id FROM `yh_user_admin_info` WHERE user_code = #{userCode} )
+			</if>
+  		</where>
+  </select>
+  
+  <select id="selectexportdate" parameterType="com.yihe.system.domain.YhExportData" resultType="com.yihe.system.domain.YhExportCheck">
+  		SELECT * FROM (SELECT regi.`name`,regi.gender,regi.birth_date,orgtree.Org_Name ,cjs.* 
+		FROM yh_question_check_json2  cjs
+		LEFT JOIN yh_user_reginfo regi ON cjs.user_code=regi.user_code
+		LEFT JOIN yh_org_tree orgtree on regi.Org_Code=orgtree.Org_Code
+	  	LEFT JOIN `yh_user_make_card` AS card ON card.user_code = regi.user_code
+  		<where>
+			orgtree.Org_Code like CONCAT('%',#{nowselect},'%')
+			 <if test="begintime!=null">
+			 	and cjs.user_check_time between #{begintime} and #{endtime}
+			 </if>
+			<if test="userCode != null">
+				and card.doctor =( SELECT id FROM `yh_user_admin_info` WHERE user_code = #{userCode} )
+			</if>
+			 ORDER BY  cjs.user_check_time DESC ) a	
+			
+  		</where>
+  		 <if test="time!=true">
+			 	GROUP BY a.`name`
+		</if>
+  </select>
+  
+  <select id="findCheckJsonInfoByRs" resultType="com.yihe.system.domain.YhExportCheck">
+   SELECT regi.`name`,regi.gender,regi.birth_date,orgtree.Org_Name ,cjs.* 
+		FROM yh_question_check_json2  cjs
+		LEFT JOIN yh_user_reginfo regi ON cjs.user_code=regi.user_code
+		LEFT JOIN yh_org_tree orgtree ON regi.Org_Code=orgtree.Org_Code 
+		WHERE cjs.`request_serialNum`=#{rs} limit 1
+  </select>
+  
+   <select id="selectexportdateByRs" parameterType="com.yihe.system.domain.YhExportData" resultType="com.yihe.system.domain.YhExportCheck">
+  		SELECT * FROM (SELECT regi.`name`,regi.gender,regi.birth_date,orgtree.Org_Name ,cjs.* 
+		FROM yh_question_check_json2  cjs
+		LEFT JOIN yh_user_reginfo regi ON cjs.user_code=regi.user_code
+		LEFT JOIN yh_org_tree orgtree on regi.Org_Code=orgtree.Org_Code ) a	
+  		<where>
+			  a.`request_serialNum`='a7a2ada7c4f549fca0c48aad290cdc58' LIMIT 1
+ 
+			
+  		</where>
+  		 
+  </select>
+   <select id="selectriskresult" parameterType="com.yihe.system.domain.YhExportData" resultMap="exprotresult">
+		SELECT repots.id as aid,result.id as rid,result.request_serialize,regi.`name`,orgtree.Org_Name,repot.id,repot.result_serialNum,repot.request_serialNum,repot.user_code,repot.qtime,repot.gender,repot.age,result.diseaseId,result.qname,result.qcode,result.qvalue,result.last_value,result.changes,result.optimal,result.remark,repots.diseasId,repots.risk_level,repots.risk_desc,repots.now_risk_desc,repots.now_risk_desc,repots.now_risk_value,repots.now_risk_level,repots.now_risk_last_value,repots.ideal_risk_desc,repots.ideal_risk_level
+ 			from yh_disease_assess_total_report2 repot
+			LEFT JOIN yh_disease_risk_result result
+			ON repot.request_serialNum =result.request_serialize AND repot.user_code=result.user_code
+			LEFT JOIN yh_disease_assess_report repots
+			ON result.request_serialize=repots.request_serialNum AND result.user_code=repots.user_code
+			LEFT JOIN yh_user_reginfo regi
+			ON regi.user_code=repot.user_code
+			LEFT JOIN yh_org_tree orgtree 
+			on regi.Org_Code=orgtree.Org_Code
+  		<where>
+			orgtree.Org_Code like CONCAT('%',#{nowselect},'%')
+			 <if test="begintime!=null">
+			 	and repot.qtime between #{begintime} and #{endtime}
+			 </if>
+	
+  		</where>
+  </select>
+
+	<select id="exportassessreport2" parameterType="com.yihe.system.domain.YhExportData" resultMap="exprotresult2">
+		SELECT repo2.id,regi.`name`,repo2.user_code,repo.id aid,repo2.request_serialNum,orgtree.Org_Name,repo2.qtime,repo2.gender,repo2.age,repo2.user_name,repo2.times,resu2.age as agefengxian,resu2.hdlc
+		,resu2.ldlc,resu2.food,resu2.sport,resu2.b4,resu2.smoke,resu2.drink,resu2.hw_check,resu2.BMI,resu2.waist,resu2.diab_his,
+		resu2.hbp_his,resu2.FBG,resu2.sbp,resu2.cholesterol,resu2.TG,resu2.BF,resu2.dbp,resu2.HBPS,resu2.HFS,resu2.hf_his,resu2.C1,
+		resu2.milk,resu2.tfa,resu2.chds,resu2.dms,resu2.smoke_sencod,resu2.lungs,resu2.emphy_his,resu2.asbestos_contact_his,resu2.decorate_house,resu2.psy_nervous,
+		resu2.bronch_his,resu2.lampblack_contact,resu2.gouts,resu2.tea,resu2.food_purine,resu2.chd_his,resu2.bua,resu2.med_use_pill,resu2.CSS,resu2.card_his,resu2.lvd_his,
+		resu2.af_his,resu2.PCS,resu2.prostate_disease,resu2.urinary_tract_infection,resu2.urine_symptom,repo.risk_level,
+		repo.risk_desc,repo.now_risk_desc,repo.now_risk_value,repo.now_risk_level,repo.now_risk_last_value,repo.ideal_risk_level,repo.ideal_risk_desc,repo.last_time,repo.diseasId
+-- 		,repo.age_forecast_r20,repo.age_forecast_r30
+-- 		,repo.age_forecast_r40
+-- 		,repo.age_forecast_r50,repo.age_forecast_r60,repo.age_forecast_r70,repo.age_forecast_r80,repo.age_op_forecast_r20_op,repo.age_op_forecast_r30_op,repo.age_op_forecast_r40_op,repo.age_op_forecast_r50_op
+-- 		,repo.age_op_forecast_r60_op,repo.age_op_forecast_r70_op,repo.age_op_forecast_r80_op
+		from yh_disease_assess_total_report2  repo2
+		LEFT JOIN  yh_disease_risk_result2 resu2
+		ON repo2.request_serialNum=resu2.request_serialize
+		LEFT JOIN yh_disease_assess_report repo
+		ON repo2.request_serialNum=repo.request_serialNum
+		LEFT JOIN yh_user_reginfo regi
+		ON regi.user_code=repo2.user_code
+		LEFT JOIN yh_org_tree orgtree
+		on regi.Org_Code=orgtree.Org_Code
+		LEFT JOIN `yh_user_make_card` AS card ON card.user_code = regi.user_code
+		<where>
+			orgtree.Org_Code like CONCAT(#{nowselect},'%')
+			<if test="begintime!=null">
+				and repo2.qtime between #{begintime} and #{endtime}
+			</if>
+			<if test="userCode != null">
+				and card.doctor =( SELECT id FROM `yh_user_admin_info` WHERE user_code = #{userCode} )
+			</if>
+			ORDER BY qtime DESC
+
+		</where>
+
+	</select>
+	
+	<select id="exportassessreport3" parameterType="com.yihe.system.domain.YhExportData" resultMap="exprotresult2">
+	SELECT repo2.id,regi.`name`,repo2.user_code,repo.id aid,repo2.request_serialNum,orgtree.Org_Name,repo2.qtime,repo2.gender,repo2.age,repo2.user_name,repo2.times,resu2.age as agefengxian,resu2.hdlc
+		,resu2.ldlc,resu2.food,resu2.sport,resu2.b4,resu2.smoke,resu2.drink,resu2.hw_check,resu2.BMI,resu2.waist,resu2.diab_his,
+		resu2.hbp_his,resu2.FBG,resu2.sbp,resu2.cholesterol,resu2.TG,resu2.BF,resu2.dbp,resu2.HBPS,resu2.HFS,resu2.hf_his,resu2.C1,
+		resu2.milk,resu2.tfa,resu2.chds,resu2.dms,resu2.smoke_sencod,resu2.lungs,resu2.emphy_his,resu2.asbestos_contact_his,resu2.decorate_house,resu2.psy_nervous,
+		resu2.bronch_his,resu2.lampblack_contact,resu2.gouts,resu2.tea,resu2.food_purine,resu2.chd_his,resu2.bua,resu2.med_use_pill,resu2.CSS,resu2.card_his,resu2.lvd_his,
+		resu2.af_his,resu2.PCS,resu2.prostate_disease,resu2.urinary_tract_infection,resu2.urine_symptom,repo.risk_level,
+		repo.risk_desc,repo.now_risk_desc,repo.now_risk_value,repo.now_risk_level,repo.now_risk_last_value,repo.ideal_risk_level,repo.ideal_risk_desc,repo.last_time,repo.diseasId
+-- 		,repo.age_forecast_r20,repo.age_forecast_r30
+-- 		,repo.age_forecast_r40
+-- 		,repo.age_forecast_r50,repo.age_forecast_r60,repo.age_forecast_r70,repo.age_forecast_r80,repo.age_op_forecast_r20_op,repo.age_op_forecast_r30_op,repo.age_op_forecast_r40_op,repo.age_op_forecast_r50_op
+-- 		,repo.age_op_forecast_r60_op,repo.age_op_forecast_r70_op,repo.age_op_forecast_r80_op
+		from yh_disease_assess_total_report2  repo2
+		LEFT JOIN  yh_disease_risk_result2 resu2
+		ON repo2.request_serialNum=resu2.request_serialize
+		LEFT JOIN yh_disease_assess_report repo
+		ON repo2.request_serialNum=repo.request_serialNum
+		LEFT JOIN yh_user_reginfo regi
+		ON regi.user_code=repo2.user_code
+		LEFT JOIN yh_org_tree orgtree
+		on regi.Org_Code=orgtree.Org_Code
+		WHERE repo2.request_serialNum=#{rs}
+	</select>
+  
+   <select id="selectapressure" parameterType="com.yihe.system.domain.YhExportData" resultType="com.yihe.system.domain.YhExportApressure">
+		SELECT * FROM (SELECT eva.*,reg.`name`,reg.gender,orgtree.Org_Name from yh_pressure_evaluate eva
+			LEFT JOIN yh_user_reginfo reg
+			ON eva.User_Code=reg.user_code
+			LEFT JOIN yh_org_tree orgtree
+			ON reg.Org_Code=orgtree.Org_Code
+	   		LEFT JOIN `yh_user_make_card` AS card ON card.user_code = reg.user_code
+  		<where>
+			orgtree.Org_Code like CONCAT('%',#{nowselect},'%')
+			 <if test="begintime!=null">
+			 	and eva.Evaluate_Date between #{begintime} and #{endtime}
+			 </if>
+			<if test="userCode != null">
+				and card.doctor =( SELECT id FROM `yh_user_admin_info` WHERE user_code = #{userCode} )
+			</if>
+			 and eva.Evaluate_Type=1  ORDER BY  eva.Evaluate_Date DESC) a		
+  		</where>
+  		<if test="time!=true">
+			 GROUP BY a.`name`
+		</if>
+  </select>
+  <select id="exportrstripressure" parameterType="com.yihe.system.domain.YhExportData" resultType="com.yihe.system.domain.YhExportApressure">
+		SELECT * FROM (SELECT eva.*,reg.`name`,reg.gender,orgtree.Org_Name from yh_pressure_evaluate eva
+			LEFT JOIN yh_user_reginfo reg
+			ON eva.User_Code=reg.user_code
+			LEFT JOIN yh_org_tree orgtree
+			ON reg.Org_Code=orgtree.Org_Code
+	  LEFT JOIN `yh_user_make_card` AS card ON card.user_code = reg.user_code
+  		<where>
+			orgtree.Org_Code like CONCAT('%',#{nowselect},'%')
+			 <if test="begintime!=null">
+			 	and eva.Evaluate_Date between #{begintime} and #{endtime}
+			 </if>
+			<if test="userCode != null">
+				and card.doctor =( SELECT id FROM `yh_user_admin_info` WHERE user_code = #{userCode} )
+			</if>
+			 and eva.Evaluate_Type=2	ORDER BY  eva.Evaluate_Date DESC) a		
+  		</where>
+  		<if test="time!=true">
+			 GROUP BY a.`name`
+		</if>
+  </select>
+
+	<select id="renal" parameterType="com.yihe.system.domain.YhExportData" resultType="com.yihe.system.domain.YhExportRenalFunction">
+		SELECT * FROM (SELECT bloo.*,reg.user_code,reg.`name`,reg.gender,orgtree.Org_Name from yh_user_renalfunction bloo
+			LEFT JOIN yh_user_reginfo reg
+			ON bloo.user_id=reg.user_code
+			LEFT JOIN yh_org_tree orgtree
+			ON reg.Org_Code=orgtree.Org_Code
+		LEFT JOIN `yh_user_make_card` AS card ON card.user_code = reg.user_code
+			<where>
+					orgtree.Org_Code like CONCAT('%',#{nowselect},'%')
+				<if test="begintime!=null">
+					and bloo.inertTime between #{begintime} and #{endtime}
+				</if>
+				<if test="userCode != null">
+					and card.doctor =( SELECT id FROM `yh_user_admin_info` WHERE user_code = #{userCode} )
+				</if>
+					and bloo.Is_Del=2  ORDER BY  bloo.inertTime DESC) a
+			</where>
+		<if test="time!=true">
+			GROUP BY a.`name`
+		</if>
+	</select>
+
+    <select id="exportbloodpressure" parameterType="com.yihe.system.domain.YhExportData" resultType="com.yihe.system.domain.YhExprotBloodPressure">
+		SELECT * FROM (SELECT bloo.*,reg.user_code,reg.`name`,reg.gender,orgtree.Org_Name from yh_user_bloodpressure bloo
+			LEFT JOIN yh_user_reginfo reg
+			ON bloo.E_User_Id=reg.user_code
+			LEFT JOIN yh_org_tree orgtree
+			ON reg.Org_Code=orgtree.Org_Code
+		LEFT JOIN `yh_user_make_card` AS card ON card.user_code = reg.user_code
+  		<where>
+			orgtree.Org_Code like CONCAT('%',#{nowselect},'%')
+			 <if test="begintime!=null">
+			 	and bloo.Entry_Time between #{begintime} and #{endtime}
+			 </if>
+			<if test="userCode != null">
+				and card.doctor =( SELECT id FROM `yh_user_admin_info` WHERE user_code = #{userCode} )
+			</if>
+			 and bloo.Is_Del=2  ORDER BY  bloo.Entry_Time DESC) a		
+  		</where>
+  		<if test="time!=true">
+			 GROUP BY a.`name`
+		</if>
+  </select>
+  
+  <select id="exportbmi" parameterType="com.yihe.system.domain.YhExportData" resultType="com.yihe.system.domain.YhExprotBMI">
+		SELECT * FROM (SELECT bmi.*,reg.user_code,reg.`name`,reg.gender,orgtree.Org_Name from yh_user_bmi bmi
+			LEFT JOIN yh_user_reginfo reg
+			ON bmi.E_User_Id=reg.user_code
+			LEFT JOIN yh_org_tree orgtree
+			ON reg.Org_Code=orgtree.Org_Code
+	  LEFT JOIN `yh_user_make_card` AS card ON card.user_code = reg.user_code
+  		<where>
+			orgtree.Org_Code like CONCAT('%',#{nowselect},'%')
+			 <if test="begintime!=null">
+			 	and bmi.Entry_Time between #{begintime} and #{endtime}
+			 </if>
+			<if test="userCode != null">
+				and card.doctor =( SELECT id FROM `yh_user_admin_info` WHERE user_code = #{userCode} )
+			</if>
+			 and bmi.Is_Del=2 ORDER BY  bmi.Entry_Time DESC) a	
+  		</where>
+  		<if test="time!=true">
+			 GROUP BY a.`name`
+		</if>
+  </select>
+  
+  <select id="exportbodyfat" parameterType="com.yihe.system.domain.YhExportData" resultType="com.yihe.system.domain.YhExportBodyFat">
+					SELECT * FROM (SELECT bodyfat.*,reg.user_code,reg.`name`,reg.gender,orgtree.Org_Name from yh_user_body_fat bodyfat			
+					LEFT JOIN yh_user_reginfo reg
+					ON bodyfat.E_User_Id=reg.user_code
+					LEFT JOIN yh_org_tree orgtree
+					ON reg.Org_Code=orgtree.Org_Code
+	  LEFT JOIN `yh_user_make_card` AS card ON card.user_code = reg.user_code
+  		<where>
+			orgtree.Org_Code like CONCAT('%',#{nowselect},'%')
+			 <if test="begintime!=null">
+			 	and bodyfat.Entry_Time between #{begintime} and #{endtime}
+			 </if>
+			<if test="userCode != null">
+				and card.doctor =( SELECT id FROM `yh_user_admin_info` WHERE user_code = #{userCode} )
+			</if>
+			 and bodyfat.Is_Del=2	ORDER BY  bodyfat.Entry_Time DESC) a
+  		</where>
+  		<if test="time!=true">
+			 GROUP BY a.`name`
+		</if>
+  </select>
+  
+  <select id="exportbloodfat" parameterType="com.yihe.system.domain.YhExportData" resultType="com.yihe.system.domain.YhExprotBloodFat">
+					SELECT * FROM (SELECT bloodfat.*,reg.user_code,reg.`name`,reg.gender,orgtree.Org_Name from yh_user_bloodfat bloodfat			
+					LEFT JOIN yh_user_reginfo reg
+					ON bloodfat.E_User_Id=reg.user_code
+					LEFT JOIN yh_org_tree orgtree
+					ON reg.Org_Code=orgtree.Org_Code
+	  LEFT JOIN `yh_user_make_card` AS card ON card.user_code = reg.user_code
+  		<where>
+			orgtree.Org_Code like CONCAT('%',#{nowselect},'%')
+			 <if test="begintime!=null">
+			 	and bloodfat.Entry_Time between #{begintime} and #{endtime}
+			 </if>
+			<if test="userCode != null">
+				and card.doctor =( SELECT id FROM `yh_user_admin_info` WHERE user_code = #{userCode} )
+			</if>
+			 and bloodfat.Is_Del=2	ORDER BY  bloodfat.Entry_Time DESC) a
+  		</where>
+  		<if test="time!=true">
+			 GROUP BY a.`user_code`
+		</if>
+  </select>
+  
+  
+  <select id="exportliver" parameterType="com.yihe.system.domain.YhExportData" resultType="com.yihe.system.domain.YhExportLiver">
+					SELECT * FROM (SELECT liver.*,reg.user_code,reg.`name`,reg.gender,orgtree.Org_Name from yh_user_liverfunction liver			
+					LEFT JOIN yh_user_reginfo reg
+					ON liver.user_id=reg.user_code
+					LEFT JOIN yh_org_tree orgtree
+					ON reg.Org_Code=orgtree.Org_Code
+	  LEFT JOIN `yh_user_make_card` AS card ON card.user_code = reg.user_code
+  		<where>
+			orgtree.Org_Code like CONCAT('%',#{nowselect},'%')
+			 <if test="begintime!=null">
+			 	and liver.insertTime between #{begintime} and #{endtime}
+			 </if>
+			<if test="userCode != null">
+				and card.doctor =( SELECT id FROM `yh_user_admin_info` WHERE user_code = #{userCode} )
+			</if>
+			 and liver.Is_Del=2	ORDER BY  liver.insertTime DESC) a
+  		</where>
+  		<if test="time!=true">
+			 GROUP BY a.`name`
+		</if>
+  </select>
+  
+  
+  
+  <select id="exportuba" parameterType="com.yihe.system.domain.YhExportData" resultType="com.yihe.system.domain.YhExportUserUBA">
+					SELECT * FROM (SELECT uba.*,reg.user_code,reg.`name`,reg.gender,orgtree.Org_Name from yh_user_uba uba			
+					LEFT JOIN yh_user_reginfo reg
+					ON uba.E_User_id=reg.user_code
+					LEFT JOIN yh_org_tree orgtree
+					ON reg.Org_Code=orgtree.Org_Code
+	  LEFT JOIN `yh_user_make_card` AS card ON card.user_code = reg.user_code
+  		<where>
+			orgtree.Org_Code like CONCAT('%',#{nowselect},'%')
+			 <if test="begintime!=null">
+			 	and uba.addDate between #{begintime} and #{endtime}
+			 </if>
+			<if test="userCode != null">
+				and card.doctor =( SELECT id FROM `yh_user_admin_info` WHERE user_code = #{userCode} )
+			</if>
+			 and uba.Is_Del=2	ORDER BY  uba.addDate DESC) a
+  		</where>
+  		<if test="time!=true">
+			 GROUP BY a.`name`
+		</if>
+  </select>
+  
+  
+  <select id="other" parameterType="com.yihe.system.domain.YhExportData" resultType="com.yihe.system.domain.YhExportOther">
+					SELECT * FROM (SELECT other.*,reg.user_code,reg.`name`,reg.gender,orgtree.Org_Name from yh_user_otherfunction other			
+					LEFT JOIN yh_user_reginfo reg
+					ON other.user_id=reg.user_code
+					LEFT JOIN yh_org_tree orgtree
+					ON reg.Org_Code=orgtree.Org_Code
+	  LEFT JOIN `yh_user_make_card` AS card ON card.user_code = reg.user_code
+  		<where>
+			orgtree.Org_Code like CONCAT('%',#{nowselect},'%')
+			 <if test="begintime!=null">
+			 	and other.insertTime between #{begintime} and #{endtime}
+			 </if>
+			<if test="userCode != null">
+				and card.doctor =( SELECT id FROM `yh_user_admin_info` WHERE user_code = #{userCode} )
+			</if>
+			 and other.Is_Del=2	 ORDER BY  other.insertTime DESC) a
+  		</where>
+  		<if test="time!=true">
+			 GROUP BY a.`name`
+		</if>
+  </select>
+  
+  <select id="exportbloodsuger" parameterType="com.yihe.system.domain.YhExportData" resultType="com.yihe.system.domain.YhExprotBloodSuger">
+	SELECT * FROM (SELECT bloosuger.*,reg.user_code,reg.`name`,reg.gender,orgtree.Org_Name from yh_user_bloodsuger bloosuger
+		LEFT JOIN yh_user_reginfo reg
+		ON bloosuger.E_User_Id=reg.user_code
+		LEFT JOIN yh_org_tree orgtree
+		ON reg.Org_Code=orgtree.Org_Code
+	  LEFT JOIN `yh_user_make_card` AS card ON card.user_code = reg.user_code
+  		<where>
+			orgtree.Org_Code like CONCAT('%',#{nowselect},'%')
+			 <if test="begintime!=null">
+			 	and bloosuger.Entry_Time between #{begintime} and #{endtime}
+			 </if>
+			<if test="userCode != null">
+				and card.doctor =( SELECT id FROM `yh_user_admin_info` WHERE user_code = #{userCode} )
+			</if>
+			 and bloosuger.Is_Del=2 ORDER BY  bloosuger.Entry_Time DESC) a
+  		</where>
+  		<if test="!time">
+			 GROUP BY a.`name`
+		</if>
+  </select>
+  
+  
+  <select id="allexportbloodsuger" parameterType="com.yihe.system.domain.YhExportData" resultType="com.yihe.system.domain.YhExprotBloodSuger">
+	  SELECT * FROM (SELECT t.*,u.user_name,tree.Org_Name,u.user_code,u.`name`,u.gender FROM (SELECT * FROM yh_user_bloodsuger ORDER BY Entry_Time DESC) t,yh_user_reginfo u ,yh_org_tree tree,`yh_user_make_card` AS card
+  		<where>
+			u.user_code=t.E_User_Id AND u.Org_Code=tree.Org_Code AND card.user_code = u.user_code AND t.Is_Del=2 and u.Org_Code like CONCAT('%',#{nowselect},'%')
+			 <if test="begintime!=null">
+			 	and t.Entry_Time between #{begintime} and #{endtime}
+			 </if>
+			<if test="userCode != null">
+				and card.doctor =( SELECT id FROM `yh_user_admin_info` WHERE user_code = #{userCode} )
+			</if>
+			ORDER BY  t.Entry_Time DESC) a
+  		</where>
+  		GROUP BY a.E_User_Id
+  </select>
+  
+  <select id="allexportbodyfat" parameterType="com.yihe.system.domain.YhExportData" resultType="com.yihe.system.domain.YhExportBodyFat">
+	  SELECT * FROM (SELECT t.*,u.user_name,tree.Org_Name,u.user_code,u.`name`,u.gender FROM (SELECT * FROM yh_user_body_fat ORDER BY Entry_Time DESC) t,yh_user_reginfo u ,yh_org_tree tree,`yh_user_make_card` AS card
+  		<where>
+			u.user_code=t.E_User_Id AND u.Org_Code=tree.Org_Code AND card.user_code = u.user_code AND t.Is_Del=2 and u.Org_Code like CONCAT('%',#{nowselect},'%')
+			 <if test="begintime!=null">
+			 	and t.Entry_Time between #{begintime} and #{endtime}
+			 </if>
+			<if test="userCode != null">
+				and card.doctor =( SELECT id FROM `yh_user_admin_info` WHERE user_code = #{userCode} )
+			</if>
+			ORDER BY  t.Entry_Time DESC) a
+		</where>
+  		GROUP BY a.E_User_Id
+  </select>
+  
+  
+  <select id="allexportbloodpressure" parameterType="com.yihe.system.domain.YhExportData" resultType="com.yihe.system.domain.YhExprotBloodPressure">
+	  SELECT * FROM (SELECT t.*,u.user_name,tree.Org_Name,u.user_code,u.`name`,u.gender FROM (SELECT * FROM yh_user_bloodpressure ORDER BY Entry_Time DESC) t,yh_user_reginfo u ,yh_org_tree tree,`yh_user_make_card` AS card
+  		<where>
+			u.user_code=t.E_User_Id AND u.Org_Code=tree.Org_Code AND card.user_code = u.user_code AND t.Is_Del=2 and u.Org_Code like CONCAT('%',#{nowselect},'%')
+			 <if test="begintime!=null">
+			 	and t.Entry_Time between #{begintime} and #{endtime}
+			 </if>
+			<if test="userCode != null">
+				and card.doctor =( SELECT id FROM `yh_user_admin_info` WHERE user_code = #{userCode} )
+			</if>
+			ORDER BY  t.Entry_Time DESC) a
+  		</where>
+  		GROUP BY a.E_User_Id
+  </select>
+	  
+	<select id="allexportbloodfat" parameterType="com.yihe.system.domain.YhExportData" resultType="com.yihe.system.domain.YhExprotBloodFat">
+		SELECT * FROM (SELECT t.*,u.user_name,tree.Org_Name,u.user_code,u.`name`,u.gender FROM (SELECT * FROM yh_user_bloodfat ORDER BY Entry_Time DESC) t,yh_user_reginfo u ,yh_org_tree tree,`yh_user_make_card` AS card
+  		<where>
+			u.user_code=t.E_User_Id AND u.Org_Code=tree.Org_Code AND card.user_code = u.user_code AND t.Is_Del=2 and u.Org_Code like CONCAT('%',#{nowselect},'%')
+			 <if test="begintime!=null">
+			 	and t.Entry_Time between #{begintime} and #{endtime}
+			 </if>
+			<if test="userCode != null">
+				and card.doctor =( SELECT id FROM `yh_user_admin_info` WHERE user_code = #{userCode} )
+			</if>
+			ORDER BY  t.Entry_Time DESC) a
+  		</where>
+		GROUP BY a.E_User_Id
+  </select>  
+	
+   <select id="allexportbmi" parameterType="com.yihe.system.domain.YhExportData" resultType="com.yihe.system.domain.YhExprotBMI">
+	   SELECT * FROM (SELECT t.*,u.user_name,tree.Org_Name,u.user_code,u.`name`,u.gender FROM (SELECT * FROM yh_user_bmi ORDER BY Entry_Time DESC) t,yh_user_reginfo u ,yh_org_tree tree,`yh_user_make_card` AS card
+  		<where>
+			u.user_code=t.E_User_Id AND u.Org_Code=tree.Org_Code AND card.user_code = u.user_code AND t.Is_Del=2 and u.Org_Code like CONCAT('%',#{nowselect},'%')
+			 <if test="begintime!=null">
+			 	and t.Entry_Time between #{begintime} and #{endtime}
+			 </if>
+			<if test="userCode != null">
+				and card.doctor =( SELECT id FROM `yh_user_admin_info` WHERE user_code = #{userCode} )
+			</if>
+			ORDER BY  t.Entry_Time DESC) a
+  		</where>
+	   GROUP BY a.E_User_Id
+  </select>
+  
+  <select id="allexportliver" parameterType="com.yihe.system.domain.YhExportData" resultType="com.yihe.system.domain.YhExportLiver">
+	  SELECT * FROM (SELECT t.*,u.user_name,tree.Org_Name,u.user_code,u.`name`,u.gender FROM (SELECT * FROM yh_user_liverfunction ORDER BY insertTime DESC) t,yh_user_reginfo u ,yh_org_tree tree,`yh_user_make_card` AS card
+  		<where>
+			u.user_code=t.user_id AND u.Org_Code=tree.Org_Code AND card.user_code = u.user_code AND t.Is_Del=2 and u.Org_Code like CONCAT('%',#{nowselect},'%')
+			 <if test="begintime!=null">
+			 	and t.insertTime between #{begintime} and #{endtime}
+			 </if>
+			<if test="userCode != null">
+				and card.doctor =( SELECT id FROM `yh_user_admin_info` WHERE user_code = #{userCode} )
+			</if>
+			ORDER BY  t.insertTime DESC) a
+  		</where>
+  		GROUP BY a.user_id
+  </select>
+  <select id="allexportfunction" parameterType="com.yihe.system.domain.YhExportData" resultType="com.yihe.system.domain.YhExportRenalFunction">
+	  SELECT * FROM (SELECT t.*,u.user_name,tree.Org_Name,u.user_code,u.`name`,u.gender FROM (SELECT * FROM yh_user_renalfunction ORDER BY inertTime DESC) t,yh_user_reginfo u ,yh_org_tree tree,`yh_user_make_card` AS card
+	  <where>
+		  u.user_code=t.user_id AND u.Org_Code=tree.Org_Code AND card.user_code = u.user_code AND t.Is_Del=2 and u.Org_Code like CONCAT('%',#{nowselect},'%')
+		  <if test="begintime!=null">
+			  and t.inertTime between #{begintime} and #{endtime}
+		  </if>
+		  <if test="userCode != null">
+			  and card.doctor =( SELECT id FROM `yh_user_admin_info` WHERE user_code = #{userCode} )
+		  </if>
+		  ORDER BY  t.inertTime DESC) a
+	  </where>
+	  GROUP BY a.user_id
+  </select>
+  
+  <select id="allexportuba" parameterType="com.yihe.system.domain.YhExportData" resultType="com.yihe.system.domain.YhExportUserUBA">
+	  SELECT * FROM (SELECT t.*,u.user_name,tree.Org_Name,u.user_code,u.`name`,u.gender FROM (SELECT * FROM yh_user_uba ORDER BY addDate DESC) t,yh_user_reginfo u ,yh_org_tree tree,`yh_user_make_card` AS card
+  		<where>
+			u.user_code=t.E_User_Id AND u.Org_Code=tree.Org_Code AND card.user_code = u.user_code AND t.Is_Del=2 and u.Org_Code like CONCAT('%',#{nowselect},'%')
+			 <if test="begintime!=null">
+			 	and t.addDate between #{begintime} and #{endtime}
+			 </if>
+			<if test="userCode != null">
+				and card.doctor =( SELECT id FROM `yh_user_admin_info` WHERE user_code = #{userCode} )
+			</if>
+			ORDER BY  t.addDate DESC) a
+  		</where>
+  		GROUP BY a.E_User_Id
+  </select>
+  
+  <select id="allother" parameterType="com.yihe.system.domain.YhExportData" resultType="com.yihe.system.domain.YhExportOther">
+	  SELECT * FROM (SELECT t.*,u.user_name,tree.Org_Name,u.user_code,u.`name`,u.gender FROM (SELECT * FROM yh_user_otherfunction ORDER BY insertTime DESC) t,yh_user_reginfo u ,yh_org_tree tree,`yh_user_make_card` AS card
+  		<where>
+			u.user_code=t.user_id AND u.Org_Code=tree.Org_Code AND card.user_code = u.user_code AND t.Is_Del=2 and u.Org_Code like CONCAT('%',#{nowselect},'%')
+			 <if test="begintime!=null">
+			 	and t.insertTime between #{begintime} and #{endtime}
+			 </if>
+			<if test="userCode != null">
+				and card.doctor =( SELECT id FROM `yh_user_admin_info` WHERE user_code = #{userCode} )
+			</if>
+			ORDER BY  t.insertTime DESC) a
+		</where>
+  		GROUP BY a.user_id
+  </select>
+  
+  <select id="exportxinli" parameterType="com.yihe.system.domain.YhExportData" resultType="com.yihe.system.domain.YhExportApressure">
+		SELECT * FROM (SELECT eva.*,reg.`name`,reg.gender,orgtree.Org_Name from yh_pressure_evaluate eva
+			LEFT JOIN yh_user_reginfo reg
+			ON eva.User_Code=reg.user_code
+			LEFT JOIN yh_org_tree orgtree
+			ON reg.Org_Code=orgtree.Org_Code
+	  LEFT JOIN `yh_user_make_card` AS card ON card.user_code = reg.user_code
+  		<where>
+			orgtree.Org_Code like CONCAT('%',#{nowselect},'%')
+			 <if test="begintime!=null">
+			 	and eva.Evaluate_Date between #{begintime} and #{endtime}
+			 </if>
+			<if test="userCode != null">
+				and card.doctor =( SELECT id FROM `yh_user_admin_info` WHERE user_code = #{userCode} )
+			</if>
+			 and eva.Evaluate_Type=3	ORDER BY  eva.Evaluate_Date DESC) a			
+  		</where>
+  		<if test="time!=true">
+			 GROUP BY a.`name`
+		</if>
+  </select>
+
+	<select id="exportyhUserArteries" parameterType="com.yihe.system.domain.YhExportData" resultType="com.yihe.system.domain.YhUserArtery">
+		SELECT * FROM (SELECT eva.time,eva.usesr_code as usesrCode,eva.capp,eva.csbp,eva.api,eva.avi,eva.Pulse,eva.dbp,eva.sbp,reg.`name`,reg.gender,orgtree.Org_Name from yh_user_artery eva
+		LEFT JOIN yh_user_reginfo reg
+		ON eva.usesr_code=reg.user_code
+		LEFT JOIN yh_org_tree orgtree
+		ON reg.Org_Code=orgtree.Org_Code
+		LEFT JOIN `yh_user_make_card` AS card ON card.user_code = reg.user_code
+		<where>
+			orgtree.Org_Code like CONCAT('%',#{nowselect},'%')
+			<if test="begintime!=null">
+				and eva.time between #{begintime} and #{endtime}
+			</if>
+			<if test="userCode != null">
+				and card.doctor =( SELECT id FROM `yh_user_admin_info` WHERE user_code = #{userCode} )
+			</if>
+				ORDER BY  eva.time DESC) a
+		</where>
+		<if test="time!=true">
+			GROUP BY a.`name`
+		</if>
+	</select>
+</mapper>

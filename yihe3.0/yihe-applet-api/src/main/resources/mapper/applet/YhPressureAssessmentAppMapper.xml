@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yihe.applet.api.mapper.YhPressureAssessmentAppMapper" >
+  <resultMap id="BaseResultMap" type="com.yihe.applet.api.domain.YhPressureAssessmentApp" >
+    <id column="Pa_Id" property="paId" jdbcType="INTEGER" />
+    <result column="Pa_Que" property="paQue" jdbcType="VARCHAR" />
+    <result column="Pa_Del" property="paDel" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    Pa_Id, Pa_Que, Pa_Del
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from yh_pressure_assessment
+    where Pa_Id = #{paId,jdbcType=INTEGER}
+  </select>
+  
+   <select id="selectAllpstre" resultMap="BaseResultMap"  >
+    select * from yh_pressure_assessment 
+  </select>
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from yh_pressure_assessment
+    where Pa_Id = #{paId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.yihe.applet.api.domain.YhPressureAssessmentApp" >
+    insert into yh_pressure_assessment (Pa_Id, Pa_Que, Pa_Del
+      )
+    values (#{paId,jdbcType=INTEGER}, #{paQue,jdbcType=VARCHAR}, #{paDel,jdbcType=INTEGER}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.yihe.applet.api.domain.YhPressureAssessmentApp" >
+    insert into yh_pressure_assessment
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="paId != null" >
+        Pa_Id,
+      </if>
+      <if test="paQue != null" >
+        Pa_Que,
+      </if>
+      <if test="paDel != null" >
+        Pa_Del,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="paId != null" >
+        #{paId,jdbcType=INTEGER},
+      </if>
+      <if test="paQue != null" >
+        #{paQue,jdbcType=VARCHAR},
+      </if>
+      <if test="paDel != null" >
+        #{paDel,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.yihe.applet.api.domain.YhPressureAssessmentApp" >
+    update yh_pressure_assessment
+    <set >
+      <if test="paQue != null" >
+        Pa_Que = #{paQue,jdbcType=VARCHAR},
+      </if>
+      <if test="paDel != null" >
+        Pa_Del = #{paDel,jdbcType=INTEGER},
+      </if>
+    </set>
+    where Pa_Id = #{paId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.yihe.applet.api.domain.YhPressureAssessmentApp" >
+    update yh_pressure_assessment
+    set Pa_Que = #{paQue,jdbcType=VARCHAR},
+      Pa_Del = #{paDel,jdbcType=INTEGER}
+    where Pa_Id = #{paId,jdbcType=INTEGER}
+  </update>
+</mapper>

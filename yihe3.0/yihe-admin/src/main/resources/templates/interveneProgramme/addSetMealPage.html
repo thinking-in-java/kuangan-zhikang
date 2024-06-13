@@ -1,0 +1,628 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, maximum-scale=1">
+<title>饮食套餐</title>
+<link rel="stylesheet" th:href="@{/assets/libs/layui/css/layui.css}" />
+<link rel="stylesheet" th:href="@{/assets/module/admin.css}" />
+<style type="text/css">
+</style>
+</head>
+<body style="padding: 15px">
+	<div style="text-align: center; padding: 20px;background-color: #fff;">
+		<a id="fanhui">< 返回</a>
+	</div>
+	<form class="layui-form" action="" style="padding: 30px;background-color: #fff;padding-bottom: 70px;">
+	<input id="id" name="id" type="hidden" th:value="id">
+		<h1 class="site-h1"
+			style="text-align: center; border-bottom: 1px solid #eee; padding-bottom: 10px;">饮食套餐</h1>
+			<div class="layui-form-item">
+			<div class="layui-inline">
+				<label class="layui-form-label">套餐描述：</label>
+				<div class="layui-input-block">
+					 <input type="text" style="width: 500px;" id="fsDescribe" name="fsDescribe" required  lay-verify="required" placeholder="请输入描述" autocomplete="off" class="layui-input">
+				</div>
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<div class="layui-inline">
+				<label class="layui-form-label">能量等级：</label>
+				<div class="layui-input-block">
+					<select name="efLevel" id="eLevel" required   lay-filter="eLevel" lay-verify="" lay-search>
+						<option th:each="list:${foodFenergy}"   th:value="${list}">[[${list}]]</option>
+					</select>
+				</div>
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<div class="layui-inline" id="pYx">
+				<label class="layui-form-label">适用范围</label>
+				<div class="layui-input-block">
+					<input lay-filter="pYx" required th:each="list,status:${dCategory}" type="checkbox" class="diseaseCode"
+						th:name="diseaseCode+${list.diseaseCode}"
+						th:title="${list.diseaseName}" th:checked="${{status.index==0}}">
+				</div>
+			</div>
+		</div>
+		<div class="layui-row">
+		 <div style="float:left">每日食谱（请在列表中进行选择）：</div>
+		 <div style="float:right"><button type="button" id="tianjia" onclick="addShipu()" class="layui-btn">+添加食谱</button></div>
+		 </div>
+			<table class="layui-hide" id="duixiang" lay-filter="duixiang"></table>
+
+
+
+
+
+		<div class="layui-form-item" style="position: fixed;bottom: -14px;width: 100%;text-align: center;padding: 15px 0px 20px 0px;background-color: #fff;margin-left: -30px;">
+			<div class="">
+				<button class="layui-btn layui-btn-primary"    id="quxiaoXJ">取消</button>
+				<button class="layui-btn" lay-submit lay-filter="formDemo">保存</button>
+			</div>
+		</div>
+	</form>
+
+</body>
+<script type="text/javascript" th:src="@{/assets/libs/layui/layui.js}"></script>
+<script type="text/javascript" th:src="@{/assets/js/common.js}"></script>
+<script type="text/javascript" th:src="@{/assets/js/xm-select.js}"></script>
+<script th:inline="javascript">
+ 
+
+
+ 
+	layui.use([ 'layer', 'form', 'table', 'laypage', 'treeSelect', 'admin',
+			'element', 'laydate', 'index', 'notice' ], function() {
+		var $ = layui.jquery;
+		var layer = layui.layer;
+		var form = layui.form;
+		var table = layui.table;
+		var laypage = layui.laypage;
+		var element = layui.element;
+		var admin = layui.admin;
+		var form = layui.form;
+		var treeSelect = layui.treeSelect;
+		var laydate = layui.laydate;
+		var notice = layui.notice;
+		
+		//翻页多选数据
+		var pageDataIdMap;
+		var idMap = new Map();
+		//每日食谱table数据
+		 
+		window.addShipu= function (){
+			//iframe层
+	 
+			layer.open({
+				  type: 2,
+				  title: '添加每日食谱',
+				 
+				  shade: 0.8,
+				  area: ['90%', '90%'],
+				  content: '/manage/intervene/addDailyRecipes?layer='+1,
+					  cancel: function(index, layero){ 
+						 
+						    layer.close(index)
+						  
+						 	 arr = [];
+							 $('#pYx .layui-input-block input:checked').each(function(){
+									  console.log($(this).attr("name"));
+									  if("diseaseCode1"==$(this).attr("name")){
+										  arr.push(1);
+									  }
+									  if("diseaseCode2"==$(this).attr("name")){
+										  arr.push(2);
+									  }
+									  if("diseaseCode3"==$(this).attr("name")){
+										  arr.push(3);
+									  }
+									  if("diseaseCode4"==$(this).attr("name")){
+										  arr.push(4);
+									  }
+									  if("diseaseCode5"==$(this).attr("name")){
+										  arr.push(5);
+									  }
+									  if("diseaseCode6"==$(this).attr("name")){
+										  arr.push(6);
+									  }
+									  if("diseaseCode7"==$(this).attr("name")){
+										  arr.push(7);
+									  }
+									  if("diseaseCode8"==$(this).attr("name")){
+										  arr.push(8);
+									  }
+									  if("diseaseCode9"==$(this).attr("name")){
+										  arr.push(9);
+									  }
+									  if("diseaseCode10"==$(this).attr("name")){
+										  arr.push(10);
+									  }
+									  if("diseaseCode11"==$(this).attr("name")){
+										  arr.push(11);
+									  }
+									  if("diseaseCode12"==$(this).attr("name")){
+										  arr.push(12);
+									  }
+									  if("diseaseCode13"==$(this).attr("name")){
+										  arr.push(13);
+									  }
+									  
+								  })
+								  
+								  data1 = {
+						eLevel:$("select[name='efLevel']").val(),
+						diseaseidArray:JSON.stringify(arr),
+				};
+							  console.log("data1",data1)
+								table1(data1);
+							  
+						  return false; 
+						},  //iframe的url
+						end:function(){
+							 
+							  
+							 	 arr = [];
+								 $('#pYx .layui-input-block input:checked').each(function(){
+										  console.log($(this).attr("name"));
+										  if("diseaseCode1"==$(this).attr("name")){
+											  arr.push(1);
+										  }
+										  if("diseaseCode2"==$(this).attr("name")){
+											  arr.push(2);
+										  }
+										  if("diseaseCode3"==$(this).attr("name")){
+											  arr.push(3);
+										  }
+										  if("diseaseCode4"==$(this).attr("name")){
+											  arr.push(4);
+										  }
+										  if("diseaseCode5"==$(this).attr("name")){
+											  arr.push(5);
+										  }
+										  if("diseaseCode6"==$(this).attr("name")){
+											  arr.push(6);
+										  }
+										  if("diseaseCode7"==$(this).attr("name")){
+											  arr.push(7);
+										  }
+										  if("diseaseCode8"==$(this).attr("name")){
+											  arr.push(8);
+										  }
+										  if("diseaseCode9"==$(this).attr("name")){
+											  arr.push(9);
+										  }
+										  if("diseaseCode10"==$(this).attr("name")){
+											  arr.push(10);
+										  }
+										  if("diseaseCode11"==$(this).attr("name")){
+											  arr.push(11);
+										  }
+										  if("diseaseCode12"==$(this).attr("name")){
+											  arr.push(12);
+										  }
+										  if("diseaseCode13"==$(this).attr("name")){
+											  arr.push(13);
+										  }
+										  
+									  })
+									  
+									  data1 = {
+							eLevel:$("select[name='efLevel']").val(),
+							diseaseidArray:JSON.stringify(arr),
+					};
+								  console.log("data1",data1)
+									table1(data1);
+								  
+							  return false; 
+						}
+				}); 
+				 // window.location.href="/manage/intervene/addDailyRecipes";
+		 
+		}
+		
+		$("#fanhui").click(function() {
+			console.log([[${yhType}]])
+			if([[${yhType}]]==1){
+				window.location.href="/manage/content/foodl?fanhui="+2; 
+			}else{
+				window.location.href="/manage/intervene/programme?fanhui="+2;
+			}
+			
+		})
+			 
+			form.on('select(eLevel)', function(data){
+				 arr = [];
+				console.log(data.value)
+				$('#pYx .layui-input-block input:checked').each(function(){
+							  console.log($(this).attr("name"));
+							  if("diseaseCode1"==$(this).attr("name")){
+								  arr.push(1);
+							  }
+							  if("diseaseCode2"==$(this).attr("name")){
+								  arr.push(2);
+							  }
+							  if("diseaseCode3"==$(this).attr("name")){
+								  arr.push(3);
+							  }
+							  if("diseaseCode4"==$(this).attr("name")){
+								  arr.push(4);
+							  }
+							  if("diseaseCode5"==$(this).attr("name")){
+								  arr.push(5);
+							  }
+							  if("diseaseCode6"==$(this).attr("name")){
+								  arr.push(6);
+							  }
+							  if("diseaseCode7"==$(this).attr("name")){
+								  arr.push(7);
+							  }
+							  if("diseaseCode8"==$(this).attr("name")){
+								  arr.push(8);
+							  }
+							  if("diseaseCode9"==$(this).attr("name")){
+								  arr.push(9);
+							  }
+							  if("diseaseCode10"==$(this).attr("name")){
+								  arr.push(10);
+							  }
+							  if("diseaseCode11"==$(this).attr("name")){
+								  arr.push(11);
+							  }
+							  if("diseaseCode12"==$(this).attr("name")){
+								  arr.push(12);
+							  }
+							  if("diseaseCode13"==$(this).attr("name")){
+								  arr.push(13);
+							  }
+							  
+						  })
+				 data1 = {
+					eLevel:data.value,
+					diseaseidArray:JSON.stringify(arr),
+			};
+						  console.log("data1",data1)
+							table1(data1);
+			})
+		var arr =[1];
+
+
+			form.on('checkbox(pYx)', function(data){
+			
+					 /* console.log(data.elem); //得到checkbox原始DOM对象
+					  console.log(data.elem.checked); //是否被选中，true或者false
+					  console.log(data.elem.name) */
+					 console.log($('#pYx .layui-input-block input:checked').length)
+					 	 arr = [];
+					 $('#pYx .layui-input-block input:checked').each(function(){
+							  console.log($(this).attr("name"));
+							  if("diseaseCode1"==$(this).attr("name")){
+								  arr.push(1);
+							  }
+							  if("diseaseCode2"==$(this).attr("name")){
+								  arr.push(2);
+							  }
+							  if("diseaseCode3"==$(this).attr("name")){
+								  arr.push(3);
+							  }
+							  if("diseaseCode4"==$(this).attr("name")){
+								  arr.push(4);
+							  }
+							  if("diseaseCode5"==$(this).attr("name")){
+								  arr.push(5);
+							  }
+							  if("diseaseCode6"==$(this).attr("name")){
+								  arr.push(6);
+							  }
+							  if("diseaseCode7"==$(this).attr("name")){
+								  arr.push(7);
+							  }
+							  if("diseaseCode8"==$(this).attr("name")){
+								  arr.push(8);
+							  }
+							  if("diseaseCode9"==$(this).attr("name")){
+								  arr.push(9);
+							  }
+							  if("diseaseCode10"==$(this).attr("name")){
+								  arr.push(10);
+							  }
+							  if("diseaseCode11"==$(this).attr("name")){
+								  arr.push(11);
+							  }
+							  if("diseaseCode12"==$(this).attr("name")){
+								  arr.push(12);
+							  }
+							  if("diseaseCode13"==$(this).attr("name")){
+								  arr.push(13);
+							  }
+							  
+						  })
+						  
+						  data1 = {
+				eLevel:$("select[name='efLevel']").val(),
+				diseaseidArray:JSON.stringify(arr),
+		};
+					  console.log("data1",data1)
+						table1(data1);
+				});
+			  console.log("arr",arr)
+		var data1 = {
+				eLevel:1200,
+				diseaseidArray:JSON.stringify(arr),
+		};
+		 
+		function table1(data) {
+			var insTb1 = table.render({
+				id : 'table1id',
+				elem : '#duixiang',
+				url : '/YhFoodSrecipeRecordContriller/adddailyRecipes',
+				cellMinWidth : 80, //全局定义常规单元格的最小宽度，layui 2.2.1 新增
+				page : true,
+				limit: 10, //每页默认显示的数量
+				where : data1,
+				 
+				cols : [ [ {
+					type : 'checkbox'
+				}, {
+
+					title : '创建日期',
+					field :'cTime',
+				}, {
+					field : 'eLevel',
+					title : '能量等级',
+				}, {
+					field : 'diseaseidStr',
+					title : '适用人群',
+				}, {
+					field : 'fElementsStr',
+					title : '餐次构成',
+
+				}, {
+					field : 'oneselfStr',
+					title : '来源',
+				}  ] ],
+				response : {
+
+					statusCode : 0
+				//规定成功的状态码，默认：0
+
+				},
+
+				parseData : function(res) { //将原始数据解析成 table 组件所规定的数据
+					console.log("table1",res.data)
+					return {
+						"code" : res.data.code, //解析接口状态
+						"msg" : res.data.msg, //解析提示文本
+						"count" : res.data.count, //解析数据长度
+						"data" : res.data.data
+					//解析数据列表
+					}
+
+				},
+				 done: function (res, curr, count) {
+					 if(count > 10) {
+				        	$("#tiwen2 .layui-table-page").show();
+				        }else {
+				        	$("#tiwen2 .layui-table-page").hide();
+				        }
+		                var len = res.data.length;
+		                pageDataIdMap = new Map();
+		                for(var i = 0;i < len;i++){   //填充当前页的数据
+		                    pageDataIdMap[res.data[i].uFoodErecipeId] = res.data[i].uFoodErecipeId;
+		                }
+		                
+		                var chooseNum = 0;   //记录当前页选中的数据行数
+		                for(var i = 0;i < len;i++){   //勾选行回显
+		                    for(var key in idMap){
+		                        if(res.data[i].uFoodErecipeId == key){
+		                            res.data[i]["LAY_CHECKED"]='true';
+		                            //找到对应数据改变勾选样式，呈现出选中效果
+		                            var index= res.data[i]['LAY_TABLE_INDEX'];
+		                            $('tr[data-index=' + index + '] input[type="checkbox"]').prop('checked', true);
+		                            $('tr[data-index=' + index + '] input[type="checkbox"]').next().addClass('layui-form-checked');
+		                            chooseNum++;
+		                        }
+		                    }
+		                }
+		                let pageDataIdMaparray = []
+					    for(let key in pageDataIdMap) {
+					      let obj = pageDataIdMap[key]
+					      obj.id = key
+					      pageDataIdMaparray.push(obj)
+					    }
+					console.log(JSON
+							.stringify({
+								"pageDataIdMaparray" : pageDataIdMaparray
+								 
+							}))
+		                if(len != 0 && chooseNum == len){   //表示该页全选  --  全选按钮样式回显
+		                $('input[lay-filter="layTableAllChoose"]').prop('checked',true);
+		                $('input[lay-filter="layTableAllChoose"]').next().addClass('layui-form-checked');
+		                }
+		            } 
+			});
+		}
+
+		table1(data1);
+		
+		
+		 
+		  //干预调整多选按钮事件
+        table.on('checkbox(duixiang)', function(obj){
+        	console.log("obj",obj)
+        	var mode=obj.data.record_mode;
+			 var checkStatus = table.checkStatus('table1id');
+			 
+			 var data = checkStatus.data;
+			// layer.msg('选中了：'+ data.length + ' 个');
+	        	 //var checkStatus = table.checkStatus('tableAuth');
+			 if(obj.type == 'one'){    //单选操作
+	                if(obj.checked){     //选中
+	                    idMap[obj.data.uFoodErecipeId] = obj.data.uFoodErecipeId;
+	                	
+	                }else{      //取消选中
+	                    for(var key in idMap){
+	                        if(key == obj.data.uFoodErecipeId){   //移除取消选中的id
+	                            delete idMap[obj.data.uFoodErecipeId];
+	                        }
+	                    }
+	                   
+	                }
+	            }else{      //全选操作
+	                if(obj.checked){
+	                	//选中
+	                    for(var pageKey in pageDataIdMap){
+	                        idMap[pageKey] = pageKey;
+	                    }
+	                }else{     //取消选中
+	                    for(var pageKey in pageDataIdMap){
+	                        for(var key in idMap){
+	                            if(key == pageKey){
+	                                delete idMap[pageKey];
+	                            }
+	                        }
+	                    }
+	                }
+	            }
+			 let array = []
+			    for(let key in idMap) {
+			      let obj = idMap[key]
+			      obj.id = key
+			      array.push(obj)
+			    }
+			console.log(JSON
+					.stringify({
+						"userList" : array
+						 
+					}))
+			 
+	        });
+	
+$("#quxiaoXJ").click(function() {
+	if([[${yhType}]]==1){
+		window.location.href="/manage/content/foodl?fanhui="+2;
+	}else{
+		window.location.href="/manage/intervene/programme?fanhui="+2;
+	}
+		})
+     
+  
+    	
+		form.on('submit(formDemo)', function (data) {
+			console.log("///",$("#fsDescribe").val().length)
+			 if($("#fsDescribe").val().length>30){
+				 layer.msg("限制套餐描述30个字符");
+					return false;
+			 }
+			
+		  let array = []
+			    for(let key in idMap) {
+			      let obj = idMap[key]
+			      obj.id = key
+			      array.push(obj)
+			    }
+			if(array.length==0){
+				 layer.msg("未选择每日食谱");
+				return false;
+			}
+			
+			if(array.length<7){
+				 layer.msg("至少勾选7条每日食谱");
+				return false;
+			}
+			var bool=false;
+			$.ajax({
+				type:"post",
+				url:"/YhFoodSrecipeRecordContriller/findYhFoodFsdescribe",
+				data:{fsDescribe:$("#fsDescribe").val()},
+				async:false, 
+				success:function(data){
+					 if(data.data>0){
+						 bool=true;
+						 layer.msg("描述已被使用，请修改");
+							return false;
+					 }
+					 
+				} 
+			});
+			   if(bool){
+				   return false;
+			   }
+			
+					
+					 arr = [];
+					 $('#pYx .layui-input-block input:checked').each(function(){
+							  if("diseaseCode1"==$(this).attr("name")){
+								  arr.push(1);
+							  }
+							  if("diseaseCode2"==$(this).attr("name")){
+								  arr.push(2);
+							  }
+							  if("diseaseCode3"==$(this).attr("name")){
+								  arr.push(3);
+							  }
+							  if("diseaseCode4"==$(this).attr("name")){
+								  arr.push(4);
+							  }
+							  if("diseaseCode5"==$(this).attr("name")){
+								  arr.push(5);
+							  }
+							  if("diseaseCode6"==$(this).attr("name")){
+								  arr.push(6);
+							  }
+							  if("diseaseCode7"==$(this).attr("name")){
+								  arr.push(7);
+							  }
+							  if("diseaseCode8"==$(this).attr("name")){
+								  arr.push(8);
+							  }
+							  if("diseaseCode9"==$(this).attr("name")){
+								  arr.push(9);
+							  }
+							  if("diseaseCode10"==$(this).attr("name")){
+								  arr.push(10);
+							  }
+							  if("diseaseCode11"==$(this).attr("name")){
+								  arr.push(11);
+							  }
+							  if("diseaseCode12"==$(this).attr("name")){
+								  arr.push(12);
+							  }
+							  if("diseaseCode13"==$(this).attr("name")){
+								  arr.push(13);
+							  }
+							  
+						  })
+						  console.log(JSON.stringify({"userList" : array,"efLevel":data.field.efLevel,"arr":arr}))
+						  if(arr.length==0){
+							  layer.msg("适用范围未选");
+								return false;
+						  }
+						   $.ajax({
+					type:"post",
+					url:"/YhFoodSrecipeRecordContriller/addSetMeal",
+					contentType:'application/json;charset=UTF-8',	//发送信息至服务器时内容编码类型
+					traditional:true,	//传统的方式来序列化数据
+					data:JSON.stringify({"userList" : array,"efLevel":data.field.efLevel,"arr":arr,"fsDescribe":data.field.fsDescribe}),
+					success:function(data){
+						if(data.data>0){
+							layer.msg("添加成功");
+						}
+						if([[${yhType}]]==1){
+							window.location.href="/manage/content/foodl?fanhui="+2;
+						}else{
+							window.location.href="/manage/intervene/programme?fanhui="+2;
+						}
+
+						return false;
+					} 
+				});  
+						  
+return false;
+})
+		
+	});
+</script>
+</html>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yihe.applet.api.mapper.YhSleepQuestionAppMapper">
+	<sql id="allColumn">question_id,question_type,question_title,choose1,choose1_value,choose2,choose2_value,choose3,choose3_value,choose4,choose4_value</sql>
+	<resultMap type="com.yihe.applet.api.domain.YhSleepQuestionApp" id="sleepQuestionMap">
+		<id column="question_id" jdbcType="INTEGER" property="questionId" />
+		<result column="question_type" jdbcType="VARCHAR" property="questionType" />
+		<result column="question_title" jdbcType="VARCHAR" property="questionTitle" />
+		<result column="choose1" jdbcType="VARCHAR" property="choose1" />
+		<result column="choose1_value" jdbcType="VARCHAR" property="choose1Value" />
+		<result column="choose2" jdbcType="VARCHAR" property="choose2" />
+		<result column="choose2_value" jdbcType="VARCHAR" property="choose2Value" />
+		<result column="choose3" jdbcType="VARCHAR" property="choose3" />
+		<result column="choose3_value" jdbcType="VARCHAR" property="choose3Value" />
+		<result column="choose4" jdbcType="VARCHAR" property="choose4" />
+		<result column="choose4_value" jdbcType="VARCHAR" property="choose4Value" />
+	</resultMap>
+	<select id="selAllQuestion" resultMap="sleepQuestionMap">
+		SELECT
+		<include refid="allColumn" />
+		FROM yh_question_sleep
+	</select>
+</mapper>

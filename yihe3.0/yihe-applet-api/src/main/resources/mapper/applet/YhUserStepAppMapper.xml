@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yihe.applet.api.mapper.YhUserStepAppMapper" >
+  <resultMap id="BaseResultMap" type="com.yihe.applet.api.domain.YhUserStepApp" >
+    <id column="step_ID" property="stepId" jdbcType="INTEGER" />
+    <result column="user_code" property="userCode" jdbcType="VARCHAR" />
+    <result column="user_type" property="userType" jdbcType="INTEGER" />
+    <result column="healthstars" property="healthstars" jdbcType="INTEGER" />
+    <result column="healthlevelstars" property="healthlevelstars" jdbcType="INTEGER" />
+    <result column="gold_coins" property="goldCoins" jdbcType="INTEGER" />
+    <result column="silver_star" property="silverStar" jdbcType="INTEGER" />
+    <result column="gold_star" property="goldStar" jdbcType="INTEGER" />
+    <result column="gold_crown" property="goldCrown" jdbcType="INTEGER" />
+    <result column="step_time" property="stepTime" jdbcType="TIMESTAMP" />
+    <result column="Long_time" property="longTime" jdbcType="INTEGER" />
+    <result column="Stay_time" property="stayTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    step_ID, user_code, user_type, healthstars, healthlevelstars, gold_coins, silver_star, 
+    gold_star, gold_crown, step_time, Long_time, Stay_time
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from yh_user_step
+    where step_ID = #{stepId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from yh_user_step
+    where step_ID = #{stepId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.yihe.applet.api.domain.YhUserStepApp" >
+    insert into yh_user_step (step_ID, user_code, user_type, 
+      healthstars, healthlevelstars, gold_coins, 
+      silver_star, gold_star, gold_crown, 
+      step_time, Long_time, Stay_time
+      )
+    values (#{stepId,jdbcType=INTEGER}, #{userCode,jdbcType=VARCHAR}, #{userType,jdbcType=INTEGER}, 
+      #{healthstars,jdbcType=INTEGER}, #{healthlevelstars,jdbcType=INTEGER}, #{goldCoins,jdbcType=INTEGER}, 
+      #{silverStar,jdbcType=INTEGER}, #{goldStar,jdbcType=INTEGER}, #{goldCrown,jdbcType=INTEGER}, 
+      #{stepTime,jdbcType=TIMESTAMP}, #{longTime,jdbcType=INTEGER}, #{stayTime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.yihe.applet.api.domain.YhUserStepApp" >
+    insert into yh_user_step
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="stepId != null" >
+        step_ID,
+      </if>
+      <if test="userCode != null" >
+        user_code,
+      </if>
+      <if test="userType != null" >
+        user_type,
+      </if>
+      <if test="healthstars != null" >
+        healthstars,
+      </if>
+      <if test="healthlevelstars != null" >
+        healthlevelstars,
+      </if>
+      <if test="goldCoins != null" >
+        gold_coins,
+      </if>
+      <if test="silverStar != null" >
+        silver_star,
+      </if>
+      <if test="goldStar != null" >
+        gold_star,
+      </if>
+      <if test="goldCrown != null" >
+        gold_crown,
+      </if>
+      <if test="stepTime != null" >
+        step_time,
+      </if>
+      <if test="longTime != null" >
+        Long_time,
+      </if>
+      <if test="stayTime != null" >
+        Stay_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="stepId != null" >
+        #{stepId,jdbcType=INTEGER},
+      </if>
+      <if test="userCode != null" >
+        #{userCode,jdbcType=VARCHAR},
+      </if>
+      <if test="userType != null" >
+        #{userType,jdbcType=INTEGER},
+      </if>
+      <if test="healthstars != null" >
+        #{healthstars,jdbcType=INTEGER},
+      </if>
+      <if test="healthlevelstars != null" >
+        #{healthlevelstars,jdbcType=INTEGER},
+      </if>
+      <if test="goldCoins != null" >
+        #{goldCoins,jdbcType=INTEGER},
+      </if>
+      <if test="silverStar != null" >
+        #{silverStar,jdbcType=INTEGER},
+      </if>
+      <if test="goldStar != null" >
+        #{goldStar,jdbcType=INTEGER},
+      </if>
+      <if test="goldCrown != null" >
+        #{goldCrown,jdbcType=INTEGER},
+      </if>
+      <if test="stepTime != null" >
+        #{stepTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="longTime != null" >
+        #{longTime,jdbcType=INTEGER},
+      </if>
+      <if test="stayTime != null" >
+        #{stayTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.yihe.applet.api.domain.YhUserStepApp" >
+    update yh_user_step
+    <set >
+      <if test="userCode != null" >
+        user_code = #{userCode,jdbcType=VARCHAR},
+      </if>
+      <if test="userType != null" >
+        user_type = #{userType,jdbcType=INTEGER},
+      </if>
+      <if test="healthstars != null" >
+        healthstars = #{healthstars,jdbcType=INTEGER},
+      </if>
+      <if test="healthlevelstars != null" >
+        healthlevelstars = #{healthlevelstars,jdbcType=INTEGER},
+      </if>
+      <if test="goldCoins != null" >
+        gold_coins = #{goldCoins,jdbcType=INTEGER},
+      </if>
+      <if test="silverStar != null" >
+        silver_star = #{silverStar,jdbcType=INTEGER},
+      </if>
+      <if test="goldStar != null" >
+        gold_star = #{goldStar,jdbcType=INTEGER},
+      </if>
+      <if test="goldCrown != null" >
+        gold_crown = #{goldCrown,jdbcType=INTEGER},
+      </if>
+      <if test="stepTime != null" >
+        step_time = #{stepTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="longTime != null" >
+        Long_time = #{longTime,jdbcType=INTEGER},
+      </if>
+      <if test="stayTime != null" >
+        Stay_time = #{stayTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where user_code = #{userCode}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.yihe.applet.api.domain.YhUserStepApp" >
+    update yh_user_step
+    set user_code = #{userCode,jdbcType=VARCHAR},
+      user_type = #{userType,jdbcType=INTEGER},
+      healthstars = #{healthstars,jdbcType=INTEGER},
+      healthlevelstars = #{healthlevelstars,jdbcType=INTEGER},
+      gold_coins = #{goldCoins,jdbcType=INTEGER},
+      silver_star = #{silverStar,jdbcType=INTEGER},
+      gold_star = #{goldStar,jdbcType=INTEGER},
+      gold_crown = #{goldCrown,jdbcType=INTEGER},
+      step_time = #{stepTime,jdbcType=TIMESTAMP},
+      Long_time = #{longTime,jdbcType=INTEGER},
+      Stay_time = #{stayTime,jdbcType=TIMESTAMP}
+    where step_ID = #{stepId,jdbcType=INTEGER}
+  </update>
+   <!--   查询总积分 -->
+   <select id="selectAggregate" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select *
+    from yh_user_step
+    where user_code = #{userCode,jdbcType=VARCHAR}
+  </select>
+
+  <select id="selectAggregateSum" parameterType="java.lang.String" resultType="integer">
+   SELECT
+	(
+		SELECT
+			IFNULL(sum(healthstars), 0)
+		FROM
+			yh_health_star
+		WHERE
+			user_code = #{userCode,jdbcType=VARCHAR}
+		AND user_type = 5
+	) - (
+		SELECT
+			IFNULL(sum(healthstars), 0)
+		FROM
+			yh_health_star
+		WHERE
+			user_code = #{userCode,jdbcType=VARCHAR}
+		AND user_type = 4
+	)
+  </select>
+
+
+  <!--修改总积分  -->
+  <update id="updateAggregateScore" parameterType="java.lang.String">
+    update yh_user_step set healthlevelstars = #{healthlevelstars,jdbcType=INTEGER} ,healthstars = #{healthstars,jdbcType=INTEGER} where user_code = #{userCode,jdbcType=VARCHAR}
+  </update>
+
+  <resultMap id="YhMemberGradeMap" type="com.yihe.applet.api.domain.YhMemberGrade">
+    <result column="id" property="id" jdbcType="INTEGER"/>
+    <result column="vip_grade" property="vipGrade" jdbcType="INTEGER"/>
+    <result column="min_energy" property="minEnergy" jdbcType="INTEGER"/>
+    <result column="max_energy" property="maxEnergy" jdbcType="INTEGER"/>
+    <result column="img" property="img" jdbcType="VARCHAR"/>
+  </resultMap>
+  <select id="findGrade" resultMap="YhMemberGradeMap" resultType="integer">
+    select id,vip_grade,min_energy,max_energy,img
+    from yh_member_grade
+    where min_energy &lt;=#{energy} and (max_energy &gt;= #{energy} or max_energy is null)
+  </select>
+</mapper>

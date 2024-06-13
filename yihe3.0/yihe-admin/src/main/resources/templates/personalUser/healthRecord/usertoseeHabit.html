@@ -1,0 +1,1132 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>用户查看习惯管理</title>
+   <link rel="stylesheet"  th:href="@{/assets/libs/layui/css/layui.css}" />
+    <link rel="stylesheet"  th:href="@{/assets/module/admin.css}"  />
+    <style type="text/css">
+.layui-elem-quote {
+    margin-bottom: 10px;
+    padding: 9px;
+    line-height: 3px;
+    border-left: 5px solid #009688;
+    border-radius: 0 2px 2px 0;
+    background-color: white;
+    margin-top: 20px;
+    float: left;
+    margin-left: 20px;
+}
+
+.layui-card {
+    margin-bottom: 15px;
+    border-radius: 2px;
+    background-color: #fff;
+    box-shadow: 0 0px 0px 0 rgba(0,0,0,.05);
+}
+.yishiname {
+    display: inline-block;
+    margin-left: 20px;
+    width: 120px;
+}	
+li {
+    margin-top: 10px;
+}
+
+.layui-icon {
+    font-family: layui-icon!important;
+    font-size: 26px;
+    font-style: normal;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    color:rgba(229, 229, 229, 1);
+}
+
+.span{
+	font-size: 18px;
+    margin-left: 15px;
+}
+</style>
+</head>
+<body style="margin: 7px;">
+ <!-- 页面加载loading -->
+<div class="page-loading">
+    <div class="ball-loader">
+        <span></span><span></span><span></span><span></span>
+    </div>
+</div>
+
+
+
+
+
+
+<div class="layui-row"  style="padding: 0px;background-color: white;">
+			<div class="layui-card">
+			<div class="layui-tab layui-tab-brief" lay-filter="docDemoTabBrief">
+			  <ul class="layui-tab-title">
+			  	
+			  	<li th:if="${type=='1'}"  class="layui-this" id="Usedtoassess">习惯评估</li>
+			     <li th:if="${type!='1'}" id="Usedtoassess">习惯评估</li>
+			    <li th:if="${type=='2'}"  class="layui-this" id="tableuser">推荐习惯</li>
+			     <li th:if="${type!='2'}" id="tableuser">推荐习惯</li>
+			    <li th:if="${type=='3'}"   class="layui-this" onclick="solo()">习惯日记</li>
+			    <li th:if="${type!='3'}" onclick="solo()">习惯日记</li>
+			    <li th:if="${type=='4'}"   class="layui-this">习惯分析报告</li>
+			     <li th:if="${type!='4'}"  >习惯分析报告</li>
+			     <!--<li>商品管理</li>
+			    <li>订单管理</li> -->
+			  </ul>
+			  <div class="layui-tab-content">
+			  
+			  
+			  <div class="layui-tab-item" th:classappend="${type=='1'} ? 'layui-show' : ''">
+			    		
+					        <div class="layui-card-body">
+					            <div class="layui-form toolbar"  style="margin-left: -24px;">
+								<div class="layui-form-item">
+									<div class="layui-inline">
+										<label class="layui-form-label">评估结果：</label>
+										<div class="layui-input-inline">
+										    <select name="result" id="result" 	 lay-search="">
+									          <option value="">全部</option>
+									          <option value="较差">较差</option>
+									          <option value="良好">良好</option>
+									          <option value="很棒">很棒</option>
+									        </select>
+										  </div>
+									</div>
+
+									<div class="layui-inline">
+										<label class="layui-form-label">评估时间：</label>
+										<div class="layui-input-inline" style="width: 300px">
+											<input type="text" class="layui-input" id="test6" placeholder=" - ">
+										</div>
+									</div>
+									
+
+									<div class="layui-inline" style="padding-left: 20px;">
+										<button class="layui-btn icon-btn sousuo2" data-type="reload" onclick="assessShow()"><i class="layui-icon"></i>搜索</button>
+										<button class="layui-btn layui-btn-primary" id="btnempty1" lay-submit="" lay-filter="reset">清除</button>
+								
+									</div>
+ 
+
+								</div>
+							</div>
+							<table id="Used_to_assess" lay-filter="Used_to_assess"></table>
+					            </div>
+					            
+									
+					        </div>
+					
+			    
+			    
+			    
+			  <!-- 内容1 -->
+			    <div class="layui-tab-item" th:classappend="${type=='2'} ? 'layui-show' : ''">
+			    
+		    <div class="layui-card">
+		        <div class="layui-card-body">
+		            <div class="layui-form toolbar">
+		                <div class="layui-form-item">
+		                    <div class="layui-inline" style="float: right;" id="frontpage">
+		                        <button id="btnSearchAuth" class="layui-btn icon-btn"><i class="layui-icon">&#xe608;</i>推荐习惯
+		                        </button>
+		                    </div>
+		                </div>
+		            </div>
+		            
+						<table id="LAY_table_user" ></table>
+		        </div>
+		    </div>
+			    
+			    
+			    </div>
+			    <!-- 内容2 -->
+			    <div class="layui-tab-item" th:classappend="${type=='3'} ? 'layui-show' : ''">
+			    
+			    <div class="demoTable">
+					  日期：
+					  <div class="layui-inline">
+					    <input type="text" class="layui-input" id="test7" placeholder=" - ">
+					  </div>
+					    完成达标：
+					     <div class="layui-inline">
+					     <form class="layui-form">
+					   <select name="reportLevel" id="standard" 	 lay-search="">
+				          <option value="">全部</option>
+				          <option value="1">是</option>
+				          <option value="2">否</option>
+				        </select>
+				        </form>
+					  </div>
+					  <button class="layui-btn" data-type="reload" onclick="solo()"><i class="layui-icon"></i>搜索</button>
+					  <button class="layui-btn layui-btn-primary" id="btnempty" lay-submit="" lay-filter="reset">清除</button>
+					</div>
+					
+					<div style="width: 100%;">
+						<div style="width: 40%;float: left">
+				   		<table class="layui-hide" id="test" lay-filter="test"></table>
+				   		</div>
+			   			<div style="width: 53%;float: left;margin-left: 3%;" id="table">
+			   				
+			   				
+			   				<!--  -->
+			   			
+			   				<table class="layui-table" lay-skin="line">
+							  <thead>
+							    <tr>
+							      <th>日记情况</th>
+							    </tr> 
+							  </thead>
+							  <tbody>
+							    <tr>
+							      <td align="center"><div style="width:100%;height:280px;" id="chartmain"></div></td>
+							    </tr>
+							  </tbody>
+							</table>   
+         
+			   			
+			   			</div>
+			    	</div>
+			    	
+			    	
+			    	
+			   <table class="layui-table" lay-skin="line" id="journal">
+				  <thead>
+				    <tr>
+				      <th>习惯日记分析 <span id="ctime"></span></th>
+				    </tr> 
+				  </thead>
+				  <tbody>
+				    <tr>
+				    	<td style="width: 33%;">
+				    		<div style="width:100%">
+				    			<div style="width:33%;float: left;" id="chartmain1width">
+									<div style="text-align:center;margin-right: 125px;">完&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;成:<span id="complete" style="color: red;">3</span>个</div>
+									<div style="text-align:center;margin-right: 125px;">总习惯数:<span id="sum" style="color: red;">3</span>个 </div>
+									<div style="height:300px;" id="chartmain1"></div>
+								</div>
+				    			<div style="width:33%;float: left;text-align:center" id="chartmain2width">
+				    				<div style="text-align:center">实际已打卡统计 </div>
+									<div style="height:300px;" id="chartmain2"></div>
+				    			</div>
+				    			<div style="width:33%;float: left;text-align:center" id="chartmain3width">
+				    				<div style="text-align:center">打卡时间分析<i  style="z-index: 999;position: absolute;font-size: 20px;color: rebeccapurple;" class="layui-icon layui-icon-help" id="help"></i>
+															</div>
+									<div style="height:300px;" id="chartmain3"></div>
+				    			</div>
+				    		</div>
+				    	</td>
+				    </tr>
+				    <tr>
+				    	<td>
+				    		<div>
+				    			<h3>习惯日记内容</h3>
+				    			<br>
+				    			<div class="layui-row" id="row">
+								    
+								 </div>
+				    		</div>
+				    	</td>
+				    </tr>
+				  </tbody>
+				</table>   
+				    
+    
+			    
+			    </div>
+			    <div class="layui-tab-item" th:classappend="${type=='4'} ? 'layui-show' : ''">
+			    		
+			    	<table id="Habitlyze" lay-filter="demonalyze"></table>
+			    </div>
+			  </div>
+			</div> 
+		</div>
+	</div>
+
+</body>
+<script type="text/javascript" th:src="@{/assets/js/jquery-1.11.1.js}"></script>
+<script type="text/javascript" th:src="@{/assets/libs/layui/layui.js}"></script>
+<script type="text/javascript" th:src="@{/assets/js/common.js}"></script>
+<script th:src="@{/assets/libs/echarts/echarts.min.js}"></script>
+<script th:src="@{/assets/libs/echarts/echarts-liquidfill.min.js}"></script>
+<script type="text/html" id="barDemo">
+ {{# if(d.oneself == 1) { }}
+ --
+{{# } else { }}
+   <a href="#" lay-event="edit"><font color="#36A4FF">查看</font></a>
+{{# } }}
+</script>
+
+<script type="text/html" id="barDemo1">
+    <a href="#" lay-event="edit"><font color="#36A4FF">查看</font></a>
+</script>
+
+<script type="text/html" id="barDemo2">
+ 	<a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="downloadReport">下载报告</a>
+	<a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="downloadQuestionnaire">下载问卷</a>
+</script>
+
+<script type="text/html" id="barDemo1">
+    <a href="#" lay-event="edit"><font color="#36A4FF">查看</font></a>
+</script>
+
+<!-- 表单弹窗 -->
+<script type="text/html" id="toutiao">
+
+
+
+<div class='layui-inline' style='margin-top:14px;float:left '><label class='layui-form-label w-auto'>习惯名称：</label><div class='layui-input-inline mr0'><input id='habitName' style='width: 160px;' class='layui-input' placeholder='请输入习惯名称'/></div></div>
+<input id='guishujishu' type='hidden' value=''>
+      <button id='selectyishi' style='margin-top:14px;margin-left:10px;background-color: #5a9ae2'  class='layui-btn icon-btn'>查询</button>
+<div style='background-color:#e6f7ff;margin-right: 15px;height:193px;margin-top:20px;margin-left:15px;border-radius:4px;overflow:auto'>
+<form id="RoleForm" lay-filter="RoleForm" class="layui-form model-form">
+<ul id='changedoctor'>
+
+</ul>
+</div>
+
+		<input id="userCode1" name="userCode" type="hidden" value="">
+
+        <input id="pitch" name="pitch" type="hidden" value="">
+    
+
+        <div class="layui-form-item text-right" style="    text-align: center;    padding-top: 10px;">
+            <button class="layui-btn layui-btn-primary" type="button" ew-event="closePageDialog">取消</button>
+            <button class="layui-btn" lay-filter="SubmitRole" lay-submit>保存</button>
+        </div>
+    </form>
+    
+</script>
+
+
+<script>
+
+//水球图
+function water(num,limit,bfb){
+	option = {
+		    series: [{
+		        color:["#00F5FF","#928e8e"],
+		        type: 'pie',
+		        radius: ['40%', '50%'],
+		        avoidLabelOverlap: false,
+		        label: {
+		            normal: {
+		                show: true,
+		                position: 'center'
+		            },
+		            emphasis: {
+		                show: true,
+		                textStyle: {
+		                    fontSize: '30',
+		                    fontWeight: 'bold'
+		                }
+		            }
+		        },
+		        labelLine: {
+		            normal: {
+		                show: false
+		            }
+		        },
+		        data: [{
+		                value: bfb,
+		                name: num,
+		                label: {
+		                    normal: {
+		                        textStyle: {
+		                            fontSize: '30',
+		                            fontWeight: 'bold'
+		                        }
+		                    }
+		                },
+		            },
+		            {
+		                value: limit,
+		                name: '打卡完成效',
+		                label: {
+		                    normal: {
+		                         textStyle: {
+		                            fontSize: '15',
+		                            color:'#999',
+		                            fontWeight: 'bold'
+		                        },
+		                        padding: [50, 0, 0, 0]
+		                    }
+		                },
+		            }
+		        ]
+		    }]
+		};
+	/* var chartmain1width = $("#chartmain1width").width();
+	$("#chartmain1").css('width',$("#chartmain1width").width()); //给图设置固定宽度，div chart是第一个tab页面上面的某个图，宽度布局与map一致				   
+	 */
+	//获取dom容器
+	var myChart = echarts.init(document.getElementById('chartmain1'));
+	// 使用刚指定的配置项和数据显示图表。
+	myChart.setOption(option);
+	
+	myChart.resize();
+}
+
+
+function statistics(food,motion,sleep,elsew){
+	let bgColor = '#fff';
+	let title = '今日打卡';
+	let color = ['#0E7CE2', '#FF8352', '#E271DE', '#F8456B', '#00FFFF', '#4AEAB0'];
+	let echartData = [{
+	        name: "饮食",
+	        value: food
+	    },
+	    {
+	        name: "运动",
+	        value: motion
+	    },
+	    {
+	        name: "睡眠",
+	        value: sleep
+	    },
+	    {
+	        name: "其它",
+	        value: elsew
+	    }
+	];
+
+	let formatNumber = function(num) {
+	    let reg = /(?=(\B)(\d{3})+$)/g;
+	    return num.toString().replace(reg, ',');
+	}
+	let total = echartData.reduce((a, b) => {
+	    return a + b.value * 1
+	}, 0);
+
+	option = {
+	    color: color,
+	    // tooltip: {
+	    //     trigger: 'item'
+	    // },
+	    title: [{
+	        text: '{name|' + title + '}\n{val|' + formatNumber(total) + '}',
+	        top: 'center',
+	        left: 'center',
+	        textStyle: {
+	            rich: {
+	                name: {
+	                    fontSize: 14,
+	                    fontWeight: 'normal',
+	                    color: '#666666',
+	                    padding: [10, 0]
+	                },
+	                val: {
+	                    fontSize: 30,
+	                    fontWeight: 'bold',
+	                    color: '#333333',
+	                }
+	            }
+	        }
+	    }],
+	    series: [{
+	        type: 'pie',
+	        radius: ['40%', '50%'],
+	        center: ['50%', '50%'],
+	        data: echartData,
+	        hoverAnimation: false,
+	        itemStyle: {
+	            normal: {
+	                borderColor: bgColor,
+	                borderWidth: 2
+	            }
+	        },
+	        labelLine: {
+	            normal: {
+	                length: 20,
+	                length2: 120,
+	                lineStyle: {
+	                    color: '#e6e6e6'
+	                }
+	            }
+	        },
+	        label: {
+	            normal: {
+	                formatter: params => {
+	                    return (
+	                        '{icon|●}{name|' + params.name + '}{value|' +
+	                        formatNumber(params.value) + '次}'
+	                    );
+	                },
+	                padding: [0 , -100, 25, -100],
+	                rich: {
+	                    icon: {
+	                        fontSize: 16
+	                    },
+	                    name: {
+	                        fontSize: 14,
+	                        padding: [0, 10, 0, 4],
+	                        color: '#666666'
+	                    },
+	                    value: {
+	                        fontSize: 18,
+	                        fontWeight: 'bold',
+	                        color: '#333333'
+	                    }
+	                }
+	            }
+	        },
+	    }]
+	};
+	/* var chartmain1width = $("#chartmain2width").width();
+	$("#chartmain2").css('width',$("#chartmain2width").width()); //给图设置固定宽度，div chart是第一个tab页面上面的某个图，宽度布局与map一致				   
+	 */
+	//获取dom容器
+	var myChart = echarts.init(document.getElementById('chartmain2'));
+	// 使用刚指定的配置项和数据显示图表。
+	myChart.setOption(option);
+	
+	myChart.resize();
+}
+
+
+
+function analyze(lyze){
+	option = {
+		    color: ['#3398DB'],
+		    tooltip: {
+		        trigger: 'axis',
+		        axisPointer: {            // 坐标轴指示器，坐标轴触发有效
+		            type: 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+		        }
+		    },
+		    grid: {
+		        left: '3%',
+		        right: '4%',
+		        bottom: '3%',
+		        containLabel: true
+		    },
+		    xAxis: [
+		        {
+		            type: 'category',
+		            data: ['清晨', '上午', '中午', '下午', '晚上', '深夜', '凌晨'],
+		            axisTick: {
+		                alignWithLabel: true
+		            }
+		        }
+		    ],
+		    yAxis: [
+		        {
+		            type: 'value'
+		        }
+		    ],
+		    series: [
+		        {
+		            name: '记录数',
+		            type: 'bar',
+		            barWidth: '60%',
+		            data: lyze
+		        }
+		    ]
+		};
+	/* var chartmain1width = $("#chartmain3width").width();
+	$("#chartmain3").css('width',$("#chartmain3width").width()); //给图设置固定宽度，div chart是第一个tab页面上面的某个图，宽度布局与map一致				   
+	 */
+	//获取dom容器
+	var myChart = echarts.init(document.getElementById('chartmain3'));
+	// 使用刚指定的配置项和数据显示图表。
+	myChart.setOption(option);
+	
+	myChart.resize();
+}
+
+//统计图
+function show(cTime,energyLevel,energyKcal){
+	option = {
+		    color: ['#ed7a2c', '#5b9bd5', '#a5a5a5'],
+		    grid: {
+		        bottom: 60,
+		    },
+		   
+		    tooltip: {
+		        trigger: 'axis',
+		        confine: true,
+		        textStyle: {
+		            fontSize: 12
+		        }
+		    },
+		    xAxis: {
+		        type: "category",
+		        data: cTime,
+		    },
+		    yAxis: {
+		        type: "value"
+		    },
+		    series: [{
+		        name: "计划打卡项",
+		        type: "line",
+		      
+		        data: energyLevel
+		    }, {
+		        name: "完成打卡项",
+		        type: "line",
+		        data: energyKcal
+		    }],
+		     dataZoom : [
+				    //1.横向使用滚动条
+				      {
+				        type: 'slider',//有单独的滑动条，用户在滑动条上进行缩放或漫游。inside是直接可以是在内部拖动显示
+				        show: true,//是否显示 组件。如果设置为 false，不会显示，但是数据过滤的功能还存在。
+				        start: 0,//数据窗口范围的起始百分比0-100
+				        end: 50,//数据窗口范围的结束百分比0-100
+				        xAxisIndex: [0],// 此处表示控制第一个xAxis，设置 dataZoom-slider 组件控制的 x轴 可是已数组[0,2]表示控制第一，三个；xAxisIndex: 2 ，表示控制第二个。yAxisIndex属性同理
+				        bottom:-10 //距离底部的距离
+				      },
+				  //2.在内部可以横向拖动
+				     {
+				         type: 'inside',// 内置于坐标系中
+				         start: 0,
+				         end: 30,
+				         xAxisIndex: [0]
+				      }
+				    ],
+		};
+	/* var width = $("#table").width();
+	$("#chartmain").css('width',$("#table").width()); //给图设置固定宽度，div chart是第一个tab页面上面的某个图，宽度布局与map一致				   
+	 */
+		//获取dom容器
+		var myChart = echarts.init(document.getElementById('chartmain'));
+		// 使用刚指定的配置项和数据显示图表。
+		myChart.setOption(option);
+		
+		myChart.resize();
+}
+
+
+//导航栏
+layui.use('element', function() {
+	var $ = layui.jquery, element = layui.element; //Tab的切换功能，切换事件监听等，需要依赖element模块
+
+	$('.site-demo-active').on('click', function() {
+		var othis = $(this), type = othis.data('type');
+		active[type] ? active[type].call(this, othis) : '';
+	});
+
+});
+
+
+
+layui.use(['layer', 'form', 'admin', 'table','laydate', 'util'], function () {
+    var $ = layui.jquery;
+    var layer = layui.layer;
+    var form = layui.form;
+    var admin = layui.admin;
+    var util = layui.util;
+    var laydate = layui.laydate;
+    table = layui.table;
+    
+    var usercode = [[${usercode}]];
+    $("#journal").hide();
+    
+    var tip_index;
+	$("#help").hover(function(){
+	    tip_index =  layer.tips('清晨：5-8点<br>上午：8-12点<br>中午：12-14点<br>下午：14-18点<br>晚上：18-22点<br>深夜：22-24点<br>凌晨：0-5点', this,{
+	        tips: [2, 'rgba(0, 0, 0, 1)'],
+	        time:0
+	    });
+	},function(){
+	    layer.close(tip_index);
+	});
+	
+	
+	 setTimeout( function(){
+		 tjt($("#test7").val(),$("#standard").val());
+	}, 3 * 100 );
+ 
+
+    function tjt(ctime,standard){
+    	var data2= {'userCode' :usercode,'signidDate':ctime,'standard':standard};
+    	 $.ajax({
+    	 type: "post",
+         url: "/YhLifeHabitSignController/selectHabitSignCtime",
+         dataType:"json",
+         data:data2,
+         success: function(data){
+        		show(data.cTime,data.energyLevel,data.energyKcal);
+         }   	
+    });
+    }
+    
+    
+    
+  //内容3
+    table.render({
+   elem: '#test'
+   ,	url : '/YhLifeHabitSignController/selectSignDiary?userCode='+usercode
+   ,method:'post'
+       ,height: 340
+   ,cols: [ [
+     {field:'uSportId', title:'ID',hide:true}
+     ,{field:'signidDate', title:'日期',sort : true,width:'40%',
+			templet : "<div>{{layui.util.toDateString(d.signidDate, 'yyyy-MM-dd')}}</div>"}
+		 
+     ,{field:'schedule', title:'打卡进度(完成数/总数)', sort: true,width:'30%'}
+     ,{
+         title: '完成达标', templet: function (d) {
+             var strs = [
+                 '是',
+                 '否'
+             ];
+             if(d.complete>=d.sum){
+                 return strs[0];
+             }else{
+             	return strs[1];
+             }
+         }, align: 'uweight',width:'30%'
+     }
+   ] ]
+   ,id : 'energyKcal'
+   ,page: true
+ });
+    
+    //搜索的方法
+	   solo=function(){
+	     table.reload('energyKcal', {
+	        where: { //设定异步数据接口的额外参数，任意设
+	        'signidDate':$("#test7").val(),
+	        'standard':$("#standard").val(),
+	       }
+	      });	
+	     tjt($("#test7").val(),$("#standard").val());
+	    }
+    
+    
+    
+	 //监听行单击事件（双击事件为：rowDouble）
+	   table.on('row(test)', function(obj){
+		 $("#journal").show();
+		 //标注选中样式
+		 obj.tr.addClass('layui-table-click').siblings().removeClass('layui-table-click');
+	     var data = obj.data;
+	    
+	     $("#complete").html(data.complete);
+	     $("#sum").html(data.sum);
+	     var bfb=Math.round(data.complete/data.sum*100);
+	     water(bfb+"%",100-bfb,bfb);
+	     var ctime=data.signidDate;
+	     var arr=ctime.split(" ");
+	     $("#ctime").html(arr[0]);
+	     
+	     var data2 = {
+	 			'userCode' :data.userCode,
+	 			'signidDate' :arr[0]
+	 		};
+	 	 $.ajax({
+	 	 type: "post",
+	      url: "/YhLifeHabitSignController/selectBySign",
+	      dataType:"json",
+	      data:data2,
+	      success: function(data){
+	     	statistics(data.food,data.motion,data.sleep,data.elsew);
+	     	
+	     	var lyze=[data.matinal, data.forenoon, data.noon, data.afternoon, data.night, data.late, data.dawn]
+	     	analyze(lyze);
+	      }  
+	 	});
+	 	 
+	 	 
+	 	 
+	    
+	 	$.ajax({
+		 	 type: "post",
+		      url: "/YhLifeHabitSignController/selectByhabitontent",
+		      dataType:"json",
+		      data:data2,
+		      success: function(data){
+		    	  $("#row").html("");
+		    	  for(var j=0;j<data.length;j++){//其他运动
+		    		  if(data[j].whether==1){
+		    			  if((j+1)%4==0){
+		    			 	 $("#row").append("<div class='layui-col-xs3'><div class='grid-demo grid-demo-bg1'><i class='layui-icon layui-icon-ok-circle' style='font-size: 26px;color: rgba(67, 207, 124, 1);'></i><span class='span'>"+data[j].name+"</span></div><br>");
+		    			  }else{
+		    				$("#row").append("<div class='layui-col-xs3'><div class='grid-demo grid-demo-bg1'><i class='layui-icon layui-icon-ok-circle' style='font-size: 26px;color: rgba(67, 207, 124, 1);'></i><span class='span'>"+data[j].name+"</span></div>");
+		    			  }
+		    		  }else{
+		    				if((j+1)%4==0){
+		    					$("#row").append("<div class='layui-col-xs3'><div class='grid-demo grid-demo-bg1'><i class='layui-icon layui-icon-ok-circle' style='font-size: 26px;color: rgba(229, 229, 229, 1);'></i><span class='span'>"+data[j].name+"</span></div><br>");
+		    				}else{
+		    					$("#row").append("<div class='layui-col-xs3'><div class='grid-demo grid-demo-bg1'><i class='layui-icon layui-icon-ok-circle' style='font-size: 26px;color: rgba(229, 229, 229, 1);'></i><span class='span'>"+data[j].name+"</span></div>");
+		    				}
+		    		}
+				 }
+		    	  
+		    	  
+		      }   
+	 });
+	     
+	     
+	     
+	     
+	     });
+    
+	 //清除按钮
+	    $("#btnempty").click(function(){
+			$("#test7").val("");
+			$("#standard").val(""); 
+		    form.render("select");
+			 table.reload('energyKcal', {
+			        where: { //设定异步数据接口的额外参数，任意设
+			        'signidDate':$("#test7").val(),
+			        'standard':$("#standard").val(),
+			       }
+			      });	
+			     tjt($("#test7").val(),$("#standard").val());
+	    })
+	    
+    //清除按钮
+    $("#btnempty1").click(function(){
+    	window.location.reload()
+     
+    })
+    
+    
+      form.on('checkbox(filter)', function(data){
+    	  console.log(data.elem); //得到checkbox原始DOM对象
+    	  console.log(data.elem.checked); //是否被选中，true或者false
+    	  console.log(data.value); //复选框value值，也可以通过data.elem.value得到
+    	  console.log(data.othis); //得到美化后的DOM对象
+    	  
+    	  var idnum = data.elem.id; //得到dom的id 
+
+    	  var chk_value =[]; 
+    	  
+    	/*   var pitc=$("#pitch").val();
+    	  if(pitc!=null){
+    		  chk_value=pitc;
+    	  } */
+
+    	  $('input[name="like1"]:checked').each(function(){ 
+    	  chk_value.push($(this).val()); 
+    	  }); 
+    	//  layer.msg(chk_value.toString());
+    	  $("#pitch").val(chk_value.toString());
+    	  form.render('checkbox');
+    	  
+    	  
+    	}); 
+    
+    
+     $(document).on('click', '#selectyishi', function() {
+    	$("#changedoctor").empty().append("");
+    	var habitName=$("#habitName").val();
+    	var d ={"habitName":habitName};
+    	$.ajax({
+       	 type: "post",
+            url: "/YhLifeHabitPersonDictController/showHabitName?userCode="+usercode,
+            dataType:"json",
+            data:d,
+            success: function(data){
+          	  var item=data.data;
+     	     	var htmld="";
+     	        for (var i = 0; i < item.length; i++) {
+  	        		 if(item[i].oneself=="1"){
+  	        			htmld+="<li style='margin-left: 20px;width: 100%;'><input type='checkbox'  lay-filter='filter' checked='' value="+item[i].id+" name='like1' lay-skin='primary'><label  class='yishiname' style='width: 20%;'>"+item[i].habitName+"</label><label class='yishiname' style='width: 40%;'>"+item[i].habitDesc+"</label><label class='yishiname'  style='color: red;margin-left: 50pxstyle='width: 10%;''>执行中</label></li>";
+  	        		 }else{
+  	        			htmld+="<li style='margin-left: 20px;width: 100%;'><input type='checkbox'  lay-filter='filter' value="+item[i].id+" name='like1' lay-skin='primary'><label  class='yishiname' style='width: 20%;'>"+item[i].habitName+"</label><label class='yishiname' style='width: 40%;'>"+item[i].habitDesc+"</label></li>";
+          	        	
+  	        		 }
+     	       }
+     	     $("#changedoctor").empty().append(htmld);
+     	     $("#userCode1").val(usercode);
+     	        form.render();
+          	  
+            }
+       });
+    });
+    
+    
+    
+    $('#frontpage').click(function () {
+	showhealth();
+    showheadline();
+});
+    
+    
+    function showhealth(){
+      	 var d ="";
+       	 $.ajax({
+        	 type: "post",
+             url: "/YhLifeHabitPersonDictController/showHabitName?userCode="+usercode,
+             dataType:"json",
+             data:d,
+             success: function(data){
+           	  var item=data.data;
+      	     	var htmld="";
+      	        for (var i = 0; i < item.length; i++) {
+   	        		 if(item[i].oneself=="1"){
+   	        			htmld+="<li style='margin-left: 20px;width: 100%;'><input type='checkbox'  lay-filter='filter' checked='' value="+item[i].id+" name='like1' lay-skin='primary'><label  class='yishiname' style='width: 20%;'>"+item[i].habitName+"</label><label class='yishiname' style='width: 40%;'>"+item[i].habitDesc+"</label><label class='yishiname'  style='color: red;margin-left: 50pxstyle='width: 10%;''>执行中</label></li>";
+  	        		 }else{
+  	        			htmld+="<li style='margin-left: 20px;width: 100%;'><input type='checkbox'  lay-filter='filter' value="+item[i].id+" name='like1' lay-skin='primary'><label  class='yishiname' style='width: 20%;'>"+item[i].habitName+"</label><label class='yishiname' style='width: 40%;'>"+item[i].habitDesc+"</label></li>";
+          	        	
+   	        		 }
+      	       }
+      	     $("#changedoctor").empty().append(htmld);
+      	     $("#userCode1").val(usercode);
+      	        form.render();
+           	  
+             }
+        });
+      }
+
+    
+     //显示编辑弹窗头条
+    function showheadline(mRole) {
+    	
+        admin.open({
+            type: 1,
+            title: '推荐习惯',
+            content: $('#toutiao').html(),
+            area: ['600px', '400px'],
+            success: function (layero, dIndex) {
+                var url = '/YhLifeHabitPersonDictController/insertSelective';
+                // 表单提交事件
+                form.on('submit(SubmitRole)', function (data) {
+                    
+                    var pitch=$("#pitch").val();
+                    var d ={"pitch":pitch,'userCode' :usercode};
+                    if(pitch==null || pitch==""){
+                    	 layer.msg("请选择1个习惯");
+                    }else{
+                    	layer.load(2);
+                    	   $.post(url, d, function (res) {
+                           	
+                           	  table.reload('tableBank');
+             					layer.msg("成功");
+             					 layer.closeAll();
+                             }, 'json');
+
+                           return false;
+                    }
+                    
+                 
+                });
+            }
+        });
+    }
+    
+    
+    //日期范围
+      laydate.render({
+        elem: '#test7'
+        ,range: true,
+		  trigger: 'click'
+      });
+    
+  //日期范围
+    laydate.render({
+      elem: '#test6'
+      ,range: true,
+		trigger: 'click'
+    });
+    
+    
+    
+    $("#tableuser").click(function(){
+    	tableuser();
+    })
+    
+    tableuser();
+    function tableuser(){
+    	 //推荐习惯
+    	table.render({
+    		elem : '#LAY_table_user',
+    		url : '/YhLifeHabitPersonDictController/showPersonHabit?usercode='+usercode,
+    		method:'post',
+    		cols : [ [ {type:'numbers'},
+            {
+                templet: function (d) {
+                    return util.toDateString(d.increaseDate);
+                }, title: '推荐时间', align: 'increaseDate', width: 400
+            }, {
+    			field : 'habitName',
+    			title : '习惯',
+    		},{
+                title: '状态', templet: function (d) {
+                    var strs = [
+                        '<span class="layui-badge layui-badge-blue">已完成</span>',
+                        '<span class="layui-badge layui-badge-red">已过期</span>',
+                        '<span class="layui-badge layui-badge-green">执行中</span>',
+                        '<span class="layui-badge layui-badge-red">已删除</span>'
+                    ];
+                    if(d.accomplishType==1 || d.accomplishType=="1"){
+                        return strs[0];
+                    }else if(d.accomplishType==2 || d.accomplishType=="2"){
+                    	 return strs[1];
+                    }else if(d.accomplishType==3 || d.accomplishType=="3"){
+                    	 return strs[2];
+                    }else{
+                    	 return strs[3];
+                    }
+                }, align: 'accomplishType', width: 400
+            },{
+                title: '推荐方式', templet: function (d) {
+                    var strs = [
+                        '<span>系统匹配</span>',
+                        '<span>医生手动</span>',
+                        '<span>用户手动</span>',
+                    ];
+                    if(d.missingDay==1 || d.missingDay=="1"){
+                        return strs[0];
+                    }else if(d.missingDay==2 || d.missingDay=="2"){
+                    	 return strs[1];
+                    }else{
+                    	 return strs[2];
+                    }
+                }, align: 'missingDay', width: 400
+            } ] ],
+    		id : 'tableBank',
+    		page : true,
+    	});
+    }
+   
+    
+    $("#Usedtoassess").click(function(){
+    	Usedtoassess();
+    })
+	Usedtoassess();
+	function Usedtoassess(){
+		//习惯评估
+	    table.render({
+	   elem: '#Used_to_assess'
+	   ,	url : '/YhLifeHabitImprovementDictController/ShowPersonageHabit?usercode='+usercode
+	   ,method:'post'
+	   ,cols: [ [
+	     /* {field:'foodguideId', title:'ID',hide:true} */
+	     {type:'numbers'}
+	     ,{
+	            templet: function (d) {
+	                return util.toDateString(d.dictTime);
+	            }, title: '评估时间', align: 'dictTime'
+	        }
+	     ,{field:'result', title:'评估结果', sort: true}
+	     ,{
+				fixed : 'right',
+				title : '操作',
+				align : 'center',
+				toolbar : '#barDemo2'
+			}
+	   ] ]
+	   ,id : 'assess'
+	   ,page: true
+	 });
+	}
+  
+	//设置一个对象来控制是否进入AJAX过程
+	var post_flag = false; 
+	//分类表格监听			
+	   table.on('tool(Used_to_assess)', function(obj) { //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
+		var data = obj.data; //获得当前行数据
+		console.info(data,"获得当前行数据下载数据");
+		var layEvent = obj.event; //获得 lay-event 对应的值
+		var tr = obj.tr; //获得当前行 tr 的DOM对象
+		var tr = obj ,tr;                                                                                                                                                                                                                                                                                                                                                                                                                                                            
+		if(layEvent === 'downloadReport'){//下载报告
+			//如果正在提交则直接返回，停止执行
+		    if(post_flag) return; 
+		    //标记当前状态为正在提交状态
+		    post_flag = true;
+		  //加载层
+
+		    var index = layer.load(0, {shade: false}); //0代表加载的风格，支持0-2
+	    	 $.ajax({
+		   		 type:'get',
+		   		 url:"/YhMyLifeHabitAssessResultWebApp/gaoxueyaDataInfo2?id="+data.id+"&usercode="+data.userCode,
+		   		 data:{},
+		   		success : function(data){
+		   			console.log(data)
+		   			post_flag =false; //在提交成功之后将标志标记为可提交状态
+	
+		   			var sleep = function(time) {
+					    var startTime = new Date().getTime() + parseInt(time, 10);
+					    while(new Date().getTime() < startTime) {}
+					};
+	
+						sleep(1000); // 延时函数，单位ms
+	
+		   			 window.location.href="/YhMyLifeHabitAssessResultWebApp/download?fileName="+data.data+".pdf";
+		   			sleep(1000); // 延时函数，单位ms
+		   			layer.close(index);    //返回数据关闭loading
+		   		},
+		        error: function(){
+		            post_flag =false; //AJAX失败也需要将标志标记为可提交状态
+		        }
+	
+	   		}) 
+	    }else if(layEvent === 'downloadQuestionnaire'){//下载问卷
+			var usercode = data.userCode;
+			var id = data.id;
+			window.location.href="/YhMyLifeHabitAssessResultWebApp/exportXls?usercode="+usercode+"&dictId="+id+"";
+		}else if(layEvent === 'edit'){
+			window.location.href="/manage/usertosee/habitpdf?id="+data.id;
+		}
+			
+		
+		
+	});
+	
+	
+	
+	  //搜索的方法
+	   assessShow=function(){
+	     table.reload('assess', {
+	        where: { //设定异步数据接口的额外参数，任意设
+	        'result':$("#result").val(),
+	        'dictTime':$("#test6").val(),
+	       }
+	      });
+	    }
+	   
+
+ 
+	  
+	 //分析报告
+	    table.render({
+	   elem: '#Habitlyze'
+	   ,	url : '/YhLifeHabitDictController/selectHabitlyze?usercode='+usercode
+	   ,method:'post'
+	   ,cols: [ [
+	     /* {field:'foodguideId', title:'ID',hide:true} */
+	     {type:'numbers'}
+	     ,{field:'newlyTime', title:'报告生成日期'}
+	     ,{field:'source', title:'报告分析来源', sort: true}
+	     ,{
+				fixed : 'right',
+				title : '操作',
+				align : 'center',
+				toolbar : '#barDemo1'
+			}
+	   ] ]
+	   ,id : 'foodanalyze'
+	   ,page: true
+	 });
+
+	    table.on('tool(demonalyze)', function(obj) { //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
+			var data = obj.data; //获得当前行数据
+			var layEvent = obj.event; //获得 lay-event 对应的值
+			var tr = obj.tr; //获得当前行 tr 的DOM对象
+			
+			 if (layEvent === 'edit') {
+				window.location.href="/manage/usertosee/habitanalyze?id="+data.habitGuideId;
+			}
+		});
+ 
+
+    
+
+  
+  
+});
+
+
+</script>
+</html>

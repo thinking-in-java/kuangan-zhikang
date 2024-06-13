@@ -1,0 +1,1036 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, maximum-scale=1">
+<title>数据表格</title>
+<link rel="stylesheet" th:href="@{/assets/libs/layui/css/layui.css}" />
+<link rel="stylesheet" th:href="@{/assets/module/admin.css}" />
+<!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body>
+	<!-- 加载动画 -->
+	<div class="page-loading">
+		<div class="ball-loader">
+			<span></span><span></span><span></span><span></span>
+		</div>
+	</div>
+	<!-- 正文开始 -->
+	<div class="layui-fluid">
+		<div class="layui-tab layui-tab-brief" lay-filter="indexTab" style="background-color: white;">
+			<ul class="layui-tab-title">
+				<li class="layui-this">风险评估</li>
+				<li lay-id="yali">压力评估</li>
+				 <li lay-id="symptom">常见症状评估</li>
+				<li lay-id="zhongyi">中医体质辨识</li>
+			</ul>
+			<div class="layui-tab-content">
+
+				<div class="layui-tab-item layui-show">
+					<div class="layui-card">
+						<div class="layui-card-body">
+
+							<div class="layui-form toolbar">
+								<div class="layui-form-item">
+
+									<div class="layui-inline">
+										<label class="layui-form-label">时间：</label>
+										<div class="layui-input-inline" style="width: 300px;">
+											<input type="text" class="layui-input" id="test1"
+												name="startTime" placeholder=" - ">
+										</div>
+									</div>
+
+									<div class="layui-inline" style="padding-left: 20px;">
+										<button class="layui-btn icon-btn sousuoDN" data-type="reload">
+											<i class="layui-icon"></i>搜索
+										</button>
+										<button class="layui-btn layui-btn-primary" id="btnempty"
+											lay-submit="" lay-filter="reset">清除</button>
+
+									</div>
+
+
+								</div>
+							</div>
+
+
+							<table id="tableTbBas" lay-filter="tableTbBas"></table>
+						</div>
+					</div>
+
+				</div>
+				<div class="layui-tab-item">
+					<div class="layui-fluid">
+			<div class="layui-card">
+				<div class="layui-card-body">
+
+					<div class="layui-form toolbar">
+						<div class="layui-form-item">
+
+							<div class="layui-inline">
+								<label class="layui-form-label">时间：</label>
+								<div class="layui-input-inline"  style="    width: 300px;">
+						 			<input type="text" class="layui-input" id="yalitest1" name="startTime" placeholder=" - ">
+								</div>
+							</div>
+								<div class="layui-inline">
+										<label class="layui-form-label">评估类型：</label>
+										<div class="layui-input-inline">
+											<select name="type" id="type">
+					 							<option value="">全部</option>
+												<option value="1">A型性格</option>
+												<option value="2">PSTRI压力</option>
+												<option value="3">心理健康</option>
+											</select>
+										</div>
+									</div>
+							<div class="layui-inline" style="padding-left: 20px;">
+			 							<button class="layui-btn icon-btn yalisousuoDN" data-type="reload"><i class="layui-icon"></i>搜索</button>
+										<button class="layui-btn layui-btn-primary" id="yalibtnempty" lay-submit="" lay-filter="reset">清除</button>
+
+							</div>
+
+
+						</div>
+					</div>
+
+					<table id="yalitableTbBas" lay-filter="yalitableTbBas"></table>
+				</div>
+			</div>
+		</div>
+
+				</div>
+				<div class="layui-tab-item">
+
+				<div class="layui-card">
+				<div class="layui-card-body">
+
+					<div class="layui-form toolbar">
+						<div class="layui-form-item">
+
+							<div class="layui-inline">
+								<label class="layui-form-label">评估时间：</label>
+								<div class="layui-input-inline"  style="    width: 300px;">
+						 			<input type="text" class="layui-input" id="symptomtest1" name="startTime" placeholder=" - ">
+								</div>
+							</div>
+							<div class="layui-inline" style="padding-left: 20px;">
+										<button class="layui-btn icon-btn symptomsousuoDN" data-type="reload"><i class="layui-icon"></i>搜索</button>
+										<button class="layui-btn layui-btn-primary" id="symptoms" lay-submit=""  lay-filter="reset">清除</button>
+
+							</div>
+
+
+						</div>
+					</div>
+
+					<table id="symptomtableTbBas" lay-filter="symptomtableTbBas"></table>
+				</div>
+			</div>
+
+
+				</div>
+
+
+
+				<div class="layui-tab-item">
+
+					<div class="layui-card">
+						<div class="layui-card-body">
+
+							<div class="layui-form toolbar">
+								<div class="layui-form-item">
+
+									<div class="layui-inline">
+										<label class="layui-form-label">评估时间：</label>
+										<div class="layui-input-inline"  style="    width: 300px;">
+											<input type="text" class="layui-input" id="symptomtest2" name="startTime" placeholder=" - ">
+										</div>
+									</div>
+									<div class="layui-inline" style="padding-left: 20px;">
+										<button class="layui-btn icon-btn zhongyitizhiDN" data-type="reload"><i class="layui-icon"></i>搜索</button>
+										<button class="layui-btn layui-btn-primary" id="symptoms2" lay-submit=""  lay-filter="reset">清除</button>
+
+									</div>
+
+
+								</div>
+							</div>
+
+							<table id="symptomtableTbBas2" lay-filter="symptomtableTbBas2"></table>
+						</div>
+					</div>
+
+
+				</div>
+
+
+		</div>
+	</div>
+	<!-- js部分 -->
+	<script type="text/javascript" th:src="@{/assets/libs/layui/layui.js}"></script>
+	<script type="text/javascript" th:src="@{/assets/js/common.js}"></script>
+	<!-- 表格状态列 -->
+	<script type="text/html" id="demoEDStateBar1">
+
+				<span class="icon-text" style="color: green;" lay-tips="{{d.jib}}">
+        {{d.sex}}
+    </span>
+
+
+</script>
+	<script type="text/html" id="demoEDStateBargfx">
+     {{# if(d.highRiskInfo==""){ }}
+      {{d.highRiskNum}}
+    {{# }else{ }}
+   <span class="icon-text" lay-tips="{{d.highRiskInfo}}">
+        {{d.highRiskNum}}
+    </span>
+
+    {{# } }}
+</script>
+
+	<script type="text/html" id="demoEDStateBarzdfx">
+     {{# if(d.mediumRiskInfo==""){ }}
+      {{d.mediumRiskNum}}
+    {{# }else{ }}
+   <span class="icon-text" lay-tips="{{d.mediumRiskInfo}}">
+        {{d.mediumRiskNum}}
+    </span>
+
+    {{# } }}
+</script>
+	<script type="text/html" id="demoEDStateBardfx">
+
+
+	{{# if(d.lowRiskInfo==""){ }}
+      {{d.lowRiskNum}}
+    {{# }else{ }}
+   <span class="icon-text" lay-tips="{{d.lowRiskInfo}}">
+        {{d.lowRiskNum}}
+    </span>
+
+    {{# } }}
+
+
+</script>
+	<!-- 表格操作列 <a href="#" style="color:#36A4FF" lay-event="see2">查看测试</a>-->
+	<script type="text/html" id="tableBar">
+  <a href="#" style="color:#36A4FF" lay-event="see2">查看</a>
+<!-- 	<a href="#" style="color:#36A4FF" lay-event="see">查看</a>-->
+    <a href="#" style="color:#36A4FF" lay-event="edit">下载报告</a>
+
+    <a href="#" style="color:#36A4FF" lay-event="expro">下载问卷</a>
+</script>
+	<script type="text/html" id="demoEDStateBarhb">
+
+
+	{{# if(d.abnormalInfo==""){ }}
+      {{d.abnormalNum}}
+    {{# }else{ }}
+   <span class="icon-text" lay-tips="{{d.abnormalInfo}}">
+        {{d.abnormalNum}}
+    </span>
+
+    {{# } }}
+
+
+</script>
+
+	<script type="text/javascript" th:inline="javascript">
+
+				layui.use(['layer', 'form', 'table', 'util', 'laydate'], function() {
+					var $ = layui.jquery;
+					var layer = layui.layer;
+					var form = layui.form;
+					var table = layui.table;
+					var util = layui.util;
+					var dropdown = layui.dropdown;
+
+					var laydate = layui.laydate;
+
+
+
+					layui.use('element', function(){
+				  		  var element = layui.element;
+				  		var type2 = [[${type2}]];
+				  		  console.log(type2,"当前点击选项卡")
+
+				  		  //获取hash来切换选项卡，假设当前地址的hash为lay-id对应的值
+				  		  var layid = GetQueryValue('type2');//location.hash.replace(/^#type=/, '');
+				  		  element.tabChange('indexTab', layid); //假设当前地址为：http://a.com#test1=222，那么选项卡会自动切换到“发送消息”这一项
+				  		  console.log("当前点击选项卡",layid)
+
+
+				  		    element.on('tab(indexTab)', function(data){
+						    var testid = $(this).attr("lay-id");
+						    location.hash = 'type2='+ testid;
+						    //console.log("当前Tab标题所在的原始DOM元素",this); //当前Tab标题所在的原始DOM元素
+							//console.log("得到当前Tab的所在下标",data.index); //得到当前Tab的所在下标
+							//console.log("//得到当前的Tab大容器",data.elem); //得到当前的Tab大容器
+						    //console.log("切换的类型:"+testid);
+				  		    })
+				        })
+
+
+					/* ==============================================中医体质辨识======================================================================== */
+					//日期时间范围
+					laydate.render({
+						elem: '#symptomtest2',
+						type: 'datetime',
+						range: true,
+						trigger: 'click'
+					});
+					var userCode= [[${usercode}]]
+
+					// 第一个实例
+					var symptomtableTbBas2 =  table.render({
+						id:'symptomtableTbBas2',
+						elem: '#symptomtableTbBas2'
+						,url: '/YhcheidentificationController/page?userCode='+userCode
+						,method : 'get'
+						,where : {} // 你额外要携带数据，以键值对的方式存入
+						,page: true // 开启分页
+						,limit : 20// 每页显示的条数
+						,limits : [ 5, 10, 20, 50, 100 ] // 每页条数的选择项
+						,cols: [[ // 表头
+							{type:'numbers', title:'序号', align: 'center',width:100}
+							,{field: 'ispinghe', align: 'center', title: '平和质'}
+							,{field: 'ispianposhi', align: 'center', title: '偏颇体制（是）'}
+							,{field: 'ispianpopianxiangshi', align: 'center', title: '偏颇体制（倾向是）'}
+							,{field: 'time',title: '评估时间',align: 'center' }
+							,{
+								fixed : 'right',
+								title : '操作',
+								align : 'center',
+								toolbar : '#sysbarDemo'
+							}
+						]],
+						done: function(res, curr, count){
+							if(count > 20) {
+								$("#symptomtableTbBas2 .layui-table-page").show();
+							}else {
+								$("#symptomtableTbBas2 .layui-table-page").hide();
+							}
+						}
+
+					});
+
+					//分类表格监听
+					table.on('tool(symptomtableTbBas2)', function(obj) { //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
+						var data = obj.data; //获得当前行数据
+						var userCode = data.userCode;
+						var reportId = data.id;
+						console.info(data,"获得当前行数据下载数据");
+						var layEvent = obj.event; //获得 lay-event 对应的值
+						var tr = obj.tr; //获得当前行 tr 的DOM对象
+						var tr = obj ,tr;
+						if(layEvent === 'downloadReport'){//下载报告
+							//如果正在提交则直接返回，停止执行
+							if(post_flag) return;
+							//标记当前状态为正在提交状态
+							post_flag = true;
+							//加载层
+							var index = layer.load(0, {shade: false}); //0代表加载的风格，支持0-2
+							$.ajax({
+								type:'get',
+								url:"/YhcheidentificationController/gaoxueyaDataInfo2?usercode="+userCode+"&reportId="+reportId,
+								data:{},
+								success : function(data){
+									console.log(data)
+									post_flag =false; //在提交成功之后将标志标记为可提交状态
+
+									var sleep = function(time) {
+										var startTime = new Date().getTime() + parseInt(time, 10);
+										while(new Date().getTime() < startTime) {}
+									};
+
+									sleep(1000); // 延时函数，单位ms
+
+									window.location.href="/YhcheidentificationController/download?fileName="+data.data;
+									sleep(1000); // 延时函数，单位ms
+									layer.close(index);    //返回数据关闭loading
+								},
+								error: function(){
+									post_flag =false; //AJAX失败也需要将标志标记为可提交状态
+								}
+
+							})
+
+
+							/* 	window.location.href="/YhPainTotalReport/gaoxueyaDataInfo2?usercode="+userCode+"&reportId="+reportId;  */
+						}else if(layEvent === 'downloadQuestionnaire'){//下载问卷
+
+							window.location.href="/YhcheidentificationController/symptomExportXls?userCode="+userCode+"&reportId="+reportId;
+						}/* else if( layEvent=== 'chakan'){
+			    			window.location.href="/manage/usertosee/symptomAssessment?reportId="+reportId;
+			    		} */
+
+
+
+					});
+
+					$("#symptoms2").click(function(){
+						$("#symptomtest2").val("");
+						/* $("#standard").val("");
+                        form.render("select"); */
+						table.reload('symptomtableTbBas2', {
+							where: { //设定异步数据接口的额外参数，任意设
+								qtime:$("#symptomtest2").val(),
+							}
+						});
+
+					})
+					//这是Layui 给 后台添加的映射  映射controller 的实体类
+					var $ = layui.$, sysactive = {
+						reload : function() {
+							//获取 上面input 值
+
+							var qtime = $('#symptomtest2').val();
+							//执行重载
+							table.reload('symptomtableTbBas2', {
+								page : {
+									curr : 1
+									//重新从第 1 页开始
+								},
+								where : {
+									//这里注意一定要跟Bean 里面的属性对应
+									qtime:qtime
+
+
+								}
+							});
+						}
+					};
+
+
+
+
+
+					$('.zhongyitizhiDN').on('click', function() {
+
+						var type = $(this).data('type');
+						sysactive[type] ? sysactive[type].call(this) : '';
+
+					});
+
+					/* ==============================================中医体质辨识Js代码结束======================================================================== */
+
+
+	/* ==============================================症状评估======================================================================== */
+					//日期时间范围
+					laydate.render({
+						elem: '#symptomtest1',
+						type: 'datetime',
+						range: true,
+						trigger: 'click'
+					});
+					var userCode= [[${usercode}]]
+
+					  // 第一个实例
+					 var symptomtableTbBas =  table.render({
+						 id:'symptomtableTbBas',
+					    elem: '#symptomtableTbBas'
+					    ,url: '/YhPainTotalReport/page?userCode='+userCode
+					    ,method : 'get'
+					    ,where : {} // 你额外要携带数据，以键值对的方式存入
+					    ,page: true // 开启分页
+					    ,limit : 20// 每页显示的条数
+						,limits : [ 5, 10, 20, 50, 100 ] // 每页条数的选择项
+					    ,cols: [[ // 表头
+					       {type:'numbers', title:'序号', align: 'center',width:100},
+					      {field: 'qtime',title: '评估时间',align: 'center',width: 300 }
+					      ,{field:'entryTime',align: 'center', title: '差',
+					    	  templet:function(d){
+					    		  var typeAll=[];
+					    		  //颈椎
+					    		  //debugger
+					    		var  cervicalClassify = d.cervicalClassify;
+					    		 if(cervicalClassify==1){
+					    			 typeAll.push("颈椎");
+					    		 }
+					    		 var shoulderClassify = d.shoulderClassify;
+					    		 if(shoulderClassify==1){
+					    			 typeAll.push("肩关节");
+					    		 }
+					    		 var backClassify = d.backClassify;
+					    		 if(backClassify==1){
+					    			 typeAll.push("上背部");
+					    		 }
+					    		 var waistClassify = d.waistClassify;
+					    		 if(waistClassify==1){
+					    			 typeAll.push("腰部");
+					    		 }
+					    		 var wristClassify = d.wristClassify;
+					    		 if(wristClassify==1){
+					    			 typeAll.push("手腕");
+					    		 }
+
+					    		 if(typeAll.length==0){
+					    			 return "--";
+					    		 }else{
+					    			 var arr = typeAll.join(";");
+					    			 return arr;
+					    		 }
+				    	     }
+					      }
+					      ,{field:'entryTime',align: 'center', title: '一般',
+					    	  templet:function(d){
+					    		  var typeAll=[];
+					    		  //颈椎
+					    		  //debugger
+					    		var  cervicalClassify = d.cervicalClassify;
+					    		 if(cervicalClassify==2){
+					    			 typeAll.push("颈椎");
+					    		 }
+					    		 var shoulderClassify = d.shoulderClassify;
+					    		 if(shoulderClassify==2){
+					    			 typeAll.push("肩关节");
+					    		 }
+					    		 var backClassify = d.backClassify;
+					    		 if(backClassify==2){
+					    			 typeAll.push("上背部");
+					    		 }
+					    		 var waistClassify = d.waistClassify;
+					    		 if(waistClassify==2){
+					    			 typeAll.push("腰部");
+					    		 }
+					    		 var wristClassify = d.wristClassify;
+					    		 if(wristClassify==2){
+					    			 typeAll.push("手腕");
+					    		 }
+
+					    		 if(typeAll.length==0){
+					    			 return "--";
+					    		 }else{
+					    			 var arr = typeAll.join(";");
+					    			 return arr;
+					    		 }
+				    	     }
+					      }
+					      ,{field:'entryTime',align: 'center', title: '良好',
+					    	  templet:function(d){
+					    		  var typeAll=[];
+					    		  //颈椎
+					    		  //debugger
+					    		var  cervicalClassify = d.cervicalClassify;
+					    		 if(cervicalClassify==3){
+					    			 typeAll.push("颈椎");
+					    		 }
+					    		 var shoulderClassify = d.shoulderClassify;
+					    		 if(shoulderClassify==3){
+					    			 typeAll.push("肩关节");
+					    		 }
+					    		 var backClassify = d.backClassify;
+					    		 if(backClassify==3){
+					    			 typeAll.push("上背部");
+					    		 }
+					    		 var waistClassify = d.waistClassify;
+					    		 if(waistClassify==3){
+					    			 typeAll.push("腰部");
+					    		 }
+					    		 var wristClassify = d.wristClassify;
+					    		 if(wristClassify==3){
+					    			 typeAll.push("手腕");
+					    		 }
+
+					    		 if(typeAll.length==0){
+					    			 return "--";
+					    		 }else{
+					    			 var arr = typeAll.join(";");
+					    			 return arr;
+					    		 }
+				    	     }
+					      }
+					      ,{
+				    			fixed : 'right',
+				    			title : '操作',
+				    			align : 'center',
+				    			toolbar : '#sysbarDemo'
+				    		}
+					    ]],
+					    done: function(res, curr, count){
+					        if(count > 20) {
+					        	$("#symptomtableTbBas .layui-table-page").show();
+					        }else {
+					        	$("#symptomtableTbBas .layui-table-page").hide();
+					        }
+					      }
+
+					  });
+
+					//分类表格监听
+			      	   table.on('tool(symptomtableTbBas)', function(obj) { //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
+			    		var data = obj.data; //获得当前行数据
+			    		var userCode = data.userCode;
+			    		var reportId = data.reportId;
+			    		console.info(data,"获得当前行数据下载数据");
+			    		var layEvent = obj.event; //获得 lay-event 对应的值
+			    		var tr = obj.tr; //获得当前行 tr 的DOM对象
+						var tr = obj ,tr;
+			    		if(layEvent === 'downloadReport'){//下载报告
+			    			//如果正在提交则直接返回，停止执行
+			    		    if(post_flag) return;
+			    		    //标记当前状态为正在提交状态
+			    		    post_flag = true;
+			    			  //加载层
+			    		    var index = layer.load(0, {shade: false}); //0代表加载的风格，支持0-2
+			    	    	 $.ajax({
+			    		   		 type:'get',
+			    		   		 url:"/YhPainTotalReport/gaoxueyaDataInfo2?usercode="+userCode+"&reportId="+reportId,
+			    		   		 data:{},
+			    		   		success : function(data){
+			    		   			console.log(data)
+			    		   			post_flag =false; //在提交成功之后将标志标记为可提交状态
+
+			    		   			var sleep = function(time) {
+			    					    var startTime = new Date().getTime() + parseInt(time, 10);
+			    					    while(new Date().getTime() < startTime) {}
+			    					};
+
+			    						sleep(1000); // 延时函数，单位ms
+
+			    		   			window.location.href="/YhPainTotalReport/download?fileName="+data.data;
+			    		   			sleep(1000); // 延时函数，单位ms
+			    		   			layer.close(index);    //返回数据关闭loading
+			    		   		},
+			    		        error: function(){
+			    		            post_flag =false; //AJAX失败也需要将标志标记为可提交状态
+			    		        }
+
+			    	   		})
+
+
+			    		/* 	window.location.href="/YhPainTotalReport/gaoxueyaDataInfo2?usercode="+userCode+"&reportId="+reportId;  */
+			    		}else if(layEvent === 'downloadQuestionnaire'){//下载问卷
+
+			    			window.location.href="/YhPainTotalReport/symptomExportXls?userCode="+userCode+"&reportId="+reportId;
+			    		}/* else if( layEvent=== 'chakan'){
+			    			window.location.href="/manage/usertosee/symptomAssessment?reportId="+reportId;
+			    		} */
+
+
+
+			    	});
+
+					 $("#symptoms").click(function(){
+							$("#symptomtest1").val("");
+							/* $("#standard").val("");
+						    form.render("select"); */
+							 table.reload('symptomtableTbBas', {
+							        where: { //设定异步数据接口的额外参数，任意设
+							        	qtime:$("#symptomtest1").val(),
+							       }
+							      });
+
+				        })
+					//这是Layui 给 后台添加的映射  映射controller 的实体类
+					var $ = layui.$, sysactive2 = {
+						reload : function() {
+							//获取 上面input 值
+
+							var qtime = $('#symptomtest1').val();
+							//执行重载
+							table.reload('symptomtableTbBas', {
+								page : {
+									curr : 1
+								//重新从第 1 页开始
+								},
+								where : {
+									//这里注意一定要跟Bean 里面的属性对应
+									qtime:qtime
+
+
+								}
+							});
+						}
+					};
+
+
+
+
+
+					$('.symptomsousuoDN').on('click', function() {
+
+						var type = $(this).data('type');
+						sysactive2[type] ? sysactive2[type].call(this) : '';
+
+					});
+
+/* ==============================================症状评估Js代码结束======================================================================== */
+					  //清除按钮
+
+
+			          $("#btnempty").click(function(){
+			        	window.location.reload()
+
+			        })
+
+
+
+
+					//日期时间范围
+					laydate.render({
+						elem: '#test1',
+						type: 'datetime',
+						range: true,
+						trigger: 'click'
+					});
+
+					var usercode= [[${usercode}]]
+					// 渲染表格
+					var insTb = table.render({
+						page : true,
+						elem: '#tableTbBas',
+						url: '/manage/YhDiseaseAssessReport/findHealthAssessmentByuser?usercode='+usercode,
+						cellMinWidth: 100,
+						cols: [
+							[{
+									type: 'numbers'
+								},
+								{
+									field: 'qtime',
+									align: 'center',
+									sort: true,
+									title: '评估时间'
+								},
+								{
+									align: 'center',
+									sort: true,
+									title: '高风险',templet: function (d) {
+										var highRiskNum = d.highRiskNum;
+										if(highRiskNum==0){
+											return "0";
+										}
+										var highRiskInfo = d.highRiskInfo;
+
+
+			                			return highRiskNum+"("+highRiskInfo+")";
+			       						 }
+								},
+								{
+
+
+									align: 'center',
+									sort: true,
+									title: '中等风险',templet: function (d) {
+										var mediumRiskNum = d.mediumRiskNum;
+										if(mediumRiskNum==0){
+											return "0";
+										}
+										var mediumRiskInfo = d.mediumRiskInfo;
+
+			                			return mediumRiskNum+"("+mediumRiskInfo+")";
+			       						 }
+								},
+								{
+									align: 'center',
+									sort: true,
+									title: '低风险',templet: function (d) {
+										var lowRiskNum = d.lowRiskNum;
+										if(lowRiskNum==0){
+											return "0";
+										}
+										var lowRiskInfo = d.lowRiskInfo;
+
+			                			return lowRiskNum+"("+lowRiskInfo+")";
+			       						 }
+								},
+								{
+
+									sort: true,
+									align: 'center',
+									title: '患病或异常',templet: function (d) {
+										var abnormalNum = d.abnormalNum;
+										if(abnormalNum==0){
+											return "0";
+										}
+										var abnormalInfo = d.abnormalInfo;
+
+			                			return abnormalNum+"("+abnormalInfo+")";
+			       						 }
+								}, {
+									align : 'center',
+									toolbar : '#tableBar',
+									title : '操作',
+									minWidth : 200
+								}
+							]
+						],
+					response : {
+
+						statusCode : 0
+					//规定成功的状态码，默认：0
+
+					},
+					parseData : function(res) { //将原始数据解析成 table 组件所规定的数据
+						return {
+							"code" : res.data.code, //解析接口状态
+							"msg" : res.data.msg, //解析提示文本
+							"count" : res.data.count, //解析数据长度
+							"data" : res.data.data
+						//解析数据列表
+						}
+
+					},
+					});
+
+					//设置一个对象来控制是否进入AJAX过程
+					var post_flag = false;
+
+					table.on('tool(tableTbBas)', function(obj) { //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
+			            var data = obj.data;
+			            var layEvent = obj.event;
+			            if(layEvent === 'see2'){
+			            	window.open("/manage/assessmentReport/info2?rs="+data.requestSerialNum+"&sex="+data.sex);
+			            }
+			            if(layEvent === 'see'){
+			            	window.open("/manage/assessmentReport/info?rs="+data.requestSerialNum+"&sex="+data.sex);
+			            }
+			            if (layEvent === 'edit') { // 查看
+			            	console.log(data)
+			            	    //如果正在提交则直接返回，停止执行
+							    if(post_flag) return;
+							    //标记当前状态为正在提交状态
+							    post_flag = true;
+							  //加载层
+
+							    var index = layer.load(0, {shade: false}); //0代表加载的风格，支持0-2
+			            	 $.ajax({
+						   		 type:'get',
+						   		 url:"/manage/YhDiseaseAssessReport/gaoxueyaDataInfo2?rs="+data.requestSerialNum+"&sex="+data.sex+"&usercode="+usercode,
+						   		 data:{},
+						   		success : function(data){
+						   			console.log(data)
+						   			post_flag =false; //在提交成功之后将标志标记为可提交状态
+
+						   			var sleep = function(time) {
+									    var startTime = new Date().getTime() + parseInt(time, 10);
+									    while(new Date().getTime() < startTime) {}
+									};
+
+										sleep(1000); // 延时函数，单位ms
+
+						   			window.location.href="/manage/YhDiseaseAssessReport/download?fileName="+data.data;
+						   			sleep(1000); // 延时函数，单位ms
+						   			layer.close(index);    //返回数据关闭loading
+						   		},
+						        error: function(){
+						            post_flag =false; //AJAX失败也需要将标志标记为可提交状态
+						        }
+
+					   		})
+			            }
+			            if (layEvent === 'expro') { // 查看
+			            	//window.open("/YhUserReginfo/assessmentExportXls2?rs="+data.requestSerialNum+"&sex="+data.sex);
+			            	window.location.href = "/YhUserReginfo/assessmentExportXls2?rs="+data.requestSerialNum
+
+
+			            }
+			        });
+
+					//这是Layui 给 后台添加的映射  映射controller 的实体类
+					var $ = layui.$, active2 = {
+						reload : function() {
+							//获取 上面input 值
+
+							var startTime = $('#test1').val();
+							//执行重载
+							table.reload('tableTbBas', {
+								page : {
+									curr : 1
+								//重新从第 1 页开始
+								},
+								where : {
+									//这里注意一定要跟Bean 里面的属性对应
+									startTime:startTime
+
+
+								}
+							});
+						}
+					};
+
+
+
+
+
+					$('.sousuoDN').on('click', function() {
+
+						var type = $(this).data('type');
+						active2[type] ? active2[type].call(this) : '';
+
+					});
+
+/* ==============================================================压力=========================================== */
+
+					//日期时间范围
+					laydate.render({
+						elem: '#yalitest1',
+						type: 'datetime',
+						range: true,
+						trigger: 'click'
+					});
+
+
+					var usercode= [[${usercode}]]
+					// 渲染表格
+					var insTb = table.render({
+						page : true,
+						elem: '#yalitableTbBas',
+						url: '/system/evaluate/findpressureRecordListByuser?usercode='+usercode,
+						cellMinWidth: 100,
+						cols: [
+							[{
+									type: 'numbers'
+								},
+								{
+									field: 'assessmentTime',
+									align: 'center',
+									sort: true,
+									title: '评估时间'
+								},
+								{
+									field: 'assessmentContent',
+									align: 'center',
+									sort: true,
+									title: '评估内容'
+								},
+								{
+									field: 'assessmentResults',
+									align: 'center',
+									sort: true,
+									title: '评估结果'
+								},
+								{
+					    			fixed : 'right',
+					    			title : '操作',
+					    			align : 'center',
+					    			toolbar : '#barDemo'
+					    		}
+
+							]
+						],
+						response : {
+
+							statusCode : 0
+						//规定成功的状态码，默认：0
+
+						},
+						parseData : function(res) { //将原始数据解析成 table 组件所规定的数据
+							return {
+								"code" : res.data.code, //解析接口状态
+								"msg" : res.data.msg, //解析提示文本
+								"count" : res.data.count, //解析数据长度
+								"data" : res.data.data
+							//解析数据列表
+							}
+
+						}
+					});
+
+
+				      $("#yalibtnempty").click(function(){
+				        	$("#yalitest1").val("");
+							 $("#type").val("");
+						    form.render("select");
+							 table.reload('yalitableTbBas', {
+							        where: { //设定异步数据接口的额外参数，任意设
+
+							        	startTime: $("#yalitest1").val(),
+										type:$("#type").val(),
+							       }
+							      });
+
+				        })
+					//这是Layui 给 后台添加的映射  映射controller 的实体类
+					var $ = layui.$,
+						yaliactive2 = {
+							reload: function() {
+								//获取 上面input 值
+
+								var startTime = $('#yalitest1').val();
+								var type = $('#type').val();
+								//执行重载
+								table.reload('yalitableTbBas', {
+									page: {
+										curr: 1
+										//重新从第 1 页开始
+									},
+									where: {
+										//这里注意一定要跟Bean 里面的属性对应
+										startTime: startTime,
+										type: type
+
+
+									}
+								});
+							}
+						};
+
+
+
+
+
+					$('.yalisousuoDN').on('click', function() {
+
+						var type = $(this).data('type');
+						yaliactive2[type] ? yaliactive2[type].call(this) : '';
+
+					});
+
+					//分类表格监听
+			      	   table.on('tool(yalitableTbBas)', function(obj) { //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
+			    		var data = obj.data; //获得当前行数据
+			    		console.info(data,"获得当前行数据下载数据");
+			    		var layEvent = obj.event; //获得 lay-event 对应的值
+			    		var tr = obj.tr; //获得当前行 tr 的DOM对象
+						var tr = obj ,tr;
+			    		if(layEvent === 'downloadReport'){//下载报告
+			    			var id = data.id;
+			    			window.location.href="/system/evaluate/exportPdf?id="+id;
+			    		}else if(layEvent === 'downloadQuestionnaire'){//下载问卷
+			    			var assessmentTime = data.assessmentTime;
+			    			var evaluateType = data.assessmentType;
+			    			var id = data.id;
+			    			window.location.href="/system/evaluate/exportXls?usercode="+usercode+"&id="+id+"&evaluateType="+evaluateType+"";
+			    		}
+
+
+
+			    	});
+
+				});
+
+				  function GetQueryValue(queryName) {
+				        var query = decodeURI(window.location.search.substring(1));
+				        var vars = query.split("&");
+				        for (var i = 0; i < vars.length; i++) {
+				            var pair = vars[i].split("=");
+				            if (pair[0] == queryName) { return pair[1]; }
+				        }
+				        return null;
+				    }
+
+			</script>
+
+<script type="text/html" id="barDemo">
+ 	<a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="downloadReport">下载报告</a>
+	<a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="downloadQuestionnaire">下载问卷</a>
+</script>
+
+<script type="text/html" id="sysbarDemo">
+ 	<a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="downloadReport">下载报告</a>
+	<a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="downloadQuestionnaire">下载问卷</a>
+
+</script>
+	<!--  <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="chakan">查看</a> -->
+</body>
+
+</html>

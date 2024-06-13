@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	  <link rel="stylesheet"  th:href="@{/assets/libs/layui/css/layui.css}" />
+    <link rel="stylesheet"  th:href="@{/assets/module/admin.css}"  />
+	</head>
+	<style>
+		
+		.layui-table th{
+background-color: #EDF4FF;
+}
+.layui-elem-quote {
+    margin-bottom: 10px;
+    padding: 15px;
+    line-height: 22px;
+    border-radius: 0 2px 2px 0;
+    background-color: #E6F7FF;
+}
+	</style>
+	<body>
+		
+		
+  
+  
+  
+  <div class="layui-container" style="background-color: #ffffff;">
+  
+ <!--  <div class="layui-row">
+    <div class="layui-row" style="padding-top: 20px;text-align: center;">
+				<div id="back"><a  href="#">返回上一页</a></div>
+    </div>
+  </div> -->
+ 
+ 
+
+ <div class="layui-row">
+    <div class="layui-col-xs6">
+      <div class="grid-demo grid-demo-bg1" style="padding-top: 20px;"><h1>常见症状评估报告与解决方案</h1></div>
+    </div>
+    <div class="layui-col-xs6">
+      <div class="grid-demo" style="float: right;"><img style="height="420px"; width="300px";" th:src="${getrepotimg}"></div>
+    </div>
+  </div>
+ 
+ <table class="layui-table" lay-size="lg">
+  <thead>
+    <tr>
+      <th>用户编码</th>
+      <th>姓名</th>
+      <th>性别</th>
+      <th>评估时年龄</th>
+      <th>评估日期</th>
+    </tr> 
+  </thead>
+  <tbody>
+    <tr>
+      <td id="userCode">[[${totalReport.userCode}]]</td>
+      <td id="userName">[[${totalReport.name}]]</td>
+      <span th:if="${totalReport.gender == 1}">
+      <td id="gender">男</td>
+      </span>
+      
+      <span th:if="${totalReport.gender == 2}">
+      <td id="gender">女</td>
+      </span>
+      
+      <td id="age">[[${totalReport.age}]]</td>
+      <td id="qtime">[[${totalReport.createdate}]]</td>
+         
+    </tr>
+  </tbody>
+</table>
+ 
+  <br />
+  <p style="color: #38A4FF;">此次评分总分为：<span id="reportScore">[[${totalReport.painScore}]]</span>分</p>
+   <br />
+   
+   <span  th:each="item : ${reportList}">
+   		<span th:if="${item.painId == 1}"> 
+   		<br /><br /><blockquote class='layui-elem-quote'><h2>颈椎</h2></blockquote>
+  		<br /> 
+   		</span>
+   		 <span th:if="${item.painId == 2}"> 
+   		<br /><br /><blockquote class='layui-elem-quote'><h2>肩关节</h2></blockquote>
+  		<br /> 
+   		</span>
+   		<span th:if="${item.painId == 3}"> 
+   		<br /><br /><blockquote class='layui-elem-quote'><h2>上背部</h2></blockquote>
+  		<br /> 
+   		</span>
+   		<span th:if="${item.painId == 4}"> 
+   		<br /><br /><blockquote class='layui-elem-quote'><h2>腰部</h2></blockquote>
+  		<br /> 
+   		</span>
+   		<span th:if="${item.painId == 5}"> 
+   		<br /><br /><blockquote class='layui-elem-quote'><h2>手腕</h2></blockquote>
+  		<br /> 
+   		</span>
+         
+   <div class="layui-row" style="width: 100%;">
+    <div style="width: 33%;float: left;">
+      <div class="grid-demo grid-demo-bg1" style="text-align: center;" id="difference" >&nbsp; <i class='layui-icon layui-icon-triangle-d' th:if="${item.resolveType == 1}"></i></div>
+    </div>
+    <div  style="width: 33%;float: left;">
+      <div class="grid-demo" style="text-align: center;" id="ordinary" >&nbsp;<i class='layui-icon layui-icon-triangle-d' th:if="${item.resolveType == 2}"></i> </div>
+    </div>
+   <div  style="width: 33%;float: left;">
+      <div class="grid-demo grid-demo-bg1" style="text-align: center;" id="well" >&nbsp;<i class='layui-icon layui-icon-triangle-d' th:if="${item.resolveType == 3}"></i></div>
+    </div>
+  </div>
+  
+
+   <div class="layui-row" style="width: 100%;">
+    <div style="width: 33%;float: left;">
+      <div class="grid-demo grid-demo-bg1" style="background-color: #ec5d51;text-align: center;"><span style="color: #f7f7f7">差</span></div>
+    </div>
+    <div  style="width: 33%;float: left;">
+      <div class="grid-demo" style="background-color: #38a4ff;text-align: center;"><span style="color: #f7f7f7">一般</span></div>
+    </div>
+    <div  style="width: 33%;float: left;">
+      <div class="grid-demo grid-demo-bg1" style="background-color:#43d9b8;text-align: center;"><span style="color: #f7f7f7">良好</span></div>
+    </div>
+  </div>
+  
+  <div style="margin-top: 36px;">
+  <p style="color: #38A4FF;">※总结</p>
+    <p style="margin-top: 25px;">[[${item.resolveName}]]</p> 
+  </div> 
+  
+    <span th:if="${item.resolveExplain != null}">
+  <div style="margin-top: 36px;">
+  <p style="color: #38A4FF;">※解释</p>
+    <p style="margin-top: 25px;">[[${item.resolveExplain}]]</p> 
+  </div> 
+ </span>
+  
+  <span th:if="${item.resolveHarm != null}">
+  <div style="margin-top: 36px;">
+  <p style="color: #38A4FF;">※危害</p>
+    <p style="margin-top: 25px;">[[${item.resolveHarm}]]</p> 
+  </div> 
+ </span>
+ 
+ <span th:if="${item.resolveSolution!= null}">
+   <span th:if="${item.resolveSolution2 != null}">
+  	<div style="margin-top: 36px;">
+ 		 <p style="color: #38A4FF;">※解决方案</p>
+  			<span th:each="arrayS:${item.resolveSolution2}">
+  				 <p style="margin-top: 25px;" th:text="${arrayS}"></p> 
+    	    </span>  	    
+   </div> 
+  </span>		
+  </span>
+  
+  <span th:if="${item.teachVideo!= null}">
+  <span th:if="${item.resolveSolution2 != null}">
+   				<div style="margin-top: 36px;">
+ 		 		<p style="color: #38A4FF;">※详情参见</p>
+ 		 		<p style="margin-top: 25px;">个人端评估结果与解决方案</p>   
+  					<!-- <span th:each="video:${item.teachVideo2}">
+	  					 <p style="margin-top: 25px;" th:text="${video}"></p> 
+	    	   		 </span>  -->	    
+   				</div> 
+  			 </span>
+ </span> 
+  	
+ </span>
+ 
+ 
+ 				
+ 
+   <!--  <br />
+  <p style="color: #38A4FF;"></p>  
+   <br /> -->
+  
+  </span>
+  <!-- <div th:if="${titlelength>1}">
+  		<br /><br /><blockquote class='layui-elem-quote'><h2>危险问题</h2></blockquote>
+  		<br />   
+  		<div class='layui-row' >
+  				<div class='layui-col-xs6' style="margin-top: 20px;" th:each="title : ${title}">
+		  			<div class='grid-demo grid-demo-bg1'><i class='layui-icon layui-icon-circle-dot' style='color: red;'></i>
+		  			<span style='padding-left: 40px;'>[[${title}]]</span>
+		  			</div>
+		  		</div>
+  		</div>
+  </div> -->
+  
+    <!-- <div th:if="${analyzenamelength>1}">
+  		<br /><br /><blockquote class='layui-elem-quote'><h2>改善意见</h2></blockquote>
+  		<br />   
+  		<div class='layui-row' >
+  				<div class='layui-col-xs6' style="margin-top: 20px;" th:each="analyzename : ${analyzename}">
+		  			<div class='grid-demo grid-demo-bg1'><i class='layui-icon layui-icon-circle-dot' style='color: #43D9B8;'></i>
+		  			<span style='padding-left: 40px;'>[[${analyzename}]]</span>
+		  			</div>
+		  		</div>
+  		</div>
+  </div> -->
+  
+  
+  
+ <br />
+<hr class="layui-bg-green">
+ <br />
+<!-- <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;良好的生活习惯和生活方式是我们健康身体的基本条件，是我们精力充沛，激情勃发投入工作的基本保障，是我们保持身心健康的基本要求。我们需要自觉的、有意识的、有目的的培养和恒久的坚持，使之成为我们生活中的一种自然习惯。</p>
+<p >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<p style="height: 200px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;具有良好习惯的人，在困难面前从容不迫，应付自如。养成一项好的习惯，我们可以从以下几方面做起：按部就班循序渐进，学会自我控制，严格自我监督。</p>
+</p> -->
+<div style="text-align: center;height: 50px;color: #D3D3D3;">声明:本报告结论和建议不作为诊断或治疗依据,任何医疗行为请遵从医嘱!</div>
+ </div>
+ <br /><br />
+  
+  
+  
+	</body>
+	<script type="text/javascript" th:src="@{/assets/libs/layui/layui.js}"></script>
+<script type="text/javascript" th:src="@{/assets/js/common.js}"></script>
+<script type="text/javascript" th:src="@{/assets/js/jquery-1.11.1.js}"></script>
+
+	
+	
+</html>

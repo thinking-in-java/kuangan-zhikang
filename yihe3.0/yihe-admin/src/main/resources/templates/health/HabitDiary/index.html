@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, maximum-scale=1">
+<title>习惯日记</title>
+<link rel="stylesheet" th:href="@{/assets/libs/layui/css/layui.css}" />
+<link rel="stylesheet" th:href="@{/assets/module/admin.css}" />
+</head>
+<body>
+	<!-- 加载动画 -->
+	<div class="page-loading">
+		<div class="ball-loader">
+			<span></span><span></span><span></span><span></span>
+		</div>
+	</div>
+	 
+	 
+
+	
+	<div class="layui-tab layui-tab-brief" style="margin:0">
+		 
+		<div class="layui-tab-content">
+			<div class="layui-tab-item layui-show">
+				<div class="layui-fluid" style="padding:0">
+					<div class="layui-card">
+						<div class="layui-card-body">
+
+							<div class="layui-form toolbar" style="    margin-left: -24px;">
+								<div class="layui-form-item">
+									 
+									<div class="layui-inline">
+										<label class="layui-form-label">是否完成：</label>
+										<div class="layui-input-inline">
+											<select name="standard" id="standard">
+												<option value="">全部</option>
+												<option value="1">是</option>
+												<option value="2">否</option>
+											</select>
+										</div>
+									</div>
+
+									<div class="layui-inline">
+										<label class="layui-form-label">姓&emsp;&emsp;名：</label>
+										<div class="layui-input-inline">
+											<input name="nameLike" id="nameLike" class="layui-input"
+												type="text" placeholder="输入姓名" />
+										</div>
+									</div>
+									<div class="layui-inline">
+										<label class="layui-form-label">账&emsp;&emsp;号：</label>
+										<div class="layui-input-inline">
+											<input name="usernameLike" id="usernameLike" class="layui-input"
+												type="text" placeholder="输入账号" />
+										</div>
+									</div>
+									<div class="layui-inline">
+										<label class="layui-form-label">时间：</label>
+										<div class="layui-input-inline" style="width: 300px">
+											<input type="text" class="layui-input" id="test10" placeholder=" - ">
+										</div>
+									</div>
+
+									<div class="layui-inline" style="padding-left: 20px;">
+										<button class="layui-btn icon-btn sousuoDN" data-type="reload"><i class="layui-icon"></i>搜索</button>
+										<button class="layui-btn layui-btn-primary" id="btnempty" lay-submit="" lay-filter="reset">清除</button>
+								
+
+									</div>
+ 
+
+								</div>
+							</div>
+							 
+							<table class="layui-hide" id="pinggu" lay-filter="pinggu"></table>
+
+						</div>
+					</div>
+				</div>
+
+			</div>
+			<!-- 评估记录 -->
+			 
+
+		</div>
+	</div>
+	<!-- 正文开始 -->
+
+
+	<!-- 表格操作列 -->
+	<script type="text/html" id="tableBar">
+    <a href="#" style="color:#36A4FF" lay-event="edit">查看</a>
+</script>
+	 
+
+
+	<!-- js部分 -->
+	<script type="text/javascript" th:src="@{/assets/libs/layui/layui.js}"></script>
+	<script type="text/javascript" th:src="@{/assets/js/common.js}"></script>
+	<script>
+		layui
+				.use(
+						[ 'layer', 'form', 'table',  
+								'laypage', 'treeSelect', 'admin','element','laydate'
+								 ],
+						function() {
+							var $ = layui.jquery;
+							var layer = layui.layer;
+							var form = layui.form;
+							var table = layui.table;
+							var laypage = layui.laypage;
+							var element = layui.element;
+							var admin = layui.admin;
+							var form = layui.form;
+							 
+							 var laydate = layui.laydate;
+							  //清除按钮
+						        $("#btnempty").click(function(){
+						        	window.location.reload()
+						         
+						        })
+						        
+							 //日期时间范围
+							  laydate.render({
+							    elem: '#test10'
+							    ,type: 'datetime'
+							    ,range: true,
+								  trigger: 'click'
+							  });
+						 
+							
+							  table.on('tool(pinggu)', function(obj) { //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
+						            var data = obj.data;
+						            var layEvent = obj.event;
+						            if (layEvent === 'edit') { // 查看
+						            	window.open("/manage/register/userIndex?page=habit&userCode="+data.usercode+""); 
+						            }
+						        });
+							
+
+							//这是Layui 给 后台添加的映射  映射controller 的实体类
+							var $ = layui.$, active2 = {
+								reload : function() {
+									//获取 上面input 值
+
+									var usernameLike = $('#usernameLike').val();
+									var nameLike = $('#nameLike').val();
+									var nameLike = $('#nameLike').val();
+									var standard = $('#standard').val();
+									var startTime = $('#test10').val();
+									//执行重载
+									table.reload('pinggu', {
+										page : {
+											curr : 1
+										//重新从第 1 页开始
+										},
+										where : {
+											//这里注意一定要跟Bean 里面的属性对应
+											 startTime:startTime,
+											 standard:standard,
+											nameLike:nameLike,
+											usernameLike:usernameLike
+											
+											
+										}
+									});
+								}
+							};
+							
+							
+							//这个是搜索按钮事件， 找到你的搜索按钮 获取搜索按钮点击事件。只需要把$(’’)这里面的内容修改了就可以了。
+							$('.sousuoDN').on('click', function() {
+
+								var type = $(this).data('type');
+								active2[type] ? active2[type].call(this) : '';
+
+							});
+							
+							 
+							  var day2 = new Date();
+							  day2.setTime(day2.getTime());
+							  var s2 = day2.getFullYear()+"-" + ((day2.getMonth()+1)>=10?(day2.getMonth()+1):"0"+(day2.getMonth()+1)) + "-" + ((day2.getDate())>=10?(day2.getDate()):"0"+(day2.getDate()))+" "+"00:00:00";
+							  var s3 = day2.getFullYear()+"-" + ((day2.getMonth()+1)>=10?(day2.getMonth()+1):"0"+(day2.getMonth()+1)) + "-" + ((day2.getDate())>=10?(day2.getDate()):"0"+(day2.getDate()))+" "+"23:59:59";
+					        var flagStr = '[[${strTime}]]'
+					        var test10Value=null;
+								if('1'==flagStr){
+									element.tabChange('demo', 2); 
+									$("#test10").val(s2+" - "+s3)
+									test10Value=s2+" - "+s3;
+								}
+							var insTb = table.render({
+								elem : '#pinggu',
+								url : '/YhLifeHabitSignController/selectHabitDiaryUserAll',
+								cellMinWidth : 50, //全局定义常规单元格的最小宽度，layui 2.2.1 新增
+								page : true,
+								where: {startTime:test10Value},
+								cols : [ [{
+									type : 'numbers',
+									title : '序号'
+								},{
+									field : 'username',
+									title : '账号'
+								}, {
+									field : 'name',
+									title : '姓名',
+
+								}
+								,{field:'diaryTime', title:'日期',sort : true,width:'40%',
+									templet : "<div>{{layui.util.toDateString(d.diaryTime, 'yyyy-MM-dd')}}</div>"}
+								 ,{field:'schedule', 
+									title:'打卡进度(完成数/总数)', 
+									sort: true
+								}
+								 , {
+										field : 'finish',
+										title : '完成达标',
+
+								}, {
+									align : 'center',
+									toolbar : '#tableBar',
+									title : '操作',
+									minWidth : 200
+								} ] ],
+								response : {
+
+									statusCode : 0
+								//规定成功的状态码，默认：0
+
+								},
+
+								parseData : function(res) { //将原始数据解析成 table 组件所规定的数据
+									return {
+										"code" : res.code, //解析接口状态
+										"msg" : res.msg, //解析提示文本
+										"count" : res.count, //解析数据长度
+										"data" : res.data
+									}
+
+								}
+							});
+ 
+						});
+	</script>
+</body>
+
+</html>

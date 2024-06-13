@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yihe.applet.api.mapper.YhHealthLectureEnshrineAppMapper" >
+  <resultMap id="BaseResultMap" type="com.yihe.applet.api.domain.YhHealthLectureEnshrineApp" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="user_code" property="userCode" jdbcType="VARCHAR" />
+    <result column="categoryId" property="categoryid" jdbcType="INTEGER" />
+    <result column="new_time" property="newTime" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, user_code, categoryId, new_time
+  </sql>
+  
+  <select id="selectWhetherEnshrineByParam" resultMap="BaseResultMap">
+    select * from yh_health_lecture_enshrine where categoryId = #{categoryid,jdbcType=INTEGER} and user_code = #{userCode,jdbcType=VARCHAR}
+  </select>
+  
+    <delete id="deleteWhetherEnshrineByParam">
+    delete from yh_health_lecture_enshrine
+     where categoryId = #{categoryid,jdbcType=INTEGER} and user_code = #{userCode,jdbcType=VARCHAR}
+  </delete>
+  
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from yh_health_lecture_enshrine
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from yh_health_lecture_enshrine
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.yihe.applet.api.domain.YhHealthLectureEnshrineApp" >
+    insert into yh_health_lecture_enshrine (id, user_code, categoryId, 
+      new_time)
+    values (#{id,jdbcType=INTEGER}, #{userCode,jdbcType=VARCHAR}, #{categoryid,jdbcType=INTEGER}, 
+      #{newTime,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.yihe.applet.api.domain.YhHealthLectureEnshrineApp" >
+    insert into yh_health_lecture_enshrine
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="userCode != null" >
+        user_code,
+      </if>
+      <if test="categoryid != null" >
+        categoryId,
+      </if>
+      <if test="newTime != null" >
+        new_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="userCode != null" >
+        #{userCode,jdbcType=VARCHAR},
+      </if>
+      <if test="categoryid != null" >
+        #{categoryid,jdbcType=INTEGER},
+      </if>
+      <if test="newTime != null" >
+        #{newTime,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.yihe.applet.api.domain.YhHealthLectureEnshrineApp" >
+    update yh_health_lecture_enshrine
+    <set >
+      <if test="userCode != null" >
+        user_code = #{userCode,jdbcType=VARCHAR},
+      </if>
+      <if test="categoryid != null" >
+        categoryId = #{categoryid,jdbcType=INTEGER},
+      </if>
+      <if test="newTime != null" >
+        new_time = #{newTime,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.yihe.applet.api.domain.YhHealthLectureEnshrineApp" >
+    update yh_health_lecture_enshrine
+    set user_code = #{userCode,jdbcType=VARCHAR},
+      categoryId = #{categoryid,jdbcType=INTEGER},
+      new_time = #{newTime,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

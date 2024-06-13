@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yihe.system.mapper.YhUserDeviceMapper">
+    
+    <resultMap type="YhUserDevice" id="YhUserDeviceResult">
+    <id column="tid" property="tid" jdbcType="INTEGER" />
+        <result property="terminalid"    column="terminalId"    />
+        <result property="usercode"    column="userCode"    />
+        <result property="online"    column="onLine"    />
+        <result property="sosNos"    column="sos_nos"    />
+        <result property="note"    column="note"    />
+        <result property="terminaltype"    column="terminalType"    />
+        <result property="terminalname"    column="terminalName"    />
+        <result property="mobileNo"    column="mobile_no"    />
+        <result property="bindingtime"    column="bindingTime"    />
+    </resultMap>
+
+    <sql id="selectYhUserDeviceVo">
+        select tid,terminalId, userCode, onLine, sos_nos, note, terminalType, terminalName, mobile_no, bindingTime from yh_user_device
+    </sql>
+
+
+ <select id="selectUserYhUserDeviceLimitParam"  resultType="com.yihe.system.domain.YhUserDevice">
+			select regin.user_name as `username`,regin.name,regin.user_code as `usercode`,vice.* 
+		  from  yh_user_reginfo as regin
+		  LEFT JOIN yh_user_make_card as card
+		  on regin.user_code=card.User_Code
+		   LEFT JOIN yh_user_device as vice
+		  on regin.user_code=vice.userCode
+		  LEFT JOIN yh_user_admin_info as yuai  
+		  ON yuai.id=card.doctor
+		  and regin.User_Type = 5
+		   where yuai.user_code=#{userCode}
+		  	<if test="name!= null and name!= ''">
+				AND regin.name LIKE CONCAT('%',#{name},'%')
+			</if>
+			<if test="terminalid!= null and terminalid!=''">
+				AND vice.terminalId LIKE CONCAT('%',#{terminalid},'%')
+			</if>
+		  order by vice.bindingTime desc
+  </select>
+
+
+ <select id="selectCount"  resultType="int" parameterType="java.lang.String">
+	select count(*)  from yh_user_device where userCode = #{userCode} 
+  </select>
+
+ <select id="selectTerminalId"  resultType="com.yihe.system.domain.YhUserDevice" parameterType="java.lang.String">
+	select * from yh_user_device where terminalId = #{terminalId} 
+  </select>
+
+ <select id="selectNewDeviceUserCode"  resultType="java.lang.String" parameterType="java.lang.String">
+	  	select 
+	  	userCode
+	    from yh_user_device
+	    where 
+		    terminalId = #{terminalId,jdbcType=VARCHAR} limit 1
+  </select>
+  <delete id="deleteYhUserDevice" parameterType="java.lang.Integer">
+        delete from yh_user_device where tid = #{tid}
+    </delete>
+  
+  
+     <select id="selectUserAll" parameterType="java.lang.String" resultMap="YhUserDeviceResult">
+       select * from yh_user_device  where  userCode = #{userCode,jdbcType=VARCHAR}
+    </select>
+  
+<select id="findTerMinalByDoctorAndNameAndTid" resultType="com.yihe.system.domain.EquipmentInfoVOJO">
+	SELECT a.tid,c.user_code AS usercode,c.user_name AS username,c.name,a.terminalId,b.DEVICE_NAME AS terminalType,a.bindingTime,a.terminalType AS type
+	FROM yh_user_device AS a
+		INNER JOIN yh_dv_device_type AS b
+		ON
+		a.terminalType=b.id
+		INNER JOIN yh_user_reginfo AS c 
+		ON
+		c.user_code=a.userCode
+
+		<where>
+			and c.user_code IN (
+			SELECT user_code FROM
+			`yh_user_make_card` WHERE doctor=(SELECT id FROM
+			`yh_user_admin_info`
+			WHERE user_code=#{usercode}) AND user_code != ''
+			AND user_code IS NOT
+			NULL
+			)
+			<if test="nameLike != null">
+				AND c.name LIKE CONCAT('%',#{nameLike},'%')
+			</if>
+			<if test="tid != null">
+				AND a.terminalId LIKE CONCAT('%',#{tid},'%')
+			</if>
+
+		</where>
+		group by a.userCode order by a.bindingTime desc
+
+	</select>
+	
+	<select id="selectAll"  resultType="com.yihe.system.domain.EquipmentInfoVOJO">
+	select  a.*,b.name,b.user_name AS username
+	from yh_user_device as a
+	INNER JOIN yh_user_reginfo AS b
+	on a.userCode = b.user_code
+	where a.userCode=#{userCode}
+	</select>
+	
+	<select id="findregInfoBYUsercodeForName"  resultType="com.yihe.system.domain.EquipmentInfoVOJO">
+	SELECT user_code AS usercode,user_name AS username,`name` FROM `yh_user_reginfo`  WHERE 
+		user_code IN (
+		SELECT user_code FROM
+		`yh_user_make_card` WHERE doctor=(SELECT id FROM
+		`yh_user_admin_info`
+		WHERE user_code=#{usercode}) AND user_code != ''
+		AND user_code IS NOT
+		NULL
+		)
+	</select>
+	
+    <select id="selectYhUserDeviceList" parameterType="YhUserDevice" resultMap="YhUserDeviceResult">
+        <include refid="selectYhUserDeviceVo"/>
+        <where>  
+        <if test="tid != null  and tid != ''"> and tid = #{tid}</if>
+            <if test="usercode != null  and usercode != ''"> and userCode = #{usercode}</if>
+            <if test="online != null  and online != ''"> and onLine = #{online}</if>
+            <if test="sosNos != null  and sosNos != ''"> and sos_nos = #{sosNos}</if>
+            <if test="note != null  and note != ''"> and note = #{note}</if>
+            <if test="terminaltype != null  and terminaltype != ''"> and terminalType = #{terminaltype}</if>
+            <if test="terminalname != null  and terminalname != ''"> and terminalName like concat('%', #{terminalname}, '%')</if>
+            <if test="mobileNo != null  and mobileNo != ''"> and mobile_no = #{mobileNo}</if>
+            <if test="bindingtime != null  and bindingtime != ''"> and bindingTime = #{bindingtime}</if>
+        </where>
+    </select>
+    
+    <select id="selectYhUserDeviceById" parameterType="int" resultMap="YhUserDeviceResult">
+        <include refid="selectYhUserDeviceVo"/>
+        where tid = #{tid}
+    </select>
+        
+    <insert id="insertYhUserDevice" parameterType="YhUserDevice"  useGeneratedKeys="true" keyProperty="tid">
+        insert into yh_user_device
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="terminalid != null  and terminalid != ''">terminalId,</if>
+            <if test="usercode != null  and usercode != ''">userCode,</if>
+            <if test="online != null  and online != ''">onLine,</if>
+            <if test="sosNos != null  and sosNos != ''">sos_nos,</if>
+            <if test="note != null  and note != ''">note,</if>
+            <if test="terminaltype != null  and terminaltype != ''">terminalType,</if>
+            <if test="terminalname != null  and terminalname != ''">terminalName,</if>
+            <if test="mobileNo != null  and mobileNo != ''">mobile_no,</if>
+            <if test="bindingtime != null  and bindingtime != ''">bindingTime,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="terminalid != null  and terminalid != ''">#{terminalid},</if>
+            <if test="usercode != null  and usercode != ''">#{usercode},</if>
+            <if test="online != null  and online != ''">#{online},</if>
+            <if test="sosNos != null  and sosNos != ''">#{sosNos},</if>
+            <if test="note != null  and note != ''">#{note},</if>
+            <if test="terminaltype != null  and terminaltype != ''">#{terminaltype},</if>
+            <if test="terminalname != null  and terminalname != ''">#{terminalname},</if>
+            <if test="mobileNo != null  and mobileNo != ''">#{mobileNo},</if>
+            <if test="bindingtime != null  and bindingtime != ''">#{bindingtime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateYhUserDevice" parameterType="YhUserDevice">
+        update yh_user_device
+        <trim prefix="SET" suffixOverrides=",">
+        <if test="terminalid != null  and terminalid != ''">terminalid = #{terminalid},</if>
+            <if test="usercode != null  and usercode != ''">userCode = #{usercode},</if>
+            <if test="online != null  and online != ''">onLine = #{online},</if>
+            <if test="sosNos != null  and sosNos != ''">sos_nos = #{sosNos},</if>
+            <if test="note != null  and note != ''">note = #{note},</if>
+            <if test="terminaltype != null  and terminaltype != ''">terminalType = #{terminaltype},</if>
+            <if test="terminalname != null  and terminalname != ''">terminalName = #{terminalname},</if>
+            <if test="mobileNo != null  and mobileNo != ''">mobile_no = #{mobileNo},</if>
+            <if test="bindingtime != null  and bindingtime != ''">bindingTime = #{bindingtime},</if>
+        </trim>
+        where tid = #{tid}
+    </update>
+
+    
+
+    <delete id="deleteYhUserDeviceByIds" parameterType="String">
+        delete from yh_user_device where tid in 
+        <foreach item="tid" collection="array" open="(" separator="," close=")">
+            #{tid}
+        </foreach>
+    </delete>
+    
+</mapper>

@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, maximum-scale=1">
+<title>注册健管师</title>
+<link rel="stylesheet" th:href="@{/assets/libs/layui/css/layui.css}" />
+<link rel="stylesheet" th:href="@{/assets/module/admin.css}" />
+
+</head>
+<body style="margin: 7px;">
+<!-- 页面加载loading -->
+	<div class="page-loading">
+		<div class="ball-loader">
+			<span></span><span></span><span></span><span></span>
+		</div>
+	</div>
+	<div class="layui-fluid">
+		<div class="layui-row">
+			<div style="width: 100%; height: 100%; background-color: #FFF; position: relative;">
+			
+			
+				<div style="font-size: 20px; font-weight: bold; margin-left: 20px; padding-top: 30px;" th:if="${userCode=='0'}">新建医生</div>
+		<div style="font-size: 20px; font-weight: bold; margin-left: 20px; padding-top: 30px;" th:if="${userCode!='0'}">修改医生</div>
+		
+				<br>
+
+				<br>
+				<form class="layui-form" action="" id="userForm" lay-filter="userForm">
+				
+				<input type="hidden" name="userCode" id="userCode" th:value ="${userCode}" class="layui-input">
+				    <input type="hidden" name="orgCode" id="orgCode" class="layui-input">
+				
+				<div class="layui-form-item">
+						<label style="margin-left: -35px;"
+							class="layui-form-label layui-form-required">归属</label>
+						<div class="layui-input-block">
+							<div class="layui-row" style="margin-left: -89px; width: 450px;">
+								<input type="hidden" name="userType" value="4"> 
+								<input  type="text"
+									name="tree" id="tree" lay-filter="tree" class="layui-input">
+							</div>
+						</div>
+					</div>
+					
+					
+				
+					<div class="layui-form-item">
+						<label style="width: 72px;"
+							class="layui-form-label layui-form-required">真实姓名</label>
+						<div class="layui-input-block">
+							<div class="layui-row">
+								<input type="hidden" name="userType" value="4"> 
+								<input style="margin-left: -89px; width: 450px;" type="text"
+									name="name"  lay-verify="required" lay-reqtext="不能为空" maxlength="10"
+									placeholder="请输入名称，最大限制10个字符" autocomplete="off" 
+									class="layui-input">
+							</div>
+						</div>
+					</div>
+					<!-- 性别 -->
+					<!-- <div class="layui-form-item">
+						<label class="layui-form-label layui-form-required"
+							style="margin-left: -35px;">性别</label>
+						<div class="layui-input-block">
+							<div class="layui-row" style="margin-left: -89px;">
+								<input type="radio" name="gender" value="1" title="男"> <input
+									type="radio" name="gender" value="2" title="女" checked>
+							</div>
+						</div>
+					</div> -->
+					
+					
+					<div class="layui-form-item">
+					    <div class="layui-inline">
+					      <label class="layui-form-label layui-form-required"
+							style="margin-left: -35px;">性别</label>
+							<div class="layui-input-block">
+								<div class="layui-row" style="margin-left: -89px;">
+									<input type="radio" name="gender" value="1" title="男"> <input
+										type="radio" name="gender" value="2" title="女" checked>
+								</div>
+							</div>
+					    </div>
+					    <div class="layui-inline">
+					     <label class="layui-form-label layui-form-required"
+							style="margin-left: -5px;">角色权限</label>
+							<div class="layui-input-block">
+								<div class="layui-row" style="margin-left: -89px;">
+									 <select name="modules" id="modules" lay-verify="required" lay-search="">
+
+								        </select>
+								</div>
+							</div>
+					    </div>
+					  </div>
+				
+				
+				<div class="layui-form-item">
+					<label style="width: 72px" class="layui-form-label layui-form-required">出生日期</label>
+					<div class="layui-input-block">
+						<div class="layui-row">
+							<input class="layui-input icon-date"
+								style="margin-left: -89px; width: 200px;" type="text"
+								name="birthtime" id="test1" lay-verify="required" lay-reqtext="不能为空" placeholder="请选择日期"
+								autocomplete="off" >
+						</div>
+					</div>
+				</div>
+															
+															
+					<!-- 手机号 -->
+					<div class="layui-form-item">
+					<div style="height: 36px;line-height: 35px;">
+						<label style="width: 74px; "class="layui-form-label layui-form-required">手机号码							   
+						</label>
+						<i class="layui-icon layui-icon-help" id="help"></i></div>
+						<div class="layui-input-block">
+							<div class="layui-row">
+								<input type="tel" style="margin-left: -89px; width: 250px;"  lay-reqtext="不能为空"
+									name="mobile"    lay-verify="required|phone" id="mobile"
+									placeholder="请输入手机号码" autocomplete="off" class="layui-input">
+							</div>
+						</div>
+					</div>
+					<!-- 登录账号 -->
+					<div class="layui-form-item" th:if="${userCode=='0'}">
+						
+				<div class="layui-inline">
+				     <label style="width: 270px;"
+								class="layui-form-label layui-form-required">登录账号(账号名称+医生,例如:张三医生) </label>
+						<div class="layui-input-block">
+							<div class="layui-row">
+								<input style="margin-left: -89px; width: 450px;" type="text" lay-reqtext="不能为空"
+									name="userName" lay-verify="userName" 
+									placeholder="请输入账号，由4-10字符组成" autocomplete="off" id="userName"
+									class="layui-input">
+							</div>
+						</div>
+				    </div>
+				    <div class="layui-inline">
+				      <label style="width: 130px;"
+							class="layui-form-label">&nbsp;</label>
+						<div class="layui-input-block">
+							<div class="layui-row">
+								<input style="margin-left: -120px; width: 50px;" type="text" lay-reqtext="不能为空"
+									autocomplete="off" value="医生"
+									class="layui-input layui-disabled"
+									disabled>
+							</div>
+						</div>
+				    </div>
+				    	
+					</div>
+					
+					<div class="layui-form-item" th:if="${userCode!='0'}">
+						<label style="width: 72px;"
+							class="layui-form-label layui-form-required">登录账号 </label>
+						<div class="layui-input-block">
+							<div class="layui-row">
+								<input style="margin-left: -89px; width: 450px;" type="text" lay-reqtext="不能为空"
+									name="userName" lay-verify="userName" 
+									placeholder="请输入账号，由4-10字符组成" autocomplete="off" id="userName"
+									 class="layui-input layui-disabled" disabled>
+							</div>
+						</div>
+					</div>
+
+
+					
+				 <div class="layui-form-item" th:if="${userCode=='0'}">
+				    <div class="layui-inline">
+				     <label style="width: 72px;"
+							class="layui-form-label layui-form-required">登录密码 </label>
+						<div class="layui-input-block">
+							<div class="layui-row">
+								<input style="margin-left: -89px; width: 450px;" type="password" lay-reqtext="不能为空"
+									name="userPwd" required lay-verify="userPwd" 
+									placeholder="请输入账号登录密码，6~20位任意字符" autocomplete="off" 
+									class="layui-input">
+							</div>
+						</div>
+				    </div>
+				    <div class="layui-inline">
+				      <label style="width: 130px;"
+							class="layui-form-label layui-form-required">再次输入登录密码</label>
+						<div class="layui-input-block">
+							<div class="layui-row">
+								<input style="margin-left: -89px; width: 450px;"  type="password" lay-reqtext="不能为空"
+									 lay-verify="required|confirmPass" 
+									placeholder="请再次输入账号登录密码" autocomplete="off"  
+									class="layui-input">
+							</div>
+						</div>
+				    </div>
+				  </div>
+				  
+				  
+				  <div class="layui-form-item" th:if="${userCode!='0'}">
+							<label style="width: 72px;"
+								class="layui-form-label layui-form-required">登录密码
+							</label>
+							<button
+								style="font-size: 12px; height: 29px; line-height: 30px; margin-left: 285px;"
+								type="button"
+								class="layui-btn layui-btn-normal layui-btn-radius"
+								id="resetPwd">密码重置</button>
+							<div class="layui-input-block">
+								<div class="layui-row">
+									<input style="margin-left: -89px; width: 450px;"
+										type="password" required lay-verify="userPwd"
+										 placeholder="********"
+										autocomplete="off" class="layui-input layui-disabled"
+										disabled>
+								</div>
+							</div>
+						</div>
+  
+					
+					<div class="layui-form-item"
+						>
+						<label style="width: 72px;"
+							class="layui-form-label">医师简介</label>
+						<div class="layui-input-block">
+							<div class="layui-row">
+								<textarea style="margin-left: -89px;" placeholder="填写客医生描述信息,最大限制500个字符" name="postCode" maxlength="500" class="layui-textarea"></textarea>
+							</div>
+						</div>
+					</div>
+
+					<div class="layui-form-item" style="margin-left: -88px;padding-bottom: 40px;">
+						<div class="layui-input-block">
+							<button class="layui-btn " lay-submit='' lay-filter="regSubmit" id="">提交</button>
+						  
+						   
+						  <!--  <a href="/manage/register/userIndex?page=health&userCode='+userCode" target='_blank'> <button type="button" class="layui-btn layui-btn-normal">补充更多信息</button></a> -->
+							<button type="reset" class="layui-btn layui-btn-primary" id ="cancel">取消</button>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</body>
+<!-- js部分 -->
+<script type="text/javascript" th:src="@{/assets/libs/layui/layui.js}"></script>
+<script type="text/javascript" th:src="@{/assets/js/common.js}"></script>
+<script type="text/javascript" th:src="@{/assets/js/jquery-1.11.1.js}"></script>
+<script type="text/javascript">
+
+layui.use(['layer','form','laydate','treeSelect', 'notice'], function(){
+	 var $ = layui.jquery;
+     var layer = layui.layer;
+     var form = layui.form;
+     var laydate = layui.laydate;
+     var treeSelect= layui.treeSelect;
+     var notice = layui.notice;
+     
+
+     
+     
+	  function showpaid(broad){
+    	 $.ajax({
+             type: "GET",
+             data:{roletype:2},
+             url: "/YhUserManage/selectallrole",
+             dataType: "json",
+             success:function(data){
+                 var htmls="";
+                 for (var i = 0; i < data.data.length; i++) {
+                	 if(broad==data.data[i].roleId){
+                		 htmls+="<option value='"+data.data[i].roleId+"' selected=''>"+data.data[i].roleName+"</option>";
+ 		        	}else{
+ 		        		 htmls+="<option value='"+data.data[i].roleId+"'>"+data.data[i].roleName+"</option>";
+ 		        	}
+                	
+                 }
+                 $("#modules").append(htmls);
+ 		       	form.render();
+             }
+
+         })
+         
+	  }
+     
+     
+   //执行一个laydate实例
+		laydate.render({
+			elem : '#test1',//指定元素
+			trigger: 'click'
+		});
+		
+   
+   
+     treeSelect.render({
+         // 选择器
+         elem: '#tree',
+         // 数据
+         data: '/YhOrgTree/showPullDownTree',
+         // 异步加载方式：get/post，默认get
+         type: 'get',
+         // 占位符
+         placeholder: '请选择',
+         // 是否开启搜索功能：true/false，默认false
+         search: true,
+         // 点击回调
+         click: function(d){
+             $('#orgCode').val(d.current.id);
+         },
+         // 加载完成后的回调函数
+         success: function (d) {
+             console.log(d);
+//             选中节点，根据id筛选
+			if([[${orgCode}]]!=0){
+				$('#orgCode').val([[${orgCode}]]);
+                 treeSelect.checkNode('tree', [[${orgCode}]]);
+             	   $('#superOrgCode').val([[${orgCode}]]);
+                }
+
+//             获取zTree对象，可以调用zTree方法
+//             var treeObj = treeSelect.zTree('tree');
+//             console.log(treeObj);
+
+//             刷新树结构
+//             treeSelect.refresh();
+         }
+     });
+     
+     
+     
+     var userCode=$("#userCode").val();
+     if(userCode!=0){
+    	 $.ajax({
+	   		 type:'get',
+	   		 url:'/YhUserReginfo/yhUserReginfo',
+	   		 data:{userCode:userCode},
+	   		success : function(data){
+	   			showpaid(data.roleId);
+	   			form.val('userForm', {
+					"userCode" : data.userCode,
+					"name" : data.name,
+					"gender" : data.gender,
+					"mobile" : data.mobile,
+					"userName" : data.userName,
+					"postCode" : data.postCode,
+					"userPwd":data.userPwd,
+					"birthtime": data.birthDate.substring(0, 10),
+				});
+			}
+	   })
+     }else{
+    	 showpaid(0);
+    	//自定义验证规则
+    	 form.verify({
+    		 userPwd: function(value){
+    			 if(value==null || value==""){
+    				 return '密码不能为空';
+    			 }else if(value.length < 4){
+    		        return '密码长度不能低于6位字符';
+    		      }else if(value.length > 10){
+    		    	  return '密码长度不能超过20位字符';
+    		      }
+    		    },
+    		 userName: [
+    			 /^.{2,5}$/
+    	      ,'账号必须是4到10位字符'
+    	    ]
+    	  });
+     }
+     
+     
+     
+     var tip_index;
+	$("#help").hover(function(){
+	    tip_index =  layer.tips('可以通过手机号码找回登录密码', this,{
+	        tips: [2, 'rgba(0, 0, 0, 1)'],
+	        time:0
+	    });
+	},function(){
+	    layer.close(tip_index);
+	});
+
+     
+     
+     // 校验两次密码是否一
+     form.verify({
+         confirmPass:function(value){
+             if($('input[name=userPwd]').val() !== value)
+                 return '两次密码输入不一致！';	
+         	
+         }
+     
+     }); 
+     
+     
+     var userPwd = "12345678";
+		$("#resetPwd").click(function() {
+			layer.confirm('登录密码将被重置为:12345678是否确认重置密码？', {
+				btn : [ '确认', '取消' ]
+			//可以无限个按钮
+
+			}, function(index, layero) {
+				var userCode=$("#userCode").val();
+				//按钮【按钮一】的回调
+				$.ajax({
+					type : 'post',
+					url : '/YhUserReginfo/resetPwd',
+					data : {
+						userPwd : userPwd,
+						userCode :userCode
+					},
+					success : function(data) {
+						if (data == 1) {
+							notice.success({
+								title : '消息通知',
+								message : '操作成功!'
+							});
+						} else {
+							notice.error({
+								title : '消息通知',
+								message : '操作失败!'
+							});
+						}
+					}
+				})
+				layer.close(index);
+
+			}, function(index) {
+				//按钮【按钮二】的回调
+			});
+		})
+     
+     
+     
+     $("#cancel").click(function(){
+	    	window.location.href='/manage/guest/accountinformation?type=0';
+	    }) 
+     
+     
+	 $('#mobile').blur(function () {
+	    var mobile = $("#mobile").val();
+	    var userCode=$("#userCode").val();
+	    $.ajax({
+	 		type:'get', 
+	 		url:'/AccountController/selectMobile',
+	 		data:{mobile:mobile,userCode:userCode},
+	 		success : function(data){
+	 			if(data ==1){
+	 				layer.msg("手机号码已被其他用户使用");	
+	 			}
+	 		}
+	 	});
+	 })
+	 
+	 	$('#userName').blur(function () {
+		 var userName1 = $("#userName").val();
+		 var userName=userName1+"医生";
+		 var userCode=$("#userCode").val();
+	    $.ajax({
+	 		type:'get', 
+	 		url:'/AccountController/selectName',
+	 		data:{userName:userName,userCode:userCode},
+	 		success : function(data){
+	 			if(data ==1){
+	 				layer.msg("登录账号已存在，不能重名创建");		
+	 			}
+	 		}
+	 	});
+	 })
+     
+    
+  //监听提交
+  form.on('submit(regSubmit)', function(dataYh){
+   /*  layer.msg(JSON.stringify(data.field)); */
+    console.log("表单数据",JSON.stringify(dataYh.field)) 
+    var orgCode=$("#orgCode").val();
+    if(orgCode==null || orgCode==""){
+    	layer.msg('归属不存在，请重新选择', {
+			  offset: 'auto',
+			  anim: 6,
+			  icon: 5
+			});
+    	return false;
+    }
+    var userName1 = $("#userName").val();
+	 var userName=userName1+"医生";
+	    var mobile = $("#mobile").val();
+	    var userCode=$("#userCode").val();
+	    $.ajax({
+	 		type:'get', 
+	 		url:'/AccountController/selectMobileAndName',
+	 		  async: false,
+	 		data:{userName:userName,mobile:mobile,userCode:userCode},
+	 		success : function(data){
+	 			console.log(data)
+	 			
+	 			/**
+	 			 *  如果返回的是100 会提示 用户名 或者 号码存着
+	 			 *  如果返回 200 就可以注册
+	 			 */
+	 			if(data.code==100){
+	 				layer.msg(data.msg);
+	 				
+	 			}
+	 			if(data.code==200){
+	 			
+	 			  $.ajax({
+					type:'post', 
+					url:'/AccountController/regSubmit',
+					data:dataYh.field, 
+					success : function(data){
+						if(data==1){
+							layer.msg("注册成功");
+							window.location.href='/manage/guest/accountinformation?type=0';
+						}else{
+							layer.msg("注册失败");
+						}
+					}
+				})
+				
+	 			}
+	 		}
+	 	});
+	// 阻止表单跳转。如果需要表单跳转，去掉这段即可。
+	return false;
+  });
+  
+  	
+	
+	
+});
+</script>
+
+</html>
+

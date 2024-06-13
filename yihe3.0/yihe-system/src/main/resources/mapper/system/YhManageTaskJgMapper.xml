@@ -1,0 +1,551 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yihe.system.mapper.YhManageTaskJgMapper">
+
+    <resultMap id="exprotresult" type="com.yihe.system.domain.YhManageTotalTask">
+        <id column="tid" jdbcType="INTEGER" property="tid" />
+        <result column="allwattingcount" jdbcType="INTEGER" property="allwattingcount" />
+        <result column="allbegincount" jdbcType="INTEGER" property="allbegincount" />
+        <result column="allclosecount" jdbcType="INTEGER" property="allclosecount" />
+        <result column="allfinishicount" jdbcType="INTEGER" property="allfinishicount" />
+        <result column="user_code" jdbcType="VARCHAR" property="user_code" />
+        <result column="doctor_code" jdbcType="VARCHAR" property="doctor_code" />
+        <result column="name" jdbcType="VARCHAR" property="name" />
+        <result column="mobile" jdbcType="VARCHAR" property="mobile" />
+        <result column="doctorname" jdbcType="VARCHAR" property="doctorname" />
+        <collection  property="managetask" column="user_code" ofType="com.yihe.system.domain.YhManageTask" javaType="java.util.ArrayList">
+            <id column="id" jdbcType="INTEGER" property="id" />
+            <result column="birth_date" jdbcType="VARCHAR" property="birth_date" />
+            <result column="gender" jdbcType="INTEGER" property="gender" />
+            <result column="service_type" jdbcType="INTEGER" property="service_type" />
+            <result column="service_content" jdbcType="VARCHAR" property="service_content" />
+            <result column="service_state" jdbcType="INTEGER" property="service_state" />
+            <result column="service_waiting_time" jdbcType="VARCHAR" property="service_waiting_time" />
+            <result column="service_record" jdbcType="VARCHAR" property="service_record" />
+            <result column="service_name" jdbcType="VARCHAR" property="service_name" />
+            <result column="returnvisit" jdbcType="VARCHAR" property="returnvisit" />
+            <result column="start_service_time" jdbcType="VARCHAR" property="start_service_time" />
+            <result column="end_service_time" jdbcType="VARCHAR" property="end_service_time" />
+            <result column="acceptsituation" jdbcType="VARCHAR" property="acceptsituation" />
+            <result column="cname" jdbcType="VARCHAR" property="cname" />
+            <result column="cbname" jdbcType="VARCHAR" property="cbname" />
+            <result column="childtag" jdbcType="VARCHAR" property="childtag" />
+            <result column="insert_time" jdbcType="VARCHAR" property="insert_time" />
+            <result column="plan_name" jdbcType="VARCHAR" property="plan_name" />
+            <result column="satisfaction" jdbcType="INTEGER" property="satisfaction" />
+            <result column="service_subtitle" jdbcType="VARCHAR" property="service_subtitle" />
+            <result column="threshold_name" jdbcType="VARCHAR" property="threshold_name" />
+        </collection>
+    </resultMap>
+
+
+
+
+
+
+
+    <select id="selectcountpage"  parameterType="com.yihe.system.domain.YhServicePage" resultType="java.lang.Integer">
+        SELECT count(tid) FROM  yh_jz_service_total_person  tp LEFT JOIN  yh_jz_service_person sp ON tp.user_code=sp.user_code LEFT JOIN yh_user_reginfo re on tp.user_code=re.user_code	LEFT JOIN yh_user_enrolinfo enro	ON enro.user_code=re.user_code
+        LEFT JOIN yh_jz_service_assessment_switch sas
+        ON sas.id=sp.childnodes
+        LEFT JOIN yh_jz_service_bodydata_switch sbs
+        ON sp.childnodes=sbs.id
+        LEFT JOIN yh_threshold_dic thdic
+        ON sp.childnodes=thdic.dic_id
+        <where>
+
+            <if	test="state!=null ">
+                <!-- 服务状态 -->
+                AND sp.service_state=#{state}
+            </if>
+            <if	test="returnvisit!=null and returnvisit!=''">
+                <!-- 服务方式 -->
+                AND sp.returnvisit=#{returnvisit}
+            </if>
+            <if	test="name!=null and name!=''">
+                <!-- 姓名 -->
+                AND	re.`name` LIKE '%#{name}%'
+            </if>
+            <if	test="servicecountent!=null and servicecountent!=''">
+                <!-- 服务内容 -->
+                AND sp.service_type=#{servicecountent}
+            </if>
+            <if	test="healthstate!=null and healthstate!=''">
+                <!-- 健康干预状态 -->
+                AND re.gender = #{healthstate}
+            </if>
+            <if	test="time!=null and time!=''">
+                <!-- 时间 -->
+                AND sp.insert_time BETWEEN	#{begintime} AND #{endtime}
+            </if>
+            <if	test="chhooeorgcode==null or chhooeorgcode==''">
+
+                AND re.Org_Code like concat('%', #{Orgcode},'%')
+            </if>
+            <if test="typeson!=null and typeson!='' and typeson&lt;100">
+                and sbs.id=#{typeson} and  sp.childtag=1
+            </if>
+            <if test="typeson!=null and typeson!='' and typeson&gt;100 and typeson&lt;200">
+                and sas.id=(#{typeson}-100) and  sp.childtag=2
+            </if>
+            <if test="typeson!=null and typeson!='' and typeson&gt;200 ">
+                and thdic.dic_id=(#{typeson}-200) and  sp.childtag=4
+            </if>
+            <if test="groupid!=null and groupid!=''">
+                AND enro.Flag_Dgroup like concat('%','f'+#{groupid}+'_',"%")
+            </if>
+            <if	test="chhooeorgcode!=null and chhooeorgcode!=''">
+
+                AND re.Org_Code like concat('%', #{chhooeorgcode},'%')
+            </if>
+            <if	test="userphone!=null and userphone!=''">
+
+                AND re.mobile =#{userphone}
+            </if>
+            <if test="totaltype!=null and totaltype!=''">
+                and sp.totaltype=#{totaltype}
+            </if>
+            <if test="planname!=null and planname!=''">
+                and sp.service_subtitle=#{planname}
+            </if>
+        </where>
+    </select>
+
+
+    <select id="selectservicecount" resultType="com.yihe.system.domain.YhManageTotalTask" parameterType="com.yihe.system.domain.YhServicePage">
+        SELECT (SELECT COUNT(id) FROM  yh_jz_service_total_person  tp LEFT JOIN  yh_jz_service_person sp ON tp.user_code=sp.user_code LEFT JOIN yh_user_reginfo reg ON reg.user_code=sp.user_code WHERE  sp.service_state=0
+        <if	test="time!=null and time!=''">
+            <!-- 时间 -->
+            AND sp.insert_time BETWEEN	#{begintime} AND #{endtime}
+        </if>
+        <if test="totaltype!=null and totaltype!=''">
+            and sp.totaltype=#{totaltype}
+        </if>
+        <if	test="Orgcode!=null and Orgcode!=''">
+            <!-- 健康干预状态 -->
+            AND reg.Org_Code like concat('%', #{Orgcode},'%')
+        </if>
+        ) AS allwattingcount,
+        (SELECT COUNT(id) FROM  yh_jz_service_total_person  tp LEFT JOIN  yh_jz_service_person sp ON tp.user_code=sp.user_code LEFT JOIN yh_user_reginfo reg ON reg.user_code=sp.user_code WHERE  sp.service_state=1
+
+        <if	test="time!=null and time!=''">
+            <!-- 时间 -->
+            AND sp.insert_time BETWEEN	#{begintime} AND #{endtime}
+        </if>
+        <if test="totaltype!=null and totaltype!=''">
+            and sp.totaltype=#{totaltype}
+        </if>
+        <if	test="Orgcode!=null and Orgcode!=''">
+            <!-- 健康干预状态 -->
+            AND reg.Org_Code like concat('%', #{Orgcode},'%')
+        </if>
+        ) AS allbegincount,
+        (SELECT COUNT(id) FROM  yh_jz_service_total_person  tp LEFT JOIN  yh_jz_service_person sp ON tp.user_code=sp.user_code LEFT JOIN yh_user_reginfo reg ON reg.user_code=sp.user_code WHERE   sp.service_state=2
+        <if	test="time!=null and time!=''">
+            <!-- 时间 -->
+            AND sp.insert_time BETWEEN	#{begintime} AND #{endtime}
+        </if>
+        <if test="totaltype!=null and totaltype!=''">
+            and sp.totaltype=#{totaltype}
+        </if>
+        <if	test="Orgcode!=null and Orgcode!=''">
+            <!-- 健康干预状态 -->
+            AND reg.Org_Code like concat('%', #{Orgcode},'%')
+        </if>
+        ) AS allclosecount,
+        (SELECT COUNT(id) FROM  yh_jz_service_total_person  tp LEFT JOIN  yh_jz_service_person sp ON tp.user_code=sp.user_code LEFT JOIN yh_user_reginfo reg ON reg.user_code=sp.user_code WHERE   sp.service_state=3
+        <if	test="time!=null and time!=''">
+            <!-- 时间 -->
+            AND sp.insert_time BETWEEN	#{begintime} AND #{endtime}
+        </if>
+        <if test="totaltype!=null and totaltype!=''">
+            and sp.totaltype=#{totaltype}
+        </if>
+        <if	test="Orgcode!=null and Orgcode!=''">
+            <!-- 健康干预状态 -->
+            AND reg.Org_Code like concat('%', #{Orgcode},'%')
+        </if>
+        ) AS allfinishicount
+    </select>
+
+
+
+    <select id="selectlist" parameterType="com.yihe.system.domain.YhServicePage" resultMap="exprotresult">
+        SELECT tp.tid,re.`name`,re.gender,tp.doctor_code,admin.user_name as doctorname,re.birth_date,sp.id,sp.user_code,sp.end_service_time,sp.phone,sp.age,sp.start_service_time,sp.service_state,sp.service_waiting_time,
+        sp.service_content,sp.service_type,sp.service_record,sp.isrede,sp.returnvisit,sp.longitude,sp.dimension,sp.insert_time,sp.acceptsituation,sp.childnodes,sp.childtag,sp.satisfaction,sp.service_subtitle,setype.service_name,sas.`name` AS cname,sbs.`name` AS cbname,plan.plan_name,thdic.threshold_name,
+        (SELECT COUNT(id) FROM  yh_jz_service_total_person  tp LEFT JOIN  yh_jz_service_person sp ON tp.user_code=sp.user_code WHERE tp.doctor_code=120 AND sp.service_state=0 AND sp.insert_time BETWEEN	'2019-03-22 09:39:33' AND '2021-03-22 09:39:33') AS allwattingcount,
+        (SELECT COUNT(id) FROM  yh_jz_service_total_person  tp LEFT JOIN  yh_jz_service_person sp ON tp.user_code=sp.user_code WHERE tp.doctor_code=120 AND sp.service_state=1 AND sp.insert_time BETWEEN	'2019-03-22 09:39:33' AND '2021-03-22 09:39:33') AS allbegincount,
+        (SELECT COUNT(id) FROM  yh_jz_service_total_person  tp LEFT JOIN  yh_jz_service_person sp ON tp.user_code=sp.user_code WHERE tp.doctor_code=120 AND sp.service_state=2 AND sp.insert_time BETWEEN	'2019-03-22 09:39:33' AND '2021-03-22 09:39:33') AS allclosecount,
+        (SELECT COUNT(id) FROM  yh_jz_service_total_person  tp LEFT JOIN  yh_jz_service_person sp ON tp.user_code=sp.user_code WHERE tp.doctor_code=120 AND sp.service_state=3 AND sp.insert_time BETWEEN	'2019-03-22 09:39:33' AND '2021-03-22 09:39:33') AS allfinishicount
+        FROM  yh_jz_service_total_person  tp LEFT JOIN  yh_jz_service_person sp	ON tp.user_code=sp.user_code
+        LEFT JOIN yh_user_reginfo re on tp.user_code=re.user_code
+        LEFT JOIN yh_user_enrolinfo enro
+        ON enro.user_code=re.user_code
+        LEFT JOIN yh_jz_service_type setype
+        ON sp.service_type=setype.id
+        LEFT JOIN yh_jz_service_assessment_switch sas
+        ON sas.id=sp.childnodes
+        LEFT JOIN yh_jz_service_bodydata_switch sbs
+        ON sp.childnodes=sbs.id
+        LEFT JOIN yh_jz_service_plan plan
+        ON sp.childnodes=plan.id
+        LEFT JOIN yh_user_admin_info admin
+        ON admin.user_code=tp.`doctor_code`
+        LEFT JOIN yh_threshold_dic thdic
+        ON sp.childnodes=thdic.dic_id
+        <where>
+            sp.service_state=#{state}
+            <if test="servicetype!=null and servicetype!=''">
+                AND sp.service_type=#{servicetype}
+            </if>
+            <if test="name!=null and name!=''">
+                AND re.name  like concat('%', #{name},'%')
+            </if>
+            <if test="healthstate!=null ">
+                AND re.gender = #{healthstate}
+            </if>
+            <if test="typeson!=null and typeson!='' and typeson&lt;100">
+                and sbs.id=#{typeson} and  sp.childtag=1
+            </if>
+            <if test="typeson!=null and typeson!='' and typeson&gt;100 and typeson&lt;200">
+                and sas.id=(#{typeson}-100) and  sp.childtag=2
+            </if>
+            <if test="typeson!=null and typeson!='' and typeson&gt;200 ">
+                and thdic.dic_id=(#{typeson}-200) and  sp.childtag=4
+            </if>
+            <if test="returnvisit!=null and returnvisit!=''">
+                AND sp.returnvisit = #{returnvisit}
+            </if>
+            <if	test="time!=null and time!=''">
+                <!-- 时间 -->
+                AND sp.insert_time BETWEEN	#{begintime} AND #{endtime}
+            </if>
+            <if	test="chhooeorgcode==null or chhooeorgcode==''">
+
+                AND re.Org_Code like concat('%', #{Orgcode},'%')
+            </if>
+            <if	test="chhooeorgcode!=null and chhooeorgcode!=''">
+
+                AND re.Org_Code like concat('%', #{chhooeorgcode},'%')
+            </if>
+            <if	test="userphone!=null and userphone!=''">
+
+                AND re.mobile =#{userphone}
+            </if>
+            <if test="groupid!=null and groupid!=''">
+                AND enro.Flag_Dgroup like concat('%','f'+#{groupid}+'_',"%")
+            </if>
+            <if test="totaltype!=null and totaltype!=''">
+                and sp.totaltype=#{totaltype}
+            </if>
+            <if test="planname!=null and planname!=''">
+                and sp.service_subtitle=#{planname}
+            </if>
+        </where>
+
+        ORDER BY sp.insert_time,re.`name`
+        LIMIT #{beginpage},20
+    </select>
+
+    <select id="selectfenxi" parameterType="com.yihe.system.domain.YhServicePage" resultType="com.yihe.system.domain.YhServicePage">
+        select (select count(*)  from yh_jz_service_person yhsp LEFT JOIN yh_user_reginfo re
+        ON yhsp.user_code=re.user_code
+        where yhsp.service_state=0
+        <if test="chhooeorgcode==null or chhooeorgcode==''">
+            AND re.Org_Code like concat('%', #{Orgcode},'%')
+        </if>
+        <if test="chhooeorgcode!=null and chhooeorgcode!=''">
+            AND re.Org_Code like concat('%', #{chhooeorgcode},'%')
+        </if>
+        <if test="begintime!=null and begintime!=''">
+            <!-- 时间 -->
+            AND yhsp.insert_time BETWEEN #{begintime} AND #{endtime}
+        </if>)  AS dengdai
+        ,
+        ( select count(*)   from yh_jz_service_person yhsp LEFT JOIN yh_user_reginfo re
+        ON yhsp.user_code=re.user_code
+        where yhsp.service_state=1
+        <if	test="chhooeorgcode==null or chhooeorgcode==''">
+            AND re.Org_Code like concat('%', #{Orgcode},'%')
+        </if>
+        <if	test="chhooeorgcode!=null and chhooeorgcode!=''">
+            AND re.Org_Code like concat('%', #{chhooeorgcode},'%')
+        </if>
+        <if	test="begintime!=null and begintime!=''">
+            <!-- 时间 -->
+            AND yhsp.insert_time BETWEEN	#{begintime} AND #{endtime}
+        </if>) AS zhengzai
+        ,
+        (select count(*) from yh_jz_service_person yhsp LEFT JOIN yh_user_reginfo re
+        ON yhsp.user_code=re.user_code
+        where yhsp.service_state=2
+        <if test="chhooeorgcode==null or chhooeorgcode==''">
+            AND re.Org_Code like concat('%', #{Orgcode},'%')
+        </if>
+        <if test="chhooeorgcode!=null and chhooeorgcode!=''">
+            AND re.Org_Code like concat('%', #{chhooeorgcode},'%')
+        </if>
+        <if test="begintime!=null and begintime!=''">
+            <!-- 时间 -->
+            AND yhsp.insert_time BETWEEN #{begintime} AND #{endtime}
+        </if>
+        )AS wancheng
+        ,
+        (select count(*) from yh_jz_service_person yhsp LEFT JOIN yh_user_reginfo re
+        ON yhsp.user_code=re.user_code
+        where yhsp.service_state=3
+        <if test="chhooeorgcode==null or chhooeorgcode==''">
+            AND re.Org_Code like concat(#{Orgcode},'%')
+        </if>
+        <if test="chhooeorgcode!=null and chhooeorgcode!=''">
+            AND re.Org_Code like concat(#{chhooeorgcode},'%')
+        </if>
+        <if test="begintime!=null and begintime!=''">
+            <!-- 时间 -->
+            AND yhsp.insert_time BETWEEN #{begintime} AND #{endtime}
+        </if>
+        )AS guanbi
+
+    </select>
+
+
+    <select id="getmundoctorby" parameterType="com.yihe.system.domain.YhServicePage" resultType="com.yihe.system.domain.YhServicePage">
+                     SELECT * from  ( SELECT count(total.doctor_code) as allshuliang,info.user_name as `name`,info.user_code as `usercode`
+            from yh_jz_service_person person LEFT JOIN yh_jz_service_total_person total
+            on person.user_code=total.user_code
+            LEFT JOIN yh_user_admin_info  info
+            ON total.doctor_code=info.user_code
+            <where>
+            <if test="chhooeorgcode==null or chhooeorgcode==''">
+                AND info.org_code like concat(#{Orgcode},'%')
+            </if>
+            <if test="chhooeorgcode!=null and chhooeorgcode!=''">
+                AND info.org_code like concat(#{chhooeorgcode},'%')
+            </if>
+            <if test="begintime!=null and begintime!=''">
+                <!-- 时间 -->
+                AND person.insert_time BETWEEN #{begintime} AND #{endtime}
+            </if>
+            </where>
+            GROUP BY total.doctor_code ) as new_tbl
+
+
+            LEFT JOIN (SELECT count(total.doctor_code) as zhengzai,info.user_code
+            from yh_jz_service_person person LEFT JOIN yh_jz_service_total_person total
+            on person.user_code=total.user_code
+            LEFT JOIN yh_user_admin_info  info
+            ON total.doctor_code=info.user_code
+            WHERE person.service_state=1
+            <if test="chhooeorgcode==null or chhooeorgcode==''">
+                AND info.org_code like concat(#{Orgcode},'%')
+            </if>
+            <if test="chhooeorgcode!=null and chhooeorgcode!=''">
+                AND info.org_code like concat(#{chhooeorgcode},'%')
+            </if>
+            <if test="begintime!=null and begintime!=''">
+                <!-- 时间 -->
+                AND person.insert_time BETWEEN #{begintime} AND #{endtime}
+            </if>
+            GROUP BY total.doctor_code) as new_tbl_p
+            ON new_tbl.usercode=new_tbl_p.user_code
+
+            LEFT JOIN (SELECT count(total.doctor_code) as wancheng,info.user_code
+            from yh_jz_service_person person LEFT JOIN yh_jz_service_total_person total
+            on person.user_code=total.user_code
+            LEFT JOIN yh_user_admin_info  info
+            ON total.doctor_code=info.user_code
+            WHERE person.service_state=3
+            <if test="chhooeorgcode==null or chhooeorgcode==''">
+                AND info.org_code like concat(#{Orgcode},'%')
+            </if>
+            <if test="chhooeorgcode!=null and chhooeorgcode!=''">
+                AND info.org_code like concat(#{chhooeorgcode},'%')
+            </if>
+            <if test="begintime!=null and begintime!=''">
+                <!-- 时间 -->
+                AND person.insert_time BETWEEN #{begintime} AND #{endtime}
+            </if>
+            GROUP BY total.doctor_code) as new_tbl_p2
+            ON new_tbl.usercode=new_tbl_p2.user_code
+
+
+
+            LEFT JOIN (SELECT count(total.doctor_code) as dengdai,info.user_code
+            from yh_jz_service_person person LEFT JOIN yh_jz_service_total_person total
+            on person.user_code=total.user_code
+            LEFT JOIN yh_user_admin_info  info
+            ON total.doctor_code=info.user_code
+            WHERE person.service_state=0
+            <if test="chhooeorgcode==null or chhooeorgcode==''">
+                AND info.org_code like concat(#{Orgcode},'%')
+            </if>
+            <if test="chhooeorgcode!=null and chhooeorgcode!=''">
+                AND info.org_code like concat(#{chhooeorgcode},'%')
+            </if>
+            <if test="begintime!=null and begintime!=''">
+                <!-- 时间 -->
+                AND person.insert_time BETWEEN #{begintime} AND #{endtime}
+            </if>
+            GROUP BY total.doctor_code) as new_tbl_p0
+            ON new_tbl.usercode=new_tbl_p0.user_code
+
+
+        LEFT JOIN (SELECT count(total.doctor_code) as guanbi,info.user_code
+        from yh_jz_service_person person LEFT JOIN yh_jz_service_total_person total
+        on person.user_code=total.user_code
+        LEFT JOIN yh_user_admin_info  info
+        ON total.doctor_code=info.user_code
+        WHERE person.service_state=2
+        <if test="chhooeorgcode==null or chhooeorgcode==''">
+            AND info.org_code like concat(#{Orgcode},'%')
+        </if>
+        <if test="chhooeorgcode!=null and chhooeorgcode!=''">
+            AND info.org_code like concat(#{chhooeorgcode},'%')
+        </if>
+        <if test="begintime!=null and begintime!=''">
+            <!-- 时间 -->
+            AND person.insert_time BETWEEN #{begintime} AND #{endtime}
+        </if>
+        GROUP BY total.doctor_code) as new_tbl_p3
+        ON new_tbl.usercode=new_tbl_p3.user_code
+    </select>
+
+
+    <select id="getmundoctorby2" parameterType="com.yihe.system.domain.YhServicePage" resultType="com.yihe.system.domain.YhServicePage">
+                SELECT * from  (SELECT count(total.doctor_code) as allshuliang,info.user_name as `name`,info.user_code as `usercode`
+                from yh_jz_service_person person LEFT JOIN yh_jz_service_total_person total
+                on person.user_code=total.user_code
+                LEFT JOIN yh_user_admin_info  info
+                ON total.doctor_code=info.user_code
+
+                <where>
+                    person.service_state=3
+                    <if test="chhooeorgcode==null or chhooeorgcode==''">
+                        AND info.org_code like concat(#{Orgcode},'%')
+                    </if>
+                    <if test="chhooeorgcode!=null and chhooeorgcode!=''">
+                        AND info.org_code like concat(#{chhooeorgcode},'%')
+                    </if>
+                    <if test="begintime!=null and begintime!=''">
+                        <!-- 时间 -->
+                        AND person.insert_time BETWEEN #{begintime} AND #{endtime}
+                    </if>
+                </where>
+                GROUP BY total.doctor_code ) as new_tbl
+
+                LEFT JOIN (SELECT count(total.doctor_code) as znx,info.user_code
+                from yh_jz_service_person person LEFT JOIN yh_jz_service_total_person total
+                on person.user_code=total.user_code
+                LEFT JOIN yh_user_admin_info  info
+                ON total.doctor_code=info.user_code
+                WHERE person.service_state=3 and person.returnvisit=3
+                <if test="chhooeorgcode==null or chhooeorgcode==''">
+                    AND info.org_code like concat(#{Orgcode},'%')
+                </if>
+                <if test="chhooeorgcode!=null and chhooeorgcode!=''">
+                    AND info.org_code like concat(#{chhooeorgcode},'%')
+                </if>
+                <if test="begintime!=null and begintime!=''">
+                    <!-- 时间 -->
+                    AND person.insert_time BETWEEN #{begintime} AND #{endtime}
+                </if>
+                GROUP BY total.doctor_code) as new_tbl_p
+                ON new_tbl.usercode=new_tbl_p.user_code
+
+                LEFT JOIN (SELECT count(total.doctor_code) as dytz,info.user_code
+                from yh_jz_service_person person LEFT JOIN yh_jz_service_total_person total
+                on person.user_code=total.user_code
+                LEFT JOIN yh_user_admin_info  info
+                ON total.doctor_code=info.user_code
+                WHERE person.service_state=3 and person.returnvisit=6
+                <if test="chhooeorgcode==null or chhooeorgcode==''">
+                    AND info.org_code like concat(#{Orgcode},'%')
+                </if>
+                <if test="chhooeorgcode!=null and chhooeorgcode!=''">
+                    AND info.org_code like concat(#{chhooeorgcode},'%')
+                </if>
+                <if test="begintime!=null and begintime!=''">
+                    <!-- 时间 -->
+                    AND person.insert_time BETWEEN #{begintime} AND #{endtime}
+                </if>
+                GROUP BY total.doctor_code) as new_tbl_p2
+                ON new_tbl.usercode=new_tbl_p2.user_code
+
+                LEFT JOIN (SELECT count(total.doctor_code) as gzhxxtz,info.user_code
+                from yh_jz_service_person person LEFT JOIN yh_jz_service_total_person total
+                on person.user_code=total.user_code
+                LEFT JOIN yh_user_admin_info  info
+                ON total.doctor_code=info.user_code
+                WHERE person.service_state=3 and person.returnvisit=7
+                <if test="chhooeorgcode==null or chhooeorgcode==''">
+                    AND info.org_code like concat(#{Orgcode},'%')
+                </if>
+                <if test="chhooeorgcode!=null and chhooeorgcode!=''">
+                    AND info.org_code like concat(#{chhooeorgcode},'%')
+                </if>
+                <if test="begintime!=null and begintime!=''">
+                    <!-- 时间 -->
+                    AND person.insert_time BETWEEN #{begintime} AND #{endtime}
+                </if>
+                GROUP BY total.doctor_code) as new_tbl_p3
+                ON new_tbl.usercode=new_tbl_p3.user_code
+
+                LEFT JOIN (SELECT count(total.doctor_code) as dxtz,info.user_code
+                from yh_jz_service_person person LEFT JOIN yh_jz_service_total_person total
+                on person.user_code=total.user_code
+                LEFT JOIN yh_user_admin_info  info
+                ON total.doctor_code=info.user_code
+                WHERE person.service_state=3 and person.returnvisit=5
+                <if test="chhooeorgcode==null or chhooeorgcode==''">
+                    AND info.org_code like concat(#{Orgcode},'%')
+                </if>
+                <if test="chhooeorgcode!=null and chhooeorgcode!=''">
+                    AND info.org_code like concat(#{chhooeorgcode},'%')
+                </if>
+                <if test="begintime!=null and begintime!=''">
+                    <!-- 时间 -->
+                    AND person.insert_time BETWEEN #{begintime} AND #{endtime}
+                </if>
+                GROUP BY total.doctor_code) as new_tbl_p4
+                ON new_tbl.usercode=new_tbl_p4.user_code
+
+                LEFT JOIN (SELECT count(total.doctor_code) as dhhf,info.user_code
+                from yh_jz_service_person person LEFT JOIN yh_jz_service_total_person total
+                on person.user_code=total.user_code
+                LEFT JOIN yh_user_admin_info  info
+                ON total.doctor_code=info.user_code
+                WHERE person.service_state=3 and person.returnvisit=1
+                <if test="chhooeorgcode==null or chhooeorgcode==''">
+                    AND info.org_code like concat(#{Orgcode},'%')
+                </if>
+                <if test="chhooeorgcode!=null and chhooeorgcode!=''">
+                    AND info.org_code like concat(#{chhooeorgcode},'%')
+                </if>
+                <if test="begintime!=null and begintime!=''">
+                    <!-- 时间 -->
+                    AND person.insert_time BETWEEN #{begintime} AND #{endtime}
+                </if>
+                GROUP BY total.doctor_code) as new_tbl_p5
+                ON new_tbl.usercode=new_tbl_p5.user_code
+
+                LEFT JOIN (SELECT count(total.doctor_code) as smhf,info.user_code
+                from yh_jz_service_person person LEFT JOIN yh_jz_service_total_person total
+                on person.user_code=total.user_code
+                LEFT JOIN yh_user_admin_info  info
+                ON total.doctor_code=info.user_code
+                WHERE person.service_state=3 and person.returnvisit=4
+                <if test="chhooeorgcode==null or chhooeorgcode==''">
+                    AND info.org_code like concat(#{Orgcode},'%')
+                </if>
+                <if test="chhooeorgcode!=null and chhooeorgcode!=''">
+                    AND info.org_code like concat(#{chhooeorgcode},'%')
+                </if>
+                <if test="begintime!=null and begintime!=''">
+                    <!-- 时间 -->
+                    AND person.insert_time BETWEEN #{begintime} AND #{endtime}
+                </if>
+                GROUP BY total.doctor_code) as new_tbl_p6
+                ON new_tbl.usercode=new_tbl_p6.user_code
+    </select>
+
+</mapper>

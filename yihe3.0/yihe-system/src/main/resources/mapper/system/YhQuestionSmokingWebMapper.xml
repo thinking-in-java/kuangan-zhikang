@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yihe.system.mapper.YhQuestionSmokingWebMapper">
+    
+    <resultMap type="YhQuestionSmokingWeb" id="YhQuestionSmokingWebResult">
+        <result property="questionId"    column="question_id"    />
+        <result property="questionType"    column="question_type"    />
+        <result property="questionTitle"    column="question_title"    />
+        <result property="choose1"    column="choose1"    />
+        <result property="choose1Value"    column="choose1_value"    />
+        <result property="choose2"    column="choose2"    />
+        <result property="choose2Value"    column="choose2_value"    />
+        <result property="choose3"    column="choose3"    />
+        <result property="choose3Value"    column="choose3_value"    />
+        <result property="choose4"    column="choose4"    />
+        <result property="choose4Value"    column="choose4_value"    />
+    </resultMap>
+
+    <sql id="selectYhQuestionSmokingWebVo">
+        select question_id, question_type, question_title, choose1, choose1_value, choose2, choose2_value, choose3, choose3_value, choose4, choose4_value from yh_question_smoking
+    </sql>
+
+    <select id="selectYhQuestionSmokingWebList" parameterType="YhQuestionSmokingWeb" resultMap="YhQuestionSmokingWebResult">
+        <include refid="selectYhQuestionSmokingWebVo"/>
+        <where>  
+            <if test="questionType != null "> and question_type = #{questionType}</if>
+            <if test="questionTitle != null  and questionTitle != ''"> and question_title = #{questionTitle}</if>
+            <if test="choose1 != null  and choose1 != ''"> and choose1 = #{choose1}</if>
+            <if test="choose1Value != null  and choose1Value != ''"> and choose1_value = #{choose1Value}</if>
+            <if test="choose2 != null  and choose2 != ''"> and choose2 = #{choose2}</if>
+            <if test="choose2Value != null  and choose2Value != ''"> and choose2_value = #{choose2Value}</if>
+            <if test="choose3 != null  and choose3 != ''"> and choose3 = #{choose3}</if>
+            <if test="choose3Value != null  and choose3Value != ''"> and choose3_value = #{choose3Value}</if>
+            <if test="choose4 != null  and choose4 != ''"> and choose4 = #{choose4}</if>
+            <if test="choose4Value != null  and choose4Value != ''"> and choose4_value = #{choose4Value}</if>
+        </where>
+    </select>
+    
+    <select id="selectYhQuestionSmokingWebById" parameterType="Long" resultMap="YhQuestionSmokingWebResult">
+        <include refid="selectYhQuestionSmokingWebVo"/>
+        where question_id = #{questionId}
+    </select>
+        
+    <insert id="insertYhQuestionSmokingWeb" parameterType="YhQuestionSmokingWeb" useGeneratedKeys="true" keyProperty="questionId">
+        insert into yh_question_smoking
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="questionType != null">question_type,</if>
+            <if test="questionTitle != null">question_title,</if>
+            <if test="choose1 != null">choose1,</if>
+            <if test="choose1Value != null">choose1_value,</if>
+            <if test="choose2 != null">choose2,</if>
+            <if test="choose2Value != null">choose2_value,</if>
+            <if test="choose3 != null">choose3,</if>
+            <if test="choose3Value != null">choose3_value,</if>
+            <if test="choose4 != null">choose4,</if>
+            <if test="choose4Value != null">choose4_value,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="questionType != null">#{questionType},</if>
+            <if test="questionTitle != null">#{questionTitle},</if>
+            <if test="choose1 != null">#{choose1},</if>
+            <if test="choose1Value != null">#{choose1Value},</if>
+            <if test="choose2 != null">#{choose2},</if>
+            <if test="choose2Value != null">#{choose2Value},</if>
+            <if test="choose3 != null">#{choose3},</if>
+            <if test="choose3Value != null">#{choose3Value},</if>
+            <if test="choose4 != null">#{choose4},</if>
+            <if test="choose4Value != null">#{choose4Value},</if>
+         </trim>
+    </insert>
+
+    <update id="updateYhQuestionSmokingWeb" parameterType="YhQuestionSmokingWeb">
+        update yh_question_smoking
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="questionType != null">question_type = #{questionType},</if>
+            <if test="questionTitle != null">question_title = #{questionTitle},</if>
+            <if test="choose1 != null">choose1 = #{choose1},</if>
+            <if test="choose1Value != null">choose1_value = #{choose1Value},</if>
+            <if test="choose2 != null">choose2 = #{choose2},</if>
+            <if test="choose2Value != null">choose2_value = #{choose2Value},</if>
+            <if test="choose3 != null">choose3 = #{choose3},</if>
+            <if test="choose3Value != null">choose3_value = #{choose3Value},</if>
+            <if test="choose4 != null">choose4 = #{choose4},</if>
+            <if test="choose4Value != null">choose4_value = #{choose4Value},</if>
+        </trim>
+        where question_id = #{questionId}
+    </update>
+
+    <delete id="deleteYhQuestionSmokingWebById" parameterType="Long">
+        delete from yh_question_smoking where question_id = #{questionId}
+    </delete>
+
+    <delete id="deleteYhQuestionSmokingWebByIds" parameterType="String">
+        delete from yh_question_smoking where question_id in 
+        <foreach item="questionId" collection="array" open="(" separator="," close=")">
+            #{questionId}
+        </foreach>
+    </delete>
+
+</mapper>

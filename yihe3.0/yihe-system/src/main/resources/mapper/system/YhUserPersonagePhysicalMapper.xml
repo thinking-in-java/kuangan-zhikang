@@ -1,0 +1,294 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yihe.system.mapper.YhUserPersonagePhysicalMapper" >
+  <resultMap id="BaseResultMap" type="com.yihe.system.domain.YhUserPersonagePhysical" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="user_code" property="userCode" jdbcType="VARCHAR" />
+    <result column="skin" property="skin" jdbcType="VARCHAR" />
+    <result column="sclera" property="sclera" jdbcType="VARCHAR" />
+    <result column="lymph" property="lymph" jdbcType="VARCHAR" />
+    <result column="heartrate" property="heartrate" jdbcType="VARCHAR" />
+    <result column="rhthm" property="rhthm" jdbcType="VARCHAR" />
+    <result column="noise" property="noise" jdbcType="VARCHAR" />
+    <result column="tenderness" property="tenderness" jdbcType="VARCHAR" />
+    <result column="enclosedbao" property="enclosedbao" jdbcType="VARCHAR" />
+    <result column="hepatomegalg" property="hepatomegalg" jdbcType="VARCHAR" />
+    <result column="selenaaxe" property="selenaaxe" jdbcType="VARCHAR" />
+    <result column="movethe" property="movethe" jdbcType="VARCHAR" />
+    <result column="lower" property="lower" jdbcType="VARCHAR" />
+    <result column="acrotarsium" property="acrotarsium" jdbcType="VARCHAR" />
+    <result column="anas" property="anas" jdbcType="VARCHAR" />
+    <result column="breast" property="breast" jdbcType="VARCHAR" />
+    <result column="gynecology" property="gynecology" jdbcType="VARCHAR" />
+    <result column="vagina" property="vagina" jdbcType="VARCHAR" />
+    <result column="cervix" property="cervix" jdbcType="VARCHAR" />
+    <result column="corpus" property="corpus" jdbcType="VARCHAR" />
+    <result column="fucheck" property="fucheck" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, user_code, skin, sclera, lymph, heartrate, rhthm, noise, tenderness, enclosedbao, 
+    hepatomegalg, selenaaxe, movethe, lower, acrotarsium, anas, breast, gynecology, vagina, 
+    cervix, corpus, fucheck
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from yh_user_personage_physical
+    where user_code = #{userCode,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from yh_user_personage_physical
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.yihe.system.domain.YhUserPersonagePhysical" >
+    insert into yh_user_personage_physical (id, user_code, skin, 
+      sclera, lymph, heartrate, 
+      rhthm, noise, tenderness, 
+      enclosedbao, hepatomegalg, selenaaxe, 
+      movethe, lower, acrotarsium, 
+      anas, breast, gynecology, 
+      vagina, cervix, corpus, 
+      fucheck)
+    values (#{id,jdbcType=INTEGER}, #{userCode,jdbcType=VARCHAR}, #{skin,jdbcType=VARCHAR}, 
+      #{sclera,jdbcType=VARCHAR}, #{lymph,jdbcType=VARCHAR}, #{heartrate,jdbcType=VARCHAR}, 
+      #{rhthm,jdbcType=VARCHAR}, #{noise,jdbcType=VARCHAR}, #{tenderness,jdbcType=VARCHAR}, 
+      #{enclosedbao,jdbcType=VARCHAR}, #{hepatomegalg,jdbcType=VARCHAR}, #{selenaaxe,jdbcType=VARCHAR}, 
+      #{movethe,jdbcType=VARCHAR}, #{lower,jdbcType=VARCHAR}, #{acrotarsium,jdbcType=VARCHAR}, 
+      #{anas,jdbcType=VARCHAR}, #{breast,jdbcType=VARCHAR}, #{gynecology,jdbcType=VARCHAR}, 
+      #{vagina,jdbcType=VARCHAR}, #{cervix,jdbcType=VARCHAR}, #{corpus,jdbcType=VARCHAR}, 
+      #{fucheck,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.yihe.system.domain.YhUserPersonagePhysical" >
+    insert into yh_user_personage_physical
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="userCode != null" >
+        user_code,
+      </if>
+      <if test="skin != null" >
+        skin,
+      </if>
+      <if test="sclera != null" >
+        sclera,
+      </if>
+      <if test="lymph != null" >
+        lymph,
+      </if>
+      <if test="heartrate != null" >
+        heartrate,
+      </if>
+      <if test="rhthm != null" >
+        rhthm,
+      </if>
+      <if test="noise != null" >
+        noise,
+      </if>
+      <if test="tenderness != null" >
+        tenderness,
+      </if>
+      <if test="enclosedbao != null" >
+        enclosedbao,
+      </if>
+      <if test="hepatomegalg != null" >
+        hepatomegalg,
+      </if>
+      <if test="selenaaxe != null" >
+        selenaaxe,
+      </if>
+      <if test="movethe != null" >
+        movethe,
+      </if>
+      <if test="lower != null" >
+        lower,
+      </if>
+      <if test="acrotarsium != null" >
+        acrotarsium,
+      </if>
+      <if test="anas != null" >
+        anas,
+      </if>
+      <if test="breast != null" >
+        breast,
+      </if>
+      <if test="gynecology != null" >
+        gynecology,
+      </if>
+      <if test="vagina != null" >
+        vagina,
+      </if>
+      <if test="cervix != null" >
+        cervix,
+      </if>
+      <if test="corpus != null" >
+        corpus,
+      </if>
+      <if test="fucheck != null" >
+        fucheck,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="userCode != null" >
+        #{userCode,jdbcType=VARCHAR},
+      </if>
+      <if test="skin != null" >
+        #{skin,jdbcType=VARCHAR},
+      </if>
+      <if test="sclera != null" >
+        #{sclera,jdbcType=VARCHAR},
+      </if>
+      <if test="lymph != null" >
+        #{lymph,jdbcType=VARCHAR},
+      </if>
+      <if test="heartrate != null" >
+        #{heartrate,jdbcType=VARCHAR},
+      </if>
+      <if test="rhthm != null" >
+        #{rhthm,jdbcType=VARCHAR},
+      </if>
+      <if test="noise != null" >
+        #{noise,jdbcType=VARCHAR},
+      </if>
+      <if test="tenderness != null" >
+        #{tenderness,jdbcType=VARCHAR},
+      </if>
+      <if test="enclosedbao != null" >
+        #{enclosedbao,jdbcType=VARCHAR},
+      </if>
+      <if test="hepatomegalg != null" >
+        #{hepatomegalg,jdbcType=VARCHAR},
+      </if>
+      <if test="selenaaxe != null" >
+        #{selenaaxe,jdbcType=VARCHAR},
+      </if>
+      <if test="movethe != null" >
+        #{movethe,jdbcType=VARCHAR},
+      </if>
+      <if test="lower != null" >
+        #{lower,jdbcType=VARCHAR},
+      </if>
+      <if test="acrotarsium != null" >
+        #{acrotarsium,jdbcType=VARCHAR},
+      </if>
+      <if test="anas != null" >
+        #{anas,jdbcType=VARCHAR},
+      </if>
+      <if test="breast != null" >
+        #{breast,jdbcType=VARCHAR},
+      </if>
+      <if test="gynecology != null" >
+        #{gynecology,jdbcType=VARCHAR},
+      </if>
+      <if test="vagina != null" >
+        #{vagina,jdbcType=VARCHAR},
+      </if>
+      <if test="cervix != null" >
+        #{cervix,jdbcType=VARCHAR},
+      </if>
+      <if test="corpus != null" >
+        #{corpus,jdbcType=VARCHAR},
+      </if>
+      <if test="fucheck != null" >
+        #{fucheck,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.yihe.system.domain.YhUserPersonagePhysical" >
+    update yh_user_personage_physical
+    <set >
+      <if test="userCode != null" >
+        user_code = #{userCode,jdbcType=VARCHAR},
+      </if>
+      <if test="skin != null" >
+        skin = #{skin,jdbcType=VARCHAR},
+      </if>
+      <if test="sclera != null" >
+        sclera = #{sclera,jdbcType=VARCHAR},
+      </if>
+      <if test="lymph != null" >
+        lymph = #{lymph,jdbcType=VARCHAR},
+      </if>
+      <if test="heartrate != null" >
+        heartrate = #{heartrate,jdbcType=VARCHAR},
+      </if>
+      <if test="rhthm != null" >
+        rhthm = #{rhthm,jdbcType=VARCHAR},
+      </if>
+      <if test="noise != null" >
+        noise = #{noise,jdbcType=VARCHAR},
+      </if>
+      <if test="tenderness != null" >
+        tenderness = #{tenderness,jdbcType=VARCHAR},
+      </if>
+      <if test="enclosedbao != null" >
+        enclosedbao = #{enclosedbao,jdbcType=VARCHAR},
+      </if>
+      <if test="hepatomegalg != null" >
+        hepatomegalg = #{hepatomegalg,jdbcType=VARCHAR},
+      </if>
+      <if test="selenaaxe != null" >
+        selenaaxe = #{selenaaxe,jdbcType=VARCHAR},
+      </if>
+      <if test="movethe != null" >
+        movethe = #{movethe,jdbcType=VARCHAR},
+      </if>
+      <if test="lower != null" >
+        lower = #{lower,jdbcType=VARCHAR},
+      </if>
+      <if test="acrotarsium != null" >
+        acrotarsium = #{acrotarsium,jdbcType=VARCHAR},
+      </if>
+      <if test="anas != null" >
+        anas = #{anas,jdbcType=VARCHAR},
+      </if>
+      <if test="breast != null" >
+        breast = #{breast,jdbcType=VARCHAR},
+      </if>
+      <if test="gynecology != null" >
+        gynecology = #{gynecology,jdbcType=VARCHAR},
+      </if>
+      <if test="vagina != null" >
+        vagina = #{vagina,jdbcType=VARCHAR},
+      </if>
+      <if test="cervix != null" >
+        cervix = #{cervix,jdbcType=VARCHAR},
+      </if>
+      <if test="corpus != null" >
+        corpus = #{corpus,jdbcType=VARCHAR},
+      </if>
+      <if test="fucheck != null" >
+        fucheck = #{fucheck,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.yihe.system.domain.YhUserPersonagePhysical" >
+    update yh_user_personage_physical
+    set id = #{id,jdbcType=INTEGER},
+      skin = #{skin,jdbcType=VARCHAR},
+      sclera = #{sclera,jdbcType=VARCHAR},
+      lymph = #{lymph,jdbcType=VARCHAR},
+      heartrate = #{heartrate,jdbcType=VARCHAR},
+      rhthm = #{rhthm,jdbcType=VARCHAR},
+      noise = #{noise,jdbcType=VARCHAR},
+      tenderness = #{tenderness,jdbcType=VARCHAR},
+      enclosedbao = #{enclosedbao,jdbcType=VARCHAR},
+      hepatomegalg = #{hepatomegalg,jdbcType=VARCHAR},
+      selenaaxe = #{selenaaxe,jdbcType=VARCHAR},
+      movethe = #{movethe,jdbcType=VARCHAR},
+      lower = #{lower,jdbcType=VARCHAR},
+      acrotarsium = #{acrotarsium,jdbcType=VARCHAR},
+      anas = #{anas,jdbcType=VARCHAR},
+      breast = #{breast,jdbcType=VARCHAR},
+      gynecology = #{gynecology,jdbcType=VARCHAR},
+      vagina = #{vagina,jdbcType=VARCHAR},
+      cervix = #{cervix,jdbcType=VARCHAR},
+      corpus = #{corpus,jdbcType=VARCHAR},
+      fucheck = #{fucheck,jdbcType=VARCHAR}
+    where user_code = #{userCode,jdbcType=VARCHAR}
+  </update>
+</mapper>

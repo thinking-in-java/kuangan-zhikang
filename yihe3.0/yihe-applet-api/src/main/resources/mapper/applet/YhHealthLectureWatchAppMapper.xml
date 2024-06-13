@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yihe.applet.api.mapper.YhHealthLectureWatchAppMapper" >
+  <resultMap id="BaseResultMap" type="com.yihe.applet.api.domain.YhHealthLectureWatchApp" >
+    <id column="watchId" property="watchid" jdbcType="INTEGER" />
+    <result column="user_code" property="userCode" jdbcType="VARCHAR" />
+    <result column="class_id" property="classId" jdbcType="INTEGER" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="mobile" property="mobile" jdbcType="VARCHAR" />
+    <result column="age" property="age" jdbcType="INTEGER" />
+    <result column="org_name" property="orgName" jdbcType="VARCHAR" />
+    <result column="watch_date" property="watchDate" jdbcType="TIMESTAMP" />
+    <result column="end_time" property="endTime" jdbcType="TIMESTAMP" />
+    <result column="watch_time" property="watchTime" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="VARCHAR" />
+    <result column="title" property="title" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    watchId, user_code, class_id, name, mobile, age, org_name, watch_date, end_time, 
+    watch_time, status, title
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from yh_health_lecture_watch
+    where watchId = #{watchid,jdbcType=INTEGER}
+  </select>
+  
+  <select id="selectYhHealthLectureWatch" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select * from yh_health_lecture_watch
+    where class_id = #{classId,jdbcType=INTEGER}
+  </select>
+  
+  <select id="selectclassIdByParam" resultMap="BaseResultMap">
+     select t1.*,t2.typeid 
+      from yh_health_lecture_watch t1
+      left join yh_health_lecture_info t2
+      on t1.class_id = t2.infoId
+    where t1.user_code=#{userCode,jdbcType=VARCHAR} and class_id=#{classId,jdbcType=INTEGER}
+    ORDER BY
+	t1.watchId DESC
+    LIMIT 1
+  </select>
+  
+  
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from yh_health_lecture_watch
+    where watchId = #{watchid,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.yihe.applet.api.domain.YhHealthLectureWatchApp" >
+    insert into yh_health_lecture_watch (watchId, user_code, class_id, 
+      name, mobile, age, 
+      org_name, watch_date, end_time, 
+      watch_time, status, title
+      )
+    values (#{watchid,jdbcType=INTEGER}, #{userCode,jdbcType=VARCHAR}, #{classId,jdbcType=INTEGER}, 
+      #{name,jdbcType=VARCHAR}, #{mobile,jdbcType=VARCHAR}, #{age,jdbcType=INTEGER}, 
+      #{orgName,jdbcType=VARCHAR}, #{watchDate,jdbcType=TIMESTAMP}, #{endTime,jdbcType=TIMESTAMP}, 
+      #{watchTime,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR}, #{title,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.yihe.applet.api.domain.YhHealthLectureWatchApp" >
+    insert into yh_health_lecture_watch
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="watchid != null" >
+        watchId,
+      </if>
+      <if test="userCode != null" >
+        user_code,
+      </if>
+      <if test="classId != null" >
+        class_id,
+      </if>
+      <if test="name != null" >
+        name,
+      </if>
+      <if test="mobile != null" >
+        mobile,
+      </if>
+      <if test="age != null" >
+        age,
+      </if>
+      <if test="orgName != null" >
+        org_name,
+      </if>
+      <if test="watchDate != null" >
+        watch_date,
+      </if>
+      <if test="endTime != null" >
+        end_time,
+      </if>
+      <if test="watchTime != null" >
+        watch_time,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="title != null" >
+        title,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="watchid != null" >
+        #{watchid,jdbcType=INTEGER},
+      </if>
+      <if test="userCode != null" >
+        #{userCode,jdbcType=VARCHAR},
+      </if>
+      <if test="classId != null" >
+        #{classId,jdbcType=INTEGER},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="mobile != null" >
+        #{mobile,jdbcType=VARCHAR},
+      </if>
+      <if test="age != null" >
+        #{age,jdbcType=INTEGER},
+      </if>
+      <if test="orgName != null" >
+        #{orgName,jdbcType=VARCHAR},
+      </if>
+      <if test="watchDate != null" >
+        #{watchDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="endTime != null" >
+        #{endTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="watchTime != null" >
+        #{watchTime,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="title != null" >
+        #{title,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.yihe.applet.api.domain.YhHealthLectureWatchApp" >
+    update yh_health_lecture_watch
+    <set >
+      <if test="userCode != null" >
+        user_code = #{userCode,jdbcType=VARCHAR},
+      </if>
+      <if test="classId != null" >
+        class_id = #{classId,jdbcType=INTEGER},
+      </if>
+      <if test="name != null" >
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="mobile != null" >
+        mobile = #{mobile,jdbcType=VARCHAR},
+      </if>
+      <if test="age != null" >
+        age = #{age,jdbcType=INTEGER},
+      </if>
+      <if test="orgName != null" >
+        org_name = #{orgName,jdbcType=VARCHAR},
+      </if>
+      <if test="watchDate != null" >
+        watch_date = #{watchDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="endTime != null" >
+        end_time = #{endTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="watchTime != null" >
+        watch_time = #{watchTime,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="title != null" >
+        title = #{title,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where watchId = #{watchid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.yihe.applet.api.domain.YhHealthLectureWatchApp" >
+    update yh_health_lecture_watch
+    set user_code = #{userCode,jdbcType=VARCHAR},
+      class_id = #{classId,jdbcType=INTEGER},
+      name = #{name,jdbcType=VARCHAR},
+      mobile = #{mobile,jdbcType=VARCHAR},
+      age = #{age,jdbcType=INTEGER},
+      org_name = #{orgName,jdbcType=VARCHAR},
+      watch_date = #{watchDate,jdbcType=TIMESTAMP},
+      end_time = #{endTime,jdbcType=TIMESTAMP},
+      watch_time = #{watchTime,jdbcType=VARCHAR},
+      status = #{status,jdbcType=VARCHAR},
+      title = #{title,jdbcType=VARCHAR}
+    where watchId = #{watchid,jdbcType=INTEGER}
+  </update>
+  
+  
+  <update id="update" parameterType="com.yihe.applet.api.domain.YhHealthLectureWatchApp" >
+   		update yh_health_lecture_watch
+   		 set  name = #{name,jdbcType=VARCHAR},
+      mobile = #{mobile,jdbcType=VARCHAR},
+      age = #{age,jdbcType=INTEGER},
+      org_name = #{orgName,jdbcType=VARCHAR},
+      watch_date = #{watchDate,jdbcType=TIMESTAMP},
+      end_time = #{endTime,jdbcType=TIMESTAMP},
+      watch_time = #{watchTime,jdbcType=VARCHAR},
+      status = #{status,jdbcType=VARCHAR},
+      title = #{title,jdbcType=VARCHAR}
+        where user_code = #{userCode,jdbcType=VARCHAR} and class_id=#{classId,jdbcType=INTEGER}
+  </update>
+  
+</mapper>

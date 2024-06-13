@@ -1,0 +1,343 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yihe.applet.api.mapper.YhUserEcgAppMapper">
+  <resultMap id="BaseResultMap" type="com.yihe.applet.api.domain.YhUserEcgApp">
+    <id column="U_ECG_Id" jdbcType="INTEGER" property="uEcgId" />
+    <result column="test_hj" jdbcType="VARCHAR" property="testHj" />
+    <result column="sr" jdbcType="INTEGER" property="sr" />
+    <result column="tr" jdbcType="INTEGER" property="tr" />
+    <result column="Pulse" jdbcType="INTEGER" property="pulse" />
+    <result column="ResultCode" jdbcType="INTEGER" property="resultcode" />
+    <result column="xd_Value" jdbcType="VARCHAR" property="xdValue" />
+    <result column="Entry_Time" jdbcType="VARCHAR" property="entryTime" />
+    <result column="Is_Del" jdbcType="INTEGER" property="isDel" />
+    <result column="E_User_Id" jdbcType="INTEGER" property="eUserId" />
+    <result column="pig_path" jdbcType="VARCHAR" property="pigPath" />
+    <result column="resurt_text" jdbcType="VARCHAR" property="resurtText" />
+    <result column="Data_Source" jdbcType="VARCHAR" property="dataSource" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    U_ECG_Id, test_hj, sr, tr, Pulse, ResultCode, xd_Value, Entry_Time, Is_Del, E_User_Id, 
+    pig_path, resurt_text, Data_Source
+  </sql>
+  <select id="selectByPrimaryKeyNewest" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    FROM `yh_user_ecg` WHERE Is_Del=2 AND E_User_Id=#{eid}
+		ORDER BY Entry_Time DESC LIMIT 1
+  </select>
+   
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from yh_user_ecg
+    where U_ECG_Id = #{uEcgId,jdbcType=INTEGER}
+  </select>
+   <select id="selectByPrimaryKeyFindEntryTime" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    Entry_Time
+    from yh_user_ecg
+    where E_User_Id = #{E_User_Id,jdbcType=INTEGER} and  Is_Del=2
+    
+  </select>
+  
+   <select id="selectByPrimaryKeyFindEntryTimeAnduserid"   resultMap="BaseResultMap">
+   SELECT 
+	<include refid="Base_Column_List" />
+	FROM `yh_user_ecg` WHERE Entry_Time LIKE concat(concat('',#{time}),'%') AND E_User_Id=#{usercode} order by Entry_Time desc
+    
+  </select>
+  <select id="selectByPrimaryKeyOrderByTimeLimit1" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from yh_user_ecg
+    where E_User_Id = #{eid} and Is_Del=2 
+    order by Entry_Time desc
+    limit 1
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from yh_user_ecg
+    where U_ECG_Id = #{uEcgId,jdbcType=INTEGER}
+  </delete>
+  
+  <insert id="insert" parameterType="com.yihe.applet.api.domain.YhUserEcgApp">
+    <selectKey keyProperty="uEcgId" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into yh_user_ecg (test_hj, sr, tr, 
+      Pulse, ResultCode, xd_Value, 
+      Entry_Time, Is_Del, E_User_Id, 
+      pig_path, resurt_text, Data_Source
+      )
+    values (#{testHj,jdbcType=VARCHAR}, #{sr,jdbcType=INTEGER}, #{tr,jdbcType=INTEGER}, 
+      #{pulse,jdbcType=INTEGER}, #{resultcode,jdbcType=INTEGER}, #{xdValue,jdbcType=VARCHAR}, 
+      #{entryTime,jdbcType=VARCHAR}, #{isDel,jdbcType=INTEGER}, #{eUserId,jdbcType=INTEGER}, 
+      #{pigPath,jdbcType=VARCHAR}, #{resurtText,jdbcType=VARCHAR}, #{dataSource,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.yihe.applet.api.domain.YhUserEcgApp">
+    <selectKey keyProperty="uEcgId" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into yh_user_ecg
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="testHj != null">
+        test_hj,
+      </if>
+      <if test="sr != null">
+        sr,
+      </if>
+      <if test="tr != null">
+        tr,
+      </if>
+      <if test="pulse != null">
+        Pulse,
+      </if>
+      <if test="resultcode != null">
+        ResultCode,
+      </if>
+      <if test="xdValue != null">
+        xd_Value,
+      </if>
+      <if test="entryTime != null">
+        Entry_Time,
+      </if>
+      <if test="isDel != null">
+        Is_Del,
+      </if>
+      <if test="eUserId != null">
+        E_User_Id,
+      </if>
+      <if test="pigPath != null">
+        pig_path,
+      </if>
+      <if test="resurtText != null">
+        resurt_text,
+      </if>
+      <if test="dataSource != null">
+        Data_Source,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="testHj != null">
+        #{testHj,jdbcType=VARCHAR},
+      </if>
+      <if test="sr != null">
+        #{sr,jdbcType=INTEGER},
+      </if>
+      <if test="tr != null">
+        #{tr,jdbcType=INTEGER},
+      </if>
+      <if test="pulse != null">
+        #{pulse,jdbcType=INTEGER},
+      </if>
+      <if test="resultcode != null">
+        #{resultcode,jdbcType=INTEGER},
+      </if>
+      <if test="xdValue != null">
+        #{xdValue,jdbcType=VARCHAR},
+      </if>
+      <if test="entryTime != null">
+        #{entryTime,jdbcType=VARCHAR},
+      </if>
+      <if test="isDel != null">
+        #{isDel,jdbcType=INTEGER},
+      </if>
+      <if test="eUserId != null">
+        #{eUserId,jdbcType=INTEGER},
+      </if>
+      <if test="pigPath != null">
+        #{pigPath,jdbcType=VARCHAR},
+      </if>
+      <if test="resurtText != null">
+        #{resurtText,jdbcType=VARCHAR},
+      </if>
+      <if test="dataSource != null">
+        #{dataSource,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+   
+  <update id="updateByExampleSelective" parameterType="map">
+    update yh_user_ecg
+    <set>
+      <if test="record.uEcgId != null">
+        U_ECG_Id = #{record.uEcgId,jdbcType=INTEGER},
+      </if>
+      <if test="record.testHj != null">
+        test_hj = #{record.testHj,jdbcType=VARCHAR},
+      </if>
+      <if test="record.sr != null">
+        sr = #{record.sr,jdbcType=INTEGER},
+      </if>
+      <if test="record.tr != null">
+        tr = #{record.tr,jdbcType=INTEGER},
+      </if>
+      <if test="record.pulse != null">
+        Pulse = #{record.pulse,jdbcType=INTEGER},
+      </if>
+      <if test="record.resultcode != null">
+        ResultCode = #{record.resultcode,jdbcType=INTEGER},
+      </if>
+      <if test="record.xdValue != null">
+        xd_Value = #{record.xdValue,jdbcType=VARCHAR},
+      </if>
+      <if test="record.entryTime != null">
+        Entry_Time = #{record.entryTime,jdbcType=VARCHAR},
+      </if>
+      <if test="record.isDel != null">
+        Is_Del = #{record.isDel,jdbcType=INTEGER},
+      </if>
+      <if test="record.eUserId != null">
+        E_User_Id = #{record.eUserId,jdbcType=INTEGER},
+      </if>
+      <if test="record.pigPath != null">
+        pig_path = #{record.pigPath,jdbcType=VARCHAR},
+      </if>
+      <if test="record.resurtText != null">
+        resurt_text = #{record.resurtText,jdbcType=VARCHAR},
+      </if>
+      <if test="record.dataSource != null">
+        Data_Source = #{record.dataSource,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update yh_user_ecg
+    set U_ECG_Id = #{record.uEcgId,jdbcType=INTEGER},
+      test_hj = #{record.testHj,jdbcType=VARCHAR},
+      sr = #{record.sr,jdbcType=INTEGER},
+      tr = #{record.tr,jdbcType=INTEGER},
+      Pulse = #{record.pulse,jdbcType=INTEGER},
+      ResultCode = #{record.resultcode,jdbcType=INTEGER},
+      xd_Value = #{record.xdValue,jdbcType=VARCHAR},
+      Entry_Time = #{record.entryTime,jdbcType=VARCHAR},
+      Is_Del = #{record.isDel,jdbcType=INTEGER},
+      E_User_Id = #{record.eUserId,jdbcType=INTEGER},
+      pig_path = #{record.pigPath,jdbcType=VARCHAR},
+      resurt_text = #{record.resurtText,jdbcType=VARCHAR},
+      Data_Source = #{record.dataSource,jdbcType=VARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.yihe.applet.api.domain.YhUserEcgApp">
+    update yh_user_ecg
+    <set>
+      <if test="testHj != null">
+        test_hj = #{testHj,jdbcType=VARCHAR},
+      </if>
+      <if test="sr != null">
+        sr = #{sr,jdbcType=INTEGER},
+      </if>
+      <if test="tr != null">
+        tr = #{tr,jdbcType=INTEGER},
+      </if>
+      <if test="pulse != null">
+        Pulse = #{pulse,jdbcType=INTEGER},
+      </if>
+      <if test="resultcode != null">
+        ResultCode = #{resultcode,jdbcType=INTEGER},
+      </if>
+      <if test="xdValue != null">
+        xd_Value = #{xdValue,jdbcType=VARCHAR},
+      </if>
+      <if test="entryTime != null">
+        Entry_Time = #{entryTime,jdbcType=VARCHAR},
+      </if>
+      <if test="isDel != null">
+        Is_Del = #{isDel,jdbcType=INTEGER},
+      </if>
+      <if test="eUserId != null">
+        E_User_Id = #{eUserId,jdbcType=INTEGER},
+      </if>
+      <if test="pigPath != null">
+        pig_path = #{pigPath,jdbcType=VARCHAR},
+      </if>
+      <if test="resurtText != null">
+        resurt_text = #{resurtText,jdbcType=VARCHAR},
+      </if>
+      <if test="dataSource != null">
+        Data_Source = #{dataSource,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where U_ECG_Id = #{uEcgId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.yihe.applet.api.domain.YhUserEcgApp">
+    update yh_user_ecg
+    set test_hj = #{testHj,jdbcType=VARCHAR},
+      sr = #{sr,jdbcType=INTEGER},
+      tr = #{tr,jdbcType=INTEGER},
+      Pulse = #{pulse,jdbcType=INTEGER},
+      ResultCode = #{resultcode,jdbcType=INTEGER},
+      xd_Value = #{xdValue,jdbcType=VARCHAR},
+      Entry_Time = #{entryTime,jdbcType=VARCHAR},
+      Is_Del = #{isDel,jdbcType=INTEGER},
+      E_User_Id = #{eUserId,jdbcType=INTEGER},
+      pig_path = #{pigPath,jdbcType=VARCHAR},
+      resurt_text = #{resurtText,jdbcType=VARCHAR},
+      Data_Source = #{dataSource,jdbcType=VARCHAR}
+    where U_ECG_Id = #{uEcgId,jdbcType=INTEGER}
+  </update>
+</mapper>

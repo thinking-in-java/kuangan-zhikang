@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yihe.applet.api.mapper.YhFoodHotSearchMapper" >
+  <resultMap id="BaseResultMap" type="com.yihe.applet.api.domain.YhFoodHotSearch" >
+    <id column="hid" property="hid" jdbcType="INTEGER" />
+    <result column="foodname" property="foodname" jdbcType="VARCHAR" />
+    <result column="heat" property="heat" jdbcType="INTEGER" />
+    <result column="usercode" property="usercode" jdbcType="VARCHAR" />
+    <result column="C_Time" property="cTime" jdbcType="VARCHAR" />
+    <result column="spare" property="spare" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    hid, foodname, heat, usercode, C_Time, spare
+  </sql>
+  <!-- 查询某食材是否存在热门表 -->
+  <select id="findFoodHotSearchByFoodName" resultMap="BaseResultMap">
+  SELECT  <include refid="Base_Column_List" />  FROM `yh_food_hot_search` WHERE foodname=#{foodName} limit 1
+  </select>
+  <!-- 查询热门食材的前10个 -->
+  <select id="findFoodHotSearchInfoLimit10" resultMap="BaseResultMap">
+  SELECT  <include refid="Base_Column_List" /> FROM `yh_food_hot_search` WHERE 1=1 ORDER BY heat DESC LIMIT 10
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from yh_food_hot_search
+    where hid = #{hid,jdbcType=INTEGER}
+  </select>
+  <update id="hotFoodAddHeat">
+  UPDATE 
+  `yh_food_hot_search` 
+SET
+  
+ 
+  `heat` = heat+1
+  
+   
+WHERE `foodname` = #{foodName}
+  </update>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from yh_food_hot_search
+    where hid = #{hid,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.yihe.applet.api.domain.YhFoodHotSearch" >
+    insert into yh_food_hot_search (hid, foodname, heat, 
+      usercode, C_Time, spare
+      )
+    values (#{hid,jdbcType=INTEGER}, #{foodname,jdbcType=VARCHAR}, #{heat,jdbcType=INTEGER}, 
+      #{usercode,jdbcType=VARCHAR}, #{cTime,jdbcType=VARCHAR}, #{spare,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.yihe.applet.api.domain.YhFoodHotSearch" >
+    insert into yh_food_hot_search
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="hid != null" >
+        hid,
+      </if>
+      <if test="foodname != null" >
+        foodname,
+      </if>
+      <if test="heat != null" >
+        heat,
+      </if>
+      <if test="usercode != null" >
+        usercode,
+      </if>
+      <if test="cTime != null" >
+        C_Time,
+      </if>
+      <if test="spare != null" >
+        spare,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="hid != null" >
+        #{hid,jdbcType=INTEGER},
+      </if>
+      <if test="foodname != null" >
+        #{foodname,jdbcType=VARCHAR},
+      </if>
+      <if test="heat != null" >
+        #{heat,jdbcType=INTEGER},
+      </if>
+      <if test="usercode != null" >
+        #{usercode,jdbcType=VARCHAR},
+      </if>
+      <if test="cTime != null" >
+        #{cTime,jdbcType=VARCHAR},
+      </if>
+      <if test="spare != null" >
+        #{spare,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.yihe.applet.api.domain.YhFoodHotSearch" >
+    update yh_food_hot_search
+    <set >
+      <if test="foodname != null" >
+        foodname = #{foodname,jdbcType=VARCHAR},
+      </if>
+      <if test="heat != null" >
+        heat = #{heat,jdbcType=INTEGER},
+      </if>
+      <if test="usercode != null" >
+        usercode = #{usercode,jdbcType=VARCHAR},
+      </if>
+      <if test="cTime != null" >
+        C_Time = #{cTime,jdbcType=VARCHAR},
+      </if>
+      <if test="spare != null" >
+        spare = #{spare,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where hid = #{hid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.yihe.applet.api.domain.YhFoodHotSearch" >
+    update yh_food_hot_search
+    set foodname = #{foodname,jdbcType=VARCHAR},
+      heat = #{heat,jdbcType=INTEGER},
+      usercode = #{usercode,jdbcType=VARCHAR},
+      C_Time = #{cTime,jdbcType=VARCHAR},
+      spare = #{spare,jdbcType=VARCHAR}
+    where hid = #{hid,jdbcType=INTEGER}
+  </update>
+</mapper>

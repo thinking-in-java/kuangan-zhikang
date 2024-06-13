@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yihe.system.mapper.YhUserApiMapper">
+
+	<!-- 权限 -->
+	<resultMap id="PermissionResultMap" type="com.yihe.system.domain.YhUserPermission">
+	    <id column="permission_id" jdbcType="INTEGER" property="permissionId" />
+	    <result column="system_id" jdbcType="INTEGER" property="systemId" />
+	    <result column="pid" jdbcType="INTEGER" property="pid" />
+	    <result column="name" jdbcType="VARCHAR" property="name" />
+	    <result column="type" jdbcType="TINYINT" property="type" />
+	    <result column="permission_value" jdbcType="VARCHAR" property="permissionValue" />
+	    <result column="uri" jdbcType="VARCHAR" property="uri" />
+	    <result column="icon" jdbcType="VARCHAR" property="icon" />
+	    <result column="status" jdbcType="TINYINT" property="status" />
+	    <result column="ctime" jdbcType="BIGINT" property="ctime" />
+	    <result column="orders" jdbcType="BIGINT" property="orders" />
+    </resultMap>
+  
+
+	<!-- 角色 -->
+	<resultMap id="RoleResultMap" type="com.yihe.system.domain.YhUserRole">
+	    <id column="role_id" jdbcType="INTEGER" property="roleId" />
+	    <result column="role_name" jdbcType="VARCHAR" property="roleName" />
+	    <result column="role_description" jdbcType="VARCHAR" property="roleDescription" />
+	    <result column="role_ctime" jdbcType="TIMESTAMP" property="roleCtime" />
+	    <result column="orders" jdbcType="BIGINT" property="orders" />
+    </resultMap>
+	
+
+	<!-- 权限字段 -->
+	<sql id="UpmsPermission_Column_List">
+		permission_id, system_id, pid, name, type, permission_value, uri, icon, status, ctime,orders
+	</sql>
+
+	<!-- 角色字段 -->
+	<sql id="UpmsRole_Column_List">
+		role_id, role_name, role_description, role_ctime, orders,role_type as  roletype
+	</sql>
+
+	<!-- 根据用户获取所拥有的权限 -->
+	<select id="selectYhUserPermissionByUserId" parameterType="java.lang.String" resultMap="PermissionResultMap">
+		select
+			<include refid="UpmsPermission_Column_List" />
+		from yh_user_permission up where up.`status`=1 and up.permission_id in (
+			select permission_id from yh_user_role_permission urp where urp.role_id in (
+				select uur.roleId role_id from yh_user_role_power uur where uur.userId=#{upmsUserId,jdbcType=VARCHAR}
+			)
+			union
+			select user_role from yh_user_role_relation uup1 where uup1.user_code=#{upmsUserId,jdbcType=VARCHAR} and uup1.type=1
+		)
+		and up.permission_id not in (
+			select user_role from yh_user_role_relation uup2 where uup2.user_code=#{upmsUserId,jdbcType=VARCHAR} and uup2.type=-1
+		) order by up.orders asc
+	</select>
+
+	<!-- 根据用户id获取所属的角色 -->
+	<select id="selectYhUserRoleByUserId" parameterType="java.lang.String" resultMap="RoleResultMap">
+		select
+			<include refid="UpmsRole_Column_List" />
+		from yh_user_role ur where ur.role_id in (
+			select uur.roleId from yh_user_role_power uur where uur.userId=#{upmsUserId,jdbcType=VARCHAR}
+		)
+	</select>
+
+	<!-- 缓存 -->
+
+</mapper>

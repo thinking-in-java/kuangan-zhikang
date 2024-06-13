@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yihe.applet.api.mapper.YhUserFileAppMapper" >
+  <resultMap id="BaseResultMap" type="com.yihe.applet.api.domain.YhUserFileApp" >
+    <id column="file_id" property="fileId" jdbcType="BIGINT" />
+    <result column="file_type" property="fileType" jdbcType="INTEGER" />
+    <result column="file_name" property="fileName" jdbcType="VARCHAR" />
+    <result column="file_size" property="fileSize" jdbcType="VARCHAR" />
+    <result column="file_parent_folder" property="fileParentFolder" jdbcType="VARCHAR" />
+    <result column="file_url" property="fileUrl" jdbcType="VARCHAR" />
+    <result column="file_create_date" property="fileCreateDate" jdbcType="TIMESTAMP" />
+    <result column="user_code" property="userCode" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    file_id, file_type, file_name, file_size, file_parent_folder, file_url, file_create_date, 
+    user_code
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from yh_user_file
+    where file_id = #{fileId,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from yh_user_file
+    where file_id = #{fileId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.yihe.applet.api.domain.YhUserFileApp" >
+    insert into yh_user_file (file_id, file_type, file_name, 
+      file_size, file_parent_folder, file_url, 
+      file_create_date, user_code)
+    values (#{fileId,jdbcType=BIGINT}, #{fileType,jdbcType=INTEGER}, #{fileName,jdbcType=VARCHAR}, 
+      #{fileSize,jdbcType=VARCHAR}, #{fileParentFolder,jdbcType=VARCHAR}, #{fileUrl,jdbcType=VARCHAR}, 
+      #{fileCreateDate,jdbcType=TIMESTAMP}, #{userCode,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.yihe.applet.api.domain.YhUserFileApp" >
+    insert into yh_user_file
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="fileId != null" >
+        file_id,
+      </if>
+      <if test="fileType != null" >
+        file_type,
+      </if>
+      <if test="fileName != null" >
+        file_name,
+      </if>
+      <if test="fileSize != null" >
+        file_size,
+      </if>
+      <if test="fileParentFolder != null" >
+        file_parent_folder,
+      </if>
+      <if test="fileUrl != null" >
+        file_url,
+      </if>
+      <if test="fileCreateDate != null" >
+        file_create_date,
+      </if>
+      <if test="userCode != null" >
+        user_code,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="fileId != null" >
+        #{fileId,jdbcType=BIGINT},
+      </if>
+      <if test="fileType != null" >
+        #{fileType,jdbcType=INTEGER},
+      </if>
+      <if test="fileName != null" >
+        #{fileName,jdbcType=VARCHAR},
+      </if>
+      <if test="fileSize != null" >
+        #{fileSize,jdbcType=VARCHAR},
+      </if>
+      <if test="fileParentFolder != null" >
+        #{fileParentFolder,jdbcType=VARCHAR},
+      </if>
+      <if test="fileUrl != null" >
+        #{fileUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="fileCreateDate != null" >
+        #{fileCreateDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="userCode != null" >
+        #{userCode,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.yihe.applet.api.domain.YhUserFileApp" >
+    update yh_user_file
+    <set >
+      <if test="fileType != null" >
+        file_type = #{fileType,jdbcType=INTEGER},
+      </if>
+      <if test="fileName != null" >
+        file_name = #{fileName,jdbcType=VARCHAR},
+      </if>
+      <if test="fileSize != null" >
+        file_size = #{fileSize,jdbcType=VARCHAR},
+      </if>
+      <if test="fileParentFolder != null" >
+        file_parent_folder = #{fileParentFolder,jdbcType=VARCHAR},
+      </if>
+      <if test="fileUrl != null" >
+        file_url = #{fileUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="fileCreateDate != null" >
+        file_create_date = #{fileCreateDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="userCode != null" >
+        user_code = #{userCode,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where file_id = #{fileId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.yihe.applet.api.domain.YhUserFileApp" >
+    update yh_user_file
+    set file_type = #{fileType,jdbcType=INTEGER},
+      file_name = #{fileName,jdbcType=VARCHAR},
+      file_size = #{fileSize,jdbcType=VARCHAR},
+      file_parent_folder = #{fileParentFolder,jdbcType=VARCHAR},
+      file_url = #{fileUrl,jdbcType=VARCHAR},
+      file_create_date = #{fileCreateDate,jdbcType=TIMESTAMP},
+      user_code = #{userCode,jdbcType=VARCHAR}
+    where file_id = #{fileId,jdbcType=BIGINT}
+  </update>
+   <select id="selectFileByParam" parameterType="com.yihe.applet.api.domain.YhUserFileApp" resultMap="BaseResultMap">
+      select * from yh_user_file where user_code=#{userCode,jdbcType=VARCHAR} and DATE_FORMAT(file_create_date,'%Y-%m-%d')=DATE_FORMAT(#{fileCreateDate,jdbcType=TIMESTAMP},'%Y-%m-%d')
+  </select>
+  <!-- 根据时间查询分组 -->
+  <select id="selectfilCreateDate"  parameterType="java.lang.String" resultType="java.util.Date">
+       select DATE_FORMAT(file_create_date,'%Y-%m-%d') from yh_user_file where user_code=#{userCode,jdbcType=VARCHAR} group by DATE_FORMAT(file_create_date,'%Y-%m-%d')
+  </select>
+   <delete id="delete" parameterType="java.lang.Integer">
+    delete from yh_user_file
+    where file_id = #{fileId,jdbcType=BIGINT}
+  </delete>
+  
+  <!-- 查询文件内容 -->
+  <select id="selectUserFile" resultMap="BaseResultMap">
+      	select t1.*
+		from yh_user_file as t1
+		left join yh_user_folder t2
+		on t1.file_parent_folder = t2.folder_id
+		where t1.user_code=#{userCode,jdbcType=VARCHAR}
+		and file_parent_folder = #{fileParentFolder,jdbcType=VARCHAR}
+		 order by file_create_date desc limit #{page},#{pageSize}
+  </select>
+  
+  <!-- 查询文件内容 -->
+  <select id="selectUserFileByParam" resultMap="BaseResultMap">
+      	select t1.*
+		from yh_user_file as t1
+		left join yh_user_folder t2
+		on t1.file_parent_folder = t2.folder_id
+		where t1.user_code=#{userCode,jdbcType=VARCHAR} and t1.file_name like CONCAT('%',#{fileName},'%') 
+		and file_parent_folder = #{fileParentFolder,jdbcType=VARCHAR}
+		 order by file_create_date desc limit #{page},#{pageSize}
+  </select>
+</mapper>

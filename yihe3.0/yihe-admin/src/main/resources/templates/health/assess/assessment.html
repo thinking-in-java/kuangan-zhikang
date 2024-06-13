@@ -1,0 +1,2827 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, maximum-scale=1">
+<title>评估档案</title>
+<link rel="stylesheet" th:href="@{/assets/libs/layui/css/layui.css}" />
+<link rel="stylesheet" th:href="@{/assets/module/admin.css}" />
+<link rel="stylesheet" th:href="@{/assets/css/formSelects-v4.css}" />
+<style type="text/css">
+ .layui-card-body{
+    padding: 10px 0px;
+}
+.layui-fluid {
+    padding: 15px 0px;
+}
+.layui-form-switch{
+	margin: 0px 10px 0px 10px;
+}
+.layui-table-box {
+	min-height:228px;
+}
+.layui-tab-item{
+display: none;
+}
+.layui-this{
+display: block;
+}
+</style>
+</head>
+<body>
+	<!-- 加载动画 -->
+	<div class="page-loading">
+		<div class="ball-loader">
+			<span></span><span></span><span></span><span></span>
+		</div>
+	</div>
+	<div  id="GroupHtml2" style="display: none;">
+		<form id="RoleForm2" lay-filter="RoleForm"   class="layui-form model-form">
+			<div class='layui-inline' style='margin-top:14px;float:left;padding-left: 15px;'>
+
+				<div class="layui-inline">
+					<input type="text" name="gname"   placeholder="请输入分组名称" autocomplete="off" class="layui-input">
+				</div>
+
+
+			</div>
+			<button type="button" lay-submit lay-filter="fzSousuo2"    style='margin-top:14px;margin-left:10px;background-color: #5a9ae2' class="layui-btn layui-btn-normal">查询</button>
+			<div style='background-color:#e6f7ff;width: 350px;height:350px;margin-top:20px;margin-left:15px;border-radius:4px;overflow:auto'>
+				<ul id='GroupList2' style="padding-top: 15px;line-height: 26px;">
+
+				</ul>
+			</div>
+
+
+			<div class="layui-form-item text-right" style="    text-align: center;    padding-top: 10px;">
+				<button class="layui-btn layui-btn-primary" type="button" ew-event="closePageDialog">取消</button>
+				<button class="layui-btn" lay-filter="SubmitRole2" lay-submit>保存</button>
+			</div>
+		</form>
+
+
+	</div>
+	<div  id="GroupHtml" style="display: none;">
+		<form id="RoleForm" lay-filter="RoleForm"   class="layui-form model-form">
+			<div class='layui-inline' style='margin-top:14px;float:left;padding-left: 15px;'>
+
+				<div class="layui-inline">
+					<input type="text" name="gname"   placeholder="请输入分组名称" autocomplete="off" class="layui-input">
+				</div>
+
+
+			</div>
+			<button type="button" lay-submit lay-filter="fzSousuo"  id='selectyishi' style='margin-top:14px;margin-left:10px;background-color: #5a9ae2' class="layui-btn layui-btn-normal">查询</button>
+			<div style='background-color:#e6f7ff;width: 350px;height:350px;margin-top:20px;margin-left:15px;border-radius:4px;overflow:auto'>
+				<ul id='GroupList' style="padding-top: 15px;line-height: 26px;">
+
+				</ul>
+			</div>
+
+
+			<div class="layui-form-item text-right" style="    text-align: center;    padding-top: 10px;">
+				<button class="layui-btn layui-btn-primary" type="button" ew-event="closePageDialog">取消</button>
+				<button class="layui-btn" lay-filter="SubmitRole" lay-submit>保存</button>
+			</div>
+		</form>
+
+
+	</div>
+	<div id="box1" style="display: none;">
+
+		<form id="modelUserForm" lay-filter="modelUserForm"
+			class="layui-form model-form">
+			<div class="layui-form-item">
+				<label class="layui-form-label">分组</label>
+				<div class="layui-input-block">
+					<select name="groupingStr" xm-select="select1"
+						lay-verify="required" , lay-verType="tips">
+						<option th:each="glist:${selectAllInfo}"
+							th:value="${glist.uDocgroupId}">[[${glist.gname}]]</option>
+
+					</select>
+				</div>
+
+			</div>
+
+
+			<div class="layui-form-item text-right">
+				<button class="layui-btn layui-btn-primary" type="button"
+					ew-event="closePageDialog">取消</button>
+				<button class="layui-btn" lay-filter="formDemo" lay-submit>保存</button>
+			</div>
+		</form>
+
+	</div>
+	<div id="box2" style="display: none;">
+
+		<form id="modelUserForm2" lay-filter="modelUserForm2"
+			class="layui-form model-form">
+			<div class="layui-form-item">
+				<label class="layui-form-label">分组</label>
+				<div class="layui-input-block">
+					<select name="groupingStr" xm-select="select2"
+						lay-verify="required" , lay-verType="tips">
+						<option th:each="glist:${selectAllInfo}"
+							th:value="${glist.uDocgroupId}">[[${glist.gname}]]</option>
+
+					</select>
+				</div>
+
+			</div>
+
+
+			<div class="layui-form-item text-right">
+				<button class="layui-btn layui-btn-primary" type="button"
+					ew-event="closePageDialog">取消</button>
+				<button class="layui-btn" lay-filter="formDemo2" lay-submit>保存</button>
+			</div>
+		</form>
+
+	</div>
+		<div id="box3" style="display: none;">
+		<div class="layui-card">
+			<div class="layui-card-header" style="border-bottom: 0px solid #f6f6f6;">温馨提示：</div>
+			<div class="layui-card-body layui-text layadmin-text" style="padding:0px 15px">根据用户最新健康风险评估结果，系统自动将用户从对应的慢病管理干预分组中，进行加入/移除操作。例如“高血压干预管理”等。</div>
+		</div>
+		<div style="padding:0px 15px">请选择需要加入分组的风险等级范围<i class="layui-icon alone-tips layui-icon-help" lay-tips="将评估结果中符合风险等级范围的用户，自动加入到慢病干预管理分组。同时在管理分组中对他们进行分级" style="margin-left: 15px;font-size: 18px;border: 1px solid #000;border-radius: 10px;"> </i></div>
+		<form style="padding: 0px 15px;" id="modelUserForm3" lay-filter="modelUserForm3"
+			class="layui-form model-form">
+			 <table id="tableTbBas2" lay-filter="tableTbBas2"></table> 
+		<div style="padding:0px">请选择是否保留已有干预计划<i class="layui-icon alone-tips layui-icon-help" lay-tips="原来为用户定制的干预计划，保留继续执行，或者清除不再执行" style="margin-left: 15px;font-size: 18px;border: 1px solid #000;border-radius: 10px;"> </i></div>
+		<div class="layui-form-item">
+    	 
+    	<div class="layui-input-block">
+     	 <input type="radio" name="jihua" value="0" title="保留原有干预计划" checked="">
+     	 <input type="radio" name="jihua" value="1" title="清除原有干预计划">
+		    </div>
+		 </div>
+			<div class="layui-form-item text-right">
+				<button class="layui-btn layui-btn-primary" type="button"
+					ew-event="closePageDialog">取消</button>
+				<button class="layui-btn" lay-filter="formDemo3" lay-submit>保存</button>
+			</div>
+		</form>
+
+	</div>
+	<div class="layui-row layui-col-space15"  style=" margin: 0px;padding: 20px;">
+		<div class="layui-card">
+			<div class="layui-tab layui-tab-brief" lay-filter="demo">
+		<ul class="layui-tab-title">
+			<li lay-id='1' class="layui-this">评估档案</li>
+			<li lay-id='2'>评估记录</li>
+			<div class="layui-inline"style="float: right;width: 355px;">
+				<div class="layui-input-inline"
+					 style="width: 138px;margin-right: 16px;">
+					<!-- <a download="filename"> -->
+					<button class="layui-btn" type="button"id="downloadpinggu">
+						<i class="layui-icon layui-icon-download-circle"></i> 下载批量评估模板
+					</button>
+					<!-- </a> -->
+				</div>
+				<div class="layui-input-inline"
+					 style="width: 108px;margin-left: 40px;">
+					<button class="layui-btn" type="button"
+							lay-filter="regManageQueryBtn" id="uploadDatapinggu">
+						<i class="layui-icon layui-icon-addition"></i> 批量评估
+					</button>
+				</div>
+
+					<button class="" type="button" style="float:left;border-color: #e6e6e6;color: #fff;"
+							lay-filter="regManageQueryBtn" id="uploadDatapinggu2">
+						批量评估
+					</button>
+			</div>
+		</ul>
+		<div class="layui-tab-content">
+			<div class="layui-tab-item layui-show" id="tiwen2">
+				<div class="layui-fluid">
+					<div class="layui-card">
+						<div class="layui-card-body">
+
+							<div class="layui-form toolbar">
+								<div class="layui-form-item">
+									<div class="layui-inline">
+										<label class="layui-form-label" style="padding:9px 0px;text-align: left;">归&emsp;&emsp;属：</label>
+										<div class="layui-input-inline" style="width: 270px;">
+											<input type="text" id="tree" lay-filter="tree"
+												class="layui-input">
+										</div>
+									</div>
+									
+									<div class="layui-inline">
+										<label class="layui-form-label">评估记录：</label>
+										<div class="layui-input-inline">
+											<select name="assessment" id="assessment">
+												<option value="">全部</option>
+												<option value="1">有</option>
+												<option value="2">无</option>
+											</select>
+										</div>
+									</div>
+
+									<div class="layui-inline">
+										<label class="layui-form-label">干预分组：</label>
+										<div class="layui-input-inline">
+											<select name="ganyu" id="ganyu">
+												<option value="">全部</option>
+												<option th:each="glist:${selectAllInfo}"
+												th:value="${glist.uDocgroupId}">[[${glist.gname}]]</option>
+											</select>
+										</div>
+									</div>
+
+
+									<div class="layui-inline">
+										<label class="layui-form-label">姓&emsp;&emsp;名：</label>
+										<div class="layui-input-inline">
+											<input name="name" id="username" class="layui-input"
+												type="text" placeholder="输入姓名" />
+										</div>
+									</div>
+
+									<div class="layui-inline" style="padding-left: 20px;">
+									
+										<button class="layui-btn icon-btn sousuo" data-type="reload"><i class="layui-icon"></i>搜索</button>
+										<button class="layui-btn layui-btn-primary" id="btnempty" lay-submit="" lay-filter="reset">清除</button>
+									</div>
+		
+
+
+									<div class="layui-inline pull-right" style="margin-right: 0;">
+										<div class="layui-btn-group">
+
+											<a href="#" onclick="screeningList()"
+												class="layui-btn icon-btn" style="border-left: none;">
+												高级筛选 </a>
+										</div>
+									</div>
+
+								</div>
+							</div>
+							 <!-- 批量操作 -->
+			<div id="piliang" class="layui-form toolbar" style="background-color: #e6f7ff;height: 40px;margin-top: 10px;margin-bottom: 10px;display: none">
+				<span style="font-size: 14px;color: #505050;line-height: 40px;margin-left: 9px;">批量操作</span>
+				<img alt="" src="">
+				<span  id="xuanze">已选择**项</span>
+				<span id="huoqu" style="padding-left:15px ">跨页全选:</span>
+				<input type="checkbox"  lay-filter="checkall"  style="margin: 0px 10px 0px 0px;" title="跨页全选"  name="checkall"   lay-skin="switch" lay-text="跨页全选|取消">
+
+				<span id="clickxuan" style="color: #1890ff;margin-left: 15px;">清空</span>
+				 <button id="zhinengfenzu" style="line-height: 32px;width: 92px;height: 32px;float: right;margin-right: 16px;text-align: center;margin-top: 5px;background-color: #2d8cf0;color: #fff;"  class="layui-btn layui-btn-primary">智能分组&emsp;</button>
+				                <button id="xzfenzu" style="line-height: 32px;width: 92px;height: 32px;float: right;margin-right: 16px;text-align: center;margin-top: 5px"  class="layui-btn layui-btn-primary">加入分组&emsp;</button>
+				<button id="yichufenzu" style="line-height: 32px;width: 92px;height: 32px;float: right;margin-right: 16px;margin-top: 5px;"   class="layui-btn layui-btn-primary";lay-filter="fenpeiyishi">移除分组&emsp;</button>
+
+			</div>
+
+							<table id="tableTbBas" lay-filter="tableTbBas"></table>
+
+						</div>
+					</div>
+				</div>
+
+			</div>
+			<!-- 评估记录 -->
+			<div class="layui-tab-item" id="tiwen3">
+			<div class="layui-fluid">
+					<div class="layui-card">
+						<div class="layui-card-body">
+
+							<div class="layui-form toolbar">
+								<div class="layui-form-item">
+									<div class="layui-inline">
+										<label class="layui-form-label" style="padding:9px 0px;text-align: left;">姓&emsp;&emsp;名：</label>
+										<div class="layui-input-inline" style="width: 270px;">
+											<input name="name" id="name2" class="layui-input"
+												type="text" placeholder="输入姓名" />
+										</div>
+									</div>
+
+									<div class="layui-inline">
+										<label class="layui-form-label">账&emsp;&emsp;号：</label>
+										<div class="layui-input-inline">
+											<input name="username2" id="username2" class="layui-input"
+												type="text" placeholder="输入姓名" />
+										</div>
+									</div>
+
+
+									<div class="layui-inline">
+										<label class="layui-form-label">评估时间：</label>
+										<div class="layui-input-inline" style="width: 297px;">
+											<input type="text" class="layui-input" id="test10" name="startTime" placeholder=" - ">
+										</div>
+									</div>
+
+									<div class="layui-inline" style="padding-left: 20px;">
+									
+										<button class="layui-btn icon-btn sousuo2" data-type="reload"><i class="layui-icon"></i>搜索</button>
+										<button class="layui-btn layui-btn-primary" id="btnempty2" lay-submit="" lay-filter="reset">清除</button>
+									</div>
+		
+
+ 
+
+								</div>
+							</div>
+			 
+
+							<table class="layui-hide" id="pinggu"></table>
+
+						</div>
+					</div>
+				</div>
+				
+				
+			</div>
+
+
+		</div>
+	</div>
+		</div>
+	</div>
+	
+	<!-- 正文开始 -->
+
+
+	<!-- 表格操作列 -->
+	<script type="text/html" id="tableBarTbBas">
+    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="edit">修改</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+    <a class="layui-btn layui-btn-xs" data-dropdown="#dropUser{{d.LAY_INDEX}}" no-shade="true">
+        更多<i class="layui-icon layui-icon-drop" style="font-size: 12px;margin-right: 0;"></i></a>
+    <!-- 下拉菜单 -->
+    <ul class="dropdown-menu-nav dropdown-bottom-right layui-hide" id="dropUser{{d.LAY_INDEX}}">
+        <div class="dropdown-anchor"></div>
+        <li><a lay-event="edit2"><i class="layui-icon layui-icon-edit"></i>修改用户</a></li>
+        <li><a lay-event="del2"><i class="layui-icon layui-icon-delete"></i>删除用户</a></li>
+        <li><a lay-event="lock2"><i class="layui-icon layui-icon-password"></i>锁定用户</a></li>
+    </ul>
+</script>
+	<!-- js部分 -->
+	<script type="text/javascript" th:src="@{/assets/libs/layui/layui.js}"></script>
+	<script type="text/javascript" th:src="@{/assets/js/common.js}"></script>
+	<script type="text/javascript"
+		th:src="@{/assets/js/formSelects-v4.min.js}"></script>
+	
+	<script type="text/html" id="tplStateTbAdv">
+    <input type="checkbox" lay-filter="ckStateTbAdv" value="{{d.usercode}}" lay-skin="switch"
+           lay-text="已干预|未干预" {{d.intervene==1?'checked':''}}/>
+  
+</script>
+
+	<script type="text/html" id="demoEDStateBargfx">
+     {{# if(d.highRiskInfo==""||d.highRiskInfo==null){ }}
+       <span></span>
+    {{# }else{ }}
+   <span class="icon-text" lay-tips="{{d.highRiskInfo}}">
+        {{d.highRiskNum}}
+    </span>
+	
+    {{# } }}
+</script>
+	<script type="text/html" id="demoEDStateBarjgfx">
+     {{# if(d.higherRiskInfo==""){ }}
+      {{d.higherRiskNum}}
+    {{# }else{ }}
+   <span class="icon-text" lay-tips="{{d.higherRiskInfo}}">
+        {{d.higherRiskNum}}
+    </span>
+	
+    {{# } }}
+</script>
+	<script type="text/html" id="demoEDStateBarzdfx">
+     {{# if(d.mediumRiskInfo==""){ }}
+      {{d.mediumRiskNum}}
+    {{# }else{ }}
+   <span class="icon-text" lay-tips="{{d.mediumRiskInfo}}">
+        {{d.mediumRiskNum}}
+    </span>
+	
+    {{# } }}
+</script>
+	<script type="text/html" id="demoEDStateBarjdfx">
+     {{# if(d.lowerRiskInfo==""){ }}
+      {{d.lowerRiskNum}}
+    {{# }else{ }}
+   <span class="icon-text" lay-tips="{{d.lowerRiskInfo}}">
+        {{d.lowerRiskNum}}
+    </span>
+	
+    {{# } }}
+</script>
+	<script type="text/html" id="demoEDStateBardfx">
+    
+   
+	{{# if(d.lowRiskInfo==""){ }}
+      {{d.lowRiskNum}}
+    {{# }else{ }}
+   <span class="icon-text" lay-tips="{{d.lowRiskInfo}}">
+        {{d.lowRiskNum}}
+    </span>
+	
+    {{# } }}
+   
+    
+</script>
+	<script type="text/html" id="demoEDStateBarhb">
+    
+   
+	{{# if(d.abnormalInfo==""||d.abnormalInfo==null){ }}
+       
+    {{# }else{ }}
+   <span class="icon-text" lay-tips="{{d.abnormalInfo}}">
+        {{d.abnormalNum}}
+    </span>
+	
+    {{# } }}
+   
+    
+</script>
+	<script  th:inline="javascript">
+		layui
+				.use(
+						[ 'layer', 'form', 'table', 'util', 'dropdown',
+								'laypage', 'treeSelect', 'element','laydate' ,'upload'],
+						function() {
+							var $ = layui.jquery;
+							var layer = layui.layer;
+							var form = layui.form;
+							var table = layui.table;
+							var util = layui.util;
+							var dropdown = layui.dropdown;
+							var laypage = layui.laypage;
+							var element = layui.element;
+							 var laydate = layui.laydate;
+							var upload = layui.upload;
+							 //日期时间范围
+							  laydate.render({
+							    elem: '#test10'
+							    ,type: 'datetime'
+							    ,range: true,
+								  trigger: 'click'
+							  });
+					        //下载导入模板
+							$('#downloadpinggu').click(function(){
+								window.open('/YhAssessmentcontroller/downloadExcel','_self');
+								// window.location.href='/YhUserReginfo/downloadExcel';
+							});
+							//指定允许上传的文件类型
+							upload.render({
+								elem: '#uploadDatapinggu',
+								url: '/YhAssessmentcontroller/import',
+								exts : 'xls|xlsx',
+								method:'post',
+								accept: 'file', //普通文件
+								choose:function(res){
+									layer.msg("正在批量评估,请稍后...",{
+										icon:16,
+										shade: [0.8, '#f5f5f5'],
+										time:-1
+									});
+								},
+								done: function(res,index,upload){
+									layer.closeAll();
+									if(res.code==200){
+										/* layer.alert("导入成功，"+res.msg); */
+										layer.confirm("评估成功！", {
+											btn : [ '确定']//按钮
+										}, function(index) {
+											layer.close(index);
+											//此处调用刷新页面代码
+											location.reload();//刷新页面
+											//window.parent.location.reload();
+										});
+
+										/* table.reload('regManageTb',{
+                                            url:'/YhUserMakeCard/page'
+                                        })  */
+
+									}else if(res.code==500){
+										layer.alert("导入失败，"+res.msg);
+									}
+
+								},
+								error : function(index,upload){
+									layer.msg("文件上传异常！");
+								}
+
+							});
+							//指定允许上传的文件类型
+							upload.render({
+								elem: '#uploadDatapinggu2',
+								url: '/YhAssessmentcontroller/importTest',
+								exts : 'xls|xlsx',
+								method:'post',
+								accept: 'file', //普通文件
+								choose:function(res){
+									layer.msg("正在批量评估,请稍后...",{
+										icon:16,
+										shade: [0.8, '#f5f5f5'],
+										time:-1
+									});
+								},
+								done: function(res,index,upload){
+									layer.closeAll();
+									if(res.code==200){
+										/* layer.alert("导入成功，"+res.msg); */
+										layer.confirm("评估成功！", {
+											btn : [ '确定']//按钮
+										}, function(index) {
+											layer.close(index);
+											//此处调用刷新页面代码
+											location.reload();//刷新页面
+											//window.parent.location.reload();
+										});
+
+										/* table.reload('regManageTb',{
+                                            url:'/YhUserMakeCard/page'
+                                        })  */
+
+									}else if(res.code==500){
+										layer.alert("导入失败，"+res.msg);
+									}
+
+								},
+								error : function(index,upload){
+									layer.msg("文件上传异常！");
+								}
+
+							});
+							// 渲染表格
+					        var insTb = table
+							.render({
+								elem : '#tableTbBas2',
+								url : '../../template/IntelligentGrouping.json',
+								 
+								page : false,
+								cols : [ [ {type: 'checkbox'},
+							                {field: 'risk', align: 'center',width:203,   title: '风险等级'},
+							                {field: 'grade', align: 'center',width:203,   title: '管理等级'}
+							                ] ],done: function(res, page, count){
+							                    //可以自行添加判断的条件是否选中
+							                    //这句才是真正选中，通过设置关键字LAY_CHECKED为true选中，这里只对第一行选中
+							                    res.data[0]["LAY_CHECKED"]='true';
+							                    res.data[1]["LAY_CHECKED"]='true';
+							                    //下面三句是通过更改css来实现选中的效果
+							                    var index= res.data[0]['LAY_TABLE_INDEX'];
+							                    $('tr[data-index=' + index + '] input[type="checkbox"]').prop('checked', true);
+							                    $('tr[data-index=' + index + '] input[type="checkbox"]').next().addClass('layui-form-checked');
+							                  //下面三句是通过更改css来实现选中的效果
+							                    var index1= res.data[1]['LAY_TABLE_INDEX'];
+							                    $('tr[data-index=' + index1 + '] input[type="checkbox"]').prop('checked', true);
+							                    $('tr[data-index=' + index1 + '] input[type="checkbox"]').next().addClass('layui-form-checked');
+							                }
+								 
+							});
+					        
+					        
+					        //今天的时间
+							  var day2 = new Date();
+							  day2.setTime(day2.getTime());
+							  var s2 = day2.getFullYear()+"-" + ((day2.getMonth()+1)>=10?(day2.getMonth()+1):"0"+(day2.getMonth()+1)) + "-" + ((day2.getDate())>=10?(day2.getDate()):"0"+(day2.getDate()))+" "+"00:00:00";
+							  var s3 = day2.getFullYear()+"-" + ((day2.getMonth()+1)>=10?(day2.getMonth()+1):"0"+(day2.getMonth()+1)) + "-" + ((day2.getDate())>=10?(day2.getDate()):"0"+(day2.getDate()))+" "+"23:59:59";
+					        var flagStr = [[${strTime}]]
+					        var test10Value=null;
+								if('1'==flagStr){
+									element.tabChange('demo', 2); 
+									$("#test10").val(s2+" - "+s3)
+									test10Value=s2+" - "+s3;
+								}
+					        
+							 
+							var insTb = table
+									.render({
+										elem : '#pinggu',
+										url : '/manage/YhDiseaseAssessReport/findPGList',
+										cellMinWidth : 80, //全局定义常规单元格的最小宽度，layui 2.2.1 新增
+										page : true,
+										where: {startTime:test10Value},
+										cols : [ [ {
+											type : 'numbers',
+											title : '序号'
+										}, {
+											field : 'usercode',
+											title : '用户编号'
+										} //width 支持：数字、百分比和不填写。你还可以通过 minWidth 参数局部定义当前单元格的最小宽度，layui 2.2.1 新增
+										, {
+											field : 'username',
+											title : '账号'
+										}, {
+											field : 'name',
+											title : '姓名'
+										}, {
+											field : 'sex',
+											title : '性别'
+										}, {
+											toolbar : '#demoEDStateBargfx',
+											align : 'center',
+											sort : true,
+											title : '高风险'
+										},
+										 
+										{
+											toolbar : '#demoEDStateBarhb',
+											field : 'abnormalNum',
+											align : 'center',
+											sort : true,
+											title : '患病或异常'
+										}, {
+											field : 'newestAssessTime',
+											title : '评估时间',
+											sort : true
+										} ] ],
+										response : {
+
+											statusCode : 0
+										//规定成功的状态码，默认：0
+
+										},
+
+										parseData : function(res) { //将原始数据解析成 table 组件所规定的数据
+											return {
+												"code" : res.data.code, //解析接口状态
+												"msg" : res.data.msg, //解析提示文本
+												"count" : res.data.count, //解析数据长度
+												"data" : res.data.data
+											//解析数据列表
+											}
+
+										}, done: function (res, curr, count) {
+											  if(count > 10) {
+										        	$("#tiwen3 .layui-table-page").show();
+										        }else {
+										        	$("#tiwen3 .layui-table-page").hide();
+										        }
+										}
+									});
+							var pageDataIdMap;
+							var idMap = new Map();
+							var resDate;
+							var resUserList;
+							var b = [[${url}]]
+							if (b == '' || b == null) {
+								// 渲染表格
+								var insTb = table
+										.render({
+											id : 'usercode',
+											elem : '#tableTbBas',
+											url : '/manage/YhDiseaseAssessReport/healthAssessment2',
+											page : true,
+											cellMinWidth : 100,
+											cols : [ [
+													{
+														type : 'checkbox'
+													},
+													{
+														type : 'numbers',
+														title : '序号'
+													},
+													{
+														field : 'usercode',
+														align : 'center',
+														sort : true,
+														title : '用户编号'
+													},
+													 
+													{
+														field : 'name',
+														align : 'center',
+														sort : true,
+														title : '姓名'
+													},
+													{
+														field : 'sex',
+														align : 'center',
+														sort : true,
+														title : '性别'
+													},
+													{
+														field : 'times',
+														align : 'center',
+														sort : true,
+														title : '评估次数'
+													},
+													{
+														field : 'qtime',
+														align : 'center',
+														sort : true,
+														title : '最新评估时间'
+													},
+													{
+														toolbar : '#demoEDStateBargfx',
+														align : 'center',
+														sort : true,
+														title : '高风险'
+													},
+													 
+													{
+														toolbar : '#demoEDStateBarhb',
+														field : 'abnormalNum',
+														align : 'center',
+														sort : true,
+														title : '患病或异常'
+													},
+													{
+														
+														field : 'flagDgroup',
+														align : 'center',
+														 
+														 
+														title : '分组'
+													},
+													{
+														 
+														title : '操作',templet: function (d) {
+															var userCode = d.usercode;
+												                			return "<a href='/manage/register/userIndex?page=healthAssessment&userCode="+userCode+"' target='_blank'><font color='#36A4FF'>查看</font></a>";
+												        } 
+													 
+													} ] ],
+											response : {
+
+												statusCode : 0
+											//规定成功的状态码，默认：0
+
+											},
+											parseData : function(res) { //将原始数据解析成 table 组件所规定的数据
+												console.log("res",res)
+												return {
+													"code" : res.data.code, //解析接口状态
+													"msg" : res.data.msg, //解析提示文本
+													"count" : res.data.count, //解析数据长度
+													"data" : res.data.data,
+													"userlist" : res.data.usercodeList
+												//解析数据列表
+												}
+
+											},
+											 done: function (res, curr, count) {
+												console.log("userlist",res.userlist)
+												 console.log("data",res.data)
+												 if(count > 10) {
+											        	$("#tiwen2 .layui-table-page").show();
+											        }else {
+											        	$("#tiwen2 .layui-table-page").hide();
+											        }
+												 resDate= res.data;
+												 resUserList= res.userlist;
+									                var len = res.data.length;
+									                pageDataIdMap = new Map();
+									                for(var i = 0;i < len;i++){   //填充当前页的数据
+									                    pageDataIdMap[res.data[i].usercode] = res.data[i].usercode;
+									                }
+									                var chooseNum = 0;   //记录当前页选中的数据行数
+									                for(var i = 0;i < len;i++){   //勾选行回显
+									                    for(var key in idMap){
+									                        if(res.data[i].usercode == key){
+									                            res.data[i]["LAY_CHECKED"]='true';
+									                            //找到对应数据改变勾选样式，呈现出选中效果
+									                            var index= res.data[i]['LAY_TABLE_INDEX'];
+									                            $('tr[data-index=' + index + '] input[type="checkbox"]').prop('checked', true);
+									                            $('tr[data-index=' + index + '] input[type="checkbox"]').next().addClass('layui-form-checked');
+									                            chooseNum++;
+									                        }
+									                    }
+									                }
+									                let pageDataIdMaparray = []
+												    for(let key in pageDataIdMap) {
+												      let obj = pageDataIdMap[key]
+												      obj.id = key
+												      pageDataIdMaparray.push(obj)
+												    }
+												console.log(JSON
+														.stringify({
+															"pageDataIdMaparray" : pageDataIdMaparray
+															 
+														}))
+									                if(len != 0 && chooseNum == len){   //表示该页全选  --  全选按钮样式回显
+									                $('input[lay-filter="layTableAllChoose"]').prop('checked',true);
+									                $('input[lay-filter="layTableAllChoose"]').next().addClass('layui-form-checked');
+									                }
+									            } 
+
+										});
+
+							} else {
+								var insTb = table
+										.render({
+											id : 'usercode',
+											elem : '#tableTbBas',
+											url : '/manage/YhDiseaseAssessReport/healthAssessment2?url='
+													+ b,
+
+											page : true,
+											cellMinWidth : 100,
+											cols : [ [
+													{
+														type : 'checkbox'
+													},
+													{
+														type : 'numbers',
+														title : '序号'
+													},
+													{
+														field : 'usercode',
+														align : 'center',
+														sort : true,
+														title : '用户编号'
+													},
+													
+													{
+														field : 'name',
+														align : 'center',
+														sort : true,
+														title : '姓名'
+													},
+													{
+														field : 'sex',
+														align : 'center',
+														sort : true,
+														title : '性别'
+													},
+													{
+														field : 'times',
+														align : 'center',
+														sort : true,
+														title : '评估次数'
+													},
+													{
+														toolbar : '#demoEDStateBargfx',
+														align : 'center',
+														sort : true,
+														title : '高风险'
+													},
+													 
+													 
+													{
+														toolbar : '#demoEDStateBarhb',
+														field : 'abnormalNum',
+														align : 'center',
+														sort : true,
+														title : '患病或异常'
+													},
+{
+														
+														field : 'flagDgroup',
+														align : 'center',
+														 
+														 
+														title : '分组'
+													},
+													{
+														title : '操作',templet: function (d) {
+															var userCode = d.usercode;
+												                			return "<a href='/manage/register/userIndex?page=healthAssessment&userCode="+userCode+"' target='_blank'><font color='#36A4FF'>查看</font></a>";
+												        } 
+													} ] ],
+											response : {
+
+												statusCode : 0
+											//规定成功的状态码，默认：0
+
+											},
+											parseData : function(res) { //将原始数据解析成 table 组件所规定的数据
+												return {
+													"code" : res.data.code, //解析接口状态
+													"msg" : res.data.msg, //解析提示文本
+													"count" : res.data.count, //解析数据长度
+													"data" : res.data.data
+												//解析数据列表
+												}
+
+											}
+											,
+										     
+											 done: function (res, curr, count) {
+												  if(count > 10) {
+											        	$("#tiwen2 .layui-table-page").show();
+											        }else {
+											        	$("#tiwen2 .layui-table-page").hide();
+											        }
+												 resDate= res.data;
+												 resUserList= res.userlist;
+									                var len = res.data.length;
+									                pageDataIdMap = new Map();
+									                for(var i = 0;i < len;i++){   //填充当前页的数据
+									                    pageDataIdMap[res.data[i].usercode] = res.data[i].usercode;
+									                }
+									                var chooseNum = 0;   //记录当前页选中的数据行数
+									                for(var i = 0;i < len;i++){   //勾选行回显
+									                    for(var key in idMap){
+									                        if(res.data[i].usercode == key){
+									                            res.data[i]["LAY_CHECKED"]='true';
+									                            //找到对应数据改变勾选样式，呈现出选中效果
+									                            var index= res.data[i]['LAY_TABLE_INDEX'];
+									                            $('tr[data-index=' + index + '] input[type="checkbox"]').prop('checked', true);
+									                            $('tr[data-index=' + index + '] input[type="checkbox"]').next().addClass('layui-form-checked');
+									                            chooseNum++;
+									                        }
+									                    }
+									                }
+									                let pageDataIdMaparray = []
+												    for(let key in pageDataIdMap) {
+												      let obj = pageDataIdMap[key]
+												      obj.id = key
+												      pageDataIdMaparray.push(obj)
+												    }
+												console.log(JSON
+														.stringify({
+															"pageDataIdMaparray" : pageDataIdMaparray
+															 
+														}))
+									                if(len != 0 && chooseNum == len){   //表示该页全选  --  全选按钮样式回显
+									                $('input[lay-filter="layTableAllChoose"]').prop('checked',true);
+									                $('input[lay-filter="layTableAllChoose"]').next().addClass('layui-form-checked');
+									                }
+									            } 
+
+										});
+							}
+
+							var treeSelect = layui.treeSelect;
+							randtreesone();
+					       	function randtreesone(){
+							treeSelect.render({
+								// 选择器
+								elem : '#tree',
+								// 数据 
+								data : '/YhUserMakeCard/showPullDownTree',
+								// 异步加载方式：get/post，默认get
+								type : 'get',
+								// 占位符
+								placeholder : '全部',
+								// 是否开启搜索功能：true/false，默认false
+								search : true,
+								// 点击回调
+								click : function(d) {
+
+									console.log($('#tree').val(d.current.id));
+								},
+								// 加载完成后的回调函数
+								success : function(d) {
+									console.log(d);
+								}
+							});
+					       	}
+
+							  //清除按钮
+					        $("#btnempty").click(function(){
+					        	idMap=new Map();
+					        	  $("#ganyu").val('');
+					        	$("#username").val('');
+					        	 
+					        	$('#tree').siblings().remove();
+					        	$('#assessment').val('');
+					        	 form.render("select");
+					        	  
+					        	 randtreesone();
+					        	 
+					        	insTb = table
+								.render({
+									id : 'usercode',
+									elem : '#tableTbBas',
+									url : '/manage/YhDiseaseAssessReport/healthAssessment2',
+									page : true,
+									cellMinWidth : 100,
+									cols : [ [
+											{
+												type : 'checkbox'
+											},
+											{
+												type : 'numbers',
+												title : '序号'
+											},
+											{
+												field : 'usercode',
+												align : 'center',
+												sort : true,
+												title : '用户编号'
+											},
+											 
+											{
+												field : 'name',
+												align : 'center',
+												sort : true,
+												title : '姓名'
+											},
+											{
+												field : 'sex',
+												align : 'center',
+												sort : true,
+												title : '性别'
+											},
+											{
+												field : 'times',
+												align : 'center',
+												sort : true,
+												title : '评估次数'
+											},
+											{
+												field : 'qtime',
+												align : 'center',
+												sort : true,
+												title : '最新评估时间'
+											},
+											{
+												toolbar : '#demoEDStateBargfx',
+												align : 'center',
+												sort : true,
+												title : '高风险'
+											},
+											 
+											{
+												toolbar : '#demoEDStateBarhb',
+												field : 'abnormalNum',
+												align : 'center',
+												sort : true,
+												title : '患病或异常'
+											},
+											{
+												
+												field : 'flagDgroup',
+												align : 'center',
+												 
+												 
+												title : '分组'
+											},
+											{
+												 
+												title : '操作',templet: function (d) {
+													var userCode = d.usercode;
+										                			return "<a href='/manage/register/userIndex?page=healthAssessment&userCode="+userCode+"' target='_blank'><font color='#36A4FF'>查看</font></a>";
+										        } 
+											 
+											} ] ],
+									response : {
+
+										statusCode : 0
+									//规定成功的状态码，默认：0
+
+									},
+									parseData : function(res) { //将原始数据解析成 table 组件所规定的数据
+										return {
+											"code" : res.data.code, //解析接口状态
+											"msg" : res.data.msg, //解析提示文本
+											"count" : res.data.count, //解析数据长度
+											"data" : res.data.data
+										//解析数据列表
+										}
+
+									}
+
+								});  
+					        	 
+					                 // batchSubmitWt();
+					              
+					        })
+					        
+
+							  //清除按钮
+					        $("#btnempty2").click(function(){
+					        	idMap=new Map();
+					        	$("#name2").val('');
+					        	$("#username2").val('');
+					        	$("#test10").val('');
+					        	
+					        	insTb = table
+								.render({
+									elem : '#pinggu',
+									url : '/manage/YhDiseaseAssessReport/findPGList',
+									cellMinWidth : 80, //全局定义常规单元格的最小宽度，layui 2.2.1 新增
+									page : true,
+									cols : [ [ {
+										type : 'numbers',
+										title : '序号'
+									}, {
+										field : 'usercode',
+										title : '用户编号'
+									} //width 支持：数字、百分比和不填写。你还可以通过 minWidth 参数局部定义当前单元格的最小宽度，layui 2.2.1 新增
+									, {
+										field : 'username',
+										title : '账号'
+									}, {
+										field : 'name',
+										title : '姓名'
+									}, {
+										field : 'sex',
+										title : '性别'
+									}, {
+										toolbar : '#demoEDStateBargfx',
+										align : 'center',
+										sort : true,
+										title : '高风险'
+									},
+									 
+									{
+										toolbar : '#demoEDStateBarhb',
+										field : 'abnormalNum',
+										align : 'center',
+										sort : true,
+										title : '患病或异常'
+									}, {
+										field : 'newestAssessTime',
+										title : '评估时间',
+										sort : true
+									} ] ],
+									response : {
+
+										statusCode : 0
+									//规定成功的状态码，默认：0
+
+									},
+
+									parseData : function(res) { //将原始数据解析成 table 组件所规定的数据
+										return {
+											"code" : res.data.code, //解析接口状态
+											"msg" : res.data.msg, //解析提示文本
+											"count" : res.data.count, //解析数据长度
+											"data" : res.data.data
+										//解析数据列表
+										}
+
+									}
+								});
+					        	
+					        })
+
+
+							//全部全选
+							form.on('switch(checkall)', function (data) {
+								var checked = data.elem.checked;
+								console.log("checked",data)
+								 if(this.checked){
+									 idMap = new Map();
+
+									 for(var i = 0;i < resUserList.length;i++){
+										 idMap[resUserList[i]]=resUserList[i]
+									 }
+
+									 for(var i = 0;i < resDate.length;i++){   //勾选行回显
+										 for(var key in idMap){
+											 if(resDate[i].usercode == key){
+												 resDate[i]["LAY_CHECKED"]='true';
+												 //找到对应数据改变勾选样式，呈现出选中效果
+												 var index= resDate[i]['LAY_TABLE_INDEX'];
+												 $('tr[data-index=' + index + '] input[type="checkbox"]').prop('checked', true);
+												 $('tr[data-index=' + index + '] input[type="checkbox"]').next().addClass('layui-form-checked');
+
+											 }
+										 }
+									 }
+									 $('input[lay-filter="layTableAllChoose"]').prop('checked',true);
+									 $('input[lay-filter="layTableAllChoose"]').next().addClass('layui-form-checked');
+
+										 $("#xuanze").html("已选择"+resUserList.length+"项")
+										 $("#piliang").css("display","block")
+
+
+
+								 }else{
+
+									 for(var i = 0;i < resDate.length;i++){   //勾选行回显
+												 resDate[i]["LAY_CHECKED"]='';
+												 //找到对应数据改变勾选样式，呈现出选中效果
+												 var index= resDate[i]['LAY_TABLE_INDEX'];
+												 $('tr[data-index=' + index + '] input[type="checkbox"]').prop('checked', false);
+												 $('tr[data-index=' + index + '] input[type="checkbox"]').next().removeClass('layui-form-checked');
+
+									 }
+
+
+									 $('input[lay-filter="layTableAllChoose"]').prop('checked',false);
+									 $('input[lay-filter="layTableAllChoose"]').next().removeClass('layui-form-checked');
+
+									 form.render("checkbox");
+									 $("#xuanze").html("已选择"+0+"项")
+									 $("#piliang").css("display","none")
+									 $("input[name='checkall']").prop('checked',false);
+									 form.render("checkbox");
+									 idMap = new Map();
+								 }
+								var checkStatus = table.checkStatus('usercode'); //idTest 即为基础参数 id 对应的值
+
+								console.log(checkStatus.data) //获取选中行的数据
+								console.log(checkStatus.data.length) //获取选中行数量，可作为是否有选中行的条件
+								console.log(checkStatus.isAll ) //表格是否全选
+								form.render('checkbox');
+							});
+							
+							 table.on('checkbox(tableTbBas)', function(obj){
+								 var checkStatus = table.checkStatus('usercode');
+								 console.log(obj)
+								 var data = checkStatus.data;
+								 //layer.msg('选中了：'+ data.length + ' 个');
+						        	 //var checkStatus = table.checkStatus('tableAuth');
+								 if(obj.type == 'one'){    //单选操作
+						                if(obj.checked){     //选中
+						                    idMap[obj.data.usercode] = obj.data.usercode;
+						                }else{      //取消选中
+						                    for(var key in idMap){
+						                        if(key == obj.data.usercode){   //移除取消选中的id
+						                            delete idMap[obj.data.usercode];
+						                        }
+						                    }
+						                }
+						            }else{      //全选操作
+						                if(obj.checked){    //选中
+						                    for(var pageKey in pageDataIdMap){
+						                        idMap[pageKey] = pageKey;
+						                    }
+						                }else{     //取消选中
+						                    for(var pageKey in pageDataIdMap){
+						                        for(var key in idMap){
+						                            if(key == pageKey){
+						                                delete idMap[pageKey];
+						                            }
+						                        }
+						                    }
+						                }
+						            }
+								 let array = []
+								    for(let key in idMap) {
+								      let obj = idMap[key]
+								      obj.id = key
+								      array.push(obj)
+								    }
+								console.log(JSON
+										.stringify({
+											"userList" : array
+											 
+										}))
+								 
+										
+								 
+								 if(array.length!=0){
+						        		$("#xuanze").html("已选择"+array.length+"项")
+						        		$("#piliang").css("display","block")
+						        	}else{
+						        		console.log(idMap)
+						        		$("#piliang").css("display","none")
+									 $("input[name='checkall']").prop('checked',false);
+									 form.render("checkbox");
+						        	}
+						        });
+							 
+							 $("#fenpeizishi").click(function (){
+								 
+								  var checkStatus = table.checkStatus('usercode');
+									 
+									 delList=[];
+
+									 var data = checkStatus.data;
+									 data.forEach(function(n,i){
+										 delList.push(n.usercode);
+									  });
+									 if(delList!=''){
+										  
+											  //do something
+											  
+											 console.log(delList)	
+											 
+											 
+											  $.ajax({
+													type:"post",
+													url:"/YhUserEnrolinfo/modifyGYList",
+													contentType:'application/json;charset=UTF-8',	//发送信息至服务器时内容编码类型
+													traditional:true,	//传统的方式来序列化数据
+													data:JSON.stringify({usercode:delList,yesOrNo:false}),
+													success:function(data){
+														$("#piliang").css("display","none");
+														$("input[name='checkall']").prop('checked',false);
+														form.render("checkbox");
+											        	$("input[name='layTableCheckbox']").each(function(){
+											 				 $(this).prop('checked', false);
+											 			  });
+														table.reload('usercode',{});
+													} 
+												});  
+											
+											  
+											 
+											 
+									 }
+							 })
+							  $("#zhuanyizhuceka").click(function (){
+								 
+								  var checkStatus = table.checkStatus('usercode');
+									 
+									 delList=[];
+
+									 var data = checkStatus.data;
+									 data.forEach(function(n,i){
+										 delList.push(n.usercode);
+									  });
+									 if(delList!=''){
+										  
+											  //do something
+											 console.log(delList)	
+											  
+											  $.ajax({
+											type:"post",
+											url:"/YhUserEnrolinfo/modifyGYList",
+											contentType:'application/json;charset=UTF-8',	//发送信息至服务器时内容编码类型
+											traditional:true,	//传统的方式来序列化数据
+											data:JSON.stringify({usercode:delList,yesOrNo:true}),
+											success:function(data){
+												$("#piliang").css("display","none");
+												$("input[name='checkall']").prop('checked',false);
+												form.render("checkbox");
+									        	$("input[name='layTableCheckbox']").each(function(){
+									 				 $(this).prop('checked', false);
+									 			  });
+												table.reload('usercode',{});
+											} 
+										});  
+											 
+										
+											  
+											 
+										 
+									 }
+
+							   })
+							 //清空按钮
+						        $("#clickxuan").click(function (){
+
+									for(var i = 0;i < resDate.length;i++){   //勾选行回显
+										for(var key in idMap){
+											if(resDate[i].usercode == key){
+												resDate[i]["LAY_CHECKED"]='';
+												//找到对应数据改变勾选样式，呈现出选中效果
+												var index= resDate[i]['LAY_TABLE_INDEX'];
+												$('tr[data-index=' + index + '] input[type="checkbox"]').prop('checked', false);
+												$('tr[data-index=' + index + '] input[type="checkbox"]').next().removeClass('layui-form-checked');
+
+											}
+										}
+									}
+									$('input[lay-filter="layTableAllChoose"]').prop('checked',false);
+									$('input[lay-filter="layTableAllChoose"]').next().removeClass('layui-form-checked');
+
+									$("#xuanze").html("已选择"+0+"项")
+									$("#piliang").css("display","none")
+
+									$("input[name='checkall']").prop('checked',false);
+									form.render("checkbox");
+
+									idMap = new Map();
+						         
+						        /* 	$(".layui-form-checkbox").removeClass("layui-form-checked");
+						        	var myCheckbox = $("input[name='layTableCheckbox']");
+						        	myCheckbox.prop('checked', false); //切换下拉选项时，清空所有选中状态
+						        	//form.render('checked');//记得每次操作后要渲染该元素 */
+
+
+ 									table.reload('usercode',{})
+						        	
+						        }) //清空按钮
+						        $("#huoqu").click(function (){
+									let array = []
+									for(let key in idMap) {
+										let obj = idMap[key]
+										obj.id = key
+										array.push(obj)
+									}
+									console.log(JSON
+											.stringify({
+												"userList" : array
+
+											}))
+
+
+						        })
+
+
+
+
+						       
+							//监听Tab切换
+							element.on('tab(demo)', function(data) {
+								/* layer.tips('切换了 ' + data.index + '：'
+										+ this.innerHTML, this, {
+									tips : 1
+								}); */
+							});
+							//这是Layui 给 后台添加的映射  映射controller 的实体类
+								  
+							//这个是搜索按钮事件， 找到你的搜索按钮 获取搜索按钮点击事件。只需要把$(’’)这里面的内容修改了就可以了。
+							$('.sousuo').on('click', function() {
+								 console.log("111")
+								 idMap=new Map();
+								var type = $(this).data('type');
+								active[type] ? active[type].call(this) : '';
+
+							});
+							//这是Layui 给 后台添加的映射  映射controller 的实体类
+							var $ = layui.$, active2 = {
+								reload : function() {
+									//获取 上面input 值
+									var startTime=	$("#test10").val();
+									 var name=	$("#name2").val();
+									 var username=	$("#username2").val();
+									 console.log(username)
+									//执行重载
+									table.reload('pinggu', {
+										page : {
+											curr : 1
+										//重新从第 1 页开始
+										},
+										where : {
+											//这里注意一定要跟Bean 里面的属性对应
+											startTime:startTime,
+											nameLike:name,
+											zhangh:username
+											 
+											
+										}
+									});
+								}
+							};
+							//这个是搜索按钮事件， 找到你的搜索按钮 获取搜索按钮点击事件。只需要把$(’’)这里面的内容修改了就可以了。
+							$('.sousuo2').on('click', function() {
+								 console.log("111")
+								var type = $(this).data('type');
+								 active2[type] ? active2[type].call(this) : '';
+
+							});
+							
+							$("#yichufenzu").click(function (){
+								var htmld="";
+								var selectAll=[[${selectAllInfo}]]
+								$.each(selectAll,function(index,item){
+									//循环的逻辑代码
+									htmld+="<li style='margin-left: 20px;'> <input type='checkbox'   lay-skin='primary' title=''   value='"+item.uDocgroupId+"' name='order2' ><label  class='yishiname' style='padding-right: 90px;'>"+item.gname+"</label></li>";
+
+								})
+								$('#GroupList2').append(htmld);
+								form.render();
+								var checkStatus = table.checkStatus('usercode'), data = checkStatus.data;
+
+								if (data.length > 0) {
+									layer.open({
+										type : 1,
+										title : "分组" //不显示标题栏
+										,
+										area : [ '451px', '600px' ],
+										shade : 0.8,
+										id : 'LAY_layuipro' //设定一个id，防止重复弹出
+										,
+										moveType : 1 //拖拽模式，0或者1
+										,
+										content : $('#GroupHtml2'),
+										success : function(layero) {
+
+											// 表单提交事件
+											form.on('submit(SubmitRole2)', function (data2) {
+
+												var arr = new Array();
+												$("input:checkbox[name='order2']:checked").each(function(i){
+													arr[i] = $(this).val();
+												});
+												data2.field.groupingStr = arr.join(",");//将数组合并成字符串
+												console.log(JSON.stringify(data2.field))
+
+
+
+												var checkStatus = table
+														.checkStatus('usercode'), data = checkStatus.data;
+												let array = []
+												for(let key in idMap) {
+													let obj = idMap[key]
+													obj.id = key
+													array.push(obj)
+												}
+												console.log(JSON
+														.stringify({
+															"userList" : array,
+															"city" : data2.field
+														}))
+
+
+												$.ajax({
+													type : "post",
+													url : "/intervene/removeGroupingNew",
+													contentType : 'application/json;charset=UTF-8', //发送信息至服务器时内容编码类型
+													traditional : true, //传统的方式来序列化数据
+													data : JSON
+															.stringify({
+																"userList" : array,
+																"city" : data2.field
+															}),
+
+													success : function(
+															data) {
+														idMap=new Map();
+														$("#piliang").css("display","none");
+														$$("input[name='checkall']").prop('checked',false);
+														form.render("checkbox");
+														$("input[name='layTableCheckbox']").each(function(){
+															$(this).prop('checked', false);
+														});
+
+														$("#ganyu").val('');
+														$("#username").val('');
+
+														$('#tree').siblings().remove();
+														form.render("select");
+														randtreesone();
+														form.render();
+														insTb = table
+																.render({
+																	id : 'usercode',
+																	elem : '#tableTbBas',
+																	url : '/manage/YhDiseaseAssessReport/healthAssessment2',
+																	page : true,
+																	cellMinWidth : 100,
+																	cols : [ [
+																		{
+																			type : 'checkbox'
+																		},
+																		{
+																			type : 'numbers',
+																			title : '序号'
+																		},
+																		{
+																			field : 'usercode',
+																			align : 'center',
+																			sort : true,
+																			title : '用户编号'
+																		},
+
+																		{
+																			field : 'name',
+																			align : 'center',
+																			sort : true,
+																			title : '姓名'
+																		},
+																		{
+																			field : 'sex',
+																			align : 'center',
+																			sort : true,
+																			title : '性别'
+																		},
+																		{
+																			field : 'times',
+																			align : 'center',
+																			sort : true,
+																			title : '评估次数'
+																		},
+																		{
+																			field : 'qtime',
+																			align : 'center',
+																			sort : true,
+																			title : '最新评估时间'
+																		},
+																		{
+																			toolbar : '#demoEDStateBargfx',
+																			align : 'center',
+																			sort : true,
+																			title : '高风险'
+																		},
+
+																		{
+																			toolbar : '#demoEDStateBarhb',
+																			field : 'abnormalNum',
+																			align : 'center',
+																			sort : true,
+																			title : '患病或异常'
+																		},
+																		{
+
+																			field : 'flagDgroup',
+																			align : 'center',
+
+
+																			title : '分组'
+																		},
+																		{
+
+																			title : '操作',templet: function (d) {
+																				var userCode = d.usercode;
+																				return "<a href='/manage/register/userIndex?page=healthAssessment&userCode="+userCode+"' target='_blank'><font color='#36A4FF'>查看</font></a>";
+																			}
+
+																		} ] ],
+																	response : {
+
+																		statusCode : 0
+																		//规定成功的状态码，默认：0
+
+																	},
+																	parseData : function(res) { //将原始数据解析成 table 组件所规定的数据
+																		return {
+																			"code" : res.data.code, //解析接口状态
+																			"msg" : res.data.msg, //解析提示文本
+																			"count" : res.data.count, //解析数据长度
+																			"data" : res.data.data
+																			//解析数据列表
+																		}
+
+																	},
+																	done: function (res, curr, count) {
+																		if(count > 10) {
+																			$("#tiwen2 .layui-table-page").show();
+																		}else {
+																			$("#tiwen2 .layui-table-page").hide();
+																		}
+																		var len = res.data.length;
+																		pageDataIdMap = new Map();
+																		for(var i = 0;i < len;i++){   //填充当前页的数据
+																			pageDataIdMap[res.data[i].usercode] = res.data[i].usercode;
+																		}
+																		var chooseNum = 0;   //记录当前页选中的数据行数
+																		for(var i = 0;i < len;i++){   //勾选行回显
+																			for(var key in idMap){
+																				if(res.data[i].usercode == key){
+																					res.data[i]["LAY_CHECKED"]='true';
+																					//找到对应数据改变勾选样式，呈现出选中效果
+																					var index= res.data[i]['LAY_TABLE_INDEX'];
+																					$('tr[data-index=' + index + '] input[type="checkbox"]').prop('checked', true);
+																					$('tr[data-index=' + index + '] input[type="checkbox"]').next().addClass('layui-form-checked');
+																					chooseNum++;
+																				}
+																			}
+																		}
+																		let pageDataIdMaparray = []
+																		for(let key in pageDataIdMap) {
+																			let obj = pageDataIdMap[key]
+																			obj.id = key
+																			pageDataIdMaparray.push(obj)
+																		}
+																		console.log(JSON
+																				.stringify({
+																					"pageDataIdMaparray" : pageDataIdMaparray
+
+																				}))
+																		if(len != 0 && chooseNum == len){   //表示该页全选  --  全选按钮样式回显
+																			$('input[lay-filter="layTableAllChoose"]').prop('checked',true);
+																			$('input[lay-filter="layTableAllChoose"]').next().addClass('layui-form-checked');
+																		}
+																	}
+
+																});
+													}
+												});
+												layer.closeAll();
+												return false;
+
+											});
+										}
+									});
+								} else {
+									layer.msg('您未选择')
+								}
+							})
+							//监听提交
+							form.on('submit(fzSousuo2)', function(data){
+								console.log(data.field);
+								$("#GroupList2").empty().append("");
+								$.ajax({
+									type: "post",
+									url: "/YhFoodSrecipeRecordContriller/findGroupInfoByname",
+									data :data.field,
+									success: function(data){
+										console.log("GroupList2",data)
+										var htmld="";
+										var item=data.data;
+										for (var i = 0; i < item.length; i++) {
+											htmld+="<li style='margin-left: 20px;'> <input type='checkbox'   lay-skin='primary' title=''   value='"+item[i].uDocgroupId+"' name='order2' ><label  class='yishiname' style='padding-right: 90px;'>"+item[i].gname+"</label></li>";
+										}
+										$('#GroupList2').append(htmld);
+										form.render();
+									}
+								});
+								return false;
+							});
+
+							//监听提交
+							form.on('submit(fzSousuo)', function(data){
+								console.log(data.field);
+								$("#GroupList").empty().append("");
+								 $.ajax({
+									type: "post",
+									url: "/YhFoodSrecipeRecordContriller/findGroupInfoByname",
+									data :data.field,
+									success: function(data){
+										console.log("GroupList",data)
+										var htmld="";
+										var item=data.data;
+										for (var i = 0; i < item.length; i++) {
+											htmld+="<li style='margin-left: 20px;'> <input type='checkbox'   lay-skin='primary' title=''   value='"+item[i].uDocgroupId+"' name='order' ><label  class='yishiname' style='padding-right: 90px;'>"+item[i].gname+"</label></li>";
+										}
+										$('#GroupList').append(htmld);
+										form.render();
+									}
+								});
+								return false;
+							});
+
+
+							 $("#xzfenzu").click(function (){
+								 $('#GroupList').html("");
+								 var htmld="";
+							 	var selectAll=[[${selectAllInfo}]]
+								 $.each(selectAll,function(index,item){
+									 //循环的逻辑代码
+									 htmld+="<li style='margin-left: 20px;'> <input type='checkbox'   lay-skin='primary' title=''   value='"+item.uDocgroupId+"' name='order' ><label  class='yishiname' style='padding-right: 90px;'>"+item.gname+"</label></li>";
+
+								 })
+								 $('#GroupList').append(htmld);
+								 form.render();
+									var checkStatus = table.checkStatus('usercode'), data = checkStatus.data;
+
+									if (data.length > 0) {
+										layer.open({
+											type : 1,
+											title : "分组" //不显示标题栏
+											,
+											area : [ '451px', '600px' ],
+											shade : 0.8,
+											id : 'LAY_layuipro' //设定一个id，防止重复弹出
+											,
+											moveType : 1 //拖拽模式，0或者1
+											,
+											content : $('#GroupHtml'),
+											success : function(layero) {
+												var url = '/YhFoodSrecipeRecordContriller/changeSetmeal';
+												// 表单提交事件
+												form.on('submit(SubmitRole)', function (data2) {
+
+													var arr = new Array();
+													$("input:checkbox[name='order']:checked").each(function(i){
+														arr[i] = $(this).val();
+													});
+													data2.field.groupingStr = arr.join(",");//将数组合并成字符串
+													 console.log(JSON.stringify(data2.field))
+
+
+
+													var checkStatus = table
+															.checkStatus('usercode'), data = checkStatus.data;
+													let array = []
+													for(let key in idMap) {
+														let obj = idMap[key]
+														obj.id = key
+														array.push(obj)
+													}
+													console.log(JSON
+															.stringify({
+																"userList" : array,
+																"city" : data2.field
+															}))
+
+
+													$.ajax({
+																type : "post",
+																url : "/intervene/batchGroupingNew",
+																contentType : 'application/json;charset=UTF-8', //发送信息至服务器时内容编码类型
+																traditional : true, //传统的方式来序列化数据
+																data : JSON
+																		.stringify({
+																			"userList" : array,
+																			"city" : data2.field
+																		}),
+
+																success : function(
+																		data) {
+																	idMap=new Map();
+																	$("#piliang").css("display","none");
+																	$("input[name='checkall']").prop('checked',false);
+																	form.render("checkbox");
+																	$("input[name='layTableCheckbox']").each(function(){
+																		$(this).prop('checked', false);
+																	});
+
+																	$("#ganyu").val('');
+																	$("#username").val('');
+
+																	$('#tree').siblings().remove();
+																	form.render("select");
+																	randtreesone();
+
+																	insTb = table
+																			.render({
+																				id : 'usercode',
+																				elem : '#tableTbBas',
+																				url : '/manage/YhDiseaseAssessReport/healthAssessment2',
+																				page : true,
+																				cellMinWidth : 100,
+																				cols : [ [
+																					{
+																						type : 'checkbox'
+																					},
+																					{
+																						type : 'numbers',
+																						title : '序号'
+																					},
+																					{
+																						field : 'usercode',
+																						align : 'center',
+																						sort : true,
+																						title : '用户编号'
+																					},
+
+																					{
+																						field : 'name',
+																						align : 'center',
+																						sort : true,
+																						title : '姓名'
+																					},
+																					{
+																						field : 'sex',
+																						align : 'center',
+																						sort : true,
+																						title : '性别'
+																					},
+																					{
+																						field : 'times',
+																						align : 'center',
+																						sort : true,
+																						title : '评估次数'
+																					},
+																					{
+																						field : 'qtime',
+																						align : 'center',
+																						sort : true,
+																						title : '最新评估时间'
+																					},
+																					{
+																						toolbar : '#demoEDStateBargfx',
+																						align : 'center',
+																						sort : true,
+																						title : '高风险'
+																					},
+
+																					{
+																						toolbar : '#demoEDStateBarhb',
+																						field : 'abnormalNum',
+																						align : 'center',
+																						sort : true,
+																						title : '患病或异常'
+																					},
+																					{
+
+																						field : 'flagDgroup',
+																						align : 'center',
+
+
+																						title : '分组'
+																					},
+																					{
+
+																						title : '操作',templet: function (d) {
+																							var userCode = d.usercode;
+																							return "<a href='/manage/register/userIndex?page=healthAssessment&userCode="+userCode+"' target='_blank'><font color='#36A4FF'>查看</font></a>";
+																						}
+
+																					} ] ],
+																				response : {
+
+																					statusCode : 0
+																					//规定成功的状态码，默认：0
+
+																				},
+																				parseData : function(res) { //将原始数据解析成 table 组件所规定的数据
+																					return {
+																						"code" : res.data.code, //解析接口状态
+																						"msg" : res.data.msg, //解析提示文本
+																						"count" : res.data.count, //解析数据长度
+																						"data" : res.data.data
+																						//解析数据列表
+																					}
+
+																				},
+																				done: function (res, curr, count) {
+																					if(count > 10) {
+																						$("#tiwen2 .layui-table-page").show();
+																					}else {
+																						$("#tiwen2 .layui-table-page").hide();
+																					}
+																					var len = res.data.length;
+																					pageDataIdMap = new Map();
+																					for(var i = 0;i < len;i++){   //填充当前页的数据
+																						pageDataIdMap[res.data[i].usercode] = res.data[i].usercode;
+																					}
+																					var chooseNum = 0;   //记录当前页选中的数据行数
+																					for(var i = 0;i < len;i++){   //勾选行回显
+																						for(var key in idMap){
+																							if(res.data[i].usercode == key){
+																								res.data[i]["LAY_CHECKED"]='true';
+																								//找到对应数据改变勾选样式，呈现出选中效果
+																								var index= res.data[i]['LAY_TABLE_INDEX'];
+																								$('tr[data-index=' + index + '] input[type="checkbox"]').prop('checked', true);
+																								$('tr[data-index=' + index + '] input[type="checkbox"]').next().addClass('layui-form-checked');
+																								chooseNum++;
+																							}
+																						}
+																					}
+																					let pageDataIdMaparray = []
+																					for(let key in pageDataIdMap) {
+																						let obj = pageDataIdMap[key]
+																						obj.id = key
+																						pageDataIdMaparray.push(obj)
+																					}
+																					console.log(JSON
+																							.stringify({
+																								"pageDataIdMaparray" : pageDataIdMaparray
+
+																							}))
+																					if(len != 0 && chooseNum == len){   //表示该页全选  --  全选按钮样式回显
+																						$('input[lay-filter="layTableAllChoose"]').prop('checked',true);
+																						$('input[lay-filter="layTableAllChoose"]').next().addClass('layui-form-checked');
+																					}
+																				}
+
+																			});
+																}
+															});
+													layer.closeAll();
+													return false;
+
+												});
+											}
+										});
+									} else {
+										layer.msg('您未选择')
+									}
+								})
+							
+							 $("#zhinengfenzu").click(function (){
+									var checkStatus = table
+											.checkStatus('usercode'), data = checkStatus.data;
+									if (data.length > 0) {
+										layer.open({
+											type : 1,
+											title : "分组" //不显示标题栏
+											,
+											area : [ '490px', '555px' ],
+											shade : 0.8,
+											id : 'LAY_layuipro' //设定一个id，防止重复弹出
+											,
+											moveType : 1 //拖拽模式，0或者1
+											,
+											content : $('#box3'),
+											success : function(layero) {
+											
+											}
+										});
+									} else {
+										layer.msg('您未选择')
+									}
+								})
+							var $1 = layui.$, active = {
+									getCheckData : function() { //获取选中数据
+										var checkStatus = table
+												.checkStatus('usercode'), data = checkStatus.data;
+										layer.alert(JSON.stringify(data));
+									},
+									getCheckLength : function() { //获取选中数目
+										var checkStatus = table
+												.checkStatus('usercode'), data = checkStatus.data;
+										layer.msg('选中了：' + data.length + ' 个');
+									},
+									isAll : function() { //验证是否全选
+										var checkStatus = table
+												.checkStatus('usercode');
+										layer.msg(checkStatus.isAll ? '全选' : '未全选')
+									},
+									zhinengfenzu : function() { //取消干预
+										var checkStatus = table
+												.checkStatus('usercode'), data = checkStatus.data;
+										if (data.length > 0) {
+											layer.close(index);
+											insTb.reload('pinggu',{
+																url : '/intervene/findInterveneListInfo',
+																where : {}
+															});
+										} else {
+											layer.msg('您未选择')
+										}
+
+									},
+									xuanzefenzu : function() {  
+										var checkStatus = table
+												.checkStatus('usercode'), data = checkStatus.data;
+										if (data.length > 0) {
+											layer.open({
+												type : 1,
+												title : "分组" //不显示标题栏
+												,
+												area : [ '490px', '360px' ],
+												shade : 0.8,
+												id : 'LAY_layuipro' //设定一个id，防止重复弹出
+												,
+												moveType : 1 //拖拽模式，0或者1
+												,
+												content : $('#box1'),
+												success : function(layero) {
+													
+												}
+											});
+										} else {
+											layer.msg('您未选择')
+										}
+									},
+									yichufenzu : function() { //验证是否全选
+										var checkStatus = table
+										.checkStatus('usercode'), data = checkStatus.data;
+								if (data.length > 0) {
+										layer.open({
+											type : 1,
+											title : "分组" //不显示标题栏
+											,
+											area : [ '490px', '360px' ],
+											shade : 0.8,
+											id : 'LAY_layuipro2' //设定一个id，防止重复弹出
+											,
+											moveType : 1 //拖拽模式，0或者1
+											,
+											content : $('#box2'),
+											success : function(layero) {
+												 
+											}
+										});
+								} else {
+									layer.msg('您未选择')
+								}
+									},
+									reload : function() {
+										//获取 上面input 值
+
+										var username = $('#username').val();
+										var tree = $('#tree').val();
+										var ganyu = $('#ganyu').val();
+										var assessment = $('#assessment').val();
+										 console.log("666",$('#tree').val())
+									 
+										//执行重载
+										table.reload('usercode', {
+											page : {
+												curr : 1
+											//重新从第 1 页开始
+											},
+											where : {
+												//这里注意一定要跟Bean 里面的属性对应
+												orgid : tree,
+												usernameLike : username,
+												ganyu:ganyu,
+												assessment:assessment,
+												
+											},
+											 done: function (res, curr, count) {
+												  if(count > 10) {
+											        	$("#tiwen2 .layui-table-page").show();
+											        }else {
+											        	$("#tiwen2 .layui-table-page").hide();
+											        }
+												 resDate= res.data;
+												 resUserList= res.userlist;
+									                var len = res.data.length;
+									                pageDataIdMap = new Map();
+									                for(var i = 0;i < len;i++){   //填充当前页的数据
+									                    pageDataIdMap[res.data[i].usercode] = res.data[i].usercode;
+									                }
+									                var chooseNum = 0;   //记录当前页选中的数据行数
+									                for(var i = 0;i < len;i++){   //勾选行回显
+									                    for(var key in idMap){
+									                        if(res.data[i].usercode == key){
+									                            res.data[i]["LAY_CHECKED"]='true';
+									                            //找到对应数据改变勾选样式，呈现出选中效果
+									                            var index= res.data[i]['LAY_TABLE_INDEX'];
+									                            $('tr[data-index=' + index + '] input[type="checkbox"]').prop('checked', true);
+									                            $('tr[data-index=' + index + '] input[type="checkbox"]').next().addClass('layui-form-checked');
+									                            chooseNum++;
+									                        }
+									                    }
+									                }
+									                let pageDataIdMaparray = []
+												    for(let key in pageDataIdMap) {
+												      let obj = pageDataIdMap[key]
+												      obj.id = key
+												      pageDataIdMaparray.push(obj)
+												    }
+												console.log(JSON
+														.stringify({
+															"pageDataIdMaparray" : pageDataIdMaparray
+															 
+														}))
+									                if(len != 0 && chooseNum == len){   //表示该页全选  --  全选按钮样式回显
+									                $('input[lay-filter="layTableAllChoose"]').prop('checked',true);
+									                $('input[lay-filter="layTableAllChoose"]').next().addClass('layui-form-checked');
+									                }
+												 let array = []
+												 for(let key in idMap) {
+													 let obj = idMap[key]
+													 obj.id = key
+													 array.push(obj)
+												 }
+												 console.log(JSON
+														 .stringify({
+															 "userList" : array
+
+														 }))
+
+
+
+												 if(array.length!=0){
+													 $("#xuanze").html("已选择"+array.length+"项")
+													 $("#piliang").css("display","block")
+												 }else{
+													 console.log(idMap)
+													 $("#piliang").css("display","none")
+
+													 $("input[name='checkall']").prop('checked',false);
+													 form.render("checkbox");
+												 }
+									            } 
+										});
+									}
+									
+								};
+
+							//监听工具条
+							table.on('tool(tableTbBas)', function(obj) {
+								var data = obj.data; //获得当前行数据
+								var layEvent = obj.event; //获得 lay-event 对应的值
+
+								if (layEvent === 'edit') { // 查看
+									layer.msg('点击了修改');
+								} else if (layEvent === 'del') { // 删除
+									layer.msg('点击了删除');
+								} else if (layEvent === 'edit2') { // 修改2
+									layer.msg('点击了下拉菜单修改');
+								} else if (layEvent === 'del2') { // 删除2
+									layer.msg('点击了下拉菜单删除');
+								} else if (layEvent === 'lock2') { // 打印2
+									layer.msg('点击了下拉菜单锁定');
+								}
+
+								dropdown.hideAll();
+							});
+
+							//监听提交
+							form
+									.on(
+											'submit(formDemo)',
+											function(data2) {
+
+												var checkStatus = table
+														.checkStatus('usercode'), data = checkStatus.data;
+												 let array = []
+												    for(let key in idMap) {
+												      let obj = idMap[key]
+												      obj.id = key
+												      array.push(obj)
+												    }
+												//layer.msg(JSON.stringify(data));
+												//layer.msg(JSON.stringify(data2.field));
+												console.log(JSON
+														.stringify({
+															"userList" : array,
+															"city" : data2.field
+														}))
+												 
+
+												$
+														.ajax({
+															type : "post",
+															url : "/intervene/batchGroupingNew",
+															contentType : 'application/json;charset=UTF-8', //发送信息至服务器时内容编码类型
+															traditional : true, //传统的方式来序列化数据
+															data : JSON
+																	.stringify({
+																		"userList" : array,
+																		"city" : data2.field
+																	}),
+
+															success : function(
+																	data) {
+																idMap=new Map();
+																$("#piliang").css("display","none");
+																$("input[name='checkall']").prop('checked',false);
+																form.render("checkbox");
+													        	$("input[name='layTableCheckbox']").each(function(){
+													 				 $(this).prop('checked', false);
+													 			  });
+
+													        	  $("#ganyu").val('');
+														        	$("#username").val('');
+														        	 
+														        	$('#tree').siblings().remove();
+														        	 form.render("select");
+														        	 randtreesone();
+														        	 
+														        	insTb = table
+																	.render({
+																		id : 'usercode',
+																		elem : '#tableTbBas',
+																		url : '/manage/YhDiseaseAssessReport/healthAssessment2',
+																		page : true,
+																		cellMinWidth : 100,
+																		cols : [ [
+																				{
+																					type : 'checkbox'
+																				},
+																				{
+																					type : 'numbers',
+																					title : '序号'
+																				},
+																				{
+																					field : 'usercode',
+																					align : 'center',
+																					sort : true,
+																					title : '用户编号'
+																				},
+																				 
+																				{
+																					field : 'name',
+																					align : 'center',
+																					sort : true,
+																					title : '姓名'
+																				},
+																				{
+																					field : 'sex',
+																					align : 'center',
+																					sort : true,
+																					title : '性别'
+																				},
+																				{
+																					field : 'times',
+																					align : 'center',
+																					sort : true,
+																					title : '评估次数'
+																				},
+																				{
+																					field : 'qtime',
+																					align : 'center',
+																					sort : true,
+																					title : '最新评估时间'
+																				},
+																				{
+																					toolbar : '#demoEDStateBargfx',
+																					align : 'center',
+																					sort : true,
+																					title : '高风险'
+																				},
+																				 
+																				{
+																					toolbar : '#demoEDStateBarhb',
+																					field : 'abnormalNum',
+																					align : 'center',
+																					sort : true,
+																					title : '患病或异常'
+																				},
+																				{
+																					
+																					field : 'flagDgroup',
+																					align : 'center',
+																					 
+																					 
+																					title : '分组'
+																				},
+																				{
+																					 
+																					title : '操作',templet: function (d) {
+																						var userCode = d.usercode;
+																			                			return "<a href='/manage/register/userIndex?page=healthAssessment&userCode="+userCode+"' target='_blank'><font color='#36A4FF'>查看</font></a>";
+																			        } 
+																				 
+																				} ] ],
+																		response : {
+
+																			statusCode : 0
+																		//规定成功的状态码，默认：0
+
+																		},
+																		parseData : function(res) { //将原始数据解析成 table 组件所规定的数据
+																			return {
+																				"code" : res.data.code, //解析接口状态
+																				"msg" : res.data.msg, //解析提示文本
+																				"count" : res.data.count, //解析数据长度
+																				"data" : res.data.data
+																			//解析数据列表
+																			}
+
+																		},
+																		 done: function (res, curr, count) {
+																			 if(count > 10) {
+																		        	$("#tiwen2 .layui-table-page").show();
+																		        }else {
+																		        	$("#tiwen2 .layui-table-page").hide();
+																		        }
+																			 resDate= res.data;
+																			 resUserList= res.userlist;
+																                var len = res.data.length;
+																                pageDataIdMap = new Map();
+																                for(var i = 0;i < len;i++){   //填充当前页的数据
+																                    pageDataIdMap[res.data[i].usercode] = res.data[i].usercode;
+																                }
+																                var chooseNum = 0;   //记录当前页选中的数据行数
+																                for(var i = 0;i < len;i++){   //勾选行回显
+																                    for(var key in idMap){
+																                        if(res.data[i].usercode == key){
+																                            res.data[i]["LAY_CHECKED"]='true';
+																                            //找到对应数据改变勾选样式，呈现出选中效果
+																                            var index= res.data[i]['LAY_TABLE_INDEX'];
+																                            $('tr[data-index=' + index + '] input[type="checkbox"]').prop('checked', true);
+																                            $('tr[data-index=' + index + '] input[type="checkbox"]').next().addClass('layui-form-checked');
+																                            chooseNum++;
+																                        }
+																                    }
+																                }
+																                let pageDataIdMaparray = []
+																			    for(let key in pageDataIdMap) {
+																			      let obj = pageDataIdMap[key]
+																			      obj.id = key
+																			      pageDataIdMaparray.push(obj)
+																			    }
+																			console.log(JSON
+																					.stringify({
+																						"pageDataIdMaparray" : pageDataIdMaparray
+																						 
+																					}))
+																                if(len != 0 && chooseNum == len){   //表示该页全选  --  全选按钮样式回显
+																                $('input[lay-filter="layTableAllChoose"]').prop('checked',true);
+																                $('input[lay-filter="layTableAllChoose"]').next().addClass('layui-form-checked');
+																                }
+																            } 
+
+																	});  
+															}
+														});
+												layer.closeAll();
+												return false;
+											});
+
+							//监听提交 移除
+							form
+									.on(
+											'submit(formDemo2)',
+											function(data2) {
+
+												var checkStatus = table
+														.checkStatus('usercode'), data = checkStatus.data;
+												let array = []
+											    for(let key in idMap) {
+											      let obj = idMap[key]
+											      obj.id = key
+											      array.push(obj)
+											    }
+												//layer.msg(JSON.stringify(data));
+												//layer.msg(JSON.stringify(data2.field));
+												//layer.msg(JSON.stringify({"record":data, "city":data2.field}));
+
+												$.ajax({
+															type : "post",
+															url : "/intervene/removeGroupingNew",
+															contentType : 'application/json;charset=UTF-8', //发送信息至服务器时内容编码类型
+															traditional : true, //传统的方式来序列化数据
+															data : JSON.stringify({
+																		"userList" : array,
+																		"city" : data2.field
+																	}),
+
+															success : function(
+																	data) {
+																idMap=new Map();;
+																console.log(idMap)
+																$("#piliang").css("display","none");
+																$("input[name='checkall']").prop('checked',false);
+																form.render("checkbox");
+													        	$("input[name='layTableCheckbox']").each(function(){
+													 				 $(this).prop('checked', false);
+													 			  });
+
+													        	  $("#ganyu").val('');
+														        	$("#username").val('');
+														        	 
+														        	$('#tree').siblings().remove();
+														        	 form.render("select");
+														        	 randtreesone();
+														        	 
+														        	insTb = table
+																	.render({
+																		id : 'usercode',
+																		elem : '#tableTbBas',
+																		url : '/manage/YhDiseaseAssessReport/healthAssessment2',
+																		page : true,
+																		cellMinWidth : 100,
+																		cols : [ [
+																				{
+																					type : 'checkbox'
+																				},
+																				{
+																					type : 'numbers',
+																					title : '序号'
+																				},
+																				{
+																					field : 'usercode',
+																					align : 'center',
+																					sort : true,
+																					title : '用户编号'
+																				},
+																				 
+																				{
+																					field : 'name',
+																					align : 'center',
+																					sort : true,
+																					title : '姓名'
+																				},
+																				{
+																					field : 'sex',
+																					align : 'center',
+																					sort : true,
+																					title : '性别'
+																				},
+																				{
+																					field : 'times',
+																					align : 'center',
+																					sort : true,
+																					title : '评估次数'
+																				},
+																				{
+																					field : 'qtime',
+																					align : 'center',
+																					sort : true,
+																					title : '最新评估时间'
+																				},
+																				{
+																					toolbar : '#demoEDStateBargfx',
+																					align : 'center',
+																					sort : true,
+																					title : '高风险'
+																				},
+																				 
+																				{
+																					toolbar : '#demoEDStateBarhb',
+																					field : 'abnormalNum',
+																					align : 'center',
+																					sort : true,
+																					title : '患病或异常'
+																				},
+																				{
+																					
+																					field : 'flagDgroup',
+																					align : 'center',
+																					 
+																					 
+																					title : '分组'
+																				},
+																				{
+																					 
+																					title : '操作',templet: function (d) {
+																						var userCode = d.usercode;
+																			                			return "<a href='/manage/register/userIndex?page=healthAssessment&userCode="+userCode+"' target='_blank'><font color='#36A4FF'>查看</font></a>";
+																			        } 
+																				 
+																				} ] ],
+																		response : {
+
+																			statusCode : 0
+																		//规定成功的状态码，默认：0
+
+																		},
+																		parseData : function(res) { //将原始数据解析成 table 组件所规定的数据
+																			return {
+																				"code" : res.data.code, //解析接口状态
+																				"msg" : res.data.msg, //解析提示文本
+																				"count" : res.data.count, //解析数据长度
+																				"data" : res.data.data
+																			//解析数据列表
+																			}
+
+																		},
+																		 done: function (res, curr, count) {
+																			 if(count > 10) {
+																		        	$("#tiwen2 .layui-table-page").show();
+																		        }else {
+																		        	$("#tiwen2 .layui-table-page").hide();
+																		        }
+																			 resDate= res.data;
+																			 resUserList= res.userlist;
+																                var len = res.data.length;
+																                pageDataIdMap = new Map();
+																                for(var i = 0;i < len;i++){   //填充当前页的数据
+																                    pageDataIdMap[res.data[i].usercode] = res.data[i].usercode;
+																                }
+																                var chooseNum = 0;   //记录当前页选中的数据行数
+																                for(var i = 0;i < len;i++){   //勾选行回显
+																                    for(var key in idMap){
+																                        if(res.data[i].usercode == key){
+																                            res.data[i]["LAY_CHECKED"]='true';
+																                            //找到对应数据改变勾选样式，呈现出选中效果
+																                            var index= res.data[i]['LAY_TABLE_INDEX'];
+																                            $('tr[data-index=' + index + '] input[type="checkbox"]').prop('checked', true);
+																                            $('tr[data-index=' + index + '] input[type="checkbox"]').next().addClass('layui-form-checked');
+																                            chooseNum++;
+																                        }
+																                    }
+																                }
+																                let pageDataIdMaparray = []
+																			    for(let key in pageDataIdMap) {
+																			      let obj = pageDataIdMap[key]
+																			      obj.id = key
+																			      pageDataIdMaparray.push(obj)
+																			    }
+																			console.log(JSON
+																					.stringify({
+																						"pageDataIdMaparray" : pageDataIdMaparray
+																						 
+																					}))
+																                if(len != 0 && chooseNum == len){   //表示该页全选  --  全选按钮样式回显
+																                $('input[lay-filter="layTableAllChoose"]').prop('checked',true);
+																                $('input[lay-filter="layTableAllChoose"]').next().addClass('layui-form-checked');
+																                }
+																            } 
+
+																	});  
+															}
+														});
+												layer.closeAll();
+												return false;
+											});
+							
+
+							//监听提交 移除
+							form
+									.on(
+											'submit(formDemo3)',
+											function(data2) {
+													//用户选择
+												var checkStatus = table.checkStatus('usercode'), data = checkStatus.data;
+												//智能分组表格数据
+												var checkStatus2 = table.checkStatus('tableTbBas2'), data3 = checkStatus2.data;
+												//layer.msg(JSON.stringify(data));
+												console.log(JSON.stringify(data3));
+												let array = []
+											    for(let key in idMap) {
+											      let obj = idMap[key]
+											      obj.id = key
+											      array.push(obj)
+											    }
+												if(data3.length > 0){
+													$.ajax({
+														type : "post",
+														url : "/intervene/intelligentGrouping",
+														contentType : 'application/json;charset=UTF-8', //发送信息至服务器时内容编码类型
+														traditional : true, //传统的方式来序列化数据
+														data : JSON.stringify({
+																	"userList" : array,
+																	"city" : data2.field,
+																	"intelligence":data3
+																}),
+
+														success : function(
+																data) {
+															idMap=new Map();;
+															console.log(data.data);
+															if(data.data>0){
+																layer.msg("智能分组成功");
+															}else{
+																layer.msg("分组失败，请确定人员已经评估");
+															}
+															
+															
+															$("#piliang").css("display","none");
+															$("input[name='checkall']").prop('checked',false);
+															form.render("checkbox");
+												        	$("input[name='layTableCheckbox']").each(function(){
+												 				 $(this).prop('checked', false);
+												 			  });
+												        	table.reload('pinggu', {
+											                    where: {},
+											                    page: {
+											                        curr: 1 //重新从第 1 页开始
+											                    }
+											                });
+
+												        	  $("#ganyu").val('');
+													        	$("#username").val('');
+													        	 
+													        	$('#tree').siblings().remove();
+													        	 form.render("select");
+													        	 randtreesone();
+													        	 
+													        	insTb = table
+																.render({
+																	id : 'usercode',
+																	elem : '#tableTbBas',
+																	url : '/manage/YhDiseaseAssessReport/healthAssessment2',
+																	page : true,
+																	cellMinWidth : 100,
+																	cols : [ [
+																			{
+																				type : 'checkbox'
+																			},
+																			{
+																				type : 'numbers',
+																				title : '序号'
+																			},
+																			{
+																				field : 'usercode',
+																				align : 'center',
+																				sort : true,
+																				title : '用户编号'
+																			},
+																			 
+																			{
+																				field : 'name',
+																				align : 'center',
+																				sort : true,
+																				title : '姓名'
+																			},
+																			{
+																				field : 'sex',
+																				align : 'center',
+																				sort : true,
+																				title : '性别'
+																			},
+																			{
+																				field : 'times',
+																				align : 'center',
+																				sort : true,
+																				title : '评估次数'
+																			},
+																			{
+																				field : 'qtime',
+																				align : 'center',
+																				sort : true,
+																				title : '最新评估时间'
+																			},
+																			{
+																				toolbar : '#demoEDStateBargfx',
+																				align : 'center',
+																				sort : true,
+																				title : '高风险'
+																			},
+																			 
+																			{
+																				toolbar : '#demoEDStateBarhb',
+																				field : 'abnormalNum',
+																				align : 'center',
+																				sort : true,
+																				title : '患病或异常'
+																			},
+																			{
+																				
+																				field : 'flagDgroup',
+																				align : 'center',
+																				 
+																				 
+																				title : '分组'
+																			},
+																			{
+																				 
+																				title : '操作',templet: function (d) {
+																					var userCode = d.usercode;
+																		                			return "<a href='/manage/register/userIndex?page=healthAssessment&userCode="+userCode+"' target='_blank'><font color='#36A4FF'>查看</font></a>";
+																		        } 
+																			 
+																			} ] ],
+																	response : {
+
+																		statusCode : 0
+																	//规定成功的状态码，默认：0
+
+																	},
+																	parseData : function(res) { //将原始数据解析成 table 组件所规定的数据
+																		return {
+																			"code" : res.data.code, //解析接口状态
+																			"msg" : res.data.msg, //解析提示文本
+																			"count" : res.data.count, //解析数据长度
+																			"data" : res.data.data
+																		//解析数据列表
+																		}
+
+																	},
+																	 done: function (res, curr, count) {
+																		 if(count > 10) {
+																	        	$("#tiwen2 .layui-table-page").show();
+																	        }else {
+																	        	$("#tiwen2 .layui-table-page").hide();
+																	        }
+																		 resDate= res.data;
+																		 resUserList= res.userlist;
+															                var len = res.data.length;
+															                pageDataIdMap = new Map();
+															                for(var i = 0;i < len;i++){   //填充当前页的数据
+															                    pageDataIdMap[res.data[i].usercode] = res.data[i].usercode;
+															                }
+															                var chooseNum = 0;   //记录当前页选中的数据行数
+															                for(var i = 0;i < len;i++){   //勾选行回显
+															                    for(var key in idMap){
+															                        if(res.data[i].usercode == key){
+															                            res.data[i]["LAY_CHECKED"]='true';
+															                            //找到对应数据改变勾选样式，呈现出选中效果
+															                            var index= res.data[i]['LAY_TABLE_INDEX'];
+															                            $('tr[data-index=' + index + '] input[type="checkbox"]').prop('checked', true);
+															                            $('tr[data-index=' + index + '] input[type="checkbox"]').next().addClass('layui-form-checked');
+															                            chooseNum++;
+															                        }
+															                    }
+															                }
+															                let pageDataIdMaparray = []
+																		    for(let key in pageDataIdMap) {
+																		      let obj = pageDataIdMap[key]
+																		      obj.id = key
+																		      pageDataIdMaparray.push(obj)
+																		    }
+																		console.log(JSON
+																				.stringify({
+																					"pageDataIdMaparray" : pageDataIdMaparray
+																					 
+																				}))
+															                if(len != 0 && chooseNum == len){   //表示该页全选  --  全选按钮样式回显
+															                $('input[lay-filter="layTableAllChoose"]').prop('checked',true);
+															                $('input[lay-filter="layTableAllChoose"]').next().addClass('layui-form-checked');
+															                }
+															            } 
+
+																});  
+														}
+													});
+													
+													layer.closeAll();
+													return false;
+												}else{
+													layer.msg("请至少选择一个");
+													return false;
+												}
+												//console.log(JSON.stringify(checkStatus2));
+												//layer.msg(JSON.stringify(data2.field));
+												//layer.msg(JSON.stringify({"record":data, "city":data2.field}));
+ 													
+												
+											});
+							
+							//监听干预操作
+							form.on('switch(ckStateTbAdv)', function(obj) {
+								/* layer.tips(this.value + '：' + obj.elem.checked,
+										obj.othis); */
+								var value = this.value;
+
+								var yesorno = obj.elem.checked;
+
+								$.post("/YhUserEnrolinfo/modifyGY",
+										{
+											usercode : value,
+											yesOrNo : yesorno
+										}, function(result) {
+
+										});
+							});
+							// 导出excel
+							$('#btnExportTbBas').click(
+									function() {
+										var checkRows = table
+												.checkStatus('tableTbBas');
+										if (checkRows.data.length == 0) {
+											layer.msg('请选择要导出的数据', {
+												icon : 2
+											});
+										} else {
+											table.exportFile(insTb.config.id,
+													checkRows.data, 'xls');
+										}
+									});
+
+							// 搜索按钮点击事件
+							form.on('submit(formSubSearchTbBas)',
+									function(data) {
+										insTb.reload({
+											where : data.field
+										}, 'data');
+									});
+							function batchSubmitWt() {
+							    var ids = "";
+							    for(var key in idMap){
+							        ids += key + ",";
+							    }
+							    if(ids == ''){
+							        layer.open({title:'提示',content:'请勾选'});
+							        return false;
+							    }
+							    ids = ids.slice(0,-1);
+							   
+							    let array = []
+							    for(let key in idMap) {
+							      let obj = idMap[key]
+							      obj.id = key
+							      array.push(obj)
+							    }
+							    console.log(array)
+							} 
+
+						});
+		function screeningList() {
+			window.location.href = "/manage/YhDiseaseAssessReport/screeningList"
+		}
+
+	
+	</script>
+</body>
+
+</html>

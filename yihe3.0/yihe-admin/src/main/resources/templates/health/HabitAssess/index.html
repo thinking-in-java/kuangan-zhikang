@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, maximum-scale=1">
+<title>习惯评估管理</title>
+<link rel="stylesheet" th:href="@{/assets/libs/layui/css/layui.css}" />
+<link rel="stylesheet" th:href="@{/assets/module/admin.css}" />
+<style type="text/css">
+.layui-card-body{
+    padding: 10px 0px;
+}
+.layui-fluid {
+    padding: 15px 0px;
+}
+
+.toolbar{
+margin-left: -23px;
+}
+</style>
+</head>
+<body>
+	<!-- 加载动画 -->
+	<div class="page-loading">
+		<div class="ball-loader">
+			<span></span><span></span><span></span><span></span>
+		</div>
+	</div>
+	 
+	 
+<div class="layui-row"  style="padding: 20px;">
+		<div class="layui-card">
+	<div class="layui-tab layui-tab-brief" lay-filter="demo2">
+		<ul class="layui-tab-title">
+			<li lay-id='1' class="layui-this" onclick="assess()">评估档案</li>
+			<li lay-id='2' onclick="RecordShow()">评估记录</li>
+		</ul>
+		<div class="layui-tab-content">
+			<div class="layui-tab-item layui-show">
+				<div class="layui-fluid">
+					<div class="layui-card">
+						<div class="layui-card-body">
+							<input name="orgCode" id="orgCode" class="layui-input" type="hidden" />
+							<div class="layui-form toolbar">
+								<div class="layui-form-item">
+									<div class="layui-inline">
+										<label class="layui-form-label">归&emsp;&emsp;属：</label>
+										<div class="layui-input-block" style="width: 270px;">
+											<input type="text" id="tree" lay-filter="tree"
+												class="layui-input">
+										</div>
+									</div>
+
+								<div class="layui-inline">
+										<label class="layui-form-label">评估结果：</label>
+										<div class="layui-input-inline">
+										   <select name="result" id="result" 	 lay-search="">
+									          <option value="">全部</option>
+									          <option value="较差">较差</option>
+									          <option value="良好">良好</option>
+									          <option value="很棒">很棒</option>
+									        </select>
+										  </div>
+									</div>
+									
+									<div class="layui-inline">
+										<label class="layui-form-label">姓&emsp;&emsp;名：</label>
+										<div class="layui-input-inline">
+											<input name="name" id="name" class="layui-input"
+												type="text" placeholder="输入姓名" />
+										</div>
+									</div>
+									
+									
+					     
+					  
+									
+
+									<div class="layui-inline" style="padding-left: 20px;">
+											<button class="layui-btn icon-btn sousuoDN" onclick="assess()" data-type="reload"><i class="layui-icon"></i>搜索</button>
+										<button class="layui-btn layui-btn-primary" id="btnempty" lay-submit="" lay-filter="reset">清除</button>
+								
+									</div>
+ 
+
+								</div>
+							</div>
+							 
+							<table id="LAY_table_user" lay-filter="demo"></table>
+							<br>
+							<br>
+							<br>
+							<br>
+						</div>
+					</div>
+				</div>
+
+			</div>
+			<!-- 评估记录 -->
+			<div class="layui-tab-item">
+				<div class="layui-fluid">
+<div class="layui-card">
+						<div class="layui-card-body">
+
+							<div class="layui-form toolbar"  style="margin-left: -24px;">
+								<div class="layui-form-item">
+									<div class="layui-inline">
+										<label class="layui-form-label">评估结果：</label>
+										<div class="layui-input-inline">
+										    <select name="result1" id="result1" 	 lay-search="">
+									          <option value="">全部</option>
+									          <option value="较差">较差</option>
+									          <option value="良好">良好</option>
+									          <option value="很棒">很棒</option>
+									        </select>
+										  </div>
+									</div>
+
+
+									<div class="layui-inline">
+										<label class="layui-form-label">姓&emsp;&emsp;名：</label>
+										<div class="layui-input-inline">
+											<input name="name1" id="name1" class="layui-input"
+												type="text" placeholder="输入姓名" />
+										</div>
+									</div>
+									<div class="layui-inline">
+										<label class="layui-form-label">账&emsp;&emsp;号：</label>
+										<div class="layui-input-inline">
+											<input name="userName" id="userName" class="layui-input"
+												type="text" placeholder="输入账号" />
+										</div>
+									</div>
+									<div class="layui-inline">
+										<label class="layui-form-label">评估时间：</label>
+										<div class="layui-input-inline" style="width: 300px">
+											<input type="text" class="layui-input" id="test10" placeholder=" - ">
+										</div>
+									</div>
+									
+
+									<div class="layui-inline" style="padding-left: 20px;">
+										<button class="layui-btn icon-btn sousuo2" data-type="reload" onclick="assessShow()"><i class="layui-icon"></i>搜索</button>
+										<button class="layui-btn layui-btn-primary" id="btnempty1" lay-submit="" lay-filter="reset">清除</button>
+								
+									</div>
+ 
+
+								</div>
+							</div>
+							 
+							<table class="layui-hide" id="fenzu" lay-filter="fenzu"></table>
+<br>
+							<br>
+							<br>
+							<br>
+						</div>
+					</div>
+				</div>
+
+			</div>
+
+
+		</div>
+	</div>
+	</div>
+	</div>
+	<!-- 正文开始 -->
+
+
+<script type="text/html" id="barDemo">
+    <a href="#" lay-event="edit"><font color="#36A4FF">查看</font></a>
+</script>
+
+	<!-- js部分 -->
+	<script type="text/javascript" th:src="@{/assets/libs/layui/layui.js}"></script>
+	<script type="text/javascript" th:src="@{/assets/js/common.js}"></script>
+	<script>
+		layui
+				.use(
+						[ 'layer', 'form', 'table',  
+								'laypage', 'treeSelect', 'admin','element','laydate', 'util'
+								 ],
+						function() {
+							var $ = layui.jquery;
+							var layer = layui.layer;
+							var form = layui.form;
+							var table = layui.table;
+							var laypage = layui.laypage;
+							var element = layui.element;
+							var admin = layui.admin;
+							var form = layui.form;
+							var treeSelect = layui.treeSelect;
+							 var laydate = layui.laydate;
+							  var util = layui.util;
+							  //清除按钮
+						        $("#btnempty").click(function(){
+						        	$("#result").val('');
+						        	$("#name").val('');
+						        	$("#orgCode").val('');
+						        	$('#tree').siblings().remove();
+						        	 form.render("select");
+						        	usertsone();
+						        	 table.reload('assess', {
+									        where: { //设定异步数据接口的额外参数，任意设
+									        'name':$("#name").val(),
+									        'result':$("#result").val(),
+									        'orgCode':$("#orgCode").val(),
+									       }
+									      });
+						        })
+						        
+						        //清除按钮
+						        $("#btnempty1").click(function(){
+						        	$("#name1").val('');
+						        	$("#result1").val('');
+						        	$("#test10").val('');
+						        	$("#userName").val('');
+						        	 form.render("select");
+						        	 table.reload('fenzu', {
+									        where: { //设定异步数据接口的额外参数，任意设
+									        'name':$("#name1").val(),
+									        'result':$("#result1").val(),
+									        'dictTime':$("#test10").val(),
+									        'userName':$("#userName").val(),
+									       }
+									      });
+						        })
+						        
+							 //日期时间范围
+							  laydate.render({
+							    elem: '#test10'
+							    ,type: 'datetime'
+							    ,range: true,
+								  trigger: 'click',
+							  });
+							 
+							  
+						        table.on('tool(demo)', function(obj) { //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
+						            var data = obj.data;
+						            var layEvent = obj.event;
+						            if (layEvent === 'edit') { // 查看
+						            	window.open("/manage/register/userIndex?page=habit1&userCode="+data.userCode+""); 
+						            }
+						        });
+						        
+						        
+						 
+							
+							usertsone();
+						   	function usertsone(){
+							treeSelect.render({
+								// 选择器
+								elem : '#tree',
+								// 数据 
+								data : '/YhUserMakeCard/showPullDownTree',
+								// 异步加载方式：get/post，默认get
+								type : 'get',
+								// 占位符
+								placeholder : '全部',
+								// 是否开启搜索功能：true/false，默认false
+								search : true,
+								// 点击回调
+								click : function(d) {
+									$('#orgCode').val(d.current.id)
+									//console.log($('#tree').val(d.current.id));
+								},
+								// 加载完成后的回调函数
+								success : function(d) {
+									console.log(d);
+								}
+							});
+							}
+							
+							
+							LAY_table_user();
+							function LAY_table_user(){
+								 //方法级渲染
+								table.render({
+									elem : '#LAY_table_user',
+									url : '/YhLifeHabitImprovementDictController/sleepbyImprovement',
+									method:'post',
+									cols : [ [ 
+										{type:'numbers'},
+										{
+											field : 'userCode',
+											title : '用户编码',
+										},
+										{
+											field : 'userName',
+											title : '账号',
+										},{
+											field : 'name',
+											title : '姓名',
+										},{
+											field : 'sex',
+											title : '性别',
+										},{
+											field : 'frequency',
+											title : '评估次数',
+										},{
+							            templet: function (d) {
+							                return util.toDateString(d.dictTime);
+							            }, title: '最终评估时间', align: 'dictTime'
+							        }, {
+										field : 'result',
+										title : '评估结果',
+									},{
+										fixed : 'right',
+										title : '操作',
+										align : 'center',
+										toolbar : '#barDemo'
+									} ] ],
+									id : 'assess',
+									page : true,
+									done: function(res, curr, count){
+								         if(count > 10) {
+								          $(".layui-table-page").show();
+								         }else {
+								          $(".layui-table-page").hide();
+								         }
+								       }
+								});
+							}
+							
+				
+							 //搜索的方法
+							   assess=function(){
+							     table.reload('assess', {
+							        where: { //设定异步数据接口的额外参数，任意设
+							        'name':$("#name").val(),
+							        'result':$("#result").val(),
+							        'orgCode':$("#orgCode").val(),
+							       }
+							      });
+							    }
+							  
+							   var day2 = new Date();
+								  day2.setTime(day2.getTime());
+								  var s2 = day2.getFullYear()+"-" + ((day2.getMonth()+1)>=10?(day2.getMonth()+1):"0"+(day2.getMonth()+1)) + "-" + ((day2.getDate())>=10?(day2.getDate()):"0"+(day2.getDate()))+" "+"00:00:00";
+								  var s3 = day2.getFullYear()+"-" + ((day2.getMonth()+1)>=10?(day2.getMonth()+1):"0"+(day2.getMonth()+1)) + "-" + ((day2.getDate())>=10?(day2.getDate()):"0"+(day2.getDate()))+" "+"23:59:59";
+						        var flagStr = '[[${strTime}]]'
+						        var test10Value=null;
+									if('1'==flagStr){
+										 element.tabChange('demo2', 2); 
+										$("#test10").val(s2+" - "+s3)
+										test10Value=s2+" - "+s3;
+									}
+									 //方法级渲染
+									table.render({
+										elem : '#fenzu',
+										url : '/YhLifeHabitImprovementDictController/ShowHabitrecord',
+										method:'post',
+										where: {dictTime:test10Value},
+										cols : [ [ 
+											{type:'numbers'},
+											{
+												field : 'userCode',
+												title : '用户编码',
+											},
+											{
+												field : 'userName',
+												title : '账号',
+											},{
+												field : 'name',
+												title : '姓名',
+											},{
+												field : 'sex',
+												title : '性别',
+											}, {
+												field : 'result',
+												title : '评估结果',
+											},{
+								            templet: function (d) {
+								                return util.toDateString(d.dictTime);
+								            }, title: '评估时间', align: 'dictTime'
+								        } ] ],
+										id : 'fenzu',
+										page : true,
+										done: function(res, curr, count){
+									         if(count > 10) {
+									          $(".layui-table-page").show();
+									         }else {
+									          $(".layui-table-page").hide();
+									         }
+									       }
+									});
+									
+							   RecordShow=function(){
+								   
+									 
+									
+									 //方法级渲染
+									table.render({
+										elem : '#fenzu',
+										url : '/YhLifeHabitImprovementDictController/ShowHabitrecord',
+										method:'post',
+										where: {dictTime:test10Value},
+										cols : [ [ 
+											{type:'numbers'},
+											{
+												field : 'userCode',
+												title : '用户编码',
+											},
+											{
+												field : 'userName',
+												title : '账号',
+											},{
+												field : 'name',
+												title : '姓名',
+											},{
+												field : 'sex',
+												title : '性别',
+											}, {
+												field : 'result',
+												title : '评估结果',
+											},{
+								            templet: function (d) {
+								                return util.toDateString(d.dictTime);
+								            }, title: '评估时间', align: 'dictTime'
+								        } ] ],
+										id : 'fenzu',
+										page : true,
+										done: function(res, curr, count){
+									         if(count > 10) {
+									          $(".layui-table-page").show();
+									         }else {
+									          $(".layui-table-page").hide();
+									         }
+									       }
+									});
+								}
+							   //搜索的方法
+							   assessShow=function(){
+							     table.reload('fenzu', {
+							        where: { //设定异步数据接口的额外参数，任意设
+							        'name':$("#name1").val(),
+							        'result':$("#result1").val(),
+							        'dictTime':$("#test10").val(),
+							        'userName':$("#userName").val(),
+							       }
+							      });
+							    }
+							   
+							
+						
+
+						});
+	</script>
+</body>
+
+</html>

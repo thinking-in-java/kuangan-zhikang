@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yihe.applet.api.mapper.YhAwardMedalMapper" >
+  <resultMap id="BaseResultMap" type="com.yihe.applet.api.domain.YhAwardMedal" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="img" property="img" jdbcType="VARCHAR" />
+    <result column="grade" property="grade" jdbcType="INTEGER" />
+    <result column="hab_id" property="habId" jdbcType="VARCHAR" />
+    <result column="me_mane" property="meMane" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, img, grade, hab_id, me_mane
+  </sql>
+  
+  <select id="selectdengMedal" resultMap="BaseResultMap" parameterType="map">
+  	 select 
+    <include refid="Base_Column_List" />
+    from yh_award_medal
+    where hab_id=#{habId,jdbcType=VARCHAR} and grade=#{grade,jdbcType=INTEGER}
+  </select>
+  
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from yh_award_medal
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from yh_award_medal
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.yihe.applet.api.domain.YhAwardMedal" >
+    insert into yh_award_medal (id, img, grade, 
+      hab_id, me_mane)
+    values (#{id,jdbcType=INTEGER}, #{img,jdbcType=VARCHAR}, #{grade,jdbcType=INTEGER}, 
+      #{habId,jdbcType=VARCHAR}, #{meMane,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.yihe.applet.api.domain.YhAwardMedal" >
+    insert into yh_award_medal
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="img != null" >
+        img,
+      </if>
+      <if test="grade != null" >
+        grade,
+      </if>
+      <if test="habId != null" >
+        hab_id,
+      </if>
+      <if test="meMane != null" >
+        me_mane,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="img != null" >
+        #{img,jdbcType=VARCHAR},
+      </if>
+      <if test="grade != null" >
+        #{grade,jdbcType=INTEGER},
+      </if>
+      <if test="habId != null" >
+        #{habId,jdbcType=VARCHAR},
+      </if>
+      <if test="meMane != null" >
+        #{meMane,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.yihe.applet.api.domain.YhAwardMedal" >
+    update yh_award_medal
+    <set >
+      <if test="img != null" >
+        img = #{img,jdbcType=VARCHAR},
+      </if>
+      <if test="grade != null" >
+        grade = #{grade,jdbcType=INTEGER},
+      </if>
+      <if test="habId != null" >
+        hab_id = #{habId,jdbcType=VARCHAR},
+      </if>
+      <if test="meMane != null" >
+        me_mane = #{meMane,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.yihe.applet.api.domain.YhAwardMedal" >
+    update yh_award_medal
+    set img = #{img,jdbcType=VARCHAR},
+      grade = #{grade,jdbcType=INTEGER},
+      hab_id = #{habId,jdbcType=VARCHAR},
+      me_mane = #{meMane,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

@@ -1,0 +1,663 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yihe.applet.api.mapper.YhHealthyPlanMapper">
+  <resultMap id="BaseResultMap" type="com.yihe.applet.api.domain.YhHealthyPlanApp">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="plan_name" jdbcType="VARCHAR" property="planName" />
+    <result column="plan_img" jdbcType="VARCHAR" property="planImg" />
+    <result column="plan_number" jdbcType="INTEGER" property="planNumber" />
+    <result column="plan_score" jdbcType="VARCHAR" property="planScore" />
+    <result column="plan_watch" jdbcType="VARCHAR" property="planWatch" />
+    <result column="plan_description" jdbcType="VARCHAR" property="planDescription" />
+     <result column="plan_people" jdbcType="VARCHAR" property="plan_people" />
+     <result column="plan_allnumber" jdbcType="INTEGER" property="plan_allnumber" />
+     <result column="plan_allintegral" jdbcType="INTEGER" property="plan_allintegral" />
+      <result column="plan_isapply" jdbcType="INTEGER" property="plan_isapply" />
+  </resultMap>
+   <resultMap id="BaseResultuserhealthplan" type="com.yihe.applet.api.domain.YhUserHealthyPlanApp">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="user_code" jdbcType="VARCHAR" property="userCode" />
+    <result column="courseSeq" jdbcType="INTEGER" property="courseseq" />
+    <result column="plan_day" jdbcType="INTEGER" property="planDay" />
+    <result column="plandetail_id" jdbcType="VARCHAR" property="plandetailId" />
+    <result column="plan_id" jdbcType="INTEGER" property="planId" />
+    <result column="plan_startdate" jdbcType="TIMESTAMP" property="planStartdate" />
+    <result column="plan_enddate" jdbcType="TIMESTAMP" property="planEnddate" />
+    <result column="plan_state" jdbcType="INTEGER" property="planState" />
+     <result column="plan_name" jdbcType="VARCHAR" property="plan_name" />
+      <result column="plan_number" jdbcType="INTEGER" property="plan_number" />
+      <result column="plan_unique" jdbcType="INTEGER" property="plan_unique" />
+      <result column="plan_choose" jdbcType="VARCHAR" property="plan_choose" />
+  </resultMap>
+  <resultMap id="BaseResulthealthydays" type="com.yihe.applet.api.domain.YhHealthyPlandays">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="planday" jdbcType="INTEGER" property="planday" />
+    <result column="plandetail_id" jdbcType="VARCHAR" property="plandetailId" />
+    <result column="plan_id" jdbcType="INTEGER" property="planId" />
+      <result column="plan_isskip" jdbcType="INTEGER" property="plan_isskip" />
+  </resultMap>
+    <resultMap id="BaseResultdetail" type="com.yihe.applet.api.domain.YhHealthyPlandetail">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="plandetail_title" jdbcType="VARCHAR" property="plandetailTitle" />
+    <result column="plandetail_type" jdbcType="INTEGER" property="plandetailType" />
+    <result column="plandetail_url" jdbcType="VARCHAR" property="plandetailUrl" />
+    <result column="plandetail_content" jdbcType="VARCHAR" property="plandetailContent" />
+    <result column="plandetail_total" jdbcType="INTEGER" property="plandetailTotal" />
+    <result column="plandetail_tip" jdbcType="VARCHAR" property="plandetailTip" />
+   	<result column="plandetail_jumpuri" jdbcType="VARCHAR" property="plandetail_jumpuri" />
+   	<result column="plandetail_finishportrait" jdbcType="VARCHAR" property="plandetail_finishportrait" />
+  </resultMap>
+    <resultMap id="BaseResultwxuser" type="com.yihe.applet.api.domain.YhWxUser">
+    <id column="user_id" jdbcType="INTEGER" property="userId" />
+    <id column="oppen_id" jdbcType="VARCHAR" property="oppenId" />
+    <result column="username" jdbcType="VARCHAR" property="username" />
+    <result column="realname" jdbcType="VARCHAR" property="realname" />
+    <result column="password" jdbcType="VARCHAR" property="password" />
+    <result column="head_img" jdbcType="VARCHAR" property="headImg" />
+    <result column="add_time" jdbcType="VARCHAR" property="addTime" />
+    <result column="area_id" jdbcType="INTEGER" property="areaId" />
+    <result column="area_name" jdbcType="VARCHAR" property="areaName" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+    <result column="member_time" jdbcType="VARCHAR" property="memberTime" />
+  </resultMap>
+
+    <resultMap id="foodrecode" type="com.yihe.system.domain.YhFoodSrecipeRecord" >
+        <id column="record_id" property="recordId" jdbcType="INTEGER" />
+        <result column="record_data" property="recordData" jdbcType="TIMESTAMP" />
+        <result column="record_name" property="recordName" jdbcType="VARCHAR" />
+        <result column="record_kay" property="recordKay" jdbcType="INTEGER" />
+        <result column="record_type" property="recordType" jdbcType="INTEGER" />
+        <result column="record_mode" property="recordMode" jdbcType="VARCHAR" />
+        <result column="user_code" property="userCode" jdbcType="VARCHAR" />
+        <result column="meal_id" property="mealId" jdbcType="VARCHAR" />
+        <result column="illness_id" property="illnessId" jdbcType="VARCHAR" />
+        <result column="standby" property="standby" jdbcType="VARCHAR" />
+        <result column="disease_name" property="name" jdbcType="VARCHAR" />
+        <result column="oneself" property="oneself" jdbcType="INTEGER" />
+    </resultMap>
+
+    <resultMap id="BaseResultMaps" type="com.yihe.system.domain.YhFoodSrecipe" >
+        <id column="id" property="id" jdbcType="INTEGER" />
+        <result column="F_type" property="dType" jdbcType="INTEGER" />
+        <result column="E_Level" property="eLevel" jdbcType="INTEGER" />
+        <result column="Is_Del" property="isDel" jdbcType="INTEGER" />
+        <result column="diseaseid" property="diseaseid" jdbcType="INTEGER" />
+        <result column="oneself" property="oneself" jdbcType="INTEGER" />
+        <result column="fs_describe" property="fsDescribe" jdbcType="VARCHAR" />
+        <result column="F_Elements" property="fElements" jdbcType="LONGVARCHAR" />
+    </resultMap>
+
+    <resultMap id="foodusers" type="com.yihe.system.domain.YhFoodUserScrecipe" >
+        <id column="U_Food_Erecipe_Id" property="uFoodErecipeId" jdbcType="INTEGER" />
+        <result column="C_Time" property="cTime" jdbcType="TIMESTAMP" />
+        <result column="Start_Time" property="startTime" jdbcType="TIMESTAMP" />
+        <result column="State_Flag" property="stateFlag" jdbcType="INTEGER" />
+        <result column="Srecipe_Id" property="srecipeId" jdbcType="INTEGER" />
+        <result column="Is_Del" property="isDel" jdbcType="INTEGER" />
+        <result column="F_Elements" property="fElements" jdbcType="LONGVARCHAR" />
+    </resultMap>
+
+
+    <resultMap id="yhfoodcookbook" type="com.yihe.applet.api.domain.YhFoodCookbook2" >
+        <id column="F_C_ID" property="fCId" jdbcType="INTEGER" />
+        <result column="F_C_NAME" property="fCName" jdbcType="VARCHAR" />
+        <result column="Appraise" property="appraise" jdbcType="VARCHAR" />
+        <result column="F_C_IMG" property="fCImg" jdbcType="VARCHAR" />
+        <result column="Measuring_unit" property="measuringUnit" jdbcType="VARCHAR" />
+        <result column="F_type" property="fType" jdbcType="VARCHAR" />
+        <result column="Cook_Person" property="cookPerson" jdbcType="VARCHAR" />
+        <result column="Energy_Kcal" property="energyKcal" jdbcType="REAL" />
+        <result column="Cho" property="cho" jdbcType="REAL" />
+        <result column="Fat" property="fat" jdbcType="REAL" />
+        <result column="Protein" property="protein" jdbcType="REAL" />
+        <result column="Cholesterol" property="cholesterol" jdbcType="REAL" />
+        <result column="VitaminA" property="vitamina" jdbcType="REAL" />
+        <result column="Cellulose" property="cellulose" jdbcType="REAL" />
+        <result column="VitaminC" property="vitaminc" jdbcType="REAL" />
+        <result column="VitaminE" property="vitamine" jdbcType="REAL" />
+        <result column="Thiamine" property="thiamine" jdbcType="REAL" />
+        <result column="Riboflavin" property="riboflavin" jdbcType="REAL" />
+        <result column="Niacin" property="niacin" jdbcType="REAL" />
+        <result column="Magnesium" property="magnesium" jdbcType="REAL" />
+        <result column="Calcium" property="calcium" jdbcType="REAL" />
+        <result column="Rron" property="rron" jdbcType="REAL" />
+        <result column="Zinc" property="zinc" jdbcType="REAL" />
+        <result column="Copper" property="copper" jdbcType="REAL" />
+        <result column="Manganese" property="manganese" jdbcType="REAL" />
+        <result column="Potassium" property="potassium" jdbcType="REAL" />
+        <result column="Phosphorus" property="phosphorus" jdbcType="REAL" />
+        <result column="Sodium" property="sodium" jdbcType="REAL" />
+        <result column="Selenium" property="selenium" jdbcType="REAL" />
+        <result column="common" property="common" jdbcType="INTEGER" />
+        <result column="oneself" property="oneself" jdbcType="INTEGER" />
+        <result column="is_del" property="isDel" jdbcType="INTEGER" />
+        <result column="user_code" property="userCode" jdbcType="VARCHAR" />
+    </resultMap>
+
+
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, plan_name, plan_img, plan_number, plan_score, plan_watch, plan_description,plan_people,plan_allnumber,plan_allintegral,plan_isapply
+  </sql>
+	<select id="yhhealthyplan" parameterType="INTEGER" resultMap="BaseResultMap">
+		select <include refid="Base_Column_List" />
+		from yh_healthy_plan
+		WHERE plan_isapply !=0
+		LIMIT ${curPage},${pageSize}
+	</select>
+	<select id="selectonehealthplan" parameterType="INTEGER" resultMap="BaseResultMap">
+		select <include refid="Base_Column_List" />
+		from yh_healthy_plan
+		where id= #{id}
+	</select>
+	<select id="selectyhhealthycount" parameterType="INTEGER" resultType="INTEGER">
+		select count(id)
+		from yh_healthy_plan
+	</select>
+	<update id="yhhealthplanwatch" parameterType="INTEGER">
+	 	UPDATE yh_healthy_plan set plan_watch=plan_watch+1
+		WHERE id=#{id}
+	</update>
+	<select id="selectyhhealthyplanbyid" parameterType="INTEGER" resultMap="BaseResultMap">
+		select <include refid="Base_Column_List" />
+		from yh_healthy_plan
+		WHERE id=#{id}
+	</select>
+	<select id="boolenaddHealthPlanDetail" parameterType="com.yihe.applet.api.domain.YhUserHealthyPlanApp" resultType="INTEGER">
+		select count(id) from yh_user_healthy_plan
+		where user_code=#{userCode} and (plan_state=1 or plan_state=0 or plan_state=4)
+	</select>
+	
+	
+	<insert id="addHealthPlanDetail" parameterType="com.yihe.applet.api.domain.YhUserHealthyPlanApp"  useGeneratedKeys="true" keyProperty="id" keyColumn="id">
+     insert into yh_user_healthy_plan
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="userCode != null">
+        user_code,
+      </if>
+      <if test="courseseq != null">
+        courseSeq,
+      </if>
+      <if test="planDay != ''">
+        plan_day,
+      </if>
+      <if test="plandetailId != null">
+        plandetail_id,
+      </if>
+      <if test="planId != null">
+        plan_id,
+      </if>
+      <if test="planStartdate != null">
+        plan_startdate,
+      </if>
+      <if test="planEnddate != null">
+        plan_enddate,
+      </if>
+       <if test="planState != null">
+        plan_state,
+      </if>
+      <if test="plan_unique!=null">
+      	plan_unique,
+      </if>
+      <if test="plan_choose!=null">
+      	plan_choose,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="userCode != null">
+        #{userCode,jdbcType=VARCHAR},
+      </if>
+      <if test="courseseq != null">
+        #{courseseq,jdbcType=INTEGER},
+      </if>
+      <if test="planDay != ''">
+        #{planDay,jdbcType=INTEGER},
+      </if>
+      <if test="plandetailId != null">
+        #{plandetailId,jdbcType=VARCHAR},
+      </if>
+      <if test="planId != null">
+        #{planId,jdbcType=VARCHAR},
+      </if>
+       <if test="planStartdate != null">
+        #{planStartdate,jdbcType=TIMESTAMP},
+      </if>
+       <if test="planEnddate != null">
+        #{planEnddate,jdbcType=TIMESTAMP},
+      </if>
+       <if test="planState != null">
+        #{planState,jdbcType=INTEGER},
+      </if>
+      <if test="plan_unique!=null">
+        #{plan_unique,jdbcType=INTEGER},
+      </if>
+      <if test="plan_choose!=null">
+        #{plan_choose,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  	
+  	
+  	<update id="changehealthplan" parameterType="com.yihe.applet.api.domain.YhUserHealthyPlanApp">
+  		 update yh_user_healthy_plan set plan_state=3 where  user_code=#{userCode} and (plan_state=1 or plan_state=0)
+  	</update>
+    <update id="updhealthfood" parameterType="string">
+        update yh_food_srecipe_record set record_type=2 where user_code=#{userCode} and record_mode='健康计划' and record_type=1
+    </update>
+    <update id="updhealthfood1" parameterType="string">
+        update yh_food_srecipe_record set record_type=1 where record_id=(select * from (select record_id from yh_food_srecipe_record where record_type=3 and user_code=#{userCode} order by record_id desc limit 1)a)
+    </update>
+  	 <update id="changeplanstate" >
+  		 update yh_user_healthy_plan set plan_state=2 where  user_code=#{user_code} and plan_state=1
+  	</update>
+   <update id="updateHealthPlanDetail" parameterType="com.yihe.applet.api.domain.YhUserHealthyPlanApp">
+    update yh_user_healthy_plan
+    <set>
+      <if test="courseseq != null">
+        courseSeq=#{courseseq,jdbcType=INTEGER},
+      </if>
+      <if test="planDay != null">
+        plan_day=#{planDay,jdbcType=INTEGER},
+      </if>
+      <if test="plandetailId != null">
+        plandetail_id=#{plandetailId,jdbcType=VARCHAR},
+      </if>
+      <if test="planId != null">
+        plan_id=#{planId,jdbcType=VARCHAR},
+      </if>
+       <if test="planStartdate != null">
+        plan_startdate=#{planStartdate,jdbcType=TIMESTAMP},
+      </if>
+       <if test="planEnddate != null">
+        plan_enddate=#{planEnddate,jdbcType=TIMESTAMP},
+      </if>
+       <if test="planState != null">
+        plan_state=#{planState,jdbcType=INTEGER},
+      </if>
+    </set>
+    	where user_code=#{userCode}  and plan_id=#{planId}
+    	<if test="planDay!=null">
+    		and plan_day=#{planDay}
+    	</if>
+    	<if test="planState != null">
+        	and	plan_state=#{planState},
+      </if>
+  </update>
+  	<update id="updateaddplan" parameterType="com.yihe.applet.api.domain.YhUserHealthyPlanApp">
+  	update yh_user_healthy_plan
+  	    <set>
+      <if test="planId != null">
+        plan_id=#{planId,jdbcType=VARCHAR},
+      </if>
+       <if test="planStartdate != null">
+        plan_startdate=#{planStartdate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="planState != null">
+          plan_state=#{planState,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id=#{id}
+  	</update>
+   <update id="updateuserhealthplan" parameterType="com.yihe.applet.api.domain.YhUserHealthyPlanApp">
+    update yh_user_healthy_plan
+    <set>
+
+        courseSeq=courseSeq+1,
+
+      <if test="planDay != null">
+        plan_day=#{planDay,jdbcType=INTEGER},
+      </if>
+      <if test="plandetailId != null">
+        plandetail_id=#{plandetailId,jdbcType=VARCHAR},
+      </if>
+      <if test="planId != null">
+        plan_id=#{planId,jdbcType=VARCHAR},
+      </if>
+       <if test="planStartdate != null">
+        plan_startdate=#{planStartdate,jdbcType=TIMESTAMP},
+      </if>
+       <if test="planEnddate != null">
+        plan_enddate=#{planEnddate,jdbcType=TIMESTAMP},
+      </if>
+       <if test="planState != null">
+        plan_state=#{planState,jdbcType=INTEGER},
+      </if>
+      <if test="plan_choose!=null">
+    	plan_choose=#{plan_choose,jdbcType=VARCHAR}
+    	</if>
+    </set>
+    	where user_code=#{userCode}  and plan_id=#{planId} and plan_state=1
+    	<if test="planDay!=null">
+    		and	plan_day=#{planDay}
+    	</if>
+    	<if test="planStartdate!=null">
+    		and plan_startdate=#{planStartdate}
+    	</if>
+  </update>
+  <update id="addplandetailtotal" parameterType="com.yihe.applet.api.domain.YhHealthyPlandetail">
+  	UPDATE yh_healthy_plandetail set plandetail_total=plandetail_total+1,plandetail_finishportrait=#{plandetail_finishportrait} WHERE id=#{id}
+  </update>
+  <select id="selectyhuserhealthplanisbegin" parameterType="com.yihe.applet.api.domain.YhUserHealthyPlanApp" resultMap="BaseResultuserhealthplan">
+  		SELECT * from( SELECT  hp.*,p.plan_name,p.plan_number,yhp.plan_allnumber,yhp.plan_allintegral from yh_user_healthy_plan hp LEFT JOIN yh_healthy_plan  p ON  hp.plan_id=p.id 
+		LEFT JOIN yh_healthy_plan yhp ON hp.plan_id=yhp.id
+		where  hp.user_code=#{userCode} AND hp.plan_state!=1 and hp.plan_state!=0  ORDER BY  plan_day DESC ) a GROUP BY a.plan_id,a.plan_state,a.plan_unique  ORDER BY  a.plan_startdate   DESC
+  </select>
+  
+   <select id="selectplancount" parameterType="com.yihe.applet.api.domain.YhUserHealthyPlanApp" resultMap="BaseResultuserhealthplan">
+  		SELECT * from (select * from yh_user_healthy_plan  WHERE plan_unique =#{plan_unique} ORDER BY plan_startdate DESC LIMIT 15)a ORDER BY a.plan_startdate
+  </select>
+
+    <select id="selectallplancount" parameterType="com.yihe.applet.api.domain.YhUserHealthyPlanApp" resultMap="BaseResultuserhealthplan">
+  		SELECT * from (select * from yh_user_healthy_plan  WHERE plan_unique =#{plan_unique} ORDER BY plan_startdate DESC )a ORDER BY a.plan_startdate
+  </select>
+
+  <select id="selectmaxunique"   resultType="INTEGER">
+  		select MAX(plan_unique) from yh_user_healthy_plan 
+  </select>
+  
+  <select id="selectalreadybegun" parameterType="com.yihe.applet.api.domain.YhUserHealthyPlanApp" resultMap="BaseResultuserhealthplan">
+  		SELECT * from( SELECT  hp.*,p.plan_name,p.plan_number from yh_user_healthy_plan hp LEFT JOIN yh_healthy_plan  p ON  hp.plan_id=p.id where  hp.user_code=#{userCode} AND (plan_state=1 or (plan_day=1 and plan_state=0)) ORDER BY  plan_startdate DESC  limit 0,30) a GROUP BY a.plan_id,a.plan_state,a.plan_unique
+  </select>
+   <select id="selectalreadybegunoneplan" parameterType="com.yihe.applet.api.domain.YhUserHealthyPlanApp" resultMap="BaseResultuserhealthplan">
+  			SELECT * from( SELECT  hp.*,p.plan_name,p.plan_number from yh_user_healthy_plan hp LEFT JOIN yh_healthy_plan  p ON  hp.plan_id=p.id 
+where  hp.user_code=#{userCode} AND plan_state=1 and plan_day=(SELECT MAX(plan_day) FROM yh_user_healthy_plan  WHERE  user_code=#{userCode} AND plan_state=1) ORDER BY  plan_startdate DESC ) a 
+  </select>
+  <select id="selectalreadyagin" parameterType="com.yihe.applet.api.domain.YhUserHealthyPlanApp" resultMap="BaseResultuserhealthplan">
+  		SELECT * from( SELECT  hp.*,p.plan_name,p.plan_number from yh_user_healthy_plan hp LEFT JOIN yh_healthy_plan  p ON  hp.plan_id=p.id where  hp.user_code=#{userCode} AND plan_state=2 ORDER BY  plan_startdate DESC ) a GROUP BY a.plan_id,a.plan_state,a.plan_unique 
+  </select>
+  <select id="selectplandays" parameterType="com.yihe.applet.api.domain.YhUserHealthyPlanApp" resultMap="BaseResulthealthydays">
+  		select * from yh_healthy_plandays where planday=#{planDay} and plan_id=#{planId}
+  </select>
+   <select id="selectplandaysa" parameterType="com.yihe.applet.api.domain.YhUserHealthyPlanApp" resultMap="BaseResulthealthydays">
+  		select * from yh_healthy_plandays where planday=#{planDay} and plan_id=#{planId}
+  </select>
+  <select id="selectyhhealthplandetailbyid" parameterType="INTEGER" resultMap="BaseResultdetail" >
+  		select * from yh_healthy_plandetail where id=#{id}
+  </select>
+  <select id="getwxuserimg" parameterType="String" resultMap="BaseResultwxuser">
+  	SELECT * from yh_wx_user WHERE user_id=#{usercode}
+  </select>
+  <select id="nowplanunique"  resultType="INTEGER">
+  	SELECT max(plan_unique) from yh_user_healthy_plan WHERE user_code=#{user_code} and plan_id=#{plan_id} and plan_state=1
+  </select>
+  <select id="selectbloodpressurenowday" parameterType="String" resultType="INTEGER">
+  	select COUNT(U_Bloodpressure_Id) from yh_user_bloodpressure where to_days(Entry_Time) = to_days(now()) AND E_User_Id=#{UserCode}  AND Is_Del=2;
+  </select>
+  <select id="selectbminowday" parameterType="String" resultType="INTEGER">
+  	select COUNT(U_Bmi_Id) from yh_user_bmi where to_days(Entry_Time) = to_days(now()) AND E_User_Id=#{UserCode} AND Is_Del=2;
+  </select>
+  <select id="selectbloodsugernowday" parameterType="String" resultType="INTEGER">
+  	select COUNT(U_Bloodsuger_Id) from yh_user_bloodsuger where to_days(Entry_Time) = to_days(now()) AND E_User_Id=#{UserCode} AND Is_Del=2
+
+  </select>
+   <select id="selectfoodnowday" parameterType="String" resultType="INTEGER">
+  	select COUNT(U_Fd_Id) from yh_food_user_diary where to_days(C_Time) = to_days(now()) AND user_code=#{UserCode} AND Is_Del=2
+  </select>
+  
+  <select id="selectnowday" parameterType="com.yihe.applet.api.domain.YhUserHealthyPlanApp" resultMap="BaseResultuserhealthplan">
+  		SELECT * from  yh_user_healthy_plan WHERE user_code=#{userCode} ORDER BY plan_startdate DESC LIMIT 1
+  </select>
+
+    <select id="selectisshenhe" parameterType="com.yihe.applet.api.domain.YhUserHealthyPlanApp" resultType="com.yihe.applet.api.domain.yhHealthyPlan">
+            SELECT * from yh_healthy_plan WHERE id=#{planId}
+    </select>
+
+
+
+    <insert id="insertSelectiveperson" parameterType="com.yihe.system.domain.YhJzServicePerson" >
+        insert into yh_jz_service_person
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="id != null" >
+                id,
+            </if>
+            <if test="userCode != null" >
+                user_code,
+            </if>
+            <if test="gender != null" >
+                gender,
+            </if>
+            <if test="endServiceTime != null" >
+                end_service_time,
+            </if>
+            <if test="phone != null" >
+                phone,
+            </if>
+            <if test="age != null" >
+                age,
+            </if>
+            <if test="startServiceTime != null" >
+                start_service_time,
+            </if>
+            <if test="serviceState != null" >
+                service_state,
+            </if>
+            <if test="serviceWaitingTime != null" >
+                service_waiting_time,
+            </if>
+            <if test="serviceContent != null" >
+                service_content,
+            </if>
+            <if test="serviceType != null" >
+                service_type,
+            </if>
+            <if test="serviceRecord != null" >
+                service_record,
+            </if>
+            <if test="isrede != null" >
+                isrede,
+            </if>
+            <if test="returnvisit != null" >
+                returnvisit,
+            </if>
+            <if test="longitude != null" >
+                longitude,
+            </if>
+            <if test="dimension != null" >
+                dimension,
+            </if>
+            <if test="insertTime != null" >
+                insert_time,
+            </if>
+            <if test="acceptsituation != null" >
+                acceptsituation,
+            </if>
+            <if test="childnodes != null" >
+                childnodes,
+            </if>
+            <if test="childtag != null" >
+                childtag,
+            </if>
+            <if test="satisfaction != null" >
+                satisfaction,
+            </if>
+            <if test="serviceSubtitle != null" >
+                service_subtitle,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="id != null" >
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="userCode != null" >
+                #{userCode,jdbcType=VARCHAR},
+            </if>
+            <if test="gender != null" >
+                #{gender,jdbcType=INTEGER},
+            </if>
+            <if test="endServiceTime != null" >
+                #{endServiceTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="phone != null" >
+                #{phone,jdbcType=VARCHAR},
+            </if>
+            <if test="age != null" >
+                #{age,jdbcType=INTEGER},
+            </if>
+            <if test="startServiceTime != null" >
+                #{startServiceTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="serviceState != null" >
+                #{serviceState,jdbcType=INTEGER},
+            </if>
+            <if test="serviceWaitingTime != null" >
+                #{serviceWaitingTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="serviceContent != null" >
+                #{serviceContent,jdbcType=VARCHAR},
+            </if>
+            <if test="serviceType != null" >
+                #{serviceType,jdbcType=INTEGER},
+            </if>
+            <if test="serviceRecord != null" >
+                #{serviceRecord,jdbcType=VARCHAR},
+            </if>
+            <if test="isrede != null" >
+                #{isrede,jdbcType=INTEGER},
+            </if>
+            <if test="returnvisit != null" >
+                #{returnvisit,jdbcType=INTEGER},
+            </if>
+            <if test="longitude != null" >
+                #{longitude,jdbcType=DOUBLE},
+            </if>
+            <if test="dimension != null" >
+                #{dimension,jdbcType=DOUBLE},
+            </if>
+            <if test="insertTime != null" >
+                #{insertTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="acceptsituation != null" >
+                #{acceptsituation,jdbcType=VARCHAR},
+            </if>
+            <if test="childnodes != null" >
+                #{childnodes,jdbcType=INTEGER},
+            </if>
+            <if test="childtag != null" >
+                #{childtag,jdbcType=INTEGER},
+            </if>
+            <if test="satisfaction != null" >
+                #{satisfaction,jdbcType=INTEGER},
+            </if>
+            <if test="serviceSubtitle != null" >
+                #{serviceSubtitle,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+
+    <delete id="deleteselectperson" parameterType="com.yihe.system.domain.YhJzServicePerson">
+         DELETE FROM yh_jz_service_person WHERE user_code = #{userCode} and phone=#{phone} and (service_state=0 or service_state=1 or service_state=4)
+    </delete>
+
+    <select id="selecttotoservice" parameterType="string" resultType="int">
+      select count(*) from yh_jz_service_total_person WHERE user_code=#{usercode}
+    </select>
+    
+    <insert id="inserttotoservice" parameterType="String">
+      INSERT INTO yh_jz_service_total_person(user_code,doctor_code) VALUE (#{usercode},(SELECT infos.user_code from yh_user_make_card card LEFT JOIN yh_user_admin_info infos ON	card.doctor=infos.id WHERE card.User_Code=#{usercode} ));
+    </insert>
+    <select id="getwxuserimgs" parameterType="String" resultType="String">
+        select  post_code from  yh_user_reginfo where user_code =#{usercode}
+    </select>
+    <select id="selectdisname" parameterType="com.yihe.system.domain.YhDiseaseAssessReport" resultType="java.lang.String">
+        SELECT risk_level FROM yh_disease_assess_report WHERE user_code=#{userCode} and diseasId=#{diseasid} ORDER BY qtime DESC LIMIT 1
+    </select>
+    <select id="selectdisname2" parameterType="com.yihe.system.domain.YhDiseaseAssessReport"
+            resultType="java.lang.String">
+        SELECT bmi FROM yh_disease_assess_total_report2 WHERE user_code=#{userCode} ORDER BY qtime DESC LIMIT 1
+    </select>
+
+    <select id="selectrecode" parameterType="String" resultMap="foodrecode">
+        select * from yh_food_srecipe_record where  user_code=#{Usercode} and (record_mode='健康计划' or record_mode='医师手动') and record_type=1  limit 1
+    </select>
+
+    <select id="selectdays" parameterType="String" resultType="integer">
+        select plan_day from  yh_user_healthy_plan where  user_code=#{Usercode} AND plan_state=1 ORDER BY plan_day desc limit 1
+    </select>
+    
+    <select id="selectsrecipe" parameterType="String" resultMap="BaseResultMaps">
+        select * from yh_food_srecipe where id=#{id}
+    </select>
+
+    <select id="selectscrecipe" parameterType="string" resultMap="foodusers">
+        select * from yh_food_user_screcipe2 where U_Food_Erecipe_Id=#{ids}
+    </select>
+
+    <select id="selectcookbook" parameterType="String" resultMap="yhfoodcookbook">
+        select * from yh_food_cookbook2 where F_C_ID=#{foodsid}
+    </select>
+
+    <select id="selectalljifen" parameterType="string" resultType="int">
+        select count(*) from yh_user_step where user_code=#{usercode}
+    </select>
+
+    <insert id="insertzong" parameterType="string" >
+        insert into yh_user_step (user_code,user_type,healthstars,healthlevelstars) values (#{usercode},5,2,2)
+    </insert>
+
+    <update id="changezong" parameterType="string">
+        update yh_user_step set healthstars=(case when healthstars is null then 0 else healthstars end)+2,healthlevelstars=(case when healthlevelstars is null then 0 else healthlevelstars end)+2 where user_code=#{usercode}
+    </update>
+
+    <insert id="changefenbiao" parameterType="string">
+        insert into yh_health_star (user_code,user_type,healthstars,healthstars_events,events_time) values (#{usercode},5,2,"慢病管理",(select NOW()));
+    </insert>
+</mapper>

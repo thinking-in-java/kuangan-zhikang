@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yihe.system.mapper.YhUserArteryMapper" >
+  <resultMap id="BaseResultMap" type="com.yihe.system.domain.YhUserArtery" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="sbp" property="sbp" jdbcType="INTEGER" />
+    <result column="dbp" property="dbp" jdbcType="INTEGER" />
+    <result column="Pulse" property="pulse" jdbcType="INTEGER" />
+    <result column="avi" property="avi" jdbcType="INTEGER" />
+    <result column="api" property="api" jdbcType="INTEGER" />
+    <result column="csbp" property="csbp" jdbcType="INTEGER" />
+    <result column="capp" property="capp" jdbcType="INTEGER" />
+    <result column="usesr_code" property="usesrCode" jdbcType="VARCHAR" />
+    <result column="time" property="time" jdbcType="TIMESTAMP" />
+    <result column="Is_Del" property="isDel" jdbcType="INTEGER" />
+    <result column="Data_Source" property="dataSource" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, sbp, dbp, Pulse, avi, api, csbp, capp, usesr_code, time,Is_Del,Data_Source
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from yh_user_artery
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="findArteryAllByUserCode" resultMap="BaseResultMap">
+    select * from yh_user_artery where usesr_code=#{usercode} and Is_Del=2
+    <if test="timetype==0">
+      AND `time` &gt;=  #{strTime} AND `time` &lt;= #{endTime}
+    </if>
+    <if test="timetype==1">
+      AND `time` LIKE CONCAT('',#{strTime},'%')
+    </if>
+    <if test="timetype==2">
+      AND YEAR(`time`) =#{strTime}
+    </if>
+  </select>
+
+  <select id="findNewInfoByUserCode" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from yh_user_artery
+    where usesr_code = #{usercode} and Is_Del=2
+    order by `time` desc
+    limit 1
+  </select>
+  <select id="selectByPrimaryKeyFindEntryTimeAnduserid"   resultMap="BaseResultMap">
+    SELECT
+    <include refid="Base_Column_List" />
+    FROM `yh_user_artery` WHERE `time` LIKE concat(concat('',#{time}),'%') AND usesr_code=#{usercode} and Is_Del =2 order by `time` desc
+
+  </select>
+  <select id="selectByPrimaryKeyFindEntryTime" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select
+    `time`
+    from yh_user_artery
+    where usesr_code = #{usercode} and  Is_Del=2
+
+  </select>
+  <select id="selectByPrimaryKeyNewest" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    FROM `yh_user_artery` WHERE Is_Del=2 AND usesr_code=#{eid}
+    ORDER BY `time` DESC LIMIT 1
+  </select>
+
+   <select id="selectUserYhUserArteryByLimitParm" resultMap="BaseResultMap" parameterType="java.lang.String" >
+     SELECT (select count(*) from yh_user_artery where usesr_code=#{usesrCode}) as insertcount,yh.* FROM yh_user_artery as yh
+        WHERE usesr_code=#{usesrCode} order by `time` desc limit 1
+  </select>
+  
+    <select id="selectAll" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select * from yh_user_artery  where usesr_code = #{usesrCode} order by `time` desc
+  </select>
+  
+  
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from yh_user_artery
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.yihe.system.domain.YhUserArtery" >
+    insert into yh_user_artery (id, sbp, dbp, 
+      Pulse, avi, api, csbp, 
+      capp, usesr_code, time
+      )
+    values (#{id,jdbcType=INTEGER}, #{sbp,jdbcType=INTEGER}, #{dbp,jdbcType=INTEGER}, 
+      #{pulse,jdbcType=INTEGER}, #{avi,jdbcType=INTEGER}, #{api,jdbcType=INTEGER}, #{csbp,jdbcType=INTEGER}, 
+      #{capp,jdbcType=INTEGER}, #{usesrCode,jdbcType=VARCHAR}, #{time,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.yihe.system.domain.YhUserArtery" >
+    insert into yh_user_artery
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="sbp != null" >
+        sbp,
+      </if>
+      <if test="dbp != null" >
+        dbp,
+      </if>
+      <if test="pulse != null" >
+        Pulse,
+      </if>
+      <if test="avi != null" >
+        avi,
+      </if>
+      <if test="api != null" >
+        api,
+      </if>
+      <if test="csbp != null" >
+        csbp,
+      </if>
+      <if test="capp != null" >
+        capp,
+      </if>
+      <if test="usesrCode != null" >
+        usesr_code,
+      </if>
+
+      `time`,
+
+      <if test="dataSource != null" >
+        Data_Source,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="sbp != null" >
+        #{sbp,jdbcType=INTEGER},
+      </if>
+      <if test="dbp != null" >
+        #{dbp,jdbcType=INTEGER},
+      </if>
+      <if test="pulse != null" >
+        #{pulse,jdbcType=INTEGER},
+      </if>
+      <if test="avi != null" >
+        #{avi,jdbcType=INTEGER},
+      </if>
+      <if test="api != null" >
+        #{api,jdbcType=INTEGER},
+      </if>
+      <if test="csbp != null" >
+        #{csbp,jdbcType=INTEGER},
+      </if>
+      <if test="capp != null" >
+        #{capp,jdbcType=INTEGER},
+      </if>
+      <if test="usesrCode != null" >
+        #{usesrCode,jdbcType=VARCHAR},
+      </if>
+
+       now(),
+
+      <if test="dataSource != null" >
+        #{dataSource,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.yihe.system.domain.YhUserArtery" >
+    update yh_user_artery
+    <set >
+      <if test="sbp != null" >
+        sbp = #{sbp,jdbcType=INTEGER},
+      </if>
+      <if test="dbp != null" >
+        dbp = #{dbp,jdbcType=INTEGER},
+      </if>
+      <if test="pulse != null" >
+        Pulse = #{pulse,jdbcType=INTEGER},
+      </if>
+      <if test="avi != null" >
+        avi = #{avi,jdbcType=INTEGER},
+      </if>
+      <if test="api != null" >
+        api = #{api,jdbcType=INTEGER},
+      </if>
+      <if test="csbp != null" >
+        csbp = #{csbp,jdbcType=INTEGER},
+      </if>
+      <if test="capp != null" >
+        capp = #{capp,jdbcType=INTEGER},
+      </if>
+      <if test="usesrCode != null" >
+        usesr_code = #{usesrCode,jdbcType=VARCHAR},
+      </if>
+      <if test="time != null" >
+        time = #{time,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isDel != null" >
+        Is_Del = #{isDel,jdbcType=INTEGER},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.yihe.system.domain.YhUserArtery" >
+    update yh_user_artery
+    set sbp = #{sbp,jdbcType=INTEGER},
+      dbp = #{dbp,jdbcType=INTEGER},
+      Pulse = #{pulse,jdbcType=INTEGER},
+      avi = #{avi,jdbcType=INTEGER},
+      api = #{api,jdbcType=INTEGER},
+      csbp = #{csbp,jdbcType=INTEGER},
+      capp = #{capp,jdbcType=INTEGER},
+      usesr_code = #{usesrCode,jdbcType=VARCHAR},
+      time = #{time,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

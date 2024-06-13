@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yihe.system.mapper.YhQuestionCheckJson2WebMapper" >
+  <resultMap id="BaseResultMap" type="com.yihe.system.domain.YhQuestionCheckJson2Web" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="user_code" property="userCode" jdbcType="VARCHAR" />
+    <result column="user_check_answer" property="userCheckAnswer" jdbcType="VARCHAR" />
+    <result column="user_check_index" property="userCheckIndex" jdbcType="INTEGER" />
+    <result column="user_check_ts" property="userCheckTs" jdbcType="INTEGER" />
+    <result column="user_check_time" property="userCheckTime" jdbcType="TIMESTAMP" />
+    <result column="request_serialNum" property="requestSerialnum" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, user_code, user_check_answer, user_check_index, user_check_ts, user_check_time, 
+    request_serialNum
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from yh_question_check_json2
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  
+   <select id="selectByRsLimit1" resultMap="BaseResultMap" >
+    select 
+    <include refid="Base_Column_List" />
+    from yh_question_check_json2
+    where request_serialNum = #{rs} limit 1
+  </select>
+  
+   <select id="selectUserByParam" resultMap="BaseResultMap" parameterType="java.lang.String" >
+   SELECT * from yh_question_check_json2 where user_code=#{userCode} ORDER BY user_check_time DESC limit 1 
+  </select>
+  
+  
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from yh_question_check_json2
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.yihe.system.domain.YhQuestionCheckJson2Web" >
+    insert into yh_question_check_json2 (id, user_code, user_check_answer, 
+      user_check_index, user_check_ts, user_check_time, 
+      request_serialNum)
+    values (#{id,jdbcType=INTEGER}, #{userCode,jdbcType=VARCHAR}, #{userCheckAnswer,jdbcType=VARCHAR}, 
+      #{userCheckIndex,jdbcType=INTEGER}, #{userCheckTs,jdbcType=INTEGER}, #{userCheckTime,jdbcType=TIMESTAMP}, 
+      #{requestSerialnum,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.yihe.system.domain.YhQuestionCheckJson2Web" >
+    insert into yh_question_check_json2
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="userCode != null" >
+        user_code,
+      </if>
+      <if test="userCheckAnswer != null" >
+        user_check_answer,
+      </if>
+      <if test="userCheckIndex != null" >
+        user_check_index,
+      </if>
+      <if test="userCheckTs != null" >
+        user_check_ts,
+      </if>
+      <if test="userCheckTime != null" >
+        user_check_time,
+      </if>
+      <if test="requestSerialnum != null" >
+        request_serialNum,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="userCode != null" >
+        #{userCode,jdbcType=VARCHAR},
+      </if>
+      <if test="userCheckAnswer != null" >
+        #{userCheckAnswer,jdbcType=VARCHAR},
+      </if>
+      <if test="userCheckIndex != null" >
+        #{userCheckIndex,jdbcType=INTEGER},
+      </if>
+      <if test="userCheckTs != null" >
+        #{userCheckTs,jdbcType=INTEGER},
+      </if>
+      <if test="userCheckTime != null" >
+        #{userCheckTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="requestSerialnum != null" >
+        #{requestSerialnum,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.yihe.system.domain.YhQuestionCheckJson2Web" >
+    update yh_question_check_json2
+    <set >
+      <if test="userCode != null" >
+        user_code = #{userCode,jdbcType=VARCHAR},
+      </if>
+      <if test="userCheckAnswer != null" >
+        user_check_answer = #{userCheckAnswer,jdbcType=VARCHAR},
+      </if>
+      <if test="userCheckIndex != null" >
+        user_check_index = #{userCheckIndex,jdbcType=INTEGER},
+      </if>
+      <if test="userCheckTs != null" >
+        user_check_ts = #{userCheckTs,jdbcType=INTEGER},
+      </if>
+      <if test="userCheckTime != null" >
+        user_check_time = #{userCheckTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="requestSerialnum != null" >
+        request_serialNum = #{requestSerialnum,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.yihe.system.domain.YhQuestionCheckJson2Web" >
+    update yh_question_check_json2
+    set user_code = #{userCode,jdbcType=VARCHAR},
+      user_check_answer = #{userCheckAnswer,jdbcType=VARCHAR},
+      user_check_index = #{userCheckIndex,jdbcType=INTEGER},
+      user_check_ts = #{userCheckTs,jdbcType=INTEGER},
+      user_check_time = #{userCheckTime,jdbcType=TIMESTAMP},
+      request_serialNum = #{requestSerialnum,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

@@ -1,0 +1,269 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yihe.system.mapper.YhAcceptserviceMapper" >
+	<resultMap id="exprotresult" type="com.yihe.system.domain.YhManageTotalTask">
+    <id column="tid" jdbcType="INTEGER" property="tid" />
+    <result column="allwattingcount" jdbcType="INTEGER" property="allwattingcount" />
+    <result column="allbegincount" jdbcType="INTEGER" property="allbegincount" />
+    <result column="allclosecount" jdbcType="INTEGER" property="allclosecount" />
+    <result column="allfinishicount" jdbcType="INTEGER" property="allfinishicount" />
+    <result column="user_code" jdbcType="VARCHAR" property="user_code" />
+    <result column="doctor_code" jdbcType="VARCHAR" property="doctor_code" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="mobile" jdbcType="VARCHAR" property="mobile" />
+   	<collection  property="managetask" column="user_code" ofType="com.yihe.system.domain.YhManageTask" javaType="java.util.ArrayList">
+   		<id column="id" jdbcType="INTEGER" property="id" />
+   		<result column="birth_date" jdbcType="VARCHAR" property="birth_date" />
+	    <result column="gender" jdbcType="INTEGER" property="gender" />
+	    <result column="service_type" jdbcType="INTEGER" property="service_type" />
+	    <result column="service_content" jdbcType="VARCHAR" property="service_content" />
+	    <result column="service_state" jdbcType="INTEGER" property="service_state" />
+	    <result column="service_waiting_time" jdbcType="VARCHAR" property="service_waiting_time" />
+	    <result column="service_record" jdbcType="VARCHAR" property="service_record" />
+	    <result column="service_name" jdbcType="VARCHAR" property="service_name" />
+	     <result column="returnvisit" jdbcType="VARCHAR" property="returnvisit" />
+	     <result column="start_service_time" jdbcType="VARCHAR" property="start_service_time" />
+	     <result column="end_service_time" jdbcType="VARCHAR" property="end_service_time" />
+	     <result column="acceptsituation" jdbcType="VARCHAR" property="acceptsituation" />
+	     <result column="cname" jdbcType="VARCHAR" property="cname" />
+	     <result column="cbname" jdbcType="VARCHAR" property="cbname" />
+	     <result column="childtag" jdbcType="VARCHAR" property="childtag" />
+		<result column="plan_name" jdbcType="VARCHAR" property="plan_name" />
+		<result column="service_subtitle" jdbcType="VARCHAR" property="service_subtitle" />
+	</collection>
+  </resultMap>
+	<resultMap id="reginmap" type="com.yihe.system.domain.YhUserReginfo">
+		<id column="user_code" jdbcType="INTEGER" property="id" />
+		<result column="User_Type" jdbcType="INTEGER" property="userType" />
+		<result column="user_name" jdbcType="VARCHAR" property="userName" />
+		<result column="user_pwd" jdbcType="VARCHAR" property="userPwd" />
+		<result column="gender" jdbcType="INTEGER" property="gender" />
+		<result column="birth_date" jdbcType="TIMESTAMP" property="birthDate" />
+		<result column="email" jdbcType="VARCHAR" property="email" />
+		<result column="province_id" jdbcType="VARCHAR" property="provinceId" />
+		<result column="city_id" jdbcType="VARCHAR" property="cityId" />
+		<result column="area_id" jdbcType="VARCHAR" property="areaId" />
+		<result column="reg_time" jdbcType="TIMESTAMP" property="regTime" />
+		<result column="Login_times" jdbcType="INTEGER" property="loginTimes" />
+		<result column="name" jdbcType="VARCHAR" property="name" />
+		<result column="address" jdbcType="VARCHAR" property="address" />
+		<result column="post_code" jdbcType="VARCHAR" property="postCode" />
+		<result column="relation" jdbcType="VARCHAR" property="relation" />
+		<result column="mobile" jdbcType="VARCHAR" property="mobile" />
+		<result column="occupation" jdbcType="INTEGER" property="occupation" />
+		<result column="ed_background" jdbcType="INTEGER" property="edBackground" />
+		<result column="marital_status" jdbcType="INTEGER" property="maritalStatus" />
+		<result column="lock_flag" jdbcType="INTEGER" property="lockFlag" />
+		<result column="reg_source" jdbcType="INTEGER" property="regSource" />
+		<result column="Cert_Type" jdbcType="INTEGER" property="certType" />
+		<result column="Cert_NO" jdbcType="VARCHAR" property="certNo" />
+		<result column="Org_Code" jdbcType="VARCHAR" property="orgCode" />
+		<result column="Blood_Type" jdbcType="VARCHAR" property="bloodType" />
+		<result column="Enrol_Card_Id" jdbcType="VARCHAR" property="enrolCardId" />
+		<result column="cardidentity" jdbcType="VARCHAR" property="cardidentity" />
+		<result column="nation" jdbcType="VARCHAR" property="nation" />
+		<result column="permanentaddress" jdbcType="VARCHAR" property="permanentaddress" />
+		<result column="rhfeminine" jdbcType="VARCHAR" property="rhfeminine" />
+		<result column="login_time" jdbcType="TIMESTAMP" property="loginTime" />
+		<result column="unit" jdbcType="VARCHAR" property="unit" />
+		<result column="is_association" jdbcType="INTEGER" property="isAssociation" />
+		<result column="association_name" jdbcType="VARCHAR" property="associationName" />
+		<result column="is_alone" jdbcType="INTEGER" property="isAlone" />
+		<result column="is_allergy" jdbcType="INTEGER" property="isAllergy" />
+		<result column="allergy_name" jdbcType="VARCHAR" property="allergyName" />
+		<result column="doctor" jdbcType="VARCHAR" property="doctor" />
+		<result column="user_code" jdbcType="VARCHAR" property="value" />
+	</resultMap>
+
+	<select id="selectservicecountbyusercode"	resultType="com.yihe.system.domain.YhManageTotalTask" parameterType="com.yihe.system.domain.YhServicePage">
+		SELECT (SELECT COUNT(id) FROM  yh_jz_service_total_person  tp LEFT JOIN  yh_jz_service_person sp ON tp.user_code=sp.user_code WHERE sp.user_code=#{usercode} AND sp.service_state=0 AND sp.insert_time BETWEEN	'2019-02-01' AND '2030-02-01') AS allwattingcount,
+	(SELECT COUNT(id) FROM  yh_jz_service_total_person  tp LEFT JOIN  yh_jz_service_person sp ON tp.user_code=sp.user_code WHERE sp.user_code=#{usercode} AND sp.service_state=1 AND sp.insert_time BETWEEN	'2019-02-01' AND '2030-02-01') AS allbegincount,
+	(SELECT COUNT(id) FROM  yh_jz_service_total_person  tp LEFT JOIN  yh_jz_service_person sp ON tp.user_code=sp.user_code WHERE sp.user_code=#{usercode} AND sp.service_state=2 AND sp.insert_time BETWEEN	'2019-02-01' AND '2030-02-01') AS allclosecount,
+	(SELECT COUNT(id) FROM  yh_jz_service_total_person  tp LEFT JOIN  yh_jz_service_person sp ON tp.user_code=sp.user_code WHERE sp.user_code=#{usercode} AND sp.service_state=3 AND sp.insert_time BETWEEN	'2019-02-01' AND '2030-02-01') AS allfinishicount
+	</select>
+
+	<select id="selectregininfobyusercode" resultMap="reginmap"  parameterType="com.yihe.system.domain.YhJzServicePerson">
+		SELECT * from yh_user_reginfo WHERE  user_code=#{userCode}
+	</select>
+
+	<select id="selectservicecountconditions"	resultType="com.yihe.system.domain.YhManageTotalTask" parameterType="com.yihe.system.domain.YhServicePage">
+		SELECT (SELECT COUNT(id) FROM  yh_jz_service_total_person  tp LEFT JOIN  yh_jz_service_person sp ON tp.user_code=sp.user_code WHERE sp.user_code=#{usercode} AND sp.service_state=0 <if test="servicetype!=null">AND sp.service_type=#{servicetype}</if> <if test="returnvisit!=null">AND sp.returnvisit=#{returnvisit}</if>  AND sp.insert_time   BETWEEN	'2019-02-01' AND '2030-02-01') AS allwattingcount,
+	(SELECT COUNT(id) FROM  yh_jz_service_total_person  tp LEFT JOIN  yh_jz_service_person sp ON tp.user_code=sp.user_code WHERE sp.user_code=#{usercode} AND sp.service_state=1	<if test="servicetype!=null">AND sp.service_type=#{servicetype}</if> <if test="returnvisit!=null">AND sp.returnvisit=#{returnvisit}</if> AND sp.insert_time BETWEEN	'2019-02-01' AND '2030-02-01') AS allbegincount,
+	(SELECT COUNT(id) FROM  yh_jz_service_total_person  tp LEFT JOIN  yh_jz_service_person sp ON tp.user_code=sp.user_code WHERE sp.user_code=#{usercode} AND sp.service_state=2	<if test="servicetype!=null">AND sp.service_type=#{servicetype}</if> <if test="returnvisit!=null">AND sp.returnvisit=#{returnvisit}</if> AND sp.insert_time BETWEEN	'2019-02-01' AND '2030-02-01') AS allclosecount,
+	(SELECT COUNT(id) FROM  yh_jz_service_total_person  tp LEFT JOIN  yh_jz_service_person sp ON tp.user_code=sp.user_code WHERE sp.user_code=#{usercode} AND sp.service_state=3	<if test="servicetype!=null">AND sp.service_type=#{servicetype}</if> <if test="returnvisit!=null">AND sp.returnvisit=#{returnvisit}</if> AND sp.insert_time BETWEEN	'2019-02-01' AND '2030-02-01') AS allfinishicount
+	</select>
+	<update id="updateallcount" parameterType="string">
+		update yh_template_execution set plan_count=plan_count+1 where user_code=#{usercode}
+	</update>
+	<select id="selectservicebyusercode"	resultMap="exprotresult" parameterType="com.yihe.system.domain.YhServicePage">
+		SELECT tp.tid,re.`name`,tp.doctor_code,re.birth_date,sp.*,setype.service_name,sas.`name` AS cname,sbs.`name` AS cbname,plan.plan_name,thdic.threshold_name
+		FROM  yh_jz_service_total_person  tp LEFT JOIN  yh_jz_service_person sp	ON tp.user_code=sp.user_code
+		LEFT JOIN yh_user_reginfo re on tp.user_code=re.user_code
+		LEFT JOIN yh_user_enrolinfo enro
+		ON enro.user_code=re.user_code
+		LEFT JOIN yh_jz_service_type setype
+		ON sp.service_type=setype.id
+		LEFT JOIN yh_jz_service_assessment_switch sas
+		ON sas.id=sp.childnodes
+		LEFT JOIN yh_jz_service_bodydata_switch sbs
+		ON sp.childnodes=sbs.id
+		LEFT JOIN yh_jz_service_plan plan
+		ON sp.childnodes=plan.id
+		LEFT JOIN yh_threshold_dic thdic
+		ON sp.childnodes=thdic.dic_id
+		<where >
+			<if test="usercode!=null">
+				and re.user_code=#{usercode} 
+			</if>
+			<if test="state!=null">
+				AND sp.service_state=#{state}
+			</if>
+			<if test="servicetype!=null">
+				AND  sp.service_type=#{servicetype}
+			</if>
+			<if test="returnvisit!=null">
+				AND sp.returnvisit=#{returnvisit}
+			</if>
+			<if test="typeson!=null and typeson!='' and typeson&lt;100">
+				and sbs.id=#{typeson} and  sp.childtag=1
+			</if>
+			<if test="typeson!=null and typeson!='' and typeson&gt;100 and typeson&lt;200">
+				and sas.id=(#{typeson}-100) and  sp.childtag=2
+			</if>
+			<if test="typeson!=null and typeson!='' and typeson&gt;200 ">
+				and thdic.dic_id=(#{typeson}-200) and  sp.childtag=4
+			</if>
+			ORDER BY sp.insert_time
+		</where>	
+		LIMIT #{page},20
+	</select>
+
+	<select id="selectCooperate" parameterType="string" resultType="integer">
+			SELECT IFNULL(SUM(satisfaction) ,0)  FROM yh_jz_service_person WHERE user_code=#{usercode} AND service_state=3
+	</select>
+
+	<select id="selectcount" parameterType="string" resultType="integer">
+		SELECT count(satisfaction) FROM yh_jz_service_person WHERE user_code=#{usercode} AND service_state=3
+	</select>
+
+	<update id="acceptservice" parameterType="java.lang.String">
+		update yh_jz_service_person
+		set service_state=1,start_service_time=(SELECT NOW()),finishi_doctor=#{Usercode}
+		where id=#{serviceid}
+	</update>
+
+	<select id="selectusername" parameterType="string" resultMap="reginmap">
+SELECT regin.* FROM( SELECT * FROM yh_user_make_card WHERE doctor=(SELECT id FROM yh_user_admin_info WHERE user_code=#{usercode} AND User_Code!='') ) AS doc LEFT JOIN yh_user_reginfo regin ON doc.User_Code=regin.user_code
+WHERE regin.user_Code!='' ORDER BY convert(regin.`name` USING gbk) COLLATE gbk_chinese_ci asc
+
+	</select>
+
+	<select id="selectcountbyuserocde" parameterType="com.yihe.system.domain.YhJzServicePerson" resultType="int">
+		SELECT COUNT(*) FROM yh_jz_service_total_person WHERE user_code=#{userCode}
+	</select>
+
+	<select id="selecttempcount" parameterType="com.yihe.system.domain.YhJzServicePerson" resultType="int">
+		SELECT COUNT(*) FROM yh_template_execution WHERE user_code=#{userCode}
+	</select>
+
+	<select id="selectdoctor" parameterType="com.yihe.system.domain.YhJzServicePerson" resultType="string">
+		SELECT id from yh_user_admin_info WHERE user_code=#{usercode}
+	</select>
+	<insert id="inserttotalper">
+		INSERT INTO yh_jz_service_total_person(user_code,doctor_code) VALUES (#{usercode},#{doctor});
+	</insert>
+
+	<insert id="inserttemp" parameterType="com.yihe.system.domain.YhTemplateDetail">
+		INSERT INTO yh_template_detail
+		<trim suffixOverrides="," suffix=")" prefix="(">
+			<if test="detailsId != null">details_id, </if>
+			<if test="ecdate != null">execute_date, </if>
+			<if test="serviceWay != null">service_way, </if>
+			<if test="planCount != null">plan_count, </if>
+			<if test="countPrompt != null">count_prompt, </if>
+			<if test="userCode != null">user_code, </if>
+			<if test="var_count != null">var_count, </if>
+		</trim>
+		<trim suffixOverrides="," suffix=")" prefix="values (">
+			<if test="detailsId != null">#{detailsId}, </if>
+			<if test="ecdate != null">#{ecdate}, </if>
+			<if test="serviceWay != null">#{serviceWay}, </if>
+			<if test="planCount != null">#{planCount}, </if>
+			<if test="countPrompt != null">#{countPrompt}, </if>
+			<if test="userCode != null">#{userCode}, </if>
+			<if test="var_count != null">#{var_count}, </if>
+		</trim>
+	</insert>
+
+	<insert id="templateDetail" parameterType="com.yihe.system.domain.YhTemplateDetail">
+		INSERT INTO yh_template_execution
+		<trim suffixOverrides="," suffix=")" prefix="(">
+
+			<if test="ecdate != null">user_code, </if>
+			<if test="ecdate != null">plan_count, </if>
+			<if test="ecdate != null">last_plan_time, </if>
+		</trim>
+		<trim suffixOverrides="," suffix=")" prefix="values (">
+			<if test="ecdate != null">#{userCode}, </if>
+			<if test="ecdate != null">1, </if>
+			<if test="ecdate != null">#{ecdate}, </if>
+		</trim>
+	</insert>
+
+	<insert id="insertserviceplan" parameterType="com.yihe.system.domain.YhJzServicePerson">
+	insert into yh_jz_service_person
+  	<trim suffixOverrides="," suffix=")" prefix="(">
+		<if test="id != null">id, </if>
+		<if test="userCode != null">user_code, </if>
+		<if test="gender != null">gender, </if>
+		<if test="endServiceTime != null">end_service_time, </if>
+		<if test="phone != null">phone, </if>
+		<if test="age != null">age, </if>
+		<if test="startServiceTime != null">start_service_time, </if>
+		<if test="serviceState != null">service_state, </if>
+		<if test="serviceWaitingTime != null">service_waiting_time, </if>
+		<if test="serviceContent != null">service_content, </if>
+		<if test="serviceType != null">service_type, </if>
+		<if test="serviceRecord != null">service_record, </if>
+		<if test="isrede != null">isrede, </if>
+		<if test="returnvisit != null">returnvisit, </if>
+		<if test="longitude != null">longitude, </if>
+		<if test="dimension != null">dimension, </if>
+		<if test="insertTime != null">insert_time, </if>
+		<if test="acceptsituation != null">acceptsituation, </if>
+		<if test="childnodes != null">childnodes, </if>
+		<if test="childtag != null">childtag, </if>
+		<if test="satisfaction != null">satisfaction, </if>
+		<if test="serviceSubtitle != null">service_subtitle, </if>
+		<if test="totaltype != null">totaltype, </if>
+		<if test="finishi_doctor != null">finishi_doctor, </if>
+	</trim>
+    <trim suffixOverrides="," suffix=")" prefix="values (">
+		<if test="id != null">#{id,jdbcType=INTEGER}, </if>
+		<if test="userCode != null">#{userCode,jdbcType=VARCHAR}, </if>
+		<if test="gender != null">#{gender,jdbcType=INTEGER}, </if>
+		<if test="endServiceTime != null">#{endServiceTime,jdbcType=TIMESTAMP}, </if>
+		<if test="phone != null">#{phone,jdbcType=VARCHAR}, </if>
+		<if test="age != null">#{age,jdbcType=INTEGER}, </if>
+		<if test="startServiceTime != null">#{startServiceTime,jdbcType=TIMESTAMP}, </if>
+		<if test="serviceState != null">#{serviceState,jdbcType=INTEGER}, </if>
+		<if test="serviceWaitingTime != null">#{serviceWaitingTime,jdbcType=TIMESTAMP}, </if>
+		<if test="serviceContent != null">#{serviceContent,jdbcType=VARCHAR}, </if>
+		<if test="serviceType != null">#{serviceType,jdbcType=INTEGER}, </if>
+		<if test="serviceRecord != null">#{serviceRecord,jdbcType=VARCHAR}, </if>
+		<if test="isrede != null">#{isrede,jdbcType=INTEGER}, </if>
+		<if test="returnvisit != null">#{returnvisit,jdbcType=INTEGER}, </if>
+		<if test="longitude != null">#{longitude,jdbcType=DOUBLE}, </if>
+		<if test="dimension != null">#{dimension,jdbcType=DOUBLE}, </if>
+		<if test="insertTime != null">#{insertTime,jdbcType=TIMESTAMP}, </if>
+		<if test="acceptsituation != null">#{acceptsituation,jdbcType=VARCHAR}, </if>
+		<if test="childnodes != null">#{childnodes,jdbcType=INTEGER}, </if>
+		<if test="childtag != null">#{childtag,jdbcType=INTEGER}, </if>
+		<if test="satisfaction != null">#{satisfaction,jdbcType=INTEGER}, </if>
+		<if test="serviceSubtitle != null">#{serviceSubtitle,jdbcType=VARCHAR}, </if>
+		<if test="totaltype != null">#{totaltype,jdbcType=VARCHAR}, </if>
+		<if test="finishi_doctor != null">#{finishi_doctor,jdbcType=VARCHAR}, </if>
+	</trim>
+
+</insert>
+</mapper>

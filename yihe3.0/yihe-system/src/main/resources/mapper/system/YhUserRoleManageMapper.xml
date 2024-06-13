@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yihe.system.mapper.YhUserRoleManageMapper">
+   <resultMap id="BaseResultMap" type="com.yihe.system.domain.YhUserRole">
+    <id column="role_id" jdbcType="INTEGER" property="roleId" />
+    <result column="role_name" jdbcType="VARCHAR" property="roleName" />
+    <result column="role_description" jdbcType="VARCHAR" property="roleDescription" />
+    <result column="role_ctime" jdbcType="TIMESTAMP" property="roleCtime" />
+    <result column="orders" jdbcType="BIGINT" property="orders" />
+    <result column="count" jdbcType="INTEGER" property="count" />
+       <result column="manage_roleid" jdbcType="VARCHAR" property="manage_roleid" />
+  </resultMap>
+    <resultMap id="ResultYhUserPermission" type="com.yihe.system.domain.YhUserPermission">
+    <id column="permission_id" jdbcType="INTEGER" property="permissionId" />
+    <result column="system_id" jdbcType="INTEGER" property="systemId" />
+    <result column="pid" jdbcType="INTEGER" property="pid" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="type" jdbcType="TINYINT" property="type" />
+    <result column="permission_value" jdbcType="VARCHAR" property="permissionValue" />
+    <result column="uri" jdbcType="VARCHAR" property="uri" />
+    <result column="icon" jdbcType="VARCHAR" property="icon" />
+    <result column="status" jdbcType="TINYINT" property="status" />
+    <result column="ctime" jdbcType="BIGINT" property="ctime" />
+    <result column="orders" jdbcType="BIGINT" property="orders" />
+  </resultMap>
+   <sql id="Base_Column_List">
+    role_id, role_name, role_description, role_ctime, orders
+  </sql>
+  
+  
+  		<select id="selecrlistrole" resultMap="BaseResultMap">
+			 select count(yh_user_reginfo.user_code)as 
+			count,yh_user_role.*
+			from yh_user_role left join yh_user_role_power
+			on yh_user_role.role_id=yh_user_role_power.roleId
+			LEFT JOIN yh_user_reginfo
+			on yh_user_reginfo.user_code=yh_user_role_power.userId
+			group by yh_user_role.role_name
+		  </select>
+
+    <select id="selectrolebycode" resultMap="BaseResultMap" >
+         select count(yh_user_reginfo.user_code)as
+			count,yh_user_role.*
+			from yh_user_role left join yh_user_role_power
+			on yh_user_role.role_id=yh_user_role_power.roleId
+			LEFT JOIN yh_user_reginfo
+			on yh_user_reginfo.user_code=yh_user_role_power.userId
+			WHERE ( yh_user_role.role_id=(select roleId from yh_user_role_power where userId=#{usercode}) OR yh_user_role.pid=(select roleId from yh_user_role_power where userId=#{usercode}) ) AND yh_user_role.role_type=#{roletype}
+			group by yh_user_role.role_name
+			ORDER BY yh_user_role.orders
+    </select>
+    
+    
+    <select id="selectrolebycode1" resultMap="BaseResultMap" >
+         select count(yh_user_reginfo.user_code)as
+			count,yh_user_role.*
+			from yh_user_role left join yh_user_role_power
+			on yh_user_role.role_id=yh_user_role_power.roleId
+			LEFT JOIN yh_user_reginfo
+			on yh_user_reginfo.user_code=yh_user_role_power.userId
+			WHERE ( yh_user_role.role_id=(select roleId from yh_user_role_power where userId=#{usercode}) OR yh_user_role.pid=(select roleId from yh_user_role_power where userId=#{usercode}) ) AND yh_user_role.role_type=#{roletype}
+			group by yh_user_role.role_name
+			ORDER BY yh_user_role.orders
+    </select>
+
+    <select id="selectrolecount" parameterType="com.yihe.system.domain.YhUserRole" resultType="integer">
+         select count(*)
+			from yh_user_role_power WHERE roleId=#{roleId}
+    </select>
+
+    <select id="selecdoctorrole" resultMap="BaseResultMap">
+        SELECT
+            count( yh_user_role.role_id ) AS count,
+            yh_user_role.*
+        FROM
+            yh_user_role
+        WHERE
+            pid =(
+            SELECT
+                role_id
+            FROM
+                yh_user_role ro
+                LEFT JOIN yh_user_role_power per ON ro.role_id = per.roleId
+            WHERE
+                per.userId = #{usercode}
+                LIMIT 1
+            )
+            AND role_type =#{roletype}
+            GROUP BY role_id
+    </select>
+  
+    <insert id="insert" parameterType="com.yihe.system.domain.YhUserRole">
+    <selectKey keyProperty="roleId" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into yh_user_role (role_name, role_description, role_ctime, 
+      orders,pid,role_type)
+    values (#{roleName,jdbcType=VARCHAR}, #{roleDescription,jdbcType=VARCHAR}, #{roleCtime,jdbcType=TIMESTAMP},
+      #{orders,jdbcType=BIGINT},#{pid},#{roletype})
+  </insert>
+
+    <select id="maxorder"  resultType="int">
+        select max(orders)+1 from  yh_user_role
+    </select>
+  
+
+   <update id="updateByPrimaryKey" parameterType="com.yihe.system.domain.YhUserRole">
+    update yh_user_role
+    <set>
+      <if test="roleName != null">
+        role_name = #{roleName,jdbcType=VARCHAR},
+      </if>
+      <if test="roleDescription != null">
+        role_description = #{roleDescription,jdbcType=VARCHAR},
+      </if>
+      <if test="roleCtime != null">
+        role_ctime = #{roleCtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="orders != null">
+        orders = #{orders,jdbcType=BIGINT},
+      </if>
+    </set>
+    where role_id = #{roleId,jdbcType=INTEGER}
+  </update>
+  
+  <select id="selectuserroleroleid" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+  	select count(id) from yh_user_role_power
+	where roleId=#{roleId}
+  </select>
+  
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from yh_user_role
+    where role_id = #{roleId,jdbcType=INTEGER}
+  </delete>
+  
+    <select id="selectpermissionbyroleid" parameterType="java.lang.Integer" resultMap="ResultYhUserPermission">
+		SELECT yhup.name,yhup.pid,yhup.permission_id from yh_user_permission as yhup
+		LEFT JOIN yh_user_role_permission as yhurp
+		ON yhup.permission_id=yhurp.permission_id
+		WHERE yhurp.role_id=#{roleId}
+    </select>
+
+    <select id="selectalldoctorper" resultMap="ResultYhUserPermission">
+        SELECT yhup.name,yhup.pid,yhup.permission_id from yh_user_permission as yhup
+		WHERE yhup.system_id=2 or yhup.system_id=4
+    </select>
+
+    <select id="selectnowuserrole" parameterType="string" resultType="int">
+        select  roleId from yh_user_role_power where userId=#{usercode}
+    </select>
+
+    <select id="selectroletypebyusercode" parameterType="string" resultType="int">
+        select role_type from yh_user_role where role_id=(SELECT roleId FROM yh_user_role_power WHERE userId=#{usercode})
+    </select>
+    
+    <select id="selectpermissionall"  resultMap="ResultYhUserPermission">
+		SELECT * from (SELECT * from yh_user_role_permission WHERE role_id=(SELECT roleId FROM yh_user_role_power WHERE userId=#{usercode})) AS a
+        LEFT JOIN yh_user_permission as permission
+        ON a.permission_id=permission.permission_id
+        <where>
+            <if test="roletype==1">
+                and (permission.system_id=1 or permission.system_id=4)
+            </if>
+            <if test="roletype==2">
+                and (permission.system_id=2 or permission.system_id=4)
+            </if>
+        </where>
+    </select>
+    
+    <delete id="deleterolepermissionbyroleid" parameterType="java.lang.Integer">
+    	DELETE FROM yh_user_role_permission where role_id=#{roleId}
+    </delete>
+    
+    <insert id="insertrolepermission" parameterType="java.lang.Integer">
+    	INSERT INTO yh_user_role_permission ( role_id, permission_id)
+                       VALUES
+                       (#{roleId}, #{permissionId});
+    </insert>
+
+    <select id="selectrolenamecount" parameterType="com.yihe.system.domain.YhUserRole" resultType="int">
+        select count(role_id) from yh_user_role where  role_name=#{roleName}
+    </select>
+
+    <select id="selectpidbyusercode" parameterType="string" resultType="int">
+        select roleId from yh_user_role_power where userId=#{usercode} limit 1
+    </select>
+
+    <select id="selectorgcodeid" parameterType="integer" resultType="integer">
+       select pid from yh_user_role where role_id=#{roleId}
+    </select>
+    
+    <select id="selectdoctorcode" parameterType="String" resultType="integer">
+        select role_id from yh_user_role where manage_roleid like concat('%',#{selectdoctorcode},'%')
+    </select>
+
+    <select id="selectrolename" parameterType="String" resultType="String">
+        select role_name from yh_user_role where role_id=#{roleid}
+    </select>
+    
+    <select id="selectorgcode" parameterType="String" resultType="string">
+        select Org_Code from yh_user_reginfo where user_code=#{usercoce};
+    </select>
+
+    <select id="selectroleid" parameterType="integer" resultMap="BaseResultMap">
+        select * from yh_user_role where pid=#{Roleid}  and role_type=1
+    </select>
+
+    <select id="selectroleid1" parameterType="integer" resultMap="BaseResultMap">
+        select * from yh_user_role where pid=#{Roleid}  and role_type=2
+    </select>
+</mapper>

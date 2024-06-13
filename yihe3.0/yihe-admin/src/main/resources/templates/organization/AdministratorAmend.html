@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, maximum-scale=1">
+<title>修改管理员</title>
+<link rel="stylesheet" th:href="@{/assets/libs/layui/css/layui.css}" />
+<link rel="stylesheet" th:href="@{/assets/module/admin.css}" />
+
+</head>
+<body style="margin: 7px;">
+<!-- 页面加载loading -->
+	<div class="page-loading">
+		<div class="ball-loader">
+			<span></span><span></span><span></span><span></span>
+		</div>
+	</div>
+	<div class="layui-fluid">
+		<div class="layui-row">
+			<div style="width: 100%; height: 100%; background-color: #FFF; position: relative;">
+				<div style="font-size: 20px; font-weight: bold; margin-left: 20px; padding-top: 30px;">修改管理员</div>
+				<div style="width: 1166px; background-color: rgb(231, 244, 255); line-height: 50px; margin-left: 19px; margin-top: 10px;">
+					<span style="margin-left: 10px;" th:text="${orgname}"></span>
+				</div>
+
+
+				<form class="layui-form" action="" id="regForm" lay-filter="regForm">
+				
+				
+				<!-- 登录账号 -->
+					<div class="layui-form-item">
+						<label style="width: 72px;"
+							class="layui-form-label layui-form-required">登录账号 </label>
+						<div class="layui-input-block">
+							<div class="layui-row">
+								<input style="margin-left: -89px; width: 450px;" type="text" lay-reqtext="不能为空"
+									name="userName" lay-verify="userName" 
+									placeholder="请输入账号，由4-10字符组成" autocomplete="off" id="userName"
+									class="layui-input layui-disabled"
+										disabled>
+							</div>
+						</div>
+					</div>
+				
+				
+				<div class="layui-form-item">
+							<label style="width: 72px;"
+								class="layui-form-label layui-form-required">登录密码
+							</label>
+							<button
+								style="font-size: 12px; height: 29px; line-height: 30px; margin-left: 285px;"
+								type="button"
+								class="layui-btn layui-btn-normal layui-btn-radius"
+								id="resetPwd">密码重置</button>
+							<div class="layui-input-block">
+								<div class="layui-row">
+									<input style="margin-left: -89px; width: 450px;"
+										type="password" required lay-verify="userPwd"
+										 placeholder="********"
+										autocomplete="off" class="layui-input layui-disabled"
+										disabled>
+								</div>
+							</div>
+						</div>
+					
+					
+				
+					<!-- 手机号 -->
+					<div class="layui-form-item">
+					    <div class="layui-inline">
+					      <div style="height: 36px;line-height: 35px;">
+						<label style="width: 74px; "class="layui-form-label layui-form-required">手机号码							   
+						</label>
+						<i class="layui-icon layui-icon-help" id="help"></i></div>
+							<div class="layui-input-block">
+							<div class="layui-row">
+								<input type="tel" style="margin-left: -89px; width: 250px;"  lay-reqtext="不能为空"
+									name="mobile"    lay-verify="required|phone" id="mobile"
+									placeholder="请输入手机号码" autocomplete="off" class="layui-input">
+							</div>
+						</div>
+					    </div>
+					    <div class="layui-inline">
+					     <label class="layui-form-label layui-form-required"
+							style="margin-left: -5px;">角色权限</label>
+							<div class="layui-input-block">
+								<div class="layui-row" style="margin-left: -89px;">
+									 <select name="modules" id="modules" lay-verify="required" lay-search="">
+
+								        </select>
+								</div>
+							</div>
+					    </div>
+					  </div>
+					
+
+					<div class="layui-form-item">
+						<label style="width: 72px;"
+							class="layui-form-label layui-form-required">真实姓名</label>
+						<div class="layui-input-block">
+							<div class="layui-row">
+							<div >
+							<input type="hidden" name="userCode" id="userCode" th:value ="${userCode}">
+							</div>
+								<input type="hidden" name="userType" value="1"> 
+								<input style="margin-left: -89px; width: 450px;" type="text"
+									name="name"  lay-verify="required" lay-reqtext="不能为空" maxlength="10"
+									placeholder="请输入名称，最大限制10个字符" autocomplete="off" 
+									class="layui-input">
+							</div>
+						</div>
+					</div>
+					
+
+					<div class="layui-form-item" style="margin-left: -88px;padding-bottom: 40px;">
+						<div class="layui-input-block">
+							<button class="layui-btn " lay-submit='' lay-filter="regSubmit" id="">提交</button>
+						  
+						   
+						  <!--  <a href="/manage/register/userIndex?page=health&userCode='+userCode" target='_blank'> <button type="button" class="layui-btn layui-btn-normal">补充更多信息</button></a> -->
+							<button type="reset" class="layui-btn layui-btn-primary" id ="cancel">取消</button>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</body>
+<!-- js部分 -->
+<script type="text/javascript" th:src="@{/assets/libs/layui/layui.js}"></script>
+<script type="text/javascript" th:src="@{/assets/js/common.js}"></script>
+<script type="text/javascript" th:src="@{/assets/js/jquery-1.11.1.js}"></script>
+<script type="text/javascript">
+
+layui.use(['layer','form','laydate'], function(){
+	 var $ = layui.jquery;
+     var layer = layui.layer;
+     var form = layui.form;
+     var laydate = layui.laydate;
+  
+     
+     
+     
+     function showpaid(broad){
+    	 $.ajax({
+             type: "GET",
+             data:{roletype:1},
+             url: "/YhUserManage/selectallrole",
+             dataType: "json",
+             success:function(data){
+                 var htmls="";
+                 for (var i = 0; i < data.data.length; i++) {
+                	 if(broad==data.data[i].roleId){
+                		 htmls+="<option value='"+data.data[i].roleId+"' selected=''>"+data.data[i].roleName+"</option>";
+ 		        	}else{
+ 		        		 htmls+="<option value='"+data.data[i].roleId+"'>"+data.data[i].roleName+"</option>";
+ 		        	}
+                	
+                 }
+                 $("#modules").append(htmls);
+ 		       	form.render();
+             }
+
+         })
+         
+	  }
+     
+     var tip_index;
+	$("#help").hover(function(){
+	    tip_index =  layer.tips('可以通过手机号码找回登录密码', this,{
+	        tips: [2, 'rgba(0, 0, 0, 1)'],
+	        time:0
+	    });
+	},function(){
+	    layer.close(tip_index);
+	});
+
+     
+	var userCode=$("#userCode").val();
+	if(userCode!=null){
+		 $.ajax({
+	   		 type:'get',
+	   		 url:'/YhUserReginfo/yhUserReginfo',
+	   		 data:{userCode:userCode},
+	   		success : function(data){
+	   			showpaid(data.roleId);
+	   			form.val('regForm', {
+					"userCode" : data.userCode,
+					"name" : data.name,
+					"mobile" : data.mobile,
+					"userName" : data.userName,
+				});
+			}
+	   })
+	}else{
+		 showpaid(0);
+	}
+	
+	var userPwd = "12345678";
+	$("#resetPwd").click(function() {
+		layer.confirm('登录密码将被重置为:12345678是否确认重置密码？', {
+			btn : [ '确认', '取消' ]
+		//可以无限个按钮
+
+		}, function(index, layero) {
+			var userCode=$("#userCode").val();
+			//按钮【按钮一】的回调
+			$.ajax({
+				type : 'post',
+				url : '/YhUserReginfo/resetPwd',
+				data : {
+					userPwd : userPwd,
+					userCode :userCode
+				},
+				success : function(data) {
+					if (data == 1) {
+						notice.success({
+							title : '消息通知',
+							message : '操作成功!'
+						});
+					} else {
+						notice.error({
+							title : '消息通知',
+							message : '操作失败!'
+						});
+					}
+				}
+			})
+			layer.close(index);
+
+		}, function(index) {
+			//按钮【按钮二】的回调
+		});
+	})
+
+     
+     
+     $("#cancel").click(function(){
+	    	window.location.href='/manage/guest/accountinformation?type=1';
+	    }) 
+     
+     
+	 $('#mobile').blur(function () {
+	    var mobile = $("#mobile").val();
+	    var userCode=$("#userCode").val();
+	    $.ajax({
+	 		type:'get', 
+	 		url:'/AccountController/selectMobile',
+	 		data:{mobile:mobile,userCode:userCode},
+	 		success : function(data){
+	 			if(data ==1){
+	 				layer.msg("手机号码已被其他用户使用");	
+	 			}
+	 		}
+	 	});
+	 })
+	 
+	 	$('#userName').blur(function () {
+		 var userName = $("#userName").val();
+		 var userCode=$("#userCode").val();
+	    $.ajax({
+	 		type:'get', 
+	 		url:'/AccountController/selectName',
+	 		data:{userName:userName,userCode:userCode},
+	 		success : function(data){
+	 			if(data ==1){
+	 				layer.msg("登录账号已存在，不能重名创建");		
+	 			}
+	 		}
+	 	});
+	 })
+     
+    
+  //监听提交
+  form.on('submit(regSubmit)', function(dataYh){
+   /*  layer.msg(JSON.stringify(data.field)); */
+    console.log("表单数据",JSON.stringify(dataYh.field)) 
+		  var userName = $("#userName").val();
+	    var mobile = $("#mobile").val();
+	    $.ajax({
+	 		type:'get', 
+	 		url:'/AccountController/selectMobileAndName',
+	 		  async: false,
+	 		data:{userName:userName,mobile:mobile},
+	 		success : function(data){
+	 			console.log(data)
+	 			
+	 			/**
+	 			 *  如果返回的是100 会提示 用户名 或者 号码存着
+	 			 *  如果返回 200 就可以注册
+	 			 */
+	 			if(data.code==100){
+	 				layer.msg(data.msg);
+	 				
+	 			}
+	 			if(data.code==200){
+	 			
+	 			  $.ajax({
+					type:'post', 
+					url:'/AccountController/regSubmit',
+					data:dataYh.field, 
+					success : function(data){
+						if(data==1){
+							layer.msg("修改成功");
+							window.location.href='/manage/guest/accountinformation?type=1';
+						}else{
+							layer.msg("修改失败");
+						}
+					}
+				})
+				
+	 			}
+	 		}
+	 	});
+	// 阻止表单跳转。如果需要表单跳转，去掉这段即可。
+	return false;
+  });
+});
+</script>
+
+</html>
+

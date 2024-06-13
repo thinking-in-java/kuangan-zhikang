@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yihe.applet.api.mapper.YhDiseaseAssessResolveAppMapper">
+    <resultMap type="com.yihe.system.domain.YHDiseaseAssessResolve" id="YhDiseaseAssessResolveResult">
+        <result property="id" column="id"/>
+        <result property="resultSerialNum" column="result_serialNum"/>
+        <result property="diseaseId" column="diseaseId"/>
+        <result property="type" column="resolve_type"/>
+        <result property="name" column="resolve_name"/>
+        <result property="improve" column="resolve_code"/>
+    </resultMap>
+
+    <sql id="allColumn">
+        id, result_serialNum, diseaseId, resolve_type, resolve_name,resolve_code
+    </sql>
+
+
+    <insert id="insertBatch" parameterType="com.yihe.system.domain.YHDiseaseAssessResolve"
+            useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO yh_disease_assess_resolve(
+        result_serialNum,
+        diseaseId,
+        resolve_type,
+        resolve_name,
+        resolve_code
+        )VALUES
+        <foreach collection="list" item="item" index="index" separator=",">
+            (
+            #{item.resultSerialNum},
+            #{item.diseaseId},
+            #{item.type},
+            #{item.name},
+            #{item.improve}
+            )
+        </foreach>
+    </insert>
+    
+    <select id="selectResolves" resultMap="YhDiseaseAssessResolveResult">
+            select 
+            <include refid="allColumn" />
+		    from yh_disease_assess_resolve
+		    where diseaseId = #{diseaseid,jdbcType=INTEGER} AND result_serialNum =  #{requestNum}
+		    
+    </select>
+   
+   <select id="selectImagetext" resultType="java.lang.String">
+            select image_url
+		    from yh_disease_assess_imagetext
+		    where id = #{improve,jdbcType=VARCHAR} 
+		    
+    </select>
+   
+</mapper>

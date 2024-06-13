@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>不活跃用户</title>
+<link rel="stylesheet" th:href="@{/assets/libs/layui/css/layui.css}" />
+<link rel="stylesheet" th:href="@{/assets/module/admin.css}" />
+
+</head>
+<style>
+.item1{
+	display:flex;
+	align-items: flex-end;
+	justify-content: space-between;
+	
+}
+	.layui1{
+	width:800px;
+
+	justify-content: flex-start;
+	}
+	
+	.layui-form-item .layui-input-inline {
+    float: left;
+    width: 100px;
+    margin-right: 10px;
+}
+
+.layui-form-item .layui-inline {
+     
+    margin-right: 10px;
+}
+</style>
+<body>
+ <!-- 页面加载loading -->
+<div class="page-loading">
+    <div class="ball-loader">
+        <span></span><span></span><span></span><span></span>
+    </div>
+</div>
+
+<div class="layui-fluid">
+		<div class="layui-row">
+			<div style="width: 100%; height: 100%; background-color: #FFF; position: relative;">
+				<form class="layui-form" id="express">
+				   
+				   <div style="height: 20px;"></div>
+				    
+				    <div class="layui-form-item">
+					    <label class="layui-form-label">机构</label>
+					    <div class="layui-input-block">
+										<div id="demoXmSelect" style="width: 95%;"></div>
+										
+									</div>
+					  </div>
+				    
+				    <div  style="font-size: 15px; font-weight: bold; margin-left: 20px; padding-top: 10px;">用户主要健康状况筛选</div>
+					 <div style="margin-left: 20px;color: rgba(166, 166, 166, 1);padding-top: 5px;">不选择，筛选对象为所有用户；选择了，筛选对象为符合所有组合条件的用户</div>
+  
+					
+					
+					<div class="layui-form-item" style="padding-top: 20px;">
+					    <div class="layui-inline" style="width: 40%;">
+					      <label class="layui-form-label">肥胖：</label>
+					      <div class="layui-input-inline" style=" width: 80%;">
+					        <input type="checkbox" name="like1[write]" lay-skin="primary" title="中心性肥胖" checked="">
+						      <input type="checkbox" name="like1[read]" lay-skin="primary" title="全身性肥胖">
+						      <input type="checkbox" name="like1[game]" lay-skin="primary" title="正常" >
+					      </div>
+					    </div>
+					    <div class="layui-inline" style="width: 40%;">
+					      <label class="layui-form-label">高血压：</label>
+					      <div class="layui-input-inline" style=" width: 80%;">
+					       <input type="checkbox" name="like1[write]" lay-skin="primary" title="已患" checked="">
+						      <input type="checkbox" name="like1[read]" lay-skin="primary" title="高风险">
+						      <input type="checkbox" name="like1[game]" lay-skin="primary" title="中等风险" >
+						          <input type="checkbox" name="like1[game]" lay-skin="primary" title="低风险" >
+					      </div>
+					    </div>
+					  </div>
+					  
+					  
+					  <div class="layui-form-item">
+					  
+					  <div class="layui-inline" style="width: 40%;">
+					      <label class="layui-form-label">糖尿病：</label>
+					      <div class="layui-input-inline" style=" width: 80%;">
+					       <input type="checkbox" name="like1[write]" lay-skin="primary" title="已患" checked="">
+						      <input type="checkbox" name="like1[read]" lay-skin="primary" title="高风险">
+						      <input type="checkbox" name="like1[game]" lay-skin="primary" title="中等风险" >
+						          <input type="checkbox" name="like1[game]" lay-skin="primary" title="低风险" >
+					      </div>
+					    </div>
+					  
+					  
+					    <div class="layui-inline" style="width: 40%;">
+					      <label class="layui-form-label">血脂异常：</label>
+					      <div class="layui-input-inline" style=" width: 80%;">
+					        <input type="checkbox" name="like1[write]" lay-skin="primary" title="血脂异常" checked="">
+						      <input type="checkbox" name="like1[read]" lay-skin="primary" title="高危人群">
+						      <input type="checkbox" name="like1[game]" lay-skin="primary" title="低危人群" >
+					      </div>
+					    </div>
+					    
+					  </div>
+					  
+					  
+					  
+					  <div class="layui-form-item">
+					  
+					  <div class="layui-inline" style="width: 40%;">
+					      <label class="layui-form-label">痛风：</label>
+					      <div class="layui-input-inline" style=" width: 80%;">
+					       <input type="checkbox" name="like1[write]" lay-skin="primary" title="已患" checked="">
+						      <input type="checkbox" name="like1[read]" lay-skin="primary" title="高风险">
+						      <input type="checkbox" name="like1[game]" lay-skin="primary" title="中等风险" >
+						          <input type="checkbox" name="like1[game]" lay-skin="primary" title="低风险" >
+					      </div>
+					    </div>
+					  </div>
+					
+					
+					 <div  style="font-size: 15px; font-weight: bold; margin-left: 20px; padding-top: 10px;">内容选择与设置</div>
+					
+				<div class="layui-form-item">
+				    <div class="layui-input-block">
+				      <input type="radio" name="sex" value="问卷评估" title="问卷评估" checked="" lay-filter="ChoiceRadio">
+				      <input type="radio" name="sex" value="健康检测" title="健康检测" lay-filter="ChoiceRadio">
+				      <input type="radio" name="sex" value="日记记录" title="日记记录" lay-filter="ChoiceRadio">
+				      <input type="radio" name="sex" value="健康计划" title="健康计划" lay-filter="ChoiceRadio">
+				    </div>
+				    <div style="margin-left: 6%;color: rgba(166, 166, 166, 1);padding-top: 5px;">最少选择1个，最多选择4个，选择多个内容时只要符合其中一个条件即为筛选对象</div>
+				  </div>
+				  
+				  
+				  <div id="wnejuan">
+				  	
+				   <div class="layui-form-item item1" >
+				   	<div class="layui1">
+					    <div class="layui-inline">
+					      <label class="layui-form-label"></label>
+					      <div class="layui-input-inline">
+					         <input type="checkbox" name="like1[read]" lay-skin="primary" title="高风险">
+					      </div>
+					    </div>
+					    <div class="layui-inline">
+						    <label class="layui-form-label">超过</label>
+						    <div class="layui-input-inline">
+						      <input type="password" name="password" lay-verify="pass" placeholder="请输入密码" autocomplete="off" class="layui-input">
+						    </div>
+						    <div class="layui-form-mid layui-word-aux">天，未用</div>
+						  </div>
+ 					</div>
+  <div class="layui1">
+  						<div class="layui-inline">
+					      <label class="layui-form-label"></label>
+					      <div class="layui-input-inline">
+					         <input type="checkbox" name="like1[read]" lay-skin="primary" title="常见症状评估">
+					      </div>
+					    </div>
+					    <div class="layui-inline">
+						    <label class="layui-form-label">超过</label>
+						    <div class="layui-input-inline">
+						      <input type="password" name="password" lay-verify="pass" placeholder="请输入密码" autocomplete="off" class="layui-input">
+						    </div>
+						    <div class="layui-form-mid layui-word-aux">天，未用</div>
+						  </div>
+  
+					  </div>
+					  </div>
+					  
+					   <div class="layui-form-item item1">
+					   <div class="layui1">
+					    <div class="layui-inline">
+					      <label class="layui-form-label"></label>
+					      <div class="layui-input-inline">
+					         <input type="checkbox" name="like1[read]" lay-skin="primary" title="血糖">
+					      </div>
+					    </div>
+					    <div class="layui-inline">
+						    <label class="layui-form-label">超过</label>
+						    <div class="layui-input-inline">
+						      <input type="password" name="password" lay-verify="pass" placeholder="请输入密码" autocomplete="off" class="layui-input">
+						    </div>
+						    <div class="layui-form-mid layui-word-aux">天，未用</div>
+						  </div>
+  </div>
+  <div class="layui1">
+  						<div class="layui-inline">
+					      <label class="layui-form-label"></label>
+					      <div class="layui-input-inline">
+					         <input type="checkbox" name="like1[read]" lay-skin="primary" title="常见症状评估">
+					      </div>
+					    </div>
+					    <div class="layui-inline">
+						    <label class="layui-form-label">体重</label>
+						    <div class="layui-input-inline">
+						      <input type="password" name="password" lay-verify="pass" placeholder="请输入密码" autocomplete="off" class="layui-input">
+						    </div>
+						    <div class="layui-form-mid layui-word-aux">天，未用</div>
+						  </div>
+  </div>
+					  </div>
+				  
+				  </div>
+				  
+				  
+				   <div id="jkang">
+				  	
+				   <div class="layui-form-item item1" >
+				   	<div class="layui1">
+					    <div class="layui-inline">
+					      <label class="layui-form-label"></label>
+					      <div class="layui-input-inline">
+					         <input type="checkbox" name="like1[read]" lay-skin="primary" title="医疗">
+					      </div>
+					    </div>
+					    <div class="layui-inline">
+						    <label class="layui-form-label">超过</label>
+						    <div class="layui-input-inline">
+						      <input type="password" name="password" lay-verify="pass" placeholder="请输入密码" autocomplete="off" class="layui-input">
+						    </div>
+						    <div class="layui-form-mid layui-word-aux">天，未用</div>
+						  </div>
+ 					</div>
+  <div class="layui1">
+  						<div class="layui-inline">
+					      <label class="layui-form-label"></label>
+					      <div class="layui-input-inline">
+					         <input type="checkbox" name="like1[read]" lay-skin="primary" title="评估">
+					      </div>
+					    </div>
+					    <div class="layui-inline">
+						    <label class="layui-form-label">超过</label>
+						    <div class="layui-input-inline">
+						      <input type="password" name="password" lay-verify="pass" placeholder="请输入密码" autocomplete="off" class="layui-input">
+						    </div>
+						    <div class="layui-form-mid layui-word-aux">天，未用</div>
+						  </div>
+  
+					  </div>
+					  </div>
+					  
+					   <div class="layui-form-item item1">
+					   <div class="layui1">
+					    <div class="layui-inline">
+					      <label class="layui-form-label"></label>
+					      <div class="layui-input-inline">
+					         <input type="checkbox" name="like1[read]" lay-skin="primary" title="血糖">
+					      </div>
+					    </div>
+					    <div class="layui-inline">
+						    <label class="layui-form-label">超过</label>
+						    <div class="layui-input-inline">
+						      <input type="password" name="password" lay-verify="pass" placeholder="请输入密码" autocomplete="off" class="layui-input">
+						    </div>
+						    <div class="layui-form-mid layui-word-aux">天，未用</div>
+						  </div>
+  </div>
+  <div class="layui1">
+  						<div class="layui-inline">
+					      <label class="layui-form-label"></label>
+					      <div class="layui-input-inline">
+					         <input type="checkbox" name="like1[read]" lay-skin="primary" title="常见症状评估">
+					      </div>
+					    </div>
+					    <div class="layui-inline">
+						    <label class="layui-form-label">体重</label>
+						    <div class="layui-input-inline">
+						      <input type="password" name="password" lay-verify="pass" placeholder="请输入密码" autocomplete="off" class="layui-input">
+						    </div>
+						    <div class="layui-form-mid layui-word-aux">天，未用</div>
+						  </div>
+  </div>
+					  </div>
+				  
+				  </div>
+				  
+				   
+					
+					<div class="layui-form-item" style="margin-left: -88px;padding-bottom: 40px;">
+						 <div class="layui-input-block" >
+	      <button class="layui-btn " lay-submit='' lay-filter="regSubmit" id="">保存</button>
+	     <button type="reset" onclick="cancel()" class="layui-btn layui-btn-primary">&emsp;取消&emsp;</button>
+	 </div>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+
+
+</body>
+<!-- js部分 -->
+	<script type="text/javascript" th:src="@{/assets/libs/layui/layui.js}"></script>
+	<script type="text/javascript" th:src="@{/assets/js/common.js}"></script>
+<script type="text/javascript">
+
+	
+layui.use([ 'layer', 'form', 'step', 'xmSelect', 'laydate', 'notice' ],
+		function() {
+			var $ = layui.jquery;
+			var layer = layui.layer;
+			var form = layui.form;
+			var step = layui.step;
+			var laydate = layui.laydate;
+			var notice = layui.notice;
+			var date1=null;
+			var date2=null;
+		  
+			
+			$("#jkang").hide();
+			
+			
+			form.on('radio(ChoiceRadio)', function(data){
+				  console.log(data.elem); //得到 radio 原始 DOM 对象
+				  console.log(data.value); //被点击的 radio 的 value 值
+				  if(data.value=='健康检测'){
+					  $("#jkang").show();
+					  $("#wnejuan").hide();
+					  
+				  }else if(data.value=='问卷评估'){
+					  $("#wnejuan").show();
+					  $("#jkang").hide();
+				  }
+				}); 
+			
+			
+			
+		  $.ajax({
+	        	 type: "GET",
+	             url: "/Exprot/selectorg",
+	             dataType: "json",
+	             success: function(data){
+	            	 
+	            	// 渲染多选下拉
+						xmSelect.render({
+							el : '#demoXmSelect',
+							data :data.data,
+							filterable:true
+						});
+	             }
+	        	
+	        });
+		  
+		});
+	
+</script>
+</html>

@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yihe.applet.api.mapper.YhDiseaseAssessTotalReportAppMapper">
+     <resultMap type="com.yihe.applet.api.domain.YhDiseaseAssessTotalReportApp" id="YhDiseaseAssessTotalReport2Result">
+        <result property="id"    column="id"    />
+        <result property="requestSerialnum"    column="request_serialNum"    />
+        <result property="userCode"    column="user_code"    />
+        <result property="qtime"    column="qtime"    />
+        <result property="gender"    column="gender"    />
+        <result property="age"    column="age"    />
+        <result property="userName"    column="user_name"    />
+        <result property="times"    column="times"    />
+        <result property="dfNames"    column="df_names"    />
+        <result property="skNames"    column="sk_names"    />
+        <result property="ldNames"    column="ld_names"    />
+        <result property="lrNames"    column="lr_names"    />
+        <result property="classify"    column="classify"    />
+        <result property="chdHis"    column="chd_his"    />
+        <result property="strokeHis"    column="stroke_his"    />
+        <result property="hbpHis"    column="hbp_his"    />
+        <result property="diab2His"    column="diab2_his"    />
+        <result property="bfHis"    column="bf_his"    />
+        <result property="huaHis"    column="hua_his"    />
+        <result property="gaeHis"    column="gae_his"    />
+        <result property="gnaHis"    column="gna_his"    />
+        <result property="opHis"    column="op_his"    />
+        <result property="flHis"    column="fl_his"    />
+        <result property="bronchHis"    column="bronch_his"    />
+        <result property="emphyHis"    column="emphy_his"    />
+        <result property="lcHis"    column="lc_his"    />
+        <result property="declineHis"    column="decline_his"    />
+        <result property="fractureHis"    column="fracture_his"    />
+        <result property="prostateDisease"    column="prostate_disease"    />
+        <result property="pcHis"    column="pc_his"    />
+        <result property="bcHis"    column="bc_his"    />
+        <result property="familyDiab"    column="family_diab"    />
+        <result property="familyHbp"    column="family_hbp"    />
+        <result property="familyChd"    column="family_chd"    />
+        <result property="familyStroke"    column="family_stroke"    />
+        <result property="familyHf"    column="family_hf"    />
+        <result property="familyLung"    column="family_lung"    />
+        <result property="familyPro"    column="family_pro"    />
+        <result property="familyBreast"    column="family_breast"    />
+        <result property="familyGout"    column="family_gout"    />
+        <result property="smokeStatus"    column="smoke_status"    />
+        <result property="foodDrink"    column="food_drink"    />
+        <result property="bmi"    column="bmi"    />
+        <result property="foodVegetables"    column="food_vegetables"    />
+        <result property="foodPurine"    column="food_purine"    />
+        <result property="foodDairy"    column="food_dairy"    />
+        <result property="foodFruits"    column="food_fruits"    />
+        <result property="B4"    column="B4"    />
+        <result property="sportIn"    column="sport_in"    />
+    </resultMap>
+    <sql id="selectYhDiseaseAssessTotalReport2Vo">
+ select id, request_serialNum, user_code, qtime, gender, age, user_name, times, df_names, sk_names, ld_names, lr_names, classify, chd_his, stroke_his, hbp_his, diab2_his, bf_his, hua_his, gae_his, gna_his, op_his, fl_his, bronch_his, emphy_his, lc_his, decline_his, fracture_his, prostate_disease, pc_his, bc_his, family_diab, family_hbp, family_chd, family_stroke, family_hf, family_lung, family_pro, family_breast, family_gout, smoke_status, food_drink, bmi,food_vegetables,food_purine, food_dairy,food_fruits,B4,sport_in from yh_disease_assess_total_report2    </sql>
+    <insert id="insertIntoTotalReport" parameterType="com.yihe.applet.api.domain.YhDiseaseAssessTotalReportApp" useGeneratedKeys="true" keyProperty="id">
+        insert into yh_disease_assess_total_report2
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="requestSerialnum != null  and requestSerialnum != ''">request_serialNum,</if>
+            <if test="userCode != null  and userCode != ''">user_code,</if>
+            <if test="qtime != null ">qtime,</if>
+            <if test="gender != null ">gender,</if>
+            <if test="age != null ">age,</if>
+            <if test="userName != null  and userName != ''">user_name,</if>
+            <if test="times != null ">times,</if>
+            <if test="dfNames != null  and dfNames != ''">df_names,</if>
+            <if test="skNames != null  and skNames != ''">sk_names,</if>
+            <if test="ldNames != null  and ldNames != ''">ld_names,</if>
+            <if test="lrNames != null  and lrNames != ''">lr_names,</if>
+            <if test="classify != null  and classify != ''">classify,</if>
+            <if test="chdHis != null ">chd_his,</if>
+            <if test="strokeHis != null ">stroke_his,</if>
+            <if test="hbpHis != null ">hbp_his,</if>
+            <if test="diab2His != null ">diab2_his,</if>
+            <if test="bfHis != null ">bf_his,</if>
+            <if test="huaHis != null ">hua_his,</if>
+            <if test="gaeHis != null ">gae_his,</if>
+            <if test="gnaHis != null ">gna_his,</if>
+            <if test="opHis != null ">op_his,</if>
+            <if test="flHis != null ">fl_his,</if>
+            <if test="bronchHis != null ">bronch_his,</if>
+            <if test="emphyHis != null ">emphy_his,</if>
+            <if test="lcHis != null ">lc_his,</if>
+            <if test="declineHis != null ">decline_his,</if>
+            <if test="fractureHis != null ">fracture_his,</if>
+            <if test="prostateDisease != null ">prostate_disease,</if>
+            <if test="pcHis != null ">pc_his,</if>
+            <if test="bcHis != null ">bc_his,</if>
+            <if test="familyDiab != null ">family_diab,</if>
+            <if test="familyHbp != null ">family_hbp,</if>
+            <if test="familyChd != null ">family_chd,</if>
+            <if test="familyStroke != null ">family_stroke,</if>
+            <if test="familyHf != null ">family_hf,</if>
+            <if test="familyLung != null ">family_lung,</if>
+            <if test="familyPro != null ">family_pro,</if>
+            <if test="familyBreast != null ">family_breast,</if>
+            <if test="familyGout != null ">family_gout,</if>
+            <if test="smokeStatus != null ">smoke_status,</if>
+            <if test="foodDrink != null ">food_drink,</if>
+            <if test="bmi != null ">bmi,</if>
+            <if test="foodVegetables != null ">food_vegetables,</if>
+            <if test="foodPurine != null ">food_purine,</if>
+            <if test="foodDairy != null ">food_dairy,</if>
+            <if test="foodFruits != null ">food_fruits,</if>
+            <if test="B4 != null ">B4,</if>
+            <if test="sportIn != null ">sport_in,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="requestSerialnum != null  and requestSerialnum != ''">#{requestSerialnum},</if>
+            <if test="userCode != null  and userCode != ''">#{userCode},</if>
+            <if test="qtime != null ">#{qtime},</if>
+            <if test="gender != null ">#{gender},</if>
+            <if test="age != null ">#{age},</if>
+            <if test="userName != null  and userName != ''">#{userName},</if>
+            <if test="times != null ">#{times},</if>
+            <if test="dfNames != null  and dfNames != ''">#{dfNames},</if>
+            <if test="skNames != null  and skNames != ''">#{skNames},</if>
+            <if test="ldNames != null  and ldNames != ''">#{ldNames},</if>
+            <if test="lrNames != null  and lrNames != ''">#{lrNames},</if>
+            <if test="classify != null  and classify != ''">#{classify},</if>
+            <if test="chdHis != null ">#{chdHis},</if>
+            <if test="strokeHis != null ">#{strokeHis},</if>
+            <if test="hbpHis != null ">#{hbpHis},</if>
+            <if test="diab2His != null ">#{diab2His},</if>
+            <if test="bfHis != null ">#{bfHis},</if>
+            <if test="huaHis != null ">#{huaHis},</if>
+            <if test="gaeHis != null ">#{gaeHis},</if>
+            <if test="gnaHis != null ">#{gnaHis},</if>
+            <if test="opHis != null ">#{opHis},</if>
+            <if test="flHis != null ">#{flHis},</if>
+            <if test="bronchHis != null ">#{bronchHis},</if>
+            <if test="emphyHis != null ">#{emphyHis},</if>
+            <if test="lcHis != null ">#{lcHis},</if>
+            <if test="declineHis != null ">#{declineHis},</if>
+            <if test="fractureHis != null ">#{fractureHis},</if>
+            <if test="prostateDisease != null ">#{prostateDisease},</if>
+            <if test="pcHis != null ">#{pcHis},</if>
+            <if test="bcHis != null ">#{bcHis},</if>
+            <if test="familyDiab != null ">#{familyDiab},</if>
+            <if test="familyHbp != null ">#{familyHbp},</if>
+            <if test="familyChd != null ">#{familyChd},</if>
+            <if test="familyStroke != null ">#{familyStroke},</if>
+            <if test="familyHf != null ">#{familyHf},</if>
+            <if test="familyLung != null ">#{familyLung},</if>
+            <if test="familyPro != null ">#{familyPro},</if>
+            <if test="familyBreast != null ">#{familyBreast},</if>
+            <if test="familyGout != null ">#{familyGout},</if>
+            <if test="smokeStatus != null ">#{smokeStatus},</if>
+            <if test="foodDrink != null ">#{foodDrink},</if>
+            <if test="bmi != null ">#{bmi},</if>
+            <if test="foodVegetables != null ">#{foodVegetables},</if>
+            <if test="foodPurine != null ">#{foodPurine},</if>
+            <if test="foodDairy != null ">#{foodDairy},</if>
+            <if test="foodFruits != null ">#{foodFruits},</if>
+            <if test="B4 != null ">#{B4},</if>
+            <if test="sportIn != null ">#{sportIn},</if>
+         </trim>
+    </insert>
+    
+    <select id="selectTotalReportByuserCode" parameterType="String" resultMap="YhDiseaseAssessTotalReport2Result">
+        <include refid="selectYhDiseaseAssessTotalReport2Vo"/>
+         where user_code = #{userCode} order by id desc limit 1
+    </select>
+  
+      <select id="selectTotalReportByuserCodeByNewest" parameterType="java.lang.String" resultMap="YhDiseaseAssessTotalReport2Result">
+        select * from yh_disease_assess_report where user_code=#{userCode} order by qtime desc limit 1
+  	</select>
+    <select id="queryOaUserAssessInfo" parameterType="string" resultMap="YhDiseaseAssessTotalReport2Result">
+        select qtime, gender, times, df_names, sk_names,
+               (select name from yh_user_reginfo where user_code = #{userCode}) as user_name
+        from yh_disease_assess_total_report2 where user_code=#{userCode} order by qtime desc limit 1
+    </select>
+    <insert id="insertIntoTotalReportNew" parameterType="yhDiseaseAssessTotalReportNewApp">
+        insert into yh_disease_assess_total_report
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="requestSerialnum != null  and requestSerialnum != ''">request_serialNum,</if>
+            <if test="userCode != null  and userCode != ''">user_code,</if>
+            <if test="qtime != null ">qtime,</if>
+            <if test="gender != null ">gender,</if>
+            <if test="age != null ">age,</if>
+            <if test="times != null ">times,</if>
+            <if test="dfNames != null  and dfNames != ''">df_names,</if>
+            <if test="skNames != null  and skNames != ''">sk_names,</if>
+            <if test="ldNames != null  and ldNames != ''">ld_names,</if>
+            <if test="lrNames != null  and lrNames != ''">lr_names,</if>
+            <if test="classify != null  and classify != ''">classify,</if>
+            <if test="bmi != null ">bmi,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="requestSerialnum != null  and requestSerialnum != ''">#{requestSerialnum},</if>
+            <if test="userCode != null  and userCode != ''">#{userCode},</if>
+            <if test="qtime != null ">#{qtime},</if>
+            <if test="gender != null ">#{gender},</if>
+            <if test="age != null ">#{age},</if>
+            <if test="times != null ">#{times},</if>
+            <if test="dfNames != null  and dfNames != ''">#{dfNames},</if>
+            <if test="skNames != null  and skNames != ''">#{skNames},</if>
+            <if test="ldNames != null  and ldNames != ''">#{ldNames},</if>
+            <if test="lrNames != null  and lrNames != ''">#{lrNames},</if>
+            <if test="classify != null  and classify != ''">#{classify},</if>
+            <if test="bmi != null ">#{bmi},</if>
+        </trim>
+    </insert>
+</mapper>

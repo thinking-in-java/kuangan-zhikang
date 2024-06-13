@@ -1,0 +1,1091 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<style>
+
+    .showbord{
+        border-bottom:2px solid  #f5f7f9;
+    }
+</style>
+<link rel="stylesheet" th:href="@{/assets/libs/layui/css/layui.css}" />
+<link rel="stylesheet"  th:href="@{/assets/module/admin.css}"  />
+<body>
+        <!--统计对象-->
+        <div style="width: 100%;height: 70px;background-color: #fff">
+
+            <div class="layui-inline" style="margin-left: -40px;margin-top: 15px">
+                <label class="layui-form-label">归属</label>
+                <div class="layui-input-block" style="width: 270px;">
+                    <input type="text" id="tree" lay-filter="tree" class="layui-input">
+                </div>
+            </div>
+
+            <div class="layui-inline" style="margin-top: 15px">
+                <label class="layui-form-label">统计范围</label>
+                <div class="layui-input-block" style="width: 270px;">
+                    <input name="times" type="text"
+                           class="layui-input" id="test6" placeholder=" - ">
+                </div>
+            </div>
+
+            <div class="layui-inline" style="margin-top: 15px;margin-left: 3%">
+
+                <div class="layui-form" lay-filter="myDiv">
+                    <select name="" id="yonghu" lay-filter="mySelect">
+
+                        <option value="1">有数据用户</option>
+                        <option value="0">无数据用户</option>
+                    </select>
+                </div>
+
+            </div>
+
+
+            <button style="margin-top: 15px;margin-left: 5%" class="layui-btn layui-btn-primary" id="btnempty" lay-submit=""
+                    lay-filter="reset">清除</button>
+
+
+                <button id="daochu" lay-submit="daochu" class="layui-btn next" style="margin-top: 15px;margin-left: 1%">导出</button>
+
+
+
+        </div>
+
+        <div style="width: 100%;height: 10px">
+
+        </div>
+
+        <div class="layui-fluid" style="padding: 0">
+            <div class="layui-card">
+                <div class="layui-tab layui-tab-brief" lay-filter="indexTab">
+                    <ul class="layui-tab-title">
+                        <li lay-id="1" class="layui-this">评估</li>
+                        <li lay-id="2">检测</li>
+                        <li lay-id="3">日记</li>
+                    </ul>
+
+
+                    <div class="layui-tab-content" style="padding: 0">
+
+                        <!--评估-->
+                        <div class="layui-tab-item layui-show">
+
+                           <div style="height: 70px;width: 100%">
+                               <div style="width: 100%;height: 25px">
+                               </div>
+                               <form class="layui-form" id="express">
+                               <div class="layui-input-block" style="margin-left: 40px">
+                                   <input type="checkbox" name="like1" id="week1" value="1"  lay-filter='filter' title="健康风险评估"  lay-skin='primary' checked="">
+                                   <input type="checkbox" name="like1"  id="week2" value="2" lay-filter='filter' title="常见症状评估"  lay-skin='primary' checked="">
+                                   <input type="checkbox" name="like1" id="week3" value="3" lay-filter='filter' title="A型性格评估"  lay-skin='primary' checked="">
+                                   <input type="checkbox" name="like1" id="week4" value="4" lay-filter='filter' title="PSTRI压力评估"  lay-skin='primary' checked="">
+                                   <input type="checkbox" name="like1" id="week5" value="5"   lay-filter='filter' title="心理健康评估"  lay-skin='primary' checked="">
+                                   <input type="checkbox" name="like1" id="week6" value="6" lay-filter='filter' title="睡眠质量评估"  lay-skin='primary' checked="">
+                                   <input type="checkbox" name="like1" id="week7" value="7" lay-filter='filter' title="健康习惯评估"  lay-skin='primary' checked="">
+                               </div>
+                               </form>
+                           </div>
+                            <div style="width: 100%;height: 10px;background-color: #f5f7f9"></div>
+                            <div style="width: 100%;background-color: #f5f7f9">
+<!--                                健康风险评估-->
+                                <div style="width: 32%;height: 250px;background-color: #fff;float: left;margin-left: 1%;margin-top: 20px">
+                                    <div style="width: 100%;height:40px;" class="showbord">
+                                        <div style="float: left;line-height: 40px;margin-left: 20px;">健康风险评估</div>
+                                        <div style="float: right;line-height: 40px;margin-right: 20px;color: rgba(166, 166, 166, 1)">次</div>
+                                        <div style="float: right;line-height: 40px" class="cishu">532</div>
+                                    </div>
+                                    <div id="chart1" style="width: 100%;height: 210px;">
+                                    </div>
+                                </div>
+<!--                                常见症状评估-->
+                                <div style="width: 32%;height: 250px;background-color: #fff;float: left;margin-left: 1%;margin-top: 20px">
+                                    <div style="width: 100%;height:40px;" class="showbord">
+                                        <div style="float: left;line-height: 40px;margin-left: 20px;">常见症状评估</div>
+                                        <div style="float: right;line-height: 40px;margin-right: 20px;color: rgba(166, 166, 166, 1)">次</div>
+                                        <div style="float: right;line-height: 40px" class="cishu">532</div>
+                                    </div>
+                                    <div id="chart2" style="width: 100%;height: 210px;">
+                                    </div>
+                                </div>
+<!--                                A型性格评估-->
+                                <div style="width: 32%;height: 250px;background-color: #fff;float: left;margin-left: 1%;margin-top: 20px">
+                                    <div style="width: 100%;height:40px;" class="showbord">
+                                        <div style="float: left;line-height: 40px;margin-left: 20px;">A型性格评估</div>
+                                        <div style="float: right;line-height: 40px;margin-right: 20px;color: rgba(166, 166, 166, 1)">次</div>
+                                        <div style="float: right;line-height: 40px" class="cishu">532</div>
+                                    </div>
+                                    <div id="chart3" style="width: 100%;height: 210px;">
+                                    </div>
+                                </div>
+<!--                                PSTRI压力评估-->
+                                <div style="width: 32%;height: 250px;background-color: #fff;float: left;margin-left: 1%;margin-top: 20px">
+                                    <div style="width: 100%;height:40px;" class="showbord">
+                                        <div style="float: left;line-height: 40px;margin-left: 20px;">PSTRI压力评估</div>
+                                        <div style="float: right;line-height: 40px;margin-right: 20px;color: rgba(166, 166, 166, 1)">次</div>
+                                        <div style="float: right;line-height: 40px" class="cishu">532</div>
+                                    </div>
+                                    <div id="chart4" style="width: 100%;height: 210px;">
+                                    </div>
+                                </div>
+<!--                                心理健康评估-->
+                                <div style="width: 32%;height: 250px;background-color: #fff;float: left;margin-left: 1%;margin-top: 20px">
+                                    <div style="width: 100%;height:40px;" class="showbord">
+                                        <div style="float: left;line-height: 40px;margin-left: 20px;">心理健康评估</div>
+                                        <div style="float: right;line-height: 40px;margin-right: 20px;color: rgba(166, 166, 166, 1)">次</div>
+                                        <div style="float: right;line-height: 40px" class="cishu">532</div>
+                                    </div>
+                                    <div id="chart5" style="width: 100%;height: 210px;">
+                                    </div>
+                                </div>
+<!--                                睡眠质量评估-->
+                                <div style="width: 32%;height: 250px;background-color: #fff;float: left;margin-left: 1%;margin-top: 20px">
+                                    <div style="width: 100%;height:40px;" class="showbord">
+                                        <div style="float: left;line-height: 40px;margin-left: 20px;">睡眠质量评估</div>
+                                        <div style="float: right;line-height: 40px;margin-right: 20px;color: rgba(166, 166, 166, 1)">次</div>
+                                        <div style="float: right;line-height: 40px" class="cishu">532</div>
+                                    </div>
+                                    <div id="chart6" style="width: 100%;height: 210px;">
+                                    </div>
+                                </div>
+<!--                                健康习惯评估-->
+                                <div style="width: 32%;height: 250px;background-color: #fff;float: left;margin-left: 1%;margin-top: 20px">
+                                    <div style="width: 100%;height:40px;" class="showbord">
+                                        <div style="float: left;line-height: 40px;margin-left: 20px;">健康习惯评估</div>
+                                        <div style="float: right;line-height: 40px;margin-right: 20px;color: rgba(166, 166, 166, 1)">次</div>
+                                        <div style="float: right;line-height: 40px" class="cishu">532</div>
+                                    </div>
+                                    <div id="chart7" style="width: 100%;height: 210px;">
+                                    </div>
+                                </div>
+
+                            </div>
+
+
+                        </div>
+
+                        <!--检测-->
+                        <div class="layui-tab-item">
+                            <div style="height: 70px;width: 100%">
+                                <div style="width: 100%;height: 25px">
+                                </div>
+                                <form class="layui-form" >
+                                    <div class="layui-input-block" style="margin-left: 40px">
+                                        <input type="checkbox" name="like1"  value="8" lay-filter='filter' title="体温"  lay-skin='primary' checked="">
+                                        <input type="checkbox" name="like1"  value="9" lay-filter='filter' title="体重"  lay-skin='primary' checked="">
+                                        <input type="checkbox" name="like1"  value="10" lay-filter='filter' title="血压"  lay-skin='primary' checked="">
+                                        <input type="checkbox" name="like1"  value="11" lay-filter='filter' title="血糖"  lay-skin='primary' checked="">
+                                        <input type="checkbox" name="like1"  value="12" lay-filter='filter' title="血氧"  lay-skin='primary' checked="">
+                                        <input type="checkbox" name="like1"  value="13" lay-filter='filter' title="心率"  lay-skin='primary' checked="">
+                                        <input type="checkbox" name="like1"  value="14" lay-filter='filter' title="体脂"  lay-skin='primary' checked="">
+                                        <input type="checkbox" name="like1"  value="15" lay-filter='filter' title="血脂四项"  lay-skin='primary' checked="">
+                                        <input type="checkbox" name="like1"  value="16" lay-filter='filter' title="肾功能"  lay-skin='primary' checked="">
+                                        <input type="checkbox" name="like1"  value="17" lay-filter='filter' title="肝功能"  lay-skin='primary' checked="">
+                                        <input type="checkbox" name="like1"  value="18" lay-filter='filter' title="心电图"  lay-skin='primary' checked="">
+                                        <input type="checkbox" name="like1"  value="19" lay-filter='filter' title="尿检"  lay-skin='primary' checked="">
+                                        <input type="checkbox" name="like1"  value="20" lay-filter='filter' title="其他指标"  lay-skin='primary' checked="">
+                                    </div>
+                                </form>
+                            </div>
+                            <div style="width: 100%;height: 10px;background-color: #f5f7f9"></div>
+                            <div style="width: 100%;background-color: #f5f7f9">
+                                <!--                                体温-->
+                                <div style="width: 32%;height: 250px;background-color: #fff;float: left;margin-left: 1%;margin-top: 20px">
+                                    <div style="width: 100%;height:40px;" class="showbord">
+                                        <div style="float: left;line-height: 40px;margin-left: 20px;">体温</div>
+                                        <div style="float: right;line-height: 40px;margin-right: 20px;color: rgba(166, 166, 166, 1)">次</div>
+                                        <div style="float: right;line-height: 40px" class="cishu">532</div>
+                                    </div>
+                                    <div id="chart8" style="width: 100%;height: 210px;">
+                                    </div>
+                                </div>
+                                <!--                                体重-->
+                                <div style="width: 32%;height: 250px;background-color: #fff;float: left;margin-left: 1%;margin-top: 20px">
+                                    <div style="width: 100%;height:40px;" class="showbord">
+                                        <div style="float: left;line-height: 40px;margin-left: 20px;">体重</div>
+                                        <div style="float: right;line-height: 40px;margin-right: 20px;color: rgba(166, 166, 166, 1)">次</div>
+                                        <div style="float: right;line-height: 40px" class="cishu">532</div>
+                                    </div>
+                                    <div id="chart9" style="width: 100%;height: 210px;">
+                                    </div>
+                                </div>
+                                <!--                                血压-->
+                                <div style="width: 32%;height: 250px;background-color: #fff;float: left;margin-left: 1%;margin-top: 20px">
+                                    <div style="width: 100%;height:40px;" class="showbord">
+                                        <div style="float: left;line-height: 40px;margin-left: 20px;">血压</div>
+                                        <div style="float: right;line-height: 40px;margin-right: 20px;color: rgba(166, 166, 166, 1)">次</div>
+                                        <div style="float: right;line-height: 40px" class="cishu">532</div>
+                                    </div>
+                                    <div id="chart10" style="width: 100%;height: 210px;">
+                                    </div>
+                                </div>
+                                <!--                                血糖-->
+                                <div style="width: 32%;height: 250px;background-color: #fff;float: left;margin-left: 1%;margin-top: 20px">
+                                    <div style="width: 100%;height:40px;" class="showbord">
+                                        <div style="float: left;line-height: 40px;margin-left: 20px;">血糖</div>
+                                        <div style="float: right;line-height: 40px;margin-right: 20px;color: rgba(166, 166, 166, 1)">次</div>
+                                        <div style="float: right;line-height: 40px" class="cishu">532</div>
+                                    </div>
+                                    <div id="chart11" style="width: 100%;height: 210px;">
+                                    </div>
+                                </div>
+                                <!--                                血氧-->
+                                <div style="width: 32%;height: 250px;background-color: #fff;float: left;margin-left: 1%;margin-top: 20px">
+                                    <div style="width: 100%;height:40px;" class="showbord">
+                                        <div style="float: left;line-height: 40px;margin-left: 20px;">血氧</div>
+                                        <div style="float: right;line-height: 40px;margin-right: 20px;color: rgba(166, 166, 166, 1)">次</div>
+                                        <div style="float: right;line-height: 40px" class="cishu">532</div>
+                                    </div>
+                                    <div id="chart12" style="width: 100%;height: 210px;">
+                                    </div>
+                                </div>
+                                <!--                                心率-->
+                                <div style="width: 32%;height: 250px;background-color: #fff;float: left;margin-left: 1%;margin-top: 20px">
+                                    <div style="width: 100%;height:40px;" class="showbord">
+                                        <div style="float: left;line-height: 40px;margin-left: 20px;">心率</div>
+                                        <div style="float: right;line-height: 40px;margin-right: 20px;color: rgba(166, 166, 166, 1)">次</div>
+                                        <div style="float: right;line-height: 40px" class="cishu">532</div>
+                                    </div>
+                                    <div id="chart13" style="width: 100%;height: 210px;">
+                                    </div>
+                                </div>
+                                <!--                                体脂-->
+                                <div style="width: 32%;height: 250px;background-color: #fff;float: left;margin-left: 1%;margin-top: 20px">
+                                    <div style="width: 100%;height:40px;" class="showbord">
+                                        <div style="float: left;line-height: 40px;margin-left: 20px;">体脂</div>
+                                        <div style="float: right;line-height: 40px;margin-right: 20px;color: rgba(166, 166, 166, 1)">次</div>
+                                        <div style="float: right;line-height: 40px" class="cishu">532</div>
+                                    </div>
+                                    <div id="chart14" style="width: 100%;height: 210px;">
+                                    </div>
+                                </div>
+                                <!--                                血脂四项-->
+                                <div style="width: 32%;height: 250px;background-color: #fff;float: left;margin-left: 1%;margin-top: 20px">
+                                    <div style="width: 100%;height:40px;" class="showbord">
+                                        <div style="float: left;line-height: 40px;margin-left: 20px;">血脂四项</div>
+                                        <div style="float: right;line-height: 40px;margin-right: 20px;color: rgba(166, 166, 166, 1)">次</div>
+                                        <div style="float: right;line-height: 40px" class="cishu">532</div>
+                                    </div>
+                                    <div id="chart15" style="width: 100%;height: 210px;">
+                                    </div>
+                                </div>
+                                <!--                                肾功能-->
+                                <div style="width: 32%;height: 250px;background-color: #fff;float: left;margin-left: 1%;margin-top: 20px">
+                                    <div style="width: 100%;height:40px;" class="showbord">
+                                        <div style="float: left;line-height: 40px;margin-left: 20px;">肾功能</div>
+                                        <div style="float: right;line-height: 40px;margin-right: 20px;color: rgba(166, 166, 166, 1)">次</div>
+                                        <div style="float: right;line-height: 40px" class="cishu">532</div>
+                                    </div>
+                                    <div id="chart16" style="width: 100%;height: 210px;">
+                                    </div>
+                                </div>
+                                <!--                                肝功能-->
+                                <div style="width: 32%;height: 250px;background-color: #fff;float: left;margin-left: 1%;margin-top: 20px">
+                                    <div style="width: 100%;height:40px;" class="showbord">
+                                        <div style="float: left;line-height: 40px;margin-left: 20px;">肝功能</div>
+                                        <div style="float: right;line-height: 40px;margin-right: 20px;color: rgba(166, 166, 166, 1)">次</div>
+                                        <div style="float: right;line-height: 40px" class="cishu">532</div>
+                                    </div>
+                                    <div id="chart17" style="width: 100%;height: 210px;">
+                                    </div>
+                                </div>
+                                <!--                                心电图-->
+                                <div style="width: 32%;height: 250px;background-color: #fff;float: left;margin-left: 1%;margin-top: 20px">
+                                    <div style="width: 100%;height:40px;" class="showbord">
+                                        <div style="float: left;line-height: 40px;margin-left: 20px;">心电图</div>
+                                        <div style="float: right;line-height: 40px;margin-right: 20px;color: rgba(166, 166, 166, 1)">次</div>
+                                        <div style="float: right;line-height: 40px" class="cishu">532</div>
+                                    </div>
+                                    <div id="chart18" style="width: 100%;height: 210px;">
+                                    </div>
+                                </div>
+                                <!--                                尿检-->
+                                <div style="width: 32%;height: 250px;background-color: #fff;float: left;margin-left: 1%;margin-top: 20px">
+                                    <div style="width: 100%;height:40px;" class="showbord">
+                                        <div style="float: left;line-height: 40px;margin-left: 20px;">尿检</div>
+                                        <div style="float: right;line-height: 40px;margin-right: 20px;color: rgba(166, 166, 166, 1)">次</div>
+                                        <div style="float: right;line-height: 40px" class="cishu">532</div>
+                                    </div>
+                                    <div id="chart19" style="width: 100%;height: 210px;">
+                                    </div>
+                                </div>
+                                <!--                                其他指标-->
+                                <div style="width: 32%;height: 250px;background-color: #fff;float: left;margin-left: 1%;margin-top: 20px">
+                                    <div style="width: 100%;height:40px;" class="showbord">
+                                        <div style="float: left;line-height: 40px;margin-left: 20px;">其他指标</div>
+                                        <div style="float: right;line-height: 40px;margin-right: 20px;color: rgba(166, 166, 166, 1)">次</div>
+                                        <div style="float: right;line-height: 40px" class="cishu">532</div>
+                                    </div>
+                                    <div id="chart20" style="width: 100%;height: 210px;">
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <!--日记-->
+                        <div class="layui-tab-item">
+                            <div style="height: 70px;width: 100%">
+                                <div style="width: 100%;height: 25px">
+                                </div>
+                                <form class="layui-form" >
+                                    <div class="layui-input-block" style="margin-left: 40px">
+                                        <input type="checkbox" name="like1"  value="21" lay-filter='filter' title="饮食日记"  lay-skin='primary' checked="">
+                                        <input type="checkbox" name="like1"  value="22" lay-filter='filter' title="运动日记"  lay-skin='primary' checked="">
+                                        <input type="checkbox" name="like1"  value="23" lay-filter='filter' title="睡眠日记"  lay-skin='primary' checked="">
+                                        <input type="checkbox" name="like1"  value="24" lay-filter='filter' title="28天健康计划-高血压"  lay-skin='primary' checked="">
+                                        <input type="checkbox" name="like1"  value="25" lay-filter='filter' title="28天健康计划-高血糖"  lay-skin='primary' checked="">
+                                        <input type="checkbox" name="like1"  value="26" lay-filter='filter' title="28天健康计划-高血脂"  lay-skin='primary' checked="">
+                                        <input type="checkbox" name="like1"  value="27" lay-filter='filter' title="28天健康计划-高尿酸"  lay-skin='primary' checked="">
+                                        <input type="checkbox" name="like1"  value="28" lay-filter='filter' title="28天健康计划-减脂"  lay-skin='primary' checked="">
+                                        <input type="checkbox" name="like1"  value="29" lay-filter='filter' title="健康习惯"  lay-skin='primary' checked="">
+                                    </div>
+                                </form>
+                            </div>
+                            <div style="width: 100%;height: 10px;background-color: #f5f7f9"></div>
+                            <div style="width: 100%;background-color: #f5f7f9">
+                                <!--                                饮食日记-->
+                                <div style="width: 32%;height: 250px;background-color: #fff;float: left;margin-left: 1%;margin-top: 20px">
+                                    <div style="width: 100%;height:40px;" class="showbord">
+                                        <div style="float: left;line-height: 40px;margin-left: 20px;">饮食日记</div>
+                                        <div style="float: right;line-height: 40px;margin-right: 20px;color: rgba(166, 166, 166, 1)">次</div>
+                                        <div style="float: right;line-height: 40px" class="cishu">532</div>
+                                    </div>
+                                    <div id="chart21" style="width: 100%;height: 210px;">
+                                    </div>
+                                </div>
+                                <!--                                运动日记-->
+                                <div style="width: 32%;height: 250px;background-color: #fff;float: left;margin-left: 1%;margin-top: 20px">
+                                    <div style="width: 100%;height:40px;" class="showbord">
+                                        <div style="float: left;line-height: 40px;margin-left: 20px;">运动日记</div>
+                                        <div style="float: right;line-height: 40px;margin-right: 20px;color: rgba(166, 166, 166, 1)">次</div>
+                                        <div style="float: right;line-height: 40px" class="cishu">532</div>
+                                    </div>
+                                    <div id="chart22" style="width: 100%;height: 210px;">
+                                    </div>
+                                </div>
+                                <!--                                睡眠日记-->
+                                <div style="width: 32%;height: 250px;background-color: #fff;float: left;margin-left: 1%;margin-top: 20px">
+                                    <div style="width: 100%;height:40px;" class="showbord">
+                                        <div style="float: left;line-height: 40px;margin-left: 20px;">睡眠日记</div>
+                                        <div style="float: right;line-height: 40px;margin-right: 20px;color: rgba(166, 166, 166, 1)">次</div>
+                                        <div style="float: right;line-height: 40px" class="cishu">532</div>
+                                    </div>
+                                    <div id="chart23" style="width: 100%;height: 210px;">
+                                    </div>
+                                </div>
+                                <!--                                28天健康计划-高血压-->
+                                <div style="width: 32%;height: 250px;background-color: #fff;float: left;margin-left: 1%;margin-top: 20px">
+                                    <div style="width: 100%;height:40px;" class="showbord">
+                                        <div style="float: left;line-height: 40px;margin-left: 20px;">28天健康计划-高血压</div>
+                                        <div style="float: right;line-height: 40px;margin-right: 20px;color: rgba(166, 166, 166, 1)">次</div>
+                                        <div style="float: right;line-height: 40px" class="cishu">532</div>
+                                    </div>
+                                    <div id="chart24" style="width: 100%;height: 210px;">
+                                    </div>
+                                </div>
+                                <!--                                28天健康计划-高血糖-->
+                                <div style="width: 32%;height: 250px;background-color: #fff;float: left;margin-left: 1%;margin-top: 20px">
+                                    <div style="width: 100%;height:40px;" class="showbord">
+                                        <div style="float: left;line-height: 40px;margin-left: 20px;">28天健康计划-高血糖</div>
+                                        <div style="float: right;line-height: 40px;margin-right: 20px;color: rgba(166, 166, 166, 1)">次</div>
+                                        <div style="float: right;line-height: 40px" class="cishu">532</div>
+                                    </div>
+                                    <div id="chart25" style="width: 100%;height: 210px;">
+                                    </div>
+                                </div>
+                                <!--                                28天健康计划-高血脂-->
+                                <div style="width: 32%;height: 250px;background-color: #fff;float: left;margin-left: 1%;margin-top: 20px">
+                                    <div style="width: 100%;height:40px;" class="showbord">
+                                        <div style="float: left;line-height: 40px;margin-left: 20px;">28天健康计划-高血脂</div>
+                                        <div style="float: right;line-height: 40px;margin-right: 20px;color: rgba(166, 166, 166, 1)">次</div>
+                                        <div style="float: right;line-height: 40px" class="cishu">532</div>
+                                    </div>
+                                    <div id="chart26" style="width: 100%;height: 210px;">
+                                    </div>
+                                </div>
+                                <!--                                28天健康计划-高尿酸-->
+                                <div style="width: 32%;height: 250px;background-color: #fff;float: left;margin-left: 1%;margin-top: 20px">
+                                    <div style="width: 100%;height:40px;" class="showbord">
+                                        <div style="float: left;line-height: 40px;margin-left: 20px;">28天健康计划-高尿酸</div>
+                                        <div style="float: right;line-height: 40px;margin-right: 20px;color: rgba(166, 166, 166, 1)">次</div>
+                                        <div style="float: right;line-height: 40px" class="cishu">532</div>
+                                    </div>
+                                    <div id="chart27" style="width: 100%;height: 210px;">
+                                    </div>
+                                </div>
+                                <!--                                28天健康计划-减脂-->
+                                <div style="width: 32%;height: 250px;background-color: #fff;float: left;margin-left: 1%;margin-top: 20px">
+                                    <div style="width: 100%;height:40px;" class="showbord">
+                                        <div style="float: left;line-height: 40px;margin-left: 20px;">28天健康计划-减脂</div>
+                                        <div style="float: right;line-height: 40px;margin-right: 20px;color: rgba(166, 166, 166, 1)">次</div>
+                                        <div style="float: right;line-height: 40px" class="cishu">532</div>
+                                    </div>
+                                    <div id="chart28" style="width: 100%;height: 210px;">
+                                    </div>
+                                </div>
+                                <!--                                健康习惯-->
+                                <div style="width: 32%;height: 250px;background-color: #fff;float: left;margin-left: 1%;margin-top: 20px">
+                                    <div style="width: 100%;height:40px;" class="showbord">
+                                        <div style="float: left;line-height: 40px;margin-left: 20px;">健康习惯</div>
+                                        <div style="float: right;line-height: 40px;margin-right: 20px;color: rgba(166, 166, 166, 1)">次</div>
+                                        <div style="float: right;line-height: 40px" class="cishu">532</div>
+                                    </div>
+                                    <div id="chart29" style="width: 100%;height: 210px;">
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+</body>
+
+<script type="text/javascript" th:src="@{/assets/libs/layui/layui.js}"></script>
+<script type="text/javascript" th:src="@{/assets/js/common.js}"></script>
+<script type="text/javascript" th:src="@{/assets/js/jquery-1.11.1.js}"></script>
+
+<script th:src="@{/assets/libs/echarts/echarts.min.js}"></script>
+<script type="text/javascript" th:inline="javascript">
+    var userCode = [[${userCode}]];
+
+    layui.use(['laypage', 'layer','element', 'treeTable','table','form','treeSelect','laydate','util','upload'], function(){
+        var laypage = layui.laypage;
+        var layer = layui.layer;
+        var element = layui.element;
+        var table = layui.table;
+        var form = layui.form;
+        var $ = layui.jquery;
+        var laydate = layui.laydate;
+        var util = layui.util;
+        var treeSelect= layui.treeSelect;
+        var upload = layui.upload;
+
+        var id=1;
+        var orgcode="";
+        var timer=formatDate(new Date().setDate(new Date().getDate()-30))+" - "+formatDate(new Date().setDate(new Date().getDate()));
+        element.on('tab(indexTab)', function(data){
+            var url='/manage/setting/changeclientservice';
+            id = $(this).attr("lay-id");
+            alltuxing();
+        })
+
+
+        //清除按钮
+        $("#btnempty").click(function() {
+
+            $("#test6").val(formatDate(new Date().setDate(new Date().getDate()-30))+" - "+formatDate(new Date().setDate(new Date().getDate())));
+            $("#yonghu").val(1);
+
+            form.render("select");
+            $('#tree').siblings().remove();
+            randtreesone();
+        })
+
+        form.on('checkbox(filter)', function (data) {
+            if(data.elem.checked){
+                $(".cishu").eq(data.value-1).parent().parent().show();
+                eval("fun"+data.value+"()")
+            }else{
+                $(".cishu").eq(data.value-1).parent().parent().hide();
+            }
+
+
+        });
+        randtreesone()
+        function randtreesone(){
+            // 树形选择器
+            treeSelect.render({
+                // 选择器
+                elem: '#tree',
+                // 数据
+                data: '/YhOrgTree/showPullDownTree',
+                // 异步加载方式：get/post，默认get
+                type: 'get',
+                // 占位符
+                placeholder: '全部',
+                // 是否开启搜索功能：true/false，默认false
+                search: true,
+                // 点击回调
+                click: function(d){
+                    orgcode=d.current.id;
+                    alltuxing()
+                    console.log(orgcode);
+                },
+                // 加载完成后的回调函数
+                success: function (d) {
+                    console.log("机构",d);
+                }
+
+            });
+        }
+
+
+
+
+      $("#daochu").click(function(){
+          var arr = [];
+          $("input:checkbox[name='like1']:checked").each(function(i){
+              arr.push($(this).val());
+          });
+            if(id==1){
+                for(var i=arr.length;i>=0;i--){
+                    if(arr[i]>7){
+                        arr.splice(i,1);
+                    }
+                }
+            }
+          if(id==2){
+              for(var i=arr.length;i>=0;i--){
+                  if(arr[i]<8 ||arr[i]>20){
+                      arr.splice(i,1);
+                  }
+              }
+          }
+          if(id==3){
+              for(var i=arr.length;i>=0;i--){
+                  if(arr[i]<21){
+                      arr.splice(i,1);
+                  }
+              }
+          }
+          var datas={xaingmu:arr,times:$("#test6").val(),yonghu:$("#yonghu").val(),orgcode:orgcode,table:id}
+          console.log(datas);
+          layer.msg("正在导出,请稍后...",{
+              icon:16,
+              shade: [0.5, '#f5f5f5'],
+              time:-1
+          });
+          var hrefs='/ExportBasicUser/exportbychoose?xiangmu='+arr+'&times='+$("#test6").val()+"&yonghu="+$("#yonghu").val()+"&orgcode="+orgcode+"&table="+id
+          console.log(hrefs);
+          fetch(hrefs, {
+              method: 'GET',
+              headers: {'Content-Type': 'application/json'},
+              //body: '<请求参数：json字符串>',
+          }).then(res => res.blob()).then(data => {
+              var blobUrl = window.URL.createObjectURL(data);
+
+              downloads(blobUrl);
+
+          });
+          // $.ajax({
+          //     url:"/ExportBasicUser/exportbychoose",
+          //     data:datas,
+          //     type:"post",
+          //     traditional:true,
+          //     dataType:"json",
+          //     beforeSend:beforeSend,
+          //     success: function(data){
+          //
+          //
+          //         sleep(1000);
+          //         layer.closeAll();
+          //
+          //     },
+          //     error: function(data){
+          //         console.log(data);
+          //         console.log("error")
+          //     }
+          // })
+      })
+        function downloads(blobUrl) {
+            //关闭提示框
+            layer.closeAll();
+            const a = document.createElement('a');
+            a.style.display = 'none';
+            a.download ='基本使用-'+ getFormatDate()+'.xls';
+            a.href = blobUrl;
+            a.click();
+
+
+        }
+        function getFormatDate() {
+            var date = new Date();
+            var month = date.getMonth() + 1;
+            var strDate = date.getDate();
+            if (month >= 1 && month <= 9) {
+                month = "0" + month;
+            }
+            if (strDate >= 0 && strDate <= 9) {
+                strDate = "0" + strDate;
+            }
+            var currentDate = date.getFullYear() + "" + month + "" + strDate
+                + "" + date.getHours() + "" + date.getMinutes() + "" + date.getSeconds();
+            return currentDate;
+        }
+        function beforeSend(){
+            layer.msg("正在导出,请稍后...",{
+                icon:16,
+                shade: [0.5, '#f5f5f5'],
+                time:-1
+            });
+        }
+
+        //定义接收本月的第一天和最后一天
+        var startDate1=new Date(new Date().setDate(1));
+        var endDate1=new Date(new Date(new Date().setMonth(new Date().getMonth()+1)).setDate(0));
+        //定义接收上个月的第一天和最后一天
+        var startDate2=new Date(new Date(new Date().setMonth(new Date().getMonth()-1)).setDate(1));
+        var endDate2=new Date(new Date().setDate(0));
+
+        laydate.render({
+            elem : '#test6',
+            max:"date",
+            range : true,
+            trigger: 'click',
+            value:formatDate(new Date().setDate(new Date().getDate()-30))+" - "+formatDate(new Date().setDate(new Date().getDate())),
+            extrabtns: [
+                {id:'today', text:'今天', range:[new Date(), new Date()]},
+                {id:'lastday-7', text:'过去7天', range:[new Date(new Date().setDate(new Date().getDate()-7)),
+                        new Date(new Date().setDate(new Date().getDate()-1))]},
+                {id:'lastday-30', text:'过去30天', range:[new Date(new Date().setDate(new Date().getDate()-30)),
+                        new Date(new Date().setDate(new Date().getDate()-1))]},
+                {id:'yesterday', text:'昨天', range:[new Date(new Date().setDate(new Date().getDate()-1)),
+                        new Date(new Date().setDate(new Date().getDate()-1))]},
+                {id:'thismonth', text:'本月', range:[startDate1,endDate1]},
+                {id:'lastmonth', text:'上个月', range:[startDate2,endDate2]}],
+            done: function(val, stdate, ovdate){
+                //当确认选择时间后调用这里
+                timer=val;
+
+                alltuxing()
+            }
+        });
+            function formatDate(date) {
+                var date = new Date(date);
+                var YY = date.getFullYear() + '-';
+                var MM = (date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1) + '-';
+                var DD = (date.getDate() < 10 ? '0' + (date.getDate()) : date.getDate());
+
+                return YY + MM + DD;
+            }
+
+        alltuxing()
+        function alltuxing(){
+            fun1();
+            fun2();
+            fun3();
+            fun4();
+            fun5();
+            fun6();
+            fun7();
+            fun8();
+            fun9();
+            fun10();
+            fun11();
+            fun12();
+            fun13();
+            fun14();
+            fun15();
+            fun16();
+            fun17();
+            fun18();
+            fun19();
+            fun20();
+            fun21();
+            fun22();
+            fun23();
+            fun24();
+            fun25();
+            fun26();
+            fun27();
+            fun28();
+            fun29();
+        }
+
+        //健康风险评估的方法
+        function fun1(){
+            $.ajax({
+                type:'post',
+                url:'/basicuse/jiankangfengxian',
+                data:{noworg:orgcode,alltime:timer},
+                success : function(data){
+                    $(".cishu").eq(0).html(data.data.times);
+                    xuanrantuxing("chart1",data.data.allcount,data.data.usecount,"未评估用户","评估用户");
+                }
+            });
+
+        }
+        //常见症状评估
+        function fun2(){
+            $.ajax({
+                type:'post',
+                url:'/basicuse/changjian',
+                data:{noworg:orgcode,alltime:timer},
+                success : function(data){
+                    $(".cishu").eq(1).html(data.data.times);
+                    xuanrantuxing("chart2",data.data.allcount,data.data.usecount,"未评估用户","评估用户");
+                }
+            });
+        }
+        //A型
+        function fun3(){
+            $.ajax({
+                type:'post',
+                url:'/basicuse/Axing',
+                data:{noworg:orgcode,alltime:timer},
+                success : function(data){
+                    $(".cishu").eq(2).html(data.data.times);
+                    xuanrantuxing("chart3",data.data.allcount,data.data.usecount,"未评估用户","评估用户");
+                }
+            });
+        }
+        //PSTRI
+        function fun4(){
+            $.ajax({
+                type:'post',
+                url:'/basicuse/PSTRI',
+                data:{noworg:orgcode,alltime:timer},
+                success : function(data){
+                    $(".cishu").eq(3).html(data.data.times);
+                    xuanrantuxing("chart4",data.data.allcount,data.data.usecount,"未评估用户","评估用户");
+                }
+            });
+        }
+        //心理健康
+        function fun5(){
+            $.ajax({
+                type:'post',
+                url:'/basicuse/xinlijiankang',
+                data:{noworg:orgcode,alltime:timer},
+                success : function(data){
+                    $(".cishu").eq(4).html(data.data.times);
+                    xuanrantuxing("chart5",data.data.allcount,data.data.usecount,"未评估用户","评估用户");
+                }
+            });
+        }
+        //睡眠评估
+        function fun6(){
+            $.ajax({
+                type:'post',
+                url:'/basicuse/sleeprepout',
+                data:{noworg:orgcode,alltime:timer},
+                success : function(data){
+                    $(".cishu").eq(5).html(data.data.times);
+                    xuanrantuxing("chart6",data.data.allcount,data.data.usecount,"未评估用户","评估用户");
+                }
+            });
+        }
+        //健康习惯评估
+        function fun7(){
+            $.ajax({
+                type:'post',
+                url:'/basicuse/xiguanpinggu',
+                data:{noworg:orgcode,alltime:timer},
+                success : function(data){
+                    $(".cishu").eq(6).html(data.data.times);
+                    xuanrantuxing("chart7",data.data.allcount,data.data.usecount,"未评估用户","评估用户");
+                }
+            });
+        }
+        //体温
+        function fun8(){
+            $.ajax({
+                type:'post',
+                url:'/basicuse/tiwen',
+                data:{noworg:orgcode,alltime:timer},
+                success : function(data){
+                    console.log(data)
+                    $(".cishu").eq(7).html(data.data.times);
+                    xuanrantuxing("chart8",data.data.allcount,data.data.usecount,"未检测用户","检测用户");
+                }
+            });
+        }
+        //体重
+        function fun9(){
+            $.ajax({
+                type:'post',
+                url:'/basicuse/tizhong',
+                data:{noworg:orgcode,alltime:timer},
+                success : function(data){
+                    $(".cishu").eq(8).html(data.data.times);
+                    xuanrantuxing("chart9",data.data.allcount,data.data.usecount,"未检测用户","检测用户");
+                }
+            });
+        }
+        //血压
+        function fun10(){
+            $.ajax({
+                type:'post',
+                url:'/basicuse/xueya',
+                data:{noworg:orgcode,alltime:timer},
+                success : function(data){
+                    $(".cishu").eq(9).html(data.data.times);
+                    xuanrantuxing("chart10",data.data.allcount,data.data.usecount,"未检测用户","检测用户");
+                }
+            });
+        }
+        //血糖
+        function fun11(){
+            $.ajax({
+                type:'post',
+                url:'/basicuse/xuetang',
+                data:{noworg:orgcode,alltime:timer},
+                success : function(data){
+                    $(".cishu").eq(10).html(data.data.times);
+                    xuanrantuxing("chart11",data.data.allcount,data.data.usecount,"未检测用户","检测用户");
+                }
+            });
+        }
+        //血氧
+        function fun12(){
+            $.ajax({
+                type:'post',
+                url:'/basicuse/xueyang',
+                data:{noworg:orgcode,alltime:timer},
+                success : function(data){
+                    $(".cishu").eq(11).html(data.data.times);
+                    xuanrantuxing("chart12",data.data.allcount,data.data.usecount,"未检测用户","检测用户");
+                }
+            });
+        }
+        //心率
+        function fun13(){
+            $.ajax({
+                type:'post',
+                url:'/basicuse/xinlv',
+                data:{noworg:orgcode,alltime:timer},
+                success : function(data){
+                    $(".cishu").eq(12).html(data.data.times);
+                    xuanrantuxing("chart13",data.data.allcount,data.data.usecount,"未检测用户","检测用户");
+                }
+            });
+        }
+        //体脂
+        function fun14(){
+            $.ajax({
+                type:'post',
+                url:'/basicuse/tizhi',
+                data:{noworg:orgcode,alltime:timer},
+                success : function(data){
+                    $(".cishu").eq(13).html(data.data.times);
+                    xuanrantuxing("chart14",data.data.allcount,data.data.usecount,"未检测用户","检测用户");
+                }
+            });
+        }
+
+        //血脂四项
+        function fun15(){
+            $.ajax({
+                type:'post',
+                url:'/basicuse/xuezhi',
+                data:{noworg:orgcode,alltime:timer},
+                success : function(data){
+                    $(".cishu").eq(14).html(data.data.times);
+                    xuanrantuxing("chart15",data.data.allcount,data.data.usecount,"未检测用户","检测用户");
+                }
+            });
+        }
+        //肾功能
+        function fun16(){
+            $.ajax({
+                type:'post',
+                url:'/basicuse/shengongneg',
+                data:{noworg:orgcode,alltime:timer},
+                success : function(data){
+                    $(".cishu").eq(15).html(data.data.times);
+                    xuanrantuxing("chart16",data.data.allcount,data.data.usecount,"未检测用户","检测用户");
+                }
+            });
+        }
+        //肝功能
+        function fun17(){
+            $.ajax({
+                type:'post',
+                url:'/basicuse/gangongneng',
+                data:{noworg:orgcode,alltime:timer},
+                success : function(data){
+                    $(".cishu").eq(16).html(data.data.times);
+                    xuanrantuxing("chart17",data.data.allcount,data.data.usecount,"未检测用户","检测用户");
+                }
+            });
+        }
+        //心电图
+        function fun18(){
+            $.ajax({
+                type:'post',
+                url:'/basicuse/xindaintu',
+                data:{noworg:orgcode,alltime:timer},
+                success : function(data){
+                    $(".cishu").eq(17).html(data.data.times);
+                    xuanrantuxing("chart18",data.data.allcount,data.data.usecount,"未检测用户","检测用户");
+                }
+            });
+        }
+        //尿检
+        function fun19(){
+            $.ajax({
+                type:'post',
+                url:'/basicuse/nianjian',
+                data:{noworg:orgcode,alltime:timer},
+                success : function(data){
+                    $(".cishu").eq(18).html(data.data.times);
+                    xuanrantuxing("chart19",data.data.allcount,data.data.usecount,"未检测用户","检测用户");
+                }
+            });
+        }
+        //其他指标
+        function fun20(){
+            $.ajax({
+                type:'post',
+                url:'/basicuse/qitazhibiao',
+                data:{noworg:orgcode,alltime:timer},
+                success : function(data){
+                    $(".cishu").eq(19).html(data.data.times);
+                    xuanrantuxing("chart20",data.data.allcount,data.data.usecount,"未检测用户","检测用户");
+                }
+            });
+        }
+        //饮食日记
+        function fun21(){
+            $.ajax({
+                type:'post',
+                url:'/basicuse/yinshiriji',
+                data:{noworg:orgcode,alltime:timer},
+                success : function(data){
+                    $(".cishu").eq(20).html(data.data.times);
+                    xuanrantuxing("chart21",data.data.allcount,data.data.usecount,"未记录用户","记录用户");
+                }
+            });
+        }
+        //运动日记
+        function fun22(){
+            $.ajax({
+                type:'post',
+                url:'/basicuse/yundongriji',
+                data:{noworg:orgcode,alltime:timer},
+                success : function(data){
+                    $(".cishu").eq(21).html(data.data.times);
+                    xuanrantuxing("chart22",data.data.allcount,data.data.usecount,"未记录用户","记录用户");
+                }
+            });
+        }
+        //睡眠日记
+        function fun23(){
+            $.ajax({
+                type:'post',
+                url:'/basicuse/shuimianriji',
+                data:{noworg:orgcode,alltime:timer},
+                success : function(data){
+                    $(".cishu").eq(22).html(data.data.times);
+                    xuanrantuxing("chart23",data.data.allcount,data.data.usecount,"未记录用户","记录用户");
+                }
+            });
+        }
+        //28高血压
+        function fun24(){
+            $.ajax({
+                type:'post',
+                url:'/basicuse/gaoxueya',
+                data:{noworg:orgcode,alltime:timer},
+                success : function(data){
+                    $(".cishu").eq(23).html(data.data.times);
+                    xuanrantuxing("chart24",data.data.allcount,data.data.usecount,"未记录用户","记录用户");
+                }
+            });
+        }
+        //28高血糖
+        function fun25(){
+            $.ajax({
+                type:'post',
+                url:'/basicuse/gaoxuetang',
+                data:{noworg:orgcode,alltime:timer},
+                success : function(data){
+                    $(".cishu").eq(24).html(data.data.times);
+                    xuanrantuxing("chart25",data.data.allcount,data.data.usecount,"未记录用户","记录用户");
+                }
+            });
+        }
+        //28高血脂
+        function fun26(){
+            $.ajax({
+                type:'post',
+                url:'/basicuse/gaoxuezhi',
+                data:{noworg:orgcode,alltime:timer},
+                success : function(data){
+                    $(".cishu").eq(25).html(data.data.times);
+                    xuanrantuxing("chart26",data.data.allcount,data.data.usecount,"未记录用户","记录用户");
+                }
+            });
+        }
+        //28高尿酸
+        function fun27(){
+            $.ajax({
+                type:'post',
+                url:'/basicuse/gaoniansuan',
+                data:{noworg:orgcode,alltime:timer},
+                success : function(data){
+                    $(".cishu").eq(26).html(data.data.times);
+                    xuanrantuxing("chart27",data.data.allcount,data.data.usecount,"未记录用户","记录用户");
+                }
+            });
+        }
+        //28减脂
+        function fun28(){
+            $.ajax({
+                type:'post',
+                url:'/basicuse/jianzhi',
+                data:{noworg:orgcode,alltime:timer},
+                success : function(data){
+                    $(".cishu").eq(27).html(data.data.times);
+                    xuanrantuxing("chart28",data.data.allcount,data.data.usecount,"未记录用户","记录用户");
+                }
+            });
+        }
+        //健康习惯
+        function fun29(){
+            $.ajax({
+                type:'post',
+                url:'/basicuse/xiguanriji',
+                data:{noworg:orgcode,alltime:timer},
+                success : function(data){
+                    $(".cishu").eq(28).html(data.data.times);
+                    xuanrantuxing("chart29",data.data.allcount,data.data.usecount,"未记录用户","记录用户");
+                }
+            });
+        }
+        function xuanrantuxing(id,weipinggu,pinggu,wei,yi){
+            var myChart = echarts.init(document.getElementById(id));
+            myChart.resize();
+            option = {
+                title: {
+
+                    left: 'center'
+                },
+                tooltip: {
+                    trigger: 'item',
+                    formatter: '{a} <br/>{b} : {c} ({d}%)'
+                },
+                //设置饼状图每个颜色块的颜色
+                color : [ 'rgba(255, 195, 0, 1)', 'rgba(24, 180, 231, 1)'],
+
+                series: [
+                    {
+                        name: '',
+                        type: 'pie',
+                        radius: '70%',
+                        center: ['45%', '50%'],
+                        data: [
+                            {value: weipinggu, name: wei},
+                            {value: pinggu, name: yi},
+                        ],
+                        emphasis: {
+                            itemStyle: {
+                                shadowBlur: 10,
+                                shadowOffsetX: 0,
+                                shadowColor: 'rgba(0, 0, 0, 0.5)'
+                            }
+                        }
+                    }
+                ]
+            };
+            // 使用刚指定的配置项和数据显示图表。
+            myChart.setOption(option);
+        }
+    });
+</script>
+</html>

@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.yihe.system.mapper.TcmConstitutionIdentificationMapper">
+    <resultMap id="YhUserReginfo" type="com.yihe.system.domain.YhUserReginfo">
+        <result column="user_code" jdbcType="VARCHAR" property="userCode" />
+        <result column="User_Type" jdbcType="INTEGER" property="userType" />
+        <result column="user_name" jdbcType="VARCHAR" property="userName" />
+        <result column="user_pwd" jdbcType="VARCHAR" property="userPwd" />
+        <result column="gender" jdbcType="INTEGER" property="gender" />
+        <result column="birth_date" jdbcType="TIMESTAMP" property="birthDate" />
+        <result column="email" jdbcType="VARCHAR" property="email" />
+        <result column="province_id" jdbcType="VARCHAR" property="provinceId" />
+        <result column="city_id" jdbcType="VARCHAR" property="cityId" />
+        <result column="area_id" jdbcType="VARCHAR" property="areaId" />
+        <result column="reg_time" jdbcType="TIMESTAMP" property="regTime" />
+        <result column="Login_times" jdbcType="INTEGER" property="loginTimes" />
+        <result column="name" jdbcType="VARCHAR" property="name" />
+        <result column="address" jdbcType="VARCHAR" property="address" />
+        <result column="post_code" jdbcType="VARCHAR" property="postCode" />
+        <result column="relation" jdbcType="VARCHAR" property="relation" />
+        <result column="mobile" jdbcType="VARCHAR" property="mobile" />
+        <result column="occupation" jdbcType="INTEGER" property="occupation" />
+        <result column="ed_background" jdbcType="INTEGER" property="edBackground" />
+        <result column="marital_status" jdbcType="INTEGER" property="maritalStatus" />
+        <result column="lock_flag" jdbcType="INTEGER" property="lockFlag" />
+        <result column="reg_source" jdbcType="INTEGER" property="regSource" />
+        <result column="Cert_Type" jdbcType="INTEGER" property="certType" />
+        <result column="Cert_NO" jdbcType="VARCHAR" property="certNo" />
+        <result column="Org_Code" jdbcType="VARCHAR" property="orgCode" />
+        <result column="Blood_Type" jdbcType="VARCHAR" property="bloodType" />
+        <result column="Enrol_Card_Id" jdbcType="VARCHAR" property="enrolCardId" />
+        <result column="key" jdbcType="VARCHAR" property="key" />
+        <result column="cardidentity" jdbcType="VARCHAR" property="cardidentity" />
+        <result column="nation" jdbcType="VARCHAR" property="nation" />
+        <result column="permanentaddress" jdbcType="VARCHAR" property="permanentaddress" />
+        <result column="rhfeminine" jdbcType="VARCHAR" property="rhfeminine" />
+        <result column="login_time" jdbcType="TIMESTAMP" property="loginTime" />
+        <result column="unit" jdbcType="VARCHAR" property="unit" />
+        <result column="is_association" jdbcType="INTEGER" property="isAssociation" />
+        <result column="association_name" jdbcType="VARCHAR" property="associationName" />
+        <result column="is_alone" jdbcType="INTEGER" property="isAlone" />
+        <result column="is_allergy" jdbcType="INTEGER" property="isAllergy" />
+        <result column="allergy_name" jdbcType="VARCHAR" property="allergyName" />
+        <result column="doctor" jdbcType="VARCHAR" property="doctor" />
+        <result column="treedate" jdbcType="VARCHAR" property="treedate" />
+        <result column="role_name" jdbcType="VARCHAR" property="roleName" />
+        <result column="roleId" jdbcType="VARCHAR" property="roleId" />
+        <result column="A_istype" jdbcType="INTEGER" property="aIstype" />
+        <result column="B_istype" jdbcType="INTEGER" property="bIstype" />
+        <result column="C_istype" jdbcType="INTEGER" property="cIstype" />
+        <result column="D_istype" jdbcType="INTEGER" property="dIstype" />
+        <result column="E_istype" jdbcType="INTEGER" property="eIstype" />
+        <result column="F_istype" jdbcType="INTEGER" property="fIstype" />
+        <result column="G_istype" jdbcType="INTEGER" property="gIstype" />
+        <result column="H_istype" jdbcType="INTEGER" property="hIstype" />
+        <result column="I_istype" jdbcType="INTEGER" property="iIstype" />
+        <result column="time" jdbcType="VARCHAR" property="time" />
+        <result column="times" jdbcType="VARCHAR" property="tiems"/>
+        <result column="gender" jdbcType="VARCHAR" property="gender" />
+        <result column="userName" jdbcType="VARCHAR" property="userName" />
+        <result column="name" jdbcType="VARCHAR" property="name" />
+    </resultMap>
+
+
+    <!-- 查询所有用户的中医体质辨识信息 -->
+    <select id="tcmConstitutionIdentificationUserAll" resultMap="YhUserReginfo" parameterType="map">
+        select r.user_code,r.name as name,r.mobile as mobile,(select count(*) from yh_chinese_anwser where User_code = r.user_code group by User_code) as times,
+        (select max(time) from yh_chinese_anwser where User_code = r.user_code group by User_code) as time,a.A_istype,a.B_istype,a.C_istype,a.D_istype,
+        a.E_istype,a.F_istype,a.G_istype,a.H_istype,a.I_istype,ma.org_id
+        from yh_user_reginfo r
+        left join (select * from `yh_chinese_anwser` order by time desc) as a on a.User_code = r.user_code
+        LEFT JOIN `yh_user_make_card` AS ma
+		 ON ma.user_code=r.user_code
+        where r.User_Type = 5
+        and ma.doctor = #{doctor}
+        group by r.user_code
+        having
+        1=1
+        <if test="''!=tree and null != tree">
+          and  org_id=#{tree}
+        </if>
+        <if test="''!=name and null != name">
+            and  user_code like concat('%',#{name},'%') or name like concat('%',#{name},'%') or mobile like concat('%',#{name},'%')
+        </if>
+        <if test="strTime!=null and strTime!='' and endTime!=null and endTime!=''">
+            AND `time` BETWEEN #{strTime}
+            AND #{endTime}
+        </if>
+        <if test="''!=key and null != key and ''!=value and null != value">
+            and ${key}=#{value}
+        </if>
+
+
+        order by times desc
+    </select>
+
+    <!-- 根据筛选条件查询用户信息 -->
+    <select id="tcmConstitutionIdentificationConditionUser" resultMap="YhUserReginfo">
+        select r.user_code,r.name,r.mobile,(select count(*) from yh_chinese_anwser where User_code = r.user_code group by User_code) as num,a.A_istype,
+        (select max(time) from yh_chinese_anwser where User_code = r.user_code group by User_code) as time,a.A_istype,a.B_istype,a.C_istype,a.D_istype,
+        a.E_istype,a.F_istype,a.G_istype,a.H_istype,a.I_istype from yh_user_reginfo r
+        left join (select * from `yh_chinese_anwser` order by time desc) as a on a.User_code = r.user_code
+        <where>
+            <if test="tree!=null">
+                and r.Org_Code = #{tree}
+            </if>
+            <if test="pinggu!=null">
+
+            </if>
+            <if test="name!=null">
+                and (r.user_code like concat('%',#{name},'%') or r.mobile like concat('%',#{name},'%')
+                or r.name like concat ('%',#{name},'%') or r.user_name like concat('%',#{name},'%'))
+            </if>
+            <if test="startTime!=null">
+                and a.time = #{startTime}
+            </if>
+        </where>
+        group by r.user_code
+    </select>
+
+    <!-- 根据筛选条件查询用户信息 -->
+    <select id="selectDoctorIdByUserCode" resultType="String">
+        select id from yh_user_admin_info where user_code = #{userCode}
+    </select>
+
+</mapper>

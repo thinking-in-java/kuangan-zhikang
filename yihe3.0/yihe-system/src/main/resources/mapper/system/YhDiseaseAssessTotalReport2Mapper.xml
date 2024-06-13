@@ -1,0 +1,646 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yihe.system.mapper.YhDiseaseAssessTotalReport2Mapper" >
+  <resultMap id="BaseResultMap" type="com.yihe.system.domain.YhDiseaseAssessTotalReport2web" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="request_serialNum" property="requestSerialnum" jdbcType="VARCHAR" />
+    <result column="user_code" property="userCode" jdbcType="VARCHAR" />
+    <result column="qtime" property="qtime" jdbcType="TIMESTAMP" />
+    <result column="gender" property="gender" jdbcType="INTEGER" />
+    <result column="age" property="age" jdbcType="INTEGER" /> 
+    <result column="user_name" property="userName" jdbcType="VARCHAR" />
+    <result column="times" property="times" jdbcType="INTEGER" />
+    <result column="df_names" property="dfNames" jdbcType="VARCHAR" />
+    <result column="sk_names" property="skNames" jdbcType="VARCHAR" />
+    <result column="ld_names" property="ldNames" jdbcType="VARCHAR" />
+    <result column="lr_names" property="lrNames" jdbcType="VARCHAR" />
+    <result column="classify" property="classify" jdbcType="VARCHAR" />
+    <result column="chd_his" property="chdHis" jdbcType="INTEGER" />
+    <result column="stroke_his" property="strokeHis" jdbcType="INTEGER" />
+    <result column="hbp_his" property="hbpHis" jdbcType="INTEGER" />
+    <result column="diab2_his" property="diab2His" jdbcType="INTEGER" />
+    <result column="bf_his" property="bfHis" jdbcType="INTEGER" />
+    <result column="hua_his" property="huaHis" jdbcType="INTEGER" />
+    <result column="gae_his" property="gaeHis" jdbcType="INTEGER" />
+    <result column="gna_his" property="gnaHis" jdbcType="INTEGER" />
+    <result column="op_his" property="opHis" jdbcType="INTEGER" />
+    <result column="fl_his" property="flHis" jdbcType="INTEGER" />
+    <result column="bronch_his" property="bronchHis" jdbcType="INTEGER" />
+    <result column="emphy_his" property="emphyHis" jdbcType="INTEGER" />
+    <result column="lc_his" property="lcHis" jdbcType="INTEGER" />
+    <result column="decline_his" property="declineHis" jdbcType="INTEGER" />
+    <result column="fracture_his" property="fractureHis" jdbcType="INTEGER" />
+    <result column="prostate_disease" property="prostateDisease" jdbcType="INTEGER" />
+    <result column="pc_his" property="pcHis" jdbcType="INTEGER" />
+    <result column="bc_his" property="bcHis" jdbcType="INTEGER" />
+    <result column="family_diab" property="familyDiab" jdbcType="INTEGER" />
+    <result column="family_hbp" property="familyHbp" jdbcType="INTEGER" />
+    <result column="family_chd" property="familyChd" jdbcType="INTEGER" />
+    <result column="family_stroke" property="familyStroke" jdbcType="INTEGER" />
+    <result column="family_hf" property="familyHf" jdbcType="INTEGER" />
+    <result column="family_lung" property="familyLung" jdbcType="INTEGER" />
+    <result column="family_pro" property="familyPro" jdbcType="INTEGER" />
+    <result column="family_breast" property="familyBreast" jdbcType="INTEGER" />
+    <result column="family_gout" property="familyGout" jdbcType="INTEGER" />
+    <result column="smoke_status" property="smokeStatus" jdbcType="INTEGER" />
+    <result column="food_drink" property="foodDrink" jdbcType="INTEGER" />
+    <result column="bmi" property="bmi" jdbcType="REAL" />
+    <result column="sport_in" property="sportIn" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, request_serialNum, user_code, qtime, gender, age, user_name, times, df_names, 
+    sk_names, ld_names, lr_names, classify, chd_his, stroke_his, hbp_his, diab2_his, 
+    bf_his, hua_his, gae_his, gna_his, op_his, fl_his, bronch_his, emphy_his, lc_his, 
+    decline_his, fracture_his, prostate_disease, pc_his, bc_his, family_diab, family_hbp, 
+    family_chd, family_stroke, family_hf, family_lung, family_pro, family_breast, family_gout, 
+    smoke_status, food_drink, bmi, sport_in
+  </sql>
+  
+  <select id="ShowHealthNum"  parameterType="map" resultMap="BaseResultMap">
+  	select * from (select ort.* from yh_disease_assess_total_report2 ort,yh_user_reginfo reg where ort.user_code=reg.user_code  and (${orgCode}) order by qtime desc) w group by w.user_code  HAVING ISNULL(w.sk_names) and ISNULL(w.df_names);
+  </select>
+  
+  <!-- 高危人群 -->
+  <select id="showHighRiskNum" parameterType="map" resultMap="BaseResultMap">
+  	select * from (select ort.* from yh_disease_assess_total_report2 ort,yh_user_reginfo reg where ort.user_code=reg.user_code  and (${orgCode})  order by qtime desc) w group by w.user_code HAVING ISNULL(w.sk_names) and w.df_names !='';
+  </select>
+  
+  
+  <!-- 已换人群 -->
+  <select id="Hasdisease" parameterType="map" resultMap="BaseResultMap">
+  	select * from (select ort.* from yh_disease_assess_total_report2 ort,yh_user_reginfo reg where ort.user_code=reg.user_code and  (${orgCode})  order by qtime desc) w group by w.user_code HAVING  w.sk_names !='';
+  </select>
+  
+  
+  <!-- 查询已评估人数 -->
+  <select id="HasassessedNum" parameterType="map" resultMap="BaseResultMap">
+  	select * from (select ort.* from yh_disease_assess_total_report2 ort,yh_user_reginfo reg where ort.user_code=reg.user_code and (${orgCode}) order by qtime desc) w group by w.user_code;
+  </select>
+  
+  <!-- 查询高风险人群-->
+	<select id="selectIllnessCoronary" parameterType="map" resultType="int">
+		SELECT
+	count(1)
+FROM
+	(
+		SELECT
+			*
+		FROM
+			(
+				SELECT
+					ort.*
+				FROM
+					yh_disease_assess_total_report2 ort,
+					yh_user_reginfo reg
+				WHERE
+					ort.user_code = reg.user_code
+				AND (${illness})
+				AND (
+					reg.Org_Code IN (
+						SELECT
+							Org_Code
+						FROM
+							yh_org_tree
+						<where>
+                          <if test="null!=orgCode">
+                            province = #{orgCode}
+                            OR city =  #{orgCode}
+                            OR county =  #{orgCode}
+                          </if>
+                        </where>
+
+					)
+				)
+				ORDER BY
+					qtime DESC
+			) w
+		GROUP BY
+			w.user_code
+	) AS a
+
+	 </select>
+	
+	<!-- 查询上次评估内容 -->
+	<select id="findAssessTotalReportLastInfo"   resultMap="BaseResultMap">
+	SELECT 
+	  <include refid="Base_Column_List" /> 
+	FROM `yh_disease_assess_total_report2` WHERE user_code=#{usercode}  AND qtime  &lt;  #{time} ORDER BY qtime DESC LIMIT 1
+	</select>
+	
+	
+	
+	<select id="selectAssessByParam" resultMap="BaseResultMap" parameterType="java.lang.String">
+		SELECT * from yh_disease_assess_total_report2 where user_code=#{userCode,jdbcType=VARCHAR} ORDER BY qtime DESC limit 1 
+	</select>
+	
+	
+	<select id="showascReport" resultMap="BaseResultMap" parameterType="java.lang.String">
+   select * from yh_disease_assess_total_report2 where user_code=#{userCode,jdbcType=VARCHAR} order by qtime desc limit 1;
+  </select>
+  
+  <select id="selectByreport" resultType="int" parameterType="java.lang.String">
+  select count(*) from yh_disease_assess_total_report2 where user_code=#{userCode,jdbcType=VARCHAR}
+ </select>
+	
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from yh_disease_assess_total_report2
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectByPrimaryRs" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from yh_disease_assess_total_report2
+    where request_serialNum = #{rs} limit 1
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from yh_disease_assess_total_report2
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.yihe.system.domain.YhDiseaseAssessTotalReport2web" >
+    insert into yh_disease_assess_total_report2 (id, request_serialNum, user_code, 
+      qtime, gender, age, 
+      user_name, times, df_names, 
+      sk_names, ld_names, lr_names, 
+      classify, chd_his, stroke_his, 
+      hbp_his, diab2_his, bf_his, 
+      hua_his, gae_his, gna_his, 
+      op_his, fl_his, bronch_his, 
+      emphy_his, lc_his, decline_his, 
+      fracture_his, prostate_disease, pc_his, 
+      bc_his, family_diab, family_hbp, 
+      family_chd, family_stroke, family_hf, 
+      family_lung, family_pro, family_breast, 
+      family_gout, smoke_status, food_drink, 
+      bmi, sport_in)
+    values (#{id,jdbcType=INTEGER}, #{requestSerialnum,jdbcType=VARCHAR}, #{userCode,jdbcType=VARCHAR}, 
+      #{qtime,jdbcType=TIMESTAMP}, #{gender,jdbcType=INTEGER}, #{age,jdbcType=INTEGER}, 
+      #{userName,jdbcType=VARCHAR}, #{times,jdbcType=INTEGER}, #{dfNames,jdbcType=VARCHAR}, 
+      #{skNames,jdbcType=VARCHAR}, #{ldNames,jdbcType=VARCHAR}, #{lrNames,jdbcType=VARCHAR}, 
+      #{classify,jdbcType=VARCHAR}, #{chdHis,jdbcType=INTEGER}, #{strokeHis,jdbcType=INTEGER}, 
+      #{hbpHis,jdbcType=INTEGER}, #{diab2His,jdbcType=INTEGER}, #{bfHis,jdbcType=INTEGER}, 
+      #{huaHis,jdbcType=INTEGER}, #{gaeHis,jdbcType=INTEGER}, #{gnaHis,jdbcType=INTEGER}, 
+      #{opHis,jdbcType=INTEGER}, #{flHis,jdbcType=INTEGER}, #{bronchHis,jdbcType=INTEGER}, 
+      #{emphyHis,jdbcType=INTEGER}, #{lcHis,jdbcType=INTEGER}, #{declineHis,jdbcType=INTEGER}, 
+      #{fractureHis,jdbcType=INTEGER}, #{prostateDisease,jdbcType=INTEGER}, #{pcHis,jdbcType=INTEGER}, 
+      #{bcHis,jdbcType=INTEGER}, #{familyDiab,jdbcType=INTEGER}, #{familyHbp,jdbcType=INTEGER}, 
+      #{familyChd,jdbcType=INTEGER}, #{familyStroke,jdbcType=INTEGER}, #{familyHf,jdbcType=INTEGER}, 
+      #{familyLung,jdbcType=INTEGER}, #{familyPro,jdbcType=INTEGER}, #{familyBreast,jdbcType=INTEGER}, 
+      #{familyGout,jdbcType=INTEGER}, #{smokeStatus,jdbcType=INTEGER}, #{foodDrink,jdbcType=INTEGER}, 
+      #{bmi,jdbcType=REAL}, #{sportIn,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.yihe.system.domain.YhDiseaseAssessTotalReport2web" >
+    insert into yh_disease_assess_total_report2
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="requestSerialnum != null" >
+        request_serialNum,
+      </if>
+      <if test="userCode != null" >
+        user_code,
+      </if>
+      <if test="qtime != null" >
+        qtime,
+      </if>
+      <if test="gender != null" >
+        gender,
+      </if>
+      <if test="age != null" >
+        age,
+      </if>
+      <if test="userName != null" >
+        user_name,
+      </if>
+      <if test="times != null" >
+        times,
+      </if>
+      <if test="dfNames != null" >
+        df_names,
+      </if>
+      <if test="skNames != null" >
+        sk_names,
+      </if>
+      <if test="ldNames != null" >
+        ld_names,
+      </if>
+      <if test="lrNames != null" >
+        lr_names,
+      </if>
+      <if test="classify != null" >
+        classify,
+      </if>
+      <if test="chdHis != null" >
+        chd_his,
+      </if>
+      <if test="strokeHis != null" >
+        stroke_his,
+      </if>
+      <if test="hbpHis != null" >
+        hbp_his,
+      </if>
+      <if test="diab2His != null" >
+        diab2_his,
+      </if>
+      <if test="bfHis != null" >
+        bf_his,
+      </if>
+      <if test="huaHis != null" >
+        hua_his,
+      </if>
+      <if test="gaeHis != null" >
+        gae_his,
+      </if>
+      <if test="gnaHis != null" >
+        gna_his,
+      </if>
+      <if test="opHis != null" >
+        op_his,
+      </if>
+      <if test="flHis != null" >
+        fl_his,
+      </if>
+      <if test="bronchHis != null" >
+        bronch_his,
+      </if>
+      <if test="emphyHis != null" >
+        emphy_his,
+      </if>
+      <if test="lcHis != null" >
+        lc_his,
+      </if>
+      <if test="declineHis != null" >
+        decline_his,
+      </if>
+      <if test="fractureHis != null" >
+        fracture_his,
+      </if>
+      <if test="prostateDisease != null" >
+        prostate_disease,
+      </if>
+      <if test="pcHis != null" >
+        pc_his,
+      </if>
+      <if test="bcHis != null" >
+        bc_his,
+      </if>
+      <if test="familyDiab != null" >
+        family_diab,
+      </if>
+      <if test="familyHbp != null" >
+        family_hbp,
+      </if>
+      <if test="familyChd != null" >
+        family_chd,
+      </if>
+      <if test="familyStroke != null" >
+        family_stroke,
+      </if>
+      <if test="familyHf != null" >
+        family_hf,
+      </if>
+      <if test="familyLung != null" >
+        family_lung,
+      </if>
+      <if test="familyPro != null" >
+        family_pro,
+      </if>
+      <if test="familyBreast != null" >
+        family_breast,
+      </if>
+      <if test="familyGout != null" >
+        family_gout,
+      </if>
+      <if test="smokeStatus != null" >
+        smoke_status,
+      </if>
+      <if test="foodDrink != null" >
+        food_drink,
+      </if>
+      <if test="bmi != null" >
+        bmi,
+      </if>
+      <if test="sportIn != null" >
+        sport_in,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="requestSerialnum != null" >
+        #{requestSerialnum,jdbcType=VARCHAR},
+      </if>
+      <if test="userCode != null" >
+        #{userCode,jdbcType=VARCHAR},
+      </if>
+      <if test="qtime != null" >
+        #{qtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gender != null" >
+        #{gender,jdbcType=INTEGER},
+      </if>
+      <if test="age != null" >
+        #{age,jdbcType=INTEGER},
+      </if>
+      <if test="userName != null" >
+        #{userName,jdbcType=VARCHAR},
+      </if>
+      <if test="times != null" >
+        #{times,jdbcType=INTEGER},
+      </if>
+      <if test="dfNames != null" >
+        #{dfNames,jdbcType=VARCHAR},
+      </if>
+      <if test="skNames != null" >
+        #{skNames,jdbcType=VARCHAR},
+      </if>
+      <if test="ldNames != null" >
+        #{ldNames,jdbcType=VARCHAR},
+      </if>
+      <if test="lrNames != null" >
+        #{lrNames,jdbcType=VARCHAR},
+      </if>
+      <if test="classify != null" >
+        #{classify,jdbcType=VARCHAR},
+      </if>
+      <if test="chdHis != null" >
+        #{chdHis,jdbcType=INTEGER},
+      </if>
+      <if test="strokeHis != null" >
+        #{strokeHis,jdbcType=INTEGER},
+      </if>
+      <if test="hbpHis != null" >
+        #{hbpHis,jdbcType=INTEGER},
+      </if>
+      <if test="diab2His != null" >
+        #{diab2His,jdbcType=INTEGER},
+      </if>
+      <if test="bfHis != null" >
+        #{bfHis,jdbcType=INTEGER},
+      </if>
+      <if test="huaHis != null" >
+        #{huaHis,jdbcType=INTEGER},
+      </if>
+      <if test="gaeHis != null" >
+        #{gaeHis,jdbcType=INTEGER},
+      </if>
+      <if test="gnaHis != null" >
+        #{gnaHis,jdbcType=INTEGER},
+      </if>
+      <if test="opHis != null" >
+        #{opHis,jdbcType=INTEGER},
+      </if>
+      <if test="flHis != null" >
+        #{flHis,jdbcType=INTEGER},
+      </if>
+      <if test="bronchHis != null" >
+        #{bronchHis,jdbcType=INTEGER},
+      </if>
+      <if test="emphyHis != null" >
+        #{emphyHis,jdbcType=INTEGER},
+      </if>
+      <if test="lcHis != null" >
+        #{lcHis,jdbcType=INTEGER},
+      </if>
+      <if test="declineHis != null" >
+        #{declineHis,jdbcType=INTEGER},
+      </if>
+      <if test="fractureHis != null" >
+        #{fractureHis,jdbcType=INTEGER},
+      </if>
+      <if test="prostateDisease != null" >
+        #{prostateDisease,jdbcType=INTEGER},
+      </if>
+      <if test="pcHis != null" >
+        #{pcHis,jdbcType=INTEGER},
+      </if>
+      <if test="bcHis != null" >
+        #{bcHis,jdbcType=INTEGER},
+      </if>
+      <if test="familyDiab != null" >
+        #{familyDiab,jdbcType=INTEGER},
+      </if>
+      <if test="familyHbp != null" >
+        #{familyHbp,jdbcType=INTEGER},
+      </if>
+      <if test="familyChd != null" >
+        #{familyChd,jdbcType=INTEGER},
+      </if>
+      <if test="familyStroke != null" >
+        #{familyStroke,jdbcType=INTEGER},
+      </if>
+      <if test="familyHf != null" >
+        #{familyHf,jdbcType=INTEGER},
+      </if>
+      <if test="familyLung != null" >
+        #{familyLung,jdbcType=INTEGER},
+      </if>
+      <if test="familyPro != null" >
+        #{familyPro,jdbcType=INTEGER},
+      </if>
+      <if test="familyBreast != null" >
+        #{familyBreast,jdbcType=INTEGER},
+      </if>
+      <if test="familyGout != null" >
+        #{familyGout,jdbcType=INTEGER},
+      </if>
+      <if test="smokeStatus != null" >
+        #{smokeStatus,jdbcType=INTEGER},
+      </if>
+      <if test="foodDrink != null" >
+        #{foodDrink,jdbcType=INTEGER},
+      </if>
+      <if test="bmi != null" >
+        #{bmi,jdbcType=REAL},
+      </if>
+      <if test="sportIn != null" >
+        #{sportIn,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.yihe.system.domain.YhDiseaseAssessTotalReport2web" >
+    update yh_disease_assess_total_report2
+    <set >
+      <if test="requestSerialnum != null" >
+        request_serialNum = #{requestSerialnum,jdbcType=VARCHAR},
+      </if>
+      <if test="userCode != null" >
+        user_code = #{userCode,jdbcType=VARCHAR},
+      </if>
+      <if test="qtime != null" >
+        qtime = #{qtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gender != null" >
+        gender = #{gender,jdbcType=INTEGER},
+      </if>
+      <if test="age != null" >
+        age = #{age,jdbcType=INTEGER},
+      </if>
+      <if test="userName != null" >
+        user_name = #{userName,jdbcType=VARCHAR},
+      </if>
+      <if test="times != null" >
+        times = #{times,jdbcType=INTEGER},
+      </if>
+      <if test="dfNames != null" >
+        df_names = #{dfNames,jdbcType=VARCHAR},
+      </if>
+      <if test="skNames != null" >
+        sk_names = #{skNames,jdbcType=VARCHAR},
+      </if>
+      <if test="ldNames != null" >
+        ld_names = #{ldNames,jdbcType=VARCHAR},
+      </if>
+      <if test="lrNames != null" >
+        lr_names = #{lrNames,jdbcType=VARCHAR},
+      </if>
+      <if test="classify != null" >
+        classify = #{classify,jdbcType=VARCHAR},
+      </if>
+      <if test="chdHis != null" >
+        chd_his = #{chdHis,jdbcType=INTEGER},
+      </if>
+      <if test="strokeHis != null" >
+        stroke_his = #{strokeHis,jdbcType=INTEGER},
+      </if>
+      <if test="hbpHis != null" >
+        hbp_his = #{hbpHis,jdbcType=INTEGER},
+      </if>
+      <if test="diab2His != null" >
+        diab2_his = #{diab2His,jdbcType=INTEGER},
+      </if>
+      <if test="bfHis != null" >
+        bf_his = #{bfHis,jdbcType=INTEGER},
+      </if>
+      <if test="huaHis != null" >
+        hua_his = #{huaHis,jdbcType=INTEGER},
+      </if>
+      <if test="gaeHis != null" >
+        gae_his = #{gaeHis,jdbcType=INTEGER},
+      </if>
+      <if test="gnaHis != null" >
+        gna_his = #{gnaHis,jdbcType=INTEGER},
+      </if>
+      <if test="opHis != null" >
+        op_his = #{opHis,jdbcType=INTEGER},
+      </if>
+      <if test="flHis != null" >
+        fl_his = #{flHis,jdbcType=INTEGER},
+      </if>
+      <if test="bronchHis != null" >
+        bronch_his = #{bronchHis,jdbcType=INTEGER},
+      </if>
+      <if test="emphyHis != null" >
+        emphy_his = #{emphyHis,jdbcType=INTEGER},
+      </if>
+      <if test="lcHis != null" >
+        lc_his = #{lcHis,jdbcType=INTEGER},
+      </if>
+      <if test="declineHis != null" >
+        decline_his = #{declineHis,jdbcType=INTEGER},
+      </if>
+      <if test="fractureHis != null" >
+        fracture_his = #{fractureHis,jdbcType=INTEGER},
+      </if>
+      <if test="prostateDisease != null" >
+        prostate_disease = #{prostateDisease,jdbcType=INTEGER},
+      </if>
+      <if test="pcHis != null" >
+        pc_his = #{pcHis,jdbcType=INTEGER},
+      </if>
+      <if test="bcHis != null" >
+        bc_his = #{bcHis,jdbcType=INTEGER},
+      </if>
+      <if test="familyDiab != null" >
+        family_diab = #{familyDiab,jdbcType=INTEGER},
+      </if>
+      <if test="familyHbp != null" >
+        family_hbp = #{familyHbp,jdbcType=INTEGER},
+      </if>
+      <if test="familyChd != null" >
+        family_chd = #{familyChd,jdbcType=INTEGER},
+      </if>
+      <if test="familyStroke != null" >
+        family_stroke = #{familyStroke,jdbcType=INTEGER},
+      </if>
+      <if test="familyHf != null" >
+        family_hf = #{familyHf,jdbcType=INTEGER},
+      </if>
+      <if test="familyLung != null" >
+        family_lung = #{familyLung,jdbcType=INTEGER},
+      </if>
+      <if test="familyPro != null" >
+        family_pro = #{familyPro,jdbcType=INTEGER},
+      </if>
+      <if test="familyBreast != null" >
+        family_breast = #{familyBreast,jdbcType=INTEGER},
+      </if>
+      <if test="familyGout != null" >
+        family_gout = #{familyGout,jdbcType=INTEGER},
+      </if>
+      <if test="smokeStatus != null" >
+        smoke_status = #{smokeStatus,jdbcType=INTEGER},
+      </if>
+      <if test="foodDrink != null" >
+        food_drink = #{foodDrink,jdbcType=INTEGER},
+      </if>
+      <if test="bmi != null" >
+        bmi = #{bmi,jdbcType=REAL},
+      </if>
+      <if test="sportIn != null" >
+        sport_in = #{sportIn,jdbcType=INTEGER},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.yihe.system.domain.YhDiseaseAssessTotalReport2web" >
+    update yh_disease_assess_total_report2
+    set request_serialNum = #{requestSerialnum,jdbcType=VARCHAR},
+      user_code = #{userCode,jdbcType=VARCHAR},
+      qtime = #{qtime,jdbcType=TIMESTAMP},
+      gender = #{gender,jdbcType=INTEGER},
+      age = #{age,jdbcType=INTEGER},
+      user_name = #{userName,jdbcType=VARCHAR},
+      times = #{times,jdbcType=INTEGER},
+      df_names = #{dfNames,jdbcType=VARCHAR},
+      sk_names = #{skNames,jdbcType=VARCHAR},
+      ld_names = #{ldNames,jdbcType=VARCHAR},
+      lr_names = #{lrNames,jdbcType=VARCHAR},
+      classify = #{classify,jdbcType=VARCHAR},
+      chd_his = #{chdHis,jdbcType=INTEGER},
+      stroke_his = #{strokeHis,jdbcType=INTEGER},
+      hbp_his = #{hbpHis,jdbcType=INTEGER},
+      diab2_his = #{diab2His,jdbcType=INTEGER},
+      bf_his = #{bfHis,jdbcType=INTEGER},
+      hua_his = #{huaHis,jdbcType=INTEGER},
+      gae_his = #{gaeHis,jdbcType=INTEGER},
+      gna_his = #{gnaHis,jdbcType=INTEGER},
+      op_his = #{opHis,jdbcType=INTEGER},
+      fl_his = #{flHis,jdbcType=INTEGER},
+      bronch_his = #{bronchHis,jdbcType=INTEGER},
+      emphy_his = #{emphyHis,jdbcType=INTEGER},
+      lc_his = #{lcHis,jdbcType=INTEGER},
+      decline_his = #{declineHis,jdbcType=INTEGER},
+      fracture_his = #{fractureHis,jdbcType=INTEGER},
+      prostate_disease = #{prostateDisease,jdbcType=INTEGER},
+      pc_his = #{pcHis,jdbcType=INTEGER},
+      bc_his = #{bcHis,jdbcType=INTEGER},
+      family_diab = #{familyDiab,jdbcType=INTEGER},
+      family_hbp = #{familyHbp,jdbcType=INTEGER},
+      family_chd = #{familyChd,jdbcType=INTEGER},
+      family_stroke = #{familyStroke,jdbcType=INTEGER},
+      family_hf = #{familyHf,jdbcType=INTEGER},
+      family_lung = #{familyLung,jdbcType=INTEGER},
+      family_pro = #{familyPro,jdbcType=INTEGER},
+      family_breast = #{familyBreast,jdbcType=INTEGER},
+      family_gout = #{familyGout,jdbcType=INTEGER},
+      smoke_status = #{smokeStatus,jdbcType=INTEGER},
+      food_drink = #{foodDrink,jdbcType=INTEGER},
+      bmi = #{bmi,jdbcType=REAL},
+      sport_in = #{sportIn,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

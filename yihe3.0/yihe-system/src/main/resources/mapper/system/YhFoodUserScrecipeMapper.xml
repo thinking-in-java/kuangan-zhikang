@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yihe.system.mapper.YhFoodUserScrecipeMapper" >
+  <resultMap id="BaseResultMap" type="com.yihe.system.domain.YhFoodUserScrecipe" >
+    <id column="U_Food_Erecipe_Id" property="uFoodErecipeId" jdbcType="INTEGER" />
+    <result column="C_Time" property="cTime" jdbcType="TIMESTAMP" />
+    <result column="Start_Time" property="startTime" jdbcType="TIMESTAMP" />
+    <result column="State_Flag" property="stateFlag" jdbcType="INTEGER" />
+    <result column="Srecipe_Id" property="srecipeId" jdbcType="INTEGER" />
+    <result column="Is_Del" property="isDel" jdbcType="INTEGER" />
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="com.yihe.system.domain.YhFoodUserScrecipe" extends="BaseResultMap" >
+    <result column="F_Elements" property="fElements" jdbcType="LONGVARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    U_Food_Erecipe_Id, C_Time, Start_Time, State_Flag, Srecipe_Id, Is_Del
+  </sql>
+  <sql id="Blob_Column_List" >
+    F_Elements
+  </sql>
+  <select id="findEnrolinfoByFood" resultType="java.lang.String" parameterType="java.lang.String">
+    select Fooddiary_Uptime from  yh_user_enrolinfo  WHERE `user_code` =  #{usercode}
+
+  </select>
+  <update id="modifyEnrolinfo" parameterType="java.lang.String">
+    UPDATE
+   `yh_user_enrolinfo`
+SET
+
+  `Fooddiary_Uptime` = NOW()
+
+WHERE `user_code` =  #{usercode}
+
+  </update>
+  <select id="findFoodUserScrecipeBySrecipeId"  resultMap="ResultMapWithBLOBs" parameterType="java.lang.Integer">
+     select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+     from yh_food_user_screcipe2
+     where
+    U_Food_Erecipe_Id=#{srecipeId}  LIMIT 1
+  </select>
+  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from yh_food_user_screcipe
+    where U_Food_Erecipe_Id = #{uFoodErecipeId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from yh_food_user_screcipe
+    where U_Food_Erecipe_Id = #{uFoodErecipeId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.yihe.system.domain.YhFoodUserScrecipe" >
+    insert into yh_food_user_screcipe (U_Food_Erecipe_Id, C_Time, Start_Time, 
+      State_Flag, Srecipe_Id, Is_Del, 
+      F_Elements)
+    values (#{uFoodErecipeId,jdbcType=INTEGER}, #{cTime,jdbcType=TIMESTAMP}, #{startTime,jdbcType=TIMESTAMP}, 
+      #{stateFlag,jdbcType=INTEGER}, #{srecipeId,jdbcType=INTEGER}, #{isDel,jdbcType=INTEGER}, 
+      #{fElements,jdbcType=LONGVARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.yihe.system.domain.YhFoodUserScrecipe" >
+    insert into yh_food_user_screcipe
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="uFoodErecipeId != null" >
+        U_Food_Erecipe_Id,
+      </if>
+      <if test="cTime != null" >
+        C_Time,
+      </if>
+      <if test="startTime != null" >
+        Start_Time,
+      </if>
+      <if test="stateFlag != null" >
+        State_Flag,
+      </if>
+      <if test="srecipeId != null" >
+        Srecipe_Id,
+      </if>
+      <if test="isDel != null" >
+        Is_Del,
+      </if>
+      <if test="fElements != null" >
+        F_Elements,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="uFoodErecipeId != null" >
+        #{uFoodErecipeId,jdbcType=INTEGER},
+      </if>
+      <if test="cTime != null" >
+        #{cTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="startTime != null" >
+        #{startTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="stateFlag != null" >
+        #{stateFlag,jdbcType=INTEGER},
+      </if>
+      <if test="srecipeId != null" >
+        #{srecipeId,jdbcType=INTEGER},
+      </if>
+      <if test="isDel != null" >
+        #{isDel,jdbcType=INTEGER},
+      </if>
+      <if test="fElements != null" >
+        #{fElements,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.yihe.system.domain.YhFoodUserScrecipe" >
+    update yh_food_user_screcipe
+    <set >
+      <if test="cTime != null" >
+        C_Time = #{cTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="startTime != null" >
+        Start_Time = #{startTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="stateFlag != null" >
+        State_Flag = #{stateFlag,jdbcType=INTEGER},
+      </if>
+      <if test="srecipeId != null" >
+        Srecipe_Id = #{srecipeId,jdbcType=INTEGER},
+      </if>
+      <if test="isDel != null" >
+        Is_Del = #{isDel,jdbcType=INTEGER},
+      </if>
+      <if test="fElements != null" >
+        F_Elements = #{fElements,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where U_Food_Erecipe_Id = #{uFoodErecipeId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.yihe.system.domain.YhFoodUserScrecipe" >
+    update yh_food_user_screcipe
+    set C_Time = #{cTime,jdbcType=TIMESTAMP},
+      Start_Time = #{startTime,jdbcType=TIMESTAMP},
+      State_Flag = #{stateFlag,jdbcType=INTEGER},
+      Srecipe_Id = #{srecipeId,jdbcType=INTEGER},
+      Is_Del = #{isDel,jdbcType=INTEGER},
+      F_Elements = #{fElements,jdbcType=LONGVARCHAR}
+    where U_Food_Erecipe_Id = #{uFoodErecipeId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.yihe.system.domain.YhFoodUserScrecipe" >
+    update yh_food_user_screcipe
+    set C_Time = #{cTime,jdbcType=TIMESTAMP},
+      Start_Time = #{startTime,jdbcType=TIMESTAMP},
+      State_Flag = #{stateFlag,jdbcType=INTEGER},
+      Srecipe_Id = #{srecipeId,jdbcType=INTEGER},
+      Is_Del = #{isDel,jdbcType=INTEGER}
+    where U_Food_Erecipe_Id = #{uFoodErecipeId,jdbcType=INTEGER}
+  </update>
+</mapper>

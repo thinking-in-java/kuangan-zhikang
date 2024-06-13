@@ -1,0 +1,969 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>健康计划</title>
+   <link rel="stylesheet"  th:href="@{/assets/libs/layui/css/layui.css}" />
+    <link rel="stylesheet"  th:href="@{/assets/module/admin.css}"  />
+    <style type="text/css">
+ 
+</style>
+</head>
+<body>
+ <!-- 页面加载loading -->
+<div class="page-loading">
+    <div class="ball-loader">
+        <span></span><span></span><span></span><span></span>
+    </div>
+</div>
+
+<div class="layui-row layui-col-space15"  style="padding: 20px;background-color: white;margin: 0px">
+		<div class="layui-card">
+			<div class="layui-tab layui-tab-brief" lay-filter="docDemoTabBrief">
+			  <ul class="layui-tab-title">
+			    <li class="layui-this">计划档案</li>
+			    <li lay-id="1">计划记录</li>
+			  </ul>
+			  <div class="layui-tab-content">
+			  <!-- 内容1 -->
+			    <div class="layui-tab-item layui-show">
+						<table id="LAY_table_user" lay-filter="demo"></table>
+			    
+			    
+			    </div>
+			    <!-- 内容2 -->
+			    <div class="layui-tab-item">
+			    
+			    	<div class="layui-form toolbar">
+								<div class="layui-form-item">
+									<!-- <input name="usercode" id="usercode" class="layui-input"
+												type="hidden"/> -->
+									<div class="layui-inline">
+										<label class="layui-form-label" style="width: 120px;">日计划完成情况：</label>
+										<div class="layui-input-inline">
+											<select name="complete" id="complete">
+												<option value="">全部</option>
+												<option value="false">完成</option>
+												<option value="true">未完成</option>
+											</select>
+										</div>
+									</div>
+
+								
+
+
+									<div class="layui-inline">
+										<label class="layui-form-label">计划名称：</label>
+										<div class="layui-input-inline">
+											<input name="planName" id="planName" class="layui-input"
+												type="text" placeholder="输入名称" />
+										</div>
+									</div>
+									
+									
+									<div class="layui-inline">
+										<label class="layui-form-label">时间：</label>
+										<div class="layui-input-inline">
+											<input type="text" class="layui-input" id="startTime" name="startTime" placeholder=" - ">
+										</div>
+									</div>
+									 
+
+									<div class="layui-inline" style="padding-left: 20px;">
+										<button class="layui-btn sousuo" data-type="reload">搜索</button>
+
+									</div>
+
+
+								
+								</div>
+							</div>
+					
+					<div>
+						<div style="width: 35%;float: left">
+				   		<table class="layui-hide" id="test" lay-filter="test"></table>
+				   		</div>
+			   			<div style="width: 60%;float: left">
+			   				
+			   				<!--  -->
+			   			
+			   				<table class="layui-table" lay-skin="line">
+							  <thead>
+							    <tr>
+							      <th>日记情况</th>
+							    </tr> 
+							  </thead>
+							  <tbody>
+							 
+							    <tr>
+							      <td align="center"><div style="width:800px;height:280px;" id="chartmain"></div></td>
+							    </tr>
+							  </tbody>
+							</table>   
+         
+			   			
+			   			</div>
+			    	</div>
+			    	
+			    	
+			    	
+			    	<table class="layui-table" lay-skin="line" id="journal">
+				  <colgroup>
+				    <col width="150">
+				    <col width="150">
+				    <col width="200">
+				    <col>
+				  </colgroup>
+				  <thead>
+				    <tr>
+				      <th>计划日记分析 <span id="ctime"></span></th>
+				    </tr> 
+				  </thead>
+				  <tbody>
+				   
+				    <tr>
+				      <td>
+				      <div style="width:100%">
+				      <p id="nameInfo"></p>
+				      <div style="width:20%;float: left">
+						      <div style="width:350px;height:250px;" id="chartmainjindu"></div>
+						    </div>
+						    <div style="width:20%;float: left">
+						      <div style="width:350px;height:250px;" id="jifentu"></div>
+						    </div>
+					      	<div style="width:20%;float: left">
+						      <div style="width:350px;height:250px;" id="chartmain1"></div>
+						    </div>
+					      	<div style="width:20%;float: left">
+					      		<div style="width:350px;height:250px;" id="chartmain2"></div>
+					    	</div>  
+					    </div>
+				      </td>
+				    </tr>
+				    <tr>
+				      <td>
+				      		 <div id="scheme">
+		   						
+		   					</div>
+				      </td>
+				    </tr>
+				   
+				  </tbody>
+				</table>   
+				    
+    
+			    
+			    </div>
+			     
+			  </div>
+			</div> 
+		</div>
+	</div>
+
+</body>
+<script type="text/javascript" th:src="@{/assets/libs/layui/layui.js}"></script>
+<script type="text/javascript" th:src="@{/assets/js/common.js}"></script>
+<script type="text/javascript" th:src="@{/assets/js/jquery-1.11.1.js}"></script>
+<script th:src="@{/assets/libs/echarts/echarts.min.js}"></script>
+
+<script type="text/html" id="barDemo">
+    <a href="#"  lay-event="edit"><font color='#36A4FF'>查看报告</font></a>
+</script>
+
+<script>
+
+function leiji(cumulative,continuity){
+	
+	console.log("leiji(cumulative,continuity"+cumulative+"----"+continuity)
+	option = {
+			   
+		    grid: {
+		        top: '0.5%',
+		        left: '3%',
+		        right: '11%',
+		        bottom: '2.5%',
+		        containLabel: true
+		    },
+		    yAxis: [{
+		        type: 'category',
+		        data: ['累计完成(天)','连续完成(天)'],
+		        inverse: true,
+		        axisTick: {
+		            alignWithLabel: true,
+		        },
+		        axisLabel: {
+		            margin: 10,
+		            textStyle: {
+		                fontSize: 18,
+		                color: ''
+		            }
+		        },
+		        axisLine: {
+		            lineStyle: {
+		                color: '#2548ac'
+		            }
+		        },
+		 
+		    }],
+		    xAxis: [{
+		        type: 'value',
+		        axisLabel: {
+		            
+		            
+		             
+		            textStyle: {
+		                fontSize: 18,
+		                color: '#000000',
+		            }
+		        },
+		        axisLine: {
+		            lineStyle: {
+		                color: '#192469'
+		            }
+		        },
+		        splitLine: {
+		            lineStyle: {
+		                color: '#17367c'
+		            }
+		        }
+		    }],
+		    series: [{
+		        name: 'Top 10',
+		        type: 'bar',
+		        barWidth: 46,
+		        data: [cumulative, continuity],
+		        label: {
+		            normal: {
+		                show: true,
+		                position: 'insideRight',
+		                textStyle: {
+		                    color: 'blue', //color of value
+		                    fontSize: 18,
+		                }
+		            }
+		        },
+		        itemStyle: {
+		 
+		            normal: {
+		                color: new echarts.graphic.LinearGradient(0, 0, 1, 0, [{
+		                    offset: 0,
+		                    color: '#0590eb' // 0% 处的颜色
+		                }, {
+		                    offset: 1,
+		                    color: '#08e3f1' // 100% 处的颜色
+		                }], false),
+		                barBorderRadius: [0, 15, 15, 0],
+		                shadowColor: 'rgba(0,0,0,0.1)',
+		                shadowBlur: 3,
+		                shadowOffsetY: 3
+		            }
+		        }
+		    }]
+		}; 
+	//获取dom容器
+	var myChart = echarts.init(document.getElementById('chartmain2'));
+	// 使用刚指定的配置项和数据显示图表。
+	myChart.setOption(option);
+}
+
+
+function wcl(num){
+	console.log("完成率统计图：--------"+num)
+	option = {
+	        color:['#38a8da','#d4effa'],
+	        title: {
+	           
+	            top:'3%',
+	            left:'1%',
+	            textStyle:{
+	                color: '#333',
+	                fontStyle: 'normal',
+	                fontWeight: 'normal',
+	                fontFamily: 'sans-serif',
+	                fontSize: 16,
+	            }
+	        },
+	        series: [{
+	            name: '来源',
+	            type: 'pie',
+	            radius: ['60%', '75%'],
+	            avoidLabelOverlap: false,
+	            hoverAnimation:false,
+	            label: {
+	                normal: {
+	                    show: false,
+	                    position: 'center',
+	                    textStyle: {
+	                        fontSize:22,
+	                        fontWeight: 'bold'
+	                    },
+	                    formatter:'{b}\n{c}%'
+	                }
+	            },
+	            data: [{
+	                    value:num,
+	                    name: '任务完成率',
+	                    label:{
+	                        normal:{
+	                            show:true
+	                        }
+	                    }
+	                 },
+	                {
+	                    value: 100-num,
+	                    name: ''
+	                }
+	            ]
+	        }]
+	    };
+	//获取dom容器
+	var myChart = echarts.init(document.getElementById('chartmain1'));
+	// 使用刚指定的配置项和数据显示图表。
+	myChart.setOption(option);
+}
+
+
+
+function GetQueryValue(queryName) {
+	var query = decodeURI(window.location.search.substring(1));
+	var vars = query.split("&");
+	for (var i = 0; i < vars.length; i++) {
+		var pair = vars[i].split("=");
+		if (pair[0] == queryName) { return pair[1]; }
+	}
+	return null;
+}
+
+function jifentu(num2){
+ 
+	console.log("积分图：--------"+num2)
+	option = {
+	        color:['#38a8da','#d4effa'],
+	        title: {
+	           
+	            top:'3%',
+	            left:'1%',
+	            textStyle:{
+	                color: '#333',
+	                fontStyle: 'normal',
+	                fontWeight: 'normal',
+	                fontFamily: 'sans-serif',
+	                fontSize: 16,
+	            }
+	        },
+	        series: [{
+	            name: '来源',
+	            type: 'pie',
+	            radius: ['60%', '75%'],
+	            avoidLabelOverlap: false,
+	            hoverAnimation:false,
+	            label: {
+	                normal: {
+	                    show: false,
+	                    position: 'center',
+	                    textStyle: {
+	                        fontSize:22,
+	                        fontWeight: 'bold'
+	                    },
+	                    formatter:'{b}\n{c}%'
+	                }
+	            },
+	            data: [{
+	                    value:num2,
+	                    name: '获取积分',
+	                    label:{
+	                        normal:{
+	                            show:true
+	                        }
+	                    }
+	                 },
+	                {
+	                    value: 100-num2,
+	                    name: ''
+	                }
+	            ]
+	        }]
+	    };
+	//获取dom容器
+	var myChart = echarts.init(document.getElementById('jifentu'));
+	// 使用刚指定的配置项和数据显示图表。
+	myChart.setOption(option);
+}
+
+
+
+function jindu(planDay){
+	var num=Math.round(planDay*100/28);
+	 
+	option = {
+		    tooltip: {
+		        trigger: 'item',
+		        formatter: '{a} <br/>{b} : {c} %'
+		    },
+		    series: [{
+		        name: '仪表盘',
+		        type: 'gauge',
+		        data: [{
+		            value: Math.round(planDay*100/28),
+		            name: '执行进度'
+		        }],
+		        radius: '80%',
+		        center: ['50%', '50%'],
+		        min: 0,
+		        max: 100,
+		        splitNumber: 4,
+		        axisLine: { // 坐标轴线
+		            lineStyle: { // 属性lineStyle控制线条样式
+		                width: 15,
+		                color: [
+		                    [num/100, '#1E90FF'],
+		                   
+		                    [1, '#F7F7F7']
+		                ]
+		            }
+		        },
+		        axisTick: { // 坐标轴小标记
+		            length: 5, // 属性length控制线长
+		            lineStyle: { // 属性lineStyle控制线条样式
+		                color: 'auto'
+		            }
+		        },
+		        splitLine: { // 分隔线
+		            length: 15, // 属性length控制线长
+		            lineStyle: { // 属性lineStyle（详见lineStyle）控制线条样式
+		                color: 'auto'
+		            }
+		        },
+		        axisLabel: {
+		            color: '#666',
+		            formatter: function(e) {
+		                switch (e) {
+		                    case 25:
+		                    return "一周";
+		                     case 50:
+		                    return "二周";
+		                      case 75:
+		                    return "三周";
+		                     case 100:
+		                    return "四周";
+		                }
+		                }
+		 
+		        },
+		        detail: {
+		            formatter: '{value}%',
+		            fontSize: 24,
+		            offsetCenter: [0, '85%']
+		        },
+		        title: {
+		            fontSize: 12,
+		            color: '#999',
+		            offsetCenter: [0, '55%']
+		        },
+		        pointer: {
+		            width: 5 // 指针大小
+		        }
+		    }]
+		};
+	//获取dom容器
+	var myChart = echarts.init(document.getElementById('chartmainjindu'));
+	// 使用刚指定的配置项和数据显示图表。
+	myChart.setOption(option);
+}
+
+
+
+
+
+
+//统计图
+function show(cTime,energyLevel,energyKcal){
+	//指定图表的配置项和数据
+	option = {
+title : {
+    text: '',
+},
+tooltip : {
+    trigger: 'axis'
+},
+legend: {
+    data:['计划任务数','计划完成数']
+},
+toolbox: {
+    show : true,
+    feature : {
+        dataView : {show: true, readOnly: false},
+        magicType : {show: true, type: ['line', 'bar']},
+        restore : {show: true},
+        saveAsImage : {show: true}
+    }
+},
+color:["rgba(222, 250, 250, 1)","rgba(0, 186, 173, 1)"],
+calculable : true,
+xAxis : [
+    {
+        type : 'category',
+        data : cTime,
+    }
+],
+yAxis : [
+    {
+        type : 'value'
+    }
+],
+series : [
+    {
+        name:'计划完成数',
+        type:'bar',
+        data:energyLevel,
+    },
+    {
+        name:'计划任务数',
+        type:'bar',
+        data:energyKcal,
+    }
+],
+dataZoom : [
+    //1.横向使用滚动条
+      {
+        type: 'slider',//有单独的滑动条，用户在滑动条上进行缩放或漫游。inside是直接可以是在内部拖动显示
+        show: true,//是否显示 组件。如果设置为 false，不会显示，但是数据过滤的功能还存在。
+        start: 0,//数据窗口范围的起始百分比0-100
+        end: 50,//数据窗口范围的结束百分比0-100
+        xAxisIndex: [0],// 此处表示控制第一个xAxis，设置 dataZoom-slider 组件控制的 x轴 可是已数组[0,2]表示控制第一，三个；xAxisIndex: 2 ，表示控制第二个。yAxisIndex属性同理
+        bottom:-10 //距离底部的距离
+      },
+  //2.在内部可以横向拖动
+     {
+         type: 'inside',// 内置于坐标系中
+         start: 0,
+         end: 30,
+         xAxisIndex: [0]
+      }
+    ]
+};
+
+		//获取dom容器
+		var myChart = echarts.init(document.getElementById('chartmain'));
+		// 使用刚指定的配置项和数据显示图表。
+		myChart.setOption(option);
+}
+
+
+
+
+
+
+
+//导航栏
+layui.use('element', function() {
+	var $ = layui.jquery, element = layui.element; //Tab的切换功能，切换事件监听等，需要依赖element模块
+
+	$('.site-demo-active').on('click', function() {
+		var othis = $(this), type = othis.data('type');
+		active[type] ? active[type].call(this, othis) : '';
+	});
+
+});
+
+
+layui.use(['layer', 'form', 'admin', 'table','laydate', 'util','element'], function () {
+    var $ = layui.jquery;
+    var layer = layui.layer;
+    var form = layui.form;
+    var admin = layui.admin;
+    var util = layui.util;
+    var laydate = layui.laydate;
+    table = layui.table;
+    var element = layui.element;
+  //日期范围
+    laydate.render({
+      elem: '#test6'
+      ,range: true,
+		trigger: 'click'
+    });
+    laydate.render({
+        elem: '#startTime'
+        ,range: true,
+		trigger: 'click'
+      });
+    
+    var usercode = [[${usercode}]];
+
+	var layid = GetQueryValue('type');//location.hash.replace(/^#type=/, '');
+	console.log(layid+"*************-******************")
+	element.tabChange('docDemoTabBrief', layid);
+    
+    $("#journal").hide();
+    //$("#usercode").val(usercode);
+    function tjt(ctime){
+    	var data2;
+    	if(ctime!=null || ctime!=""){
+    		data2 = {'usercode' :usercode,'ctime':ctime};
+    	}else{
+    		data2 = {'usercode' :usercode};
+    	}
+   	 $.ajax({
+    	 type: "post",
+         url: "/system/plan/selectPlanDiaryCtime",
+         dataType:"json",
+         data:data2,
+         success: function(data){
+        		show(data.cTime,data.energyLevel,data.energyKcal);
+         }   	
+    });
+   }
+    tjt();
+    
+    //内容2
+     table.render({
+    	  
+    elem: '#test'
+    ,	url : '/system/plan/selectPlanDiary?usercode='+usercode
+    ,method:'post'
+    	,width: 500
+        ,height: 340
+    ,cols: [ [
+      {field:'id', title:'ID',hide:true}
+      ,{field:'planStrTime', title:'日期',templet:'<div>{{ layui.util.toDateString(d.planStrTime, "yyyy-MM-dd") }}</div>'}
+      ,{field:'', title:'任务完成情况',
+    	  templet: function (d) {
+      	console.log(d);
+    		  var str=d.courseseq+"/"+d.planNum
+    		  return str;
+    	  }
+      }
+      ,{
+          title: '是否达标', templet: function (d) {
+              var strs = [
+                  '是',
+                  '否'
+              ];
+              if(d.courseseq>=d.planNum){
+                  return strs[0];
+              }else{
+              	return strs[1];
+              }
+          }
+      }
+    ] ],
+    response : {
+
+		statusCode : 0
+	//规定成功的状态码，默认：0
+
+	},
+
+	parseData : function(res) { //将原始数据解析成 table 组件所规定的数据
+		console.log(res.data)
+		return {
+			"code" : res.data.code, //解析接口状态
+			"msg" : res.data.msg, //解析提示文本
+			"count" : res.data.count, //解析数据长度
+			"data" : res.data.data
+		//解析数据列表
+		}
+
+	}
+    ,id : 'energyKcal'
+    ,page: true
+  });
+    
+    
+   //搜索的方法
+   	//这是Layui 给 后台添加的映射  映射controller 的实体类
+							var $ = layui.$, active = {
+								reload : function() {
+									//获取 上面input 值
+
+									var startTime = $('#startTime').val();
+									var complete = $('#complete').val();
+									var planName = $('#planName').val();
+									var usercode = $('#usercode').val();
+									 
+									 
+									//执行重载
+									table.reload('energyKcal', {
+										page : {
+											curr : 1
+										//重新从第 1 页开始
+										},
+										where : {
+											//这里注意一定要跟Bean 里面的属性对应
+											complete : complete,
+											usercode : usercode,
+											planName:planName,
+											startTime:startTime
+										}
+									});
+								}
+							};
+	  //这个是搜索按钮事件， 找到你的搜索按钮 获取搜索按钮点击事件。只需要把$(’’)这里面的内容修改了就可以了。
+							$('.sousuo').on('click', function() {
+
+								var type = $(this).data('type');
+								active[type] ? active[type].call(this) : '';
+
+							});
+	  
+							$('.layui-tab-title').on('click', function(title) {
+						    	console.log(title)
+						        if(title.toElement.textContent=="计划档案"){
+						        	console.log(title.toElement.textContent)
+						        	table.reload('tableBank', {
+										page : {
+											curr : 1
+										//重新从第 1 页开始
+										},
+										where : {
+										 
+										}
+									});
+
+									 
+						        }else if(title.toElement.textContent=="计划记录"){
+						        	console.log(title.toElement.textContent)
+						        	 
+						        	table.reload('energyKcal', {
+										page : {
+											curr : 1
+										//重新从第 1 页开始
+										},
+										where : {
+										 
+										}
+									});
+						        } 
+						    });
+						    
+  
+  //监听行单击事件（双击事件为：rowDouble）
+  table.on('row(test)', function(obj){
+    var data = obj.data;
+    console.log(data)
+    var planStrTime=layui.util.toDateString(data.planStrTime, "yyyy-MM-dd");
+    var data2 = {
+			'usercode' :data.usercode,
+			'planId' :data.planId,
+			'planUnique' :data.planUnique,
+			'planStrTime' :data.planStrTime
+		};
+    $("#ctime").html(planStrTime);
+    var planName=data.planName;
+    var planDay=data.planDay;
+    
+    $("#nameInfo").html(planName+planDay+"/28");
+    jindu(data.planDay);//进度
+   
+    
+    $.ajax({
+   	 type: "post",
+        url: "/system/plan/selectplancompleteInfo",
+        dataType:"json",
+        data:data2,
+        success: function(data){
+        	var numAllInfo=data.numAllInfo;//全部计划数
+        	var completeNum=data.completeNum;//完成计划数
+        	 
+        var num	=Math.round(completeNum/numAllInfo*100);
+        var num2	=Math.round((completeNum*2)/(numAllInfo*2)*100);
+        	 wcl(num);//完成率
+        	 jifentu(num2);
+        }   	
+   });
+    var data3 = {
+			  
+			'planUnique' :data.planUnique,
+			'usercode' :data.usercode
+			 
+		};
+       
+  //累计完成
+    $.ajax({
+      	 type: "post",
+           url: "/system/plan/selectCumulativeInfo",
+           dataType:"json",
+           data:data3,
+           success: function(data){
+           	var cumulative=data.cumulative;//累计完成
+           	var continuity=data.completeNum;//连续完成
+           	 
+          
+           	
+           leiji(cumulative,continuity);//累计完成
+           }   	
+      });
+  
+    var data4 = {
+			 
+			'id' :data.id,
+			'planId' :data.planId,
+			'planDay' :data.planDay
+			 
+		};
+  
+  //已完成和未完成
+  var ywcInfo='';
+  var wwcInfo='';
+  var ywcNum=0;
+  var wwcNum=0;
+    $.ajax({
+      	 type: "post",
+           url: "/system/plan/selectPlanDetailInfo",
+           dataType:"json",
+           data:data4,
+           success: function(data){
+           	var wwc=data.wwc;//累计完成
+           	var ywc=data.ywc;//连续完成
+           	 for(var i=0;i<wwc.length;i++){
+           		ywcNum++;
+           		ywcInfo=ywcInfo+"<dl>"+wwc[i]+"</dl>"
+           	 }
+           	 for(var i=0;i<ywc.length;i++){
+           		wwcNum++
+           		wwcInfo=wwcInfo+"<dl>"+ywc[i]+"</dl>"
+            	 }
+          console.log(wwc);
+          console.log(ywc);
+          $("#journal").show();
+          $("#scheme").html("<p>计划日记内容</p><br><div class='layui-row'><div class='layui-col-xs6'><div class='grid-demo grid-demo-bg1'><i class='layui-icon layui-icon-ok' style='color:#5FB878;'></i> 已完成任务("+wwcNum+"/"+(wwcNum+ywcNum)+")"+
+      			"<dl>"+wwcInfo+"</dl></div></div><div class='layui-col-xs6'><div class='grid-demo grid-demo-bg1'><i class='layui-icon layui-icon-close' style='color: red;'></i>未完成任务("+ywcNum+"/"+(wwcNum+ywcNum)+")"+
+      			"<dl>"+ywcInfo+"</dl></div></div></div>");
+           
+           }   	
+      });
+    
+   
+   
+	
+    //标注选中样式
+    obj.tr.addClass('layui-table-click').siblings().removeClass('layui-table-click');
+  });
+  //内容2结束
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+  //添加头条
+    $('#frontpage').click(function () {
+    	showhealth();
+        showheadline();
+    });
+  
+    function showhealth(){
+   	 var d ="";
+    	 $.ajax({
+     	 type: "post",
+          url: "/YhFoodSrecipeRecordContriller/selectSrecipeshow",
+          dataType:"json",
+          data:d,
+          success: function(data){
+         	 var htmld="<option value=''>请选择</option>";
+   	       	var item=data.data;
+   	        for (var i = 0; i < item.length; i++) {
+   	        	htmld+="<option value="+item[i].fsId+">"+item[i].name+"</option>";
+   			}
+   	       	$('#health').append(htmld);
+   	     $("#userCode1").val(usercode);
+   	        form.render();
+          }   	
+     });
+   }
+    
+   
+  
+	table.on('tool(demo)', function(obj) { //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
+		var data = obj.data; //获得当前行数据
+		var layEvent = obj.event; //获得 lay-event 对应的值
+		var tr = obj.tr; //获得当前行 tr 的DOM对象
+		
+		 if (layEvent === 'edit') {
+			 console.log("edit查看报告--------------"+data.planUnique)
+			window.location.href="/manage/health/userPlanPresentation?planUnique="+data.planUnique+"&usercode="+usercode;
+		}
+	});
+	
+  //方法级渲染
+	table.render({
+		elem : '#LAY_table_user',
+		url : '/system/plan/findPlanDiaryInfoByUsercode?usercode='+usercode,
+		method:'post',
+		cols : [ [ {
+			type : 'numbers',
+			title : '序号',
+			width:100
+		},
+        {
+			field : 'planName',
+			title : '计划名称'
+		}, {
+			 
+			title : '已执行天数',
+			width:320,
+			templet : function (d)  {
+				console.log(d)
+				var day=d.planRunDay
+					var sta=d.planState;
+				if(day==1&&sta=="未开始"){
+					return "0"
+				}
+				return d.planRunDay
+			}
+		},  {
+			field : 'planState',
+			title : '状态',
+			width:320
+		},  {
+			field : 'planStrTime',
+			title : '加入计划时间',
+			width:320
+		},{
+			fixed : 'right',
+			title : '操作',
+			align : 'center',
+			toolbar : '#barDemo',
+			width:192
+		} ] ],
+		response : {
+
+			statusCode : 0
+		//规定成功的状态码，默认：0
+
+		},
+		parseData : function(res) { //将原始数据解析成 table 组件所规定的数据
+			return {
+				"code" : res.data.code, //解析接口状态
+				"msg" : res.data.msg, //解析提示文本
+				"count" : res.data.count, //解析数据长度
+				"data" : res.data.data
+			//解析数据列表
+			}
+
+		},
+		id : 'tableBank',
+		page : true,
+	});
+
+
+
+ 
+
+    
+
+  
+  
+});
+
+
+</script>
+</html>

@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yihe.applet.api.mapper.YhHealthLectureCategoryAppMapper" >
+  <resultMap id="BaseResultMap" type="com.yihe.applet.api.domain.YhHealthLectureCategoryApp" >
+    <id column="categoryId" property="categoryid" jdbcType="INTEGER" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="parent_id" property="parentId" jdbcType="VARCHAR" />
+    <result column="sort_id" property="sortId" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    categoryId, name, parent_id, sort_id
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from yh_health_lecture_category
+    where categoryId = #{categoryid,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from yh_health_lecture_category
+    where categoryId = #{categoryid,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.yihe.applet.api.domain.YhHealthLectureCategoryApp" >
+    insert into yh_health_lecture_category (categoryId, name, parent_id, 
+      sort_id)
+    values (#{categoryid,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{parentId,jdbcType=VARCHAR}, 
+      #{sortId,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.yihe.applet.api.domain.YhHealthLectureCategoryApp" >
+    insert into yh_health_lecture_category
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="categoryid != null" >
+        categoryId,
+      </if>
+      <if test="name != null" >
+        name,
+      </if>
+      <if test="parentId != null" >
+        parent_id,
+      </if>
+      <if test="sortId != null" >
+        sort_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="categoryid != null" >
+        #{categoryid,jdbcType=INTEGER},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="parentId != null" >
+        #{parentId,jdbcType=VARCHAR},
+      </if>
+      <if test="sortId != null" >
+        #{sortId,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.yihe.applet.api.domain.YhHealthLectureCategoryApp" >
+    update yh_health_lecture_category
+    <set >
+      <if test="name != null" >
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="parentId != null" >
+        parent_id = #{parentId,jdbcType=VARCHAR},
+      </if>
+      <if test="sortId != null" >
+        sort_id = #{sortId,jdbcType=INTEGER},
+      </if>
+    </set>
+    where categoryId = #{categoryid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.yihe.applet.api.domain.YhHealthLectureCategoryApp" >
+    update yh_health_lecture_category
+    set name = #{name,jdbcType=VARCHAR},
+      parent_id = #{parentId,jdbcType=VARCHAR},
+      sort_id = #{sortId,jdbcType=INTEGER}
+    where categoryId = #{categoryid,jdbcType=INTEGER}
+  </update>
+   <!-- 查询点赞数 -->
+  <select id="findFabulousByInfoId"  resultType="java.lang.Integer">
+  SELECT COUNT(1) FROM `yh_health_lecture_fabulous` WHERE categoryId=#{categoryId}
+  </select>
+  <!-- 点赞 -->
+  <insert id="insertFabulous">
+  
+		INSERT INTO `yh_health_lecture_fabulous` (
+		 
+		  `user_code`,
+		  `categoryId`,
+		  `new_time`
+		) 
+		VALUES
+		  (
+		   
+		    #{usercode},
+		    #{categoryId},
+		    NOW()
+		  ) 
+  </insert>
+  
+    <select id="findFabulousExistence"  resultType="java.lang.Integer" >
+  SELECT COUNT(1) FROM yh_health_lecture_fabulous WHERE categoryId=#{categoryId} AND user_code=#{usercode}
+  </select>
+  
+  <delete id="deleteFabulous">
+	  
+	DELETE 
+	FROM
+	   `yh_health_lecture_fabulous` 
+	WHERE `categoryId` = #{categoryId} AND `user_code`=#{usercode}
+  
+  </delete>
+     <select id="findInfoAllByParent"  resultMap="BaseResultMap" parameterType="com.yihe.applet.api.domain.YhHealthLectureCategoryApp" >
+  SELECT * FROM yh_health_lecture_category WHERE parent_id = #{parentId,jdbcType=VARCHAR} ORDER BY sort_id
+  </select>
+  
+</mapper>

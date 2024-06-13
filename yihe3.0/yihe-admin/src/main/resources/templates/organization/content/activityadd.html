@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>精彩活动新增</title>
+   <link rel="stylesheet"  th:href="@{/assets/libs/layui/css/layui.css}" />
+    <link rel="stylesheet"  th:href="@{/assets/module/admin.css}"  />
+    
+    <!--引入所需依赖-->
+    <link rel="stylesheet" th:href="@{/editormd/css/style.css}"/>
+    <link rel="stylesheet" th:href="@{/editormd/css/editormd.css}"/>
+    
+<style type="text/css">
+	
+</style>
+</head>
+<body> 
+<a id="cancel" target="_self" style="display: none" href="/manage/content/activity" lay-text="精彩活动管理">"精彩活动管理"</a>
+<div class="layui-fluid">
+		<div class="layui-row">
+			<div style="width: 100%; height: 100%; background-color: #FFF; position: relative;">
+			
+			<div th:if="${id==0}" style="font-size: 20px; font-weight: bold; margin-left: 20px; padding-top: 30px;">新增活动</div>
+				<div th:if="${id!=0}" style="font-size: 20px; font-weight: bold; margin-left: 20px; padding-top: 30px;">修改活动</div>
+				
+				
+<form class="layui-form" id="express" method="post">
+	
+	<input id="id" name="id" type="hidden" th:value="${id}">
+
+  <div class="layui-form-item">
+    <div class="layui-form-label layui-form-required">名称&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
+    <div style="margin-left: 25px;">
+      <input type="text" id="eventName" name="eventName" maxlength="20" lay-verify="title" autocomplete="off" placeholder="请输入名称,最大限制50个字" class="layui-input">
+    </div>
+  </div>
+  
+  <div class="layui-form-item">
+    <div class="layui-form-label layui-form-required">活动说明</div>
+    <!-- <div style="margin-left: 25px;">
+    <textarea class="layui-textarea" placeholder="最大限制5000字符" id="eventContent" name="eventContent"style="display: none">  
+
+	</textarea>
+    </div> -->
+    <!--这里的id=editormd_id就是下面的初始化editorMD的editormd_id-->
+<div id="editormd_id" style="margin-left: 25px;">
+    <!-- 第一个textarea是文本输入区域-->
+    <textarea id="htmlContent" class="editorMd-html-textarea"  name="editorMd-html-textarea" >
+    </textarea>
+
+    <!--第二个textarea 是展示文本区域 要隐藏起来 display->none-->
+    <textarea class="editorMd-text-textarea" name="editorMd-text-textarea" style="display:none;" id="textContent">
+    </textarea>
+</div>
+  </div>
+  
+  
+  
+   <div class="layui-form-item">
+    <label class="layui-form-label"  id="help">在线报名<span><i class="layui-icon layui-icon-help"></i></span></label>
+    <div class="layui-input-inline" style="width: 1000px;height: 30px;">
+      <input type="checkbox" name="like" id="like" lay-filter="like" value="1" lay-skin="primary"  title="开启">
+    </div>
+  </div>
+  
+   <div class="layui-form-item" id="erqi">
+    <div style="margin-left: 25px;">
+      <input type="text" class="layui-input" style="    width: 400px;" name="shij"  id="test16"  placeholder="开始 到 结束" readonly>
+    </div>
+  </div>
+  
+  
+  <div class="layui-upload-drag" id="test10" style="margin-left: 25px;">
+  <i class="layui-icon"></i>
+  <p>点击上传，或将文件拖拽到此处</p>
+  <p>（尺寸：4:3 ）</p>
+  <div class="layui-hide" id="uploadDemoView" >
+    <hr>
+    <img src="" alt="上传成功后渲染" style="max-width: 196px">
+  </div>
+</div>
+  
+  
+  <div class="layui-form-item">
+    <div class="layui-input-inline" style="width: 1000px;height: 30px;    margin-left: 25px;">
+      <input type="checkbox" name="eventType1"  id="eventType1" value="1" lay-filter="eventType" lay-skin="primary" title="暂存为草稿(在草稿阶段用户不会看到,未上传封面只能暂存为草稿哦)">
+    </div>
+  </div>
+  
+  <input id="eventType" name="eventType" type="hidden" value="1">
+  
+<input id="tup" name="eventImg" type="hidden" value="">
+  
+
+  
+  <div class="layui-form-item" style="margin-left: -88px;padding-bottom: 40px;">
+						 <div class="layui-input-block" >
+	     <button type="button"  lay-submit="" lay-filter="demo1" class="layui-btn layui-btn-normal">保存</button>
+	   <button type="reset" onclick="cancel()" class="layui-btn layui-btn-primary">&emsp;取消&emsp;</button>
+	 </div>
+					</div>
+</form>
+ </div>
+  </div>
+   </div>
+</body>
+</html>
+
+<script type="text/javascript" th:src="@{/assets/js/jquery-1.11.1.js}"></script>
+<script th:src="@{/editormd/editormd.js}"></script>
+<script type="text/javascript" th:src="@{/assets/libs/layui/layui.js}"></script>
+<script type="text/javascript" th:src="@{/assets/js/common.js}"></script>
+<script>
+//初始化editorMD
+var HEADER;
+$(function () {
+	HEADER = editormd("editormd_id", {
+        width: "90%",
+        height: 720,
+        toc: true,
+        emoji: true,//表情功能开启
+        taskList: true,
+        syncScrolling: "single",
+        imageUpload: true,
+        htmlDecode: "style,script,iframe",
+        tex: true, // 默认不解析
+        flowChart: true, // 默认不解析
+        sequenceDiagram: true, // 默认不解析
+        codeFold: true,
+        imageFormats: ["jpg", "jpeg", "gif", "png", "bmp", "webp"],
+        imageUploadURL: "/Uploading/upload",       //图片上传URL 即后台的图片上传接口URL
+        path: '/editormd/lib/',          //项目启动路径
+        toolbarIcons : function() {
+            // Or return editormd.toolbarModes[name]; // full, simple, mini
+            // Using "||" set icons align right.
+            return [ "undo", "redo", "|", 
+                "bold", "italic", "quote", "|", 
+                "h1", "h2", "h3", "h4", "h5", "h6", "|",
+                "list-ul", "list-ol", "hr", "|",
+                "link",  "image", "|",
+                "watch"]
+        },
+        //path: '../static/editormd/lib/',    //本地路径
+        saveHTMLToTextarea: true
+    });
+});
+
+window.onload = function () {
+    layui.use('layedit', function () {
+       
+    });
+}
+
+cancel=function(){
+	document.getElementById("cancel").click();
+}
+layui.use(['form', 'layedit', 'laydate'], function(){
+	  var form = layui.form
+	  ,$ = layui.jquery
+	  ,layer = layui.layer
+	  ,layedit = layui.layedit
+	  ,laydate = layui.laydate;
+	  
+	  
+	  layedit.set({
+		  uploadImage:{
+			  url: '/Uploading/upload' //接口url
+			,type: 'post' //默认post 
+			} 
+	  }); //注意:layedit.set 一定要放在 build 前面，否则配置全局接口将无效。
+
+    
+    
+
+
+
+		//构建一个默认的编辑器
+		  var index = layedit.build('eventContent', {
+		  tool: ['left','center','right','face','image','help']
+		  , height: 580 //设置编辑器高度
+		  });
+	  
+      
+	  //监听提交
+	  form.on('submit(demo1)', function(data){
+		  //注意：parent 是 JS 自带的全局对象，可用于操作父页面
+		 
+		  var formData = data.field;//表单所有数据
+		  
+		 // var textarea = layedit.getContent(index);//富文本编辑器取值
+		  var content = HEADER.getHTML();
+		 
+		  var content1 = HEADER.getMarkdown();
+		  
+		  formData.eventContent=content;//把富文本编辑器中的值放到表单中
+		  
+		  formData.eventContentmd=content1;//把富文本编辑器中的值放到表单中
+		  
+		  var like=$("#like").val();
+		  var test16=$("#test16").val();
+		  var eventName=$("#eventName").val();
+		  if(eventName==null || eventName==""){
+			  layer.msg('名称不能为空哦!', {
+				  offset: 'auto',
+				  anim: 6,
+				  icon: 5
+				});
+		  }else if(like==2 && test16=="" || test16==null){
+			  layer.msg('报名时间不能为空哦!', {
+				  offset: 'auto',
+				  anim: 6,
+				  icon: 5
+				});
+		  }else{
+			  var eventName = $("#eventName").val();
+			    var id = $("#id").val();
+			    $.ajax({
+			 		type:'get', 
+			 		url:'/YhEventEnroll/selctEventNmaeRepetition',
+			 		data:{eventName:eventName,id:id},
+			 		success : function(data){
+			 			if(data ==1){
+			 				layer.msg("活动名称已被占用!");	
+			 			}
+			 			if(data ==0){
+			 				$.ajax({
+			 			      	 type: "post",
+			 			           url: "/YhEventEnroll/enrolladd",
+			 			           dataType:"json",
+			 			           data:formData,
+			 			           success: function(data){
+			 			        	   if(data.data==1){
+			 			        		    layer.msg('操作成功');
+			 									cancel();
+			 			        	   }else{
+			 				            	   layer.msg('操作失败');
+			 			        	   }
+			 			           }   	
+			 			      });
+			 			}
+			 		}
+			 	});
+		  }
+	  
+	  
+	});
+
+	  
+
+	  
+	  
+	  var tip_index;
+		$("#help").hover(function(){
+		    tip_index =  layer.tips('勾选，则用户在设定的时间范围内可以在活动详情页通过点击按钮直接报名。<br />不勾选，则不支持用户在线报名', this,{
+		        tips: [2, 'rgba(0, 0, 0, 1)'],
+		        time:0
+		    });
+		},function(){
+		    layer.close(tip_index);
+		});
+		
+	  
+	  $(function(){
+		 
+			var id=layui.$("#id").val();
+			if(id!=0){
+				 $.ajax({
+			    	 type: "post",
+			         url: "/YhEventEnroll/clientselect",
+			         dataType:"json",
+			         data:{"id":id},
+			         success: function(data){
+			        	 layui.$("#eventName").val(data.data.eventName);
+			        	 //layui.$("#eventContent").html(data.data.eventContent);
+//			        	 $("#eventContent").html(data.data.eventContent);
+			        	// var editIndex = layedit.build('eventContent');
+			        	//layedit.setContent(index,data.data.eventContent);
+			        	 setTimeout(function(){ 
+			        		 HEADER.setMarkdown(data.data.eventContent);
+			  	        	},500);
+			        	 layui.$('#uploadDemoView').removeClass('layui-hide').find('img').attr('src', data.data.eventImg);
+			        	 layui.$("#tup").val(data.data.eventImg);
+			        	 
+			        	 if(data.data.startDate==null){
+			        		 $("#erqi").hide();
+			        		 $('input[name="like"]').val("1");
+			        	 }else{
+			        		 var shij=data.data.startDate+" 到 "+data.data.registerEndDate;
+				        	 laydate.render({
+				        		    elem: '#test16'
+				        		    	,min: 0
+				        		    ,type: 'datetime'
+				        		    ,range: '到'
+				        		    ,format: 'yyyy-MM-dd HH:mm:ss'
+				        		    ,value: shij
+                                    ,trigger: 'click'
+				        		  });
+			        		 $("#erqi").show();
+			        		 $('input[name="like"]').val("2");
+			        		 $("#like").prop("checked",true);
+			        	 }
+			        	
+			        	 if(data.data.eventType==2){
+					  		   layui.$("#eventType1").prop("checked", true);
+			        	 }
+			        	 $('#eventType').val(data.data.eventType);
+			        	 $('#eventType1').val(data.data.eventType);
+			  		   form.render();
+			        	 
+			         }   	
+			    });
+			}else{
+				layui.$("#htmlContent").val("");
+				$("#erqi").hide();
+				 form.render();
+			}
+			
+			
+		})
+		
+		
+		 form.on('checkbox(eventType)', function(data){
+		  console.log(data.elem); //得到radio原始DOM对象
+		  console.log(data.value); //被点击的radio的value值
+		  if(data.value==1){
+			  $('#eventType1').val("2");
+			  $('#eventType').val("2");
+		  }else{
+			  $('#eventType1').val("1");
+			  $('#eventType').val("1");
+		  }
+		});
+	  
+	  
+	  form.on('checkbox(like)', function(data){
+		  console.log(data.elem); //得到radio原始DOM对象
+		  console.log(data.value); //被点击的radio的value值
+		  if(data.value==1){
+			  $("#erqi").show();
+	    		$('input[name="like"]').val("2");
+		  }else{
+			  $("#erqi").hide();
+	    		$("#test16").val("");
+	    		$('input[name="like"]').val("1");
+		  }
+		});
+	  
+	  
+	  
+	  laydate.render({
+	    elem: '#test16'
+	    ,type: 'datetime'
+	    	,min: 0
+	    ,range: '到'
+	    ,format: 'yyyy-MM-dd HH:mm:ss'
+          ,trigger: 'click'
+	  });
+
+	});
+	
+	
+	
+	
+	layui.use('upload', function(){
+	  var $ = layui.jquery
+	  ,upload = layui.upload;
+	  
+	  //拖拽上传
+	  upload.render({
+	    elem: '#test10'
+	    ,url: '/YhEventEnroll/addEnrollImg' //改成您自己的上传接口
+    	,before: function(obj){ //obj参数包含的信息，跟 choose回调完全一致，可参见上文。
+    		this.layerIndex = layer.load(0, {shade: [0.5, '#666c7f']});
+    	}
+	    ,done: function(res){
+	     layer.close(this.layerIndex);
+	      layer.msg('上传成功');
+	      layui.$('#uploadDemoView').removeClass('layui-hide').find('img').attr('src', res.files);
+	      layui.$("#tup").val(res.files);
+	      console.log(res)
+	    }
+	  });
+	
+	  
+	});
+</script>

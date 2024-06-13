@@ -1,0 +1,265 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yihe.applet.api.mapper.YhPainTotalReportAppMapper" >
+  <resultMap id="BaseResultMap" type="com.yihe.applet.api.domain.YhPainTotalReportApp" >
+    <id column="report_id" property="reportId" jdbcType="INTEGER" />
+    <result column="user_code" property="userCode" jdbcType="VARCHAR" />
+    <result column="qtime" property="qtime" jdbcType="TIMESTAMP" />
+    <result column="gender" property="gender" jdbcType="INTEGER" />
+    <result column="age" property="age" jdbcType="INTEGER" />
+    <result column="user_name" property="userName" jdbcType="VARCHAR" />
+    <result column="times" property="times" jdbcType="INTEGER" />
+    <result column="pain_score" property="painScore" jdbcType="INTEGER" />
+    <result column="cervical_result" property="cervicalResult" jdbcType="INTEGER" />
+    <result column="cervical_classify" property="cervicalClassify" jdbcType="INTEGER" />
+    <result column="shoulder_result" property="shoulderResult" jdbcType="VARCHAR" />
+    <result column="shoulder_classify" property="shoulderClassify" jdbcType="INTEGER" />
+    <result column="back_result" property="backResult" jdbcType="VARCHAR" />
+    <result column="back_classify" property="backClassify" jdbcType="INTEGER" />
+    <result column="waist_result" property="waistResult" jdbcType="VARCHAR" />
+    <result column="waist_classify" property="waistClassify" jdbcType="INTEGER" />
+    <result column="wrist_result" property="wristResult" jdbcType="VARCHAR" />
+    <result column="wrist_classify" property="wristClassify" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    report_id, user_code, qtime, gender, age, user_name, times, pain_score, cervical_result, 
+    cervical_classify, shoulder_result, shoulder_classify, back_result, back_classify, 
+    waist_result, waist_classify, wrist_result, wrist_classify
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from yh_pain_total_report
+    where report_id = #{reportId,jdbcType=INTEGER}
+  </select>
+
+
+  <select id="selectYhPainResolveLimitByParam" resultMap="BaseResultMap" parameterType="java.lang.String">
+    
+	select * from yh_pain_total_report as port where port.user_code=#{userCode} order by qtime desc limit 1
+  </select>
+
+  <select id="YhPainTotalReportAppCount" resultType="java.lang.Integer" parameterType="java.lang.String">
+    SELECT COUNT(DISTINCT port.user_name) FROM yh_pain_total_report AS PORT
+	LEFT JOIN yh_user_reginfo AS regin
+	ON port.user_code = regin.user_code
+	INNER JOIN  yh_org_tree AS tree
+	ON regin.Org_code=tree.Org_Code
+	WHERE tree.Org_Code=(SELECT Org_Code FROM yh_user_reginfo WHERE user_code=#{userCode})
+  </select>
+  
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from yh_pain_total_report
+    where report_id = #{reportId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.yihe.applet.api.domain.YhPainTotalReportApp" >
+    insert into yh_pain_total_report (report_id, user_code, qtime, 
+      gender, age, user_name, 
+      times, pain_score, cervical_result, 
+      cervical_classify, shoulder_result, shoulder_classify, 
+      back_result, back_classify, waist_result, 
+      waist_classify, wrist_result, wrist_classify
+      )
+    values (#{reportId,jdbcType=INTEGER}, #{userCode,jdbcType=VARCHAR}, #{qtime,jdbcType=TIMESTAMP}, 
+      #{gender,jdbcType=INTEGER}, #{age,jdbcType=INTEGER}, #{userName,jdbcType=VARCHAR}, 
+      #{times,jdbcType=INTEGER}, #{painScore,jdbcType=INTEGER}, #{cervicalResult,jdbcType=INTEGER}, 
+      #{cervicalClassify,jdbcType=INTEGER}, #{shoulderResult,jdbcType=VARCHAR}, #{shoulderClassify,jdbcType=INTEGER}, 
+      #{backResult,jdbcType=VARCHAR}, #{backClassify,jdbcType=INTEGER}, #{waistResult,jdbcType=VARCHAR}, 
+      #{waistClassify,jdbcType=INTEGER}, #{wristResult,jdbcType=VARCHAR}, #{wristClassify,jdbcType=INTEGER}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.yihe.applet.api.domain.YhPainTotalReportApp" useGeneratedKeys="true" keyProperty="reportId">
+    insert into yh_pain_total_report
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="reportId != null" >
+        report_id,
+      </if>
+      <if test="userCode != null" >
+        user_code,
+      </if>
+      <if test="qtime != null" >
+        qtime,
+      </if>
+      <if test="gender != null" >
+        gender,
+      </if>
+      <if test="age != null" >
+        age,
+      </if>
+      <if test="userName != null" >
+        user_name,
+      </if>
+      <if test="times != null" >
+        times,
+      </if>
+      <if test="painScore != null" >
+        pain_score,
+      </if>
+      <if test="cervicalResult != null" >
+        cervical_result,
+      </if>
+      <if test="cervicalClassify != null" >
+        cervical_classify,
+      </if>
+      <if test="shoulderResult != null" >
+        shoulder_result,
+      </if>
+      <if test="shoulderClassify != null" >
+        shoulder_classify,
+      </if>
+      <if test="backResult != null" >
+        back_result,
+      </if>
+      <if test="backClassify != null" >
+        back_classify,
+      </if>
+      <if test="waistResult != null" >
+        waist_result,
+      </if>
+      <if test="waistClassify != null" >
+        waist_classify,
+      </if>
+      <if test="wristResult != null" >
+        wrist_result,
+      </if>
+      <if test="wristClassify != null" >
+        wrist_classify,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="reportId != null" >
+        #{reportId,jdbcType=INTEGER},
+      </if>
+      <if test="userCode != null" >
+        #{userCode,jdbcType=VARCHAR},
+      </if>
+      <if test="qtime != null" >
+        #{qtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gender != null" >
+        #{gender,jdbcType=INTEGER},
+      </if>
+      <if test="age != null" >
+        #{age,jdbcType=INTEGER},
+      </if>
+      <if test="userName != null" >
+        #{userName,jdbcType=VARCHAR},
+      </if>
+      <if test="times != null" >
+        #{times,jdbcType=INTEGER},
+      </if>
+      <if test="painScore != null" >
+        #{painScore,jdbcType=INTEGER},
+      </if>
+      <if test="cervicalResult != null" >
+        #{cervicalResult,jdbcType=INTEGER},
+      </if>
+      <if test="cervicalClassify != null" >
+        #{cervicalClassify,jdbcType=INTEGER},
+      </if>
+      <if test="shoulderResult != null" >
+        #{shoulderResult,jdbcType=VARCHAR},
+      </if>
+      <if test="shoulderClassify != null" >
+        #{shoulderClassify,jdbcType=INTEGER},
+      </if>
+      <if test="backResult != null" >
+        #{backResult,jdbcType=VARCHAR},
+      </if>
+      <if test="backClassify != null" >
+        #{backClassify,jdbcType=INTEGER},
+      </if>
+      <if test="waistResult != null" >
+        #{waistResult,jdbcType=VARCHAR},
+      </if>
+      <if test="waistClassify != null" >
+        #{waistClassify,jdbcType=INTEGER},
+      </if>
+      <if test="wristResult != null" >
+        #{wristResult,jdbcType=VARCHAR},
+      </if>
+      <if test="wristClassify != null" >
+        #{wristClassify,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.yihe.applet.api.domain.YhPainTotalReportApp" >
+    update yh_pain_total_report
+    <set >
+      <if test="userCode != null" >
+        user_code = #{userCode,jdbcType=VARCHAR},
+      </if>
+      <if test="qtime != null" >
+        qtime = #{qtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gender != null" >
+        gender = #{gender,jdbcType=INTEGER},
+      </if>
+      <if test="age != null" >
+        age = #{age,jdbcType=INTEGER},
+      </if>
+      <if test="userName != null" >
+        user_name = #{userName,jdbcType=VARCHAR},
+      </if>
+      <if test="times != null" >
+        times = #{times,jdbcType=INTEGER},
+      </if>
+      <if test="painScore != null" >
+        pain_score = #{painScore,jdbcType=INTEGER},
+      </if>
+      <if test="cervicalResult != null" >
+        cervical_result = #{cervicalResult,jdbcType=INTEGER},
+      </if>
+      <if test="cervicalClassify != null" >
+        cervical_classify = #{cervicalClassify,jdbcType=INTEGER},
+      </if>
+      <if test="shoulderResult != null" >
+        shoulder_result = #{shoulderResult,jdbcType=VARCHAR},
+      </if>
+      <if test="shoulderClassify != null" >
+        shoulder_classify = #{shoulderClassify,jdbcType=INTEGER},
+      </if>
+      <if test="backResult != null" >
+        back_result = #{backResult,jdbcType=VARCHAR},
+      </if>
+      <if test="backClassify != null" >
+        back_classify = #{backClassify,jdbcType=INTEGER},
+      </if>
+      <if test="waistResult != null" >
+        waist_result = #{waistResult,jdbcType=VARCHAR},
+      </if>
+      <if test="waistClassify != null" >
+        waist_classify = #{waistClassify,jdbcType=INTEGER},
+      </if>
+      <if test="wristResult != null" >
+        wrist_result = #{wristResult,jdbcType=VARCHAR},
+      </if>
+      <if test="wristClassify != null" >
+        wrist_classify = #{wristClassify,jdbcType=INTEGER},
+      </if>
+    </set>
+    where report_id = #{reportId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.yihe.applet.api.domain.YhPainTotalReportApp" >
+    update yh_pain_total_report
+    set user_code = #{userCode,jdbcType=VARCHAR},
+      qtime = #{qtime,jdbcType=TIMESTAMP},
+      gender = #{gender,jdbcType=INTEGER},
+      age = #{age,jdbcType=INTEGER},
+      user_name = #{userName,jdbcType=VARCHAR},
+      times = #{times,jdbcType=INTEGER},
+      pain_score = #{painScore,jdbcType=INTEGER},
+      cervical_result = #{cervicalResult,jdbcType=INTEGER},
+      cervical_classify = #{cervicalClassify,jdbcType=INTEGER},
+      shoulder_result = #{shoulderResult,jdbcType=VARCHAR},
+      shoulder_classify = #{shoulderClassify,jdbcType=INTEGER},
+      back_result = #{backResult,jdbcType=VARCHAR},
+      back_classify = #{backClassify,jdbcType=INTEGER},
+      waist_result = #{waistResult,jdbcType=VARCHAR},
+      waist_classify = #{waistClassify,jdbcType=INTEGER},
+      wrist_result = #{wristResult,jdbcType=VARCHAR},
+      wrist_classify = #{wristClassify,jdbcType=INTEGER}
+    where report_id = #{reportId,jdbcType=INTEGER}
+  </update>
+</mapper>

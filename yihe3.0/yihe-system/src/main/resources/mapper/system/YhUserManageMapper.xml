@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yihe.system.mapper.YhUserManageMapper">
+ <resultMap id="RoleResultMap" type="com.yihe.system.domain.YhUserReginfo">
+    <id column="user_code" jdbcType="VARCHAR" property="userCode" />
+    <result column="User_Type" jdbcType="INTEGER" property="userType" />
+    <result column="user_name" jdbcType="VARCHAR" property="userName" />
+    <result column="user_pwd" jdbcType="VARCHAR" property="userPwd" />
+    <result column="gender" jdbcType="INTEGER" property="gender" />
+    <result column="birth_date" jdbcType="TIMESTAMP" property="birthDate" />
+    <result column="email" jdbcType="VARCHAR" property="email" />
+    <result column="province_id" jdbcType="VARCHAR" property="provinceId" />
+    <result column="city_id" jdbcType="VARCHAR" property="cityId" />
+    <result column="area_id" jdbcType="VARCHAR" property="areaId" />
+    <result column="reg_time" jdbcType="TIMESTAMP" property="regTime" />
+    <result column="Login_times" jdbcType="INTEGER" property="loginTimes" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="address" jdbcType="VARCHAR" property="address" />
+    <result column="post_code" jdbcType="VARCHAR" property="postCode" />
+    <result column="tel" jdbcType="VARCHAR" property="tel" />
+    <result column="mobile" jdbcType="VARCHAR" property="mobile" />
+    <result column="occupation" jdbcType="INTEGER" property="occupation" />
+    <result column="ed_background" jdbcType="INTEGER" property="edBackground" />
+    <result column="marital_status" jdbcType="INTEGER" property="maritalStatus" />
+    <result column="lock_flag" jdbcType="INTEGER" property="lockFlag" />
+    <result column="reg_source" jdbcType="INTEGER" property="regSource" />
+    <result column="Cert_Type" jdbcType="INTEGER" property="certType" />
+    <result column="Cert_NO" jdbcType="VARCHAR" property="certNo" />
+    <result column="Org_Code" jdbcType="VARCHAR" property="orgCode" />
+    <result column="Blood_Type" jdbcType="INTEGER" property="bloodType" />
+    <result column="Enrol_Card_Id" jdbcType="VARCHAR" property="enrolCardId" />
+    <result column="login_time" jdbcType="TIMESTAMP" property="loginTime" />
+    <result column="unit" jdbcType="VARCHAR" property="unit" />
+    <result column="is_association" jdbcType="INTEGER" property="isAssociation" />
+    <result column="association_name" jdbcType="VARCHAR" property="associationName" />
+    <result column="is_alone" jdbcType="INTEGER" property="isAlone" />
+    <result column="is_allergy" jdbcType="INTEGER" property="isAllergy" />
+    <result column="allergy_name" jdbcType="VARCHAR" property="allergyName" />
+    <association property="yhuserrole" javaType="com.yihe.system.domain.YhUserRole">
+    	<id column="role_id" jdbcType="INTEGER" property="roleId"/> 
+    	<result column="role_name" jdbcType="VARCHAR" property="roleName"/>
+    	<result column="role_description" jdbcType="VARCHAR" property="roleDescription"/>
+    	<result column="role_ctime" jdbcType="TIMESTAMP" property="roleCtime"/>
+    	<result column="orders" jdbcType="BIGINT" property="orders"/>
+    </association>
+    </resultMap>
+  <select id="selectuseranrole" resultMap="RoleResultMap" parameterType="com.yihe.system.domain.YhUserReginfo">
+  	SELECT yur.*,yuro.*	 from yh_user_reginfo as yur
+		LEFT  JOIN  yh_user_role_power as yurp
+		on yur.user_code=yurp.userId
+		LEFT JOIN yh_user_role  as yuro
+		on yuro.role_id=yurp.roleId
+		<where>
+			<if test="userCode != null and userCode != ''">
+				yur.user_code=#{userCode}
+			</if>
+			<if test="userName != null and userName != ''">
+				yur.user_name like concat('%',#{userName},'%')
+			</if>
+			<if test="gender != null and gender != ''">
+				yur.gender=#{gender}
+			</if>
+		</where>
+		limit #{page},#{limit}
+  </select>
+   <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from yh_user_reginfo
+    where user_code = #{userCode,jdbcType=VARCHAR}
+  </delete>
+  
+    <delete id="deleterolepowerbyusercode" parameterType="java.lang.String">
+    delete from yh_user_role_power
+    where userId = #{userCode,jdbcType=VARCHAR}
+  </delete>
+  <update id="updateuserbyid" parameterType="com.yihe.system.domain.YhUserReginfo">
+  	UPDATE yh_user_reginfo
+		<set>
+			
+			<if test="ber != null">
+				birth_date = #{ber},
+			</if>
+			<if test="email != null">
+				email = #{email},
+			</if>
+			<if test="gender != null">
+				gender = #{gender},
+			</if>
+			<if test="userName != null">
+				user_name = #{userName},
+			</if>
+		</set>
+		 WHERE User_Code=#{userCode}
+  </update>
+  <select id="selectcount" resultType="INTEGER">
+  	SELECT COUNT(user_code) from yh_user_reginfo
+  </select>
+  
+  <update id="updaterole" parameterType="com.yihe.system.domain.YhUserReginfo">
+  	UPDATE yh_user_role_power
+		<set>
+			
+			<if test="roleId != null">
+				roleId = #{roleId},
+			</if>
+		</set>
+		 WHERE userId=#{userCode}
+  </update>
+</mapper>

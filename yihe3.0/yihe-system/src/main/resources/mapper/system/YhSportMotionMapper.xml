@@ -1,0 +1,432 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yihe.system.mapper.YhSportMotionMapper" >
+  <resultMap id="BaseResultMap" type="com.yihe.system.domain.YhSportMotion" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="sport_type" property="sportType" jdbcType="INTEGER" />
+    <result column="sport_show" property="sportShow" jdbcType="INTEGER" />
+    <result column="sport_name" property="sportName" jdbcType="VARCHAR" />
+    <result column="sport_steps" property="sportSteps" jdbcType="VARCHAR" />
+    <result column="sport_fell" property="sportFell" jdbcType="VARCHAR" />
+    <result column="sport_breath" property="sportBreath" jdbcType="VARCHAR" />
+    <result column="follow_second" property="followSecond" jdbcType="VARCHAR" />
+    <result column="sport_img" property="sportImg" jdbcType="VARCHAR" />
+    <result column="sport_gif" property="sportGif" jdbcType="VARCHAR" />
+    <result column="sport_video" property="sportVideo" jdbcType="VARCHAR" />
+    <result column="sport_content" property="sportContent" jdbcType="VARCHAR" />
+    <result column="sport_explain_img" property="sportExplainImg" jdbcType="VARCHAR" />
+    <result column="is_del" property="isDel" jdbcType="INTEGER" />
+    <result column="Kcal" property="kcal" jdbcType="VARCHAR" />
+    <result column="hot" property="hot" jdbcType="INTEGER" />
+    <result column="standby" property="standby" jdbcType="VARCHAR" />
+    <result column="sport_classity" property="sportClassity" jdbcType="VARCHAR" />
+    <result column="sport_place" property="sportPlace" jdbcType="VARCHAR" />
+    <result column="sport_goals" property="sportGoals" jdbcType="VARCHAR" />
+    <result column="sport_strength" property="sportStrength" jdbcType="INTEGER" />
+    <result column="sport_videotime" property="sportVideotime" jdbcType="VARCHAR" />
+    <result column="sport_totalkcal" property="sportTotalkcal" jdbcType="VARCHAR" />
+    <result column="sport_numberduration" property="sportNumberduration" jdbcType="VARCHAR" />
+    <result column="user_code" property="userCode" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, sport_type, sport_show, sport_name, sport_steps, sport_fell, sport_breath, follow_second, 
+    sport_img, sport_gif, sport_video, sport_content, sport_explain_img, is_del, Kcal, 
+    hot, standby, sport_classity, sport_place, sport_goals, sport_strength, sport_videotime, 
+    sport_totalkcal, sport_numberduration, user_code
+  </sql>
+   <!-- 本月记录 -->
+  <select id="showsportformatMonth" resultType="java.lang.String">
+  	SELECT user_code FROM yh_sport_diary WHERE DATE_FORMAT( Entry_Time, '%Y%m' ) = DATE_FORMAT( CURDATE( ) , '%Y%m' ) GROUP BY user_code;
+  </select>
+  
+   <!-- 季度记录 -->
+    <select id="showsportQujilu" resultType="java.lang.String">
+    	SELECT user_code FROM yh_sport_diary WHERE QUARTER(Entry_Time) = QUARTER(now()) GROUP BY user_code
+    </select>
+    
+       <!-- 年度记录 -->
+    <select id="showsportNianjilu" resultType="java.lang.String">
+    	select user_code from yh_sport_diary where  YEAR(Entry_Time)=YEAR(NOW()) GROUP BY user_code
+    </select>
+    
+   <!-- 查询运动热量 -->
+ <!--  <select id="sportShowName" parameterType="java.lang.String" resultMap="BaseResultMap">
+   select 
+    <include refid="Base_Column_List" />
+    from yh_sport_motion
+    where sport_name=#{sportName,jdbcType=VARCHAR}
+  </select> -->
+  
+   <select id="sportShowName" parameterType="java.lang.String" resultMap="BaseResultMap">
+   select * from yh_sport_motion
+    where sport_name  = #{sportName} and sport_show=0 limit 1
+  </select>
+  
+   <select id="selectSportNameByParam" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select * from  yh_sport_motion where sport_name like CONCAT('%',#{sportName},'%') order by hot  desc limit 5
+  </select>
+  
+  
+  
+  <!-- 查询用户收藏运动 -->
+  <select id="selectByhotCollect" parameterType="java.lang.String" resultMap="BaseResultMap">
+   select * from yh_sport_motion mo,yh_sport_collect co where mo.id=co.sport_id and co.user_code=#{userCode,jdbcType=VARCHAR} order by hot desc
+  </select>
+  
+  <!-- 根据hot取最新的10条 -->
+  <select id="selectNewestTendata"  resultMap="BaseResultMap">
+   select * from  yh_sport_motion where sport_show=0 order by hot  desc limit 10 
+  </select>
+  
+  <!-- 查询热门运动 -->
+  <select id="selectByhot" parameterType="map" resultMap="BaseResultMap">
+   select 
+    <include refid="Base_Column_List" />
+    from yh_sport_motion where sport_show=0
+   order by hot desc
+    limit #{curPage},#{pageSize}
+  </select>
+  
+  <!-- 模糊查询 -->
+  <select id="selectByname" parameterType="map" resultMap="BaseResultMap">
+   select 
+    <include refid="Base_Column_List" />
+    from yh_sport_motion
+    where sport_name LIKE CONCAT('%',#{sportName},'%')
+    and sport_show=0
+    limit #{curPage},#{pageSize}
+  </select>
+  
+  
+  <select id="selctSportNmaeRepetition"  parameterType="map" resultType="int">
+	  select count(*) from yh_sport_motion where sport_name=#{sportName} and id!=#{id}
+  </select>
+  
+    <!-- 查询所有运动模糊查询 -->
+    <select id="selectSport" resultMap="BaseResultMap" parameterType="map">
+  		select * from yh_sport_motion
+  		<where>
+  		and sport_show=0
+  			<if test="sportName!=null and sportName !=''">
+  			AND
+  			(
+  				sport_name like CONCAT('%',#{sportName},'%' )
+  			)
+  			</if>
+  		</where>
+  		
+  		order by id desc LIMIT  #{page},#{limit}
+  </select>
+  
+  
+   <!-- 查询所有运动模糊查询总行数 -->
+    <select id="selectSportConut" resultType="int" parameterType="map">
+  		select count(*) from yh_sport_motion
+  		<where>
+  		and sport_show=0
+  			<if test="sportName!=null and sportName !=''">
+  			AND
+  			(
+  				sport_name like CONCAT('%',#{sportName},'%' )
+  			)
+  			</if>
+  		</where>
+  		
+  		order by id desc
+  </select>
+  
+  
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from yh_sport_motion
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from yh_sport_motion
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.yihe.system.domain.YhSportMotion" >
+    insert into yh_sport_motion (id, sport_type, sport_show, 
+      sport_name, sport_steps, sport_fell, 
+      sport_breath, follow_second, sport_img, 
+      sport_gif, sport_video, sport_content, 
+      sport_explain_img, is_del, Kcal, 
+      hot, standby, sport_classity, 
+      sport_place, sport_goals, sport_strength, 
+      sport_videotime, sport_totalkcal, sport_numberduration, 
+      user_code)
+    values (#{id,jdbcType=INTEGER}, #{sportType,jdbcType=INTEGER}, #{sportShow,jdbcType=INTEGER}, 
+      #{sportName,jdbcType=VARCHAR}, #{sportSteps,jdbcType=VARCHAR}, #{sportFell,jdbcType=VARCHAR}, 
+      #{sportBreath,jdbcType=VARCHAR}, #{followSecond,jdbcType=VARCHAR}, #{sportImg,jdbcType=VARCHAR}, 
+      #{sportGif,jdbcType=VARCHAR}, #{sportVideo,jdbcType=VARCHAR}, #{sportContent,jdbcType=VARCHAR}, 
+      #{sportExplainImg,jdbcType=VARCHAR}, #{isDel,jdbcType=INTEGER}, #{kcal,jdbcType=VARCHAR}, 
+      #{hot,jdbcType=INTEGER}, #{standby,jdbcType=VARCHAR}, #{sportClassity,jdbcType=VARCHAR}, 
+      #{sportPlace,jdbcType=VARCHAR}, #{sportGoals,jdbcType=VARCHAR}, #{sportStrength,jdbcType=INTEGER}, 
+      #{sportVideotime,jdbcType=VARCHAR}, #{sportTotalkcal,jdbcType=VARCHAR}, #{sportNumberduration,jdbcType=VARCHAR}, 
+      #{userCode,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.yihe.system.domain.YhSportMotion" >
+    insert into yh_sport_motion
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="sportType != null" >
+        sport_type,
+      </if>
+      <if test="sportShow != null" >
+        sport_show,
+      </if>
+      <if test="sportName != null" >
+        sport_name,
+      </if>
+      <if test="sportSteps != null" >
+        sport_steps,
+      </if>
+      <if test="sportFell != null" >
+        sport_fell,
+      </if>
+      <if test="sportBreath != null" >
+        sport_breath,
+      </if>
+      <if test="followSecond != null" >
+        follow_second,
+      </if>
+      <if test="sportImg != null" >
+        sport_img,
+      </if>
+      <if test="sportGif != null" >
+        sport_gif,
+      </if>
+      <if test="sportVideo != null" >
+        sport_video,
+      </if>
+      <if test="sportContent != null" >
+        sport_content,
+      </if>
+      <if test="sportExplainImg != null" >
+        sport_explain_img,
+      </if>
+      <if test="isDel != null" >
+        is_del,
+      </if>
+      <if test="kcal != null" >
+        Kcal,
+      </if>
+      <if test="hot != null" >
+        hot,
+      </if>
+      <if test="standby != null" >
+        standby,
+      </if>
+      <if test="sportClassity != null" >
+        sport_classity,
+      </if>
+      <if test="sportPlace != null" >
+        sport_place,
+      </if>
+      <if test="sportGoals != null" >
+        sport_goals,
+      </if>
+      <if test="sportStrength != null" >
+        sport_strength,
+      </if>
+      <if test="sportVideotime != null" >
+        sport_videotime,
+      </if>
+      <if test="sportTotalkcal != null" >
+        sport_totalkcal,
+      </if>
+      <if test="sportNumberduration != null" >
+        sport_numberduration,
+      </if>
+      <if test="userCode != null" >
+        user_code,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="sportType != null" >
+        #{sportType,jdbcType=INTEGER},
+      </if>
+      <if test="sportShow != null" >
+        #{sportShow,jdbcType=INTEGER},
+      </if>
+      <if test="sportName != null" >
+        #{sportName,jdbcType=VARCHAR},
+      </if>
+      <if test="sportSteps != null" >
+        #{sportSteps,jdbcType=VARCHAR},
+      </if>
+      <if test="sportFell != null" >
+        #{sportFell,jdbcType=VARCHAR},
+      </if>
+      <if test="sportBreath != null" >
+        #{sportBreath,jdbcType=VARCHAR},
+      </if>
+      <if test="followSecond != null" >
+        #{followSecond,jdbcType=VARCHAR},
+      </if>
+      <if test="sportImg != null" >
+        #{sportImg,jdbcType=VARCHAR},
+      </if>
+      <if test="sportGif != null" >
+        #{sportGif,jdbcType=VARCHAR},
+      </if>
+      <if test="sportVideo != null" >
+        #{sportVideo,jdbcType=VARCHAR},
+      </if>
+      <if test="sportContent != null" >
+        #{sportContent,jdbcType=VARCHAR},
+      </if>
+      <if test="sportExplainImg != null" >
+        #{sportExplainImg,jdbcType=VARCHAR},
+      </if>
+      <if test="isDel != null" >
+        #{isDel,jdbcType=INTEGER},
+      </if>
+      <if test="kcal != null" >
+        #{kcal,jdbcType=VARCHAR},
+      </if>
+      <if test="hot != null" >
+        #{hot,jdbcType=INTEGER},
+      </if>
+      <if test="standby != null" >
+        #{standby,jdbcType=VARCHAR},
+      </if>
+      <if test="sportClassity != null" >
+        #{sportClassity,jdbcType=VARCHAR},
+      </if>
+      <if test="sportPlace != null" >
+        #{sportPlace,jdbcType=VARCHAR},
+      </if>
+      <if test="sportGoals != null" >
+        #{sportGoals,jdbcType=VARCHAR},
+      </if>
+      <if test="sportStrength != null" >
+        #{sportStrength,jdbcType=INTEGER},
+      </if>
+      <if test="sportVideotime != null" >
+        #{sportVideotime,jdbcType=VARCHAR},
+      </if>
+      <if test="sportTotalkcal != null" >
+        #{sportTotalkcal,jdbcType=VARCHAR},
+      </if>
+      <if test="sportNumberduration != null" >
+        #{sportNumberduration,jdbcType=VARCHAR},
+      </if>
+      <if test="userCode != null" >
+        #{userCode,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.yihe.system.domain.YhSportMotion" >
+    update yh_sport_motion
+    <set >
+      <if test="sportType != null" >
+        sport_type = #{sportType,jdbcType=INTEGER},
+      </if>
+      <if test="sportShow != null" >
+        sport_show = #{sportShow,jdbcType=INTEGER},
+      </if>
+      <if test="sportName != null" >
+        sport_name = #{sportName,jdbcType=VARCHAR},
+      </if>
+      <if test="sportSteps != null" >
+        sport_steps = #{sportSteps,jdbcType=VARCHAR},
+      </if>
+      <if test="sportFell != null" >
+        sport_fell = #{sportFell,jdbcType=VARCHAR},
+      </if>
+      <if test="sportBreath != null" >
+        sport_breath = #{sportBreath,jdbcType=VARCHAR},
+      </if>
+      <if test="followSecond != null" >
+        follow_second = #{followSecond,jdbcType=VARCHAR},
+      </if>
+      <if test="sportImg != null" >
+        sport_img = #{sportImg,jdbcType=VARCHAR},
+      </if>
+      <if test="sportGif != null" >
+        sport_gif = #{sportGif,jdbcType=VARCHAR},
+      </if>
+      <if test="sportVideo != null" >
+        sport_video = #{sportVideo,jdbcType=VARCHAR},
+      </if>
+      <if test="sportContent != null" >
+        sport_content = #{sportContent,jdbcType=VARCHAR},
+      </if>
+      <if test="sportExplainImg != null" >
+        sport_explain_img = #{sportExplainImg,jdbcType=VARCHAR},
+      </if>
+      <if test="isDel != null" >
+        is_del = #{isDel,jdbcType=INTEGER},
+      </if>
+      <if test="kcal != null" >
+        Kcal = #{kcal,jdbcType=VARCHAR},
+      </if>
+      <if test="hot != null" >
+        hot = #{hot,jdbcType=INTEGER},
+      </if>
+      <if test="standby != null" >
+        standby = #{standby,jdbcType=VARCHAR},
+      </if>
+      <if test="sportClassity != null" >
+        sport_classity = #{sportClassity,jdbcType=VARCHAR},
+      </if>
+      <if test="sportPlace != null" >
+        sport_place = #{sportPlace,jdbcType=VARCHAR},
+      </if>
+      <if test="sportGoals != null" >
+        sport_goals = #{sportGoals,jdbcType=VARCHAR},
+      </if>
+      <if test="sportStrength != null" >
+        sport_strength = #{sportStrength,jdbcType=INTEGER},
+      </if>
+      <if test="sportVideotime != null" >
+        sport_videotime = #{sportVideotime,jdbcType=VARCHAR},
+      </if>
+      <if test="sportTotalkcal != null" >
+        sport_totalkcal = #{sportTotalkcal,jdbcType=VARCHAR},
+      </if>
+      <if test="sportNumberduration != null" >
+        sport_numberduration = #{sportNumberduration,jdbcType=VARCHAR},
+      </if>
+      <if test="userCode != null" >
+        user_code = #{userCode,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.yihe.system.domain.YhSportMotion" >
+    update yh_sport_motion
+    set sport_type = #{sportType,jdbcType=INTEGER},
+      sport_show = #{sportShow,jdbcType=INTEGER},
+      sport_name = #{sportName,jdbcType=VARCHAR},
+      sport_steps = #{sportSteps,jdbcType=VARCHAR},
+      sport_fell = #{sportFell,jdbcType=VARCHAR},
+      sport_breath = #{sportBreath,jdbcType=VARCHAR},
+      follow_second = #{followSecond,jdbcType=VARCHAR},
+      sport_img = #{sportImg,jdbcType=VARCHAR},
+      sport_gif = #{sportGif,jdbcType=VARCHAR},
+      sport_video = #{sportVideo,jdbcType=VARCHAR},
+      sport_content = #{sportContent,jdbcType=VARCHAR},
+      sport_explain_img = #{sportExplainImg,jdbcType=VARCHAR},
+      is_del = #{isDel,jdbcType=INTEGER},
+      Kcal = #{kcal,jdbcType=VARCHAR},
+      hot = #{hot,jdbcType=INTEGER},
+      standby = #{standby,jdbcType=VARCHAR},
+      sport_classity = #{sportClassity,jdbcType=VARCHAR},
+      sport_place = #{sportPlace,jdbcType=VARCHAR},
+      sport_goals = #{sportGoals,jdbcType=VARCHAR},
+      sport_strength = #{sportStrength,jdbcType=INTEGER},
+      sport_videotime = #{sportVideotime,jdbcType=VARCHAR},
+      sport_totalkcal = #{sportTotalkcal,jdbcType=VARCHAR},
+      sport_numberduration = #{sportNumberduration,jdbcType=VARCHAR},
+      user_code = #{userCode,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

@@ -1,0 +1,1708 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta http-equiv="content-type" content="text/html;charset=utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, maximum-scale=1" />
+
+	<link th:href="${topimg}"  rel="icon">
+<title>健康评估报告</title>
+<link rel="stylesheet" th:href="@{/assets/libs/layui/css/layui.css}" />
+<link rel="stylesheet" th:href="@{/assets/module/admin.css}" />
+<style type="text/css">
+	thead { display: table-header-group; }
+	tfoot { display: table-row-group; }
+	tr { page-break-inside: avoid; }
+body {
+	font-size: 20px;
+	padding: 20px;
+	background-color: white;
+}
+.layui-col-md10{
+	width:  80%;
+}
+#back {
+	line-height: 20px;
+	text-align: right;
+}
+
+.progress {
+	background-image: linear-gradient(to right, #648af585 0%, #90b4f78a 25%, rgba(27, 139, 255, 0.67) 50%,
+		#1ba0ffa1 75%, #1b8bffad 100%);
+	height: 0.5em;
+	height: 11px;
+	padding: 5px;
+	overflow: visible;
+	border-radius: 20px;
+	margin-top: 50px;
+}
+
+.progress .progress-bar {
+	border-radius: 20px;
+	position: relative;
+	animation: animate-positive 2s;
+}
+
+.progress .progress-value {
+	display: block;
+	padding: 3px 7px;
+	font-size: 13px;
+	color: #fff;
+	position: absolute;
+	top: -31px;
+	right: -18px;
+}
+
+.layui-col-md5 {
+	float: left;
+}
+.layui-table td, .layui-table th {
+
+	min-height: 22px;
+	line-height: 22px;
+	font-size: 20px;
+}
+
+.layui-col-md4 {
+	float: left;
+}
+
+@
+-webkit-keyframes animate-positive { 0% {
+	width: 0;
+}
+
+}
+@
+keyframes animate-positive { 0% {
+	width: 0;
+}
+
+}
+.layui-col-md4 {
+	padding: 15px;
+}
+
+.layui-elem-quote {
+	font-size: 21px;
+	font-weight: 800;
+}
+
+@media screen {
+	div.break_here {
+		page-break-after: always !important;
+	}
+}
+
+.xiahuaxian:after {
+	content: '';
+	display: block;
+	width: 400px;
+	margin-top: -5px;
+	border-bottom: 2px solid grey;
+}
+ 
+.layui-col-md5{
+width: 40%
+}
+</style>
+<!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+
+<body class="layui-container" style="padding-bottom: 50px;width: 1170px;">
+	<!-- <a href="javascript:js_method();" >下载</a> -->
+	<div class="break_here" style="page-break-inside: avoid !important;">
+		<div class="layui-row" style="margin-top: 50px;">
+			<div class="layui-col-md5"
+				style="font-size: 34px; line-height: 120px;">&nbsp;
+				 </div>
+			<div class="layui-col-md7" style="text-align: right;">
+				<img style="height: 120px; width: 300px;" th:src="${getrepotimg}" />
+			</div>
+		</div>
+
+
+		<div class="text-center"
+			style="color: #32bd36; font-size: 57px; letter-spacing: 20px;">
+
+			个人健康风险评估报告</div>
+		<div class="text-center" style="color: #32bd36; font-size: 43px;">
+			Personal health risk assessment report</div>
+		<img src="http://xcxqny.yhy.ren/pinggupdfimg1.png"
+			style="width: 100%; padding: 60px 0px;">
+		<div class=""
+			style="margin: 38% auto; text-align: left; font-size: 30px; line-height: 65px;">
+
+
+			<div class="layui-row">
+				<div class="layui-col-xs4 text-right">姓名：</div>
+				<div class="layui-col-xs8 xiahuaxian">[[${vojo.name}]]</div>
+			</div>
+
+			<div class="layui-row">
+				<div class="layui-col-xs4 text-right">性别：</div>
+				<div class="layui-col-xs8 xiahuaxian">[[${vojo.sex}]]</div>
+			</div>
+
+			<div class="layui-row">
+				<div class="layui-col-xs4 text-right">年龄：</div>
+				<div class="layui-col-xs8 xiahuaxian">[[${vojo.age}]]</div>
+			</div>
+
+			<div class="layui-row">
+				<div class="layui-col-xs4 text-right">单位：</div>
+				<div class="layui-col-xs8 xiahuaxian">[[${vojo.unit}]]</div>
+			</div>
+
+			<div class="layui-row">
+				<div class="layui-col-xs4 text-right">日期：</div>
+				<div class="layui-col-xs8 xiahuaxian">[[${vojo.pinggutime}]]</div>
+			</div>
+		</div>
+
+		<div class="text-center" style="padding: 30px; font-size: 18px;">
+			声明：本报告结论和建议不作为诊断或治疗依据，任何医疗行为请遵循医嘱</div>
+	</div>
+
+	<div  class="break_here" style="page-break-inside: avoid !important;">
+		<div class="layui-row" style="margin-top: 50px;">
+			<div class="layui-col-md5"
+				style="font-size: 34px; line-height: 120px;">
+				 &nbsp;</div>
+<!--			<div class="layui-col-md7" style="text-align: right;">
+				<img style="height: 120px; width: 300px;" th:src="${getrepotimg}" />
+			</div>-->
+		</div>
+
+
+		<div class="text-center" style="font-size: 90px; color: #bed995;">
+			目录</div>
+		<hr class="" style="height: 30px; background-color: #32bd36;">
+		<div id="" style="text-align: right; font-size: 90px; color: #bed995;">
+			contents</div>
+		<div class=""
+			style="margin: auto; width: 380px; text-align: left; font-size: 30px; line-height: 50px;">
+			<div id="">个人健康风险评估汇总报告</div>
+			<div th:if="${findAssessTotalReportLastInfo!=null}">健康项目对比</div>
+			<div th:each="list : ${findDiseaseNameAndRiskLevelByRs}"
+				th:if="${list.diseasid!=11}">[[${list.diseaseName}]]风险评估报告</div>
+			<div id="">代谢综合征风险评估报告</div>
+			<div id="">肥胖症风险评估报告</div>
+			<div id="">生活方式风险评估报告</div>
+			<div id="">健康风险改善指南</div>
+			<div id="">膳食指南</div>
+			<div id="">膳食方案</div>
+			<div id="">运动指南</div>
+			<div id="">运动方案</div>
+		</div>
+	</div>
+
+	<div class="break_here" style="page-break-inside: avoid !important;">
+	<div class="layui-row" style="margin-top: 50px;">
+			<div
+				style="font-size: 38px; line-height: 60px;float: left;width: 48%;">
+				个人健康风险评估汇总报告</div>
+<!--			<div style="text-align: right;float: left;width: 48%;">
+				<img style="height: 120px; width: 300px;" th:src="${getrepotimg}" />
+			</div>-->
+		</div>
+
+		<blockquote class="layui-elem-quote layui-text"
+			style="margin-top: 20px;">本次疾病风险评估汇总</blockquote>
+		<div id="" style="line-height: 68px;">
+			<div class="layui-row">
+				<div style="width: 18%;float: left;">
+					<button type="button" class="layui-btn"
+						style="background-color: #FF0000;font-size: 20px; ">现患(疑似)</button>
+				</div>
+				<div style="width: 80%;float: left;font-size: 20px;">[[${huanb}]]</div>
+			</div>
+
+			<div class="layui-row">
+				<div  style="width: 18%;float: left;">
+					<button type="button" class="layui-btn"
+						style="background-color: #EC5D51;font-size: 20px;">高风险(高危)</button>
+				</div>
+				<div style="width: 80%;float: left;font-size: 20px;">[[${gaofx}]]</div>
+			</div>
+
+			<div class="layui-row">
+				<div style="width: 18%;float: left;">
+					<button type="button" class="layui-btn"
+						style="background-color: #FF8700;font-size: 20px;">较高风险</button>
+				</div>
+				<div style="width: 80%;float: left;font-size: 20px;">[[${jiaogaofx}]]</div>
+			</div>
+
+			<div class="layui-row">
+				<div style="width: 18%;float: left;">
+					<button type="button" class="layui-btn"
+						style="background-color: #009DFF;font-size: 20px;">中等风险</button>
+				</div>
+				<div style="width: 80%;float: left;font-size: 20px;">[[${zhongdengfx}]]</div>
+			</div>
+
+			<div class="layui-row">
+				<div style="width: 18%;float: left;">
+					<button type="button" class="layui-btn"
+						style="background-color: #43D9B8;font-size: 20px;">低风险(低危)</button>
+				</div>
+				<div style="width: 80%;float: left;font-size: 20px;">[[${difx}]]</div>
+			</div>
+		</div>
+
+		<blockquote class="layui-elem-quote layui-text"
+			style="margin-top: 20px;">当前生活方式评估</blockquote>
+
+		<table class="layui-table">
+			<tbody>
+				<tr th:each="cList : ${currentLifestyle}">
+					<td>[[${cList.thisTime}]]</td>
+					<td>[[${cList.lastTime}]]</td>
+				</tr>
+			</tbody>
+		</table>
+
+		<blockquote class="layui-elem-quote layui-text"
+			style="margin-top: 20px;">重要指标检查结果</blockquote>
+
+		<div class="layui-form" style="text-align: center;">
+			<table class="layui-table" id="gaoxueya" lay-filter="gaoxueya">
+				<colgroup>
+					<col width="150" />
+					<col width="150" />
+					<col width="200" />
+				</colgroup>
+				<thead>
+					<tr>
+						<th style="text-align: center;">指标</th>
+						<th style="text-align: center;">参考值</th>
+						<th style="text-align: center;">当前数据</th>
+
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>空腹血糖</td>
+						<td>3.9~6.0mmol/L</td>
+						<td id="gxyxuetang">[[${vojo.bs}]]</td>
+
+					</tr>
+					<tr>
+						<td>血压</td>
+						<td>＜ 120/80mmHg</td>
+						<td id="gxyxueya">[[${vojo.sbp}]]/[[${vojo.dbp}]]</td>
+					</tr>
+					<tr>
+						<td>腰围</td>
+
+						<block th:if="${sex=='1'}">
+						<td>＜ 85cm</td>
+						<td id="gxyyaowei">[[${vojo.theWaist}]]</td>
+						</block>
+						<block th:if="${sex!='1'}">
+						<td>＜ 80cm</td>
+						<td id="gxyyaowei">[[${vojo.theWaist}]]</td>
+						</block>
+
+					</tr>
+					<tr>
+						<td>BMI</td>
+						<td>18.5 ≤ BMI ＜ 24</td>
+						<td id="gxybmi">[[${vojo.bmi}]]</td>
+					</tr>
+					<tr>
+						<td>总胆固醇</td>
+						<td>2.9~5.17mmol/L</td>
+						<td id="gxytc">[[${vojo.tc}]]</td>
+					</tr>
+					<tr>
+						<td>甘油三酯</td>
+						<td>0.57~1.69 mmol/l</td>
+						<td id="gxytg">[[${vojo.tg}]]</td>
+					</tr>
+					<tr>
+						<td>高密度脂蛋白</td>
+						<td>≥ 1.04mmol/L</td>
+						<td id="gxyhdlc">[[${vojo.hdlc}]]</td>
+					</tr>
+					<tr>
+						<td>低密度脂蛋白</td>
+						<td>0~3.36mmol/L</td>
+						<td id="gxyldlc">[[${vojo.ldlc}]]</td>
+					</tr>
+					<tr>
+						<td>骨密度检查指标-T值</td>
+						<td>≥1.6</td>
+						<td id="gxyt_score">[[${vojo.t_score}]]</td>
+					</tr>
+
+					<tr>
+						<td>膳食结构</td>
+						<td>合理</td>
+						<td id="gxyfood">[[${vojo.b4}]]</td>
+					</tr>
+					<tr>
+						<td>体力活动</td>
+						<td>充足</td>
+						<td id="gxysport">[[${vojo.sport}]]</td>
+					</tr>
+					<tr>
+						<td>吸烟</td>
+						<td>不吸烟或戒烟</td>
+						<td id="gxysmoke">[[${vojo.smoke}]]</td>
+					</tr>
+					<tr>
+						<td>饮酒</td>
+						<td>适量或不喝酒</td>
+						<td id="gxydrck">[[${vojo.foodDrink}]]</td>
+					</tr>
+					<tr>
+						<td>血尿酸</td>
+						<td><block th:if="${sex=='1'}">210~420μmol/L</block> <block
+								th:if="${sex=='2'}">150～360 mmol/L</block></td>
+						<td id="gxybua">[[${vojo.bua}]]</td>
+					</tr>
+					<tr>
+						<td>血肌酐</td>
+						<td><block th:if="${sex=='1'}">54～106μmol/L</block> <block
+								th:if="${sex=='2'}">44～97μmol/L</block></td>
+						<td id="gxyserumCreatinine">[[${vojo.serumCreatinine}]]</td>
+					</tr>
+
+
+				</tbody>
+			</table>
+		</div>
+
+		<blockquote class="layui-elem-quote layui-text"
+			style="margin-top: 20px;">如果达到了上述理想目标，疾病风险的下降率为</blockquote>
+
+
+		<div class="layui-form"
+			style="text-align: center;">
+			<table class="layui-table">
+
+				<thead>
+					<tr>
+						<th th:each="user,userStat : ${findDiseaseNameAndRiskLevelByRs}"
+							th:if="${user.diseasid!=6&&user.diseasid!=11}"
+							style="text-align: center;">[[${user.diseaseName}]]</th>
+
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<th th:each="user,userStat : ${findDiseaseNameAndRiskLevelByRs}"
+							th:if="${user.diseasid!=6&&user.diseasid!=11}"
+							style="text-align: center;"><span
+							th:if="${user.nowRiskValue!=null&&user.idealRiskLevel!=null}">[[${user.nowRiskValue}-${user.idealRiskLevel}]]</span>
+							<span th:if="${user.diseasid!=2&&user.diseasid!=9}">‰</span> <span
+							th:if="${user.diseasid==2||user.diseasid==9}">/10万</span></th>
+					</tr>
+
+
+				</tbody>
+			</table>
+		</div>
+
+		<blockquote th:if="${mainRiskFactors!=null}" class="layui-elem-quote layui-text"
+			style="margin-top: 20px;">主要危险因素</blockquote>
+
+		<table th:if="${mainRiskFactors!=null}" class="layui-table">
+			<tbody>
+				<tr>
+					<td>类型</td>
+					<td>危险因素</td>
+					<td>建议</td>
+				</tr>
+				<tr th:each="mList : ${mainRiskFactors}"
+					th:if="${mList.riskFactors!=null && mList.riskFactors != ''}">
+					<td>[[${mList.type}]]</td>
+					<td th:utext="${#strings.replace(mList.riskFactors,',','<br>')}"></td>
+					<td>[[${mList.proposal}]]</td>
+				</tr>
+
+			</tbody>
+		</table>
+	</div>
+
+
+	<div  class="break_here" style="page-break-inside: avoid !important;"
+		th:if="${findAssessTotalReportLastInfo!=null}">
+		<div class="layui-row" style="margin-top: 50px;">
+			<div class="layui-col-md5"
+				style="font-size: 34px; line-height: 120px;">
+				健康项目对比</div>
+<!--			<div class="layui-col-md7" style="text-align: right;">
+				<img style="height: 120px; width: 300px;" th:src="${getrepotimg}" />
+			</div>-->
+		</div>
+		<div id="">您本次的评估与您上次的评估进行比对，直观地查看一下近期的健康变化。</div>
+		<!--<blockquote class="layui-elem-quote layui-text"
+			style="margin-top: 20px;">医学健康指标 异常</blockquote>
+		<table class="layui-table">
+			<tbody>
+				<tr>
+					<td>本次([[${thisTime}]])</td>
+					<td>上次([[${lastTime}]])</td>
+				</tr>
+				<tr>
+					<td
+						th:utext="${#strings.replace(findResolveInfo.thisTime,',','<br>')}"></td>
+					<td th:if="${null!=findResolveInfo.lastTime}"
+						th:utext="${#strings.replace(findResolveInfo.lastTime,',','<br>')}"></td>
+				</tr>
+
+			</tbody>
+		</table>-->
+
+		<blockquote class="layui-elem-quote layui-text"
+			style="margin-top: 20px;">健康指标具体变化</blockquote>
+
+		<table class="layui-table">
+			<tbody>
+				<tr>
+					<td>指标项</td>
+					<td>趋势</td>
+					<td>本次([[${thisTime}]])</td>
+					<td>上次([[${lastTime}]])</td>
+					<td>参考值</td>
+				</tr>
+				<tr th:each="reporList : ${findAssessTotalReportLastInfo}">
+					<td>[[${reporList.indicators}]]</td>
+					<td>[[${reporList.trend}]]</td>
+					<td th:if="${reporList.thisTimeColor=='1'}"
+						style="background-color: #ff7600;">[[${reporList.thisTime}]]</td>
+					<td th:if="${reporList.thisTimeColor!='1'}">[[${reporList.thisTime}]]</td>
+					<td th:if="${reporList.lastTimeColor=='1'}"
+						style="background-color: #ff7600;">[[${reporList.lastTime}]]</td>
+					<td th:if="${reporList.lastTimeColor!='1'}">[[${reporList.lastTime}]]</td>
+					<td>[[${reporList.referenceValue}]]</td>
+				</tr>
+
+			</tbody>
+		</table>
+	</div>
+
+	<div class="break_here" style="page-break-inside: avoid !important;"
+		th:each="list : ${findDiseaseNameAndRiskLevelByRs}"
+		th:if="${list.diseasid!=11}">
+		<div class="layui-row" style="margin-top: 50px;">
+			<div
+				style="font-size: 33px;float: left;width: 49%;line-height: 40px;">
+				[[${list.diseaseName}]]风险评估报告</div>
+<!--			<div   style="text-align: right;float: left;width: 49%;padding-bottom: 20px;">
+				<img style="height: 120px; width: 300px;" th:src="${getrepotimg}" />
+			</div>-->
+		</div>
+
+
+		<blockquote class="layui-elem-quote layui-text">
+			未来10年[[${list.diseaseName}]]的发病风险等级：[[${list.riskLevel}]]</blockquote>
+		<div class="" style="text-align: center;"th:if="${list.diseasid!=6}" >
+			<div class=""
+				th:style="'margin-right:'+*{list.sign}+'px;font-size: 24rpx;font-family: PingFang SC;font-weight: bold;color: rgba(128, 165, 255, 1);'">
+				<div>你在这里</div>
+				<img src="http://xcxqny.yhy.ren/basic/up.png"
+					style="width: 23rpx; height: 14rpx;"></img>
+			</div>
+			<img src="http://xcxqny.yhy.ren/basic/zhu.png"></img>
+		</div>
+		<div class="layui-row" th:if="${list.diseasid==6}">
+
+
+			<div id="" style="line-height: 33px; padding-top: 50px;">
+				<p style="color: #1AA4FF; font-weight: 600; font-size: 20px;">
+					根据《中国成人血脂异常防治指南》对血脂异常的定义：
+				</p>
+				<p> 1)、血清甘油三酯≥1.70mmol/L</p>
+				<p>	2)、总胆固醇≥5.18mmol/L</p>
+				<p>	3)、高密度脂蛋白胆固醇＜1.04mmol/L</p>
+				<p>	4)、低密度脂蛋白胆固醇≥3.37mmol/L</p>
+				<p>	4项中具备1项及以上者即为血脂异常。根据您提供的有关信息及临床检查结果，您达到[[${list.riskLevel}]]人群的诊断标准。</p>
+
+
+
+
+			</div>
+
+		</div>
+		<div class="layui-row">
+			<div  style="float: left;width: 49%">
+				<div
+					th:if="${!#strings.containsIgnoreCase(list.riskLevel,'患')&&list.diseasid!=6&&list.diseasid!=11}"
+					style="width: 95%; height: 450px;"
+					th:id="'tu' + ${list.diseasid}"></div>
+			</div>
+			<div th:if="${#strings.containsIgnoreCase(list.riskLevel,'患')&&list.diseasid!=6&&list.diseasid!=11}"  style="float: left;width: 99%">
+
+				<div id="" style="line-height: 33px; padding-top: 50px;">
+					<p style="color: #1AA4FF; font-weight: 600; font-size: 20px;">您患[[${list.diseaseName}]]的风险等级：[[${list.riskLevel}]]</p>
+
+					<p>[[${list.riskDesc}]]</p>
+
+				</div>
+
+				<div id="" style="line-height: 33px; padding-top: 50px;"
+					 th:if="${!#strings.containsIgnoreCase(list.riskLevel,'患')&&list.diseasid!=6&&list.diseasid!=11}">
+					<p style="color: #1AA4FF; font-weight: 600; font-size: 20px;">
+						当前风险：[[${list.nowRiskValue}]] <span
+							th:if="${list.diseasid!=2&&list.diseasid!=9}">‰</span> <span
+							th:if="${list.diseasid==2||list.diseasid==9}">/10万</span>
+					</p>
+
+					<p>[[${list.nowRiskDesc}]]</p>
+
+				</div>
+
+				<div id="" style="line-height: 33px; padding-top: 50px;"
+					 th:if="${!#strings.containsIgnoreCase(list.riskLevel,'患')&&list.diseasid!=6&&list.diseasid!=11}">
+					<p style="color: #1AA4FF; font-weight: 600; font-size: 20px;">
+						理想风险：[[${list.idealRiskLevel}]]<span
+							th:if="${list.diseasid!=2&&list.diseasid!=9}">‰</span> <span
+							th:if="${list.diseasid==2||list.diseasid==9}">/10万</span>
+					</p>
+
+					<p>[[${list.idealRiskDesc}]]</p>
+
+				</div>
+			</div>
+			<div th:if="${!#strings.containsIgnoreCase(list.riskLevel,'患')&&list.diseasid!=6&&list.diseasid!=11}"  style="float: left;width: 49%">
+
+				<div id="" style="line-height: 33px; padding-top: 50px;">
+					<p style="color: #1AA4FF; font-weight: 600; font-size: 20px;">您患[[${list.diseaseName}]]的风险等级：[[${list.riskLevel}]]</p>
+
+					<p>[[${list.riskDesc}]]</p>
+
+				</div>
+
+				<div id="" style="line-height: 33px; padding-top: 50px;"
+					th:if="${!#strings.containsIgnoreCase(list.riskLevel,'患')&&list.diseasid!=6&&list.diseasid!=11}">
+					<p style="color: #1AA4FF; font-weight: 600; font-size: 20px;">
+						当前风险：[[${list.nowRiskValue}]] <span
+							th:if="${list.diseasid!=2&&list.diseasid!=9}">‰</span> <span
+							th:if="${list.diseasid==2||list.diseasid==9}">/10万</span>
+					</p>
+
+					<p>[[${list.nowRiskDesc}]]</p>
+
+				</div>
+
+				<div id="" style="line-height: 33px; padding-top: 50px;"
+					th:if="${!#strings.containsIgnoreCase(list.riskLevel,'患')&&list.diseasid!=6&&list.diseasid!=11}">
+					<p style="color: #1AA4FF; font-weight: 600; font-size: 20px;">
+						理想风险：[[${list.idealRiskLevel}]]<span
+							th:if="${list.diseasid!=2&&list.diseasid!=9}">‰</span> <span
+							th:if="${list.diseasid==2||list.diseasid==9}">/10万</span>
+					</p>
+
+					<p>[[${list.idealRiskDesc}]]</p>
+
+				</div>
+			</div>
+		</div>
+
+		<blockquote class="layui-elem-quote layui-text"
+			style="margin-top: 20px;" th:if="not ${#lists.isEmpty(list.rlist)}">
+			与[[${list.diseaseName}]]发病相关的危险因素</blockquote>
+
+		<div class="layui-form" style="text-align: center; padding-top: 20px;"
+			th:if="not ${#lists.isEmpty(list.rlist)}">
+			<table class="layui-table">
+
+				<thead>
+					<tr>
+						<th style="text-align: center;">危险因素</th>
+						<th style="text-align: center;">本次评估</th>
+						<th style="text-align: center;">上次评估</th>
+						<th style="text-align: center;">变化情况</th>
+						<th style="text-align: center;">理想水平</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr th:each="rlist : ${list.rlist}">
+						<td>[[${rlist.riskFactors}]]</td>
+						<td th:if="${rlist.thisTimeColor=='1'}"
+							style="background-color: #ff7600">[[${rlist.thisTime}]]</td>
+						<td th:if="${rlist.thisTimeColor!='1'}">[[${rlist.thisTime}]]</td>
+						<td th:if="${rlist.lastTimeColor=='1'}"
+							style="background-color: #ff7600">[[${rlist.lastTime}]]</td>
+						<td th:if="${rlist.lastTimeColor!='1'}">[[${rlist.lastTime}]]</td>
+						<td th:text="${rlist.changes==''?'-':rlist.changes}"></td>
+						<td>[[${rlist.idealLevel}]]</td>
+					</tr>
+
+				</tbody>
+			</table>
+		</div>
+
+
+
+		<blockquote class="layui-elem-quote layui-text"
+			style="margin-top: 20px;" th:if="not ${#lists.isEmpty(list.glist)}">
+			改善以下因素，降低发病风险</blockquote>
+
+		<p th:if="not ${#lists.isEmpty(list.glist)}">具体改善途径请查看健康风险改善指南，有任何问题请咨询医生或健康管理师。</p>
+		<div id="" style="line-height: 40px;" th:each="glist : ${list.glist}" th:if="${glist.type!='目前状况：总胆固醇偏高 努力目标：降低总胆固醇至5.18mmol/L以下'}">
+			<p    style="color: #1AA4FF; font-weight: 600; font-size: 20px;">※[[${glist.type}]]</p>
+			<!-- <p style="text-indent: 30px">[[${glist.name}]]</p> -->
+		</div>
+		<div id="" style="line-height: 40px;" th:each="glist : ${list.glist}" th:if="${glist.type=='目前状况：总胆固醇偏高 努力目标：降低总胆固醇至5.18mmol/L以下'}">
+			<p  th:if="${vojo.tc<=5.17}"  style="color: #1AA4FF; font-weight: 600; font-size: 20px;">※[[${glist.type}]]</p>
+			<!-- <p style="text-indent: 30px">[[${glist.name}]]</p> -->
+		</div>
+
+
+	</div>
+
+	<div class="break_here" style="page-break-inside: avoid !important;">
+
+
+
+		<div class="layui-row" style="margin-top: 50px;">
+			<div class="layui-col-md5"
+				 style="font-size: 32px; line-height: 120px;">代谢综合征风险评估报告</div>
+
+<!--			<div class="layui-col-md7" style="text-align: right;">
+				<img style="height: 120px; width: 300px;" th:src="${getrepotimg}" />
+			</div>-->
+		</div>
+
+
+		<blockquote class="layui-elem-quote layui-text">
+			代谢综合征评估结果为： <span th:if="${metabolizeNum==375}">低危</span>
+			<span th:if="${metabolizeNum==0}">高危</span>
+			<span th:if="${metabolizeNum==-375}">现患</span>
+
+		</blockquote>
+		<div class="layui-row">
+			<div style="">
+				<div class="" style="text-align: center;">
+					<div class=""
+						 th:style="'margin-right:'+*{metabolizeNum}+'px;font-size: 24rpx;font-family: PingFang SC;font-weight: bold;color: rgba(128, 165, 255, 1);'">
+						<div>你在这里</div>
+						<img src="http://xcxqny.yhy.ren/basic/up.png"
+							 style="width: 23rpx; height: 14rpx;"></img>
+					</div>
+					<img style="width: 50%;" src="http://xcxqny.yhy.ren/daixieImg.png"></img>
+				</div>
+			</div>
+		</div>
+
+		<div class="layui-row">
+
+
+			<div id="" style="line-height: 33px; padding-top: 50px;">
+				<p style="color: #1AA4FF; font-weight: 600; font-size: 20px;">
+					根据中华医学会糖尿病学分会对代谢综合征的定义：
+				</p>
+				<p> 1)、超重和（或）肥胖：BMI≥25；</p>
+				<p>	2)、高血糖空腹血糖（FPG）≥6.1mmol/L或（和）已确诊为糖尿病并治疗者；</p>
+				<p>	3)、高血压:收缩压/舒张压≥140/90mmHg或（和）已确诊为高血压并治疗者；</p>
+				<p>	4)、血脂紊乱空腹甘油三酯≥1.70mmol/L，和（或）空腹血高密度脂蛋白胆固醇（HDL-C）＜0.9mmol/L（男），<1.0mmol/L（女）；</p>
+				<p>	4项中具备3项或全部者可确诊为代谢综合征。根据您提供的有关信息及临床检查结果, 您属于代谢综合征<span th:if="${metabolizeNum==375}">低危</span>
+					<span th:if="${metabolizeNum==0}">高危</span>
+					<span th:if="${metabolizeNum==-375}">现患</span>人群。</p>
+
+
+
+
+			</div>
+
+		</div>
+
+		<blockquote class="layui-elem-quote layui-text"
+					style="margin-top: 20px;">
+			与代谢综合征相关的危险因素</blockquote>
+
+
+
+		<div class="layui-form" style="text-align: center; padding-top: 20px;">
+			<table class="layui-table">
+
+				<thead>
+				<tr>
+					<th style="text-align: center;">危险因素</th>
+					<th style="text-align: center;">本次评估</th>
+					<th style="text-align: center;">上次评估</th>
+					<th style="text-align: center;">变化情况</th>
+					<th style="text-align: center;">理想水平</th>
+				</tr>
+				</thead>
+				<tbody>
+				<tr th:each="mlist : ${metabolizeList}">
+					<td>[[${mlist.riskFactors}]]</td>
+
+					<td th:if="${mlist.thisTimeColor=='1'}"
+						style="background-color: #ff7600;">[[${mlist.thisTime}]]</td>
+					<td th:if="${mlist.thisTimeColor!='1'}">[[${mlist.thisTime}]]</td>
+
+					<td th:if="${mlist.lastTimeColor=='1'}"
+						style="background-color: #ff7600;">[[${mlist.lastTime}]]</td>
+					<td th:if="${mlist.lastTimeColor!='1'}">[[${mlist.lastTime}]]</td>
+					<td>[[${mlist.changes}]]</td>
+					<td>[[${mlist.idealLevel}]]</td>
+				</tr>
+
+
+				</tbody>
+			</table>
+		</div>
+		<blockquote class="layui-elem-quote layui-text"
+					style="margin-top: 20px;">指导建议</blockquote>
+
+		<div id="">
+			 <p>代谢综合征是指在个体中多种代谢异常情况集结存在的现象，这些异常包括糖尿病或糖调节受损、高血压、血脂紊乱、肥胖等。这些代谢异常大多为动脉硬化性心、脑及周围血管病(简称心脑血管疾病)的危险因素，故代谢综合征患者是心脑血管疾病的高危人群。</p>
+
+			<span th:if="${metabolizeNum==0}" style="text-indent: 30px; line-height: 30px;">尽管您目前尚未被诊断为代谢综合征，属于代谢综合征高危人群，但是您存在一些与发生代谢综合征有关的危险因素如血压偏高，您可以通过减轻体重、减少脂肪摄入、增加体力活动水平等治疗性生活方式改善措施来有效控制血压水平，从而预防未来发生代谢综合征的风险。</span>
+      <span th:if="${metabolizeNum==0}" style="text-indent: 30px; line-height: 30px;">如需获得详细的指导方案，请在医生指导下参考您的“饮食处方”和“运动处方”来开始您的代谢综合征改善行动。</span>
+			<span th:if="${metabolizeNum==-375}" style="text-indent: 30px; line-height: 30px;">按照中华医学会糖尿病学分会建议的诊断标准，您目前已被诊断为代谢综合征，属于代谢综合征现患人群，您在日常生活中需要注意：</span>
+			<span th:if="${metabolizeNum==-375}" style="text-indent: 30px; line-height: 30px;">（1）饮食调节</span>
+<span th:if="${metabolizeNum==-375}" style="text-indent: 30px; line-height: 30px;">合理饮食，控制总热卡量，减低脂肪摄入。</span>
+<span th:if="${metabolizeNum==-375}" style="text-indent: 30px; line-height: 30px;">（2）运动锻炼</span>
+<span th:if="${metabolizeNum==-375}" style="text-indent: 30px; line-height: 30px;">适当体力活动和体育运动，每日进行轻至中等强度体力活动30分钟。</span>
+<span th:if="${metabolizeNum==-375}" style="text-indent: 30px; line-height: 30px;">如需获得详细的指导方案，请在医生指导下参考您的“饮食处方”和“运动处方”来开始您的代谢综合征改善行动。</span>
+
+		</div>
+
+
+	</div>
+
+	<div class="break_here" style="page-break-inside: avoid !important;">
+
+
+
+		<div class="layui-row" style="margin-top: 50px;">
+			<div class="layui-col-md5"
+				style="font-size: 34px; line-height: 120px;">肥胖症风险评估报告</div>
+
+<!--			<div class="layui-col-md7" style="text-align: right;">
+				<img style="height: 120px; width: 300px;" th:src="${getrepotimg}" />
+			</div>-->
+		</div>
+
+
+		<blockquote class="layui-elem-quote layui-text">
+			全身性肥胖评估结果为： <span th:if="${bmiValue<18.5}">体重过低</span> <span
+				th:if="${bmiValue>=18.5&&bmiValue<24}">体重正常</span> <span
+				th:if="${bmiValue>=24&&bmiValue<=28}">超重</span> <span
+				th:if="${bmiValue>28}">肥胖</span> 中心性肥胖评估结果为： <span
+				th:if="${sex=='1'}"> <span th:if="${waistValue<85}">正常</span>
+				<span th:if="${waistValue>=85&&waistValue<110}">中心性肥胖（1级)</span> <span
+				th:if="${waistValue>=110}">中心性肥胖（2级)</span>
+			</span> <span th:if="${sex!='1'}"> <span th:if="${waistValue<80}">正常</span>
+				<span th:if="${waistValue>=80&&waistValue<105}">中心性肥胖（1级)</span> <span
+				th:if="${waistValue>=105}">中心性肥胖（2级)</span>
+			</span>
+
+		</blockquote>
+		<div class="layui-row">
+			<div style="float: left;width: 49%">
+				<div class="" style="text-align: center;">
+					<div class=""
+						th:style="'margin-right:'+*{peipangWeiyi1}+'px;font-size: 24rpx;font-family: PingFang SC;font-weight: bold;color: rgba(128, 165, 255, 1);'">
+						<div>你在这里</div>
+						<img src="http://xcxqny.yhy.ren/basic/up.png"
+							style="width: 23rpx; height: 14rpx;"></img>
+					</div>
+					<img style="width: 70%;" src="http://xcxqny.yhy.ren/feipang1.png"></img>
+				</div>
+			</div>
+			<div  style="float: left;width: 49%">
+				<div class="" style="text-align: center;">
+					<div class=""
+						th:style="'margin-right:'+*{peipangWeiyi2}+'px;font-size: 24rpx;font-family: PingFang SC;font-weight: bold;color: rgba(128, 165, 255, 1);'">
+						<div>你在这里</div>
+						<img src="http://xcxqny.yhy.ren/basic/up.png"
+							style="width: 23rpx; height: 14rpx;"></img>
+					</div>
+					<img style="width: 80%;" src="http://xcxqny.yhy.ren/feipang2.png"></img>
+				</div>
+			</div>
+		</div>
+
+		<div class="layui-row">
+
+
+			<div id="" style="line-height: 33px; padding-top: 50px;">
+				<p style="color: #1AA4FF; font-weight: 600; font-size: 20px;">
+					全身性肥胖评估结果： <span th:if="${bmiValue<18.5}">体重过低</span> <span
+						th:if="${bmiValue>=18.5&&bmiValue<24}">体重正常</span> <span
+						th:if="${bmiValue>=24&&bmiValue<=28}">超重</span> <span
+						th:if="${bmiValue>28}">肥胖</span>。
+				</p>
+
+				<p>
+					按照您现有的身高和体重计算得到的体重指数：<span>[[${bmiValue}]]</span>，属于<span
+						th:if="${bmiValue<18.5}">体重过低</span> <span
+						th:if="${bmiValue>=18.5&&bmiValue<24}">体重正常</span> <span
+						th:if="${bmiValue>=24&&bmiValue<=28}">超重</span> <span
+						th:if="${bmiValue>28}">肥胖</span>。
+				</p>
+
+			</div>
+
+			<div id="" style="line-height: 33px; padding-top: 50px;">
+				<p style="color: #1AA4FF; font-weight: 600; font-size: 20px;">
+					中心性肥胖评估结果： <span th:if="${sex=='1'}"> <span
+						th:if="${waistValue<85}">正常</span> <span
+						th:if="${waistValue>=85&&waistValue<110}">中心性肥胖（1级)</span> <span
+						th:if="${waistValue>=110}">中心性肥胖（2级)</span>
+					</span> <span th:if="${sex!='1'}"> <span th:if="${waistValue<80}">正常</span>
+						<span th:if="${waistValue>=80&&waistValue<85}">中心性肥胖（1级)</span> <span
+						th:if="${waistValue>=85&&waistValue<90}">中心性肥胖（2级)</span> <span
+						th:if="${waistValue>=90}">中心性肥胖（3级)</span>
+					</span>
+				</p>
+
+				<p>
+					对于<span th:if="${sex=='1'}">男性</span><span th:if="${sex!='1'}">女性</span>来说，正常腰围应小于<span
+						th:if="${sex=='1'}">85</span><span th:if="${sex!='1'}">80</span>厘米，您目前的腰围是[[${waistValue}]]厘米，属于<span
+						th:if="${sex=='1'}"> <span th:if="${waistValue<85}">正常</span>
+						<span th:if="${waistValue>=85&&waistValue<90}">中心性肥胖(1级)</span> <span
+						th:if="${waistValue>=90&&waistValue<95}">中心性肥胖(2级)</span> <span
+						th:if="${waistValue>=95}">中心性肥胖(3级)</span>
+					</span> <span th:if="${sex!='1'}"> <span th:if="${waistValue<80}">正常</span>
+						<span th:if="${waistValue>=80&&waistValue<105}">中心性肥胖（1级)</span> <span
+						th:if="${waistValue>=105}">中心性肥胖（2级)</span>
+					</span>。
+				</p>
+
+			</div>
+
+
+		</div>
+
+		<blockquote class="layui-elem-quote layui-text"
+			style="margin-top: 20px;">
+			中国成人超重和肥胖的体重指数/腰围界限值与相关疾病（①）发生的危险关系</blockquote>
+
+
+		<div class="layui-form" style="text-align: center; padding-top: 20px;">
+			<table class="layui-table">
+
+				<thead>
+					<tr>
+						<th rowspan="2" style="text-align: center;">分类</th>
+						<th rowspan="2" style="text-align: center;">体重指数</th>
+						<th colspan="3" style="text-align: center;">腰围</th>
+
+					</tr>
+					<tr th:if="${sex=='1'}">
+						<th style="text-align: center;"><85cm</th>
+						<th style="text-align: center;">85~110cm</th>
+						<th style="text-align: center;">≥110cm</th>
+					</tr>
+					<tr th:if="${sex!='1'}">
+						<th style="text-align: center;">＜80cm</th>
+						<th style="text-align: center;">80~105cm</th>
+						<th style="text-align: center;">≥105cm</th>
+					</tr>
+
+				</thead>
+				<tbody>
+					<tr>
+						<td>体重过低（②）</td>
+						<td>＜18.5</td>
+						<td>--</td>
+						<td>--</td>
+						<td>--</td>
+					</tr>
+					<tr>
+						<td>体重正常</td>
+						<td>18.5≤ BMI＜24.0</td>
+						<td>--</td>
+						<td>增加</td>
+						<td>高</td>
+					</tr>
+					<tr>
+						<td>超重</td>
+						<td>24.0≤ BMI＜28.0</td>
+						<td>增加</td>
+						<td>高</td>
+						<td>较高</td>
+					</tr>
+
+
+					<tr>
+						<td>肥胖</td>
+						<td>≥28.0</td>
+						<td>高</td>
+						<td>较高</td>
+						<td>极高</td>
+					</tr>
+
+
+
+
+
+				</tbody>
+			</table>
+		</div>
+		注: ①相关疾病指高血压、糖尿病、血脂异常和危险聚集；②体重过低可能预示有其他健康问题；
+		<blockquote class="layui-elem-quote layui-text"
+			style="margin-top: 20px;">与肥胖症发病相关的危险因素</blockquote>
+
+		<div class="layui-form" style="text-align: center; padding-top: 20px;">
+			<table class="layui-table">
+
+				<thead>
+					<tr>
+						<th style="text-align: center;">危险因素</th>
+						<th style="text-align: center;">本次评估</th>
+						<th style="text-align: center;">上次评估</th>
+						<th style="text-align: center;">变化情况</th>
+						<th style="text-align: center;">理想水平</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr th:each="olist : ${obesityRelated}">
+						<td>[[${olist.riskFactors}]]</td>
+
+						<td th:if="${olist.thisTimeColor=='1'}"
+							style="background-color: #ff7600;">[[${olist.thisTime}]]</td>
+						<td th:if="${olist.thisTimeColor!='1'}">[[${olist.thisTime}]]</td>
+
+						<td th:if="${olist.lastTimeColor=='1'}"
+							style="background-color: #ff7600;">[[${olist.lastTime}]]</td>
+						<td th:if="${olist.lastTimeColor!='1'}">[[${olist.lastTime}]]</td>
+						<td>[[${olist.changes}]]</td>
+						<td>[[${olist.idealLevel}]]</td>
+					</tr>
+
+
+				</tbody>
+			</table>
+		</div>
+		<blockquote class="layui-elem-quote layui-text"
+			style="margin-top: 20px;">指导建议</blockquote>
+
+		<div id="" th:if="${bmiValue<18.5}">
+			<p style="text-indent: 30px; line-height: 30px;">
+			<p style="text-indent: 30px; line-height: 30px;">您的体重低于正常范围。虽然一般认为体重过重是严重的问题，但事实上，体重过轻也是值得注意的，体重过轻可能预示有其他健康问题，如甲亢、糖尿病、消化系统疾病等。研究发现它还与免疫力低下、月经不调或闭经、骨质疏松、贫血等病症有关。您当前的目标是达到健康体重范围。</p>
+			<p style="text-indent: 60px; line-height: 30px;">有助于您增加体重的方法：</p>
+			<p style="text-indent: 90px; line-height: 30px;">（1）先排除是否有其他疾病导致的体重过轻，没有后才开始实施增肥计划</p>
+			<p style="text-indent: 90px; line-height: 30px;">（2）充足的热量：在均衡营养（包括多种食物）的基础上，每天增加热量摄入。</p>
+			<p style="text-indent: 90px; line-height: 30px;">（3）充足的蛋白质：蛋白质是形成肌肉不可或缺材料，应有15%～20％的热量来自于蛋白质，宜选择优良的蛋白质来源，如蛋类、奶类、豆类及豆制品、鱼类、瘦肉等。</p>
+			<p style="text-indent: 90px; line-height: 30px;">（4）适量的脂肪：与一般饮食一样，不需加强油脂摄取，但是应有充足的必需脂肪酸，如开心果、核桃、杏仁等。</p>
+			<p style="text-indent: 90px; line-height: 30px;">（5）胃口小的人可以少量多餐。</p>
+			<p style="text-indent: 90px; line-height: 30px;">（6）经常锻炼身体，强健骨骼。</p>
+			</p>
+		</div>
+
+		<p th:if="${bmiValue>=18.5&&bmiValue<24}">您的BMI正常，非常棒，请持续控制体重。</p>
+		<div id="" th:if="${bmiValue>=24}">
+			<p>
+			<p style="text-indent: 30px; line-height: 30px;">您的体重已超过正常范围。虽然减肥十分困难，但适当减掉一些体重以达到正常体重范围，不仅可降低血压及胆固醇水平，还会改善您的总体健康状况，从而达到降低各疾病发病风险的目的。（请注意：运动员、孕妇、被看护的病人上述体重指数解释不适用）。</p>
+			<p style="text-indent: 60px; line-height: 30px;">有助于您降低体重的方法：</p>
+			<p style="text-indent: 90px; line-height: 30px;">a)、少吃</p>
+			<p style="text-indent: 90px; line-height: 30px;">（1）少吃是控制体重的重要途径之一。</p>
+			<p style="text-indent: 90px; line-height: 30px;">（2）注意挑选热量较低的食物(如同样重量的五花肉,其热量是纯瘦肉的3倍,是鱼肉的6倍)。</p>
+			<p style="text-indent: 90px; line-height: 30px;">（3）少吃热量较高的零食,如花生、瓜子等。</p>
+			<p style="text-indent: 90px; line-height: 30px;">（4）减慢吃饭速度,吃得越快,往往吃得越多。</p>
+			<p style="text-indent: 90px; line-height: 30px;">b)、多动</p>
+			<p style="text-indent: 90px; line-height: 30px;">（1）各种类型的身体活动对体重控制都有帮助。</p>
+			<p style="text-indent: 90px; line-height: 30px;">（2）较长时间的有氧运动,机体可更多地燃烧脂肪来提供能量,所以您最好每次至少锻炼30分钟。</p>
+			<p style="text-indent: 90px; line-height: 30px;">（3）坚持每天步行或骑自行车上、下班;若需乘公共汽车,可以提前几个站下车;若上楼尽量选择走楼梯
+				,少乘电梯。</p>
+			<p style="text-indent: 90px; line-height: 30px;">（4）最好能加入公园或小区里的锻炼队伍,大家一起锻炼。</p>
+			</p>
+		</div>
+
+	</div>
+
+	<div class="break_here" style="page-break-inside: avoid !important;">
+		<div class="layui-row" style="margin-top: 50px;">
+			<div class="layui-col-md5"
+				style="font-size: 34px; line-height: 120px;">生活方式评估报告</div>
+<!--			<div class="layui-col-md7" style="text-align: right;">
+				<img style="height: 120px; width: 300px;"
+					th:src="${getrepotimg}">
+			</div>-->
+		</div>
+
+
+		<blockquote class="layui-elem-quote layui-text">
+			生活方式评分：[[${thisNum}]]</blockquote>
+
+		<div class="layui-row">
+			<div  style="float: left;width: 49%">
+				<div style="width: 550px; height: 500px;" id="shenghuo"></div>
+			</div>
+			<div   style="padding-top: 81px;float: left;width: 49%">
+				<div style="color: #0481ec; font-size: 20px; padding-bottom: 20px;">生活方式评价</div>
+				<div style="line-height: 25px;">医学研究证明，个人生活方式行为与健康及寿命息息相关，
+				良好健康的生活方式行为可以促进健康，延长寿命，反之则会对健康和寿命有损。
+				此处的报告通过对您生活方式信息汇总产生评分，评分越高证明生活方式行为越好，
+				反之则越差。
+				<block th:if="${evaluateInfo!=null}">与您上次生活方式行为评分[[${lastNum}]]分的评分相比较，您当前的生活方式行为健康积分[[${evaluateInfo}]]</block>
+				</div>
+
+
+			</div>
+		</div>
+
+		<blockquote class="layui-elem-quote layui-text"
+			style="margin-top: 20px;">与生活方式相关的危险因素</blockquote>
+
+		<div class="layui-form" style="text-align: center;">
+			<table class="layui-table" id="gaoxueya" lay-filter="gaoxueya">
+				<colgroup>
+					<col width="150" />
+					<col width="150" />
+					<col width="200" />
+				</colgroup>
+				<thead>
+					<tr>
+						<th style="text-align: center;">危险因素</th>
+						<th style="text-align: center;">本次评估状况</th>
+						<th style="text-align: center;">理想水平</th>
+						<th style="text-align: center;">本次得分</th>
+						<th style="text-align: center;">上次得分</th>
+						<th style="text-align: center;">变化情况</th>
+
+					</tr>
+				</thead>
+				<tbody>
+					<tr th:each="lifeList : ${lifeRiskInfo}">
+						<td>[[${lifeList.riskFactors}]]</td>
+						<td th:if="${lifeList.thisTimeColor=='1'}"
+							style="background-color: #ff7600">[[${lifeList.thisTime}]]</td>
+						<td th:if="${lifeList.thisTimeColor!='1'}">[[${lifeList.thisTime}]]</td>
+						<td>[[${lifeList.idealLevel}]]</td>
+						<td>[[${lifeList.thisScore}]]</td>
+						<td th:text="${lifeList.lastScore==null?'--':lifeList.lastScore}"></td>
+						<td th:text="${lifeList.changes==null?'--':lifeList.changes}"></td>
+					</tr>
+
+
+				</tbody>
+			</table>
+		</div>
+
+		<blockquote class="layui-elem-quote layui-text"
+			style="margin-top: 20px;">您的实际生理年龄：[[${evaluateAge.age}]]岁</blockquote>
+
+		<div class="layui-row">
+			<div  style="float: left;width: 49%">
+				<div class="" style="text-align: center;">
+					<div class=""
+						 th:style="'text-align: left; margin-left: '+*{evaluateAge.evaluatepxNum}+'px; font-size: 24rpx; font-family: PingFang SC; font-weight: bold; color: rgba(128, 165, 255, 1);'">
+						<div></div>
+						<img src="http://xcxqny.yhy.ren/gerenxinxi.png"
+							style="width: 23rpx; height: 14rpx;"></img>
+					</div>
+					<div class="layui-row"
+						style="padding: 0px 55px 0px 55px; margin-top: -23px;">
+						<div 
+							style="float: left;width: 40%; background-color: #9ad2ec;">&nbsp;</div>
+						<div class="layui-col-md2"
+							style="float: left;width: 20%; background-color: #6faac5;">&nbsp;</div>
+						<div class="layui-col-md2"
+							style="float: left;width: 20%; background-color: #568aa2;">&nbsp;</div>
+						<div class="layui-col-md2"
+							style="float: left;width: 20%; background-color: #3882a5;">&nbsp;</div>
+					</div>
+					<div class="layui-row"
+						style="padding: 0px 55px 0px 55px; margin-top: -23px;">
+						<div  style="float: left;width: 20%; text-align: left;">
+							0</div>
+						<div  style="float: left;width: 20%; text-align: right;">
+							40</div>
+						<div   style="float: left;width: 20%; text-align: right;">
+							60</div>
+						<div   style="float: left;width: 20%; text-align: right;">
+							80</div>
+						<div   style="float: left;width: 20%; text-align: right;">
+							100</div>
+					</div>
+				</div>
+
+				<div class="" style="text-align: center;">
+					<div class=""
+						 th:style="'text-align: left; margin-left: '+*{evaluateAge.idealpxNum}+'px; font-size: 24rpx; font-family: PingFang SC; font-weight: bold; color: rgba(128, 165, 255, 1);'">
+						<div></div>
+						<img src="http://xcxqny.yhy.ren/gerenxinxi.png"
+							style="width: 23rpx; height: 14rpx;"></img>
+					</div>
+					<div class="layui-row"
+						style="padding: 0px 55px 0px 55px; margin-top: -23px;">
+						<div  
+							style="float: left;width: 40%; background-color: #9ad2ec;">&nbsp;</div>
+						<div  
+							style="float: left;width: 20%; background-color: #6faac5;">&nbsp;</div>
+						<div  
+							style="float: left;width: 20%; background-color: #568aa2;">&nbsp;</div>
+						<div  
+							style="float: left;width: 20%; background-color: #3882a5;">&nbsp;</div>
+					</div>
+					<div class="layui-row"
+						style="padding: 0px 55px 0px 55px; margin-top: -23px;">
+						<div  style="float: left;width: 20%; text-align: left;">
+							0</div>
+						<div  style="float: left;width: 20%; text-align: right;">
+							40</div>
+						<div   style="float: left;width: 20%; text-align: right;">
+							60</div>
+						<div   style="float: left;width: 20%; text-align: right;">
+							80</div>
+						<div   style="float: left;width: 20%; text-align: right;">
+							100</div>
+					</div>
+				</div>
+
+
+			</div>
+			<div  style="float: left;width: 49%">
+				<div id="" style="line-height: 33px; padding-top: 50px;">
+					<p style="color: #1AA4FF; font-weight: 600; font-size: 20px;">您的评价年龄:
+						[[${evaluateAge.evaluateAge}]]</p>
+
+					<p>[[${evaluateAge.evaluateStr}]]</p>
+
+				</div>
+
+				<div id="" style="line-height: 33px; padding-top: 50px;">
+					<p style="color: #1AA4FF; font-weight: 600; font-size: 20px;">您的理想健康年龄:
+						[[${evaluateAge.idealAge}]]</p>
+
+					<p>[[${evaluateAge.idealStr}]]</p>
+
+				</div>
+
+				<div id="" style="line-height: 33px; padding-top: 50px;">
+					<p style="color: #1AA4FF; font-weight: 600; font-size: 20px;">寿命延长空间:
+						[[${evaluateAge.extendAge}]]</p>
+
+					<p>[[${evaluateAge.extend}]]</p>
+
+				</div>
+			</div>
+		</div>
+
+		<blockquote class="layui-elem-quote layui-text"
+			style="margin-top: 20px;">主要分析建议</blockquote>
+		<block th:each="suggestions : ${suggestions}">
+		<fieldset class="layui-elem-field layui-field-title site-title">
+			<legend>
+				<a name="use">[[${suggestions.thisTime}]]</a>
+			</legend>
+		</fieldset>
+		<div>[[${suggestions.proposal}]]</div>
+		</block>
+		<div style="width: 100%; text-align: center; padding: 15px">
+			<img alt="" src="http://xcxqny.yhy.ren/sidajishi.png">
+		</div>
+	</div>
+
+
+	<div class="break_here" style="page-break-inside: avoid !important;">
+		<div class="layui-row" style="margin-top: 50px;">
+			<div class="layui-col-md5"
+				style="font-size: 34px; line-height: 120px;">健康风险改善行动指南</div>
+<!--			<div class="layui-col-md7" style="text-align: right;">
+				<img style="height: 120px; width: 300px;"
+					th:src="${getrepotimg}">
+			</div>-->
+		</div>
+		<div>帮助您全面了解与疾病风险相关的各项可改变危险因素当中，在哪些方面做得不够好，需要立即改善以降低您的疾病发病风险。有任何问题请咨询医生或健康管理师。</div>
+		<!--<blockquote class="layui-elem-quote layui-text"
+			style="margin-top: 20px;">危险因素提示：您做得好的方面</blockquote>
+			<div class="layui-row" style="text-align: left;line-height: 35px;">
+			<div  th:each="goodList : ${goodList}" th:if="${goodList!='年龄'}" class="layui-col-md5" style="width: 50%;">
+				<div>
+					<span class="layui-badge" style="height: 12px;background-color: #0affd2;"></span>
+					 [[${goodList}]]
+				</div>
+
+			</div>
+
+		</div>-->
+		<blockquote class="layui-elem-quote layui-text"
+			style="margin-top: 20px;">危险因素提示：您做得不够好的方面</blockquote>
+		<div class="layui-row" style="text-align: left;line-height: 35px;">
+			<div  th:each="nogoodList : ${nogoodList}" class="layui-col-md5" style="width: 50%;">
+				<div>
+					<span class="layui-badge" style="height: 12px;background-color: #ff0000;"></span>
+					[[${nogoodList}]]
+				</div>
+				 
+			</div>
+
+		</div>
+	 
+		<blockquote class="layui-elem-quote layui-text"
+			style="margin-top: 20px;">危险因素控制目标及改善途径</blockquote>
+			<div id="" style="line-height: 40px;" th:each="glist,key : ${mapResolve}">
+			<p style="color: #1AA4FF; font-weight: 600; font-size: 20px;">※[[${key.current.key}]]</p>
+			<p style="text-indent: 30px">[[${key.current.value}]]</p> 
+		</div>
+	</div>
+	
+	
+	<div class="break_here" style="page-break-inside: avoid !important;">
+		<div class="layui-row" style="margin-top: 50px;">
+			<div class="layui-col-md5"
+				style="font-size: 34px; line-height: 120px;">膳食指南</div>
+<!--			<div class="layui-col-md7" style="text-align: right;">
+				<img style="height: 120px; width: 300px;"
+					th:src="${getrepotimg}">
+			</div>-->
+		</div>
+		<p  style="text-indent: 30px">不良膳食习惯会对您的身体健康带来负面影响。对于已患慢性病的患者来说，纠正膳食习惯有助于改善健康指标。对于无疾病症状的人群，改善膳食习惯，可以大大降低未来的患病风险。</p>
+		<p  style="text-indent: 30px">膳食有指南，健康不再难。有任何问题请咨询医生或健康管理师。</p>
+	 <blockquote class="layui-elem-quote layui-text"
+			style="margin-top: 20px;">平衡膳食宝塔</blockquote>
+			<div style="width: 100%; text-align: center; padding: 15px 55px 15px 55px">
+			<img alt="" src="http://xcxqny.yhy.ren/shanshibaota.png">
+		</div>
+		 <blockquote class="layui-elem-quote layui-text"
+			style="margin-top: 20px;">食物多样，谷类为主</blockquote>
+			<p>平均每天不重复的食物种类数达到12种以上，每周25种以上。</p>
+			<p>量化到一日三餐，建议早餐至少4-5个品种，午餐5-6个食物品种，晚餐4-5个食物品种，加上零食-2个品种。</p>
+			 <blockquote class="layui-elem-quote layui-text"
+			style="margin-top: 20px;">吃动平衡，健康体重</blockquote>
+			<p>天天运动、保持健康体重。</p>
+			<p>食不过量，不暴饮暴食，控制总能量摄入，保持能量平衡。</p>
+			
+			<div style="width: 100%; text-align: center; padding: 15px 55px 15px 55px">
+			<img alt="" src="http://xcxqny.yhy.ren/pingheng.png">
+		</div>
+		 <blockquote class="layui-elem-quote layui-text"
+			style="margin-top: 20px;">多吃蔬菜、奶类、大豆</blockquote>
+			<p>餐餐有蔬菜，深色蔬菜应占1/2；</p>
+			<p>天天吃水果，果汁不能代替鲜果。</p>
+			<p>奶豆不可缺，注意进食奶及其制品，大豆及其制品。</p>
+			<p>适量吃坚果，每天吃一小把（10-15克），常见坚果有核桃、花生、瓜子、板栗、腰果、开心果等。</p>
+			
+			<div style="width: 100%; text-align: center; padding: 15px 55px 15px 55px">
+			<img alt="" src="http://xcxqny.yhy.ren/ruleijiaohuanbiao.png">
+		</div>
+		 <blockquote class="layui-elem-quote layui-text"
+			style="margin-top: 20px;">适量吃鱼、禽、蛋、瘦肉</blockquote>
+			<p>优先选择鱼虾和禽，食用猪、牛、羊等畜肉时建议选择瘦肉，烹调时不要太油腻。</p>
+			<p>少吃肥肉、烟熏和腌制肉制品。控制总量，分散食用；切小块烹制；多蒸煮，少煎炸。</p>
+			 <blockquote class="layui-elem-quote layui-text"
+			style="margin-top: 20px;">少盐少油，控糖限酒</blockquote>
+				<p>培养清淡饮食习惯，少吃高盐和油炸食品。</p>
+				<p>控制添加糖的摄入量、反式脂肪酸摄入量。</p>
+				<p>控尽量不饮酒，成人若饮酒，男性一天饮用酒的酒精量不超过25g，女性不超过15g。足量饮水，建议饮用白开水和茶水。</p>
+				
+				<div style="width: 100%; text-align: center; padding: 15px 55px 15px 55px">
+			<img alt="" src="http://xcxqny.yhy.ren/yinxingyan.png">
+		</div>
+		 <blockquote class="layui-elem-quote layui-text"
+			style="margin-top: 20px;">杜绝浪费，兴新食尚</blockquote>
+			<p>珍惜食物，按需备餐，提倡分餐不浪费。选择新鲜卫生的食物和适宜的烹调方式。食物制备生熟分开、熟食二次加热要热透。学会阅读食品标签，合理选择食品。多回家吃饭，享受食物和亲情。传承优良文化，兴饮食文明新风。</p>
+	 <blockquote class="layui-elem-quote layui-text"
+			style="margin-top: 20px;">营养摄入参考</blockquote>
+
+		<div style="width: 80%; text-align: center; padding: 15px 55px 15px 55px">
+			<img alt="" src="http://xcxqny.yhy.ren/yysckImg.png">
+		</div>
+		 <blockquote class="layui-elem-quote layui-text"
+			style="margin-top: 20px;">餐次结构参考</blockquote>
+		<p>建议按照：早餐25%、午餐35%、晚餐25%，加餐15%的餐次结构养成日常饮食习惯。</p>
+	</div>
+
+		<div class="break_here" style="page-break-inside: avoid !important;" th:if="${foodInfo!=null}">
+			<div class="layui-row" style="margin-top: 50px;">
+			<div class="layui-col-md5"
+				style="font-size: 34px; line-height: 120px;">膳食方案</div>
+<!--			<div class="layui-col-md7" style="text-align: right;">
+				<img style="height: 120px; width: 300px;"
+					th:src="${getrepotimg}">
+			</div>-->
+			</div>
+			<p>平衡膳食控制体重的口诀：少吃一两口，多动十五分；粮食七八两，油脂少两成；蔬菜八两好，奶豆天天有；持之以恒做，健康体重得。以下推荐方案内容，是根据您填写的健康指标数据生成，有任何问题请咨询医生或健康管理师。</p>
+		<block  th:each="flists,fvojo : ${foodInfo}">
+		<blockquote class="layui-elem-quote layui-text"
+			style="margin-top: 20px;">
+			<block th:if="${fvojo.count==1}">第一天</block>
+			<block th:if="${fvojo.count==2}">第二天</block>
+			<block th:if="${fvojo.count==3}">第三天</block>
+			</blockquote>
+			<div class="layui-form" style="text-align: center; padding-top: 20px;">
+			<table class="layui-table">
+
+				<thead>
+					<tr>
+						<th style="text-align: center;">餐次</th>
+						<th style="text-align: center;">食物</th>
+						<th style="text-align: center;">能量（kcal）</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr   th:each="flist : ${flists}">
+						<td>[[${flist.riskFactors}]]</td>
+						<td>[[${flist.thisTime}]]</td>
+						<td>[[${flist.lastTime}]]  <br> [[${flist.idealLevel}]]  </td>
+					</tr>
+
+				</tbody>
+			</table>
+		</div>
+		</block>
+		<p>温馨提示：更多内容，请参见个人端饮食推荐方案，每日推送。</p>
+			
+		</div>
+		
+		<div class="break_here" style="page-break-inside: avoid !important;line-height: 35px;">
+			<div class="layui-row" style="margin-top: 50px;">
+			<div class="layui-col-md5"
+				style="font-size: 34px; line-height: 120px;">运动指南</div>
+<!--			<div class="layui-col-md7" style="text-align: right;">
+				<img style="height: 120px; width: 300px;"
+					th:src="${getrepotimg}">
+			</div>-->
+			</div>
+			<p>身体活动不足是导致人体死亡的第四独立因素。体育活动已经成为提高健康水平最积极、最有效、最经济的生活方式。</p>
+			<p>对于已患慢性病的患者来说，养成规律运动习惯有助于将健康指标维持在一个相对稳定和合理的范围。对于无疾病症状的人群，规律运动，可以大大降低未来的患病风险，提高幸福指数。</p>
+			<blockquote class="layui-elem-quote layui-text"
+			style="margin-top: 20px;">体育健身活动原则</blockquote>
+			<p>安全性原则：健身活动过程中，根据身体状况和运动能力来适度运动，运动前热身，运动后放松，避免发生运动伤害事故</p>
+			<p>全面发展原则：要提高心肺功能和免疫能力，又要提高肌肉力量、柔韧等身体素质，运动方式要多样化</p>
+			<p>循序渐进原则：根据自己的适应程度，逐渐增加运动负荷，科学地、逐步地增加活动时间和运动强度</p>
+			<p>个性化原则：制定运动健身方案时，要进行必要的医学检查和运动能力测试，使运动健身方案更具个性特征</p>
+			<blockquote class="layui-elem-quote layui-text"
+			style="margin-top: 20px;">体育健身活动5大类</blockquote>
+			<p style="font-size: 20px;">有氧运动：</p>
+			<p style="text-indent:2em;">提高心肺功能、减轻体重、调节血压、改善血脂</p>
+			<p style="text-indent:2em;">中等运动强度：包括健身走、慢跑（6～8千米/小时）、骑自行车(12～16千米/小时)、登山、爬楼梯、游泳等</p>
+			<p style="text-indent:2em;">大强度运动：包括跑步（8千米/小时以上）、骑自行车(16千米/小时以上)等。</p>
+			<p style="font-size: 20px;">力量练习：</p>
+			<p style="text-indent:2em;">提高肌肉力量、增加肌肉体积、发展肌肉耐力，促进骨骼发育和骨健康</p>
+			<p style="text-indent:2em;">非器械练习：包括俯卧撑、原地纵跳、仰卧起坐等</p>
+			<p style="text-indent:2em;">器械力量练习：在各种力量练习器械上进行的力量练习。</p>
+			<p style="font-size: 20px;">球类运动：</p>
+			<p style="text-indent:2em;">提高机体的心肺功能、肌肉力量和反应能力，调节心理状态</p>
+			<p style="text-indent:2em;">直接身体接触的球类运动：包括篮球、足球、橄榄球、曲棍球、冰球等</p>
+			<p style="text-indent:2em;">非直接身体接触的球类运动：包括排球、乒乓球、羽毛球、网球、门球、柔力球等。</p>
+			<p style="font-size: 20px;">中国传统运动方式：</p>
+			<p style="text-indent:2em;">提高人体的心肺功能、平衡能力，改善神经系统功能，调节心理状态，且安全性好</p>
+			<p style="text-indent:2em;">太极拳（剑）、木兰拳（剑）、武术套路、五禽戏、八段锦、易筋经、六字诀等。</p>
+			<p style="font-size: 20px;">牵拉练习：</p>
+			<p style="text-indent:2em;">可以增加关节的活动幅度，提高运动技能，减少运动损伤，初参加应以静力性牵拉练习为主，随着柔韧能力的提高，逐渐增加动力性牵拉练习内容。</p>
+			<p style="text-indent:2em;">静力性牵拉：包括正压腿、侧压腿、压肩等</p>
+			<p style="text-indent:2em;">动力性牵拉包括正踢腿、侧踢腿、甩腰等。</p>
+			<div style="width: 100%; text-align: center; padding: 15px 55px 15px 55px">
+				<img style="width: 850px;" alt="" src="https://xcxqny.yhy.ren/access/sportImg5.png">
+			</div>
+			
+		</div>	
+		
+		<div class="break_here" style="page-break-inside: avoid !important;line-height: 35px;">
+			<div class="layui-row" style="margin-top: 50px;">
+				<div class="layui-col-md5" style="font-size: 34px; line-height: 120px;">运动方案
+				</div>
+<!--				<div class="layui-col-md7" style="text-align: right;">
+					<img style="height: 120px; width: 300px;" th:src="${getrepotimg}">
+				</div>-->
+			</div>
+			<p>运动是良医，适当的运动可以控制体重，改善身体素质，提高免疫力，还能有效地缓解抑郁和压力。</p>
+			<p>[[${sportInfo}]] 并持续坚持，从有任何问题请咨询医生或健康管理师。</p>
+			<div style="width: 100%; text-align: center; padding: 15px 55px 15px 55px">
+				<img alt="" style="width: 850px;" src="http://xcxqny.yhy.ren/access/sportImg1.png">
+			</div>
+			<div style="width: 100%; text-align: center; padding: 15px 55px 15px 55px">
+				<img alt="" style="width: 850px;" src="https://xcxqny.yhy.ren/access/sportImg2.png">
+			</div>
+			<div style="width: 100%; text-align: center; padding: 15px 55px 15px 55px">
+				<img alt="" style="width: 850px;" src="https://xcxqny.yhy.ren/access/sportImg3.png">
+			</div>
+			<div style="width: 100%; text-align: center; padding: 15px 55px 15px 55px">
+				<img alt="" style="width: 850px;" src="https://xcxqny.yhy.ren/access/sportImg4.png">
+			</div>
+			<blockquote class="layui-elem-quote layui-text"
+			style="margin-top: 20px;">运动中的注意事项</blockquote>
+			<p>1. 高血糖、高血压患者的运动时间要与用药时间错开，避免造成低血糖、低血压的风险。</p>
+			<p>2. 运动要循序渐进，不宜突然进行高强度长时间的运动，而且情绪激动时不要进行运动。</p>
+			<p>3. 运动过程中要注意保持呼吸，发生心悸、头昏、乏力应立即减量，但最好不要骤停。</p>
+			<p>4. 运动过程中可以少量、多次地补充水份。</p>
+			<p>5. 运动后，不宜立即走进空调房或风口纳凉，不宜立即吸烟和/或饮酒，不宜吃冷饮、大量喝水吃糖、吃饭。</p>
+	    </div>
+
+
+	<!-- js部分 -->
+	<script type="text/javascript" th:src="@{/assets/libs/layui/layui.js}"></script>
+	<script type="text/javascript" th:src="@{/assets/js/common.js}"></script>
+	<script type="text/javascript" th:src="@{/assets/js/jquery-1.11.1.js}"></script>
+	<script th:src="@{/assets/libs/echarts/echarts.min.js}"></script>
+
+	<script type="text/javascript" th:inline="javascript">
+		$(function() {
+			function js_method(){
+			   	  $.ajax({
+				   		 type:'get',
+				   		 url:'/manage/YhDiseaseAssessReport/gaoxueyaDataInfo2',
+				   		 data:{},
+				   		success : function(data){
+				   			console.log(data)
+				   			 window.location.href="/manage/YhDiseaseAssessReport/download?fileName=wkhtmltopdf.pdf";
+
+				   		}
+			   		})  
+			   	}
+			var rs= [[${rs}]];
+			var findDiseaseNameAndRiskLevelByRsList= [[${findDiseaseNameAndRiskLevelByRs}]];
+			 var fxlist=null;
+
+			   	$.each(findDiseaseNameAndRiskLevelByRsList,function(index,value){  //arrTmp数组数据
+			   	    console.log(index+": "+JSON.stringify(value.rlist))
+			   		
+					var list=value;
+					fxlist=list.fxlist;
+						 var idname="tu"+list.diseasid;
+						if(null!=list.gvojolist&&list.riskLevel.indexOf("患") == -1&&list.diseasid!=6&&list.diseasid!=11){
+							guanxinbingFunction(list.gvojolist,list.dangqianList,list.lixiangList,idname);
+							 
+						}
+						if((index+1)==findDiseaseNameAndRiskLevelByRsList.length){
+							console.log("结束")
+						/* 	$.ajax({
+				   		 type:'get',
+				   		 url:'/manage/YhDiseaseAssessReport/gaoxueyaDataInfo2',
+				   		success : function(data){
+				   			console.log(data)
+				   			if(data.flag){
+				   				//window.location.href="/manage/YhDiseaseAssessReport/download?fileName=wkhtmltopdf.pdf";
+
+				   			}
+				   			
+				   		}
+			   		}) */
+						}
+			   	});
+			   	
+			   	function shenghuoFunction(value){
+			   		
+			   	//获取dom容器
+					var myChart = echarts.init(document.getElementById("shenghuo"));
+					// 使用刚指定的配置项和数据显示图表。
+					myChart.setOption({
+					    tooltip: {
+					        formatter: '{a} <br/>{b} : {c}%'
+					    },
+					    
+					    series: [
+					        {
+					            name: '生活方式评分',
+					            type: 'gauge',
+					            detail: {formatter: '本次评分：{value}'},
+					            data: [{value: value, name: '生活方式评分'}]
+					        }
+					    ]
+					})
+				 
+			   	}
+			 var thisScort=  	[[${thisNum}]]
+			   	shenghuoFunction(thisScort);
+				function guanxinbingFunction(gvojolist,dangqianList,lixiangList,idname) {
+			 
+				var indicator =gvojolist;
+			    var value = dangqianList;   //定义三个数组存放 五个点的名称 和 2条线条的值
+			    var valuea = lixiangList;
+			  
+					 
+					//获取dom容器
+					var myChart = echarts.init(document.getElementById(idname));
+					// 使用刚指定的配置项和数据显示图表。
+					myChart.setOption({
+						
+						radar:[
+
+						       {
+								   name: { // (圆外的标签)雷达图每个指示器名称的配置项。
+									   textStyle: {
+										   fontSize: 16,
+										   color: '#000'
+									   }
+								   },
+								   splitLine: { // (这里是指所有圆环)坐标轴在 grid 区域中的分隔线。
+									   lineStyle: {
+
+										   // 分隔线颜色
+										   width: 3,
+										   // 分隔线线宽
+									   }
+								   },
+								   // 雷达图绘制类型，支持 'polygon'(多边形) 和 'circle'(圆)。[ default: 'polygon' ]
+								   axisLine: { // (圆内的几条直线)坐标轴轴线相关设置
+									   lineStyle: {
+										   // 坐标轴线线的颜色。
+										   width: 2,
+										   // 坐标轴线线宽。
+										   type: 'solid',
+										   // 坐标轴线线的类型。
+									   }
+								   },
+						    	   indicator:indicator,
+						    	   center: ['50%', '50%'], // 位置
+						    	   radius: '45%',
+						       }
+						       ],
+						       series:[{
+						    	   type: 'radar',
+						    	   data:[
+						    	         {value:value, 
+						    	        	 areaStyle: {
+						                     normal: {
+						                         color: '#E3E2FE'
+						                     }
+						                 }},
+						    	         {value:valuea,
+						                	 areaStyle: {
+						                     normal: {
+						                         color: '#ADC4FD'
+						                     }
+						                 }}
+						    	         ]
+						       }]
+					})
+				 
+				}
+
+			
+			});
+	 	
+			layui.use(['layer','table'], function() {
+				var $ = layui.jquery;
+				var layer = layui.layer;
+				 var table = layui.table;
+				 
+				 var vojoInfo=[[${vojo}]]
+				 var sexInfo=[[${sex}]]
+				 
+				if(vojoInfo.bs>6.0||vojoInfo.bs<3.9){
+					 $("#gxyxuetang").css("background-color","#ff7600");
+				}
+				if(vojoInfo.sbp>=120||vojoInfo.dbp>=80){
+					 $("#gxyxueya").css("background-color","#ff7600");
+				}
+				 if(sexInfo==1){
+					 if(vojoInfo.theWaist>=85){
+						 $("#gxyyaowei").css("background-color","#ff7600");
+					}
+					  
+				 }else{
+					 if(vojoInfo.theWaist>=80){
+						 $("#gxyyaowei").css("background-color","#ff7600");
+					}
+					 
+				 }
+				 if(vojoInfo.bmi<18.5||vojoInfo.bmi>=24){
+					 $("#gxybmi").css("background-color","#ff7600");
+				}
+				 if(vojoInfo.tc>5.17||vojoInfo.tc<2.9){
+					 $("#gxytc").css("background-color","#ff7600");
+				}
+				 
+				 if(vojoInfo.tg>=1.69||vojoInfo.tg<=0.57){
+					 $("#gxytg").css("background-color","#ff7600");
+				}
+				 if(vojoInfo.hdlc<1.04){
+					 $("#gxyhdlc").css("background-color","#ff7600");
+				}
+				 if(vojoInfo.ldlc>3.36||vojoInfo.ldlc<0){
+					 $("#gxyldlc").css("background-color","#ff7600");
+				}
+				 
+				 if(vojoInfo.t_score<1.6){
+					 $("#gxyt_score").css("background-color","#ff7600");
+				}
+
+				 if(null!=vojoInfo.bua&&"--"!=vojoInfo.bua){
+					 if(sexInfo==1){
+						 if(vojoInfo.bua>420||vojoInfo.bua<210){
+							 $("#gxybua").css("background-color","#ff7600");
+						 }
+					 }else{
+						 if(vojoInfo.bua>360||vojoInfo.bua<150){
+							 $("#gxybua").css("background-color","#ff7600");
+						 }
+					 }
+				 }
+
+				 if(null!=vojoInfo.serumCreatinine&&"--"!=vojoInfo.serumCreatinine){
+					 if(sexInfo==1){
+						 if(vojoInfo.serumCreatinine>106||vojoInfo.serumCreatinine<54){
+							 $("#gxyserumCreatinine").css("background-color","#ff7600");
+						 }
+					 }else{
+						 if(vojoInfo.serumCreatinine>97||vojoInfo.serumCreatinine<44){
+							 $("#gxyserumCreatinine").css("background-color","#ff7600");
+						 }
+					 }
+				 }
+
+				 
+				 if(vojoInfo.b4=="不合理"){
+					 $("#gxyfood").css("background-color","#ff7600");
+				}
+				 if(vojoInfo.sport=="不充足"){
+					 $("#gxysport").css("background-color","#ff7600");
+				}
+				 if(vojoInfo.smoke=="吸烟"){
+					 $("#gxysmoke").css("background-color","#ff7600");
+				}
+				 
+				 if(vojoInfo.foodDrink=="喝酒"){
+					 $("#gxydrck").css("background-color","#ff7600");
+				}
+				 
+				 
+				 
+				 
+				 
+				 
+				 
+				
+			   /* 	 $.ajax({
+			   		 type:'get',
+			   		 url:'/manage/YhDiseaseAssessReport/gaoxueyaDataInfo',
+			   		 data:{rs:rs},
+			   		success : function(data){
+			   			 
+			   			$("#gxyxuetang").html(data.data.bs);
+			   			$("#gxyxueya").html(data.data.bloodPressure);
+			   			$("#gxyyaowei").html(data.data.theWaist);
+			   			$("#gxybmi").html(data.data.bmi);
+			   			$("#gxytc").html(data.data.tc);
+			   			$("#gxytg").html(data.data.tg);
+			   			$("#gxyhdlc").html(data.data.hdlc);
+			   			$("#gxyldlc").html(data.data.ldlc);
+			   			$("#gxyfood").html(data.data.b4);
+			   			$("#gxysport").html(data.data.sport);
+			   			$("#gxysmoke").html(data.data.smoke);
+			   			$("#gxydrck").html(data.data.foodDrink);
+			   		
+					}
+			   	 }) */
+				
+				
+			 
+			 
+			  
+				
+				
+				
+				
+			 
+				
+				
+				 
+				 
+				 
+			
+				 
+				
+
+			});
+		</script>
+</body>
+</html>

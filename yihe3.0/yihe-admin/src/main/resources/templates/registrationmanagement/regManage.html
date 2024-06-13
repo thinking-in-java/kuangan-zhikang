@@ -1,0 +1,778 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, maximum-scale=1">
+<title>注册管理</title>
+<link rel="stylesheet" th:href="@{/assets/libs/layui/css/layui.css}" />
+<link rel="stylesheet" th:href="@{/assets/module/admin.css}" />
+<!-- js部分 -->
+ 
+<style type="text/css">
+/* #out{
+				width: 600px;
+				height: 600px;
+				background-color: red;
+				margin:50px;
+			}
+			#middle{
+				width:200px;
+				height:200px;
+				background-color: yellow;
+				margin:50px;
+			}
+			#inner{
+				width: 300px;
+				height: 300px;
+				background-color: blue;
+				margin: 50px;
+			} */
+			
+.layui-form-label {
+    float: left;
+    display: block;
+    padding: 9px 15px;
+        padding-top: 9px;
+        padding-bottom: 9px;
+    width: 43px;
+    font-weight: 400;
+    line-height: 20px;
+    text-align: right;
+   }
+   
+   .layui-form-item .layui-inline {
+    margin-bottom: 1px;
+    margin-right: 10px;
+}
+.layui-form-item {
+    margin-bottom: 1px;
+    clear: both;
+    *zoom: 1;
+}
+.layui-table-box {
+	min-height:500px;
+}
+</style>
+
+</head>	
+<body style="overflow-x:hidden;overflow-y:scroll">
+	<!-- 加载动画 -->
+	<div class="page-loading">
+		<div class="ball-loader">
+			<span></span><span></span><span></span><span></span>
+		</div>
+	</div>
+	 
+	 
+<div class="layui-row layui-col-space15"  style="padding: 20px;">
+	<div class="layui-card">
+
+	<input id="guishu" type="hidden" value="">
+	<div style="width: 100%; text-align: right; margin: 0px 0px 27px 0px;">
+
+		<div id="count" style="display: inline;">
+			注册卡总数：<span th:text="${makeCardCount}"></span>
+		</div>
+
+		<div style="display: inline; margin-left: 70px;">
+			已使用注册卡： <span th:text="${makeCardEmploy}"></span>
+		</div>
+
+		<div style="display: inline; margin-left: 70px;">
+			剩余注册卡： <span th:text="${makeCardSurplus}"></span>
+		</div>
+
+	</div>
+	<!-- 注册卡头部搜索 -->
+	<div id="search-header">
+		<form id="regForm" lay-filter="regForm" class="layui-form queryForm">
+			<div class="layui-form-item">
+
+				<div class="layui-inline" style="margin-left: -31px;">
+					<label class="layui-form-label">归属</label>
+					<div class="layui-input-block" style="width: 259px;margin-left: 73px;">
+						<input type="text" id="tree" lay-filter="tree" class="layui-input">
+					</div>
+				</div>
+				
+				<div class="layui-inline">
+					<label class="layui-form-label" style="margin-left: -26px;">状态</label>
+					<div class="layui-input-inline" style="width: 110px">
+						<select id="status" name="status" lay-filter="" lay-search>
+							<option value="">全部</option>
+							<option value="2">已用</option>
+							<option value="1">未用</option>
+							<option value="3">待激活</option>
+						</select>
+					</div>
+				</div>
+
+				<div class="layui-inline">
+					<label class="layui-form-label" style="margin-left: -26px;">有效性</label>
+					<div class="layui-input-inline" style="width: 110px">
+						<select id="validity" name="validity" lay-filter="" lay-search>
+							<option value="">全部</option>
+							<option value="Y">未过期</option>
+							<option value="N">已过期</option>
+						</select>
+					</div>
+				</div>
+				
+				
+				
+
+				<div class="layui-inline">
+					<label class="layui-form-label"></label>
+					<div class="layui-input-inline"
+						style="margin-left: -85px;">
+						<!-- <button class="layui-btn icon-btn sousuoDN" lay-submit=""
+							lay-filter="regManageQueryBtn"><i class="layui-icon"></i>搜索</button> -->
+							
+							<button class="layui-btn icon-btn sousuoDN" lay-submit="" lay-filter="regManageQueryBtn"><i class="layui-icon"></i>搜索</button>
+							
+						<button class="layui-btn layui-btn-primary" lay-submit=""
+							lay-filter="reset">清除</button>
+					</div>
+					
+				</div>
+
+
+			<div class="layui-inline"style="float: right;width: 355px;">
+					<div class="layui-input-inline"
+						style="width: 138px;margin-right: 16px;">
+						<!-- <a download="filename"> -->
+						<button class="layui-btn" type="button"id="download">
+							<i class="layui-icon layui-icon-download-circle"></i> 下载导入模板
+						</button>
+						<!-- </a> -->
+					</div>
+					<div class="layui-input-inline"
+						style="width: 108px;margin-left: 12px;">
+						<button class="layui-btn" type="button"
+							lay-filter="regManageQueryBtn" id="uploadData">
+							<i class="layui-icon layui-icon-addition"></i> 批量导入
+						</button>
+					</div>
+					<div class="layui-input-inline"
+						style="width: 1px;margin-left: 15px;">
+						<button class="layui-btn" type="button"
+							id="exportData" lay-filter="regManageQueryBtn">导出</button>
+					</div>
+				</div>
+
+				<div class="layui-inline">
+					
+				</div>
+
+				<div class="layui-inline">
+					
+				</div>
+
+
+
+			</div>
+
+
+		</form>
+		<!-- 批量操作 -->
+		<div id="piliang" class="layui-form toolbar" style="background-color: #e6f7ff;height: 50px;margin-top: 10px;margin-bottom: 10px;display: none">
+			<span style="font-size: 14px;color: #505050;line-height: 50px;margin-left: 9px;">批量操作</span>
+			<img alt="" src="">
+			<span  id="xuanze">已选择**项</span>
+			<span id="clickxuan" style="color: #1890ff;margin-left: 15px;">清空</span>
+			<button id="zhucema" style="width: 120px;float: right;margin-right: 16px;text-align: center;margin-top: 7px;"   class="layui-btn layui-btn-primary";lay-filter="fenpeiyishi">生成激活码</button>
+		</div>
+		<!-- <button type="button" class="layui-btn" id="uploadData" style="display:none">
+		<i class="layui-icon"></i>上传文件
+		</button> -->
+	</div>
+
+
+	<table id="demo" lay-filter="test"></table>
+	</div>
+</div>
+</body>
+ 
+ <form class="layui-form" id="addfolder" lay-filter="folderForm" style="display: none;">
+			<input id="guishu2" type="hidden" value="">
+			  <div class="layui-form-item" style="margin-top: 38px;">
+			    <label class="layui-form-label layui-form-required" style="width: 80px;">选择机构</label>
+			    <div class="layui-input-block" style="width: 309px;">
+			      <input type="text" id="tree2" lay-filter="tree2" class="layui-input">
+			    </div>
+			    <div style="margin-left: 110px;margin-top: 7px;display: none;" id="orgSurplusCard"></div>
+			  </div>
+	 		 
+	 		 <div class="layui-form-item" style="display: block;margin-top: 38px;margin-left: -8px;">
+	  			  <label class="layui-form-label layui-form-required" style="width: 90px;">选择文件</label>
+	    			  <button type="button" class="layui-btn layui-btn-normal" id="test8">选择文件</button>
+	 		 </div>
+	 		 
+	 		 <div class="layui-form-item" style="margin-top: 25px;margin-left: -3px;">
+						<div class="layui-input-block">
+						<button style="width: 100px;" type="reset" id="cancel"  class="layui-btn layui-btn-primary">取消</button>
+							<button style="width: 100px; margin-left: 14px;" class="layui-btn layui-btn-normal"
+								 id='import' type="button">导入</button>
+							
+						</div>
+				</div>
+	</form>
+ 
+<script type="text/javascript" th:src="@{/assets/libs/layui/layui.js}"></script>
+<script type="text/javascript" th:src="@{/assets/js/common.js}"></script>
+<script type="text/javascript">
+var treeOrgCode = '';
+layui.use(['laypage', 'layer','element', 'treeTable','table','form','treeSelect','laydate','util','upload', 'notice'], function(){
+  var laypage = layui.laypage;
+  var layer = layui.layer;
+  var element = layui.element;
+  var table = layui.table;
+  var form = layui.form;
+  var $ = layui.jquery;
+  var laydate = layui.laydate;
+  var util = layui.util;
+  var treeSelect= layui.treeSelect;
+  var upload = layui.upload;
+  var notices = layui.notice;
+	//查询出来的总条数
+	var fenyeshuju=null;
+	//当前页数的数据（用来全选）
+	var nowpagedata=null;
+	//选中的数量
+	var xuanzhong = 0;
+  treeSelect.render({
+      // 选择器
+      elem: '#tree',
+      // 数据 
+      data: '/YhUserMakeCard/showPullDownTree',
+      // 异步加载方式：get/post，默认get
+      type: 'get',
+      // 占位符
+      placeholder: '全部',
+      // 是否开启搜索功能：true/false，默认false
+      search: true,
+      // 点击回调
+      click: function(d){
+          console.log($('#guishu').val(d.current.id));
+      },
+      // 加载完成后的回调函数
+      success: function (d) {
+          console.log(d);
+		  treeSelect.render({
+			  // 选择器
+			  elem: '#tree2',
+			  // 数据
+			  data: '/YhUserMakeCard/showPullDownTree',
+			  // 异步加载方式：get/post，默认get
+			  type: 'get',
+			  // 占位符
+			  placeholder: '全部',
+			  // 是否开启搜索功能：true/false，默认false
+			  search: true,
+			  // 点击回调
+			  click: function(d){
+				  console.log($('#guishu2').val(d.current.id));
+				  treeOrgCode = $('#guishu2').val();
+				  console.log("code"+treeOrgCode)
+				  $.ajax({
+					  type:'post',
+					  url: '/YhUserMakeCard/orgSurplusCard',
+					  data:{orgCode:treeOrgCode},
+					  success: function (data) {
+						  if(data.code == 20000){
+							  $("#orgSurplusCard").html("该机构剩余可用注册卡："+data.data+"张");
+							  $("#orgSurplusCard").show();
+						  }
+					  }
+				  })
+			  },
+			  // 加载完成后的回调函数
+			  success: function (d) {
+				  console.log(d);
+			  }
+
+		  });
+      }
+      
+  });
+
+ 
+  //第一个实例
+	var regManageTb = table.render({
+	  id : 'regManageTb',
+    elem: '#demo'
+    ,url: '/YhUserMakeCard/page' //数据接口
+     ,method : 'get'
+    ,where : {} // 你额外要携带数据，以键值对的方式存入
+    ,page: true //开启分页
+    ,limit : 20// 每页显示的条数
+	,limits : [ 5, 10, 20, 50, 100 ] // 每页条数的选择项
+	,loading : true // 是否显示加载条(切换分页的时候显示）
+	,cellMinWidth : 80 // 全局定义所有常规单元格的最小宽度（默认：60）
+	 ,sort:true
+		,parseData: function(res){
+		var boolenhave=false;
+		nowpagedata= res.data;
+		if(fenyeshuju==null){
+			fenyeshuju= res.data;
+		}else{
+			for (var i = 0; i < res.data.length; i++) {
+				for (var j = 0; j < fenyeshuju.length; j++) {
+					if(fenyeshuju[j].Enrol_Card_Id==res.data[i].Enrol_Card_Id){
+						boolenhave=true
+					}
+				}
+			}
+			if(boolenhave==false){
+				for (var i = 0; i < res.data.length; i++) {
+					fenyeshuju.push(res.data[i]);
+				}
+			}else{
+				for (var i = 0; i < fenyeshuju.length; i++) {
+					for (var j = 0; j < res.data.length; j++) {
+						if(fenyeshuju[i].Enrol_Card_Id==res.data[j].Enrol_Card_Id){
+							res.data[j]['LAY_CHECKED']=fenyeshuju[i].checked;
+						}
+					}
+				}
+			}
+		}
+	}
+    ,cols: [ //表头
+    	[{type: 'checkbox', fixed: 'left'},
+        {type:'numbers', title:'序号', align: 'center'}
+        ,{field: 'Enrol_Card_Id', title: '注册卡号', align: 'center'}
+        ,{field: 'name', title: '姓名', align: 'center',
+        	templet:function (d){ 
+    		var name = "";
+    		if(d.name==null||d.name==""){
+    			 return	name="--";
+    		}else{
+    			 return d.name;
+    		}
+         } 
+       }
+        ,{field: 'Org_Name', align: 'center', title: '归属', width:600} 
+        , {
+            title: '状态', templet: function (d) {
+            	/*  console.log('调试区'+d.user_name);   */
+                var strs = [
+                    '<span class="layui-badge layui-badge-green">已用</span>',
+                    '<span class="layui-badge layui-badge-gray">未用</span>',
+					'<span class="layui-badge layui-badge-gray">待激活</span>',
+                ];
+				if((d.User_Code==null||d.User_Code=="")&&(d.key==null||d.key=="")){
+					return strs[1];
+				}else if((d.User_Code==null||d.User_Code=="")&&(d.key!=null&&d.key!="")){
+					return strs[2];
+				}else{
+                	return strs[0];
+                }
+               
+            }, align: 'center', width: 100
+        }
+        ,{field: 'Add_Date', title: '结束日期', align: 'center',sort: true,
+        	templet:function (row){
+        		
+        		var date = "";
+        		if(row.Add_Date==null||row.Add_Date==""){
+        			 return	date="--";
+        		}else{
+        			 return createTime(row.Add_Date);
+        		}
+             } 
+        }
+        ,{ title: '操作', templet: function (d) {
+        	
+        	var myDate = new Date();
+        	var userCode = d.User_Code;
+        	var cardId = d.Enrol_Card_Id;
+        	var orgId = d.Org_Code;
+        	//var userCode = d.user_code;
+        	 //alert(orgId) 
+        	//当前时间戳
+        	var timestamp = (new Date()).valueOf(); // 结果：1477808630404 通过valueOf()函数返回指定对象的原始值获得准确的时间戳值
+        	//数据库结束时间戳
+			var time  = d.Add_Date;
+			if(time!=null && time!=""){
+				time=time +" 23:59:59";
+			}
+
+			var finishTime = (new Date(time)).valueOf();
+			
+        	if((d.Add_Date==null || d.Add_Date=="")){
+				if((d.User_Code==null || d.User_Code=="")&&(d.key==null||d.key=="")){
+					return "<a href='/manage/register/registerPage?cardId="+cardId+"&orgId="+orgId+"'><font color='#36A4FF'>注册</font></a>";
+
+				}else if((d.User_Code==null || d.User_Code=="")&&(d.key!=null&&d.key!="")){
+					return "<font>--</font>";
+				}else{
+        			return "<a href='/manage/register/userIndex?page=health&userCode="+userCode+"&orgId="+orgId+"' target='_blank'><font color='#36A4FF'>查看</font></a>";	
+        		}
+	
+        	}else{ 
+        			if(finishTime>timestamp){
+						if((d.User_Code==null || d.User_Code=="")&&(d.key==null||d.key=="")){
+        					return "<a href='/manage/register/registerPage?cardId="+cardId+"&orgId="+orgId+"'><font color='#36A4FF'>注册</font></a>";
+                		}else if((d.User_Code==null || d.User_Code=="")&&(d.key!=null&&d.key!="")){
+							return "<font>--</font>";
+						}else{
+                			return "<a href='/manage/register/userIndex?page=health&userCode="+userCode+"&orgId="+orgId+"' target='_blank'><font color='#36A4FF'>查看</font></a>";	
+                		}
+            			
+            		}else{
+            			return "<font>--</font>";
+            		}
+        	}
+
+
+        	
+        	
+        },align: 'center', width:100}
+        
+      ]
+      ],
+      done: function(res, curr, count){
+	        if(count > 20) {
+	        	$(".layui-table-page").show();
+	        }else {
+	        	$(".layui-table-page").hide();
+	        }
+	      }
+  });
+
+	//注意--注册成功或或取消都会回到原来的表单，但是注册卡的使用人数没有刷新，需要传参
+	$(function(){
+		var status=$('#status').val();
+		var validity=$('#validity').val();
+		var orgCode=$('#guishu').val();
+		// alert(status+"-"+validity+"-"+orgCode);
+		if(status=='' && validity=='' && orgCode==''){
+
+		}else{
+			regManageTb.reload({
+				where : {
+					//这里注意一定要跟Bean 里面的属性对应
+					orgCode:$('#guishu').val(),
+					validity:$('#validity').val(),
+					status:$('#status').val()
+				},
+				page : {
+					curr : 1
+				}
+			});
+		}
+	})
+  
+    
+  function createTime(v){
+		var date = new Date(v);
+	    var y = date.getFullYear();
+	    var m = date.getMonth()+1;
+	    m = m<10?'0'+m:m;
+	    var d = date.getDate();
+	    d = d<10?("0"+d):d;
+	    var h = date.getHours();
+	    h = h<10?("0"+h):h;
+	    var M = date.getMinutes();
+	    M = M<10?("0"+M):M;
+	    var str = y+"-"+m+"-"+d;
+	    return str;
+	}
+  
+//头部搜素表单提交
+  form.on('submit(regManageQueryBtn)', function(data){
+	  xuanzhong=0;
+	  fenyeshuju=null;
+	  $("#piliang").css('display','none');
+	 /*   console.log(data.elem);//被执行事件的元素DOM对象，一般为button对象
+	  console.log(data.form); //被执行提交的form对象，一般在存在form标签时才会返回
+	 console.log(data.field); //当前容器的全部表单字段，名值对形式：{name: value} */
+		regManageTb.reload({
+		  where : {
+				//这里注意一定要跟Bean 里面的属性对应
+			 orgCode:$('#guishu').val(),
+			 validity:$('#validity').val(),
+			 status:$('#status').val()
+			},
+		  page : {
+			  curr : 1
+		  }
+		  
+	  });
+	// 阻止表单跳转。如果需要表单跳转，去掉这段即可。
+	  return false;
+  });
+  
+  
+  
+  $('#download').click(function(){
+	 window.open('/YhUserReginfo/downloadExcel','_self'); 
+	 // window.location.href='/YhUserReginfo/downloadExcel'; 
+  })
+
+		$('#downloadpinggu').click(function(){
+		window.open('/YhAssessmentcontroller/downloadExcel','_self');
+		// window.location.href='/YhUserReginfo/downloadExcel';
+	})
+
+	//指定允许上传的文件类型
+	upload.render({
+		elem: '#uploadDatapinggu',
+		url: '/YhAssessmentcontroller/import',
+		exts : 'xls|xlsx',
+		method:'post',
+		accept: 'file', //普通文件
+		choose:function(res){
+			layer.msg("正在批量评估,请稍后...",{
+				icon:16,
+				shade: [0.8, '#f5f5f5'],
+				time:-1
+			});
+		},
+		done: function(res,index,upload){
+			layer.closeAll();
+			if(res.code==200){
+				/* layer.alert("导入成功，"+res.msg); */
+				layer.confirm("评估成功！", {
+					btn : [ '确定']//按钮
+				}, function(index) {
+					layer.close(index);
+					//此处调用刷新页面代码
+					location.reload();//刷新页面
+					//window.parent.location.reload();
+				});
+
+				/* table.reload('regManageTb',{
+                    url:'/YhUserMakeCard/page'
+                })  */
+
+			}else if(res.code==500){
+				layer.alert("导入失败，"+res.msg);
+			}
+
+		},
+		error : function(index,upload){
+			layer.msg("文件上传异常！");
+		}
+
+	});
+
+	
+
+		//指定允许上传的文件类型
+		$("#uploadData").on('click',function(){
+			layer.open({
+				  title:'批量导入',
+				  type: 1,
+				  skin: 'layui-layer-rim', //加上边框
+				  area: ['450px', '300px'], //宽高
+				  content: $("#addfolder"),
+				  end: function () {
+                      $("#addfolder")[0].reset();
+                      layui.form.render();
+					  $("#orgSurplusCard").hide();
+						layer.closeAll();
+				  }
+				});
+		})
+	upload.render({
+    elem: '#test8',
+    url: '/YhUserReginfo/import',
+    exts : 'xls|xlsx',
+    method:'post',
+    auto:false,
+    bindAction:'#import',
+    before: function(obj){
+		layer.alert('导入中...')
+        this.data={'orgCode':treeOrgCode};//关键代码
+        } ,
+    accept: 'file', //普通文件
+    done: function(res,index,upload){
+    	if(res.code==200){
+    		//layer.alert("导入成功，"+res.msg);
+    		layer.confirm("导入成功，"+res.msg, {
+    			btn : [ '确定']//按钮
+    			}, function(index) {
+    			layer.close(index);
+    			//此处调用刷新页面代码
+    			location.reload();//刷新页面
+    			}); 
+  
+	    	
+    	}else if(res.code==500){
+    		layer.alert("导入失败，"+res.msg);
+    	}
+    	
+    },
+  error : function(index,upload){
+	  layer.msg("文件上传异常！");
+  }
+  
+  });  
+	
+  
+  $("#exportData").click(function(){
+	  var shuz=new Array()
+	  var jishu=0;
+	  for (var i = 0; i < fenyeshuju.length; i++) {
+		  if(fenyeshuju[i].checked){
+			  shuz[jishu]=fenyeshuju[i].Enrol_Card_Id
+			  jishu++;
+		  }
+	  }
+	  if(shuz.length==0){
+		  notices.error({
+			  title: '提示',
+			  message: '请先勾选要导出的数据'
+		  });
+		  return;
+	  }
+	  window.location.href="/YhUserReginfo/exportXls?shuzu="+shuz;
+	  xuanzhong=0;
+	  $("#piliang").css("display","none");
+	  console.log(fenyeshuju);
+	  for (var i = 0; i < fenyeshuju.length; i++) {
+		  fenyeshuju[i].checked=false;
+	  }
+	  regManageTb.reload({
+		  where : {
+			  //这里注意一定要跟Bean 里面的属性对应
+			  orgCode:$('#guishu').val(),
+			  validity:$('#validity').val(),
+			  status:$('#status').val()
+		  },
+		  page : {
+			  curr : 1
+		  }
+
+	  });
+	 //window.open('/YhUserReginfo/exportXls','_self');
+  		})
+  			$("#cancel").on('click',function(){
+  				
+				$("#orgSurplusCard").hide();
+				layer.closeAll();
+			})
+
+//清空按钮
+	$("#clickxuan").click(function (){
+		xuanzhong=0;
+		$("#piliang").css("display","none");
+		console.log(fenyeshuju);
+		for (var i = 0; i < fenyeshuju.length; i++) {
+			fenyeshuju[i].checked=false;
+		}
+		regManageTb.reload({
+			where : {
+				//这里注意一定要跟Bean 里面的属性对应
+				orgCode:$('#guishu').val(),
+				validity:$('#validity').val(),
+				status:$('#status').val()
+			},
+			page : {
+				curr : 1
+			}
+
+		});
+	});
+
+	table.on('checkbox(test)', function(obj){
+		console.log(obj)
+		//全选获取到的数据
+		//var checkStatus = table.checkStatus('tableAuth');
+		//如果是全选
+		if(obj.type=="all"){
+			if(obj.checked){
+				for (var i = 0; i < fenyeshuju.length; i++) {
+					for (var j = 0; j < nowpagedata.length; j++) {
+						if(fenyeshuju[i].Enrol_Card_Id==nowpagedata[j].Enrol_Card_Id){
+							if(fenyeshuju[i].checked!=true){
+								fenyeshuju[i].checked=true;
+								xuanzhong++;
+							}
+						}
+					}
+				}
+			}else{
+				for (var i = 0; i < fenyeshuju.length; i++) {
+					for (var j = 0; j < nowpagedata.length; j++) {
+						if(fenyeshuju[i].Enrol_Card_Id==nowpagedata[j].Enrol_Card_Id){
+							if(fenyeshuju[i].checked==true){
+								fenyeshuju[i].checked=false;
+								xuanzhong--;
+							}
+						}
+					}
+				}
+			}
+		}else{
+			//循环判断哪一个被选中
+			for (var i = 0; i < fenyeshuju.length; i++) {
+				if(fenyeshuju[i].Enrol_Card_Id==obj.data.Enrol_Card_Id){
+					if(obj.checked){
+						fenyeshuju[i].checked=true
+						xuanzhong++;
+					}else{
+						fenyeshuju[i].checked=false
+						xuanzhong--;
+					}
+
+				}
+			}
+		}
+		if(xuanzhong!=0){
+			$("#xuanze").html("已选择"+xuanzhong+"项")
+			$("#piliang").css("display","block")
+		}else{
+			$("#piliang").css("display","none")
+		}
+	});
+	$('#zhucema').click(function(){
+		jihuoma(fenyeshuju);
+	})
+	function jihuoma(data){
+		var shuz=new Array()
+		var jishu=0;
+		for (var i = 0; i < data.length; i++) {
+			if(data[i].checked){
+				if((data[i].user_name==null||data[i].user_name=="")&&(data[i].key==null||data[i].key=="")){
+					shuz[jishu]=data[i].Enrol_Card_Id
+					jishu++;
+				}else {
+					notices.error({
+						title: '提示',
+						message: '请选择未使用的注册卡'
+					});
+					return;
+				}
+			}
+		}
+		var datas={};
+		datas.shuzu=shuz
+		console.log(datas)
+		cardIdActivation(datas);
+	}
+	function cardIdActivation(data){
+		$.ajax({
+			type: "post",
+			traditional:true,
+			dataType: "json",
+			data:data,
+			url: "/YhUserSetting/cardIdActivation",
+			success:function(data){
+				notices.success({
+					title: '消息通知',
+					message: '生成成功'
+				});
+				window.location.reload();
+			}
+		})
+	}
+});
+
+</script>
+
+</html>

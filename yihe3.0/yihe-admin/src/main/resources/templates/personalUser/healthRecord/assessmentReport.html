@@ -1,0 +1,3493 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+		<title>个人健康风险评估汇总报告</title>
+	<link rel="stylesheet" th:href="@{/assets/libs/layui/css/layui.css}" />
+<link rel="stylesheet" th:href="@{/assets/module/admin.css}" />
+		<style type="text/css">
+			body {
+				padding: 20px;
+				background-color: white;
+			}
+
+			#back {
+				line-height: 20px;
+				text-align: right;
+			}
+			.progress {
+				background-image: linear-gradient(to right, #648af585 0%, #90b4f78a 25%, #1b8bffab 50%, #1ba0ffa1 75%, #1b8bffad 100%);
+				height: 0.5em;
+				height: 11px;
+			
+				padding: 5px;
+				overflow: visible;
+				border-radius: 20px;
+			
+			
+				margin-top: 50px;
+			}
+			
+			.progress .progress-bar {
+				border-radius: 20px;
+				position: relative;
+				animation: animate-positive 2s;
+			}
+			
+			.progress .progress-value {
+				display: block;
+				padding: 3px 7px;
+				font-size: 13px;
+				color: #fff;
+				position: absolute;
+				top: -31px;
+				right: -18px;
+			}
+			
+			
+			@-webkit-keyframes animate-positive {
+				0% {
+					width: 0;
+				}
+			}
+			
+			@keyframes animate-positive {
+				0% {
+					width: 0;
+				}
+			}
+			.layui-col-md4 {
+			    padding: 15px;
+			}
+			.layui-elem-quote{
+			font-size: 16px;
+			font-weight: 800;
+			}
+		</style>
+		<!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+	</head>
+
+	<body class="layui-container">
+
+		<div class="layui-row">
+			<div class="layui-col-md7" style="font-size: 34px;line-height: 120px;">
+				个人健康风险评估汇总报告
+			</div>
+			<div class="layui-col-md5" style="text-align: right;">
+				<img style="height: 120px;" src="https://img.xiaopiu.com/userImages/img195170e6f083d8.png">
+			</div>
+		</div>
+
+		<blockquote class="layui-elem-quote layui-text">
+			本次疾病风险评估汇总
+		</blockquote>
+		<div class="layui-row" style="text-align: center;">
+			<div class="layui-col-md5" style="width: 14%;">
+				<div>
+					<span class="layui-badge" style="height: 12px;background-color: #FF0000;"></span>
+				</div>
+				现患
+			</div>
+			<div class="layui-col-md5" style="width: 14%;">
+				<div>
+					<span class="layui-badge" style="height: 12px;background-color: #EC5D51;"></span>
+				</div>
+				高风险（高危）
+			</div>
+			<div class="layui-col-md5" style="width: 14%;">
+				<div>
+					<span class="layui-badge" style="height: 12px;background-color: #FF8700;"></span>
+				</div>
+				较高风险
+			</div>
+			<div class="layui-col-md5" style="width: 14%;">
+				<div>
+					<span class="layui-badge" style="height: 12px;background-color: #009DFF;"></span>
+				</div>
+				中等风险
+			</div>
+			<div class="layui-col-md5" style="width: 14%;">
+				<div>
+					<span class="layui-badge" style="height: 12px;background-color: #A0DCA0;"></span>
+				</div>
+				较低风险
+			</div>
+			<div class="layui-col-md5" style="width: 14%;">
+				<div>
+					<span class="layui-badge" style="height: 12px;background-color: #43D9B8;"></span>
+				</div>
+				低风险（低危）
+			</div>
+			<div class="layui-col-md5" style="width: 14%;">
+				<div>
+					<span class="layui-badge" style="height: 12px;background-color: #B0B2FF;"></span>
+				</div>
+				疑似
+			</div>
+		</div>
+
+		<div class="layui-row" style="text-align: center;padding-top: 20px;">
+			<div class="layui-col-md4" th:each="user,userStat : ${findDiseaseNameAndRiskLevelByRs}">
+				<button class="layui-btn layui-btn-primary" style="width: 100px">[[${user.diseaseName}]] </button><button type="button" th:if="${#strings.containsIgnoreCase(user.riskLevel,'患')}" class="layui-btn" style="background-color: #FF0000;width: 100px">现患</button>
+				 	 <button type="button" th:if="${#strings.containsIgnoreCase(user.riskLevel,'高')&&!#strings.containsIgnoreCase(user.riskLevel,'高血')&&!#strings.containsIgnoreCase(user.riskLevel,'较高')}" class="layui-btn" style="background-color: #EC5D51;width: 100px">高风险</button>
+				 	 <button type="button" th:if="${#strings.containsIgnoreCase(user.riskLevel,'较高')}" class="layui-btn" style="background-color: #FF8700;width: 100px">较高</button>
+				 	 <button type="button" th:if="${#strings.containsIgnoreCase(user.riskLevel,'中等')}" class="layui-btn" style="background-color: #009DFF;width: 100px">中等风险</button>
+				 	 <button type="button" th:if="${#strings.containsIgnoreCase(user.riskLevel,'较低')}" class="layui-btn" style="background-color: #A0DCA0;width: 100px">较低风险</button>
+				 	 <button type="button" th:if="${#strings.containsIgnoreCase(user.riskLevel,'异')}" class="layui-btn" style="background-color: #FF0000;width: 100px">异常</button>
+				 	 <button type="button" th:if="${#strings.containsIgnoreCase(user.riskLevel,'低')&&!#strings.containsIgnoreCase(user.riskLevel,'较低')}" class="layui-btn" style="background-color: #43D9B8;width: 100px">低风险</button>
+				 	 <button type="button" th:if="${#strings.containsIgnoreCase(user.riskLevel,'疑')&&!#strings.containsIgnoreCase(user.riskLevel,'患')}" class="layui-btn" style="background-color: #较低;width: 100px">疑似</button>
+			</div>
+			 
+		</div>
+
+		<blockquote class="layui-elem-quote layui-text" style="margin-top: 20px;">
+			当前的健康指标数据及理想目标
+		</blockquote>
+
+		<div class="layui-form" style="text-align: center;">
+			<table class="layui-table" id="gaoxueya"  lay-filter="gaoxueya">
+				 <colgroup>
+					<col width="150">
+					<col width="150">
+					<col width="200">
+					<col>
+				</colgroup>
+				<thead>
+					<tr>
+						<th style="text-align: center;">指标</th>
+						<th style="text-align: center;">理想目标</th>
+						<th style="text-align: center;">当前数据</th>
+
+					</tr>
+				</thead> 
+				 <tbody>
+					<tr>
+						<td>血糖</td>
+						<td>
+							< 6.1mmol/L </td> <td id="gxyxuetang"> 
+						</td>
+
+					</tr>
+					<tr>
+						<td>血压</td>
+						<td>
+							< 120/80 </td> <td id="gxyxueya"> 
+						</td>
+					</tr>
+					<tr>
+						<td>腰围</td>
+						<td>
+							< 80cm</td> <td id="gxyyaowei"> 
+						</td>
+					</tr>
+					<tr>
+						<td>BMI</td>
+						<td>18.5 ≤ BMI < 24</td> <td id="gxybmi"></td>
+					</tr>
+					<tr>
+						<td>总胆固醇</td>
+						<td>
+							< 5.18mmol/L </td> <td id="gxytc">
+						</td>
+					</tr>
+					<tr>
+						<td>甘油三酯</td>
+						<td>
+							< 1.7mmol/ L</td> <td id="gxytg">
+						</td>
+					</tr>
+					<tr>
+						<td>高密度脂蛋白</td>
+						<td>≥ 1.04mmol/L</td>
+						<td id="gxyhdlc"></td>
+					</tr>
+					<tr>
+						<td>低密度脂蛋白</td>
+						<td>
+							< 3.37mmol/L </td> <td id="gxyldlc">
+						</td>
+					</tr>
+					<tr>
+						<td>膳食结构</td>
+						<td>合理</td>
+						<td id="gxyfood"></td>
+					</tr>
+					<tr>
+						<td>体力活动</td>
+						<td>充分</td>
+						<td id="gxysport"></td>
+					</tr>
+					<tr>
+						<td>吸烟</td>
+						<td>不吸烟或戒烟</td>
+						<td id="gxysmoke"></td>
+					</tr>
+					<tr>
+						<td>饮酒</td>
+						<td>适量或不喝酒</td>
+						<td id="gxydrck"></td>
+					</tr>
+
+				</tbody> 
+			</table>
+		</div>
+
+
+
+		<blockquote class="layui-elem-quote layui-text" style="margin-top: 20px;">
+			如果达到了上述理想目标，疾病风险的下降率为
+		</blockquote>
+
+		<div class="layui-form" style="text-align: center;">
+			<table class="layui-table">
+
+				<thead>
+					<tr>
+						<th  th:each="user,userStat : ${findDiseaseNameAndRiskLevelByRs}" style="text-align: center;">[[${user.diseaseName}]]</th>
+						 
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<th  th:each="user,userStat : ${findDiseaseNameAndRiskLevelByRs}" style="text-align: center;">[[${user.idealRiskLevel}]]%</th>
+					</tr>
+
+
+				</tbody>
+			</table>
+		</div>
+
+		<div class="layui-row" style="margin-top: 50px;">
+			<div class="layui-col-md7" style="font-size: 34px;line-height: 120px;">
+				高血压风险评估报告
+			</div>
+			<div class="layui-col-md5" style="text-align: right;">
+				<img style="height: 120px;" src="https://img.xiaopiu.com/userImages/img195170e6f083d8.png">
+			</div>
+		</div>
+
+
+		<blockquote class="layui-elem-quote layui-text">
+			未来4年高血压的发病风险等级：低风险
+		</blockquote>
+
+		<div class="layui-row">
+			<div class="layui-col-md6">
+				<div style="width:500px;height:450px;" id="gaoxueyatu"></div>
+			</div>
+			<div class="layui-col-md6">
+				<div class="layui-col-md6">
+
+					<span class="layui-badge" style="height: 12px;background-color: #E3E2FE;"></span>
+
+					当前风险
+				</div>
+				<div class="layui-col-md6">
+					<span class="layui-badge" style="height: 12px;background-color: #ADC4FD;"></span>
+
+					当前风险
+				</div>
+
+				<div id="" style="line-height: 33px;padding-top: 50px;">
+					<p style="color: #1AA4FF;font-weight: 600;font-size: 18px;">您患高血压的风险等级：低风险</p>
+
+					<p>基于您提供的有关健康信息及临床检查结果，得出您与同年龄同性别人群高血压发病的风险等级。</p>
+
+				</div>
+
+				<div id="" style="line-height: 33px;padding-top: 50px;">
+					<p style="color: #1AA4FF;font-weight: 600;font-size: 18px;">您患高血压的风险等级：低风险</p>
+
+					<p>基于您提供的有关健康信息及临床检查结果，得出您与同年龄同性别人群高血压发病的风险等级。</p>
+
+				</div>
+
+				<div id="" style="line-height: 33px;padding-top: 50px;">
+					<p style="color: #1AA4FF;font-weight: 600;font-size: 18px;">您患高血压的风险等级：低风险</p>
+
+					<p>基于您提供的有关健康信息及临床检查结果，得出您与同年龄同性别人群高血压发病的风险等级。</p>
+
+				</div>
+			</div>
+		</div>
+
+		<blockquote class="layui-elem-quote layui-text" style="margin-top: 20px;">
+			与高血压发病相关的危险因素
+		</blockquote>
+
+		<div class="layui-form" style="text-align: center;padding-top: 20px;">
+			<table class="layui-table">
+
+				<thead>
+					<tr>
+						<th style="text-align: center;">危险因素</th>
+						<th style="text-align: center;">本次评估时间<br>（2019-11-28）</th>
+						<th style="text-align: center;">上次评估时间<br>（2018-10-05）</th>
+						<th style="text-align: center;">变化情况</th>
+						<th style="text-align: center;">理想水平</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>年龄</td>
+						<td>23</td>
+						<td>22</td>
+						<td>↑</td>
+						<td>随年龄增加风险升高</td>
+					</tr>
+					<tr>
+						<td>父母高血压史</td>
+						<td>有（双方）</td>
+						<td>有（双方）</td>
+						<td>--</td>
+						<td>无</td>
+					</tr>
+					<tr>
+						<td>收缩压</td>
+						<td>99</td>
+						<td>100</td>
+						<td>↓</td>
+						<td>
+							< 120 mmHg</td> </tr> <tr>
+						<td>体重指数（BMI）</td>
+						<td>17.21</td>
+						<td>17.40</td>
+						<td>↓</td>
+						<td>18.5 ≤ BMI < 24</td> </tr> <tr>
+						<td>吸烟状况</td>
+						<td>不吸烟</td>
+						<td>不吸烟</td>
+						<td>--</td>
+						<td>不吸烟</td>
+					</tr>
+
+
+
+
+
+				</tbody>
+			</table>
+		</div>
+
+
+
+		<blockquote class="layui-elem-quote layui-text" style="margin-top: 20px;">
+			如何改善目前状况降低风险
+		</blockquote>
+
+
+		<div id="" style="line-height: 40px;">
+			<p style="color: #1AA4FF;font-weight: 600;font-size: 18px;">※目前状况：血压偏高 努力目标：降低血压至120/80mmHg以下</p>
+
+			<p style="text-indent:30px">您的血压已高于《中国高血压防治指南》所建议的正常血压范围(＜120/80mmHg)。
+				您的血压越高，患心血管疾病的危险性就越大。大多数自我感觉健康的人并没意识到他们患有高血压，所以高血压被称为隐形杀手。您应该努力通过改善膳食、运动习惯达到理想血压。
+				血压超过140/90mmHg或有高血压症状者请向医生咨询有关控制措施。</p>
+
+			<p style="text-indent:30px">有助于您降低血压的方法：</p>
+			<p style="text-indent:30px">（1）超重和肥胖、饮酒过量、膳食高盐是导致高血压的主要危险因素，请注意避免这些因素。</p>
+			<p style="text-indent:30px">（2）保持积极、乐观、平和的心态，学会正确处理工作生活中的压力。</p>
+
+
+		</div>
+
+		<div id="" style="line-height: 40px;">
+			<p style="color: #1AA4FF;font-weight: 600;font-size: 18px;">※目前状况：腰围过大 努力目标：降低腰围</p>
+
+			<p style="text-indent:30px">您的腰围已超过正常范围85cm。目前公认腰围是衡量脂肪在腹部蓄积（向心性肥胖）程度最简单实用的指标，脂肪在体内的分布，尤其是腹部脂肪堆积的程度，与糖尿病等肥胖相关性疾病有更强的关联。</p>
+
+			<p style="text-indent:30px">对于体重指数不太高者，腹部脂肪增加被认为是独立的危险性预测因素。</p>
+			<p style="text-indent:30px">有助于您降低腰围的方法：</p>
+
+			<p style="text-indent:30px">（1）控制饮食总热量，多选择能量密度较低的食物，如蔬菜、水果、豆制品、杂粮等。</p>
+			<p style="text-indent:30px">（2）改变生活习惯：吃完饭后不要立即坐下或趴睡，最好能保持站立的姿势，可以选择散步或做家务。</p>
+			<p style="text-indent:30px">（3）走姿和坐姿要正确；走路时要抬头挺胸、摆动手臂；坐下时脊背打直，不要弯腰或挺腹，如此腰部才不易松垮。</p>
+			<p style="text-indent:30px">（4）在全身运动的基础上，加强腰部锻炼：30分钟以上的全身运动有助于减少脂肪，从而减小腰围，而腰部运动如呼拉圈、仰卧起坐等，可增加腹部肌肉的弹性，改善体态。</p>
+
+		</div>
+
+
+		<div id="" style="line-height: 40px;">
+			<p style="color: #1AA4FF;font-weight: 600;font-size: 18px;">※目前状况：存在高脂饮食 努力目标：控制高脂肪食物的摄入量</p>
+
+			<p style="text-indent:30px">你目前的饮食结构为高脂肪型饮食。高脂肪型饮食是指在每天的饮食中，摄入的脂肪所提供的能量超过全天总热量的30%；饮食当中脂肪摄入过多，特别是动物性脂肪的过多摄入，可能会使体内胆固醇增加，继而导致雄性激素生成过多，雄性激素水平的增高是诱发前列腺癌的危险因素之一，因此在日常膳食当中应控制高脂肪食物的摄入量。高脂肪的食物包括肉类（尤其肥肉）、油炸食品及奶油蛋糕（多数市售奶油蛋糕）、动物油脂、植物油等。</p>
+
+			<p style="text-indent:30px">有助于您控制高脂肪食物的摄入量的方法：</p>
+
+			<p style="text-indent:30px">（1）少吃或不吃高脂肪的食物：如肉类（尤其肥肉）、油炸食品及奶油蛋糕（多数市售奶油蛋糕）、动物油脂、植物油等。</p>
+			<p style="text-indent:30px">（2）适量增加低脂肪的食物：所有的蔬菜和水果、大多数的鱼类（三文鱼、鳗鱼等脂</p>
+			<p style="text-indent:30px">（3）减少烹调用油，在烹调时多采用煮、蒸、凉拌等烹调方法。</p>
+
+		</div>
+
+
+		<div class="layui-row" style="margin-top: 50px;">
+			<div class="layui-col-md7" style="font-size: 34px;line-height: 120px;">
+				糖尿病风险评估报告
+			</div>
+			<div class="layui-col-md5" style="text-align: right;">
+				<img style="height: 120px;" src="https://img.xiaopiu.com/userImages/img195170e6f083d8.png">
+			</div>
+		</div>
+
+
+		<blockquote class="layui-elem-quote layui-text">
+			未来4年糖尿病的发病风险等级：低风险
+		</blockquote>
+
+		<div class="layui-row">
+			<div class="layui-col-md6">
+				<div style="width:500px;height:450px;" id="tangniaobingtu"></div>
+			</div>
+			<div class="layui-col-md6">
+				<div class="layui-col-md6">
+
+					<span class="layui-badge" style="height: 12px;background-color: #E3E2FE;"></span>
+
+					当前风险
+				</div>
+				<div class="layui-col-md6">
+					<span class="layui-badge" style="height: 12px;background-color: #ADC4FD;"></span>
+
+					当前风险
+				</div>
+
+				<div id="" style="line-height: 33px;padding-top: 50px;">
+					<p style="color: #1AA4FF;font-weight: 600;font-size: 18px;">您患高血压的风险等级：低风险</p>
+
+					<p>基于您提供的有关健康信息及临床检查结果，得出您与同年龄同性别人群高血压发病的风险等级。</p>
+
+				</div>
+
+				<div id="" style="line-height: 33px;padding-top: 50px;">
+					<p style="color: #1AA4FF;font-weight: 600;font-size: 18px;">您患高血压的风险等级：低风险</p>
+
+					<p>基于您提供的有关健康信息及临床检查结果，得出您与同年龄同性别人群高血压发病的风险等级。</p>
+
+				</div>
+
+				<div id="" style="line-height: 33px;padding-top: 50px;">
+					<p style="color: #1AA4FF;font-weight: 600;font-size: 18px;">您患高血压的风险等级：低风险</p>
+
+					<p>基于您提供的有关健康信息及临床检查结果，得出您与同年龄同性别人群高血压发病的风险等级。</p>
+
+				</div>
+			</div>
+		</div>
+
+		<blockquote class="layui-elem-quote layui-text" style="margin-top: 20px;">
+			与糖尿病发病相关的危险因素
+		</blockquote>
+
+
+		<div class="layui-form" style="text-align: center;padding-top: 20px;">
+			<table class="layui-table">
+
+				<thead>
+					<tr>
+						<th style="text-align: center;">危险因素</th>
+						<th style="text-align: center;">本次评估时间<br>（2019-11-28）</th>
+						<th style="text-align: center;">上次评估时间<br>（2018-10-05）</th>
+						<th style="text-align: center;">变化情况</th>
+						<th style="text-align: center;">理想水平</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>年龄</td>
+						<td>23</td>
+						<td>22</td>
+						<td>↑</td>
+						<td>随年龄增加风险升高</td>
+					</tr>
+					<tr>
+						<td>糖尿病病史</td>
+						<td>有（双方）</td>
+						<td>有（双方）</td>
+						<td>--</td>
+						<td>无</td>
+					</tr>
+					<tr>
+						<td>高血压病史</td>
+						<td>有（双方）</td>
+						<td>有（双方）</td>
+						<td>--</td>
+						<td>无</td>
+					</tr>
+
+
+					<tr>
+						<td>体重指数（BMI）</td>
+						<td>17.21</td>
+						<td>17.40</td>
+						<td>↓</td>
+						<td>18.5 ≤ BMI < 24</td> </tr> <tr>
+						<td>吸烟状况</td>
+						<td>不吸烟</td>
+						<td>不吸烟</td>
+						<td>--</td>
+						<td>不吸烟</td>
+					</tr>
+
+
+
+
+
+				</tbody>
+			</table>
+		</div>
+
+
+		<blockquote class="layui-elem-quote layui-text" style="margin-top: 20px;">
+			如何改善目前状况降低风险
+		</blockquote>
+
+
+		<div id="" style="line-height: 40px;">
+			<p style="color: #1AA4FF;font-weight: 600;font-size: 18px;">※目前状况：血压偏高 努力目标：降低血压至120/80mmHg以下</p>
+
+			<p style="text-indent:30px">您的血压已高于《中国高血压防治指南》所建议的正常血压范围(＜120/80mmHg)。
+				您的血压越高，患心血管疾病的危险性就越大。大多数自我感觉健康的人并没意识到他们患有高血压，所以高血压被称为隐形杀手。您应该努力通过改善膳食、运动习惯达到理想血压。
+				血压超过140/90mmHg或有高血压症状者请向医生咨询有关控制措施。</p>
+
+			<p style="text-indent:30px">有助于您降低血压的方法：</p>
+			<p style="text-indent:30px">（1）超重和肥胖、饮酒过量、膳食高盐是导致高血压的主要危险因素，请注意避免这些因素。</p>
+			<p style="text-indent:30px">（2）保持积极、乐观、平和的心态，学会正确处理工作生活中的压力。</p>
+
+
+		</div>
+
+		<div id="" style="line-height: 40px;">
+			<p style="color: #1AA4FF;font-weight: 600;font-size: 18px;">※目前状况：腰围过大 努力目标：降低腰围</p>
+
+			<p style="text-indent:30px">您的腰围已超过正常范围85cm。目前公认腰围是衡量脂肪在腹部蓄积（向心性肥胖）程度最简单实用的指标，脂肪在体内的分布，尤其是腹部脂肪堆积的程度，与糖尿病等肥胖相关性疾病有更强的关联。</p>
+
+			<p style="text-indent:30px">对于体重指数不太高者，腹部脂肪增加被认为是独立的危险性预测因素。</p>
+			<p style="text-indent:30px">有助于您降低腰围的方法：</p>
+
+			<p style="text-indent:30px">（1）控制饮食总热量，多选择能量密度较低的食物，如蔬菜、水果、豆制品、杂粮等。</p>
+			<p style="text-indent:30px">（2）改变生活习惯：吃完饭后不要立即坐下或趴睡，最好能保持站立的姿势，可以选择散步或做家务。</p>
+			<p style="text-indent:30px">（3）走姿和坐姿要正确；走路时要抬头挺胸、摆动手臂；坐下时脊背打直，不要弯腰或挺腹，如此腰部才不易松垮。</p>
+			<p style="text-indent:30px">（4）在全身运动的基础上，加强腰部锻炼：30分钟以上的全身运动有助于减少脂肪，从而减小腰围，而腰部运动如呼拉圈、仰卧起坐等，可增加腹部肌肉的弹性，改善体态。</p>
+
+		</div>
+
+
+		<div id="" style="line-height: 40px;">
+			<p style="color: #1AA4FF;font-weight: 600;font-size: 18px;">※目前状况：存在高脂饮食 努力目标：控制高脂肪食物的摄入量</p>
+
+			<p style="text-indent:30px">你目前的饮食结构为高脂肪型饮食。高脂肪型饮食是指在每天的饮食中，摄入的脂肪所提供的能量超过全天总热量的30%；饮食当中脂肪摄入过多，特别是动物性脂肪的过多摄入，可能会使体内胆固醇增加，继而导致雄性激素生成过多，雄性激素水平的增高是诱发前列腺癌的危险因素之一，因此在日常膳食当中应控制高脂肪食物的摄入量。高脂肪的食物包括肉类（尤其肥肉）、油炸食品及奶油蛋糕（多数市售奶油蛋糕）、动物油脂、植物油等。</p>
+
+			<p style="text-indent:30px">有助于您控制高脂肪食物的摄入量的方法：</p>
+
+			<p style="text-indent:30px">（1）少吃或不吃高脂肪的食物：如肉类（尤其肥肉）、油炸食品及奶油蛋糕（多数市售奶油蛋糕）、动物油脂、植物油等。</p>
+			<p style="text-indent:30px">（2）适量增加低脂肪的食物：所有的蔬菜和水果、大多数的鱼类（三文鱼、鳗鱼等脂</p>
+			<p style="text-indent:30px">（3）减少烹调用油，在烹调时多采用煮、蒸、凉拌等烹调方法。</p>
+
+		</div>
+		
+		
+		<div class="layui-row" style="margin-top: 50px;">
+			<div class="layui-col-md7" style="font-size: 34px;line-height: 120px;">
+				冠心病风险评估报告
+			</div>
+			<div class="layui-col-md5" style="text-align: right;">
+				<img style="height: 120px;" src="https://img.xiaopiu.com/userImages/img195170e6f083d8.png">
+			</div>
+		</div>
+		
+		
+		<blockquote class="layui-elem-quote layui-text">
+			未来4年冠心病的发病风险等级：低风险
+		</blockquote>
+		
+		<div class="layui-row">
+			<div class="layui-col-md6">
+				<div style="width:500px;height:450px;" id="guanxinbingtu"></div>
+			</div>
+			<div class="layui-col-md6">
+				<div class="layui-col-md6">
+		
+					<span class="layui-badge" style="height: 12px;background-color: #E3E2FE;"></span>
+		
+					当前风险
+				</div>
+				<div class="layui-col-md6">
+					<span class="layui-badge" style="height: 12px;background-color: #ADC4FD;"></span>
+		
+					当前风险
+				</div>
+		
+				<div id="" style="line-height: 33px;padding-top: 50px;">
+					<p style="color: #1AA4FF;font-weight: 600;font-size: 18px;">您患高血压的风险等级：低风险</p>
+		
+					<p>基于您提供的有关健康信息及临床检查结果，得出您与同年龄同性别人群高血压发病的风险等级。</p>
+		
+				</div>
+		
+				<div id="" style="line-height: 33px;padding-top: 50px;">
+					<p style="color: #1AA4FF;font-weight: 600;font-size: 18px;">您患高血压的风险等级：低风险</p>
+		
+					<p>基于您提供的有关健康信息及临床检查结果，得出您与同年龄同性别人群高血压发病的风险等级。</p>
+		
+				</div>
+		
+				<div id="" style="line-height: 33px;padding-top: 50px;">
+					<p style="color: #1AA4FF;font-weight: 600;font-size: 18px;">您患高血压的风险等级：低风险</p>
+		
+					<p>基于您提供的有关健康信息及临床检查结果，得出您与同年龄同性别人群高血压发病的风险等级。</p>
+		
+				</div>
+			</div>
+		</div>
+		
+		<blockquote class="layui-elem-quote layui-text" style="margin-top: 20px;">
+			与冠心病发病相关的危险因素
+		</blockquote>
+		
+		
+		<div class="layui-form" style="text-align: center;padding-top: 20px;">
+			<table class="layui-table">
+		
+				<thead>
+					<tr>
+						<th style="text-align: center;">危险因素</th>
+						<th style="text-align: center;">本次评估时间<br>（2019-11-28）</th>
+						<th style="text-align: center;">上次评估时间<br>（2018-10-05）</th>
+						<th style="text-align: center;">变化情况</th>
+						<th style="text-align: center;">理想水平</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>年龄</td>
+						<td>23</td>
+						<td>22</td>
+						<td>↑</td>
+						<td>随年龄增加风险升高</td>
+					</tr>
+					<tr>
+						<td>糖尿病病史</td>
+						<td>有（双方）</td>
+						<td>有（双方）</td>
+						<td>--</td>
+						<td>无</td>
+					</tr>
+					<tr>
+						<td>高血压病史</td>
+						<td>有（双方）</td>
+						<td>有（双方）</td>
+						<td>--</td>
+						<td>无</td>
+					</tr>
+		
+		
+					<tr>
+						<td>体重指数（BMI）</td>
+						<td>17.21</td>
+						<td>17.40</td>
+						<td>↓</td>
+						<td>18.5 ≤ BMI < 24</td> </tr> <tr>
+						<td>吸烟状况</td>
+						<td>不吸烟</td>
+						<td>不吸烟</td>
+						<td>--</td>
+						<td>不吸烟</td>
+					</tr>
+		
+		
+		
+		
+		
+				</tbody>
+			</table>
+		</div>
+		
+		
+		<blockquote class="layui-elem-quote layui-text" style="margin-top: 20px;">
+			如何改善目前状况降低风险
+		</blockquote>
+		
+		
+		<div id="" style="line-height: 40px;">
+			<p style="color: #1AA4FF;font-weight: 600;font-size: 18px;">※目前状况：血压偏高 努力目标：降低血压至120/80mmHg以下</p>
+		
+			<p style="text-indent:30px">您的血压已高于《中国高血压防治指南》所建议的正常血压范围(＜120/80mmHg)。
+				您的血压越高，患心血管疾病的危险性就越大。大多数自我感觉健康的人并没意识到他们患有高血压，所以高血压被称为隐形杀手。您应该努力通过改善膳食、运动习惯达到理想血压。
+				血压超过140/90mmHg或有高血压症状者请向医生咨询有关控制措施。</p>
+		
+			<p style="text-indent:30px">有助于您降低血压的方法：</p>
+			<p style="text-indent:30px">（1）超重和肥胖、饮酒过量、膳食高盐是导致高血压的主要危险因素，请注意避免这些因素。</p>
+			<p style="text-indent:30px">（2）保持积极、乐观、平和的心态，学会正确处理工作生活中的压力。</p>
+		
+		
+		</div>
+		
+		<div id="" style="line-height: 40px;">
+			<p style="color: #1AA4FF;font-weight: 600;font-size: 18px;">※目前状况：腰围过大 努力目标：降低腰围</p>
+		
+			<p style="text-indent:30px">您的腰围已超过正常范围85cm。目前公认腰围是衡量脂肪在腹部蓄积（向心性肥胖）程度最简单实用的指标，脂肪在体内的分布，尤其是腹部脂肪堆积的程度，与糖尿病等肥胖相关性疾病有更强的关联。</p>
+		
+			<p style="text-indent:30px">对于体重指数不太高者，腹部脂肪增加被认为是独立的危险性预测因素。</p>
+			<p style="text-indent:30px">有助于您降低腰围的方法：</p>
+		
+			<p style="text-indent:30px">（1）控制饮食总热量，多选择能量密度较低的食物，如蔬菜、水果、豆制品、杂粮等。</p>
+			<p style="text-indent:30px">（2）改变生活习惯：吃完饭后不要立即坐下或趴睡，最好能保持站立的姿势，可以选择散步或做家务。</p>
+			<p style="text-indent:30px">（3）走姿和坐姿要正确；走路时要抬头挺胸、摆动手臂；坐下时脊背打直，不要弯腰或挺腹，如此腰部才不易松垮。</p>
+			<p style="text-indent:30px">（4）在全身运动的基础上，加强腰部锻炼：30分钟以上的全身运动有助于减少脂肪，从而减小腰围，而腰部运动如呼拉圈、仰卧起坐等，可增加腹部肌肉的弹性，改善体态。</p>
+		
+		</div>
+		
+		
+		<div id="" style="line-height: 40px;">
+			<p style="color: #1AA4FF;font-weight: 600;font-size: 18px;">※目前状况：存在高脂饮食 努力目标：控制高脂肪食物的摄入量</p>
+		
+			<p style="text-indent:30px">你目前的饮食结构为高脂肪型饮食。高脂肪型饮食是指在每天的饮食中，摄入的脂肪所提供的能量超过全天总热量的30%；饮食当中脂肪摄入过多，特别是动物性脂肪的过多摄入，可能会使体内胆固醇增加，继而导致雄性激素生成过多，雄性激素水平的增高是诱发前列腺癌的危险因素之一，因此在日常膳食当中应控制高脂肪食物的摄入量。高脂肪的食物包括肉类（尤其肥肉）、油炸食品及奶油蛋糕（多数市售奶油蛋糕）、动物油脂、植物油等。</p>
+		
+			<p style="text-indent:30px">有助于您控制高脂肪食物的摄入量的方法：</p>
+		
+			<p style="text-indent:30px">（1）少吃或不吃高脂肪的食物：如肉类（尤其肥肉）、油炸食品及奶油蛋糕（多数市售奶油蛋糕）、动物油脂、植物油等。</p>
+			<p style="text-indent:30px">（2）适量增加低脂肪的食物：所有的蔬菜和水果、大多数的鱼类（三文鱼、鳗鱼等脂</p>
+			<p style="text-indent:30px">（3）减少烹调用油，在烹调时多采用煮、蒸、凉拌等烹调方法。</p>
+		
+		</div>
+		
+		
+		<div class="layui-row" style="margin-top: 50px;">
+			<div class="layui-col-md7" style="font-size: 34px;line-height: 120px;">
+				脑卒中风险评估报告
+			</div>
+			<div class="layui-col-md5" style="text-align: right;">
+				<img style="height: 120px;" src="https://img.xiaopiu.com/userImages/img195170e6f083d8.png">
+			</div>
+		</div>
+		
+		
+		<blockquote class="layui-elem-quote layui-text">
+			未来4年脑卒中的发病风险等级：低风险
+		</blockquote>
+		
+		<div class="layui-row">
+			<div class="layui-col-md6">
+				<div style="width:500px;height:450px;" id="naocuzhongtu"></div>
+			</div>
+			<div class="layui-col-md6">
+				<div class="layui-col-md6">
+		
+					<span class="layui-badge" style="height: 12px;background-color: #E3E2FE;"></span>
+		
+					当前风险
+				</div>
+				<div class="layui-col-md6">
+					<span class="layui-badge" style="height: 12px;background-color: #ADC4FD;"></span>
+		
+					当前风险
+				</div>
+		
+				<div id="" style="line-height: 33px;padding-top: 50px;">
+					<p style="color: #1AA4FF;font-weight: 600;font-size: 18px;">您患高血压的风险等级：低风险</p>
+		
+					<p>基于您提供的有关健康信息及临床检查结果，得出您与同年龄同性别人群高血压发病的风险等级。</p>
+		
+				</div>
+		
+				<div id="" style="line-height: 33px;padding-top: 50px;">
+					<p style="color: #1AA4FF;font-weight: 600;font-size: 18px;">您患高血压的风险等级：低风险</p>
+		
+					<p>基于您提供的有关健康信息及临床检查结果，得出您与同年龄同性别人群高血压发病的风险等级。</p>
+		
+				</div>
+		
+				<div id="" style="line-height: 33px;padding-top: 50px;">
+					<p style="color: #1AA4FF;font-weight: 600;font-size: 18px;">您患高血压的风险等级：低风险</p>
+		
+					<p>基于您提供的有关健康信息及临床检查结果，得出您与同年龄同性别人群高血压发病的风险等级。</p>
+		
+				</div>
+			</div>
+		</div>
+		
+		<blockquote class="layui-elem-quote layui-text" style="margin-top: 20px;">
+			与冠心病发病相关的危险因素
+		</blockquote>
+		
+		
+		<div class="layui-form" style="text-align: center;padding-top: 20px;">
+			<table class="layui-table">
+		
+				<thead>
+					<tr>
+						<th style="text-align: center;">危险因素</th>
+						<th style="text-align: center;">本次评估时间<br>（2019-11-28）</th>
+						<th style="text-align: center;">上次评估时间<br>（2018-10-05）</th>
+						<th style="text-align: center;">变化情况</th>
+						<th style="text-align: center;">理想水平</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>年龄</td>
+						<td>23</td>
+						<td>22</td>
+						<td>↑</td>
+						<td>随年龄增加风险升高</td>
+					</tr>
+					<tr>
+						<td>糖尿病病史</td>
+						<td>有（双方）</td>
+						<td>有（双方）</td>
+						<td>--</td>
+						<td>无</td>
+					</tr>
+					<tr>
+						<td>高血压病史</td>
+						<td>有（双方）</td>
+						<td>有（双方）</td>
+						<td>--</td>
+						<td>无</td>
+					</tr>
+		
+		
+					<tr>
+						<td>体重指数（BMI）</td>
+						<td>17.21</td>
+						<td>17.40</td>
+						<td>↓</td>
+						<td>18.5 ≤ BMI < 24</td> </tr> <tr>
+						<td>吸烟状况</td>
+						<td>不吸烟</td>
+						<td>不吸烟</td>
+						<td>--</td>
+						<td>不吸烟</td>
+					</tr>
+		
+		
+		
+		
+		
+				</tbody>
+			</table>
+		</div>
+		
+		
+		<blockquote class="layui-elem-quote layui-text" style="margin-top: 20px;">
+			如何改善目前状况降低风险
+		</blockquote>
+		
+		
+		<div id="" style="line-height: 40px;">
+			<p style="color: #1AA4FF;font-weight: 600;font-size: 18px;">※目前状况：血压偏高 努力目标：降低血压至120/80mmHg以下</p>
+		
+			<p style="text-indent:30px">您的血压已高于《中国高血压防治指南》所建议的正常血压范围(＜120/80mmHg)。
+				您的血压越高，患心血管疾病的危险性就越大。大多数自我感觉健康的人并没意识到他们患有高血压，所以高血压被称为隐形杀手。您应该努力通过改善膳食、运动习惯达到理想血压。
+				血压超过140/90mmHg或有高血压症状者请向医生咨询有关控制措施。</p>
+		
+			<p style="text-indent:30px">有助于您降低血压的方法：</p>
+			<p style="text-indent:30px">（1）超重和肥胖、饮酒过量、膳食高盐是导致高血压的主要危险因素，请注意避免这些因素。</p>
+			<p style="text-indent:30px">（2）保持积极、乐观、平和的心态，学会正确处理工作生活中的压力。</p>
+		
+		
+		</div>
+		
+		<div id="" style="line-height: 40px;">
+			<p style="color: #1AA4FF;font-weight: 600;font-size: 18px;">※目前状况：腰围过大 努力目标：降低腰围</p>
+		
+			<p style="text-indent:30px">您的腰围已超过正常范围85cm。目前公认腰围是衡量脂肪在腹部蓄积（向心性肥胖）程度最简单实用的指标，脂肪在体内的分布，尤其是腹部脂肪堆积的程度，与糖尿病等肥胖相关性疾病有更强的关联。</p>
+		
+			<p style="text-indent:30px">对于体重指数不太高者，腹部脂肪增加被认为是独立的危险性预测因素。</p>
+			<p style="text-indent:30px">有助于您降低腰围的方法：</p>
+		
+			<p style="text-indent:30px">（1）控制饮食总热量，多选择能量密度较低的食物，如蔬菜、水果、豆制品、杂粮等。</p>
+			<p style="text-indent:30px">（2）改变生活习惯：吃完饭后不要立即坐下或趴睡，最好能保持站立的姿势，可以选择散步或做家务。</p>
+			<p style="text-indent:30px">（3）走姿和坐姿要正确；走路时要抬头挺胸、摆动手臂；坐下时脊背打直，不要弯腰或挺腹，如此腰部才不易松垮。</p>
+			<p style="text-indent:30px">（4）在全身运动的基础上，加强腰部锻炼：30分钟以上的全身运动有助于减少脂肪，从而减小腰围，而腰部运动如呼拉圈、仰卧起坐等，可增加腹部肌肉的弹性，改善体态。</p>
+		
+		</div>
+		
+		
+		<div id="" style="line-height: 40px;">
+			<p style="color: #1AA4FF;font-weight: 600;font-size: 18px;">※目前状况：存在高脂饮食 努力目标：控制高脂肪食物的摄入量</p>
+		
+			<p style="text-indent:30px">你目前的饮食结构为高脂肪型饮食。高脂肪型饮食是指在每天的饮食中，摄入的脂肪所提供的能量超过全天总热量的30%；饮食当中脂肪摄入过多，特别是动物性脂肪的过多摄入，可能会使体内胆固醇增加，继而导致雄性激素生成过多，雄性激素水平的增高是诱发前列腺癌的危险因素之一，因此在日常膳食当中应控制高脂肪食物的摄入量。高脂肪的食物包括肉类（尤其肥肉）、油炸食品及奶油蛋糕（多数市售奶油蛋糕）、动物油脂、植物油等。</p>
+		
+			<p style="text-indent:30px">有助于您控制高脂肪食物的摄入量的方法：</p>
+		
+			<p style="text-indent:30px">（1）少吃或不吃高脂肪的食物：如肉类（尤其肥肉）、油炸食品及奶油蛋糕（多数市售奶油蛋糕）、动物油脂、植物油等。</p>
+			<p style="text-indent:30px">（2）适量增加低脂肪的食物：所有的蔬菜和水果、大多数的鱼类（三文鱼、鳗鱼等脂</p>
+			<p style="text-indent:30px">（3）减少烹调用油，在烹调时多采用煮、蒸、凉拌等烹调方法。</p>
+		
+		</div>
+		
+		
+		<div class="layui-row" style="margin-top: 50px;">
+			<div class="layui-col-md7" style="font-size: 34px;line-height: 120px;">
+				肺癌风险评估报告
+			</div>
+			<div class="layui-col-md5" style="text-align: right;">
+				<img style="height: 120px;" src="https://img.xiaopiu.com/userImages/img195170e6f083d8.png">
+			</div>
+		</div>
+		
+		
+		<blockquote class="layui-elem-quote layui-text">
+			未来4年肺癌的发病风险等级：低风险
+		</blockquote>
+		
+		<div class="layui-row">
+			<div class="layui-col-md6">
+				<div style="width:500px;height:450px;" id="feiaitu"></div>
+			</div>
+			<div class="layui-col-md6">
+				<div class="layui-col-md6">
+		
+					<span class="layui-badge" style="height: 12px;background-color: #E3E2FE;"></span>
+		
+					当前风险
+				</div>
+				<div class="layui-col-md6">
+					<span class="layui-badge" style="height: 12px;background-color: #ADC4FD;"></span>
+		
+					当前风险
+				</div>
+		
+				<div id="" style="line-height: 33px;padding-top: 50px;">
+					<p style="color: #1AA4FF;font-weight: 600;font-size: 18px;">您患高血压的风险等级：低风险</p>
+		
+					<p>基于您提供的有关健康信息及临床检查结果，得出您与同年龄同性别人群高血压发病的风险等级。</p>
+		
+				</div>
+		
+				<div id="" style="line-height: 33px;padding-top: 50px;">
+					<p style="color: #1AA4FF;font-weight: 600;font-size: 18px;">您患高血压的风险等级：低风险</p>
+		
+					<p>基于您提供的有关健康信息及临床检查结果，得出您与同年龄同性别人群高血压发病的风险等级。</p>
+		
+				</div>
+		
+				<div id="" style="line-height: 33px;padding-top: 50px;">
+					<p style="color: #1AA4FF;font-weight: 600;font-size: 18px;">您患高血压的风险等级：低风险</p>
+		
+					<p>基于您提供的有关健康信息及临床检查结果，得出您与同年龄同性别人群高血压发病的风险等级。</p>
+		
+				</div>
+			</div>
+		</div>
+		
+		<blockquote class="layui-elem-quote layui-text" style="margin-top: 20px;">
+			与肺癌发病相关的危险因素
+		</blockquote>
+		
+		
+		<div class="layui-form" style="text-align: center;padding-top: 20px;">
+			<table class="layui-table">
+		
+				<thead>
+					<tr>
+						<th style="text-align: center;">危险因素</th>
+						<th style="text-align: center;">本次评估时间<br>（2019-11-28）</th>
+						<th style="text-align: center;">上次评估时间<br>（2018-10-05）</th>
+						<th style="text-align: center;">变化情况</th>
+						<th style="text-align: center;">理想水平</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>年龄</td>
+						<td>23</td>
+						<td>22</td>
+						<td>↑</td>
+						<td>随年龄增加风险升高</td>
+					</tr>
+					<tr>
+						<td>糖尿病病史</td>
+						<td>有（双方）</td>
+						<td>有（双方）</td>
+						<td>--</td>
+						<td>无</td>
+					</tr>
+					<tr>
+						<td>高血压病史</td>
+						<td>有（双方）</td>
+						<td>有（双方）</td>
+						<td>--</td>
+						<td>无</td>
+					</tr>
+		
+		
+					<tr>
+						<td>体重指数（BMI）</td>
+						<td>17.21</td>
+						<td>17.40</td>
+						<td>↓</td>
+						<td>18.5 ≤ BMI < 24</td> </tr> <tr>
+						<td>吸烟状况</td>
+						<td>不吸烟</td>
+						<td>不吸烟</td>
+						<td>--</td>
+						<td>不吸烟</td>
+					</tr>
+		
+		
+		
+		
+		
+				</tbody>
+			</table>
+		</div>
+		
+		
+		<blockquote class="layui-elem-quote layui-text" style="margin-top: 20px;">
+			如何改善目前状况降低风险
+		</blockquote>
+		
+		
+		<div id="" style="line-height: 40px;">
+			<p style="color: #1AA4FF;font-weight: 600;font-size: 18px;">※目前状况：血压偏高 努力目标：降低血压至120/80mmHg以下</p>
+		
+			<p style="text-indent:30px">您的血压已高于《中国高血压防治指南》所建议的正常血压范围(＜120/80mmHg)。
+				您的血压越高，患心血管疾病的危险性就越大。大多数自我感觉健康的人并没意识到他们患有高血压，所以高血压被称为隐形杀手。您应该努力通过改善膳食、运动习惯达到理想血压。
+				血压超过140/90mmHg或有高血压症状者请向医生咨询有关控制措施。</p>
+		
+			<p style="text-indent:30px">有助于您降低血压的方法：</p>
+			<p style="text-indent:30px">（1）超重和肥胖、饮酒过量、膳食高盐是导致高血压的主要危险因素，请注意避免这些因素。</p>
+			<p style="text-indent:30px">（2）保持积极、乐观、平和的心态，学会正确处理工作生活中的压力。</p>
+		
+		
+		</div>
+		
+		<div id="" style="line-height: 40px;">
+			<p style="color: #1AA4FF;font-weight: 600;font-size: 18px;">※目前状况：腰围过大 努力目标：降低腰围</p>
+		
+			<p style="text-indent:30px">您的腰围已超过正常范围85cm。目前公认腰围是衡量脂肪在腹部蓄积（向心性肥胖）程度最简单实用的指标，脂肪在体内的分布，尤其是腹部脂肪堆积的程度，与糖尿病等肥胖相关性疾病有更强的关联。</p>
+		
+			<p style="text-indent:30px">对于体重指数不太高者，腹部脂肪增加被认为是独立的危险性预测因素。</p>
+			<p style="text-indent:30px">有助于您降低腰围的方法：</p>
+		
+			<p style="text-indent:30px">（1）控制饮食总热量，多选择能量密度较低的食物，如蔬菜、水果、豆制品、杂粮等。</p>
+			<p style="text-indent:30px">（2）改变生活习惯：吃完饭后不要立即坐下或趴睡，最好能保持站立的姿势，可以选择散步或做家务。</p>
+			<p style="text-indent:30px">（3）走姿和坐姿要正确；走路时要抬头挺胸、摆动手臂；坐下时脊背打直，不要弯腰或挺腹，如此腰部才不易松垮。</p>
+			<p style="text-indent:30px">（4）在全身运动的基础上，加强腰部锻炼：30分钟以上的全身运动有助于减少脂肪，从而减小腰围，而腰部运动如呼拉圈、仰卧起坐等，可增加腹部肌肉的弹性，改善体态。</p>
+		
+		</div>
+		
+		
+		<div id="" style="line-height: 40px;">
+			<p style="color: #1AA4FF;font-weight: 600;font-size: 18px;">※目前状况：存在高脂饮食 努力目标：控制高脂肪食物的摄入量</p>
+		
+			<p style="text-indent:30px">你目前的饮食结构为高脂肪型饮食。高脂肪型饮食是指在每天的饮食中，摄入的脂肪所提供的能量超过全天总热量的30%；饮食当中脂肪摄入过多，特别是动物性脂肪的过多摄入，可能会使体内胆固醇增加，继而导致雄性激素生成过多，雄性激素水平的增高是诱发前列腺癌的危险因素之一，因此在日常膳食当中应控制高脂肪食物的摄入量。高脂肪的食物包括肉类（尤其肥肉）、油炸食品及奶油蛋糕（多数市售奶油蛋糕）、动物油脂、植物油等。</p>
+		
+			<p style="text-indent:30px">有助于您控制高脂肪食物的摄入量的方法：</p>
+		
+			<p style="text-indent:30px">（1）少吃或不吃高脂肪的食物：如肉类（尤其肥肉）、油炸食品及奶油蛋糕（多数市售奶油蛋糕）、动物油脂、植物油等。</p>
+			<p style="text-indent:30px">（2）适量增加低脂肪的食物：所有的蔬菜和水果、大多数的鱼类（三文鱼、鳗鱼等脂</p>
+			<p style="text-indent:30px">（3）减少烹调用油，在烹调时多采用煮、蒸、凉拌等烹调方法。</p>
+		
+		</div>
+		
+		
+		<div class="layui-row" style="margin-top: 50px;">
+			<div class="layui-col-md7" style="font-size: 34px;line-height: 120px;">
+				乳腺癌风险评估报告
+			</div>
+			<div class="layui-col-md5" style="text-align: right;">
+				<img style="height: 120px;" src="https://img.xiaopiu.com/userImages/img195170e6f083d8.png">
+			</div>
+		</div>
+		
+		
+		<blockquote class="layui-elem-quote layui-text">
+			未来4年乳腺癌的发病风险等级：低风险
+		</blockquote>
+		
+		<div class="layui-row">
+			<div class="layui-col-md6">
+				<div style="width:500px;height:450px;" id="ruxianaitu"></div>
+			</div>
+			<div class="layui-col-md6">
+				<div class="layui-col-md6">
+		
+					<span class="layui-badge" style="height: 12px;background-color: #E3E2FE;"></span>
+		
+					当前风险
+				</div>
+				<div class="layui-col-md6">
+					<span class="layui-badge" style="height: 12px;background-color: #ADC4FD;"></span>
+		
+					当前风险
+				</div>
+		
+				<div id="" style="line-height: 33px;padding-top: 50px;">
+					<p style="color: #1AA4FF;font-weight: 600;font-size: 18px;">您患高血压的风险等级：低风险</p>
+		
+					<p>基于您提供的有关健康信息及临床检查结果，得出您与同年龄同性别人群高血压发病的风险等级。</p>
+		
+				</div>
+		
+				<div id="" style="line-height: 33px;padding-top: 50px;">
+					<p style="color: #1AA4FF;font-weight: 600;font-size: 18px;">您患高血压的风险等级：低风险</p>
+		
+					<p>基于您提供的有关健康信息及临床检查结果，得出您与同年龄同性别人群高血压发病的风险等级。</p>
+		
+				</div>
+		
+				<div id="" style="line-height: 33px;padding-top: 50px;">
+					<p style="color: #1AA4FF;font-weight: 600;font-size: 18px;">您患高血压的风险等级：低风险</p>
+		
+					<p>基于您提供的有关健康信息及临床检查结果，得出您与同年龄同性别人群高血压发病的风险等级。</p>
+		
+				</div>
+			</div>
+		</div>
+		
+		<blockquote class="layui-elem-quote layui-text" style="margin-top: 20px;">
+			与乳腺癌发病相关的危险因素
+		</blockquote>
+		
+		
+		<div class="layui-form" style="text-align: center;padding-top: 20px;">
+			<table class="layui-table">
+		
+				<thead>
+					<tr>
+						<th style="text-align: center;">危险因素</th>
+						<th style="text-align: center;">本次评估时间<br>（2019-11-28）</th>
+						<th style="text-align: center;">上次评估时间<br>（2018-10-05）</th>
+						<th style="text-align: center;">变化情况</th>
+						<th style="text-align: center;">理想水平</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>年龄</td>
+						<td>23</td>
+						<td>22</td>
+						<td>↑</td>
+						<td>随年龄增加风险升高</td>
+					</tr>
+					<tr>
+						<td>糖尿病病史</td>
+						<td>有（双方）</td>
+						<td>有（双方）</td>
+						<td>--</td>
+						<td>无</td>
+					</tr>
+					<tr>
+						<td>高血压病史</td>
+						<td>有（双方）</td>
+						<td>有（双方）</td>
+						<td>--</td>
+						<td>无</td>
+					</tr>
+		
+		
+					<tr>
+						<td>体重指数（BMI）</td>
+						<td>17.21</td>
+						<td>17.40</td>
+						<td>↓</td>
+						<td>18.5 ≤ BMI < 24</td> </tr> <tr>
+						<td>吸烟状况</td>
+						<td>不吸烟</td>
+						<td>不吸烟</td>
+						<td>--</td>
+						<td>不吸烟</td>
+					</tr>
+		
+		
+		
+		
+		
+				</tbody>
+			</table>
+		</div>
+		
+		
+		<blockquote class="layui-elem-quote layui-text" style="margin-top: 20px;">
+			如何改善目前状况降低风险
+		</blockquote>
+		
+		
+		<div id="" style="line-height: 40px;">
+			<p style="color: #1AA4FF;font-weight: 600;font-size: 18px;">※目前状况：血压偏高 努力目标：降低血压至120/80mmHg以下</p>
+		
+			<p style="text-indent:30px">您的血压已高于《中国高血压防治指南》所建议的正常血压范围(＜120/80mmHg)。
+				您的血压越高，患心血管疾病的危险性就越大。大多数自我感觉健康的人并没意识到他们患有高血压，所以高血压被称为隐形杀手。您应该努力通过改善膳食、运动习惯达到理想血压。
+				血压超过140/90mmHg或有高血压症状者请向医生咨询有关控制措施。</p>
+		
+			<p style="text-indent:30px">有助于您降低血压的方法：</p>
+			<p style="text-indent:30px">（1）超重和肥胖、饮酒过量、膳食高盐是导致高血压的主要危险因素，请注意避免这些因素。</p>
+			<p style="text-indent:30px">（2）保持积极、乐观、平和的心态，学会正确处理工作生活中的压力。</p>
+		
+		
+		</div>
+		
+		<div id="" style="line-height: 40px;">
+			<p style="color: #1AA4FF;font-weight: 600;font-size: 18px;">※目前状况：腰围过大 努力目标：降低腰围</p>
+		
+			<p style="text-indent:30px">您的腰围已超过正常范围85cm。目前公认腰围是衡量脂肪在腹部蓄积（向心性肥胖）程度最简单实用的指标，脂肪在体内的分布，尤其是腹部脂肪堆积的程度，与糖尿病等肥胖相关性疾病有更强的关联。</p>
+		
+			<p style="text-indent:30px">对于体重指数不太高者，腹部脂肪增加被认为是独立的危险性预测因素。</p>
+			<p style="text-indent:30px">有助于您降低腰围的方法：</p>
+		
+			<p style="text-indent:30px">（1）控制饮食总热量，多选择能量密度较低的食物，如蔬菜、水果、豆制品、杂粮等。</p>
+			<p style="text-indent:30px">（2）改变生活习惯：吃完饭后不要立即坐下或趴睡，最好能保持站立的姿势，可以选择散步或做家务。</p>
+			<p style="text-indent:30px">（3）走姿和坐姿要正确；走路时要抬头挺胸、摆动手臂；坐下时脊背打直，不要弯腰或挺腹，如此腰部才不易松垮。</p>
+			<p style="text-indent:30px">（4）在全身运动的基础上，加强腰部锻炼：30分钟以上的全身运动有助于减少脂肪，从而减小腰围，而腰部运动如呼拉圈、仰卧起坐等，可增加腹部肌肉的弹性，改善体态。</p>
+		
+		</div>
+		
+		
+		<div id="" style="line-height: 40px;">
+			<p style="color: #1AA4FF;font-weight: 600;font-size: 18px;">※目前状况：存在高脂饮食 努力目标：控制高脂肪食物的摄入量</p>
+		
+			<p style="text-indent:30px">你目前的饮食结构为高脂肪型饮食。高脂肪型饮食是指在每天的饮食中，摄入的脂肪所提供的能量超过全天总热量的30%；饮食当中脂肪摄入过多，特别是动物性脂肪的过多摄入，可能会使体内胆固醇增加，继而导致雄性激素生成过多，雄性激素水平的增高是诱发前列腺癌的危险因素之一，因此在日常膳食当中应控制高脂肪食物的摄入量。高脂肪的食物包括肉类（尤其肥肉）、油炸食品及奶油蛋糕（多数市售奶油蛋糕）、动物油脂、植物油等。</p>
+		
+			<p style="text-indent:30px">有助于您控制高脂肪食物的摄入量的方法：</p>
+		
+			<p style="text-indent:30px">（1）少吃或不吃高脂肪的食物：如肉类（尤其肥肉）、油炸食品及奶油蛋糕（多数市售奶油蛋糕）、动物油脂、植物油等。</p>
+			<p style="text-indent:30px">（2）适量增加低脂肪的食物：所有的蔬菜和水果、大多数的鱼类（三文鱼、鳗鱼等脂</p>
+			<p style="text-indent:30px">（3）减少烹调用油，在烹调时多采用煮、蒸、凉拌等烹调方法。</p>
+		
+		</div>
+		
+		
+		
+		
+		<div class="layui-row" style="margin-top: 50px;">
+			<div class="layui-col-md7" style="font-size: 34px;line-height: 120px;">
+				前列腺癌风险评估报告
+			</div>
+			<div class="layui-col-md5" style="text-align: right;">
+				<img style="height: 120px;" src="https://img.xiaopiu.com/userImages/img195170e6f083d8.png">
+			</div>
+		</div>
+		
+		
+		<blockquote class="layui-elem-quote layui-text">
+			未来4年前列腺癌的发病风险等级：低风险
+		</blockquote>
+		
+		<div class="layui-row">
+			<div class="layui-col-md6">
+				<div style="width:500px;height:450px;" id="qianliexianaitu"></div>
+			</div>
+			<div class="layui-col-md6">
+				<div class="layui-col-md6">
+		
+					<span class="layui-badge" style="height: 12px;background-color: #E3E2FE;"></span>
+		
+					当前风险
+				</div>
+				<div class="layui-col-md6">
+					<span class="layui-badge" style="height: 12px;background-color: #ADC4FD;"></span>
+		
+					当前风险
+				</div>
+		
+				<div id="" style="line-height: 33px;padding-top: 50px;">
+					<p style="color: #1AA4FF;font-weight: 600;font-size: 18px;">您患高血压的风险等级：低风险</p>
+		
+					<p>基于您提供的有关健康信息及临床检查结果，得出您与同年龄同性别人群高血压发病的风险等级。</p>
+		
+				</div>
+		
+				<div id="" style="line-height: 33px;padding-top: 50px;">
+					<p style="color: #1AA4FF;font-weight: 600;font-size: 18px;">您患高血压的风险等级：低风险</p>
+		
+					<p>基于您提供的有关健康信息及临床检查结果，得出您与同年龄同性别人群高血压发病的风险等级。</p>
+		
+				</div>
+		
+				<div id="" style="line-height: 33px;padding-top: 50px;">
+					<p style="color: #1AA4FF;font-weight: 600;font-size: 18px;">您患高血压的风险等级：低风险</p>
+		
+					<p>基于您提供的有关健康信息及临床检查结果，得出您与同年龄同性别人群高血压发病的风险等级。</p>
+		
+				</div>
+			</div>
+		</div>
+		
+		<blockquote class="layui-elem-quote layui-text" style="margin-top: 20px;">
+			与前列腺癌发病相关的危险因素
+		</blockquote>
+		
+		
+		<div class="layui-form" style="text-align: center;padding-top: 20px;">
+			<table class="layui-table">
+		
+				<thead>
+					<tr>
+						<th style="text-align: center;">危险因素</th>
+						<th style="text-align: center;">本次评估时间<br>（2019-11-28）</th>
+						<th style="text-align: center;">上次评估时间<br>（2018-10-05）</th>
+						<th style="text-align: center;">变化情况</th>
+						<th style="text-align: center;">理想水平</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>年龄</td>
+						<td>23</td>
+						<td>22</td>
+						<td>↑</td>
+						<td>随年龄增加风险升高</td>
+					</tr>
+					<tr>
+						<td>糖尿病病史</td>
+						<td>有（双方）</td>
+						<td>有（双方）</td>
+						<td>--</td>
+						<td>无</td>
+					</tr>
+					<tr>
+						<td>高血压病史</td>
+						<td>有（双方）</td>
+						<td>有（双方）</td>
+						<td>--</td>
+						<td>无</td>
+					</tr>
+		
+		
+					<tr>
+						<td>体重指数（BMI）</td>
+						<td>17.21</td>
+						<td>17.40</td>
+						<td>↓</td>
+						<td>18.5 ≤ BMI < 24</td> </tr> <tr>
+						<td>吸烟状况</td>
+						<td>不吸烟</td>
+						<td>不吸烟</td>
+						<td>--</td>
+						<td>不吸烟</td>
+					</tr>
+		
+		
+		
+		
+		
+				</tbody>
+			</table>
+		</div>
+		
+		
+		<blockquote class="layui-elem-quote layui-text" style="margin-top: 20px;">
+			如何改善目前状况降低风险
+		</blockquote>
+		
+		
+		<div id="" style="line-height: 40px;">
+			<p style="color: #1AA4FF;font-weight: 600;font-size: 18px;">※目前状况：血压偏高 努力目标：降低血压至120/80mmHg以下</p>
+		
+			<p style="text-indent:30px">您的血压已高于《中国高血压防治指南》所建议的正常血压范围(＜120/80mmHg)。
+				您的血压越高，患心血管疾病的危险性就越大。大多数自我感觉健康的人并没意识到他们患有高血压，所以高血压被称为隐形杀手。您应该努力通过改善膳食、运动习惯达到理想血压。
+				血压超过140/90mmHg或有高血压症状者请向医生咨询有关控制措施。</p>
+		
+			<p style="text-indent:30px">有助于您降低血压的方法：</p>
+			<p style="text-indent:30px">（1）超重和肥胖、饮酒过量、膳食高盐是导致高血压的主要危险因素，请注意避免这些因素。</p>
+			<p style="text-indent:30px">（2）保持积极、乐观、平和的心态，学会正确处理工作生活中的压力。</p>
+		
+		
+		</div>
+		
+		<div id="" style="line-height: 40px;">
+			<p style="color: #1AA4FF;font-weight: 600;font-size: 18px;">※目前状况：腰围过大 努力目标：降低腰围</p>
+		
+			<p style="text-indent:30px">您的腰围已超过正常范围85cm。目前公认腰围是衡量脂肪在腹部蓄积（向心性肥胖）程度最简单实用的指标，脂肪在体内的分布，尤其是腹部脂肪堆积的程度，与糖尿病等肥胖相关性疾病有更强的关联。</p>
+		
+			<p style="text-indent:30px">对于体重指数不太高者，腹部脂肪增加被认为是独立的危险性预测因素。</p>
+			<p style="text-indent:30px">有助于您降低腰围的方法：</p>
+		
+			<p style="text-indent:30px">（1）控制饮食总热量，多选择能量密度较低的食物，如蔬菜、水果、豆制品、杂粮等。</p>
+			<p style="text-indent:30px">（2）改变生活习惯：吃完饭后不要立即坐下或趴睡，最好能保持站立的姿势，可以选择散步或做家务。</p>
+			<p style="text-indent:30px">（3）走姿和坐姿要正确；走路时要抬头挺胸、摆动手臂；坐下时脊背打直，不要弯腰或挺腹，如此腰部才不易松垮。</p>
+			<p style="text-indent:30px">（4）在全身运动的基础上，加强腰部锻炼：30分钟以上的全身运动有助于减少脂肪，从而减小腰围，而腰部运动如呼拉圈、仰卧起坐等，可增加腹部肌肉的弹性，改善体态。</p>
+		
+		</div>
+		
+		
+		<div id="" style="line-height: 40px;">
+			<p style="color: #1AA4FF;font-weight: 600;font-size: 18px;">※目前状况：存在高脂饮食 努力目标：控制高脂肪食物的摄入量</p>
+		
+			<p style="text-indent:30px">你目前的饮食结构为高脂肪型饮食。高脂肪型饮食是指在每天的饮食中，摄入的脂肪所提供的能量超过全天总热量的30%；饮食当中脂肪摄入过多，特别是动物性脂肪的过多摄入，可能会使体内胆固醇增加，继而导致雄性激素生成过多，雄性激素水平的增高是诱发前列腺癌的危险因素之一，因此在日常膳食当中应控制高脂肪食物的摄入量。高脂肪的食物包括肉类（尤其肥肉）、油炸食品及奶油蛋糕（多数市售奶油蛋糕）、动物油脂、植物油等。</p>
+		
+			<p style="text-indent:30px">有助于您控制高脂肪食物的摄入量的方法：</p>
+		
+			<p style="text-indent:30px">（1）少吃或不吃高脂肪的食物：如肉类（尤其肥肉）、油炸食品及奶油蛋糕（多数市售奶油蛋糕）、动物油脂、植物油等。</p>
+			<p style="text-indent:30px">（2）适量增加低脂肪的食物：所有的蔬菜和水果、大多数的鱼类（三文鱼、鳗鱼等脂</p>
+			<p style="text-indent:30px">（3）减少烹调用油，在烹调时多采用煮、蒸、凉拌等烹调方法。</p>
+		
+		</div>
+		
+		
+
+
+		<div class="layui-row" style="margin-top: 50px;">
+			<div class="layui-col-md7" style="font-size: 34px;line-height: 120px;">
+				骨质疏松性骨折风险评估报告
+			</div>
+			<div class="layui-col-md5" style="text-align: right;">
+				<img style="height: 120px;" src="https://img.xiaopiu.com/userImages/img195170e6f083d8.png">
+			</div>
+		</div>
+		
+		
+		<blockquote class="layui-elem-quote layui-text">
+			未来4年骨质疏松性骨折的发病风险等级：低风险
+		</blockquote>
+		
+		<div class="layui-row">
+			<div class="layui-col-md6">
+				<div style="width:500px;height:450px;" id="guzhisusongtu"></div>
+			</div>
+			<div class="layui-col-md6">
+				<div class="layui-col-md6">
+		
+					<span class="layui-badge" style="height: 12px;background-color: #E3E2FE;"></span>
+		
+					当前风险
+				</div>
+				<div class="layui-col-md6">
+					<span class="layui-badge" style="height: 12px;background-color: #ADC4FD;"></span>
+		
+					当前风险
+				</div>
+		
+				<div id="" style="line-height: 33px;padding-top: 50px;">
+					<p style="color: #1AA4FF;font-weight: 600;font-size: 18px;">您患高血压的风险等级：低风险</p>
+		
+					<p>基于您提供的有关健康信息及临床检查结果，得出您与同年龄同性别人群高血压发病的风险等级。</p>
+		
+				</div>
+		
+				<div id="" style="line-height: 33px;padding-top: 50px;">
+					<p style="color: #1AA4FF;font-weight: 600;font-size: 18px;">您患高血压的风险等级：低风险</p>
+		
+					<p>基于您提供的有关健康信息及临床检查结果，得出您与同年龄同性别人群高血压发病的风险等级。</p>
+		
+				</div>
+		
+				<div id="" style="line-height: 33px;padding-top: 50px;">
+					<p style="color: #1AA4FF;font-weight: 600;font-size: 18px;">您患高血压的风险等级：低风险</p>
+		
+					<p>基于您提供的有关健康信息及临床检查结果，得出您与同年龄同性别人群高血压发病的风险等级。</p>
+		
+				</div>
+			</div>
+		</div>
+		
+		<blockquote class="layui-elem-quote layui-text" style="margin-top: 20px;">
+			与骨质疏松性骨折发病相关的危险因素
+		</blockquote>
+		
+		
+		<div class="layui-form" style="text-align: center;padding-top: 20px;">
+			<table class="layui-table">
+		
+				<thead>
+					<tr>
+						<th style="text-align: center;">危险因素</th>
+						<th style="text-align: center;">本次评估时间<br>（2019-11-28）</th>
+						<th style="text-align: center;">上次评估时间<br>（2018-10-05）</th>
+						<th style="text-align: center;">变化情况</th>
+						<th style="text-align: center;">理想水平</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>年龄</td>
+						<td>23</td>
+						<td>22</td>
+						<td>↑</td>
+						<td>随年龄增加风险升高</td>
+					</tr>
+					<tr>
+						<td>糖尿病病史</td>
+						<td>有（双方）</td>
+						<td>有（双方）</td>
+						<td>--</td>
+						<td>无</td>
+					</tr>
+					<tr>
+						<td>高血压病史</td>
+						<td>有（双方）</td>
+						<td>有（双方）</td>
+						<td>--</td>
+						<td>无</td>
+					</tr>
+		
+		
+					<tr>
+						<td>体重指数（BMI）</td>
+						<td>17.21</td>
+						<td>17.40</td>
+						<td>↓</td>
+						<td>18.5 ≤ BMI < 24</td> </tr> <tr>
+						<td>吸烟状况</td>
+						<td>不吸烟</td>
+						<td>不吸烟</td>
+						<td>--</td>
+						<td>不吸烟</td>
+					</tr>
+		
+		
+		
+		
+		
+				</tbody>
+			</table>
+		</div>
+		
+		
+		
+		
+		<div class="layui-row" style="margin-top: 50px;">
+			<div class="layui-col-md7" style="font-size: 34px;line-height: 120px;">
+				代谢综合征风险评估报告
+			</div>
+			<div class="layui-col-md5" style="text-align: right;">
+				<img style="height: 120px;" src="https://img.xiaopiu.com/userImages/img195170e6f083d8.png">
+			</div>
+		</div>
+		
+		
+		<blockquote class="layui-elem-quote layui-text">
+			代谢综合征风险等级：低风险
+		</blockquote>
+		
+		<div class="layui-row">
+			<div class="layui-col-md6">
+				<div style="width:500px;height:450px;" id="daixiezonggezhengtu"></div>
+			</div>
+			<div class="layui-col-md6">
+				<div class="layui-col-md6">
+		
+					<span class="layui-badge" style="height: 12px;background-color: #E3E2FE;"></span>
+		
+					当前风险
+				</div>
+				<div class="layui-col-md6">
+					<span class="layui-badge" style="height: 12px;background-color: #ADC4FD;"></span>
+		
+					当前风险
+				</div>
+		
+				<div id="" style="line-height: 33px;padding-top: 50px;">
+					<p style="color: #1AA4FF;font-weight: 600;font-size: 18px;">您患高血压的风险等级：低风险</p>
+		
+					<p>基于您提供的有关健康信息及临床检查结果，得出您与同年龄同性别人群高血压发病的风险等级。</p>
+		
+				</div>
+		
+				<div id="" style="line-height: 33px;padding-top: 50px;">
+					<p style="color: #1AA4FF;font-weight: 600;font-size: 18px;">您患高血压的风险等级：低风险</p>
+		
+					<p>基于您提供的有关健康信息及临床检查结果，得出您与同年龄同性别人群高血压发病的风险等级。</p>
+		
+				</div>
+		
+				<div id="" style="line-height: 33px;padding-top: 50px;">
+					<p style="color: #1AA4FF;font-weight: 600;font-size: 18px;">您患高血压的风险等级：低风险</p>
+		
+					<p>基于您提供的有关健康信息及临床检查结果，得出您与同年龄同性别人群高血压发病的风险等级。</p>
+		
+				</div>
+			</div>
+		</div>
+		
+		<blockquote class="layui-elem-quote layui-text" style="margin-top: 20px;">
+			与骨质疏松性骨折发病相关的危险因素
+		</blockquote>
+		
+		
+		<div class="layui-form" style="text-align: center;padding-top: 20px;">
+			<table class="layui-table">
+		
+				<thead>
+					<tr>
+						<th style="text-align: center;">危险因素</th>
+						<th style="text-align: center;">本次评估时间<br>（2019-11-28）</th>
+						<th style="text-align: center;">上次评估时间<br>（2018-10-05）</th>
+						<th style="text-align: center;">变化情况</th>
+						<th style="text-align: center;">理想水平</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>年龄</td>
+						<td>23</td>
+						<td>22</td>
+						<td>↑</td>
+						<td>随年龄增加风险升高</td>
+					</tr>
+					<tr>
+						<td>糖尿病病史</td>
+						<td>有（双方）</td>
+						<td>有（双方）</td>
+						<td>--</td>
+						<td>无</td>
+					</tr>
+					<tr>
+						<td>高血压病史</td>
+						<td>有（双方）</td>
+						<td>有（双方）</td>
+						<td>--</td>
+						<td>无</td>
+					</tr>
+		
+		
+					<tr>
+						<td>体重指数（BMI）</td>
+						<td>17.21</td>
+						<td>17.40</td>
+						<td>↓</td>
+						<td>18.5 ≤ BMI < 24</td> </tr> <tr>
+						<td>吸烟状况</td>
+						<td>不吸烟</td>
+						<td>不吸烟</td>
+						<td>--</td>
+						<td>不吸烟</td>
+					</tr>
+		
+		
+		
+		
+		
+				</tbody>
+			</table>
+		</div>
+		
+		<blockquote class="layui-elem-quote layui-text" style="margin-top: 20px;">
+			指导建议
+		</blockquote>
+		
+		<div id="">
+			<p  style="text-indent:30px;line-height: 30px;">
+				代谢综合征是指在个体中多种代谢异常情况集结存在的现象，这些异常包括糖尿病或糖调节受损、高血压、血脂紊乱、全身或腹部肥胖等。这些代谢异常大多为动脉硬化性心、脑及周围血管病(简称心脑血管疾病)的危险因素，故代谢综合征患者是心脑血管疾病的高危人群。
+			</p>
+			
+			<p style="text-indent:30px;line-height: 30px;">
+				尽管您目前尚未被诊断为代谢综合征，属于代谢综合征高危人群，但是您存在一些与发生代谢综合征有关的危险因素如血压偏高，您可以通过减轻体重、减少脂肪摄入、增加体力活动水平等治疗性生活方式改善措施来有效控制血压水平，从而预防未来发生代谢综合征的风险。
+				
+			</p>
+			<p style="text-indent:30px;line-height: 30px;">如需获得详细的指导方案，请在医生指导下参考您的“膳食处方”和“运动处方”来开始您的代谢综合征改善行动。</p>
+		</div>
+		
+		
+		
+		
+		
+		<div class="layui-row" style="margin-top: 50px;">
+			<div class="layui-col-md7" style="font-size: 34px;line-height: 120px;">
+				血脂异常风险评估报告
+			</div>
+			<div class="layui-col-md5" style="text-align: right;">
+				<img style="height: 120px;" src="https://img.xiaopiu.com/userImages/img195170e6f083d8.png">
+			</div>
+		</div>
+		
+		
+		<blockquote class="layui-elem-quote layui-text">
+			血脂异常风险等级：低风险
+		</blockquote>
+		
+		<div class="layui-row">
+			<div class="layui-col-md6">
+				<div style="width:500px;height:450px;" id="xuezhiyichangtu"></div>
+			</div>
+			<div class="layui-col-md6">
+				<div class="layui-col-md6">
+		
+					<span class="layui-badge" style="height: 12px;background-color: #E3E2FE;"></span>
+		
+					当前风险
+				</div>
+				<div class="layui-col-md6">
+					<span class="layui-badge" style="height: 12px;background-color: #ADC4FD;"></span>
+		
+					当前风险
+				</div>
+		
+				<div id="" style="line-height: 33px;padding-top: 50px;">
+					<p style="color: #1AA4FF;font-weight: 600;font-size: 18px;">您患高血压的风险等级：低风险</p>
+		
+					<p>基于您提供的有关健康信息及临床检查结果，得出您与同年龄同性别人群高血压发病的风险等级。</p>
+		
+				</div>
+		
+				<div id="" style="line-height: 33px;padding-top: 50px;">
+					<p style="color: #1AA4FF;font-weight: 600;font-size: 18px;">您患高血压的风险等级：低风险</p>
+		
+					<p>基于您提供的有关健康信息及临床检查结果，得出您与同年龄同性别人群高血压发病的风险等级。</p>
+		
+				</div>
+		
+				<div id="" style="line-height: 33px;padding-top: 50px;">
+					<p style="color: #1AA4FF;font-weight: 600;font-size: 18px;">您患高血压的风险等级：低风险</p>
+		
+					<p>基于您提供的有关健康信息及临床检查结果，得出您与同年龄同性别人群高血压发病的风险等级。</p>
+		
+				</div>
+			</div>
+		</div>
+		
+		<blockquote class="layui-elem-quote layui-text" style="margin-top: 20px;">
+			与骨质疏松性骨折发病相关的危险因素
+		</blockquote>
+		
+		
+		<div class="layui-form" style="text-align: center;padding-top: 20px;">
+			<table class="layui-table">
+		
+				<thead>
+					<tr>
+						<th style="text-align: center;">危险因素</th>
+						<th style="text-align: center;">本次评估时间<br>（2019-11-28）</th>
+						<th style="text-align: center;">上次评估时间<br>（2018-10-05）</th>
+						<th style="text-align: center;">变化情况</th>
+						<th style="text-align: center;">理想水平</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>年龄</td>
+						<td>23</td>
+						<td>22</td>
+						<td>↑</td>
+						<td>随年龄增加风险升高</td>
+					</tr>
+					<tr>
+						<td>糖尿病病史</td>
+						<td>有（双方）</td>
+						<td>有（双方）</td>
+						<td>--</td>
+						<td>无</td>
+					</tr>
+					<tr>
+						<td>高血压病史</td>
+						<td>有（双方）</td>
+						<td>有（双方）</td>
+						<td>--</td>
+						<td>无</td>
+					</tr>
+		
+		
+					<tr>
+						<td>体重指数（BMI）</td>
+						<td>17.21</td>
+						<td>17.40</td>
+						<td>↓</td>
+						<td>18.5 ≤ BMI < 24</td> </tr> <tr>
+						<td>吸烟状况</td>
+						<td>不吸烟</td>
+						<td>不吸烟</td>
+						<td>--</td>
+						<td>不吸烟</td>
+					</tr>
+		
+		
+		
+		
+		
+				</tbody>
+			</table>
+		</div>
+		
+		
+		 
+	 <blockquote class="layui-elem-quote layui-text" style="margin-top: 20px;">
+	 	指导建议
+	 </blockquote>
+	 
+	 <div id="">
+	 	<p  style="text-indent:30px;line-height: 30px;">
+	 		代谢综合征是指在个体中多种代谢异常情况集结存在的现象，这些异常包括糖尿病或糖调节受损、高血压、血脂紊乱、全身或腹部肥胖等。这些代谢异常大多为动脉硬化性心、脑及周围血管病(简称心脑血管疾病)的危险因素，故代谢综合征患者是心脑血管疾病的高危人群。
+	 	</p>
+	 	
+	 	<p style="text-indent:30px;line-height: 30px;">
+	 		尽管您目前尚未被诊断为代谢综合征，属于代谢综合征高危人群，但是您存在一些与发生代谢综合征有关的危险因素如血压偏高，您可以通过减轻体重、减少脂肪摄入、增加体力活动水平等治疗性生活方式改善措施来有效控制血压水平，从而预防未来发生代谢综合征的风险。
+	 		
+	 	</p>
+	 	<p style="text-indent:30px;line-height: 30px;">如需获得详细的指导方案，请在医生指导下参考您的“膳食处方”和“运动处方”来开始您的代谢综合征改善行动。</p>
+	 </div>
+	 
+		
+		
+		 
+		
+				
+				
+				<div class="layui-row" style="margin-top: 50px;">
+					<div class="layui-col-md7" style="font-size: 34px;line-height: 120px;">
+						肥胖症评估报告
+					</div>
+					<div class="layui-col-md5" style="text-align: right;">
+						<img style="height: 120px;" src="https://img.xiaopiu.com/userImages/img195170e6f083d8.png">
+					</div>
+				</div>
+				
+				
+				<blockquote class="layui-elem-quote layui-text">
+					全身性肥胖评估结果为：体重正常&nbsp; &nbsp;&nbsp;&nbsp; &nbsp; &nbsp;&nbsp;&nbsp; 中心性肥胖评估结果为：中心性肥胖(1级)
+				</blockquote>
+				
+				<div class="layui-row">
+					<div class="layui-col-md6">
+						<div style="width:500px;height:450px;" id="feipangtu"></div>
+					</div>
+					<div class="layui-col-md6">
+						<div class="layui-col-md6">
+				
+							<span class="layui-badge" style="height: 12px;background-color: #E3E2FE;"></span>
+				
+							当前风险
+						</div>
+						<div class="layui-col-md6">
+							<span class="layui-badge" style="height: 12px;background-color: #ADC4FD;"></span>
+				
+							当前风险
+						</div>
+				
+						<div id="" style="line-height: 33px;padding-top: 50px;">
+							<p style="color: #1AA4FF;font-weight: 600;font-size: 18px;">您患高血压的风险等级：低风险</p>
+				
+							<p>基于您提供的有关健康信息及临床检查结果，得出您与同年龄同性别人群高血压发病的风险等级。</p>
+				
+						</div>
+				
+						<div id="" style="line-height: 33px;padding-top: 50px;">
+							<p style="color: #1AA4FF;font-weight: 600;font-size: 18px;">您患高血压的风险等级：低风险</p>
+				
+							<p>基于您提供的有关健康信息及临床检查结果，得出您与同年龄同性别人群高血压发病的风险等级。</p>
+				
+						</div>
+				
+						<div id="" style="line-height: 33px;padding-top: 50px;">
+							<p style="color: #1AA4FF;font-weight: 600;font-size: 18px;">您患高血压的风险等级：低风险</p>
+				
+							<p>基于您提供的有关健康信息及临床检查结果，得出您与同年龄同性别人群高血压发病的风险等级。</p>
+				
+						</div>
+					</div>
+				</div>
+				
+				<blockquote class="layui-elem-quote layui-text" style="margin-top: 20px;">
+					与骨质疏松性骨折发病相关的危险因素
+				</blockquote>
+				
+				
+				<div class="layui-form" style="text-align: center;padding-top: 20px;">
+					<table class="layui-table">
+				
+						<thead>
+							<tr>
+								<th style="text-align: center;">危险因素</th>
+								<th style="text-align: center;">本次评估时间<br>（2019-11-28）</th>
+								<th style="text-align: center;">上次评估时间<br>（2018-10-05）</th>
+								<th style="text-align: center;">变化情况</th>
+								<th style="text-align: center;">理想水平</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td>年龄</td>
+								<td>23</td>
+								<td>22</td>
+								<td>↑</td>
+								<td>随年龄增加风险升高</td>
+							</tr>
+							<tr>
+								<td>糖尿病病史</td>
+								<td>有（双方）</td>
+								<td>有（双方）</td>
+								<td>--</td>
+								<td>无</td>
+							</tr>
+							<tr>
+								<td>高血压病史</td>
+								<td>有（双方）</td>
+								<td>有（双方）</td>
+								<td>--</td>
+								<td>无</td>
+							</tr>
+				
+				
+							<tr>
+								<td>体重指数（BMI）</td>
+								<td>17.21</td>
+								<td>17.40</td>
+								<td>↓</td>
+								<td>18.5 ≤ BMI < 24</td> </tr> <tr>
+								<td>吸烟状况</td>
+								<td>不吸烟</td>
+								<td>不吸烟</td>
+								<td>--</td>
+								<td>不吸烟</td>
+							</tr>
+				
+				
+				
+				
+				
+						</tbody>
+					</table>
+				</div>
+				
+				
+				 
+		<blockquote class="layui-elem-quote layui-text" style="margin-top: 20px;">
+			指导建议
+		</blockquote>
+		
+		<div id="">
+			<p  style="text-indent:30px;line-height: 30px;">
+				代谢综合征是指在个体中多种代谢异常情况集结存在的现象，这些异常包括糖尿病或糖调节受损、高血压、血脂紊乱、全身或腹部肥胖等。这些代谢异常大多为动脉硬化性心、脑及周围血管病(简称心脑血管疾病)的危险因素，故代谢综合征患者是心脑血管疾病的高危人群。
+			</p>
+			
+			<p style="text-indent:30px;line-height: 30px;">
+				尽管您目前尚未被诊断为代谢综合征，属于代谢综合征高危人群，但是您存在一些与发生代谢综合征有关的危险因素如血压偏高，您可以通过减轻体重、减少脂肪摄入、增加体力活动水平等治疗性生活方式改善措施来有效控制血压水平，从而预防未来发生代谢综合征的风险。
+				
+			</p>
+			<p style="text-indent:30px;line-height: 30px;">如需获得详细的指导方案，请在医生指导下参考您的“膳食处方”和“运动处方”来开始您的代谢综合征改善行动。</p>
+		</div>
+		
+
+
+
+				<div class="layui-row" style="margin-top: 50px;">
+					<div class="layui-col-md7" style="font-size: 34px;line-height: 120px;">
+生活方式评估报告
+					</div>
+					<div class="layui-col-md5" style="text-align: right;">
+						<img style="height: 120px;" src="https://img.xiaopiu.com/userImages/img195170e6f083d8.png">
+					</div>
+				</div>
+				
+				
+				<blockquote class="layui-elem-quote layui-text">
+					全身性肥胖评估结果为：体重正常&nbsp; &nbsp;&nbsp;&nbsp; &nbsp; &nbsp;&nbsp;&nbsp; 中心性肥胖评估结果为：中心性肥胖(1级)
+				</blockquote>
+				
+				<div class="layui-row">
+					<div class="layui-col-md6">
+						<div style="width:700px;height:650px;left: -75px;" id="shenghuofangshitu"></div>
+					</div>
+					<div class="layui-col-md6">
+						<div class="layui-col-md6">
+				
+							<span class="layui-badge" style="height: 12px;background-color: #E3E2FE;"></span>
+				
+							当前风险
+						</div>
+						<div class="layui-col-md6">
+							<span class="layui-badge" style="height: 12px;background-color: #ADC4FD;"></span>
+				
+							当前风险
+						</div>
+				
+						<div id="" style="line-height: 33px;padding-top: 50px;">
+							<p style="color: #1AA4FF;font-weight: 600;font-size: 18px;">您患高血压的风险等级：低风险</p>
+				
+							<p>基于您提供的有关健康信息及临床检查结果，得出您与同年龄同性别人群高血压发病的风险等级。</p>
+				
+						</div>
+				
+						<div id="" style="line-height: 33px;padding-top: 50px;">
+							<p style="color: #1AA4FF;font-weight: 600;font-size: 18px;">您患高血压的风险等级：低风险</p>
+				
+							<p>基于您提供的有关健康信息及临床检查结果，得出您与同年龄同性别人群高血压发病的风险等级。</p>
+				
+						</div>
+				
+						<div id="" style="line-height: 33px;padding-top: 50px;">
+							<p style="color: #1AA4FF;font-weight: 600;font-size: 18px;">您患高血压的风险等级：低风险</p>
+				
+							<p>基于您提供的有关健康信息及临床检查结果，得出您与同年龄同性别人群高血压发病的风险等级。</p>
+				
+						</div>
+					</div>
+				</div>
+				
+				<blockquote class="layui-elem-quote layui-text" style="margin-top: 20px;">
+					与生活方式相关的危险因素
+				</blockquote>
+				
+				
+				<div class="layui-form" style="text-align: center;padding-top: 20px;">
+					<table class="layui-table">
+				
+						<thead>
+							<tr>
+								<th style="text-align: center;">危险因素</th>
+								<th style="text-align: center;">本次评估时间<br>（2019-11-28）</th>
+								<th style="text-align: center;">上次评估时间<br>（2018-10-05）</th>
+								<th style="text-align: center;">变化情况</th>
+								<th style="text-align: center;">理想水平</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td>年龄</td>
+								<td>23</td>
+								<td>22</td>
+								<td>↑</td>
+								<td>随年龄增加风险升高</td>
+							</tr>
+							<tr>
+								<td>糖尿病病史</td>
+								<td>有（双方）</td>
+								<td>有（双方）</td>
+								<td>--</td>
+								<td>无</td>
+							</tr>
+							<tr>
+								<td>高血压病史</td>
+								<td>有（双方）</td>
+								<td>有（双方）</td>
+								<td>--</td>
+								<td>无</td>
+							</tr>
+				
+				
+							<tr>
+								<td>体重指数（BMI）</td>
+								<td>17.21</td>
+								<td>17.40</td>
+								<td>↓</td>
+								<td>18.5 ≤ BMI < 24</td> </tr> <tr>
+								<td>吸烟状况</td>
+								<td>不吸烟</td>
+								<td>不吸烟</td>
+								<td>--</td>
+								<td>不吸烟</td>
+							</tr>
+				
+				
+				
+				
+				
+						</tbody>
+					</table>
+				</div>
+				
+				
+				 
+		<blockquote class="layui-elem-quote layui-text" style="margin-top: 20px;">
+			您的实际生理年龄：22岁
+		</blockquote>
+		
+		
+		
+		
+		<div class="layui-row">
+			<div class="layui-col-md6">
+				<div id="" style="padding: 20px 110px;">
+					<div class="progress">
+						<div class="progress-bar progress-bar-info progress-bar-striped active" style="width: 10%;">
+							<div class="progress-value"><img style="width: 32px;height: 32px;" src="assets/images/gerenxinxi.png"></div>
+						</div>
+					</div>
+					<div class="layui-row">
+						<div class="layui-col-md2" style="width: 19%;">
+							0
+						</div>
+						<div class="layui-col-md2" style="width: 19%;">
+							20
+						</div>
+						<div class="layui-col-md2" style="width: 19%;">
+							40
+						</div>
+						<div class="layui-col-md2" style="width: 19%;">
+							60
+						</div>
+						<div class="layui-col-md2" style="width: 19%;">
+							80
+						</div>
+						<div class="layui-col-md2" style="width: 5%;text-align: right;">
+							100
+						</div>
+					</div>
+				</div>
+				
+				<div id="" style="padding: 20px 110px;">
+					<div class="progress">
+						<div class="progress-bar progress-bar-info progress-bar-striped active" style="width: 10%;">
+							<div class="progress-value"><img style="width: 32px;height: 32px;" src="assets/images/gerenxinxi.png"></div>
+						</div>
+					</div>
+					<div class="layui-row">
+						<div class="layui-col-md2" style="width: 19%;">
+							0
+						</div>
+						<div class="layui-col-md2" style="width: 19%;">
+							20
+						</div>
+						<div class="layui-col-md2" style="width: 19%;">
+							40
+						</div>
+						<div class="layui-col-md2" style="width: 19%;">
+							60
+						</div>
+						<div class="layui-col-md2" style="width: 19%;">
+							80
+						</div>
+						<div class="layui-col-md2" style="width: 5%;text-align: right;">
+							100
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="layui-col-md6">
+				<div class="layui-col-md6">
+		
+					<span class="layui-badge" style="height: 12px;background-color: #E3E2FE;"></span>
+		
+					当前风险
+				</div>
+				<div class="layui-col-md6">
+					<span class="layui-badge" style="height: 12px;background-color: #ADC4FD;"></span>
+		
+					当前风险
+				</div>
+		
+				<div id="" style="line-height: 33px;padding-top: 50px;">
+					<p style="color: #1AA4FF;font-weight: 600;font-size: 18px;">您患高血压的风险等级：低风险</p>
+		
+					<p>基于您提供的有关健康信息及临床检查结果，得出您与同年龄同性别人群高血压发病的风险等级。</p>
+		
+				</div>
+		
+				<div id="" style="line-height: 33px;padding-top: 50px;">
+					<p style="color: #1AA4FF;font-weight: 600;font-size: 18px;">您患高血压的风险等级：低风险</p>
+		
+					<p>基于您提供的有关健康信息及临床检查结果，得出您与同年龄同性别人群高血压发病的风险等级。</p>
+		
+				</div>
+		
+				<div id="" style="line-height: 33px;padding-top: 50px;">
+					<p style="color: #1AA4FF;font-weight: 600;font-size: 18px;">您患高血压的风险等级：低风险</p>
+		
+					<p>基于您提供的有关健康信息及临床检查结果，得出您与同年龄同性别人群高血压发病的风险等级。</p>
+		
+				</div>
+			</div>
+		</div>
+			
+			<div id="" style="text-align: center;">
+				<img src="assets/images/sidajishi.png" >
+			</div>
+			
+			<div class="layui-row" style="margin-top: 50px;">
+				<div class="layui-col-md7" style="font-size: 34px;line-height: 120px;">
+					健康风险改善行动指南
+				</div>
+				<div class="layui-col-md5" style="text-align: right;">
+					<img style="height: 120px;" src="https://img.xiaopiu.com/userImages/img195170e6f083d8.png">
+				</div>
+			</div>
+
+			<div>
+				<p style="text-indent: 30px;line-height: 30px;">在您的“个人健康体检报告”以及“疾病风险评估报告”的基础上为您提供了“健康风险改善行动指南”，帮助您全面了解与疾病风险相关的各项可改变危险因素当中，您在哪些方面做得好，需要继续保持；在哪些方面做得不够好，需要立即改善以降低您的疾病发病风险，同时针对这些需要改善的危险因素，为您设定了控制目标以及改善途径。希望您能认真阅读，并立即开始实施健康改善行动。有任何问题请咨询医生或健康管理师。</p>
+			</div>
+			<blockquote class="layui-elem-quote layui-text">
+					危险因素提示：您做得好的方面
+				</blockquote>
+				
+				<div id="" style="line-height: 50px;">
+					<div class="layui-row">
+						<div class="layui-col-md6">
+						
+							<span class="layui-badge" style="height: 12px;background-color: #4cd8d1;"></span>
+						
+							当前风险
+						</div>
+						<div class="layui-col-md6">
+							<span class="layui-badge" style="height: 12px;background-color: #4cd8d1;"></span>
+						
+							当前风险
+						</div>
+						
+					</div>
+					
+					<div class="layui-row">
+						<div class="layui-col-md6">
+						
+							<span class="layui-badge" style="height: 12px;background-color: #4cd8d1;"></span>
+						
+							当前风险
+						</div>
+						<div class="layui-col-md6">
+							<span class="layui-badge" style="height: 12px;background-color: #4cd8d1;"></span>
+						
+							当前风险
+						</div>
+						
+					</div>
+					
+					<div class="layui-row">
+						<div class="layui-col-md6">
+						
+							<span class="layui-badge" style="height: 12px;background-color: #4cd8d1;"></span>
+						
+							当前风险
+						</div>
+						<div class="layui-col-md6">
+							<span class="layui-badge" style="height: 12px;background-color: #4cd8d1;"></span>
+						
+							当前风险
+						</div>
+						
+					</div>
+					
+					<div class="layui-row">
+						<div class="layui-col-md6">
+						
+							<span class="layui-badge" style="height: 12px;background-color: #4cd8d1;"></span>
+						
+							当前风险
+						</div>
+						<div class="layui-col-md6">
+							<span class="layui-badge" style="height: 12px;background-color: #4cd8d1;"></span>
+						
+							当前风险
+						</div>
+						
+					</div>
+				</div>
+				
+				<blockquote class="layui-elem-quote layui-text">
+						危险因素提示：您做得不够好的方面
+					</blockquote>
+					
+					<div id="" style="line-height: 50px;">
+						<div class="layui-row">
+							<div class="layui-col-md6">
+							
+								<span class="layui-badge" style="height: 12px;background-color: #ff0707;"></span>
+							
+								当前风险
+							</div>
+							<div class="layui-col-md6">
+								<span class="layui-badge" style="height: 12px;background-color: #ff0707;"></span>
+							
+								当前风险
+							</div>
+							
+						</div>
+						
+						<div class="layui-row">
+							<div class="layui-col-md6">
+							
+								<span class="layui-badge" style="height: 12px;background-color: #ff0707;"></span>
+							
+								当前风险
+							</div>
+							<div class="layui-col-md6">
+								<span class="layui-badge" style="height: 12px;background-color: #ff0707;"></span>
+							
+								当前风险
+							</div>
+							
+						</div>
+						
+						<div class="layui-row">
+							<div class="layui-col-md6">
+							
+								<span class="layui-badge" style="height: 12px;background-color: #ff0707;"></span>
+							
+								当前风险
+							</div>
+							<div class="layui-col-md6">
+								<span class="layui-badge" style="height: 12px;background-color: #ff0707;"></span>
+							
+								当前风险
+							</div>
+							
+						</div>
+					</div>
+					
+					<blockquote class="layui-elem-quote layui-text">
+							危险因素控制目标及改善途径
+						</blockquote>
+						
+						<div id="" style="line-height: 30px;">
+							<p style="color: #1AA4FF;font-weight: 600;font-size: 18px;">※目前状况：血压偏高 努力目标：降低血压至120/80mmHg以下</p>
+							<p style="text-indent: 30px;">您的血压为118/89mmHg，已高于《中国高血压防治指南》所建议的正常血压范围(＜120/80mmHg)。 您的血压越高，患心血管疾病的危险性就越大。大多数自我感觉健康的人并没意识到他们患有高血压，所以高血压被称为隐形杀手。您应该努力通过改善膳食、运动习惯达到理想血压。 血压超过140/90mmHg或有高血压症状者请向医生咨询有关控制措施。</p>
+						<p style="text-indent: 30px;">有助于您降低血压的方法</p>
+						<p style="text-indent: 30px;">（1）超重和肥胖、饮酒过量、膳食高盐是导致高血压的主要危险因素，请注意避免这些因素。</p>
+						<p style="text-indent: 30px;">（2）保持积极、乐观、平和的心态，学会正确处理工作生活中的压力。</p>
+						<p style="color: #1AA4FF;font-weight: 600;font-size: 18px;">※目前状况：腰围过大 努力目标：＜85cm</p>
+						<p style="text-indent: 30px;">您的腰围为89cm，已超过正常范围（< 85cm）。 目前公认腰围是衡量脂肪在腹部蓄积（向心性肥胖）程度最简单实用的指标，脂肪在体内的分布，尤其是腹部脂肪堆积的程度，与糖尿病等肥胖相关性疾病有更强的关联。 对于体重指数不太高者，腹部脂肪增加被认为是独立的危险性预测因素。</p>
+						<p style="text-indent: 30px;">有助于您降低腰围的方法：</p>
+						
+						<p style="text-indent: 30px;">（1）控制饮食总热量，多选择能量密度较低的食物，如蔬菜、水果、豆制品、杂粮等。</p>
+						<p style="text-indent: 30px;">（2）改变生活习惯：吃完饭后不要立即坐下或趴睡，最好能保持站立的姿势，可以选择散步或做家务。</p>
+						<p style="text-indent: 30px;">（3）走姿和坐姿要正确；走路时要抬头挺胸、摆动手臂；坐下时脊背打直，不要弯腰或挺腹，如此腰部才不易松垮。</p>
+						<p style="text-indent: 30px;">（4）在全身运动的基础上，加强腰部锻炼：30分钟以上的全身运动有助于减少脂肪，从而减小腰围，而腰部运动如呼拉圈、仰卧起坐等，可增加腹部肌肉的弹性，改善体态。</p>
+						</div>
+
+
+		<!-- js部分 -->
+		<script type="text/javascript" th:src="@{/assets/libs/layui/layui.js}"></script>
+<script type="text/javascript" th:src="@{/assets/js/common.js}"></script>
+		<script type="text/javascript" th:src="@{/assets/js/jquery-1.11.1.js}"></script>
+<script th:src="@{/assets/libs/echarts/echarts.min.js}"></script>
+
+		<script type="text/javascript" th:inline="javascript">
+			layui.use(['layer','table'], function() {
+				var $ = layui.jquery;
+				var layer = layui.layer;
+				 var table = layui.table;
+				 
+				var rs= [[${rs}]];
+			  	 
+			   	 $.ajax({
+			   		 type:'get',
+			   		 url:'/manage/YhDiseaseAssessReport/gaoxueyaDataInfo',
+			   		 data:{rs:rs},
+			   		success : function(data){
+			   			 console.log(JSON.stringify(data))
+			   			$("#gxyxuetang").html(data.data.bs);
+			   			$("#gxyxueya").html(data.data.bloodPressure);
+			   			$("#gxyyaowei").html(data.data.theWaist);
+			   			$("#gxybmi").html(data.data.bmi);
+			   			$("#gxytc").html(data.data.tc);
+			   			$("#gxytg").html(data.data.tg);
+			   			$("#gxyhdlc").html(data.data.hdlc);
+			   			$("#gxyldlc").html(data.data.ldlc);
+			   			$("#gxyfood").html(data.data.b4);
+			   			$("#gxysport").html(data.data.sport);
+			   			$("#gxysmoke").html(data.data.smoke);
+			   			$("#gxydrck").html(data.data.foodDrink);
+			   			
+					}
+			   	 })
+				 
+				
+				// 渲染日签到图表
+
+				//高血压风险统计图
+				gaoxueyatuFunction();
+				//糖尿病风险图
+				tangniaobingtuFunction();
+				//冠心病风险图
+				guanxinbingFunction();
+				//脑卒中风险图
+				naocuzhongtuFunction();
+				//肺癌风险图
+				feiaituFunction();
+				//乳腺癌风险图
+				ruxianaituFunction();
+				//前列腺癌风险图
+				qianliexianaituFunction();
+				//骨质疏松风险图
+				guzhisusongtuFunction();
+				
+				//代谢综合征风险图
+				daixiezonggezhengtuFunction();
+				
+				//血脂异常
+				xuezhiyichangtuFunction();
+				
+				//肥胖
+				feipangtuFunction();
+				
+				//生活方式
+				shenghuofangshituFunction();
+				function shenghuofangshituFunction() {
+				
+				
+					option = {
+					    title: {
+					        show: false,
+					        x: "center",
+					        text: '',
+					    },
+					    backgroundColor: '#ffffff',
+					    tooltip: {
+					        show: false,
+					        backgroundColor: '#F7F9FB',
+					        borderColor: '#92DAFF',
+					        borderWidth: '1px',
+					        textStyle: {
+					            color: 'red'
+					        },
+					
+					    },
+					    series: [{
+					            name: '',
+					            type: 'gauge',
+					            radius: '53%',
+					            startAngle: 180,
+					            endAngle: 0,
+					            min: 0,
+					            max: 100,
+					            axisLine: {
+					                show: true,
+					                lineStyle: {
+					                    width: 30,
+					                    shadowBlur: 0,
+					                    color: [
+					                        [
+					                            1, new echarts.graphic.LinearGradient(
+					                                0, 0, 1, 0, [{
+					                                        offset: 0,
+					                                        color: 'rgba(249,169,234, 1)',
+					                                    },
+					                                    {
+					                                        offset: 0.5,
+					                                        color: 'rgba(223,145,232, 1)',
+					                                    },
+					                                    {
+					                                        offset: 1,
+					                                        color: 'rgba(201,121,230, 1)',
+					                                    }
+					                                ]
+					                            )
+					                        ],
+					
+					                    ]
+					                }
+					            },
+					            axisTick: {
+					                show: true,
+					                splitNumber: 1
+					            },
+					            splitLine: {
+					                show: true,
+					                length: 30,
+					                lineStyle: {
+					                    color: 'white'
+					                },
+					            },
+					            axisLabel: {
+					                show: false,
+					                textStyle: {
+					                    fontSize: 14
+					                }
+					            },
+					
+					            pointer: {
+					                show: true,
+					                width: 8,
+					                length: '70%',
+					
+					            },
+					            detail: {
+					                offsetCenter: [0, 60],
+					                formatter: function(param) {
+					
+					                    var x = param / 100;
+					                    var y = x.toString();
+					                    var z = y.indexOf('.');
+					                    if (z < 0) {
+					                        z = y.length;
+					                        y += '.';
+					                    }
+					                    while (y.length <= z + 2) {
+					                        y += '0';
+					                    }
+					                    return `{a|本次评价:  }` + y + '(' + param + `%)`;
+					                },
+					                rich: {
+					                    a: {
+					                        color: '#333333',
+					                        lineHeight: 55,
+					                        fontSize: 16,
+					                        fontWeight: 700
+					                    }
+					                },
+					                textStyle: {
+					                    fontSize: 16,
+					                    color: "#3ca2f8"
+					                },
+					            },
+					            data: [{
+					                name: "%",
+					                value: 0
+					            }]
+					        },
+					        {
+					            type: 'gauge',
+					            center: ['50%', '50%'],
+					            radius: '53%',
+					            splitNumber: 10,
+					            min: 0,
+					            max: 100,
+					            startAngle: 180,
+					            endAngle: 0,
+					            axisLine: {
+					                show: true,
+					                lineStyle: {
+					                    width: 1,
+					                    color: [
+					                        [1, 'white']
+					                    ]
+					                }
+					            }, //仪表盘轴线
+					
+					            //刻度样式
+					            splitLine: {
+					                show: false,
+					                length: 12,
+					                lineStyle: {
+					                    width: 1,
+					
+					                }
+					            }, //分隔线样式
+					            axisLabel: {
+					                show: true,
+					                distance: 20,
+					                textStyle: {
+					                    color: '#999999',
+					                    fontSize: '12',
+					                }
+					            },
+					            pointer: {
+					                show: 0
+					            },
+					            detail: {
+					                show: 0
+					            }
+					        },
+					    ]
+					};
+					//获取dom容器
+					var myChart = echarts.init(document.getElementById('shenghuofangshitu'));
+					// 使用刚指定的配置项和数据显示图表。
+					myChart.setOption(option);
+				}
+				
+				function feipangtuFunction() {
+				
+				
+					option = {
+				
+						color: ['#46B9B2', '#D372B2'],
+						tooltip: {
+							trigger: 'item'
+						},
+						grid: {
+							top: '23%'
+						},
+				
+				
+						radar: {
+							// shape: 'circle',
+							name: {
+								textStyle: {
+									color: '#ffffff',
+									backgroundColor: '#999',
+									borderRadius: 3,
+									padding: [3, 5]
+								}
+							},
+							radius: '80%',
+							center: ['50%', '53%'],
+							indicator: [{
+									name: '基建指数',
+									max: 100
+								},
+								{
+									name: '成长指数',
+									max: 100
+								},
+								{
+									name: '发展指数',
+									max: 100
+								},
+								{
+									name: '创新指数',
+									max: 100
+								},
+								{
+									name: '招商引资指数',
+									max: 100
+								},
+								{
+									name: '就业指数',
+									max: 100
+								}
+							]
+						},
+						series: [{
+							name: '大连' + 'vs' + '青岛',
+							type: 'radar',
+							data: [{
+									value: [30, 50, 40, 20, 80, 90],
+									name: '大连',
+									areaStyle: {
+										normal: {
+											color: '#46B9B2'
+										}
+									}
+								},
+								{
+									value: [50, 70, 90, 50, 64, 74],
+									name: '青岛',
+									areaStyle: {
+										normal: {
+											color: '#D372B2'
+										},
+									},
+								}
+							]
+						}]
+					};
+					//获取dom容器
+					var myChart = echarts.init(document.getElementById('feipangtu'));
+					// 使用刚指定的配置项和数据显示图表。
+					myChart.setOption(option);
+				}
+				
+				function xuezhiyichangtuFunction() {
+				
+				
+					option = {
+				
+						color: ['#46B9B2', '#D372B2'],
+						tooltip: {
+							trigger: 'item'
+						},
+						grid: {
+							top: '23%'
+						},
+				
+				
+						radar: {
+							// shape: 'circle',
+							name: {
+								textStyle: {
+									color: '#ffffff',
+									backgroundColor: '#999',
+									borderRadius: 3,
+									padding: [3, 5]
+								}
+							},
+							radius: '80%',
+							center: ['50%', '53%'],
+							indicator: [{
+									name: '基建指数',
+									max: 100
+								},
+								{
+									name: '成长指数',
+									max: 100
+								},
+								{
+									name: '发展指数',
+									max: 100
+								},
+								{
+									name: '创新指数',
+									max: 100
+								},
+								{
+									name: '招商引资指数',
+									max: 100
+								},
+								{
+									name: '就业指数',
+									max: 100
+								}
+							]
+						},
+						series: [{
+							name: '大连' + 'vs' + '青岛',
+							type: 'radar',
+							data: [{
+									value: [30, 50, 40, 20, 80, 90],
+									name: '大连',
+									areaStyle: {
+										normal: {
+											color: '#46B9B2'
+										}
+									}
+								},
+								{
+									value: [50, 70, 90, 50, 64, 74],
+									name: '青岛',
+									areaStyle: {
+										normal: {
+											color: '#D372B2'
+										},
+									},
+								}
+							]
+						}]
+					};
+					//获取dom容器
+					var myChart = echarts.init(document.getElementById('xuezhiyichangtu'));
+					// 使用刚指定的配置项和数据显示图表。
+					myChart.setOption(option);
+				}
+				
+				
+				
+				
+				function daixiezonggezhengtuFunction() {
+				
+				
+					option = {
+				
+						color: ['#46B9B2', '#D372B2'],
+						tooltip: {
+							trigger: 'item'
+						},
+						grid: {
+							top: '23%'
+						},
+				
+				
+						radar: {
+							// shape: 'circle',
+							name: {
+								textStyle: {
+									color: '#ffffff',
+									backgroundColor: '#999',
+									borderRadius: 3,
+									padding: [3, 5]
+								}
+							},
+							radius: '80%',
+							center: ['50%', '53%'],
+							indicator: [{
+									name: '基建指数',
+									max: 100
+								},
+								{
+									name: '成长指数',
+									max: 100
+								},
+								{
+									name: '发展指数',
+									max: 100
+								},
+								{
+									name: '创新指数',
+									max: 100
+								},
+								{
+									name: '招商引资指数',
+									max: 100
+								},
+								{
+									name: '就业指数',
+									max: 100
+								}
+							]
+						},
+						series: [{
+							name: '大连' + 'vs' + '青岛',
+							type: 'radar',
+							data: [{
+									value: [30, 50, 40, 20, 80, 90],
+									name: '大连',
+									areaStyle: {
+										normal: {
+											color: '#46B9B2'
+										}
+									}
+								},
+								{
+									value: [50, 70, 90, 50, 64, 74],
+									name: '青岛',
+									areaStyle: {
+										normal: {
+											color: '#D372B2'
+										},
+									},
+								}
+							]
+						}]
+					};
+					//获取dom容器
+					var myChart = echarts.init(document.getElementById('daixiezonggezhengtu'));
+					// 使用刚指定的配置项和数据显示图表。
+					myChart.setOption(option);
+				}
+				
+				
+				
+				
+				
+				
+				function guzhisusongtuFunction() {
+				
+				
+					option = {
+				
+						color: ['#46B9B2', '#D372B2'],
+						tooltip: {
+							trigger: 'item'
+						},
+						grid: {
+							top: '23%'
+						},
+				
+				
+						radar: {
+							// shape: 'circle',
+							name: {
+								textStyle: {
+									color: '#ffffff',
+									backgroundColor: '#999',
+									borderRadius: 3,
+									padding: [3, 5]
+								}
+							},
+							radius: '80%',
+							center: ['50%', '53%'],
+							indicator: [{
+									name: '基建指数',
+									max: 100
+								},
+								{
+									name: '成长指数',
+									max: 100
+								},
+								{
+									name: '发展指数',
+									max: 100
+								},
+								{
+									name: '创新指数',
+									max: 100
+								},
+								{
+									name: '招商引资指数',
+									max: 100
+								},
+								{
+									name: '就业指数',
+									max: 100
+								}
+							]
+						},
+						series: [{
+							name: '大连' + 'vs' + '青岛',
+							type: 'radar',
+							data: [{
+									value: [30, 50, 40, 20, 80, 90],
+									name: '大连',
+									areaStyle: {
+										normal: {
+											color: '#46B9B2'
+										}
+									}
+								},
+								{
+									value: [50, 70, 90, 50, 64, 74],
+									name: '青岛',
+									areaStyle: {
+										normal: {
+											color: '#D372B2'
+										},
+									},
+								}
+							]
+						}]
+					};
+					//获取dom容器
+					var myChart = echarts.init(document.getElementById('guzhisusongtu'));
+					// 使用刚指定的配置项和数据显示图表。
+					myChart.setOption(option);
+				}
+				
+				
+				function qianliexianaituFunction() {
+				
+				
+					option = {
+				
+						color: ['#46B9B2', '#D372B2'],
+						tooltip: {
+							trigger: 'item'
+						},
+						grid: {
+							top: '23%'
+						},
+				
+				
+						radar: {
+							// shape: 'circle',
+							name: {
+								textStyle: {
+									color: '#ffffff',
+									backgroundColor: '#999',
+									borderRadius: 3,
+									padding: [3, 5]
+								}
+							},
+							radius: '80%',
+							center: ['50%', '53%'],
+							indicator: [{
+									name: '基建指数',
+									max: 100
+								},
+								{
+									name: '成长指数',
+									max: 100
+								},
+								{
+									name: '发展指数',
+									max: 100
+								},
+								{
+									name: '创新指数',
+									max: 100
+								},
+								{
+									name: '招商引资指数',
+									max: 100
+								},
+								{
+									name: '就业指数',
+									max: 100
+								}
+							]
+						},
+						series: [{
+							name: '大连' + 'vs' + '青岛',
+							type: 'radar',
+							data: [{
+									value: [30, 50, 40, 20, 80, 90],
+									name: '大连',
+									areaStyle: {
+										normal: {
+											color: '#46B9B2'
+										}
+									}
+								},
+								{
+									value: [50, 70, 90, 50, 64, 74],
+									name: '青岛',
+									areaStyle: {
+										normal: {
+											color: '#D372B2'
+										},
+									},
+								}
+							]
+						}]
+					};
+					//获取dom容器
+					var myChart = echarts.init(document.getElementById('qianliexianaitu'));
+					// 使用刚指定的配置项和数据显示图表。
+					myChart.setOption(option);
+				}
+				
+				
+				
+				
+				function ruxianaituFunction() {
+				
+				
+					option = {
+				
+						color: ['#46B9B2', '#D372B2'],
+						tooltip: {
+							trigger: 'item'
+						},
+						grid: {
+							top: '23%'
+						},
+				
+				
+						radar: {
+							// shape: 'circle',
+							name: {
+								textStyle: {
+									color: '#ffffff',
+									backgroundColor: '#999',
+									borderRadius: 3,
+									padding: [3, 5]
+								}
+							},
+							radius: '80%',
+							center: ['50%', '53%'],
+							indicator: [{
+									name: '基建指数',
+									max: 100
+								},
+								{
+									name: '成长指数',
+									max: 100
+								},
+								{
+									name: '发展指数',
+									max: 100
+								},
+								{
+									name: '创新指数',
+									max: 100
+								},
+								{
+									name: '招商引资指数',
+									max: 100
+								},
+								{
+									name: '就业指数',
+									max: 100
+								}
+							]
+						},
+						series: [{
+							name: '大连' + 'vs' + '青岛',
+							type: 'radar',
+							data: [{
+									value: [30, 50, 40, 20, 80, 90],
+									name: '大连',
+									areaStyle: {
+										normal: {
+											color: '#46B9B2'
+										}
+									}
+								},
+								{
+									value: [50, 70, 90, 50, 64, 74],
+									name: '青岛',
+									areaStyle: {
+										normal: {
+											color: '#D372B2'
+										},
+									},
+								}
+							]
+						}]
+					};
+					//获取dom容器
+					var myChart = echarts.init(document.getElementById('ruxianaitu'));
+					// 使用刚指定的配置项和数据显示图表。
+					myChart.setOption(option);
+				}
+				
+				
+				
+				
+				function feiaituFunction() {
+				
+				
+					option = {
+				
+						color: ['#46B9B2', '#D372B2'],
+						tooltip: {
+							trigger: 'item'
+						},
+						grid: {
+							top: '23%'
+						},
+				
+				
+						radar: {
+							// shape: 'circle',
+							name: {
+								textStyle: {
+									color: '#ffffff',
+									backgroundColor: '#999',
+									borderRadius: 3,
+									padding: [3, 5]
+								}
+							},
+							radius: '80%',
+							center: ['50%', '53%'],
+							indicator: [{
+									name: '基建指数',
+									max: 100
+								},
+								{
+									name: '成长指数',
+									max: 100
+								},
+								{
+									name: '发展指数',
+									max: 100
+								},
+								{
+									name: '创新指数',
+									max: 100
+								},
+								{
+									name: '招商引资指数',
+									max: 100
+								},
+								{
+									name: '就业指数',
+									max: 100
+								}
+							]
+						},
+						series: [{
+							name: '大连' + 'vs' + '青岛',
+							type: 'radar',
+							data: [{
+									value: [30, 50, 40, 20, 80, 90],
+									name: '大连',
+									areaStyle: {
+										normal: {
+											color: '#46B9B2'
+										}
+									}
+								},
+								{
+									value: [50, 70, 90, 50, 64, 74],
+									name: '青岛',
+									areaStyle: {
+										normal: {
+											color: '#D372B2'
+										},
+									},
+								}
+							]
+						}]
+					};
+					//获取dom容器
+					var myChart = echarts.init(document.getElementById('feiaitu'));
+					// 使用刚指定的配置项和数据显示图表。
+					myChart.setOption(option);
+				}
+				
+				
+				
+				
+				function naocuzhongtuFunction() {
+				
+				
+					option = {
+				
+						color: ['#46B9B2', '#D372B2'],
+						tooltip: {
+							trigger: 'item'
+						},
+						grid: {
+							top: '23%'
+						},
+				
+				
+						radar: {
+							// shape: 'circle',
+							name: {
+								textStyle: {
+									color: '#ffffff',
+									backgroundColor: '#999',
+									borderRadius: 3,
+									padding: [3, 5]
+								}
+							},
+							radius: '80%',
+							center: ['50%', '53%'],
+							indicator: [{
+									name: '基建指数',
+									max: 100
+								},
+								{
+									name: '成长指数',
+									max: 100
+								},
+								{
+									name: '发展指数',
+									max: 100
+								},
+								{
+									name: '创新指数',
+									max: 100
+								},
+								{
+									name: '招商引资指数',
+									max: 100
+								},
+								{
+									name: '就业指数',
+									max: 100
+								}
+							]
+						},
+						series: [{
+							name: '大连' + 'vs' + '青岛',
+							type: 'radar',
+							data: [{
+									value: [30, 50, 40, 20, 80, 90],
+									name: '大连',
+									areaStyle: {
+										normal: {
+											color: '#46B9B2'
+										}
+									}
+								},
+								{
+									value: [50, 70, 90, 50, 64, 74],
+									name: '青岛',
+									areaStyle: {
+										normal: {
+											color: '#D372B2'
+										},
+									},
+								}
+							]
+						}]
+					};
+					//获取dom容器
+					var myChart = echarts.init(document.getElementById('naocuzhongtu'));
+					// 使用刚指定的配置项和数据显示图表。
+					myChart.setOption(option);
+				}
+				
+				
+				
+				function guanxinbingFunction() {
+				
+				
+					option = {
+				
+						color: ['#46B9B2', '#D372B2'],
+						tooltip: {
+							trigger: 'item'
+						},
+						grid: {
+							top: '23%'
+						},
+				
+				
+						radar: {
+							// shape: 'circle',
+							name: {
+								textStyle: {
+									color: '#ffffff',
+									backgroundColor: '#999',
+									borderRadius: 3,
+									padding: [3, 5]
+								}
+							},
+							radius: '80%',
+							center: ['50%', '53%'],
+							indicator: [{
+									name: '基建指数',
+									max: 100
+								},
+								{
+									name: '成长指数',
+									max: 100
+								},
+								{
+									name: '发展指数',
+									max: 100
+								},
+								{
+									name: '创新指数',
+									max: 100
+								},
+								{
+									name: '招商引资指数',
+									max: 100
+								},
+								{
+									name: '就业指数',
+									max: 100
+								}
+							]
+						},
+						series: [{
+							name: '大连' + 'vs' + '青岛',
+							type: 'radar',
+							data: [{
+									value: [30, 50, 40, 20, 80, 90],
+									name: '大连',
+									areaStyle: {
+										normal: {
+											color: '#46B9B2'
+										}
+									}
+								},
+								{
+									value: [50, 70, 90, 50, 64, 74],
+									name: '青岛',
+									areaStyle: {
+										normal: {
+											color: '#D372B2'
+										},
+									},
+								}
+							]
+						}]
+					};
+					//获取dom容器
+					var myChart = echarts.init(document.getElementById('guanxinbingtu'));
+					// 使用刚指定的配置项和数据显示图表。
+					myChart.setOption(option);
+				}
+
+				function gaoxueyatuFunction() {
+
+
+					option = {
+
+						color: ['#46B9B2', '#D372B2'],
+						tooltip: {
+							trigger: 'item'
+						},
+						grid: {
+							top: '23%'
+						},
+
+
+						radar: {
+							// shape: 'circle',
+							name: {
+								textStyle: {
+									color: '#ffffff',
+									backgroundColor: '#999',
+									borderRadius: 3,
+									padding: [3, 5]
+								}
+							},
+							radius: '80%',
+							center: ['50%', '53%'],
+							indicator: [{
+									name: '基建指数',
+									max: 100
+								},
+								{
+									name: '成长指数',
+									max: 100
+								},
+								{
+									name: '发展指数',
+									max: 100
+								},
+								{
+									name: '创新指数',
+									max: 100
+								},
+								{
+									name: '招商引资指数',
+									max: 100
+								},
+								{
+									name: '就业指数',
+									max: 100
+								}
+							]
+						},
+						series: [{
+							name: '大连' + 'vs' + '青岛',
+							type: 'radar',
+							data: [{
+									value: [30, 50, 40, 20, 80, 90],
+									name: '大连',
+									areaStyle: {
+										normal: {
+											color: '#46B9B2'
+										}
+									}
+								},
+								{
+									value: [50, 70, 90, 50, 64, 74],
+									name: '青岛',
+									areaStyle: {
+										normal: {
+											color: '#D372B2'
+										},
+									},
+								}
+							]
+						}]
+					};
+					//获取dom容器
+					var myChart = echarts.init(document.getElementById('gaoxueyatu'));
+					// 使用刚指定的配置项和数据显示图表。
+					myChart.setOption(option);
+				}
+
+				function tangniaobingtuFunction() {
+
+
+					option = {
+
+						color: ['#46B9B2', '#D372B2'],
+						tooltip: {
+							trigger: 'item'
+						},
+						grid: {
+							top: '23%'
+						},
+
+
+						radar: {
+							// shape: 'circle',
+							name: {
+								textStyle: {
+									color: '#ffffff',
+									backgroundColor: '#999',
+									borderRadius: 3,
+									padding: [3, 5]
+								}
+							},
+							radius: '80%',
+							center: ['50%', '53%'],
+							indicator: [{
+									name: '基建指数',
+									max: 100
+								},
+								{
+									name: '成长指数',
+									max: 100
+								},
+								{
+									name: '发展指数',
+									max: 100
+								},
+								{
+									name: '创新指数',
+									max: 100
+								},
+								{
+									name: '招商引资指数',
+									max: 100
+								},
+								{
+									name: '就业指数',
+									max: 100
+								}
+							]
+						},
+						series: [{
+							name: '大连' + 'vs' + '青岛',
+							type: 'radar',
+							data: [{
+									value: [30, 50, 40, 20, 80, 90],
+									name: '大连',
+									areaStyle: {
+										normal: {
+											color: '#46B9B2'
+										}
+									}
+								},
+								{
+									value: [50, 70, 90, 50, 64, 74],
+									name: '青岛',
+									areaStyle: {
+										normal: {
+											color: '#D372B2'
+										},
+									},
+								}
+							]
+						}]
+					};
+					//获取dom容器
+					var myChart = echarts.init(document.getElementById('tangniaobingtu'));
+					// 使用刚指定的配置项和数据显示图表。
+					myChart.setOption(option);
+				}
+
+
+
+
+
+			});
+		</script>
+	</body>
+</html>

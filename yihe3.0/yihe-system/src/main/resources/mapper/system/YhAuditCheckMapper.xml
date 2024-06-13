@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yihe.system.mapper.YhAuditCheckMapper" >
+  <resultMap id="BaseResultMap" type="com.yihe.system.domain.YhAuditCheck" >
+    <id column="checkid" property="checkid" jdbcType="INTEGER" />
+    <result column="audit_id" property="auditId" jdbcType="INTEGER" />
+    <result column="audit_type" property="auditType" jdbcType="INTEGER" />
+    <result column="audit_title" property="auditTitle" jdbcType="VARCHAR" />
+    <result column="audit_name" property="auditName" jdbcType="VARCHAR" />
+    <result column="audit_status" property="auditStatus" jdbcType="INTEGER" />
+    <result column="audit_date" property="auditDate" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    checkid, audit_id, audit_type, audit_title, audit_name, audit_status, audit_date
+  </sql>
+  
+  <!-- 查询膳食新增申请 -->
+  <select id="showfoodcount" resultType="int">
+  	select count(*) from yh_audit_check where audit_type='1';
+  </select>
+  
+   <!-- 查询膳食申请待处理 -->
+  <select id="showfoodcountDispose" resultType="int">
+  	select count(*) from yh_audit_check where audit_type='1' and audit_status='1'
+  </select>
+  
+  <!-- 查询运动新增申请 -->
+  <select id="showExercisecount" resultType="int">
+  	select count(*) from yh_audit_check where audit_type='2';
+  </select>
+  
+   <!-- 查询运动申请待处理 -->
+  <select id="showExercisecountDispose" resultType="int">
+  	select count(*) from yh_audit_check where audit_type='2' and audit_status='1'
+  </select>
+  
+  
+    <!-- 查询所有审核 -->
+    <select id="selectaudit" resultMap="BaseResultMap" parameterType="map">
+  		select * from yh_audit_check
+  		<where>
+  			<if test="auditType !=null and auditType !=''">
+  			and
+  			audit_type = #{auditType,jdbcType=INTEGER}
+  			</if>
+  			<if test="auditStatus !=null and auditStatus !=''">
+  			and
+  			audit_status = #{auditStatus,jdbcType=INTEGER}
+  			</if>
+  			<if test="auditTitle!=null and auditTitle !=''">
+  			AND
+  			(
+  				audit_title like CONCAT('%',#{auditTitle},'%' )
+  			)
+  			</if>
+  			<if test="entryTime!=null and entryTime !=''">
+  			and audit_date between #{entryTime} and #{entryTime1}
+  			</if>
+  		</where>
+  		order by audit_date desc LIMIT  #{page},#{limit}
+  </select>
+  
+  
+   <!-- 查询所有审核总行数 -->
+    <select id="selectauditConut" resultType="int" parameterType="map">
+  		select count(*) from yh_audit_check
+  		<where>
+  			<if test="auditType !=null and auditType !=''">
+  			and
+  			audit_type = #{auditType,jdbcType=INTEGER}
+  			</if>
+  			<if test="auditStatus !=null and auditStatus !=''">
+  			and
+  			audit_status = #{auditStatus,jdbcType=INTEGER}
+  			</if>
+  			<if test="auditTitle!=null and auditTitle !=''">
+  			AND
+  			(
+  				audit_title like CONCAT('%',#{auditTitle},'%' )
+  			)
+  			</if>
+  			<if test="entryTime!=null and entryTime !=''">
+  			and audit_date between #{entryTime} and #{entryTime1}
+  			</if>
+  		</where>
+  		order by audit_date desc
+  </select>
+  
+  
+  
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from yh_audit_check
+    where checkid = #{checkid,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from yh_audit_check
+    where checkid = #{checkid,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.yihe.system.domain.YhAuditCheck" >
+    insert into yh_audit_check (checkid, audit_id, audit_type, 
+      audit_title, audit_name, audit_status, 
+      audit_date)
+    values (#{checkid,jdbcType=INTEGER}, #{auditId,jdbcType=INTEGER}, #{auditType,jdbcType=INTEGER}, 
+      #{auditTitle,jdbcType=VARCHAR}, #{auditName,jdbcType=VARCHAR}, #{auditStatus,jdbcType=INTEGER}, 
+      #{auditDate,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.yihe.system.domain.YhAuditCheck" >
+    insert into yh_audit_check
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="checkid != null" >
+        checkid,
+      </if>
+      <if test="auditId != null" >
+        audit_id,
+      </if>
+      <if test="auditType != null" >
+        audit_type,
+      </if>
+      <if test="auditTitle != null" >
+        audit_title,
+      </if>
+      <if test="auditName != null" >
+        audit_name,
+      </if>
+      <if test="auditStatus != null" >
+        audit_status,
+      </if>
+      <if test="auditDate != null" >
+        audit_date,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="checkid != null" >
+        #{checkid,jdbcType=INTEGER},
+      </if>
+      <if test="auditId != null" >
+        #{auditId,jdbcType=INTEGER},
+      </if>
+      <if test="auditType != null" >
+        #{auditType,jdbcType=INTEGER},
+      </if>
+      <if test="auditTitle != null" >
+        #{auditTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="auditName != null" >
+        #{auditName,jdbcType=VARCHAR},
+      </if>
+      <if test="auditStatus != null" >
+        #{auditStatus,jdbcType=INTEGER},
+      </if>
+      <if test="auditDate != null" >
+        #{auditDate,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.yihe.system.domain.YhAuditCheck" >
+    update yh_audit_check
+    <set >
+      <if test="auditId != null" >
+        audit_id = #{auditId,jdbcType=INTEGER},
+      </if>
+      <if test="auditType != null" >
+        audit_type = #{auditType,jdbcType=INTEGER},
+      </if>
+      <if test="auditTitle != null" >
+        audit_title = #{auditTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="auditName != null" >
+        audit_name = #{auditName,jdbcType=VARCHAR},
+      </if>
+      <if test="auditStatus != null" >
+        audit_status = #{auditStatus,jdbcType=INTEGER},
+      </if>
+      <if test="auditDate != null" >
+        audit_date = #{auditDate,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where checkid = #{checkid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.yihe.system.domain.YhAuditCheck" >
+    update yh_audit_check
+    set audit_id = #{auditId,jdbcType=INTEGER},
+      audit_type = #{auditType,jdbcType=INTEGER},
+      audit_title = #{auditTitle,jdbcType=VARCHAR},
+      audit_name = #{auditName,jdbcType=VARCHAR},
+      audit_status = #{auditStatus,jdbcType=INTEGER},
+      audit_date = #{auditDate,jdbcType=TIMESTAMP}
+    where checkid = #{checkid,jdbcType=INTEGER}
+  </update>
+</mapper>

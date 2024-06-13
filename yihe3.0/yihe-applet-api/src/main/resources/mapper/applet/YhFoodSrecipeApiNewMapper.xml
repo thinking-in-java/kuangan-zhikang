@@ -1,0 +1,248 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yihe.applet.api.mapper.YhFoodSrecipeApiNewMapper" >
+  <resultMap id="BaseResultMap" type="com.yihe.applet.api.domain.YhFoodSrecipeApiNew" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="F_type" property="fType" jdbcType="INTEGER" />
+    <result column="E_Level" property="eLevel" jdbcType="INTEGER" />
+    <result column="Is_Del" property="isDel" jdbcType="INTEGER" />
+    <result column="diseaseid" property="diseaseid" jdbcType="VARCHAR" />
+    <result column="oneself" property="oneself" jdbcType="INTEGER" />
+    <result column="status" property="status" jdbcType="INTEGER" />
+    <result column="fs_describe" property="fsDescribe" jdbcType="VARCHAR" />
+    <result column="User_code" property="userCode" jdbcType="VARCHAR" />
+    <result column="creationTime" property="creationtime" jdbcType="VARCHAR" />
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="com.yihe.applet.api.domain.YhFoodSrecipeApiNew" extends="BaseResultMap" >
+    <result column="F_Elements" property="fElements" jdbcType="LONGVARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, F_type, E_Level, Is_Del, diseaseid, oneself, status, fs_describe, User_code, 
+    creationTime
+  </sql>
+  <sql id="Blob_Column_List" >
+    F_Elements
+  </sql>
+  <select id="findNearFoodSrecipeInfo" resultMap="ResultMapWithBLOBs" >
+  SELECT `id`,
+  `F_type`,
+  `E_Level`,
+  `F_Elements`,
+  `Is_Del`,
+  `diseaseid`,
+  `oneself`,
+  `status`,
+  `fs_describe`,
+  `User_code`,
+  `creationTime`  FROM `yh_food_srecipe`  WHERE    F_type=1 AND diseaseid=#{diseaseid}  AND Is_Del=2   AND E_Level=(SELECT E_Level FROM yh_food_srecipe WHERE F_type=1 AND diseaseid=#{diseaseid}  AND Is_Del=2 ORDER BY ABS(#{findEnergyNum}-`E_Level`) LIMIT 1)
+ 
+  </select>
+  <select id="findNearFoodSrecipeInfoForJianKang" resultMap="ResultMapWithBLOBs" >
+  SELECT `id`,
+  `F_type`,
+  `E_Level`,
+  `F_Elements`,
+  `Is_Del`,
+  `diseaseid`,
+  `oneself`,
+  `status`,
+  `fs_describe`,
+  `User_code`,
+  `creationTime`  FROM `yh_food_srecipe`  WHERE    F_type=1 AND diseaseid=13  AND Is_Del=2   AND E_Level=(SELECT E_Level FROM yh_food_srecipe ORDER BY ABS(#{findEnergyNum}-`E_Level`) LIMIT 1)
+ 
+  </select>
+  <select id="findFoodSrecipeInfoByWuman" resultMap="ResultMapWithBLOBs">
+  SELECT `id`,
+  `F_type`,
+  `E_Level`,
+  `F_Elements`,
+  `Is_Del`,
+  `diseaseid`,
+  `oneself`,
+  `status`,
+  `fs_describe`,
+  `User_code`,
+  `creationTime`  FROM `yh_food_srecipe`  WHERE    F_type=1 AND diseaseid=13  AND Is_Del=2   AND E_Level=(SELECT E_Level FROM yh_food_srecipe WHERE  F_type=1 AND diseaseid=13  AND Is_Del=2   ORDER BY  E_Level LIMIT 1 )
+  
+  </select>
+  
+  
+   <select id="findFoodSrecipeInfoByMan" resultMap="ResultMapWithBLOBs">
+ SELECT `id`,
+  `F_type`,
+  `E_Level`,
+  `F_Elements`,
+  `Is_Del`,
+  `diseaseid`,
+  `oneself`,
+  `status`,
+  `fs_describe`,
+  `User_code`,
+  `creationTime`  FROM `yh_food_srecipe`  WHERE    F_type=1 AND diseaseid=13  AND Is_Del=2   AND E_Level=(
+SELECT  
+  DISTINCT `E_Level` 
+ 
+  FROM yh_food_srecipe WHERE    F_type=1 AND diseaseid=13 AND Is_Del=2  ORDER BY E_Level   LIMIT 2,1
+)
+  </select>
+  
+  
+  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from yh_food_srecipe
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from yh_food_srecipe
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.yihe.applet.api.domain.YhFoodSrecipeApiNew" >
+    insert into yh_food_srecipe (id, F_type, E_Level, 
+      Is_Del, diseaseid, oneself, 
+      status, fs_describe, User_code, 
+      creationTime, F_Elements)
+    values (#{id,jdbcType=BIGINT}, #{fType,jdbcType=INTEGER}, #{eLevel,jdbcType=INTEGER}, 
+      #{isDel,jdbcType=INTEGER}, #{diseaseid,jdbcType=VARCHAR}, #{oneself,jdbcType=INTEGER},
+      #{status,jdbcType=INTEGER}, #{fsDescribe,jdbcType=VARCHAR}, #{userCode,jdbcType=VARCHAR}, 
+      #{creationtime,jdbcType=VARCHAR}, #{fElements,jdbcType=LONGVARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.yihe.applet.api.domain.YhFoodSrecipeApiNew" >
+    insert into yh_food_srecipe
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="fType != null" >
+        F_type,
+      </if>
+      <if test="eLevel != null" >
+        E_Level,
+      </if>
+      <if test="isDel != null" >
+        Is_Del,
+      </if>
+      <if test="diseaseid != null" >
+        diseaseid,
+      </if>
+      <if test="oneself != null" >
+        oneself,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="fsDescribe != null" >
+        fs_describe,
+      </if>
+      <if test="userCode != null" >
+        User_code,
+      </if>
+      <if test="creationtime != null" >
+        creationTime,
+      </if>
+      <if test="fElements != null" >
+        F_Elements,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="fType != null" >
+        #{fType,jdbcType=INTEGER},
+      </if>
+      <if test="eLevel != null" >
+        #{eLevel,jdbcType=INTEGER},
+      </if>
+      <if test="isDel != null" >
+        #{isDel,jdbcType=INTEGER},
+      </if>
+      <if test="diseaseid != null" >
+        #{diseaseid,jdbcType=VARCHAR},
+      </if>
+      <if test="oneself != null" >
+        #{oneself,jdbcType=INTEGER},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="fsDescribe != null" >
+        #{fsDescribe,jdbcType=VARCHAR},
+      </if>
+      <if test="userCode != null" >
+        #{userCode,jdbcType=VARCHAR},
+      </if>
+      <if test="creationtime != null" >
+        #{creationtime,jdbcType=VARCHAR},
+      </if>
+      <if test="fElements != null" >
+        #{fElements,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.yihe.applet.api.domain.YhFoodSrecipeApiNew" >
+    update yh_food_srecipe
+    <set >
+      <if test="fType != null" >
+        F_type = #{fType,jdbcType=INTEGER},
+      </if>
+      <if test="eLevel != null" >
+        E_Level = #{eLevel,jdbcType=INTEGER},
+      </if>
+      <if test="isDel != null" >
+        Is_Del = #{isDel,jdbcType=INTEGER},
+      </if>
+      <if test="diseaseid != null" >
+        diseaseid = #{diseaseid,jdbcType=VARCHAR},
+      </if>
+      <if test="oneself != null" >
+        oneself = #{oneself,jdbcType=INTEGER},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="fsDescribe != null" >
+        fs_describe = #{fsDescribe,jdbcType=VARCHAR},
+      </if>
+      <if test="userCode != null" >
+        User_code = #{userCode,jdbcType=VARCHAR},
+      </if>
+      <if test="creationtime != null" >
+        creationTime = #{creationtime,jdbcType=VARCHAR},
+      </if>
+      <if test="fElements != null" >
+        F_Elements = #{fElements,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.yihe.applet.api.domain.YhFoodSrecipeApiNew" >
+    update yh_food_srecipe
+    set F_type = #{fType,jdbcType=INTEGER},
+      E_Level = #{eLevel,jdbcType=INTEGER},
+      Is_Del = #{isDel,jdbcType=INTEGER},
+      diseaseid = #{diseaseid,jdbcType=VARCHAR},
+      oneself = #{oneself,jdbcType=INTEGER},
+      status = #{status,jdbcType=INTEGER},
+      fs_describe = #{fsDescribe,jdbcType=VARCHAR},
+      User_code = #{userCode,jdbcType=VARCHAR},
+      creationTime = #{creationtime,jdbcType=VARCHAR},
+      F_Elements = #{fElements,jdbcType=LONGVARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.yihe.applet.api.domain.YhFoodSrecipeApiNew" >
+    update yh_food_srecipe
+    set F_type = #{fType,jdbcType=INTEGER},
+      E_Level = #{eLevel,jdbcType=INTEGER},
+      Is_Del = #{isDel,jdbcType=INTEGER},
+      diseaseid = #{diseaseid,jdbcType=VARCHAR},
+      oneself = #{oneself,jdbcType=INTEGER},
+      status = #{status,jdbcType=INTEGER},
+      fs_describe = #{fsDescribe,jdbcType=VARCHAR},
+      User_code = #{userCode,jdbcType=VARCHAR},
+      creationTime = #{creationtime,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

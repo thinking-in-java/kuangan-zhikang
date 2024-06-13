@@ -1,0 +1,299 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yihe.system.mapper.YhEventEnrollMapper">
+  <resultMap id="BaseResultMap" type="com.yihe.system.domain.YhEventEnroll">
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="event_name" property="eventName" jdbcType="VARCHAR" />
+    <result column="event_content" property="eventContent" jdbcType="VARCHAR" />
+    <result column="provider" property="provider" jdbcType="VARCHAR" />
+    <result column="start_date" property="startDate" jdbcType="TIMESTAMP" />
+    <result column="register_end_date" property="registerEndDate" jdbcType="TIMESTAMP" />
+    <result column="total" property="total" jdbcType="INTEGER" />
+    <result column="public_date" property="publicDate" jdbcType="TIMESTAMP" />
+    <result column="end_date" property="endDate" jdbcType="TIMESTAMP" />
+    <result column="event_rule" property="eventRule" jdbcType="VARCHAR" />
+    <result column="event_addr" property="eventAddr" jdbcType="VARCHAR" />
+    <result column="event_img" property="eventImg" jdbcType="VARCHAR" />
+    <result column="event_type" property="eventType" jdbcType="INTEGER" />
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="com.yihe.system.domain.YhEventEnroll" extends="BaseResultMap" >
+    <result column="event_contentmd" property="eventContentmd" jdbcType="LONGVARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, event_name, event_content, provider, start_date, register_end_date, total, public_date, 
+    end_date, event_rule, event_addr, event_img, event_type
+  </sql>
+  <sql id="Blob_Column_List" >
+    event_contentmd
+  </sql>
+  
+  <select id="selctEventNmaeRepetition"  parameterType="map" resultType="int">
+	  select count(*) from yh_event_enroll where event_name=#{eventName} and id!=#{id}
+  </select>
+  
+  
+  
+  <!-- 查询所有精彩活动模糊查询 -->
+    <select id="selectEnrollAll" resultMap="BaseResultMap" parameterType="map">
+  		select * from yh_event_enroll 
+  		<where>
+  			<if test="eventName!=null and eventName !=''">
+  			  			AND
+  			(
+  				event_name like CONCAT('%',#{eventName},'%' )
+  			)
+  			</if>
+  			<if test="eventType !=null and eventType !=''">
+  			and event_type = #{eventType,jdbcType=INTEGER}
+  			</if>
+  			<if test="center !=null and center !='' and center==1">
+  			and start_date &lt;&gt;&apos;&apos;
+  			</if>
+  			<if test="center !=null and center !='' and center==2">
+  			and ISNULL(start_date)
+  			</if>
+            <if test="orgCodes !=null">
+            and org_code in
+              <foreach item="item" collection="orgCodes" separator="," open="(" close=")" index="">
+                #{item}
+              </foreach>
+           </if>
+  		</where>
+  		order by public_date desc LIMIT  #{page},#{limit}
+  </select>
+  
+   <!-- 查询所有精彩活动模糊查询总行数 -->
+    <select id="selectEnrollAllConut" resultType="int" parameterType="map">
+  		select count(*) from yh_event_enroll 
+  		<where>
+  			<if test="eventName!=null and eventName !=''">
+  			  			AND
+  			(
+  				event_name like CONCAT('%',#{eventName},'%' )
+  			)
+  			</if>
+  			<if test="eventType !=null and eventType !=''">
+  			and event_type = #{eventType,jdbcType=INTEGER}
+  			</if>
+  			<if test="center !=null and center !='' and center==1">
+  			and start_date &lt;&gt;&apos;&apos;
+  			</if>
+  			<if test="center !=null and center !='' and center==2">
+  			and ISNULL(start_date)
+  			</if>
+            <if test="orgCodes !=null">
+            and org_code in
+              <foreach item="item" collection="orgCodes" separator="," open="(" close=")" index="">
+                 #{item}
+              </foreach>
+          </if>
+  		</where>
+  		order by public_date desc 
+  </select>
+  
+  <select id="selectByExample" resultMap="BaseResultMap">
+    select * from yh_event_enroll
+  
+  </select>
+  
+  
+  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from yh_event_enroll
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from yh_event_enroll
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.yihe.system.domain.YhEventEnroll" >
+    insert into yh_event_enroll (id, event_name, event_content, 
+      provider, start_date, register_end_date, 
+      total, public_date, end_date, 
+      event_rule, event_addr, event_img, 
+      event_type, event_contentmd)
+    values (#{id,jdbcType=INTEGER}, #{eventName,jdbcType=VARCHAR}, #{eventContent,jdbcType=VARCHAR}, 
+      #{provider,jdbcType=VARCHAR}, #{startDate,jdbcType=TIMESTAMP}, #{registerEndDate,jdbcType=TIMESTAMP}, 
+      #{total,jdbcType=INTEGER}, #{publicDate,jdbcType=TIMESTAMP}, #{endDate,jdbcType=TIMESTAMP}, 
+      #{eventRule,jdbcType=VARCHAR}, #{eventAddr,jdbcType=VARCHAR}, #{eventImg,jdbcType=VARCHAR}, 
+      #{eventType,jdbcType=INTEGER}, #{eventContentmd,jdbcType=LONGVARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.yihe.system.domain.YhEventEnroll" >
+    insert into yh_event_enroll
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="eventName != null" >
+        event_name,
+      </if>
+      <if test="eventContent != null" >
+        event_content,
+      </if>
+      <if test="provider != null" >
+        provider,
+      </if>
+      <if test="startDate != null" >
+        start_date,
+      </if>
+      <if test="registerEndDate != null" >
+        register_end_date,
+      </if>
+      <if test="total != null" >
+        total,
+      </if>
+      <if test="publicDate != null" >
+        public_date,
+      </if>
+      <if test="endDate != null" >
+        end_date,
+      </if>
+      <if test="eventRule != null" >
+        event_rule,
+      </if>
+      <if test="eventAddr != null" >
+        event_addr,
+      </if>
+      <if test="eventImg != null" >
+        event_img,
+      </if>
+      <if test="eventType != null" >
+        event_type,
+      </if>
+      <if test="eventContentmd != null" >
+        event_contentmd,
+      </if>
+      <if test="orgCode != null" >
+        org_code,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="eventName != null" >
+        #{eventName,jdbcType=VARCHAR},
+      </if>
+      <if test="eventContent != null" >
+        #{eventContent,jdbcType=VARCHAR},
+      </if>
+      <if test="provider != null" >
+        #{provider,jdbcType=VARCHAR},
+      </if>
+      <if test="startDate != null" >
+        #{startDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="registerEndDate != null" >
+        #{registerEndDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="total != null" >
+        #{total,jdbcType=INTEGER},
+      </if>
+      <if test="publicDate != null" >
+        #{publicDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="endDate != null" >
+        #{endDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="eventRule != null" >
+        #{eventRule,jdbcType=VARCHAR},
+      </if>
+      <if test="eventAddr != null" >
+        #{eventAddr,jdbcType=VARCHAR},
+      </if>
+      <if test="eventImg != null" >
+        #{eventImg,jdbcType=VARCHAR},
+      </if>
+      <if test="eventType != null" >
+        #{eventType,jdbcType=INTEGER},
+      </if>
+      <if test="eventContentmd != null" >
+        #{eventContentmd,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="orgCode != null" >
+        #{orgCode,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.yihe.system.domain.YhEventEnroll" >
+    update yh_event_enroll
+    <set >
+      <if test="eventName != null" >
+        event_name = #{eventName,jdbcType=VARCHAR},
+      </if>
+      <if test="eventContent != null" >
+        event_content = #{eventContent,jdbcType=VARCHAR},
+      </if>
+      <if test="provider != null" >
+        provider = #{provider,jdbcType=VARCHAR},
+      </if>
+      <if test="startDate != null" >
+        start_date = #{startDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="registerEndDate != null" >
+        register_end_date = #{registerEndDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="total != null" >
+        total = #{total,jdbcType=INTEGER},
+      </if>
+      <if test="publicDate != null" >
+        public_date = #{publicDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="endDate != null" >
+        end_date = #{endDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="eventRule != null" >
+        event_rule = #{eventRule,jdbcType=VARCHAR},
+      </if>
+      <if test="eventAddr != null" >
+        event_addr = #{eventAddr,jdbcType=VARCHAR},
+      </if>
+      <if test="eventImg != null" >
+        event_img = #{eventImg,jdbcType=VARCHAR},
+      </if>
+      <if test="eventType != null" >
+        event_type = #{eventType,jdbcType=INTEGER},
+      </if>
+      <if test="eventContentmd != null" >
+        event_contentmd = #{eventContentmd,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.yihe.system.domain.YhEventEnroll" >
+    update yh_event_enroll
+    set event_name = #{eventName,jdbcType=VARCHAR},
+      event_content = #{eventContent,jdbcType=VARCHAR},
+      provider = #{provider,jdbcType=VARCHAR},
+      start_date = #{startDate,jdbcType=TIMESTAMP},
+      register_end_date = #{registerEndDate,jdbcType=TIMESTAMP},
+      total = #{total,jdbcType=INTEGER},
+      public_date = #{publicDate,jdbcType=TIMESTAMP},
+      end_date = #{endDate,jdbcType=TIMESTAMP},
+      event_rule = #{eventRule,jdbcType=VARCHAR},
+      event_addr = #{eventAddr,jdbcType=VARCHAR},
+      event_img = #{eventImg,jdbcType=VARCHAR},
+      event_type = #{eventType,jdbcType=INTEGER},
+      event_contentmd = #{eventContentmd,jdbcType=LONGVARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.yihe.system.domain.YhEventEnroll" >
+    update yh_event_enroll
+    set event_name = #{eventName,jdbcType=VARCHAR},
+      event_content = #{eventContent,jdbcType=VARCHAR},
+      provider = #{provider,jdbcType=VARCHAR},
+      start_date = #{startDate,jdbcType=TIMESTAMP},
+      register_end_date = #{registerEndDate,jdbcType=TIMESTAMP},
+      total = #{total,jdbcType=INTEGER},
+      public_date = #{publicDate,jdbcType=TIMESTAMP},
+      end_date = #{endDate,jdbcType=TIMESTAMP},
+      event_rule = #{eventRule,jdbcType=VARCHAR},
+      event_addr = #{eventAddr,jdbcType=VARCHAR},
+      event_img = #{eventImg,jdbcType=VARCHAR},
+      event_type = #{eventType,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

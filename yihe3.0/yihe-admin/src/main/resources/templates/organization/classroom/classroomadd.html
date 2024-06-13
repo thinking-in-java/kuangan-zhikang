@@ -1,0 +1,767 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<title>健康课堂新增</title>
+   <link rel="stylesheet"  th:href="@{/assets/libs/layui/css/layui.css}" />
+    <link rel="stylesheet"  th:href="@{/assets/module/admin.css}"  />
+    <!-- js部分 -->
+<script type="text/javascript" th:src="@{/assets/libs/layui/layui.js}"></script>
+<script type="text/javascript" th:src="@{/assets/js/common.js}"></script>
+
+ <!--引入所需依赖-->
+    <link rel="stylesheet" th:href="@{/editormd/css/style.css}"/>
+    <link rel="stylesheet" th:href="@{/editormd/css/editormd.css}"/>
+    
+    
+<style type="text/css">
+	div.tagsinput input {
+    color: #000;
+    font-size: 14px;
+    padding: 5px;
+    margin-bottom: 5px;
+    background: transparent;
+    border: none;
+    outline: none;
+    width: 150px;
+}
+</style>
+</head>
+<body> 
+	              
+<a id="cancel" target="_self" style="display: none" href="/manage/content/healthclass" lay-text="课堂管理">"课堂管理"</a>
+
+
+
+<div class="layui-fluid">
+		<div class="layui-row">
+			<div style="width: 100%; height: 100%; background-color: #FFF; position: relative;">
+				<div th:if="${id==0}" style="font-size: 20px; font-weight: bold; margin-left: 20px; padding-top: 30px;">新建课堂</div>
+				<div th:if="${id!=0}" style="font-size: 20px; font-weight: bold; margin-left: 20px; padding-top: 30px;">修改课堂</div>
+				<br>
+<form class="layui-form" id="express">
+
+  <input id="infoid" name="infoid" type="hidden" th:value="${id}">
+  <input id="showtips" type="hidden" th:value="${tips}">
+  <div class="layui-form-item">
+    <label class="layui-form-label layui-form-required">名称:</label>
+    <div class="layui-input-block">
+      <input type="text" name="title" id="title" lay-verify="required" lay-reqtext="名称不能为空" maxlength="50"
+									placeholder="请输入名称，最大限制50个字符" autocomplete="off"  class="layui-input">
+    </div>
+  </div>
+  
+
+  
+  
+  <div class="layui-form-item">
+  
+  <div class="layui-inline">
+      <label class="layui-form-label">作者:</label>
+    <div class="layui-input-block">
+      <input type="text" name="author" id="author" maxlength="10"
+									placeholder="请输入主讲人" autocomplete="off"  class="layui-input">
+    </div>
+    </div>
+    
+  
+  
+    <div class="layui-inline">
+      <label class="layui-form-label layui-form-required">类型</label>
+       <div class="layui-input-block">
+	      <input type="radio" name="typeid" lay-filter="eventType" value="5" title="文章" checked="">
+	      <input type="radio" name="typeid" lay-filter="eventType" value="1" title="视频 ">
+	    </div>
+    </div>
+    <div class="layui-inline" id="update">
+      <label class="layui-form-label"  id="help">开播时间<i class="layui-icon layui-icon-help"></i></label>
+      <div class="layui-input-inline">
+        <input type="text" class="layui-input" name="update" id="test5" placeholder="yyyy-MM-dd HH:mm:ss">
+      </div>
+    </div>
+  </div>
+  
+   <div class="layui-form-item layui-form-text">
+    <label class="layui-form-label">正文:</label>
+    <!-- <div class="layui-input-block">
+      <textarea class="layui-textarea" placeholder="最大限制5000字符" id="instruction" maxlength="500" name="instruction"style="display: none"> </textarea> 
+      
+    </div> -->
+    
+    <!--这里的id=editormd_id就是下面的初始化editorMD的editormd_id-->
+<div id="editormd_id">
+    <!-- 第一个textarea是文本输入区域-->
+    <textarea id="htmlContent" class="editorMd-html-textarea"  name="editorMd-html-textarea" placeholder="请输入内容...">
+    </textarea>
+
+    <!--第二个textarea 是展示文本区域 要隐藏起来 display->none-->
+    <textarea class="editorMd-text-textarea" name="editorMd-text-textarea" style="display:none;" id="textContent">
+    </textarea>
+</div>
+
+
+
+  </div>
+  
+  
+  <div class="layui-form-item">
+    <div class="layui-inline">
+      <label class="layui-form-label">图片上传</label>
+     	
+     <div class="layui-input-block">
+     <div class="layui-upload-drag" id="test10">
+		  <i class="layui-icon"></i>
+		  <p>点击上传，或将图片拖拽到此处</p>
+		   <p>（尺寸：4:3 ）</p>
+		  <div class="layui-hide" id="uploadDemoView" >
+		    <hr>
+		    <img src="" alt="上传成功后渲染" style="max-width: 196px">
+		  </div>
+		</div>
+    </div>
+    </div>
+    
+  
+    
+    <div class="layui-inline" id="erqi">
+      <label class="layui-form-label">视频上传</label>
+      <div class="layui-upload-drag" id="test11">
+		  <i class="layui-icon"></i>
+		  <p>点击上传，或将视频拖拽到此处</p>
+		  <div class="layui-inline" id="erqi3">
+       <video src="" style="width: 300px;" id="shiping" controls>
+      		  您的浏览器不支持video元素
+		</video> 
+    </div>
+		</div>
+    </div>
+    
+    
+    <!-- <div class="layui-inline" id="erqi3">
+       <video src="" style="width: 300px;" id="shiping" controls>
+      		  您的浏览器不支持video元素
+		</video> 
+    </div> -->
+    
+    
+  </div>
+  
+  
+  
+  
+  
+  
+  <div class="layui-form-item">
+    <div class="layui-inline">
+      <label class="layui-form-label layui-form-required">分类</label>
+
+     	<div class="layui-input-inline">
+      		<select lay-filter="aihao" lay-verify="required" lay-reqText="请选择分类" name="categoryIdda" id="doctors">
+						
+			</select>
+    </div>
+    <div class="layui-input-inline" id="second">
+      <select lay-filter="classify"  name="categoryIdxiao" id="classify">
+						
+	   </select>
+    </div>
+     	
+     	
+     	<div class="layui-input-inline" id="three">
+      <select  name="threelevel" id="threelevel">
+						
+	   </select>
+    </div>
+     	
+     	
+     	
+    </div>
+    
+    
+    <div class="layui-inline" style="width: 60%;">
+      <label class="layui-form-label" style="width: 120px;" id="icon">标签(1-5个标签)<i class="layui-icon layui-icon-help"></i></label>
+        <div class="layui-input-block" style=" margin-left: 16%;">
+                            <input id="demoTagsInput1" name="tips" value="" placeholder="请填写,回车确认" class="layui-hide"/>
+                        </div>
+    </div>
+  </div>
+  
+  <div class="layui-form-item">
+    <label class="layui-form-label"></label>
+    <div class="layui-input-inline" style="width: 1000px;height: 30px;">
+      <input type="checkbox" name="state1" id="state1" lay-filter="state1" value="1" lay-skin="primary" title="暂存为草稿(在草稿阶段用户不会看到,而类型选择视频时，未上传视频只能暂存为草稿哦)">
+    </div>
+  </div>
+  
+    <input id="state" name="state" type="hidden" value="">
+  
+<input id="tup" name="thumbnailUrl" type="hidden" value="">
+<input id="tup1" name="listboxUrl" type="hidden" value="">
+<input id="videoUrl" name="videoUrl" type="hidden" value="">
+  <div class="layui-form-item">
+  <div class="layui-input-block" >
+	     <button class="layui-btn " lay-submit='' lay-filter="regSubmit" id="">保存</button>
+	     <button type="reset" onclick="cancel()" class="layui-btn layui-btn-primary">&emsp;取消&emsp;</button>
+	 </div>
+  </div>
+</form>
+
+
+</div>
+		</div>
+		</div>
+    
+    
+</body>
+</html>
+<script type="text/javascript" th:src="@{/assets/js/jquery-1.11.1.js}"></script>
+<script th:src="@{/editormd/editormd.js}"></script>
+<script type="text/javascript" th:src="@{/assets/libs/layui/layui.js}"></script>
+<script type="text/javascript" th:src="@{/assets/js/common.js}"></script>
+
+<script>
+
+
+
+//初始化editorMD
+var HEADER;
+$(function () {
+	HEADER = editormd("editormd_id", {
+        width: "90%",
+        height: 720,
+        toc: true,
+        emoji: true,//表情功能开启
+        taskList: true,
+        syncScrolling: "single",
+        imageUpload: true,
+        htmlDecode: "style,script,iframe",
+        tex: true, // 默认不解析
+        flowChart: true, // 默认不解析
+        sequenceDiagram: true, // 默认不解析
+        codeFold: true,
+        imageFormats: ["jpg", "jpeg", "gif", "png", "bmp", "webp"],
+        imageUploadURL: "/Uploading/upload",       //图片上传URL 即后台的图片上传接口URL
+        path: '/editormd/lib/',          //项目启动路径
+        toolbarIcons : function() {
+            // Or return editormd.toolbarModes[name]; // full, simple, mini
+            // Using "||" set icons align right.
+            return [ "undo", "redo", "|", 
+                "bold", "italic", "quote", "|", 
+                "h1", "h2", "h3", "h4", "h5", "h6", "|",
+                "list-ul", "list-ol", "hr", "|",
+                "link",  "image", "|",
+                "watch"]
+        },
+        //path: '../static/editormd/lib/',    //本地路径
+        saveHTMLToTextarea: true
+    });
+});
+
+
+
+$('#title').blur(function () {
+    var title = $("#title").val();
+    var infoid = $("#infoid").val();
+    $.ajax({
+ 		type:'get', 
+ 		url:'/YhHealthLectureInfo/selctTitleRepetition',
+ 		data:{title:title,infoid:infoid},
+ 		success : function(data){
+ 			if(data ==1){	
+ 				layer.msg("课程名称已被占用!");	
+ 			}
+ 		}
+ 	});
+ })
+
+ var categoryId=0;
+ 
+ 
+
+/* $(function(){
+	alert(123);
+  	
+  	layuishow();
+  }) */
+  
+  var showtips=$("#showtips").val();
+  if(showtips!=null){
+	  $("#demoTagsInput1").val(showtips);
+  }
+ 
+	layuishow();
+ 
+function layuishow(){
+	
+	
+	//初始二级三级分类
+	var erji=0;
+	var sanji=0;
+
+layui.use(['form', 'layedit', 'laydate', 'tagsInput'], function(){
+	  var form = layui.form
+	  ,$ = layui.jquery
+	  ,layer = layui.layer
+	  ,layedit = layui.layedit
+	  ,laydate = layui.laydate
+	  ,tagsInput = layui.tagsInput;
+	// 输入框样式
+      $('#demoTagsInput1').tagsInput();
+	
+     
+      
+	  layedit.set({
+		  uploadImage:{
+			  url: '/Uploading/upload' //接口url
+			,type: 'post' //默认post
+				
+			}
+	  }); //注意:layedit.set 一定要放在 build 前面，否则配置全局接口将无效。
+
+
+		var id=layui.$("#infoid").val();
+	  	if(id!=0){
+	  		 $.ajax({
+	  	    	 type: "post",
+	  	         url: "/YhHealthLectureInfo/Infoselect",
+	  	         dataType:"json",
+	  	         data:{"id":id},
+	  	         success: function(data){
+	  	        	 if(data.data.typeid==5){
+	  	        		 document.getElementsByName('typeid')[0].checked  = true;
+	  	        		layui.$("#erqi").hide();
+	  	        		$("#update").hide();
+	  	        		layui.$("#erqi3").hide();
+	  	        	 }else{
+	  	        		 document.getElementsByName('typeid')[1].checked  = true;
+	  	        		layui.$("#shiping").attr("src",data.data.videoUrl);
+	  	        		layui.$("#videoUrl").val(data.data.videoUrl);
+	  	   		   layui.$("#erqi").show();
+	  	        		layui.$("#erqi3").show();
+	  	        		$("#update").show();
+	  	        	 }
+	  	        	layui.$('#uploadDemoView').removeClass('layui-hide').find('img').attr('src', data.data.listboxUrl);
+	  	        	layui.$("#tup").val(data.data.listboxUrl);
+	  	        	layui.$("#tup1").val(data.data.listboxUrl);
+                    layui.$("#test5").val(data.data.updateDate);
+	  	        	layui.$("#title").val(data.data.title);
+	  	        	layui.$("#author").val(data.data.author);
+	  	        	//layui.$("#htmlContent").val(data.data.instruction);
+	  	        	//layedit.setContent(testEditor,data.data.instruction);
+	  	        	setTimeout(function(){ 
+	  	        		HEADER.setMarkdown(data.data.instruction);
+	  	        	},500);
+	  	        	categoryId=data.data.categoryId;
+	  	        	show(categoryId);
+	  	        	 if(data.data.state==2){
+	  			  		   layui.$("#state1").prop("checked", true);
+	  	        	 }
+	  	        	layui.$('#state1').val(data.data.state);
+	  	        	layui.$('#state').val(data.data.state);
+	  	  		   form.render();
+	  	         }
+	  	    });
+	  	}else{
+	  		layui.$("#htmlContent").val("");
+	  		$("#update").hide();
+	  		$("#erqi").hide();
+	  		$("#erqi3").hide();
+	  		showpaid(0);
+	  		 form.render();
+	  	}
+
+
+	//构建一个默认的编辑器
+	  var index = layedit.build('instruction', {
+	  tool: ['left','center','right','face','image','help']
+	  , height: 580 //设置编辑器高度
+	  });
+
+	  var tip_index1;
+		$("#icon").hover(function(){
+		    tip_index1 =  layer.tips('请填写，回车确认', this,{
+		        tips: [2, 'rgba(0, 0, 0, 1)'],
+		        time:0
+		    });
+		},function(){
+		    layer.close(tip_index1);
+		});
+
+	  var tip_index;
+		$("#help").hover(function(){
+		    tip_index =  layer.tips('若设置了，则用户在开播时间之后可以看到', this,{
+		        tips: [2, 'rgba(0, 0, 0, 1)'],
+		        time:0
+		    });
+		},function(){
+		    layer.close(tip_index);
+		});
+
+
+		show=function(categoryId){
+	      if(categoryId!=0){
+        		$.ajax({
+		          	 type: "post",
+		               url: "/YhHealthLectureInfo/showpaidselectByPrimaryKey",
+		               dataType:"json",
+		              data:{categoryid:categoryId},
+		               success: function(rydata){
+		            	   var broad=0;//一级
+		            	   var subclass=0;//二级
+		            	   var threelevel=0;//三级
+		            	   
+		            	   if(rydata.data.parentId==0){
+			            		  broad=rydata.data.categoryid;//一级
+			            		  showpaid(broad);
+			               }else{//如果父级不等于0查询二级分类
+			            	   
+			            	   $.ajax({
+			   		          	 type: "post",
+			   		               url: "/YhHealthLectureInfo/showpaidselectByPrimaryKey",
+			   		               dataType:"json",
+			   		              data:{categoryid:rydata.data.parentId},
+			   		               success: function(rydata1){
+			   		            	 if(rydata1.data.parentId==0){
+				   		            	broad=rydata.data.parentId;//一级
+			   		            		subclass=rydata.data.categoryid;//二级
+					               	}else{
+					               		threelevel=rydata.data.categoryid;//三级
+					               		subclass=rydata1.data.categoryid;//二级
+					               		broad=rydata1.data.parentId;//一级
+					               	}
+			   		            	 
+			   		            	
+					            	   
+					            	  
+					            	   
+			   		            	showpaid(broad);
+			   		             if(subclass>0){
+				            		   $("#second").show();
+				            		   var select_val = broad;
+										var url = "/YhHealthLectureInfo/showclassify";
+										var data2 = {
+												'parentId' : select_val
+										};
+										$.post(url, data2, function(data) {
+											var htmld="<option value=''>请选择</option>";
+									       	var item=data.data;
+									        for (var i = 0; i < item.length; i++) {
+									        	if(subclass==item[i].categoryid){
+									        		htmld+="<option selected='' value="+item[i].categoryid+">"+item[i].name+"</option>";
+									        	}else{
+									        		htmld+="<option value="+item[i].categoryid+">"+item[i].name+"</option>";
+									        	}
+
+											}
+									       	$('#classify').html(htmld);
+									        form.render();
+										})
+				            	   }
+					            	   
+										
+										
+									 if(threelevel>0){
+					            		   $("#three").show();
+						            		 var url = "/YhHealthLectureInfo/showclassify";
+						   					var data2 = {
+						   							'parentId' : subclass
+						   					};
+						   					$.post(url, data2, function(data) {
+						   						var htmld="<option value=''>请选择</option>";
+						   				       	var item=data.data;
+						   				        for (var i = 0; i < item.length; i++) {
+						   				        	if(threelevel==item[i].categoryid){
+										        		htmld+="<option selected='' value="+item[i].categoryid+">"+item[i].name+"</option>";
+										        	}else{
+										        		htmld+="<option value="+item[i].categoryid+">"+item[i].name+"</option>";
+										        	}
+						   						}
+						   				       	$('#threelevel').html(htmld);
+						   				        form.render();
+						   					})
+					            	   }
+										
+										
+										
+			   		               
+			   		               }
+			   		            });
+			            	   
+								
+			               }
+		            	   
+		            	  
+		            		   
+		               }
+		          });
+
+        	}else{
+        		showpaid(0);
+        	}
+		}
+		
+		$("#second").hide();
+		$("#three").hide();
+	//一级分类
+	  function showpaid(broad){
+		  var url = "/YhHealthLectureInfo/showpaid";
+			var data2 = {
+
+			};
+			$.post(url, data2, function(data) {
+				$('#doctors').html("");
+				var htmld="<option value=''>全部</option>";
+		       	var item=data.data;
+		        for (var i = 0; i < item.length; i++) {
+		        	if(broad==item[i].categoryid){
+		        		htmld+="<option  selected='' value="+item[i].categoryid+">"+item[i].name+"</option>";
+		        	}else{
+		        		htmld+="<option value="+item[i].categoryid+">"+item[i].name+"</option>";
+		        	}
+
+				}
+		       	$('#doctors').append(htmld);
+		       	form.render();
+			})
+	  }
+	
+	
+	//二级分类
+		layui.use('form', function(){
+			  var form = layui.form;
+			  form.on('select(aihao)', function(data){
+				  $('#classify').html("");
+				  var select_text = data.elem[data.elem.selectedIndex].text;
+					var select_val = data.value;
+					var url = "/YhHealthLectureInfo/showclassify";
+					var data2 = {
+							'parentId' : select_val
+					};
+					$.post(url, data2, function(data) {
+						var htmld="<option value=''>请选择</option>";
+				       	var item=data.data;
+				    	if(item.length>0){
+				       		$("#second").show();
+				       		erji=item.length;
+				       	}else{
+				       		$("#second").hide();
+				       		erji=0;
+				       	}
+				        for (var i = 0; i < item.length; i++) {
+				        	htmld+="<option value="+item[i].categoryid+">"+item[i].name+"</option>";
+						}
+				       	$('#classify').html(htmld);
+				        form.render();
+					})
+				});
+
+			});
+	
+	
+		//三级分类
+		layui.use('form', function(){
+			  var form = layui.form;
+			  form.on('select(classify)', function(data){
+				  $('#threelevel').html("");
+				  var select_text = data.elem[data.elem.selectedIndex].text;
+					var select_val = data.value;
+					var url = "/YhHealthLectureInfo/showclassify";
+					var data2 = {
+							'parentId' : select_val
+					};
+					$.post(url, data2, function(data) {
+						var htmld="<option value=''>请选择</option>";
+				       	var item=data.data;
+				    	if(item.length>0){
+				       		$("#three").show();
+				       		sanji=item.length;
+				       	}else{
+				       		$("#three").hide();
+				       		sanji=0;
+				       	}
+				        for (var i = 0; i < item.length; i++) {
+				        	htmld+="<option value="+item[i].categoryid+">"+item[i].name+"</option>";
+						}
+				       	$('#threelevel').html(htmld);
+				        form.render();
+					})
+				});
+
+			});
+
+
+	//监听提交
+	  form.on('submit(regSubmit)', function(dataYh){
+		 var demoTagsInput1=$("#demoTagsInput1").val();
+		 var  sex=$('input[name="typeid"]:checked').val();
+		 var test5=$("#test5").val();
+		 strs=demoTagsInput1.split(","); //字符分割
+
+
+		 var formData = dataYh.field;//表单所有数据
+
+		 var content = HEADER.getHTML();
+		 
+		 var length=content.length;
+		 var content1 = HEADER.getMarkdown();
+		/*  
+		  var textarea = layedit.getContent(index);//富文本编辑器取值
+		  var str = textarea
+	      str = str.replace(/<xml>[\s\S]*?<\/xml>/ig, '')
+	      str = str.replace(/<style>[\s\S]*?<\/style>/ig, '')
+	      str = str.replace(/<font face="宋体">/g, '')
+	       str = str.replace(/<span>/g, '')
+	       str = str.replace(/<\/span>/g, '')
+	      str = str.replace(/<font face="Calibri">/g, '')
+	      str = str.replace(/<font face="Arial">/g, '')
+	      str = str.replace(/<o:p>/g, '')
+		  str = str.replace(/<\/o:p>/g, '')
+	      str = str.replace(/<\/font[^>]*>/g, '')
+	      str = str.replace(/[ | ]*\n/g, '\n')
+	      str = str.replace(/&nbsp;/ig, '')
+	      console.log('****', str) */
+
+		  formData.instruction=content;//把富文本编辑器中的值放到表单中
+			
+		  formData.instructionmd=content1;//把富文本编辑器中的值放到表单中
+		  
+		  var classify=$("#classify").val();
+		  var threelevel=$("#threelevel").val();
+		  
+		  if(erji>0 && classify==''){
+			  layer.msg("请填写二级分类");
+		  }else if(sanji>0 && threelevel==''){
+			  layer.msg("请填写三级分类");
+		  }else if(strs.length>5){
+			 layer.msg("最多可以创建5个标签哦!");
+		 }else if(length>5000){
+			 layer.msg("正文:最多只能5000个字符哦!");
+		 }else{
+			  var title = $("#title").val();
+			    var infoid = $("#infoid").val();
+			    $.ajax({
+			 		type:'get',
+			 		url:'/YhHealthLectureInfo/selctTitleRepetition',
+			 		data:{title:title,infoid:infoid},
+			 		success : function(data){
+			 			if(data ==0){
+			 				 $.ajax({
+			 		          	 type: "post",
+			 		               url: "/YhHealthLectureInfo/insertInfo",
+			 		               dataType:"json",
+			 		              data:formData,
+			 		               success: function(data){
+			 		            	   if(data.data==1){
+			 		            		    layer.msg('添加成功');
+			 								cancel();
+			 		            	   }else{
+			 			            	   layer.msg('添加失败');
+			 		            	   }
+			 		               }
+			 		          });
+			 			}else{
+			 				layer.msg("课程名称已被占用!");
+			 			}
+			 		}
+			 	});
+		 }
+	    return false;
+	  });
+
+
+      form.on('checkbox(state1)', function(data){
+		  console.log(data.elem); //得到radio原始DOM对象
+		  console.log(data.value); //被点击的radio的value值
+		  if(data.value==1){
+			  $('#state1').val("2");
+			  $('#state').val("2");
+		  }else{
+			  $('#state1').val("1");
+			  $('#state').val("1");
+		  }
+		});
+
+
+
+
+
+		
+
+
+	  form.on('radio(eventType)', function(data){
+		  console.log(data.elem); //得到radio原始DOM对象
+		  console.log(data.value); //被点击的radio的value值
+		  if(data.value==1){
+			  $("#erqi").show();
+			  $("#update").show();
+		  }else{
+			  $("#erqi").hide();
+			  $("#update").hide();
+		  }
+		}); 
+	  
+	    //日期时间选择器
+	    laydate.render({
+	      elem: '#test5'
+	      ,type: 'datetime',
+            trigger: 'click'
+	    });
+	    
+		  
+
+	});
+}
+	
+	
+cancel=function(){
+	document.getElementById("cancel").click();
+}
+	
+	
+
+
+
+	layui.use('upload', function(){
+	  var $ = layui.jquery
+	  ,upload = layui.upload;
+	  
+	  //拖拽上传图片
+	  upload.render({
+	    elem: '#test10'
+	    ,url: '/Uploading/addEnrollImg' //改成您自己的上传接口
+    	,before: function(obj){ //obj参数包含的信息，跟 choose回调完全一致，可参见上文。
+    		this.layerIndex = layer.load(0, {shade: [0.5, '#666c7f']});
+    	}
+	    ,done: function(res){
+	      layer.close(this.layerIndex);
+	      layer.msg('上传成功');
+	      layui.$('#uploadDemoView').removeClass('layui-hide').find('img').attr('src', res.files);
+	      layui.$("#tup").val(res.files);
+	      layui.$("#tup1").val(res.files);
+	      console.log(res)
+	    }
+	  });
+	//拖拽上传视频
+	  upload.render({
+		    elem: '#test11'
+		    ,url: '/Uploading/addEnrollImg' //改成您自己的上传接口
+		    ,accept: 'video' //视频
+	    	,before: function(obj){ //obj参数包含的信息，跟 choose回调完全一致，可参见上文。
+	    		this.layerIndex = layer.load(0, {shade: [0.5, '#666c7f']});
+	    	}
+		    ,done: function(res){
+		    	layer.close(this.layerIndex);
+		      layer.msg(res.message);
+		      $("#erqi3").show();
+		      layui.$("#shiping").attr("src",res.files);
+		      layui.$("#videoUrl").val(res.files);
+		      console.log(res)
+		    }
+		  });
+	
+	  
+	});
+</script>

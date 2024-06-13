@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yihe.applet.api.mapper.YhQuestionCheckJsonAppMapper">
+    <resultMap type="com.yihe.applet.api.domain.YhQuestionCheckJsonApp" id="YhQuestionCheckJsonResult">
+        <result property="id"    column="id"    />
+        <result property="userCode"    column="user_code"    />
+        <result property="userCheckAnswer"    column="user_check_answer"    />
+        <result property="userCheckIndex"    column="user_check_index"    />
+        <result property="userCheckTs"    column="user_check_ts"    />
+        <result property="userCheckTime"    column="user_check_time"    />
+        <result property="requestSerialNum"    column="request_serialNum"    />
+    </resultMap>
+    <sql id="allColumn">
+        id, user_code, user_check_answer, user_check_index, user_check_ts, user_check_time,request_serialNum
+    </sql>
+    <!--增-->
+    <insert id="insertYhQuestionCheckJson" parameterType="com.yihe.applet.api.domain.YhQuestionCheckJsonApp" useGeneratedKeys="true" keyProperty="id">
+        insert into yh_question_check_json2
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="userCode != null  and userCode != ''">user_code,</if>
+            <if test="userCheckAnswer != null  and userCheckAnswer != ''">user_check_answer,</if>
+            <if test="userCheckIndex != null ">user_check_index,</if>
+            <if test="userCheckTs != null ">user_check_ts,</if>
+            <if test="userCheckTime != null ">user_check_time,</if>
+            <if test="requestSerialNum != null ">request_serialNum,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="userCode != null  and userCode != ''">#{userCode},</if>
+            <if test="userCheckAnswer != null  and userCheckAnswer != ''">#{userCheckAnswer},</if>
+            <if test="userCheckIndex != null ">#{userCheckIndex},</if>
+            <if test="userCheckTs != null ">#{userCheckTs},</if>
+            <if test="userCheckTime != null ">#{userCheckTime},</if>
+            <if test="requestSerialNum != null ">#{requestSerialNum},</if>
+        </trim>
+    </insert>
+    <!--改-->
+    <update id="updateYhQuestionCheckJson" parameterType="com.yihe.applet.api.domain.YhQuestionCheckJsonApp">
+        update yh_question_check_json2
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="userCode != null  and userCode != ''">user_code = #{userCode},</if>
+            <if test="userCheckAnswer != null  and userCheckAnswer != ''">user_check_answer = #{userCheckAnswer},</if>
+            <if test="userCheckIndex != null ">user_check_index = #{userCheckIndex},</if>
+            <if test="userCheckTs != null ">user_check_ts = #{userCheckTs},</if>
+            <if test="userCheckTime != null ">user_check_time = #{userCheckTime},</if>
+            <if test="requestSerialNum != null ">request_serialNum = #{requestSerialNum},</if>
+        </trim>
+        where user_code = #{userCode}
+    </update>
+    <!--查-->
+    <select id="selectYhQuestionCheckJsonByUserCode" resultMap="YhQuestionCheckJsonResult">
+        SELECT <include refid="allColumn"/> FROM yh_question_check_json2
+        where user_code = #{userCode} and user_check_ts = #{userCheckTs}
+        ORDER BY user_check_time DESC LIMIT 1
+    </select>
+     <select id="selectYhQuestionCheckCount" resultType="int">
+        select count(*) from yh_question_check_json2
+    </select>
+
+    <delete id="delYhQuestionCheckJson" parameterType="string">
+        delete from yh_question_check_json2 where user_code = #{userCode}  and user_check_ts = 2
+    </delete>
+</mapper>

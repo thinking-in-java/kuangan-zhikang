@@ -1,0 +1,412 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yihe.applet.api.mapper.YhUserFoodWeeklyMapper" >
+  <resultMap id="BaseResultMap" type="com.yihe.applet.api.domain.YhUserFoodWeekly" >
+    <id column="wid" property="wid" jdbcType="INTEGER" />
+    <result column="user_code" property="userCode" jdbcType="VARCHAR" />
+    <result column="startTime" property="starttime" jdbcType="VARCHAR" />
+    <result column="endTime" property="endtime" jdbcType="VARCHAR" />
+    <result column="ecordDays" property="ecorddays" jdbcType="INTEGER" />
+    <result column="exceedingDays" property="exceedingdays" jdbcType="INTEGER" />
+    <result column="noRepetition" property="norepetition" jdbcType="INTEGER" />
+    <result column="averageIntake" property="averageintake" jdbcType="REAL" />
+    <result column="averageIntake7" property="averageintake7" jdbcType="REAL" />
+    <result column="protein" property="protein" jdbcType="REAL" />
+    <result column="fat" property="fat" jdbcType="REAL" />
+    <result column="carbohydrate" property="carbohydrate" jdbcType="REAL" />
+    <result column="zao" property="zao" jdbcType="REAL" />
+    <result column="wu" property="wu" jdbcType="REAL" />
+    <result column="wan" property="wan" jdbcType="REAL" />
+    <result column="jia" property="jia" jdbcType="REAL" />
+    <result column="foodType" property="foodtype" jdbcType="VARCHAR" />
+    <result column="type1" property="type1" jdbcType="REAL" />
+    <result column="type2" property="type2" jdbcType="REAL" />
+    <result column="type3" property="type3" jdbcType="REAL" />
+    <result column="type4" property="type4" jdbcType="REAL" />
+    <result column="type5" property="type5" jdbcType="REAL" />
+    <result column="type6" property="type6" jdbcType="REAL" />
+    <result column="type7" property="type7" jdbcType="REAL" />
+    <result column="type8" property="type8" jdbcType="REAL" />
+    <result column="type9" property="type9" jdbcType="REAL" />
+    <result column="type10" property="type10" jdbcType="REAL" />
+    <result column="type11" property="type11" jdbcType="REAL" />
+    <result column="type12" property="type12" jdbcType="REAL" />
+    <result column="type13" property="type13" jdbcType="REAL" />
+    <result column="type14" property="type14" jdbcType="REAL" />
+    <result column="type15" property="type15" jdbcType="REAL" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    wid, user_code, startTime, endTime, ecordDays, exceedingDays, noRepetition, averageIntake, averageIntake7, 
+    protein, fat, carbohydrate, zao, wu, wan, jia, foodType, type1, type2, type3, type4, 
+    type5, type6, type7, type8, type9, type10, type11, type12, type13, type14, type15
+  </sql>
+  
+ 
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from yh_user_food_weekly
+    where wid = #{wid,jdbcType=INTEGER}
+  </select>
+  <select id="findUserWeekLyInfoByUsercode" resultMap="BaseResultMap">
+  
+SELECT    <include refid="Base_Column_List" />  FROM `yh_user_food_weekly` WHERE user_code=#{usercode} AND startTime=#{startTime}  AND endTime=#{endTime} LIMIT 1
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from yh_user_food_weekly
+    where wid = #{wid,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.yihe.applet.api.domain.YhUserFoodWeekly" >
+    insert into yh_user_food_weekly (wid, user_code, startTime, 
+      endTime, ecordDays, exceedingDays, 
+      noRepetition, averageIntake,averageIntake7, protein, 
+      fat, carbohydrate, zao, wu, 
+      wan, jia, foodType, type1, 
+      type2, type3, type4, type5, 
+      type6, type7, type8, type9, 
+      type10, type11, type12, type13, 
+      type14, type15)
+    values (#{wid,jdbcType=INTEGER}, #{userCode,jdbcType=VARCHAR}, #{starttime,jdbcType=VARCHAR}, 
+      #{endtime,jdbcType=VARCHAR}, #{ecorddays,jdbcType=INTEGER}, #{exceedingdays,jdbcType=INTEGER}, 
+      #{norepetition,jdbcType=INTEGER}, #{averageintake,jdbcType=REAL},#{averageintake7,jdbcType=REAL}, #{protein,jdbcType=REAL}, 
+      #{fat,jdbcType=REAL}, #{carbohydrate,jdbcType=REAL}, #{zao,jdbcType=REAL}, #{wu,jdbcType=REAL}, 
+      #{wan,jdbcType=REAL}, #{jia,jdbcType=REAL}, #{foodtype,jdbcType=VARCHAR}, #{type1,jdbcType=REAL}, 
+      #{type2,jdbcType=REAL}, #{type3,jdbcType=REAL}, #{type4,jdbcType=REAL}, #{type5,jdbcType=REAL}, 
+      #{type6,jdbcType=REAL}, #{type7,jdbcType=REAL}, #{type8,jdbcType=REAL}, #{type9,jdbcType=REAL}, 
+      #{type10,jdbcType=REAL}, #{type11,jdbcType=REAL}, #{type12,jdbcType=REAL}, #{type13,jdbcType=REAL}, 
+      #{type14,jdbcType=REAL}, #{type15,jdbcType=REAL})
+  </insert>
+  <insert id="insertSelective" parameterType="com.yihe.applet.api.domain.YhUserFoodWeekly" >
+    insert into yh_user_food_weekly
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="wid != null" >
+        wid,
+      </if>
+      <if test="userCode != null" >
+        user_code,
+      </if>
+      <if test="starttime != null" >
+        startTime,
+      </if>
+      <if test="endtime != null" >
+        endTime,
+      </if>
+      <if test="ecorddays != null" >
+        ecordDays,
+      </if>
+      <if test="exceedingdays != null" >
+        exceedingDays,
+      </if>
+      <if test="norepetition != null" >
+        noRepetition,
+      </if>
+      <if test="averageintake != null" >
+        averageIntake,
+      </if>
+      <if test="averageintake7 != null" >
+        averageIntake7,
+      </if>
+      <if test="protein != null" >
+        protein,
+      </if>
+      <if test="fat != null" >
+        fat,
+      </if>
+      <if test="carbohydrate != null" >
+        carbohydrate,
+      </if>
+      <if test="zao != null" >
+        zao,
+      </if>
+      <if test="wu != null" >
+        wu,
+      </if>
+      <if test="wan != null" >
+        wan,
+      </if>
+      <if test="jia != null" >
+        jia,
+      </if>
+      <if test="foodtype != null" >
+        foodType,
+      </if>
+      <if test="type1 != null" >
+        type1,
+      </if>
+      <if test="type2 != null" >
+        type2,
+      </if>
+      <if test="type3 != null" >
+        type3,
+      </if>
+      <if test="type4 != null" >
+        type4,
+      </if>
+      <if test="type5 != null" >
+        type5,
+      </if>
+      <if test="type6 != null" >
+        type6,
+      </if>
+      <if test="type7 != null" >
+        type7,
+      </if>
+      <if test="type8 != null" >
+        type8,
+      </if>
+      <if test="type9 != null" >
+        type9,
+      </if>
+      <if test="type10 != null" >
+        type10,
+      </if>
+      <if test="type11 != null" >
+        type11,
+      </if>
+      <if test="type12 != null" >
+        type12,
+      </if>
+      <if test="type13 != null" >
+        type13,
+      </if>
+      <if test="type14 != null" >
+        type14,
+      </if>
+      <if test="type15 != null" >
+        type15,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="wid != null" >
+        #{wid,jdbcType=INTEGER},
+      </if>
+      <if test="userCode != null" >
+        #{userCode,jdbcType=VARCHAR},
+      </if>
+      <if test="starttime != null" >
+        #{starttime,jdbcType=VARCHAR},
+      </if>
+      <if test="endtime != null" >
+        #{endtime,jdbcType=VARCHAR},
+      </if>
+      <if test="ecorddays != null" >
+        #{ecorddays,jdbcType=INTEGER},
+      </if>
+      <if test="exceedingdays != null" >
+        #{exceedingdays,jdbcType=INTEGER},
+      </if>
+      <if test="norepetition != null" >
+        #{norepetition,jdbcType=INTEGER},
+      </if>
+      <if test="averageintake != null" >
+        #{averageintake,jdbcType=REAL},
+      </if>
+       <if test="averageintake7 != null" >
+        #{averageintake7,jdbcType=REAL},
+      </if>
+      <if test="protein != null" >
+        #{protein,jdbcType=REAL},
+      </if>
+      <if test="fat != null" >
+        #{fat,jdbcType=REAL},
+      </if>
+      <if test="carbohydrate != null" >
+        #{carbohydrate,jdbcType=REAL},
+      </if>
+      <if test="zao != null" >
+        #{zao,jdbcType=REAL},
+      </if>
+      <if test="wu != null" >
+        #{wu,jdbcType=REAL},
+      </if>
+      <if test="wan != null" >
+        #{wan,jdbcType=REAL},
+      </if>
+      <if test="jia != null" >
+        #{jia,jdbcType=REAL},
+      </if>
+      <if test="foodtype != null" >
+        #{foodtype,jdbcType=VARCHAR},
+      </if>
+      <if test="type1 != null" >
+        #{type1,jdbcType=REAL},
+      </if>
+      <if test="type2 != null" >
+        #{type2,jdbcType=REAL},
+      </if>
+      <if test="type3 != null" >
+        #{type3,jdbcType=REAL},
+      </if>
+      <if test="type4 != null" >
+        #{type4,jdbcType=REAL},
+      </if>
+      <if test="type5 != null" >
+        #{type5,jdbcType=REAL},
+      </if>
+      <if test="type6 != null" >
+        #{type6,jdbcType=REAL},
+      </if>
+      <if test="type7 != null" >
+        #{type7,jdbcType=REAL},
+      </if>
+      <if test="type8 != null" >
+        #{type8,jdbcType=REAL},
+      </if>
+      <if test="type9 != null" >
+        #{type9,jdbcType=REAL},
+      </if>
+      <if test="type10 != null" >
+        #{type10,jdbcType=REAL},
+      </if>
+      <if test="type11 != null" >
+        #{type11,jdbcType=REAL},
+      </if>
+      <if test="type12 != null" >
+        #{type12,jdbcType=REAL},
+      </if>
+      <if test="type13 != null" >
+        #{type13,jdbcType=REAL},
+      </if>
+      <if test="type14 != null" >
+        #{type14,jdbcType=REAL},
+      </if>
+      <if test="type15 != null" >
+        #{type15,jdbcType=REAL},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.yihe.applet.api.domain.YhUserFoodWeekly" >
+    update yh_user_food_weekly
+    <set >
+      <if test="userCode != null" >
+        user_code = #{userCode,jdbcType=VARCHAR},
+      </if>
+      <if test="starttime != null" >
+        startTime = #{starttime,jdbcType=VARCHAR},
+      </if>
+      <if test="endtime != null" >
+        endTime = #{endtime,jdbcType=VARCHAR},
+      </if>
+      <if test="ecorddays != null" >
+        ecordDays = #{ecorddays,jdbcType=INTEGER},
+      </if>
+      <if test="exceedingdays != null" >
+        exceedingDays = #{exceedingdays,jdbcType=INTEGER},
+      </if>
+      <if test="norepetition != null" >
+        noRepetition = #{norepetition,jdbcType=INTEGER},
+      </if>
+      <if test="averageintake != null" >
+        averageIntake = #{averageintake,jdbcType=REAL},
+      </if>
+      <if test="averageintake7 != null" >
+        averageIntake7 = #{averageintake7,jdbcType=REAL},
+      </if>
+      <if test="protein != null" >
+        protein = #{protein,jdbcType=REAL},
+      </if>
+      <if test="fat != null" >
+        fat = #{fat,jdbcType=REAL},
+      </if>
+      <if test="carbohydrate != null" >
+        carbohydrate = #{carbohydrate,jdbcType=REAL},
+      </if>
+      <if test="zao != null" >
+        zao = #{zao,jdbcType=REAL},
+      </if>
+      <if test="wu != null" >
+        wu = #{wu,jdbcType=REAL},
+      </if>
+      <if test="wan != null" >
+        wan = #{wan,jdbcType=REAL},
+      </if>
+      <if test="jia != null" >
+        jia = #{jia,jdbcType=REAL},
+      </if>
+      <if test="foodtype != null" >
+        foodType = #{foodtype,jdbcType=VARCHAR},
+      </if>
+      <if test="type1 != null" >
+        type1 = #{type1,jdbcType=REAL},
+      </if>
+      <if test="type2 != null" >
+        type2 = #{type2,jdbcType=REAL},
+      </if>
+      <if test="type3 != null" >
+        type3 = #{type3,jdbcType=REAL},
+      </if>
+      <if test="type4 != null" >
+        type4 = #{type4,jdbcType=REAL},
+      </if>
+      <if test="type5 != null" >
+        type5 = #{type5,jdbcType=REAL},
+      </if>
+      <if test="type6 != null" >
+        type6 = #{type6,jdbcType=REAL},
+      </if>
+      <if test="type7 != null" >
+        type7 = #{type7,jdbcType=REAL},
+      </if>
+      <if test="type8 != null" >
+        type8 = #{type8,jdbcType=REAL},
+      </if>
+      <if test="type9 != null" >
+        type9 = #{type9,jdbcType=REAL},
+      </if>
+      <if test="type10 != null" >
+        type10 = #{type10,jdbcType=REAL},
+      </if>
+      <if test="type11 != null" >
+        type11 = #{type11,jdbcType=REAL},
+      </if>
+      <if test="type12 != null" >
+        type12 = #{type12,jdbcType=REAL},
+      </if>
+      <if test="type13 != null" >
+        type13 = #{type13,jdbcType=REAL},
+      </if>
+      <if test="type14 != null" >
+        type14 = #{type14,jdbcType=REAL},
+      </if>
+      <if test="type15 != null" >
+        type15 = #{type15,jdbcType=REAL},
+      </if>
+    </set>
+    where wid = #{wid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.yihe.applet.api.domain.YhUserFoodWeekly" >
+    update yh_user_food_weekly
+    set user_code = #{userCode,jdbcType=VARCHAR},
+      startTime = #{starttime,jdbcType=VARCHAR},
+      endTime = #{endtime,jdbcType=VARCHAR},
+      ecordDays = #{ecorddays,jdbcType=INTEGER},
+      exceedingDays = #{exceedingdays,jdbcType=INTEGER},
+      noRepetition = #{norepetition,jdbcType=INTEGER},
+      averageIntake = #{averageintake,jdbcType=REAL},
+      averageIntake7 = #{averageintake7,jdbcType=REAL},
+      protein = #{protein,jdbcType=REAL},
+      fat = #{fat,jdbcType=REAL},
+      carbohydrate = #{carbohydrate,jdbcType=REAL},
+      zao = #{zao,jdbcType=REAL},
+      wu = #{wu,jdbcType=REAL},
+      wan = #{wan,jdbcType=REAL},
+      jia = #{jia,jdbcType=REAL},
+      foodType = #{foodtype,jdbcType=VARCHAR},
+      type1 = #{type1,jdbcType=REAL},
+      type2 = #{type2,jdbcType=REAL},
+      type3 = #{type3,jdbcType=REAL},
+      type4 = #{type4,jdbcType=REAL},
+      type5 = #{type5,jdbcType=REAL},
+      type6 = #{type6,jdbcType=REAL},
+      type7 = #{type7,jdbcType=REAL},
+      type8 = #{type8,jdbcType=REAL},
+      type9 = #{type9,jdbcType=REAL},
+      type10 = #{type10,jdbcType=REAL},
+      type11 = #{type11,jdbcType=REAL},
+      type12 = #{type12,jdbcType=REAL},
+      type13 = #{type13,jdbcType=REAL},
+      type14 = #{type14,jdbcType=REAL},
+      type15 = #{type15,jdbcType=REAL}
+    where wid = #{wid,jdbcType=INTEGER}
+  </update>
+</mapper>

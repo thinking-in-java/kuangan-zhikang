@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yihe.applet.api.mapper.YhjzsysSmsAppMapper" >
+  <resultMap id="BaseResultMap" type="com.yihe.applet.api.domain.YhJzSysSmsApp" >
+    <id column="sms_id" property="smsId" jdbcType="BIGINT" />
+    <result column="template_id" property="templateId" jdbcType="VARCHAR" />
+    <result column="smsname" property="smsname" jdbcType="VARCHAR" />
+    <result column="signname" property="signname" jdbcType="VARCHAR" />
+    <result column="accessKey" property="accesskey" jdbcType="VARCHAR" />
+    <result column="accessKeySecret" property="accesskeysecret" jdbcType="VARCHAR" />
+    <result column="smscode_num" property="smscodeNum" jdbcType="INTEGER" />
+    <result column="sms_create" property="smsCreate" jdbcType="TIMESTAMP" />
+    <result column="sms_modified" property="smsModified" jdbcType="TIMESTAMP" />
+    <result column="type" property="type" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    sms_id, template_id, smsname, signname, accessKey, accessKeySecret, smscode_num, 
+    sms_create, sms_modified, type
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from yh_jz_sys_sms
+    where sms_id = #{smsId,jdbcType=BIGINT}
+  </select>
+  
+    <select id="selectYhJzSysSmsAppBytype" resultMap="BaseResultMap">
+    select * from yh_jz_sys_sms where type =2
+  </select>
+  
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from yh_jz_sys_sms
+    where sms_id = #{smsId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.yihe.applet.api.domain.YhJzSysSmsApp" >
+    insert into yh_jz_sys_sms (sms_id, template_id, smsname, 
+      signname, accessKey, accessKeySecret, 
+      smscode_num, sms_create, sms_modified, 
+      type)
+    values (#{smsId,jdbcType=BIGINT}, #{templateId,jdbcType=VARCHAR}, #{smsname,jdbcType=VARCHAR}, 
+      #{signname,jdbcType=VARCHAR}, #{accesskey,jdbcType=VARCHAR}, #{accesskeysecret,jdbcType=VARCHAR}, 
+      #{smscodeNum,jdbcType=INTEGER}, #{smsCreate,jdbcType=TIMESTAMP}, #{smsModified,jdbcType=TIMESTAMP}, 
+      #{type,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.yihe.applet.api.domain.YhJzSysSmsApp" >
+    insert into yh_jz_sys_sms
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="smsId != null" >
+        sms_id,
+      </if>
+      <if test="templateId != null" >
+        template_id,
+      </if>
+      <if test="smsname != null" >
+        smsname,
+      </if>
+      <if test="signname != null" >
+        signname,
+      </if>
+      <if test="accesskey != null" >
+        accessKey,
+      </if>
+      <if test="accesskeysecret != null" >
+        accessKeySecret,
+      </if>
+      <if test="smscodeNum != null" >
+        smscode_num,
+      </if>
+      <if test="smsCreate != null" >
+        sms_create,
+      </if>
+      <if test="smsModified != null" >
+        sms_modified,
+      </if>
+      <if test="type != null" >
+        type,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="smsId != null" >
+        #{smsId,jdbcType=BIGINT},
+      </if>
+      <if test="templateId != null" >
+        #{templateId,jdbcType=VARCHAR},
+      </if>
+      <if test="smsname != null" >
+        #{smsname,jdbcType=VARCHAR},
+      </if>
+      <if test="signname != null" >
+        #{signname,jdbcType=VARCHAR},
+      </if>
+      <if test="accesskey != null" >
+        #{accesskey,jdbcType=VARCHAR},
+      </if>
+      <if test="accesskeysecret != null" >
+        #{accesskeysecret,jdbcType=VARCHAR},
+      </if>
+      <if test="smscodeNum != null" >
+        #{smscodeNum,jdbcType=INTEGER},
+      </if>
+      <if test="smsCreate != null" >
+        #{smsCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="smsModified != null" >
+        #{smsModified,jdbcType=TIMESTAMP},
+      </if>
+      <if test="type != null" >
+        #{type,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.yihe.applet.api.domain.YhJzSysSmsApp" >
+    update yh_jz_sys_sms
+    <set >
+      <if test="templateId != null" >
+        template_id = #{templateId,jdbcType=VARCHAR},
+      </if>
+      <if test="smsname != null" >
+        smsname = #{smsname,jdbcType=VARCHAR},
+      </if>
+      <if test="signname != null" >
+        signname = #{signname,jdbcType=VARCHAR},
+      </if>
+      <if test="accesskey != null" >
+        accessKey = #{accesskey,jdbcType=VARCHAR},
+      </if>
+      <if test="accesskeysecret != null" >
+        accessKeySecret = #{accesskeysecret,jdbcType=VARCHAR},
+      </if>
+      <if test="smscodeNum != null" >
+        smscode_num = #{smscodeNum,jdbcType=INTEGER},
+      </if>
+      <if test="smsCreate != null" >
+        sms_create = #{smsCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="smsModified != null" >
+        sms_modified = #{smsModified,jdbcType=TIMESTAMP},
+      </if>
+      <if test="type != null" >
+        type = #{type,jdbcType=INTEGER},
+      </if>
+    </set>
+    where sms_id = #{smsId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.yihe.applet.api.domain.YhJzSysSmsApp" >
+    update yh_jz_sys_sms
+    set template_id = #{templateId,jdbcType=VARCHAR},
+      smsname = #{smsname,jdbcType=VARCHAR},
+      signname = #{signname,jdbcType=VARCHAR},
+      accessKey = #{accesskey,jdbcType=VARCHAR},
+      accessKeySecret = #{accesskeysecret,jdbcType=VARCHAR},
+      smscode_num = #{smscodeNum,jdbcType=INTEGER},
+      sms_create = #{smsCreate,jdbcType=TIMESTAMP},
+      sms_modified = #{smsModified,jdbcType=TIMESTAMP},
+      type = #{type,jdbcType=INTEGER}
+    where sms_id = #{smsId,jdbcType=BIGINT}
+  </update>
+  <select id="selectById" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from yh_jz_sys_sms
+    where sms_id = #{smsId}
+  </select>
+</mapper>

@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yihe.system.mapper.YHUserOxygenMapper" >
+  <resultMap id="BaseResultMap" type="com.yihe.system.domain.YHUserOxygen" >
+    <id column="U_oxygen_Id" property="uOxygenId" jdbcType="INTEGER" />
+    <result column="oxygen" property="oxygen" jdbcType="REAL" />
+    <result column="heart_rate" property="heartRate" jdbcType="INTEGER" />
+    <result column="Entry_Time" property="entryTime" jdbcType="VARCHAR" />
+    <result column="Is_Del" property="isDel" jdbcType="INTEGER" />
+    <result column="E_User_Id" property="eUserId" jdbcType="INTEGER" />
+    <result column="test_hj" property="testHj" jdbcType="VARCHAR" />
+    <result column="type" property="type" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    U_oxygen_Id, oxygen, heart_rate, Entry_Time, Is_Del, E_User_Id, test_hj, type
+  </sql>
+  
+  <!-- 血氧/心率总数 -->
+   <select id="selectByOxygenCount" resultType="int" >
+  	select count(*) from yh_user_oxygen
+  </select>
+  
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from yh_user_oxygen
+    where U_oxygen_Id = #{uOxygenId,jdbcType=INTEGER}
+  </select>
+  <select id="selectByPrimaryKeyByUsercodeLimit" resultMap="BaseResultMap" parameterType="java.lang.String" >
+   SELECT  <include refid="Base_Column_List" /> FROM yh_user_oxygen WHERE E_user_id=#{usercode} and is_Del=2  ORDER BY Entry_Time DESC LIMIT 1
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from yh_user_oxygen
+    where U_oxygen_Id = #{uOxygenId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.yihe.system.domain.YHUserOxygen" >
+    insert into yh_user_oxygen (U_oxygen_Id, oxygen, heart_rate, 
+      Entry_Time, Is_Del, E_User_Id, 
+      test_hj, type)
+    values (#{uOxygenId,jdbcType=INTEGER}, #{oxygen,jdbcType=REAL}, #{heartRate,jdbcType=INTEGER}, 
+      #{entryTime,jdbcType=VARCHAR}, #{isDel,jdbcType=INTEGER}, #{eUserId,jdbcType=INTEGER}, 
+      #{testHj,jdbcType=VARCHAR}, #{type,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.yihe.system.domain.YHUserOxygen" >
+    insert into yh_user_oxygen
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="uOxygenId != null" >
+        U_oxygen_Id,
+      </if>
+      <if test="oxygen != null" >
+        oxygen,
+      </if>
+      <if test="heartRate != null" >
+        heart_rate,
+      </if>
+      <if test="entryTime != null" >
+        Entry_Time,
+      </if>
+      <if test="isDel != null" >
+        Is_Del,
+      </if>
+      <if test="eUserId != null" >
+        E_User_Id,
+      </if>
+      <if test="testHj != null" >
+        test_hj,
+      </if>
+      <if test="type != null" >
+        type,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="uOxygenId != null" >
+        #{uOxygenId,jdbcType=INTEGER},
+      </if>
+      <if test="oxygen != null" >
+        #{oxygen,jdbcType=REAL},
+      </if>
+      <if test="heartRate != null" >
+        #{heartRate,jdbcType=INTEGER},
+      </if>
+      <if test="entryTime != null" >
+        #{entryTime,jdbcType=VARCHAR},
+      </if>
+      <if test="isDel != null" >
+        #{isDel,jdbcType=INTEGER},
+      </if>
+      <if test="eUserId != null" >
+        #{eUserId,jdbcType=INTEGER},
+      </if>
+      <if test="testHj != null" >
+        #{testHj,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null" >
+        #{type,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.yihe.system.domain.YHUserOxygen" >
+    update yh_user_oxygen
+    <set >
+      <if test="oxygen != null" >
+        oxygen = #{oxygen,jdbcType=REAL},
+      </if>
+      <if test="heartRate != null" >
+        heart_rate = #{heartRate,jdbcType=INTEGER},
+      </if>
+      <if test="entryTime != null" >
+        Entry_Time = #{entryTime,jdbcType=VARCHAR},
+      </if>
+      <if test="isDel != null" >
+        Is_Del = #{isDel,jdbcType=INTEGER},
+      </if>
+      <if test="eUserId != null" >
+        E_User_Id = #{eUserId,jdbcType=INTEGER},
+      </if>
+      <if test="testHj != null" >
+        test_hj = #{testHj,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null" >
+        type = #{type,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where U_oxygen_Id = #{uOxygenId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.yihe.system.domain.YHUserOxygen" >
+    update yh_user_oxygen
+    set oxygen = #{oxygen,jdbcType=REAL},
+      heart_rate = #{heartRate,jdbcType=INTEGER},
+      Entry_Time = #{entryTime,jdbcType=VARCHAR},
+      Is_Del = #{isDel,jdbcType=INTEGER},
+      E_User_Id = #{eUserId,jdbcType=INTEGER},
+      test_hj = #{testHj,jdbcType=VARCHAR},
+      type = #{type,jdbcType=VARCHAR}
+    where U_oxygen_Id = #{uOxygenId,jdbcType=INTEGER}
+  </update>
+  <!--  查询用户血氧 -->
+  <select id="selectYHUserOxygen" resultType="map" parameterType="java.lang.String" >
+   select xy.oxygen,
+(select count(*) from yh_user_oxygen where E_User_Id=#{ eUserId,jdbcType=INTEGER} and Is_Del = 2) as num,
+xy.`type`,xy.Entry_Time,xy.heart_rate
+from yh_user_reginfo as reg 
+left join yh_user_oxygen xy
+on reg.user_code = xy.E_User_Id
+where xy.U_oxygen_Id = (select U_oxygen_Id from yh_user_oxygen where E_User_Id=#{ eUserId,jdbcType=INTEGER} and Is_Del = 2 order by Entry_Time desc limit 1)
+  </select>
+  
+  <select id="selectPageByParam" resultMap="BaseResultMap" parameterType="java.lang.String"  >
+  	select  xy.oxygen,xy.Entry_Time
+	from yh_user_reginfo as reg 
+	inner join yh_user_oxygen xy
+	on reg.user_code = xy.E_User_Id 
+	and Is_Del = 2
+	 where reg.user_code=#{ eUserId,jdbcType=INTEGER} order by Entry_Time desc 
+  </select>
+
+  <select id="selectPageYHUserOxygen" resultMap="BaseResultMap" parameterType="java.lang.String"  >
+    select  xy.oxygen,xy.Entry_Time
+	from yh_user_reginfo as reg 
+	inner join yh_user_oxygen xy
+	on reg.user_code = xy.E_User_Id 
+	and Is_Del = 2
+	 where reg.user_code=#{ eUserId,jdbcType=INTEGER} order by Entry_Time desc 
+  </select>
+  
+  
+  <select id="selectPageByheart" resultMap="BaseResultMap" parameterType="java.lang.String"  >
+  	select  xy.heart_rate,xy.Entry_Time
+	from yh_user_reginfo as reg 
+	inner join yh_user_heart_rate xy
+	on reg.user_code = xy.E_User_Id 
+	 where reg.user_code=#{ eUserId,jdbcType=INTEGER} order by Entry_Time desc
+  </select>
+
+  <select id="selectPageYHUserHeart" resultMap="BaseResultMap" parameterType="java.lang.String"  >
+   select  xy.heart_rate,xy.Entry_Time
+	from yh_user_reginfo as reg 
+	inner join yh_user_heart_rate xy
+	on reg.user_code = xy.E_User_Id 
+	 where reg.user_code=#{ eUserId,jdbcType=INTEGER} order by Entry_Time desc
+  </select>
+  
+  
+</mapper>

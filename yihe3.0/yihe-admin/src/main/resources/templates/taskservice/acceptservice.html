@@ -1,0 +1,1742 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title></title>
+    <link rel="stylesheet"  th:href="@{/assets/libs/layui/css/layui.css}" />
+    <link rel="stylesheet"  th:href="@{/assets/module/admin.css}"  />
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+        <style>
+        /** 统计快捷方式样式 */
+        .console-link-block {
+            font-size: 16px;
+            padding: 20px 20px;
+            border-radius: 4px;
+            background-color: #9BC539;
+            color: rgba(255, 255, 255, .8);
+            box-shadow: 0 2px 3px rgba(0, 0, 0, .05);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .console-link-block .console-link-block-num {
+            font-size: 40px;
+            margin-bottom: 5px;
+            color: rgba(255, 255, 255, .9);
+        }
+
+        .console-link-block .console-link-block-icon {
+            position: absolute;
+            top: 50%;
+            right: 20px;
+            width: 50px;
+            height: 50px;
+            font-size: 50px;
+            line-height: 50px;
+            margin-top: -25px;
+            color: rgba(255, 255, 255, .65);
+        }
+
+        .console-link-block .console-link-block-band {
+            width: 80px;
+            line-height: 1;
+            padding: 4px 0;
+            font-size: 12px;
+            text-align: center;
+            background-color: #E32A16;
+            color: rgba(255, 255, 255, .8);
+            position: absolute;
+            top: 8px;
+            right: -20px;
+            transform: rotate(45deg);
+            transform-origin: center;
+            z-index: 1;
+        }
+        .clickback{
+        	background-color: #F0F0F0
+        }
+        .isdisplay{
+        	display: none;
+        }
+        .outflor{
+            word-break: keep-all; /* 不换行 */
+            white-space: nowrap; /* 不换行 */
+            overflow: hidden; /* 内容超出宽度时隐藏超出部分的内容 */
+            text-overflow: ellipsis;
+        }
+
+        /** //统计快捷方式样式 */
+
+        /** 设置每个快捷块的颜色 */
+        .layui-row > div:nth-child(1) .console-link-block {
+            background-color: rgb(85, 165, 234);
+        }
+
+        .layui-row > div:nth-child(2) .console-link-block {
+            background-color: #d9d9d9;
+        }
+         .layui-row > div:nth-child(3) .console-link-block {
+            background-color: #d9d9d9;
+        }
+         .layui-row > div:nth-child(4) .console-link-block {
+            background-color: #d9d9d9;
+        }
+        .setprople{
+        	width: 100%;height: 110px;background: #FFF;
+        }
+		.classmagin{
+			height: 20px;width: 100%;background-color: #F5F6FD;
+		}
+		#demo7{
+			 min-height:500px
+		}
+    </style>
+</head>
+<body>
+	<!-- 页面加载loading -->
+	<div class="page-loading">
+		<div class="ball-loader">
+			<span></span><span></span><span></span><span></span>
+		</div>
+	</div>
+			<div style="width: 100%; height: 100%; position: relative;">
+				<div class="layui-tab layui-tab-brief" lay-filter="indexTab">
+					<ul  class="layui-tab-title" style="background-color: white;">
+					<li class="layui-this">服务任务</li>
+						<li lay-id="2">干预计划</li>
+					</ul>
+					<div class="layui-tab-content">
+						<div class="layui-tab-item layui-show">
+						<div class="layui-fluid ew-console-wrapper">
+    <!-- 快捷方式 -->
+    <div class="layui-fluid" style="width: 100%;left: -1%;margin-top: -25px;">
+    <div class="layui-card">
+        <div class="layui-card-body table-tool-mini full-table">
+		<span>服务记录(</span><span id='servicecount'>(389)</span><span>)</span>
+            <span id="Cooperate2" style="display: inline-block;float: right"></span>
+            <img id="customer" style="width: 16px;height: 16px;margin-right: 5px;float: right;margin-top: 5px"  src="/assets/images/unpo.jpg">
+    <div class="layui-row layui-col-space15" style="margin-top: 10px" >
+        <div class="layui-col-lg2 layui-col-sm4 layui-col-xs6" style="width: 25%">
+            <div id="watting" class="console-link-block service" >
+                <div class="console-link-block-num">0</div>
+                <div class="console-link-block-text">等待服务</div>
+                <i class=" layui-icon ">0%</i>
+                <i class="console-link-block-icon layui-icon layui-icon-survey"></i>
+                <div class="console-link-block-band">待服务</div>
+            </div>
+        </div>
+        
+        <div class="layui-col-lg2 layui-col-sm4 layui-col-xs6" style="width: 25%">
+            <div id="begin" class="console-link-block service" >
+                <div class="console-link-block-num">0</div>
+                <div class="console-link-block-text">正在服务</div>
+                <i class=" layui-icon ">0%</i>
+                  <i class="console-link-block-icon layui-icon layui-icon-reply-fill"> </i>
+                 <div class=" console-link-block-band">正在服务</div>
+            </div>
+        </div>
+      	<div class="layui-col-lg2 layui-col-sm4 layui-col-xs6" style="width: 25%">
+            <div id="closeservice" class="console-link-block service" >
+                <div class="console-link-block-num">0</div>
+                <div class="console-link-block-text">服务关闭</div>
+                <i class=" layui-icon ">0%</i>
+                 <div style="background-color: #d9d9d9" class="console-link-block-band">已关闭</div>
+                 <i class="console-link-block-icon layui-icon layui-icon-set"></i>
+            </div>
+        </div>
+        <div class="layui-col-lg2 layui-col-sm4 layui-col-xs6" style="width: 25%">
+            <div id="finish" class="console-link-block service	" >
+                <div class="console-link-block-num">0</div>
+                <div  class="console-link-block-text">服务完成</div>
+                <i class=" layui-icon ">0%</i>
+                 <i class="console-link-block-icon layui-icon layui-icon-vercode"></i>
+                 <div style="background-color: #d9d9d9" class="console-link-block-band">已完成</div>
+            </div>
+        </div>
+      
+
+  </div>  
+  </div>  
+  </div>
+    </div>
+</div>
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div class="layui-card-body table-tool-mini full-table" style="height: 40px;">
+            <div class="layui-form toolbar">
+                <div class="layui-form-item">
+                    <div class="layui-inline">
+                        <div class="layui-input-inline mr0" >
+                           <select name="type"	lay-filter='content' id="type">
+                               <option value="">服务内容</option>
+                               <option value="1">首次检测</option>
+                               <option value="2">每次检测</option>
+                               <option value="7">问卷完成评估</option>
+                               <option value="8">问卷久未评估</option>
+                               <option value="4">检测异常</option>
+                               <option value="25">手动新增</option>
+                               <option value="26">干预计划</option>
+                            </select>
+                        </div>
+                    </div>
+
+
+                    <div class="layui-inline">
+                        <div class="layui-input-inline mr0">
+                            <select name="typeson" id="typeson" lay-filter="typeson">
+                                <option value="">内容子项</option>
+                                <!--                                <option value="1">血压</option>-->
+                                <!--                                <option value="2">血糖</option>-->
+                                <!--                                <option value="3">血脂四项</option>-->
+                                <!--                                <option value="4">体重</option>-->
+                                <!--                                <option value="11">健康风险评估</option>-->
+                                <!--                                <option value="12">睡眠质量评估</option>-->
+                                <!--                                <option value="13">健康习惯评估</option>-->
+                                <!--                                <option value="14">A型性格评估</option>-->
+                                <!--                                <option value="15">PSTRI压力评估</option>-->
+                                <!--                                <option value="16">心理健康评估</option>-->
+                            </select>
+                        </div>
+                    </div>
+
+
+
+                    <div class="layui-inline">
+                        <div class="layui-input-inline mr0">
+                             <select name="returnvisit"   lay-filter='returnvisite'>
+                                 <option value="">回访方式</option>
+                                 <option value="1">电话回访</option>
+                                 <option value="5">短信回访</option>
+                                 <option value="3">小程序站内信回访</option>
+                                 <option value="4">上门回访</option>
+                                 <option value="6">小程序订阅通知回访</option>
+                                 <option value="7">公众号通知回访</option>
+                            </select>
+                        </div>
+                    </div>
+                    <!-- <div id="ishidetime" style="float: right;line-height: 40px;">
+                    	<span>已选择 <span id='checkcount'>0</span> 项</span>
+                    	 <span  style='color: rgb(85, 165, 234);display: inline-block;height: 40px;margin-left: 0px;'   class='shouli'><i class='layui-icon layui-icon-util'></i>受理</span>
+                    </div> -->
+                </div>
+            </div>
+            
+            <table id="tableUser" lay-filter="tableUser"></table>
+           
+        </div>
+     <div  id="changecontent">
+
+     </div>
+     
+     <div id="piliang" class="layui-form toolbar" style="background-color: #e6f7ff;height: 50px;margin-top: 10px;margin-bottom: 10px;display: none">
+				<span style="font-size: 14px;color: #505050;line-height: 50px;margin-left: 9px;">批量操作</span>
+				<img alt="" src="">
+				<span>已选择 <span id='checkcount'>0</span> 项</span>
+				<span id="clickxuan" style="color: #1890ff;margin-left: 15px;">清空</span>
+				<span id="buttonfuwu">
+				</span>
+				<button id="fenpeizishi" style="width: 120px;float: right;margin-right: 16px;text-align: center;margin-top: 7px;"   class="layui-btn layui-btn-primary";lay-filter="fenpeiyishi">关闭</button>
+               	</div>
+     
+     
+     
+       <div class="classmagin"></div>
+       <form class="layui-form" action="" > 
+		  <div id="demo7">
+		  		<div style="width: 100%;">
+<!-- 		  			<div style="width: 100%;height: 50px;background-color: #fafafa">
+		  				<div style="width: 15%;height: 40px;float: left;margin-left: 5%;line-height: 50px">服务内容</div>
+		  				<div style="width: 15%;height: 40px;float: left;line-height: 50px">服务形式</div>
+		  				<div style="width: 35%;height: 40px;float: left;line-height: 50px">服务指示</div>
+		  				<div style="width: 15%;height: 40px;float: left;line-height: 50px">关键信息</div>
+		  				<div style="width: 15%;height: 40px;float: left;line-height: 50px">剩余服务期限</div>
+		  			</div> -->
+
+		  			<div id="wattings">
+			  			<div style="width: 100%;height: 50px">
+				  				<div style="width: 15%;height: 40px;float: left;margin-left: 5%;line-height: 50px">
+				  					<input type="checkbox" name="like1[write]" lay-skin="primary" title="首次检测【血压】" checked="">
+				  				</div>
+				  				<div style="width: 15%;height: 40px;float: left;line-height: 50px">
+				  					电话回访
+				  				</div>
+				  				<div style="width: 35%;height: 40px;float: left;line-height: 50px">
+				  				首次使用指导和问候、提供使用帮助和健康建议等
+				  				</div>
+				  				<div style="width: 15%;height: 40px;float: left;line-height: 50px">
+				  				血压120/85
+				  				</div>
+				  				<div style="width: 15%;height: 40px;float: left;line-height: 50px">
+				  				等待服务 00:00:00
+				  				</div>
+			  			</div>
+		  			</div>
+		  		</div>
+		  </div>
+		  </form>
+    </div>
+ <div id='demo8'></div>
+</div>
+						</div>
+						<div class="layui-tab-item"><!-- 内容2 -->
+						
+						<!-- 正文开始 -->
+<input id="fenzuming" type="hidden" th:value="${groupname}" >
+<input id="fenzuid" type="hidden" th:value='${usercode}' >
+<input id="guishu" type="hidden" value="">
+<div class="layui-fluid" >
+    <div class="layui-card">
+        <div class="layui-card-body">
+            <div class="layui-form toolbar">
+                <div class="layui-form-item">
+                    <div class="layui-inline" style="width: 25%">
+                    <label style="padding-left: 0px;padding-right: 0px;height:20px" class="layui-form-label w-auto">健康干预计划</label>
+                        <div class="layui-input-block" >
+                                <input name="times" type="text"
+                                       class="layui-input" id="test6" placeholder=" - ">
+                        </div>
+                    </div>
+                    <div class="layui-inline" style="width: 10%;">
+                        <div class="layui-input-inline mr0" lay-filter="myDivs" style="width: 100%;">
+                            <select   lay-verify="required" id="plans">
+                                <option value="">全部</option>
+                                <option value="1">电话回访</option>
+                                <option value="2">微信聊天回访</option>
+                                <option value="3">小程序聊天回访</option>
+                                <option value="4">上门回访</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <button id="btnSearchAuth" style="background-color: #1890ff" class="layui-btn icon-btn"><i class="layui-icon">&#xe615;</i>搜索
+                        </button>
+                        <button id="btnempty" style="background-color: #fff;width: 69px;color: black;border: 1px solid #e5e5e5;" class="layui-btn icon-btn"></i>清除</button>
+                    </div>
+                    <!-- <span style="font-size: 15px;float: right;margin-right: 5%;margin-top: 5px" id="taidu">配合态度</span> -->
+                </div>
+            </div>
+            <!-- 批量操作 -->
+            <div id="piliang2" class="layui-form toolbar" style="background-color: #e6f7ff;height: 50px;margin-top: 10px;margin-bottom: 10px;display: none">
+                <span style="font-size: 14px;color: #505050;line-height: 50px;margin-left: 9px;">批量操作</span>
+                <img alt="" src="">
+                <span  id="xuanze">已选择**项</span>
+                <span id="clickxuan2" style="color: #1890ff;margin-left: 15px;">清空</span>
+                <button id="zhuanyizhuceka" style="width: 120px;float: right;margin-right: 16px;text-align: center;margin-top: 7px;"  class="layui-btn layui-btn-primary">删除</button>
+            </div>
+            <table id="tableAuth" lay-filter="tableAuth"></table>
+            <div id="page2"></div>
+        </div>
+    </div>
+</div>
+						
+						</div>
+					</div>
+			</div>
+	</div>
+
+<form class="layui-form" id="test" style="display:none">
+
+         <input type="hidden" id="pickListModels" th:value='${usercode}'>
+		 <div  style="margin-top: 20px;width: 50%;float: left">
+			    <label class="layui-form-label" >受理方式:</label>
+			    <div class="layui-input-block">
+				     <select id="selecttype" name="quiz" lay-search>
+				    	<option value="1">电话回访</option>
+				  		<option value="2">微信回访</option>
+				  		<option value="3">小程序聊天回访</option>
+				  		<option value="4">上门回访</option>
+					</select>
+			    </div>
+		  </div>
+        <div  style="margin-top: 20px;width: 30%;float: left">
+            <label class="layui-form-label" >配合态度:</label>
+            <div class="layui-input-block">
+                <select id="peihechengdu" name="peihe" lay-search>
+                    <option value="2">比较配合</option>
+                    <option value="3">非常配合</option>
+                    <option value="1">一般配合</option>
+                    <option value="0">不配合</option>
+                </select>
+            </div>
+        </div>
+
+		  <div class="layui-form-item layui-form-text" style="position: relative;top: 40px">
+		    <label class="layui-form-label" >受理情况:</label>
+			    <div class="layui-input-block" style="width: 80%">
+			      <textarea id='acceptsituation' lay-verify="required" name="desc" placeholder="请输入服务过程和结果，最大限制500个字符" class="layui-textarea"></textarea>
+			    </div>
+		  </div>
+</form>
+<form class="layui-form" id="test2" style="display:none">
+ 
+
+		  <div class="layui-form-item layui-form-text">
+		    <label class="layui-form-label" >原因:</label>
+			    <div class="layui-input-block" style="margin-top: 20px;width: 80%">
+			      <textarea id='cause' lay-verify="required" name="desc" placeholder="请输入服务过程和结果，最大限制200个字符" class="layui-textarea"></textarea>
+			    </div>
+		  </div>
+</form>
+	<input id="usercode" type="hidden" th:value="${usercode}">
+		<input id="servicestate" type="hidden" th:value="${servicestate}">
+<!-- 页面加载loading -->
+<div class="page-loading">
+    <div class="ball-loader">
+        <span></span><span></span><span></span><span></span>
+    </div>
+</div>
+
+<!-- 正文开始 -->
+
+
+<!-- 表格操作列 -->
+<script type="text/html" id="tableBarUser"  th:inline="none">
+    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="edit">修改</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+    <a class="layui-btn layui-btn-xs" lay-event="reset">重置密码</a>
+</script>
+
+<!-- js部分 -->
+<script type="text/javascript" th:src="@{/assets/libs/layui/layui.js}"></script>
+<script type="text/javascript" th:src="@{/assets/js/common.js}"></script>
+<script th:inline="none">
+    layui.use(['layer', 'form', 'table', 'util', 'admin', 'laydate','laypage', 'notice','element','treeSelect','notice'], function () {
+        var $ = layui.jquery;
+        var layer = layui.layer;
+        var form = layui.form;
+        var table = layui.table;
+        var util = layui.util;
+        var admin = layui.admin;
+        var laydate = layui.laydate;
+        var laypage = layui.laypage;
+        var notice = layui.notice;
+        var element = layui.element;
+        var treeSelect= layui.treeSelect;
+        var notices = layui.notice;
+        //选中的总数组
+        var checked=[];
+      //全选的总数组
+        var checkedall=[];
+        //当前总数
+        var count=29;
+        //服务状态
+        var sta=0;
+        //服务内容
+        var servicecount='';
+        //回访方式
+        var returnvisite='';
+		var curr=1;
+		var nowservicestate=0;
+        var Usercode=$("#pickListModels").val();
+        var userCode=$("#pickListModels").val();
+        var typeson="";
+        
+        wancheng=function(){
+	        layer.open({
+	            type:2,
+	            skin: 'layui-layer-rim', //加上边框
+	            area: ['1100px', '600px'], //宽高
+	            content:'/manage/acceptse/complete?checked='+$.makeArray(checked),
+	            resize: false,
+	            success: function (index, layero) {
+	             
+	            },
+	            // 右上角关闭按钮触发的回调：默认会自动触发关闭。如果不想关闭，return false即可
+	              cancel: function(index, layero){
+	                  
+	                      //window.open("/manageXht/health/testing","_self"); 
+	                  
+	                  //return false;
+	              },
+	           });
+	}
+
+
+        var layid = GetQueryValue('type');//location.hash.replace(/^#type=/, '');
+        console.log(layid);
+        element.tabChange('indexTab', layid); //假设当前地址为：http://a.com#test1=222，那么选项卡会自动切换到“发送消息”这一项
+        
+        $("#clickxuan").click(function(){
+			
+        	var val=$("#test6").val();
+        	checked=[];
+        	checkedall=[];
+        	getpagecount(nowservicestate);
+       	 getallcount();
+       	getnowindexpage(servicecount,returnvisite,1,Usercode);
+            checked=[];
+            checkedall=[];
+             if(checked.length!=0){
+   			  $("#checkcount").html(checked.length);
+         		$("#piliang").css("display","block")
+         	}else{
+         		$("#piliang").css("display","none")
+         	}
+})
+
+
+        function GetQueryValue(queryName) {
+            var query = decodeURI(window.location.search.substring(1));
+            var vars = query.split("&");
+            for (var i = 0; i < vars.length; i++) {
+                var pair = vars[i].split("=");
+                if (pair[0] == queryName) { return pair[1]; }
+            }
+            return null;
+        }
+
+zhuanyizhuceka=function(){
+			$.ajax({
+    			type:"POST",
+	            url:'/YhAcceptserviceController/acceptservice',
+	            dataType:"json",
+	            traditional:true,
+	            data:{serviceid:$.makeArray(checked)},
+	            success:function(res){
+	            	var val=$("#test6").val();
+	            	
+	  			  $("#checkcount").html(checked.length);
+                    notice.success({
+                        title: '消息通知',
+                        message: '受理成功!'
+                    });
+              
+                    
+                    //询问框
+                    layer.confirm('受理成功<br />是否马上进行完成处理，如短信通知等？', {
+                      btn: ['立即处理','稍后再说'], //按钮
+                      title: '提示',
+                    success: function(layero){
+                        layero.find('.layui-layer-btn').css('text-align', 'center'); //改变位置按钮居中，left左
+                    },
+                    }, function(){
+                      wancheng();
+                    }, function(){
+                    	checked=[];
+    	            	checkedall=[];
+    	            	 getpagecount(nowservicestate);
+    	            	 getallcount();
+    	            	getnowindexpage(servicecount,returnvisite,1,Usercode);
+    	                 if(checked.length!=0){
+    		       			  $("#checkcount").html(checked.length);
+    		             		$("#piliang").css("display","block")
+    		             	}else{
+    		             		$("#piliang").css("display","none")
+    		             	}
+    	  			  
+                    });
+                    
+                    
+                  
+                  
+	            }
+    		});
+		}
+        
+        
+$("#fenpeizishi").click(function(){
+			
+			
+			var name="";
+			var height='';
+				name="#test2";
+				height='250px';
+		
+			var index=layer.open({
+				  type:1,
+				  area:['60%',height],
+				  title: '完成服务任务'
+				  ,content: $(name),
+				  shade: 0.5,
+				  btn: ['提交', '取消']
+				  ,btn1: function(index, layero){
+						  var acceptsituation= $("#cause").val();
+							if($("#cause").val().replace(/[^\x00-\xff]/g, 'AA').length>200){
+								layer.msg('不能超过200个字符！', {icon: 5});
+								return false;
+							}
+							$("#cause").val("");
+							
+							$.ajax({
+				    			type:"POST",
+					            url:'/yhmanagetaskcontroller/closeUpdatestate',
+					            dataType:"json",
+					            traditional:true,
+					            data:{serviceid:$.makeArray(checked),acceptsituation:acceptsituation},
+					            success:function(res){
+					            	var val=$("#test6").val();
+					            	checked=[];
+					            	checkedall=[];
+					                 
+					             	getpagecount(nowservicestate);
+					            	 getallcount();
+					            	getnowindexpage(servicecount,returnvisite,1,Usercode);
+					            	
+					                 if(checked.length!=0){
+						       			  $("#checkcount").html(checked.length);
+						             		$("#piliang").css("display","block")
+						             	}else{
+						             		$("#piliang").css("display","none")
+						             	}
+					            }
+				    		});
+					
+					  		
+					  		layer.close(index); 
+							notice.success({
+				                title: '消息通知',
+				                message: '服务任务完成!'
+				            });
+					  },
+					  btn2: function(index, layero){
+						  layer.close(index); 
+					   return false;
+					  },
+					  cancel: function(layero,index){ 
+					   layer.closeAll();
+					  }
+
+				});
+		})
+
+        /**
+         * @param { Array<Number> } arr 一组数据
+         * @param { Boolean } needSign 返回值是否添加%
+         * @param { Number } decimalCount 精度：最多保留多少位小数
+         * @returns { Array<Number|String> }
+         */
+        const calcPercentage = (arr = [], needSign = true, decimalCount = 4) => {
+            let sum = arr.reduce((a, b) => a + b, 0),
+                D = decimalCount < 2 ? 2 : decimalCount,
+                // E1, E2将小数转化成整数，解决因精度导致小数计算错误的问题
+                E1 = Math.pow(10, D),
+                E2 = Math.pow(10, D + 2);
+            if(sum === 0) {
+                return arr.map(_ => needSign ? '0%' : 0);
+            }
+            const perArr = arr.map((e, i) => ({
+                index: i,
+                percentage: Math.round((e / sum).toFixed(D) * E1)
+            }));
+            const all = perArr.reduce((a, b) => a + b.percentage, 0);
+            // 比较计算出的百分比总和和实际总和
+            if(all > E1) {
+                // 根据误差大小排序
+                perArr.sort((a, b) => {
+                    const aCur = a.percentage * Math.pow(10, 2),
+                        aReal = Number((arr[a.index] / sum).toFixed(D + 2)) * E2,
+                        bCur = b.percentage * Math.pow(10, 2),
+                        bReal = Number((arr[b.index] / sum).toFixed(D + 2)) * E2,
+                        aError = aCur - aReal,
+                        bError = bCur - bReal;
+                    return  bError - aError < 0 ? -1 : bError - aError > 0 ? 1 : a.index - b.index; // 根据误差排序，如果误差一样，索引小的在前面
+                });
+                let sumError = all - E1, i = 0;
+                // 百分比总和多的部分，从误差大的百分比依次扣除
+                while(sumError) {
+                    perArr[i].percentage = perArr[i].percentage - 1;
+                    sumError--;
+                    i++;
+                }
+            }
+            if(all < E1) {
+
+                // 根据误差大小排序
+                perArr.sort((a, b) => {
+                    const aCur = a.percentage * Math.pow(10, 2),
+                        aReal = Number((arr[a.index] / sum).toFixed(decimalCount + 2)) * E2,
+                        bCur = b.percentage * Math.pow(10, 2),
+                        bReal = Number((arr[b.index] / sum).toFixed(decimalCount + 2)) * E2,
+                        aError = aCur - aReal,
+                        bError = bCur - bReal;
+                    return  aError - bError < 0 ? -1 : aError - bError > 0 ? 1 : a.index - b.index;
+                });
+                let sumError = all - E1, i = 0;
+                // 百分比总和少的部分，从误差大的百分比依次补上
+                while(sumError) {
+                    perArr[i].percentage = perArr[i].percentage + 1;
+                    sumError++;
+                    i++;
+                }
+            }
+            return perArr.sort((a, b) => a.index - b.index).map(e => needSign ? (e.percentage / Math.pow(10, D - 2)).toFixed(D - 2) + '%' : e.percentage/E1);
+        };
+
+
+		//获取页数
+        getpagecount(nowservicestate);
+		//获取当前页数据
+        getnowindexpage(servicecount,returnvisite,1,Usercode);//状态，服务类型，返回类型，页码，用户code
+        //获取总条数
+        getallcount();
+        function getallcount(){
+        	$.ajax({
+    			type:"POST",
+	            url:'/YhAcceptserviceController/selectallservice',
+	            dataType:"json",
+	            traditional:true,
+	            data:{usercode:Usercode},
+	            success:function(res){
+                    var arr= calcPercentage([division(res.data.allwattingcount,(res.data.allwattingcount+res.data.allbegincount+res.data.allclosecount+res.data.allfinishicount)*100),division(res.data.allbegincount,(res.data.allwattingcount+res.data.allbegincount+res.data.allclosecount+res.data.allfinishicount)*100),division(res.data.allclosecount,(res.data.allwattingcount+res.data.allbegincount+res.data.allclosecount+res.data.allfinishicount)*100),division(res.data.allfinishicount,(res.data.allwattingcount+res.data.allbegincount+res.data.allclosecount+res.data.allfinishicount)*100)],true,4);
+	            	$("#watting").children().eq(0).html(res.data.allwattingcount);
+	            	  $("#watting").children().eq(2).html(arr[0]);
+	            	  $("#begin").children().eq(0).html(res.data.allbegincount);
+	            	  $("#begin").children().eq(2).html(arr[1]);
+	            	  $("#closeservice").children().eq(0).html(res.data.allclosecount);
+	            	  $("#closeservice").children().eq(2).html(arr[2]);
+	            	  $("#finish").children().eq(0).html(res.data.allfinishicount);
+	            	  $("#finish").children().eq(2).html(arr[3]);
+	            	  $("#servicecount").html(res.data.allwattingcount+res.data.allbegincount+res.data.allclosecount+res.data.allfinishicount);
+	            }
+    		});
+        }
+        changeCooperate2();
+        function changeCooperate2(){
+            $.ajax({
+                type:"POST",
+                url:'/YhAcceptserviceController/selectCooperate',
+                dataType:"json",
+                traditional:true,
+                data:{usercode:Usercode},
+                success:function(res) {
+					console.log("配合态度",res)
+                    $("#Cooperate2").html("配合态度:"+(Math.round(res.data*100))+"%");
+                }
+            });
+        }
+
+        var tips;
+        $('#customer').on({
+
+            mouseenter:function(){
+
+                tips=layer.tips("<span>按照服务任务完成时,填写的用户配合态度进行评分换算：<br>非常配合 3分<br>比较配合 2分<br>一般配合 1分<br>不配合<br>总得分/已完成分数*3</span>","#customer",{time:0});
+            },
+            mouseleave:function(){
+                layer.close(tips);
+            }
+        });
+        //除数为0判断
+    	function division(beichu,chu){
+    		if(chu==0){
+    			return 0;
+    		}else{
+    			return beichu/chu;
+    		}
+    	}
+        function getpagecount(servicestate){
+        	$.ajax({
+    			type:"POST",
+	            url:'/YhAcceptserviceController/selectservicecountconditions',
+	            dataType:"json",
+	            traditional:true,
+	            data:{servicetype:servicecount,returnvisit:returnvisite,usercode:Usercode},
+	            success:function(res){
+
+					if(servicestate==0){
+
+						count=res.data.allwattingcount;
+						paging(res.data.allwattingcount,curr)
+					}else if(servicestate==1){
+						count=res.data.allbegincount;
+						paging(res.data.allbegincount,curr)
+					}else if(servicestate==2){
+						count=res.data.allclosecount;
+						paging(res.data.allclosecount,curr)
+					}else if(servicestate==3){
+						count=res.data.allfinishicount;
+						paging(res.data.allfinishicount,curr)
+					}
+					
+	            }
+    		});
+        }
+		function getnowindexpage(servertype,returnvisite,page,usercode){
+			$.ajax({
+    			type:"POST",
+	            url:'/YhAcceptserviceController/selectservicebyusercode',
+	            dataType:"json",
+	            data:{state:nowservicestate,servicetype:servertype,returnvisit:returnvisite,page:page,usercode:usercode,typeson:typeson},
+	            success:function(res){
+
+	            	var html='';
+	            	if(res.data!=null){
+	            		var date=res.data.managetask;
+
+	            		if(nowservicestate==0){
+	            			 $("#buttonfuwu").html("");
+	   	            	  $("#buttonfuwu").html("<button id='zhuanyizhuceka' onclick='zhuanyizhuceka()' style='width: 120px;float: right;margin-right: 16px;text-align: center;margin-top: 7px;' class='layui-btn icon-btn' lay-filter='formSubSearchUser' lay-submit><i class='layui-icon layui-icon-util'></i>受理</button>");
+	   	            
+	            			var array="";
+	            		      for(var l= 0;l<date.length;l++){
+	            		    	  array+=date[l].id+",";
+	            		      }
+	            		      
+	            		      var indexall=checkedall.indexOf(page+"");
+            				  var checkall="";
+            				  if(indexall!=-1){
+            					  checkall="<input type='checkbox' lay-skin='primary'  id='c_all' data-array='"+array+"' value="+page+" lay-filter='c_all'   checked=''>";
+      	           			 	}else{
+      	           			 	checkall="<input type='checkbox' lay-skin='primary'  id='c_all' data-array='"+array+"' value="+page+" lay-filter='c_all'>";
+      	           			 	}
+            				  
+            				  
+	            			html+="<div style='width: 100%;height: 50px;background-color: #fafafa'><div class='outflor' style='width: 15%;height: 40px;float: left;margin-left: 5%;line-height: 50px'>"+checkall+"服务内容</div><div class='outflor' style='width: 15%;height: 40px;float: left;line-height: 50px'>服务形式</div><div style='width: 35%;height: 40px;float: left;line-height: 50px'>服务指示</div>";
+	            			html+="<div class='outflor' style='width: 15%;height: 40px;float: left;line-height: 50px'>关键信息</div><div class='outflor' style='width: 15%;height: 40px;float: left;line-height: 50px'>剩余服务期限</div></div>";
+	            		for(var i=0 ; i<res.data.managetask.length;i++){
+	            			var visitreturn='';
+	            			if(res.data.managetask[i].returnvisit==1){
+	            				visitreturn='电话回访';
+	            			}else if(res.data.managetask[i].returnvisit==2){
+	            				visitreturn='微信回访';
+	            			}else if(res.data.managetask[i].returnvisit==3){
+	            				visitreturn='小程序聊天回访';
+	            			}else if(res.data.managetask[i].returnvisit==4){
+	            				visitreturn='上门回访';
+	            			}else if(res.data.managetask[i].returnvisit==5){
+	            				visitreturn='短信回访';
+	            			}else if(res.data.managetask[i].returnvisit==6){
+	            				visitreturn='小程序订阅回访';
+	            			}else if(res.data.managetask[i].returnvisit==7){
+	            				visitreturn='公众号通知回访';
+	            			}
+	            			html+="<div class='changebackco' style='width: 100%;height: 50px'><div class='outflor' style='width: 15%;height: 50px;float: left;margin-left: 5%;line-height: 50px'>";
+	           			 	var index=checked.indexOf(date[i].id);
+	           				 var service="";
+                            if(date[i].childtag==1){
+                                service=date[i].cbname;
+                            }else if(date[i].childtag==2){
+                                service=date[i].cname;
+                            }else if(date[i].childtag==3){
+                                service=date[i].plan_name;
+                            }else if(date[i].childtag==4){
+                                service=date[i].threshold_name;
+                            }else {
+                                service=date[i].service_subtitle;
+                            }
+           				  var servicename=""
+           				  servicename=date[i].service_name+"【"+service+"】";
+           				  if(servicename.length>9){		 
+           					   servicename=servicename.substring(0,9)+"..."
+           				  }
+	           			 	if(index!=-1){
+	           			 	html+="<input type='checkbox' name='"+date[i].id+"' lay-skin='primary' title='"+servicename+"' lay-filter='tba' value="+date[i].id+" checked=''></div>";
+	           			 	}else{
+	           			 	html+="<input type='checkbox' name='"+date[i].id+"' lay-skin='primary' title='"+servicename+"' lay-filter='tba' value="+date[i].id+" ></div>";
+	           			 	}
+	           			 	
+	            			html+="<div class='servicedetail' data-serviceid="+date[i].id+"><div class='outflor'  style='width: 15%;height: 50px;float: left;line-height: 50px'>"+visitreturn+"</div>";
+                              if(date[i].service_content.length>30){
+                                  html+="<div class='outflor' style='width: 35%;height: 50px;float: left;line-height: 50px'>"+date[i].service_content.substring(0,30)+"...</div>";
+                              }else{
+                                  html+="<div class='outflor'  style='width: 35%;height: 50px;float: left;line-height: 50px'>"+date[i].service_content+"</div>";
+                              }
+                                if(date[i].service_record.length>12){
+                                    html+="<div class='outflor' style='width: 15%;height: 50px;float: left;line-height: 50px'>"+date[i].service_record.substring(0,12)+"...</div>";
+                                }else{
+                                    html+="<div class='outflor' style='width: 15%;height: 50px;float: left;line-height: 50px'>"+date[i].service_record+"</div>";
+                                }
+
+	            			html+="<div class='outflor' style='width: 15%;height: 40px;float: left;line-height: 50px'>"+count_down(date[i].service_waiting_time)+"</div></div></div>";
+	            			}
+	            		}else if(nowservicestate==1){
+	            			  $("#buttonfuwu").html("");
+	    	            	  $("#buttonfuwu").html("<button id='wancheng' onclick='wancheng()' style='width: 120px;float: right;margin-right: 16px;text-align: center;margin-top: 7px;' class='layui-btn icon-btn' lay-filter='formSubSearchUser' lay-submit><i class='layui-icon layui-icon-util'></i>完成</button>");
+	    	            	
+	    	            	  var array="";
+	            		      for(var l= 0;l<date.length;l++){
+	            		    	  array+=date[l].id+",";
+	            		      }
+	            		      
+	            		      var indexall=checkedall.indexOf(page+"");
+            				  var checkall="";
+            				  if(indexall!=-1){
+            					  checkall="<input type='checkbox' lay-skin='primary'  id='c_all' data-array='"+array+"' value="+page+" lay-filter='c_all'   checked=''>";
+      	           			 	}else{
+      	           			 	checkall="<input type='checkbox' lay-skin='primary'  id='c_all' data-array='"+array+"' value="+page+" lay-filter='c_all'>";
+      	           			 	}
+            				  
+            				  
+	            			html+="<div style='width: 100%;height: 50px;background-color: #fafafa'><div class='outflor' style='width: 15%;height: 40px;float: left;margin-left: 5%;line-height: 50px'>"+checkall+"服务内容</div><div class='outflor' style='width: 15%;height: 40px;float: left;line-height: 50px'>服务形式</div><div style='width: 35%;height: 40px;float: left;line-height: 50px'>服务指示</div>";
+	            			html+="<div class='outflor' style='width: 15%;height: 40px;float: left;line-height: 50px'>关键信息</div></div>";
+	            		for(var i=0 ; i<res.data.managetask.length;i++){
+	            			var visitreturn='';
+	            			if(res.data.managetask[i].returnvisit==1){
+	            				visitreturn='电话回访';
+	            			}else if(res.data.managetask[i].returnvisit==2){
+	            				visitreturn='微信回访';
+	            			}else if(res.data.managetask[i].returnvisit==3){
+	            				visitreturn='小程序聊天回访';
+	            			}else if(res.data.managetask[i].returnvisit==4){
+	            				visitreturn='上门回访';
+	            			}else if(res.data.managetask[i].returnvisit==5){
+	            				visitreturn='短信回访';
+	            			}else if(res.data.managetask[i].returnvisit==6){
+	            				visitreturn='小程序订阅回访';
+	            			}else if(res.data.managetask[i].returnvisit==7){
+	            				visitreturn='公众号通知回访';
+	            			}
+	            			html+="<div class='changebackco' style='width: 100%;height: 50px'><div class='outflor' style='width: 15%;height: 50px;float: left;margin-left: 5%;line-height: 50px'>";
+	           			 	var index=checked.indexOf(date[i].id);
+	           				 var service="";
+                            if(date[i].childtag==1){
+                                service=date[i].cbname;
+                            }else if(date[i].childtag==2){
+                                service=date[i].cname;
+                            }else if(date[i].childtag==3){
+                                service=date[i].plan_name;
+                            }else if(date[i].childtag==4){
+                                service=date[i].threshold_name;
+                            }else {
+                                service=date[i].service_subtitle;
+                            }
+           				  var servicename=""
+           				  servicename=date[i].service_name+"【"+service+"】";
+           				  if(servicename.length>9){		 
+           					   servicename=servicename.substring(0,9)+"..."
+           				  }
+	           			 	if(index!=-1){
+	           			 	html+="<input type='checkbox' name='"+date[i].id+"' lay-skin='primary' title='"+servicename+"' lay-filter='tba' value="+date[i].id+" checked=''></div>";
+	           			 	}else{
+	           			 	html+="<input type='checkbox' name='"+date[i].id+"' lay-skin='primary' title='"+servicename+"' lay-filter='tba' value="+date[i].id+" ></div>";
+	           			 	}
+	           			 	
+	            			html+="<div class='servicedetail' data-serviceid="+date[i].id+"><div class='outflor'  style='width: 15%;height: 50px;float: left;line-height: 50px'>"+visitreturn+"</div>";
+                              if(date[i].service_content.length>30){
+                                  html+="<div class='outflor' style='width: 35%;height: 50px;float: left;line-height: 50px'>"+date[i].service_content.substring(0,30)+"...</div>";
+                              }else{
+                                  html+="<div class='outflor'  style='width: 35%;height: 50px;float: left;line-height: 50px'>"+date[i].service_content+"</div>";
+                              }
+                                if(date[i].service_record.length>12){
+                                    html+="<div class='outflor' style='width: 15%;height: 50px;float: left;line-height: 50px'>"+date[i].service_record.substring(0,12)+"...</div>";
+                                }else{
+                                    html+="<div class='outflor' style='width: 15%;height: 50px;float: left;line-height: 50px'>"+date[i].service_record+"</div>";
+                                }
+
+	            			html+="</div></div>";
+	            			}
+	            		}else if(nowservicestate==2){
+	            		    console.log("-------------------------")
+	            		    console.log(res.data)
+                            console.log("-------------------------")
+	            			html+="<div style='width: 100%;height: 50px;background-color: #fafafa'><div style='width: 15%;height: 40px;float: left;margin-left: 5%;line-height: 50px'>服务内容</div><div style='width: 10%;height: 40px;float: left;line-height: 50px'>服务形式</div><div style='width: 15%;height: 40px;float: left;line-height: 50px'>创建时间</div><div style='width: 15%;height: 40px;float: left;line-height: 50px'>关闭时间</div>";
+	            			html+="<div style='width: 30%;height: 40px;float: left;line-height: 50px'>关闭原因</div><div style='width: 5%;height: 40px;float: left;line-height: 50px'>状态</div></div>";
+	            			for(var i=0 ; i<res.data.managetask.length;i++){
+		            			var visitreturn='';
+		            			if(res.data.managetask[i].returnvisit==1){
+		            				visitreturn='电话回访';
+		            			}else if(res.data.managetask[i].returnvisit==2){
+		            				visitreturn='微信回访';
+		            			}else if(res.data.managetask[i].returnvisit==3){
+		            				visitreturn='小程序聊天回访';
+		            			}else if(res.data.managetask[i].returnvisit==4){
+		            				visitreturn='上门回访';
+		            			}else if(res.data.managetask[i].returnvisit==5){
+		            				visitreturn='短信回访';
+		            			}else if(res.data.managetask[i].returnvisit==6){
+		            				visitreturn='小程序订阅回访';
+		            			}else if(res.data.managetask[i].returnvisit==7){
+		            				visitreturn='公众号通知回访';
+		            			}
+		            			 var service="";
+                                if(date[i].childtag==1){
+                                    service=date[i].cbname;
+                                }else if(date[i].childtag==2){
+                                    service=date[i].cname;
+                                }else if(date[i].childtag==3){
+                                    service=date[i].plan_name;
+                                }else if(date[i].childtag==4){
+                                    service=date[i].threshold_name;
+                                }else {
+                                    service=date[i].service_subtitle;
+                                }
+		           				  var servicename=""
+		           				  servicename=date[i].service_name+"【"+service+"】";
+		           				  if(servicename.length>12){		 
+		           					   servicename=servicename.substring(0,12)+"..."
+		           				  }
+		            			html+="<div class='servicedetail' data-serviceid="+date[i].id+" style='width: 100%;height: 80px'><div style='width: 15%;height: 40px;float: left;margin-left: 5%;line-height: 80px'>"+servicename+"</div>";		 	
+		            			html+="<div style='width: 10%;height: 80px;float: left;line-height: 80px'>"+visitreturn+"</div>";
+                                if(date[i].start_service_time!=null){
+                                    html+="<div class='outflor' style='width: 15%;height: 80px;float: left;line-height: 80px'>"+date[i].start_service_time+"</div>";
+                                }else{
+                                    html+="<div class='outflor' style='width: 15%;height: 80px;float: left;line-height: 80px'>--</div>";
+                                }
+
+		            			html+="<div class='outflor' style='width: 15%;height: 80px;float: left;line-height: 80px'>"+date[i].end_service_time+"</div>";
+		            			html+="<div class='outflor' style='width: 30%;height: 80px;float: left;line-height: 80px'>"+date[i].acceptsituation+"</div>";
+		            			html+="<div class='outflor' style='width: 5%;height: 80px;float: left;line-height: 80px'>服务关闭</div></div>";
+		            			}
+	            		}else if(nowservicestate==3){
+	            			html+="<div style='width: 100%;height: 50px;background-color: #fafafa'><div style='width: 15%;height: 40px;float: left;margin-left: 5%;line-height: 50px'>服务内容</div><div style='width: 10%;height: 40px;float: left;line-height: 50px'>服务形式</div><div style='width: 15%;height: 40px;float: left;line-height: 50px'>创建时间</div><div style='width: 15%;height: 40px;float: left;line-height: 50px'>关闭时间</div>";
+	            			html+="<div style='width: 30%;height: 50px;float: left;line-height: 50px'>处理结果记录</div><div style='width: 5%;height: 40px;float: left;line-height: 50px'>状态</div></div>";
+	            			for(var i=0 ; i<res.data.managetask.length;i++){
+		            			var visitreturn='';
+		            			if(res.data.managetask[i].returnvisit==1){
+		            				visitreturn='电话回访';
+		            			}else if(res.data.managetask[i].returnvisit==2){
+		            				visitreturn='微信回访';
+		            			}else if(res.data.managetask[i].returnvisit==3){
+		            				visitreturn='小程序聊天回访';
+		            			}else if(res.data.managetask[i].returnvisit==4){
+		            				visitreturn='上门回访';
+		            			}else if(res.data.managetask[i].returnvisit==5){
+		            				visitreturn='短信回访';
+		            			}else if(res.data.managetask[i].returnvisit==6){
+		            				visitreturn='小程序订阅回访';
+		            			}else if(res.data.managetask[i].returnvisit==7){
+		            				visitreturn='公众号通知回访';
+		            			}
+		             			 var service="";
+                                if(date[i].childtag==1){
+                                    service=date[i].cbname;
+                                }else if(date[i].childtag==2){
+                                    service=date[i].cname;
+                                }else if(date[i].childtag==3){
+                                    service=date[i].plan_name;
+                                }else if(date[i].childtag==4){
+                                    service=date[i].threshold_name;
+                                }else {
+                                    service=date[i].service_subtitle;
+                                }
+		           				  var servicename=""
+		           				  servicename=date[i].service_name+"【"+service+"】";
+		           				  if(servicename.length>12){		 
+		           					   servicename=servicename.substring(0,12)+"..."
+		           				  }
+		            			html+="<div class='servicedetail' data-serviceid="+date[i].id+" style='width: 100%;height: 50px'><div style='width: 15%;height: 50px;float: left;margin-left: 5%;line-height: 50px'>"+servicename+"</div>";		 	
+		            			html+="<div style='width: 10%;height: 50px;float: left;line-height: 50px'>"+visitreturn+"</div>";
+                                if(date[i].start_service_time==null){
+                                    html+="<div class='outflor' style='width: 15%;height: 50px;float: left;line-height: 50px'>--</div>";
+                                }else{
+                                    html+="<div class='outflor' style='width: 15%;height: 50px;float: left;line-height: 50px'>"+date[i].start_service_time+"</div>";
+                                }
+
+		            			html+="<div class='outflor' style='width: 15%;height: 50px;float: left;line-height: 50px'>"+date[i].end_service_time+"</div>";
+		            			if(date[i].acceptsituation.length>25){
+		            				html+="<div class='outflor' style='width: 30%;height: 50px;float: left;line-height: 50px'>"+date[i].acceptsituation.substring(0,25)+"...</div>";
+		            			}else{
+		            				html+="<div class='outflor' style='width: 30%;height: 50px;float: left;line-height: 50px'>"+date[i].acceptsituation+"</div>";
+		            			}
+		            			
+		            			html+="<div style='width: 5%;height: 50px;float: left;line-height: 50px'>服务完成</div></div>";
+		            			}
+	            		}
+	            		
+	            		//count=res.data.managetask.length;
+		            	//paging(count,curr);
+		            	$("#wattings").empty().append(html);
+		            	form.render('checkbox');
+	            	}else{
+	            		//count=0;
+		            	//paging(count,curr);
+		            	
+		            	$("#wattings").empty().append(html);
+		            	form.render('checkbox');
+	            	}
+	            	
+	            }
+    		});
+		}
+		paging(count,curr);
+		function paging(count,curr){
+	        //完整功能
+
+	        laypage.render({
+	          elem: 'demo8'
+	          ,count: count
+	          ,layout: ['count', 'prev', 'page', 'next', 'refresh', 'skip']
+	          ,curr:curr
+	          ,limit:20
+	          ,jump: function(obj,first){
+	        	  if(count > 20) {
+			          $("#demo8").show();
+			         }else {
+			          $("#demo8").hide();
+			         }
+	            if(!first){
+	            	curr=obj.curr;
+	            	getnowindexpage(servicecount,returnvisite,obj.curr,Usercode);
+	              }
+	          }
+	        });
+		}
+		
+		$(document).on('mouseout','.servicedetail	',function(){
+			
+			this.classList.remove("clickback")
+		})
+		$(document).on('mouseover','.servicedetail',function(){
+			
+			this.classList.add("clickback")
+			
+		})
+		$(document).on('mouseout','.changebackco	',function(){
+			
+			this.classList.remove("clickback")
+		})
+		$(document).on('mouseover','.changebackco',function(){
+			
+			this.classList.add("clickback")
+			
+		})
+		$(document).on('click','.servicedetail',function(){
+
+			window.location.href = "/manage/service/serrvicedetails?serviceid="+this.getAttribute("data-serviceid"); 
+		})
+		$(".shouli").click(function(){
+			
+			$.ajax({
+    			type:"POST",
+	            url:'/YhAcceptserviceController/acceptservice',
+	            dataType:"json",
+	            traditional:true,
+	            data:{serviceid:$.makeArray(checked)},
+	            success:function(res){
+	            	getpagecount(nowservicestate);
+	            	 getallcount();
+	            	getnowindexpage(servicecount,returnvisite,1,Usercode);
+	            	checked=[];
+	  			  $("#checkcount").html(checked.length);
+                    notice.success({
+                        title: '消息通知',
+                        message: '受理成功!'
+                    });
+	            }
+    		});
+		})
+		//上面四个框的点击事件
+		 $('.service').click(function(){
+			 checked=[];
+	        	checkedall=[];
+	        	 if(checked.length!=0){
+	      			  $("#checkcount").html(checked.length);
+	            		$("#piliang").css("display","block")
+	            	}else{
+	            		$("#piliang").css("display","none")
+	            	}
+        	var a=$('.service').index(this);
+        	//服务内容,服务方式，健康干预状态，用户名，服务状态
+        	//selectpagecount(servicecount,returnvisite,healthstate,username,a,$("#test6").val());
+        	 getpagecount(a);
+        	 nowservicestate=a;
+        	 if(a==0){
+        		 $("#ishidetime").removeClass("isdisplay");
+        		
+        	 }else{
+        		 $("#ishidetime").addClass("isdisplay");
+        	 }
+        	var eac = $('.service');
+        	
+        	eac.each(function(i) {
+				if(i==a){
+					$('.service').eq(i).css('background-color',' rgb(85, 165, 234)');
+				}else{
+					$('.service').eq(i).css('background-color','#d9d9d9');
+				}
+			});
+        	//selectdate(a,1,servicecount,healthstate,username,returnvisite);
+        	getnowindexpage(servicecount,returnvisite,1,Usercode);
+        });
+		//点击复选框
+		form.on('checkbox(tba)', function(data){
+			// console.log(data.elem); //得到checkbox原始DOM对象
+			 //console.log(data.elem.checked); //是否被选中，true或者false
+			  //console.log(data.value); //复选框value值，也可以通过data.elem.value得到
+			 // console.log(data.othis); //得到美化后的DOM对象
+			  if(data.elem.checked){
+				  checked.push(data.value)
+			  }else{
+				  checked.remove(data.value)
+			  }
+			  if(checked.length!=0){
+				  $("#checkcount").html(checked.length);
+	        		$("#piliang").css("display","block")
+	        	}else{
+	        		$("#piliang").css("display","none")
+	        	}
+		});
+
+		//点击类型
+		form.on('select(content)', function(data){
+		    $("#piliang").hide();
+            checked=[];
+            checkedall=[];
+            if(checked.length!=0){
+                $("#checkcount").html(checked.length);
+                $("#piliang").css("display","block")
+            }else{
+                $("#piliang").css("display","none")
+            }
+            var html="";
+            if(data.value==""){
+                html+=" <option value=''>内容子项</option>";
+            }else if(data.value==1){
+                html+="<option value=''>内容子项</option>" +
+                    "                                <option value='1'>血压</option>" +
+                    "                                <option value='2'>血糖</option>" +
+                    "                                <option value='3'>血脂四项</option>" +
+                    "                                <option value='4'>体重</option>"
+            }else if(data.value==2){
+                html+="<option value=''>内容子项</option>" +
+                    "                                <option value='1'>血压</option>" +
+                    "                                <option value='2'>血糖</option>" +
+                    "                                <option value='3'>血脂四项</option>" +
+                    "                                <option value='4'>体重</option>"
+            }else if(data.value==7 || data.value==8){
+                html+="<option value=''>内容子项</option><option value='101'>健康风险评估</option>" +
+                    "                                <option value='102'>睡眠质量评估</option>" +
+                    "                                <option value='103'>健康习惯评估</option>" +
+                    "                                <option value='104'>A型性格评估</option>" +
+                    "                                <option value='105'>PSTRI压力评估</option>" +
+                    "                                <option value='106'>心理健康评估</option>"
+            }else if(data.value==4){
+                html+="<option value=''>内容子项</option><option value='201'>体温</option>" +
+                    "                                <option value='202'>血氧</option>" +
+                    "                                <option value='203'>BMI</option>" +
+                    "                                <option value='204'>收缩压</option>" +
+                    "                                <option value='205'>舒张压</option>" +
+                    "                                <option value='206'>空腹血糖</option>"+
+                    "                                <option value='207'>心率</option>" +
+                    "                                <option value='208'>总胆固醇</option>" +
+                    "                                <option value='209'>甘油三酯</option>" +
+                    "                                <option value='210'>高密度脂蛋白胆固醇</option>" +
+                    "                                <option value='211'>低密度脂蛋白胆固醇</option>" +
+                    "                                <option value='212'>血肌酐</option>" +
+                    "                                <option value='213'>血尿素氮</option>" +
+                    "                                <option value='214'>血尿酸</option>" +
+                    "                                <option value='215'>谷丙转氨酶</option>" +
+                    "                                <option value='216'>谷草转氨酶</option>"+
+                    "                                <option value='217'>血清白蛋白</option>" +
+                    "                                <option value='218'>血清球蛋白</option>" +
+                    "                                <option value='219'>尿微量蛋白</option>" +
+                    "                                <option value='220'>糖化血红蛋白</option>" +
+                    "                                <option value='221'>同型半胱氨酸</option>"+
+                    "                                <option value='222'>尿检红细胞</option>" +
+                    "                                <option value='223'>尿蛋白</option>" +
+                    "                                <option value='224'>酮体</option>" +
+                    "                                <option value='225'>餐后2小时血糖</option>"
+            }else{
+                html+=" <option value=''>内容子项</option>";
+            }
+            $("#typeson").empty().append(html);
+            form.render();
+            servicecount=data.value;
+			getpagecount(nowservicestate)
+			 getnowindexpage(servicecount,returnvisite,1,Usercode);//状态，服务类型，返回类型，页码，用户code
+			  //console.log(data.elem); //得到select原始DOM对象
+
+			  //console.log(data.value); //得到被选中的值
+
+			 // console.log(data.othis); //得到美化后的DOM对象
+			  checked=[];
+			  $("#checkcount").html(checked.length);
+		});
+
+        //点击类型
+        form.on('select(typeson)', function(data){
+            $("#piliang").hide();
+            checked=[];
+            checkedall=[];
+            if(checked.length!=0){
+                $("#checkcount").html(checked.length);
+                $("#piliang").css("display","block")
+            }else{
+                $("#piliang").css("display","none")
+            }
+            console.log(data.value);
+            typeson=data.value;
+            getpagecount(nowservicestate)
+            getnowindexpage(servicecount,returnvisite,1,Usercode);//状态，服务类型，返回类型，页码，用户code
+            checked=[];
+            $("#checkcount").html(checked.length);
+        });
+		
+		
+		//点击复选框全选
+		form.on('checkbox(c_all)', function(data){
+			 console.log(data.elem); //得到checkbox原始DOM对象
+			 console.log(data.elem.checked); //是否被选中，true或者false
+			  console.log(data.value); //复选框value值，也可以通过data.elem.value得到
+			  console.log(data.othis); //得到美化后的DOM对象
+			  console.log(this.getAttribute('data-array'));
+			  if(data.elem.checked){
+				  checkedall.push(data.value);
+				  $("."+data.value+"").prop("checked", true);
+		        
+		          var strs= new Array(); //定义一数组 
+		          strs=this.getAttribute('data-array').split(","); //字符分割 
+		          for (i=0;i<strs.length-1 ;i++ ) 
+		          { 
+		        	  
+		       	  $("input[name="+strs[i]+"]").prop("checked", true);
+		          console.log(strs[i]);//分割后的字符输出
+		          checked.push(strs[i]);
+		          } 
+		          form.render('checkbox');
+			  }else{
+				  remoall(data.value);
+				  $("."+data.value+"").prop("checked", false);
+		          
+		          var strs= new Array(); //定义一数组 
+		          strs=this.getAttribute('data-array').split(","); //字符分割 
+		          for (i=0;i<strs.length-1 ;i++ ) 
+		          { 
+		        	  $("input[name="+strs[i]+"]").prop("checked", false);
+		          console.log(strs[i]);//分割后的字符输出
+		          remo(strs[i])
+		          } 
+		          form.render('checkbox');
+			  }
+			  
+			  if(checked.length!=0){
+				  $("#checkcount").html(checked.length);
+		    		$("#piliang").css("display","block")
+		    	}else{
+		    		$("#piliang").css("display","none")
+		    	}
+		});
+			
+		
+		function remoall(d) { 
+			  var a = checkedall.indexOf(d); 
+			  if (a >= 0) { 
+				  checkedall.splice(a, 1); 
+			  return true; 
+			  } 
+			  return false; 
+			  }; 
+		function remo(d) { 
+			  var a = checked.indexOf(d); 
+			  if (a >= 0) { 
+				  checked.splice(a, 1); 
+			  return true; 
+			  } 
+			  return false; 
+			  }; 
+		
+		
+		//选择返回方式
+		form.on('select(returnvisite)', function(data){
+			  returnvisite=data.value;
+            $("#piliang").hide();
+            checked=[];
+            checkedall=[];
+            if(checked.length!=0){
+                $("#checkcount").html(checked.length);
+                $("#piliang").css("display","block")
+            }else{
+                $("#piliang").css("display","none")
+            }
+			  getpagecount(nowservicestate)
+			  getnowindexpage(servicecount,returnvisite,1,Usercode);//状态，服务类型，返回类型，页码，用户code
+			  //console.log(data.elem); //得到select原始DOM对象
+
+			  //console.log(data.value); //得到被选中的值
+
+			  //console.log(data.othis); //得到美化后的DOM对象
+			  checked=[];
+			  $("#checkcount").html(checked.length);
+		}); 
+		Array.prototype.indexOf = function(val) { 
+			for (var i = 0; i < this.length; i++) { 
+			if (this[i] == val) return i; 
+			} 
+			return -1; 
+		};
+		Array.prototype.remove = function(val) { 
+			var index = this.indexOf(val); 
+			if (index > -1) { 
+			this.splice(index, 1); 
+			} 
+		};
+        function getNowFormatDate() {
+			var date = new Date();
+			var seperator1 = "-";
+			var seperator2 = ":";
+			var month = date.getMonth() + 1;
+			var strDate = date.getDate();
+			if (month >= 1 && month <= 9) {
+				month = "0" + month;
+			}
+			if (strDate >= 0 && strDate <= 9) {
+				strDate = "0" + strDate;
+			}
+			var currentdate = date.getFullYear() + seperator1 + month
+					+ seperator1 + strDate + " " + date.getHours() + seperator2
+					+ date.getMinutes() + seperator2 + date.getSeconds();
+			return currentdate;
+		}
+        function count_down(o){
+            var datatime=/^[\d]{4}-[\d]{1,2}-[\d]{1,2}( [\d]{1,2}:[\d]{1,2}(:[\d]{1,2})?)?$/ig,str='',conn,s;
+            if(!o.match(datatime)){
+                    alert('参数格式为2020-01-01[ 01:01[:01]].\r其中[]内的内容可省略');
+                    return false;
+            }
+            var sec=(new Date(o.replace(/-/ig,'/')).getTime() - new Date().getTime())/1000;
+            if(sec > 0){
+                conn='等待服务';
+            }else{
+                return conn='请立即服务';
+
+            }
+            s={'天':sec/24/3600,'小时':sec/3600%24,'分':sec/60%60,'秒':sec%60};
+            for(i in s){
+                    if(Math.floor(s[i])>0 ) str += Math.floor(s[i]) + i;
+            }
+            if(Math.floor(sec)==0){ str='0秒'; }
+            return   conn+str ;
+    		}
+		//计算年龄
+		
+		function jsGetAge(strBirthday)
+		{       
+			var date = new Date(); 
+			var thisYear=date.getFullYear();
+			strBirthday=strBirthday.substr(0,4);
+			age=(thisYear-strBirthday);
+		    
+		    return age;//返回周岁年龄
+		    
+		}
+		
+		$(document).on('click','.serviceupdate',function(){
+			var nowid=this.getAttribute("data-id");
+			var state=this.getAttribute("data-state");
+			var name="";
+			var height='';
+			if(state==2){
+				name="#test2";
+				height='250px';
+			}else if(state==3){
+				name="#test";
+				height='350px';
+			}
+			var index=layer.open({
+				  type:1,
+				  area:['60%',height],
+				  title: '完成服务任务'
+				  ,content: $(name),
+				  shade: 0.5,
+				  btn: ['提交', '取消']
+				  ,btn1: function(index, layero){
+					  if(state==2){
+						  var acceptsituation= $("#cause").val();
+							var data={id:nowid,state:state,acceptsituation:acceptsituation};
+							
+							if(acceptsituation.replace(/[^\x00-\xff]/g, 'AA').length>200){
+								layer.msg('不能超过200个字符！', {icon: 5});
+								return false;
+							}
+							$("#cause").val("");
+						}else if(state==3){
+							  var kk=$("#selecttype").val();
+							  var acceptsituation=$("#acceptsituation").val();
+                             var taidu=$("#peihechengdu").val();
+							var data={id:nowid,state:state,servicetype:kk,acceptsituation:acceptsituation,satisfaction:taidu};
+							if(acceptsituation.replace(/[^\x00-\xff]/g, 'AA').length>500){
+								layer.msg('不能超过500个字符！', {icon: 5});
+								return false;
+							}
+							$("#acceptsituation").val("");
+						}
+					  		updatestate(data);
+					  		layer.close(index); 
+							notice.success({
+				                title: '消息通知',
+				                message: '操作成功!'
+				            });
+					  },
+					  btn2: function(index, layero){
+						  layer.close(index); 
+					   return false;
+					  },
+					  cancel: function(layero,index){ 
+					   layer.closeAll();
+					  }
+
+				});
+		})
+		function updatestate(data){
+			$.ajax({
+    			type:"POST",
+	            url:'/yhmanagetaskcontroller/updatestate',
+	            dataType:"json",
+	            data:data,
+	            success:function(res){
+	            	getpagecount(nowservicestate);
+	            	 getallcount();
+	            	getnowindexpage(servicecount,returnvisite,1,Usercode);
+	            }
+    		});
+		}
+        //时间戳转时间4252020052220
+        function createTime(v){  
+        	    return new Date(parseInt(v)).toLocaleString()
+        	}
+        	/**重写toLocaleString方法*/
+        	Date.prototype.toLocaleString = function() {
+        	         var y = this.getFullYear();  
+        	        var m = this.getMonth()+1;  
+        	        m = m<10?'0'+m:m;  
+        	        var d = this.getDate();  
+        	        d = d<10?("0"+d):d;  
+        	        var h = this.getHours();  
+        	        h = h<10?("0"+h):h;  
+        	        var M = this.getMinutes();  
+        	        M = M<10?("0"+M):M;  
+        	        var S=this.getSeconds();
+        	        S=S<10?("0"+S):S;  
+        	        return y+"-"+m+"-"+d+" "+h+":"+M+":"+S; 
+        	};
+        	/* ---------------------干预分组----------------------------------------------- */
+        	 var objs={field: "123", type: "desc"};
+             randtreesone();
+             function randtreesone(){
+                 treeSelect.render({
+                     // 选择器
+                     elem : '#trees',
+                     // 数据
+                     data : '/YhUserMakeCard/showPullDownTree',
+                     // 异步加载方式：get/post，默认get
+                     type : 'get',
+                     // 占位符
+                     placeholder : '全部',
+                     // 是否开启搜索功能：true/false，默认false
+                     search : true,
+                     // 点击回调
+                     click : function(d) {
+                     },
+                     // 加载完成后的回调函数
+                     success : function(d) {
+                     }
+                 });
+             }
+             //定义接收本月的第一天和最后一天
+             var startDate1=new Date(new Date().setDate(1));
+             var endDate1=new Date(new Date(new Date().setMonth(new Date().getMonth()+1)).setDate(0));
+             //定义接收上个月的第一天和最后一天
+             var startDate2=new Date(new Date(new Date().setMonth(new Date().getMonth()-1)).setDate(1));
+             var endDate2=new Date(new Date().setDate(0));
+             laydate.render({
+                 elem : '#test6',
+                 range : true,
+                 trigger: 'click',
+                 extrabtns: [
+                     {id:'today', text:'今天', range:[new Date(), new Date()]},
+                     {id:'lastday-7', text:'过去7天', range:[new Date(new Date().setDate(new Date().getDate()-7)),
+                             new Date(new Date().setDate(new Date().getDate()-1))]},
+                     {id:'lastday-30', text:'过去30天', range:[new Date(new Date().setDate(new Date().getDate()-30)),
+                             new Date(new Date().setDate(new Date().getDate()-1))]},
+                     {id:'yesterday', text:'昨天', range:[new Date(new Date().setDate(new Date().getDate()-1)),
+                             new Date(new Date().setDate(new Date().getDate()-1))]},
+                     {id:'thismonth', text:'本月', range:[startDate1,endDate1]},
+                     {id:'lastmonth', text:'上个月', range:[startDate2,endDate2]}],
+                 done: function(val, stdate, ovdate){
+                     //当确认选择时间后调用这里
+                 }
+             });
+             table.on('tool(tableAuth)', function (obj) { //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
+                 var data = obj.data;
+                 var layEvent = obj.event;
+                 userCode = data.usercode;
+                 if (layEvent === 'edit') { // 查看
+                     window.open("../register/userIndex?page=summary&userCode="+userCode+"");
+                     console.log(obj)
+                 }
+             });
+             // 设置全局变量以保存选中行信息
+             let ids = new Array();
+             // 保存当前页全部数据id，点击全选时使用
+             let tableIds = new Array();
+             var gdata={userCode:$("#pickListModels").val()}
+             getData();
+             function getData() {
+                 table.render({
+                     elem: '#tableAuth'
+                     ,url: '/YhGroupIntervention/selectplanbyuser' //数据接口
+                     ,title: '分组人员'
+                     ,page:true
+                     ,where:gdata
+                     ,parseData: function(res){
+                         console.log(res);
+                     }
+                     ,cols: [[ //表头
+                         {type: 'checkbox', fixed: 'left'},
+                         {
+                             title: '执行时间',
+                             width : 200,
+                             align : 'center',
+                             templet:function (d) {
+                                 console.log(d)
+                                 return ""+d.executeDate.split(" 00:00:00")[0]+""
+                             }
+                         },
+
+                         {field: 'servicenam', title: '服务方式', align: 'center',width:200},
+                         {field: 'counts', title: '计划内容', align: 'center',width:200,
+                             templet:function (d) {
+                                 if(d.counts!=null){
+                                     return d.counts;
+                                 }else{
+                                     return d.var_count;
+                                 }
+
+                             }},
+                         {field: 'countPrompt', title: '内容提示', align: 'center'},
+                     ]], done: function(res){
+
+                         // 设置当前页全部数据id到全局变量
+                         tableIds = res.data.map(function (value) {
+                             return value.detailsId;
+                         });
+                         // 设置当前页选中项
+                         $.each(res.data, function (idx, val) {
+                             if (ids.indexOf(val.detailsId) > -1) {
+                                 val["LAY_CHECKED"] = 'true';
+                                 //找到对应数据改变勾选样式，呈现出选中效果
+                                 let index = val['LAY_TABLE_INDEX'];
+                                 $('tr[data-index=' + index + '] input[type="checkbox"]').click();
+                                 form.render('checkbox'); //刷新checkbox选择框渲染
+                             }
+                         });
+                         // 获取表格勾选状态，全选中时设置全选框选中
+                         let checkStatus = table.checkStatus('test');
+                         if (checkStatus.isAll) {
+                             $('.layui-table-header th[data-field="0"] input[type="checkbox"]').prop('checked', true);
+                             form.render('checkbox'); //刷新checkbox选择框渲染
+                         }
+                     }
+                 });
+             }
+
+
+             $('#zhuanyizhuceka').click(function(){
+                 layer.confirm('确认要删除吗？', {
+                     btn : [ '确定', '取消' ]//按钮
+                 }, function(index) {
+                     $.ajax({
+                         type: "POST",
+                         traditional:true,
+                         dataType: "json",
+                         data:{deleteids:ids,userCode:$("#fenzuid").val()},
+                         url: "/YhGroupIntervention/deletesplanbyid",
+                         success:function(data){
+                             notices.success({
+                                 title: '消息通知',
+                                 message: '删除成功'
+                             });
+                             getData();
+                             $("#piliang2").hide();
+                             ids=[];
+                             table.reload('tableAuth');
+                             tableReload();//重载表格的方法
+                             ids=[];
+                            
+                             /* window.location.reload(); */
+                         }
+                     })
+                     layer.close(index);
+                     console.log(ids)
+
+                 });
+             })
+             table.on('checkbox(tableAuth)', function (obj) {
+                 console.log(obj)
+                 if (obj.checked == true) {
+                     if (obj.type == 'one') {
+                         ids.push(obj.data.detailsId);
+                     } else {
+                         for (let i = 0; i < tableIds.length; i++) {
+                             //当全选之前选中了部分行进行判断，避免重复
+                             if (ids.indexOf(tableIds[i]) == -1) {
+                                 ids.push(tableIds[i]);
+                             }
+                         }
+                     }
+                 } else {
+                     if (obj.type == 'one') {
+                         let i = ids.length;
+                         while (i--) {
+                             if (ids[i] == obj.data.detailsId) {
+                                 ids.splice(i, 1);
+                             }
+                         }
+                     } else {
+                         let i = ids.length;
+                         while (i--) {
+                             if (tableIds.indexOf(ids[i]) != -1) {
+                                 ids.splice(i, 1);
+                             }
+                         }
+                     }
+                 }
+                 //干预批量id
+                 if(ids.length>0){
+                     $("#piliang2").show();
+                     $("#xuanze").html("已选择"+ids.length+"项")
+                 }else{
+                     $("#piliang2").hide();
+                 }
+             });
+             changeCooperate();
+             function changeCooperate(){
+                 $.ajax({
+                     type:"POST",
+                     url:'/YhAcceptserviceController/selectCooperate',
+                     dataType:"json",
+                     traditional:true,
+                     data:{usercode:$('#fenzuid').val()},
+                     success:function(res) {
+
+                         /* $("#taidu").html("配合态度:"+(res.data*100)+"%"); */
+                     }
+                 });
+             }
+             function zhucefenpei(data){
+                 $.ajax({
+                     type: "post",
+                     traditional:true,
+                     dataType: "json",
+                     data:{deleteids:ids},
+                     url: "/YhGroupIntervention/updategroup",
+                     success:function(data){
+                         notices.success({
+                             title: '消息通知',
+                             message: '修改成功'
+                         });
+                         window.location.reload();
+                     }
+                 })
+             }
+             $('#clickxuan2').click(function(){
+                 ids=[];
+                 getData();
+                 $("#piliang2").hide();
+
+             });
+             // 搜索
+             $('#btnSearchAuth').click(function () {
+                 var test6 = $('#test6').val();
+                 var plans = $('#plans').val();
+                 var usercode = $('#fenzuid').val();
+                 gdata={times:test6,serviceWay:plans,userCode:usercode}
+                 getData();
+             });
+             //iframe层-父子操作
+
+             //清除按钮
+             $("#btnempty").click(function(){
+                 window.location.reload();
+             })
+
+
+    });
+</script>
+</body>
+</html>

@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>共享文档</title>
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+    <link rel="shortcut icon" href="favicon.ico">
+    <link href="/assets/file/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/assets/file/css/font-awesome.css" rel="stylesheet">
+    <link href="/assets/file/css/animate.css" rel="stylesheet">
+    <link href="/assets/file/css/layui.css" rel="stylesheet">
+    <link href="/assets/file/css/style.css" rel="stylesheet">
+    <link href="/assets/file/css/stream-v1.css" rel="stylesheet" type="text/css">
+    <style>
+        a:active  {color:yellow;}
+        a:hover   {color:red;}
+		.context-menu.dropdown-menu
+		{
+		    display: block;
+		    left: 0px;
+		    opacity: 0;
+		    position: absolute;
+		    top: 0px;
+		    transition: visibility 0s 0.1s, opacity 0.1s linear;
+		    visibility: hidden;
+		}
+		    .context-menu.dropdown-menu.open
+		    {
+		        visibility: visible;
+		        opacity: 1;
+		        transition: opacity 0.1s linear;
+		    }
+
+		    .context-menu.dropdown-menu a
+		    {
+		        cursor: pointer;
+		    }
+
+        .file .file-name {
+            text-align: center;
+            line-height: 30px;
+        }
+
+		.dropdown-submenu .dropdown-toggle:after
+		{
+		    content: "\f0da";
+			display: inline-block;
+			float: right;
+		    font: normal normal normal 14px/1 FontAwesome;
+		    font-size: inherit;
+		    padding-top: 3px;
+		    text-rendering: auto;
+		    -webkit-font-smoothing: antialiased;
+		}
+
+		.dropdown-submenu .dropdown-menu
+		{
+		    top: 0;
+		    left: 100%;
+		}
+		#cnxt-cursor
+		{
+		    height: 0px;
+		    opacity: 0;
+		    position: absolute;
+		    visibility: hidden;
+		    width: 0px;
+		}
+	    .addColor{
+	      background-color:#99ccff;
+	    }
+	    
+	    .file:hover{
+          background-color:#99ccff;
+        }
+        .file-name:hover{
+          background-color:#99ccff;
+        }
+    </style>
+</head>
+<body class="gray-bg">
+<div class="wrapper wrapper-content" id="app">
+    <div class="row">
+        <div class="col-sm-3">
+            <div class="ibox float-e-margins" style="width:107px;">
+                <div class="ibox-content">
+                    <div class="file-manager">
+                        <button type="button" class="layui-btn" id="test1" >
+                            <i class="fa fa-cloud"></i>上传文件
+                        </button>
+
+                        <ul class="folder-list" style="padding: 0">
+                            <li class="addColor" onclick="changeType('',this)">
+                                <a class="file-control"><i class="fa fa-folder"></i>所有文件</a>
+                            </li>
+                            <li onclick="changeType(0,this)">
+                                <a class="file-control"><i class="fa fa-folder"></i>图片</a>
+                            </li>
+                            <li  onclick="changeType(1,this)">
+                                <a class="file-control"><i class="fa fa-folder"></i>文档</a>
+                            </li>
+                            <li onclick="changeType(2,this)">
+                                <a class="file-control"><i class="fa fa-folder"></i>视频</a>
+                            </li>
+                            <li onclick="changeType(3,this)">
+                                <a class="file-control"><i class="fa fa-folder"></i>音乐</a>
+                            </li>
+                            <li onclick="changeType(99,this)">
+                                <a class="file-control"><i class="fa fa-folder"></i>其他</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-9 animated fadeInRight">
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="file-box" v-for="row in rows">
+                        <div class="file" v-if="row.type==2">
+                            <a href="#">
+                                <span class="corner"></span>
+                                <div class="image">
+                                   <div  :type="row.type">
+                                       <video class="img-responsive" width="200" height="120" :src="row.url"></video>
+                                   </div>
+                                </div>
+                                <div class="rId" style="display:none;">
+                                   <input class="file-rId" :value="row.id" name="ids">
+                                </div>
+                                <div class ="file-name">
+
+                                    <small>{{row.createDate | formatDate}}</small>
+                                </div>
+                                &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp;<button
+                                    class="btn btn-warning btn-xs copy" :url="row.url">复制
+                            </button>&nbsp; &nbsp; &nbsp; &nbsp;<button class="btn btn-danger btn-xs"
+                                                                        @click="remove(row.id)">删除
+                            </button>
+                            </a>
+                        </div>
+
+
+                        <div class="file" v-if="row.type==0">
+                            <a href="#">
+                                <span class="corner"></span>
+                                <div class="image">
+
+                                    <div  :type="row.type">
+                                        <img alt="image" class="img-responsive" :src="row.url"   width="200" height="120">
+                                    </div>
+                                </div>
+                                <div class="rId" style="display:none;">
+                                    <input class="file-rId" :value="row.id" name="ids">
+                                </div>
+                                <div class ="file-name">
+
+                                    <small>{{row.createDate | formatDate}}</small>
+                                </div>
+                                &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp;<button
+                                    class="btn btn-warning btn-xs copy" :url="row.url">复制
+                            </button>&nbsp; &nbsp; &nbsp; &nbsp;<button class="btn btn-danger btn-xs"
+                                                                        @click="remove(row.id)">删除
+                            </button>
+                            </a>
+                        </div>
+
+                        <div class="file" v-else>
+                            <a href="#">
+                                <span class="corner"></span>
+                                <div class="image">
+                                    <div  :type="row.type">
+                                        <img alt="image" class="img-responsive" src="/assets/images/wendang.jpg"  :url="row.url" width="116" height="80">
+                                    </div>
+                                </div>
+                                <div class="rId" style="display:none;">
+                                    <input class="file-rId" :value="row.id" name="ids">
+                                </div>
+                                <div class ="file-name">
+
+                                    <small>{{row.createDate | formatDate}}</small>
+                                </div>
+                                &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp;<button
+                                    class="btn btn-warning btn-xs copy" :url="row.url">复制
+                            </button>&nbsp; &nbsp; &nbsp; &nbsp;<button class="btn btn-danger btn-xs"
+                                                                        @click="remove(row.id)">删除
+                            </button>
+                            </a>
+                        </div>
+
+
+                    </div>
+                    <div id="incomeNum"></div>
+                </div>
+            </div>
+            <div>
+                <ul id="page"></ul>
+            </div>
+        </div>
+    </div>
+
+</div>
+<div id="append_parent"></div>
+<div id="i_stream_files_queue">
+	</div>
+<!-- 全局js -->
+<script src="/assets/file/js/jquery.min.js"></script>
+<script src="/assets/file/js/bootstrap.min.js"></script>
+<script src="/assets/file/js/bootstrap-paginator.min.js"></script>
+<script src="/assets/file/js/tether/js/tether.min.js"></script>
+<script src="/assets/file/js/jquery.context-menu.min.js"></script>
+<script src="/assets/file/js/content.js"></script>
+<script src="/assets/file/js/layui.js"></script>
+<script src="/assets/file/js/plugins/clipboard/clipboard.min.js"></script>
+<script src="/assets/file/js/plugins/layer/layer.min.js"></script>
+<script src="/assets/file/js/vue.min.js"></script>
+<script src="/assets/file/js/stream-v1.js"></script>
+
+
+<script>
+    var app = new Vue({
+        el: '#app',
+        data: {
+            limit: 12,
+            offset: 0,
+            total: 0,
+            file: '',
+            type: '',
+            rows: '',
+        },
+        methods: {
+            getData: function () {
+
+                $.getJSON("/sysFile/list", {
+                    limit: this.limit,
+                    offset: this.offset,
+                    type: this.type
+                }, function (r) {
+                    app.total = r.total;
+                    app.rows = r.rows;
+                    app.page();
+                });
+            },
+            page: function () {
+                var options = {
+                    currentPage: app.offset / 12 + 1, //当前页
+                    totalPages: app.total / (12 + 1) + 1, //总页数
+                    numberofPages: 4, //显示的页数
+                    bootstrapMajorVersion: 3,
+                    alignment: 'center',
+                    size: 'large',
+                    shouldShowPage: true,
+                    itemTexts: function (type, page, current) { //修改显示文字
+                        switch (type) {
+                            case "first":
+                                return "首页";
+                            case "prev":
+                                return "上一页";
+                            case "next":
+                                return "下一页";
+                            case "last":
+                                return "尾页";
+                            case "page":
+                                return page;
+                        }
+                    },
+                    onPageClicked: function (event, originalEvent, type, page) {
+                        app.offset = (page - 1) * 12;
+                        app.getData();
+                    }
+                };
+                $('#page').bootstrapPaginator(options);
+            },
+            remove: function (id) {
+                layer.confirm('确定要删除选中的记录？', {
+                    btn: ['确定', '取消']
+                }, function () {
+                    $.ajax({
+                        url: "/sysFile/remove",
+                        type: "post",
+                        data: {
+                            'id': id
+                        },
+                        success: function (r) {
+                            if (r.code == 20000) {
+                                layer.msg(r.message);
+                                app.getData();
+                            } else {
+                                layer.msg(r.message);
+                                app.getData();
+                            }
+                        }
+                    });
+                })
+                return false;
+            }
+        },
+        created: function () {
+            this.getData();
+        }
+    });
+</script>
+
+<script type="text/javascript">
+    var domain = window.location.host;
+    var clipboard = new Clipboard('button.copy', {
+        text: function (trigger) {
+            layer.msg('路径复制成功');
+            return domain+""+$(trigger).attr('url');
+        }
+    });
+
+
+   	var config = {
+   		browseFileId : "test1", /** 选择文件的ID, 默认: i_select_files */
+   		browseFileBtn : "<div></div>", /** 显示选择文件的样式, 默认: `<div>请选择文件</div>` */
+   		dragAndDropArea: "i_select_files", /** 拖拽上传区域，Id（字符类型"i_select_files"）或者DOM对象, 默认: `i_select_files` */
+   		dragAndDropTips: "<span></span>", /** 拖拽提示, 默认: `<span>把文件(文件夹)拖拽到这里</span>` */
+   		filesQueueId : "i_stream_files_queue", /** 文件上传容器的ID, 默认: i_stream_files_queue */
+   		filesQueueHeight : 200, /** 文件上传容器的高度（px）, 默认: 450 */
+   		messagerId : "", /** 消息显示容器的ID, 默认: i_stream_message_container */
+   		multipleFiles: true, /** 多个文件一起上传, 默认: false */
+   		autoUploading: true, /** 选择文件后是否自动上传, 默认: true */
+   		autoRemoveCompleted : true, /** 是否自动删除容器中已上传完毕的文件, 默认: false */
+   		maxSize: 104857600, /** 单个文件的最大大小，默认:2G */
+   		retryCount : 5, /** HTML5上传失败的重试次数 */
+   		postVarsPerFile : { /** 上传文件时传入的参数，默认: {} */
+   			param1: "val1",
+   			param2: "val2"
+   		},
+   		swfURL : "/swf/FlashUploader.swf", /** SWF文件的位置 */
+   		tokenURL : "/sysFile/tk", /** 根据文件名、大小等信息获取Token的URI（用于生成断点续传、跨域的令牌） */
+   		//frmUploadURL : "/fd;", /** Flash上传的URI */
+   		uploadURL : "/sysFile/upload", /** HTML5上传的URI */
+   		simLimit: 200, /** 单次最大上传文件个数 */
+   		extFilters: [".txt", ".rpm", ".rmvb", ".gz", ".rar", ".zip", ".avi", ".mkv", ".mp3", ".js",".jpg",".gig",".png",".doc",".xlsx"], /** 允许的文件扩展名, 默认: [] */
+   		onSelect: function(list) {$("#i_stream_files_queue").show()}, /** 选择文件后的响应事件 */
+   		onMaxSizeExceed: function(size, limited, name) {layer.msg('文件大小超出范围')}, /** 文件大小超出的响应事件 */
+   		onFileCountExceed: function(selected, limit) {layer.msg('文件数量超出范围')}, /** 文件数量超出的响应事件 */
+   		onExtNameMismatch: function(name, filters) {layer.msg('不支持的文件类型')}, /** 文件的扩展名不匹配的响应事件 */
+   		onCancel : function(file) {layer.msg('取消上传的文件名:  ' + file.name)}, /** 取消上传文件的响应事件 */
+   		onComplete: function(file) {layer.msg("上传"+file.name+"成功");}, /** 单个文件上传完毕的响应事件 */
+   		onQueueComplete: function() {
+   		  layer.confirm('全部上传完毕', {
+              btn: ['确定','取消']
+          },function (index) {
+        	  $("#i_stream_files_queue").fadeOut("slow");
+        	  layer.close(index);
+        	  app.getData();
+          })
+   		}, /** 所以文件上传完毕的响应事件 */
+   		onUploadError: function(status, msg) {alert(msg)} /** 文件上传出错的响应事件 */
+   	};
+   	var _t = new Stream(config);
+
+  /*   layui.use('upload', function () {
+        var upload = layui.upload;
+        //执行实例
+        var uploadInst = upload.render({
+            elem: '#test1', //绑定元素
+            url: '/common/sysFile/upload', //上传接口
+            size: 1000,
+            accept: 'file',
+            done: function (r) {
+                layer.msg(r.msg);
+                app.getData();
+            },
+            error: function (r) {
+                layer.msg(r.msg);
+            }
+        });
+    }); */
+    function changeType(i,obj) {
+        app.type = i;
+        app.offset = 0;
+        app.getData();
+        $(obj).addClass("addColor").siblings().removeClass("addColor");
+    }
+
+
+
+
+    jQuery(function()
+  		  {
+    	var url;
+    	var id;
+    	var type;
+    	var ids = [];
+    	var fileurl;
+    	var copy;
+    	let _debug = function(properties)
+		      {
+
+		          console.log("Hai selezionato '" + properties.text + "' ('" + properties.key + "').");
+		          if(properties.key=="all"){
+		        	 ids = [];
+		        	 //给所有全选加上样式
+		        	 $(".file").addClass("addColor");
+		        	 $(".file-name").css("background-color","#99ccff");
+		        	 var $inputArr = $('input[name="ids"]');//length = 3
+		        	 //3.循环处理input,并定义结果集
+		        	 $inputArr.each(function(){
+		        	 //4.将每个input的值放进结果集
+		        	      ids.push($(this).val());
+		             });
+
+		          }else if(properties.key=="copy"){
+
+		        	  if(copy!=null && copy!=undefined){
+		        	     copy.click();
+		        	  }else{
+		        		  layer.msg("请选择图片");
+		        	  }
+
+		          }else if(properties.key=="delect"){
+
+		        	 if(id!=null && id!=""){
+			        	  if(ids.length<2){
+			        		  layer.confirm('确定要删除选中的记录？', {
+			                      btn: ['确定', '取消']
+			                  }, function () {
+			                      $.ajax({
+			                          url: "/sysFile/remove",
+			                          type: "post",
+			                          data: {
+			                              'id': id
+			                          },
+			                          success: function (r) {
+			                              if (r.code == 20000) {
+			                            	  ids = [];
+			                            	  layer.msg(r.message);
+			                                  app.getData();
+			                              } else {
+			                                  layer.msg(r.message);
+			                                  app.getData();
+			                              }
+			                          }
+			                      });
+			                  })
+
+			        	  }else{
+			        		  layer.confirm('确定要全选删除记录？', {
+			                      btn: ['确定', '取消']
+			                  }, function () {
+			                      $.ajax({
+			                          url: "/sysFile/batchRemove",
+			                          type: "post",
+			                          dataType:"json",
+			                          data: {
+			                              'ids': ids
+			                          },
+			                          success: function (r) {
+			                              if (r.code == 20000) {
+			                                  layer.msg(r.message);
+			                                  app.getData();
+			                              } else {
+			                                  layer.msg(r.message);
+			                                  app.getData();
+			                              }
+			                          }
+			                      });
+			                  })
+			        	  }
+		        	 }
+
+		          }else if(properties.key=="download"){
+		        	  if(url!="" && url!=undefined){
+                          if(type==0){
+                              window.location.href="/sysFile/download?url="+url;
+		        		  }else{
+                              if(fileurl!="" && fileurl!=undefined){
+                                  window.location.href="/sysFile/download?url="+fileurl;
+                              }else{
+                                  layer.msg("请选择文件");
+                              }
+		        		  }
+		        	  }else{
+		        		  layer.msg("请选择图片");
+		        	  }
+
+		          }else if(properties.key=="preview"){
+		        	  //预览功能
+		        	if(url!="" && url!=undefined){
+		        		if(type==0){
+                            var furl = url;
+                            var winHeight = window.document.documentElement.clientHeight-10;
+                            window.open(furl, "_blank", "height=" + winHeight
+                                + ",top=0,left=0,toolbar=no, menubar=no, scrollbars=no, resizable=no");
+		        		}else{
+                            if(fileurl!="" && fileurl!=undefined) {
+                                var furl = fileurl;
+                                var winHeight = window.document.documentElement.clientHeight - 10;
+                                window.open(furl, "_blank", "height=" + winHeight
+                                    + ",top=0,left=0,toolbar=no, menubar=no, scrollbars=no, resizable=no");
+                            }else{
+                                layer.msg("请选择文件");
+                            }
+
+		        		}
+		        	}else{
+		        		 layer.msg("没有选中内容");
+		        	}
+		          }
+		      };
+  		      let _menuItems = [
+
+  		          {
+  		              type: "title",
+  		              text: "菜单"
+  		          },
+  		          {
+  		              type: "item",
+  		              icon: "check-square-o",
+  		              text: "全选",
+  		              key: "all",
+  		              action: _debug
+
+  		          },
+ 		         {
+ 		              type: "item",
+ 		              icon: "external-link",
+ 		              text: "预览",
+ 		              key: "preview",
+ 		              action: _debug
+
+ 		          },
+		          {
+		              type: "item",
+		              icon: "cloud-download",
+		              text: "下载",
+		              key: "download",
+		              action: _debug
+
+		          },
+  		          {
+  		              type: "item",
+  		              icon: "clone",
+  		              text: "复制",
+  		              key: "copy",
+  		              action: _debug
+  		              
+  		          },
+		          {
+		              type: "item",
+		              icon: "trash-o",
+		              text: "删除",
+		              key: "delect",
+  		              action: _debug
+		              
+		          },
+  		          {
+  		              type: "divider"
+  		          },
+  		          {
+  		              type: "item",
+  		              icon: "refresh",
+  		              text: "刷新",
+  		              action: function()
+  		              {
+  		                  window.location.reload();
+  		              }
+  		          },
+  		          {
+  		              type: "item",
+  		              icon: "home",
+  		              text: "返回",
+  		              action: function()
+  		              {
+  		                  window.history.go(-1);
+  		              }
+  		          }
+  		      ];
+  		      
+  		    //监听鼠标右键事件
+  		    $(document).mousedown(function(e){
+  		    	if(3 == e.which){
+
+  		    	  //获取事件点击元素    
+  		    	  copy = $(e.target).attr('src')==undefined?$(e.target).parent().parent().parent().find(".copy"):$(e.target).parent().parent().parent().parent().parent().find(".copy");
+  		          var targ = e.target;    
+  		          //获取元素名称    
+  		          var tname = targ.tagName;   
+  		          url = $(e.target).attr('src')==undefined?$(e.target).parents().find("img").attr("src"):$(e.target).attr('src');
+  		          fileurl = $(e.target).attr('url')==undefined?$(e.target).parents().find("img").attr("url"):$(e.target).attr('url');
+  		          type = $(e.target).attr('type')==undefined?$(e.target).parents().attr("type"):$(e.target).attr('type');
+  		          id  = $(e.target).find(".file-rId").val()==undefined?$(e.target).parents().next().find(".file-rId").val():$(e.target).find(".file-rId").val();
+  		          //根据鼠标显示右键菜单显示
+  		          $(window).contextMenu({
+  		 		          items: _menuItems,
+  		 		  });
+  		    		
+
+  		    	}
+  		    });
+  		    
+  		   var flag=true;
+  		   //ctrl+a快捷实现全选
+  		   $(document).keydown(function(objEvent) { 
+  			 
+  			  if (objEvent.ctrlKey) {   
+  			   if (objEvent.keyCode == 65) { 
+  				 $(".file").addClass("addColor");
+ 	        	 $(".file-name").css("background-color","#99ccff");
+  				 if(flag){
+	 				 //给所有全选加上样式
+	 	        	 var $inputArr = $('input[name="ids"]');//length = 3
+	 	        	 //3.循环处理input,并定义结果集
+	 	        	 $inputArr.each(function(){
+	 	        	 //4.将每个input的值放进结果集
+	 	        	      ids.push($(this).val());
+	 	             });
+  	        	  flag=false;
+  				 }
+  			    return false;
+  			   }  
+  			  }  
+  			 });
+  		   
+  		   
+  		   $(document).click(function(){
+  			 ids = [];
+  			 $(".file").removeClass("addColor");
+  			 $(".file-name").css("background-color","#f8f8f8");
+  		   })
+  		   
+  		});
+</script>
+</body>
+</html>

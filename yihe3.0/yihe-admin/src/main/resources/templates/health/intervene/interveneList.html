@@ -1,0 +1,819 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, maximum-scale=1">
+<title>干预管理</title>
+<link rel="stylesheet" th:href="@{/assets/libs/layui/css/layui.css}" />
+<link rel="stylesheet" th:href="@{/assets/module/admin.css}" />
+<link rel="stylesheet" th:href="@{/assets/css/formSelects-v4.css}" />
+<style type="text/css">
+.layui-card-body{
+    padding: 10px 0px;
+}
+.layui-fluid {
+    padding: 15px 0px;
+}
+
+.toolbar{
+margin-left: -23px;
+}
+</style>
+</head>
+<body>
+	<!-- 加载动画 -->
+	<div class="page-loading">
+		<div class="ball-loader">
+			<span></span><span></span><span></span><span></span>
+		</div>
+	</div>
+	<div id="box1" style="display: none;">
+
+		<form id="modelUserForm" lay-filter="modelUserForm"
+			class="layui-form model-form">
+			<div class="layui-form-item">
+				<label class="layui-form-label">分组</label>
+				<div class="layui-input-block">
+					<select name="groupingStr" xm-select="select1"
+						lay-verify="required" , lay-verType="tips">
+						<option th:each="glist:${YHDocGroup}"
+							th:value="${glist.uDocgroupId}">[[${glist.gname}]]</option>
+
+					</select>
+				</div>
+
+			</div>
+
+
+			<div class="layui-form-item text-right">
+				<button class="layui-btn layui-btn-primary" type="button"
+					ew-event="closePageDialog">取消</button>
+				<button class="layui-btn" lay-filter="formDemo" lay-submit>保存</button>
+			</div>
+		</form>
+
+	</div>
+	<div id="box2" style="display: none;">
+
+		<form id="modelUserForm2" lay-filter="modelUserForm2"
+			class="layui-form model-form">
+			<div class="layui-form-item">
+				<label class="layui-form-label">分组</label>
+				<div class="layui-input-block">
+					<select name="groupingStr" xm-select="select2"
+						lay-verify="required" , lay-verType="tips">
+						<option th:each="glist:${YHDocGroup}"
+							th:value="${glist.uDocgroupId}">[[${glist.gname}]]</option>
+
+					</select>
+				</div>
+
+			</div>
+
+
+			<div class="layui-form-item text-right">
+				<button class="layui-btn layui-btn-primary" type="button"
+					ew-event="closePageDialog">取消</button>
+				<button class="layui-btn" lay-filter="formDemo2" lay-submit>保存</button>
+			</div>
+		</form>
+
+	</div>
+<div class="layui-row layui-col-space15"  style="padding: 20px;">
+		<div class="layui-card">
+	<div class="layui-tab layui-tab-brief" lay-filter="demo">
+		<ul class="layui-tab-title">
+			<!-- <li class="layui-this">用户干预</li> -->
+			<li>分组管理</li>
+		</ul>
+		<div class="layui-tab-content">
+			<div class="layui-tab-item">
+				<div class="layui-fluid">
+					<div class="layui-card">
+						<div class="layui-card-body">
+
+							<div class="layui-form toolbar">
+								<div class="layui-form-item">
+									<div class="layui-inline">
+										<label class="layui-form-label">分&emsp;&emsp;组：</label>
+										<div class="layui-input-block" style="width: 270px;">
+											<select name="infoType" id="infoType">
+											<option value="">全部</option>
+												<option th:each="glist:${YHDocGroup}"
+							th:value="${glist.uDocgroupId}">[[${glist.gname}]]</option>
+												
+											</select>
+										</div>
+									</div>
+
+									<div class="layui-inline">
+										<label class="layui-form-label" style="width:auto">开始干预时间：</label>
+										<div class="layui-input-inline" style="width: 300px;">
+											<input type="text" style="width: 300px;" class="layui-input" id="test10" placeholder=" - ">
+										</div>
+									</div>
+
+
+									<div class="layui-inline">
+										<label class="layui-form-label">姓&emsp;&emsp;名：</label>
+										<div class="layui-input-inline">
+											<input name="name" id="name" class="layui-input"
+												type="text" placeholder="输入姓名" />
+										</div>
+									</div>
+
+									<div class="layui-inline" style="padding-left: 20px;">
+										<button class="layui-btn icon-btn sousuo" data-type="reload"><i class="layui-icon"></i>搜索</button>
+										<button class="layui-btn layui-btn-primary" id="btnempty" lay-submit="" lay-filter="reset">清除</button>
+									</div>
+
+
+									<!-- <div class="layui-inline pull-right" style="margin-right: 0;">
+										<div class="layui-btn-group">
+
+											<a href="#" onclick="screeningList()"
+												class="layui-btn icon-btn" style="border-left: none;">
+												高级筛选 </a>
+										</div>
+									</div> -->
+
+								</div>
+							</div>
+							<!-- 批量操作 已选择 <span id="NumBer">0</span> 项 <a href="#" id="qingkong"></a>
+							<div class="layui-btn-group demoTable">
+								<button class="layui-btn" data-type="quxiao">取消干预</button>
+								<button class="layui-btn" data-type="xuanzefenzu">选择分组</button>
+								<button class="layui-btn" data-type="yichufenzu">移除分组</button>
+							</div>  -->
+											 <!-- 批量操作 -->
+			<div id="piliang" class="layui-form toolbar" style="background-color: #e6f7ff;height: 40px;margin-top: 10px;margin-bottom: 10px;display: none">
+				<span style="font-size: 14px;color: #505050;line-height: 40px;margin-left: 9px;">批量操作</span>
+				<img alt="" src="">
+				<span  id="xuanze">已选择**项</span>
+				<span id="clickxuan" style="color: #1890ff;margin-left: 15px;">清空</span>
+				<button id="fenpeizishi" style="width: 100px;height: 32px;float: right;margin-right: 16px;margin-top: 5px"   class="layui-btn layui-btn-primary">取消干预&emsp;</button>
+				<button id="xzfenzu" style="width: 100px;height: 32px;float: right;margin-right: 16px;margin-top: 5px"   class="layui-btn layui-btn-primary">选择分组&emsp;</button>
+                <button id="yichufenzu" style="width: 100px;height: 32px;float: right;margin-right: 16px;text-align: center;margin-top: 5px"  class="layui-btn layui-btn-primary">移除分组&emsp;</button>
+			</div>
+							<table class="layui-hide" id="pinggu" lay-filter="pinggu"></table>
+
+						</div>
+					</div>
+				</div>
+
+			</div>
+			<!-- 评估记录 -->
+			<div class="layui-tab-item layui-show">
+				<div class="layui-fluid">
+
+					<div class="layui-card">
+						<div class="layui-card-body">
+							<div class="layui-form toolbar">
+								<div class="layui-form-item">
+										<span class="pull-left" style="    padding-left: 22px;"><h1>分组</h1></span>
+									<div class="layui-inline pull-right" style="margin-right: 0;">
+										<div class="layui-btn-group">
+
+											 
+										<button id="btnAdd" class="layui-btn icon-btn">
+											<i class="layui-icon">&#xe654;</i>添加
+										</button>
+									 
+										</div>
+									</div>
+									
+								</div>
+							</div>
+
+							<table class="layui-hide" id="fenzu" lay-filter="fenzu"></table>
+						</div>
+					</div>
+				</div>
+
+			</div>
+
+
+		</div>
+	</div>
+	</div>
+	</div>
+	<!-- 正文开始 -->
+
+<script type="text/html" id="tableBar">
+ 
+	{{# if(d.sort==1){ }}
+        
+	 
+    {{# }else{ }}
+    <a href="#" style="color:#36A4FF" lay-event="edit">修改</a>
+	<a href="#" style="color:#36A4FF" lay-event="del">删除</a>
+	
+    {{# } }}
+    
+</script>
+	 
+	<!-- 表单弹窗 -->
+	<script type="text/html" id="modelUser">
+    <form id="modelUserForm" lay-filter="modelUserForm" class="layui-form model-form">
+        <div class="layui-form-item">
+            <label class="layui-form-label">分组名称</label>
+            <div class="layui-input-block">
+                <input name="gname" placeholder="请输入名称" type="text" class="layui-input"
+                       lay-verType="tips" lay-verify="required" required/>
+            </div>
+			<div class="layui-input-block">
+                <input name="uDocgroupId"  type="hidden" />
+            </div>
+        </div>
+       
+         
+        <div class="layui-form-item text-right">
+            <button class="layui-btn layui-btn-primary" type="button" ew-event="closePageDialog">取消</button>
+            <button class="layui-btn" lay-filter="modelSubmitUser" lay-submit>保存</button>
+        </div>
+    </form>
+</script>
+
+
+	<!-- js部分 -->
+	<script type="text/javascript" th:src="@{/assets/libs/layui/layui.js}"></script>
+	<script type="text/javascript" th:src="@{/assets/js/common.js}"></script>
+	<script type="text/javascript"
+		th:src="@{/assets/js/formSelects-v4.min.js}"></script>
+	<script>
+		layui
+				.use(
+						[ 'layer', 'form', 'table', 'util', 'dropdown',
+								'laypage', 'treeSelect', 'admin', 'element',
+								'formSelects','laydate' ],
+						function() {
+							var $ = layui.jquery;
+							var layer = layui.layer;
+							var form = layui.form;
+							var table = layui.table;
+							var util = layui.util;
+							var dropdown = layui.dropdown;
+							var laypage = layui.laypage;
+							var element = layui.element;
+							var admin = layui.admin;
+							var form = layui.form;
+							 var laydate = layui.laydate;
+							  
+							 
+							 
+								//这是Layui 给 后台添加的映射  映射controller 的实体类
+								var $ = layui.$, active2 = {
+									reload : function() {
+										//获取 上面input 值
+
+										var usernameLike = $('#name').val();
+										var startTime = $('#test10').val();
+										var infoType = $('#infoType').val();
+										 
+										//执行重载
+										table.reload('pinggu', {
+											page : {
+												curr : 1
+											//重新从第 1 页开始
+											},
+											where : {
+												//这里注意一定要跟Bean 里面的属性对应
+												fenzu : infoType,
+												startTime : startTime,
+												usernameLike:usernameLike
+												
+											}
+										});
+									}
+								};
+								
+								
+								//这个是搜索按钮事件， 找到你的搜索按钮 获取搜索按钮点击事件。只需要把$(’’)这里面的内容修改了就可以了。
+								$('.sousuo').on('click', function() {
+
+									var type = $(this).data('type');
+									active2[type] ? active2[type].call(this) : '';
+
+								});
+								
+								
+							 //日期时间范围
+							  laydate.render({
+							    elem: '#test10'
+							    ,type: 'datetime'
+							    ,range: true,
+								  trigger: 'click'
+							  });
+							//监听提交
+							form
+									.on(
+											'submit(formDemo)',
+											function(data2) {
+
+												var checkStatus = table
+														.checkStatus('usercode'), data = checkStatus.data;
+
+												//layer.msg(JSON.stringify(data));
+												//layer.msg(JSON.stringify(data2.field));
+												//layer.msg(JSON.stringify({"record":data, "city":data2.field}));
+
+												$
+														.ajax({
+															type : "post",
+															url : "/intervene/batchGrouping",
+															contentType : 'application/json;charset=UTF-8', //发送信息至服务器时内容编码类型
+															traditional : true, //传统的方式来序列化数据
+															data : JSON
+																	.stringify({
+																		"record" : data,
+																		"city" : data2.field
+																	}),
+
+															success : function(
+																	data) {
+																$("#piliang").css("display","none");
+													        	$("input[name='layTableCheckbox']").each(function(){
+													 				 $(this).prop('checked', false);
+													 			  });
+
+																insTb
+																		.reload(
+																				'pinggu',
+																				{
+																					url : '/intervene/findInterveneListInfo',
+																					where : {}
+																				});
+															}
+														});
+												layer.closeAll();
+												return false;
+											});
+
+							//监听提交 移除
+							form
+									.on(
+											'submit(formDemo2)',
+											function(data2) {
+
+												var checkStatus = table
+														.checkStatus('usercode'), data = checkStatus.data;
+
+												//layer.msg(JSON.stringify(data));
+												//layer.msg(JSON.stringify(data2.field));
+												//layer.msg(JSON.stringify({"record":data, "city":data2.field}));
+
+												$
+														.ajax({
+															type : "post",
+															url : "/intervene/removeGrouping",
+															contentType : 'application/json;charset=UTF-8', //发送信息至服务器时内容编码类型
+															traditional : true, //传统的方式来序列化数据
+															data : JSON
+																	.stringify({
+																		"record" : data,
+																		"city" : data2.field
+																	}),
+
+															success : function(
+																	data) {
+																$("#piliang").css("display","none");
+													        	$("input[name='layTableCheckbox']").each(function(){
+													 				 $(this).prop('checked', false);
+													 			  });
+
+																insTb
+																		.reload(
+																				'pinggu',
+																				{
+																					url : '/intervene/findInterveneListInfo',
+																					where : {}
+																				});
+															}
+														});
+												layer.closeAll();
+												return false;
+											});
+							//监听表格复选框选择
+							table
+									.on(
+											'checkbox(pinggu)',
+											function(obj) {
+												console.log(obj)
+												var checkStatus = table
+														.checkStatus('usercode'), data = checkStatus.data;
+												$("#NumBer").html(data.length)
+
+											});
+
+							var $ = layui.$, active = {
+								getCheckData : function() { //获取选中数据
+									var checkStatus = table
+											.checkStatus('usercode'), data = checkStatus.data;
+									layer.alert(JSON.stringify(data));
+								},
+								getCheckLength : function() { //获取选中数目
+									var checkStatus = table
+											.checkStatus('usercode'), data = checkStatus.data;
+									layer.msg('选中了：' + data.length + ' 个');
+								},
+								isAll : function() { //验证是否全选
+									var checkStatus = table
+											.checkStatus('usercode');
+									layer.msg(checkStatus.isAll ? '全选' : '未全选')
+								},
+								quxiao : function() { //取消干预
+									var checkStatus = table
+											.checkStatus('usercode'), data = checkStatus.data;
+									if (data.length > 0) {
+										layer
+												.confirm(
+														'真的取消么',
+														function(index) {
+
+															$
+																	.ajax({
+																		type : "post",
+																		url : "/intervene/cancelIntervention",
+																		contentType : 'application/json;charset=UTF-8', //发送信息至服务器时内容编码类型
+																		traditional : true, //传统的方式来序列化数据
+																		data : JSON
+																				.stringify(data),
+																		success : function(
+																				data) {
+																			layer
+																					.close(index);
+																			insTb
+																					.reload(
+																							'pinggu',
+																							{
+																								url : '/intervene/findInterveneListInfo',
+																								where : {}
+																							});
+																		}
+																	});
+
+														});
+									} else {
+										layer.msg('您未选择')
+									}
+
+								},
+								xuanzefenzu : function() {  
+									var checkStatus = table
+											.checkStatus('usercode'), data = checkStatus.data;
+									if (data.length > 0) {
+										layer.open({
+											type : 1,
+											title : "分组" //不显示标题栏
+											,
+											area : [ '490px', '360px' ],
+											shade : 0.8,
+											id : 'LAY_layuipro' //设定一个id，防止重复弹出
+											,
+											moveType : 1 //拖拽模式，0或者1
+											,
+											content : $('#box1'),
+											success : function(layero) {
+												
+											}
+										});
+									} else {
+										layer.msg('您未选择')
+									}
+								},
+								yichufenzu : function() { //验证是否全选
+									var checkStatus = table
+									.checkStatus('usercode'), data = checkStatus.data;
+							if (data.length > 0) {
+									layer.open({
+										type : 1,
+										title : "分组" //不显示标题栏
+										,
+										area : [ '490px', '360px' ],
+										shade : 0.8,
+										id : 'LAY_layuipro2' //设定一个id，防止重复弹出
+										,
+										moveType : 1 //拖拽模式，0或者1
+										,
+										content : $('#box2'),
+										success : function(layero) {
+											 
+										}
+									});
+							} else {
+								layer.msg('您未选择')
+							}
+								}
+								
+							};
+
+							$('.demoTable .layui-btn').on('click', function() {
+								var type = $(this).data('type');
+								active[type] ? active[type].call(this) : '';
+							});
+
+							$('#btnAdd').click(function() {
+								showEditModel();
+							});
+							$('#qingkong').click(function() {
+
+							});
+							
+							$("#yichufenzu").click(function (){
+								var checkStatus = table
+								.checkStatus('usercode'), data = checkStatus.data;
+						if (data.length > 0) {
+								layer.open({
+									type : 1,
+									title : "分组" //不显示标题栏
+									,
+									area : [ '490px', '360px' ],
+									shade : 0.8,
+									id : 'LAY_layuipro2' //设定一个id，防止重复弹出
+									,
+									moveType : 1 //拖拽模式，0或者1
+									,
+									content : $('#box2'),
+									success : function(layero) {
+										
+							        
+									}
+								});
+						} else {
+							layer.msg('您未选择')
+						}
+							})
+							
+							 $("#xzfenzu").click(function (){
+								var checkStatus = table
+										.checkStatus('usercode'), data = checkStatus.data;
+								if (data.length > 0) {
+									layer.open({
+										type : 1,
+										title : "分组" //不显示标题栏
+										,
+										area : [ '490px', '360px' ],
+										shade : 0.8,
+										id : 'LAY_layuipro' //设定一个id，防止重复弹出
+										,
+										moveType : 1 //拖拽模式，0或者1
+										,
+										content : $('#box1'),
+										success : function(layero) {
+										
+										}
+									});
+								} else {
+									layer.msg('您未选择')
+								}
+							})
+							 $("#fenpeizishi").click(function (){
+								 
+								 //取消干预
+									var checkStatus = table
+											.checkStatus('usercode'), data = checkStatus.data;
+									if (data.length > 0) {
+										layer
+												.confirm(
+														'真的取消么',
+														function(index) {
+
+															$
+																	.ajax({
+																		type : "post",
+																		url : "/intervene/cancelIntervention",
+																		contentType : 'application/json;charset=UTF-8', //发送信息至服务器时内容编码类型
+																		traditional : true, //传统的方式来序列化数据
+																		data : JSON
+																				.stringify(data),
+																		success : function(
+																				data) {
+																			layer
+																					.close(index);
+																			insTb
+																					.reload(
+																							'pinggu',
+																							{
+																								url : '/intervene/findInterveneListInfo',
+																								where : {}
+																							});
+																		}
+																	});
+
+														});
+									} else {
+										layer.msg('您未选择')
+									}
+
+							 })
+							 
+							  //清除按钮
+					        $("#btnempty").click(function(){
+					        	window.location.reload()
+					         
+					        })
+					        
+					         table.on('checkbox(pinggu)', function(obj){
+								 var checkStatus = table.checkStatus('usercode');
+								 console.log(obj)
+								 var data = checkStatus.data;
+								 //layer.msg('选中了：'+ data.length + ' 个');
+						        	 //var checkStatus = table.checkStatus('tableAuth');
+						        	 
+								 if(data.length!=0){
+						        		$("#xuanze").html("已选择"+data.length+"项")
+						        		$("#piliang").css("display","block")
+						        	}else{
+						        		$("#piliang").css("display","none")
+						        	}
+						        });
+							  
+					      //清空按钮
+					        $("#clickxuan").click(function (){
+					        	$("#piliang").css("display","none");
+					        	$("input[name='layTableCheckbox']").each(function(){
+					 				 $(this).prop('checked', false);
+					 			  });
+					         
+					        /* 	$(".layui-form-checkbox").removeClass("layui-form-checked");
+					        	var myCheckbox = $("input[name='layTableCheckbox']");
+					        	myCheckbox.prop('checked', false); //切换下拉选项时，清空所有选中状态
+					        	//form.render('checked');//记得每次操作后要渲染该元素 */
+					        	
+									table.reload('usercode',{})
+					        	
+					        })
+
+							function showEditModel(mData) {
+								admin
+										.open({
+											type : 1,
+											title : mData ? '修改' : '添加',
+											content : $('#modelUser').html(),
+											success : function(layero, dIndex) {
+												form
+														.val('modelUserForm',
+																mData);
+												
+												
+												form
+														.on(
+																'submit(modelSubmitUser)',
+																function(data) {
+																	if (mData) {
+																		console
+																				.log(data.field)
+
+																		$
+																				.ajax({
+																					type : "post",
+																					url : "/intervene/addGroupInfo",
+																					contentType : 'application/json;charset=UTF-8', //发送信息至服务器时内容编码类型
+																					traditional : true, //传统的方式来序列化数据
+																					data : JSON
+																							.stringify(data.field),
+																					success : function(
+																							data) {
+
+																					}
+																				});
+																	} else {
+																		console
+																				.log(data.field)
+
+																		$
+																				.ajax({
+																					type : "post",
+																					url : "/intervene/addGroupInfo",
+																					contentType : 'application/json;charset=UTF-8', //发送信息至服务器时内容编码类型
+																					traditional : true, //传统的方式来序列化数据
+																					data : JSON
+																							.stringify(data.field),
+																					success : function(
+																							data) {
+
+																					}
+																				});
+
+																	}
+																	insTb2
+																			.reload(
+																					'fenzu',
+																					{
+																						url : '/intervene/findGroupListInfo',
+																						where : {}
+																					});
+																	layer
+																			.close(dIndex);
+																 
+																});
+											}
+										});
+							}
+
+							// 工具条点击事件
+							table
+									.on(
+											'tool(fenzu)',
+											function(obj) {
+												var data = obj.data;
+												var id = data.uDocgroupId;
+												var layEvent = obj.event;
+												if (layEvent === 'edit') { // 修改
+													showEditModel(data);
+												} else if (layEvent === 'del') { // 删除
+													layer
+															.confirm(
+																	'真的删除行么',
+																	function(
+																			index) {
+																		obj
+																				.del(); //删除对应行（tr）的DOM结构
+																		layer
+																				.close(index);
+																		//向服务端发送删除指令
+																		$
+																				.post(
+																						"/intervene/delGroupInfo",
+																						{
+																							uDocgroupId : id
+																						},
+																						function(
+																								result) {
+																							insTb2
+																									.reload(
+																											'fenzu',
+																											{
+																												url : '/intervene/findGroupListInfo',
+																												where : {}
+																											});
+																						});
+																	});
+
+												}
+
+											});
+
+						 
+							 table.on('tool(pinggu)', function(obj) {  
+						            var data = obj.data;
+						            var layEvent = obj.event;
+						            console.log(obj)
+						            if (layEvent === 'edit') { // 查看
+						            	window.open("/manage/register/userIndex?page=summary&userCode="+data.usercode+"&type2=2");
+						            }
+						        });
+
+							var insTb2 = table.render({
+								elem : '#fenzu',
+								url : '/intervene/findGroupListInfo',
+							 
+								page : true,
+								cols : [ [ {
+									type : 'numbers',
+									title : '序号'
+								}, {
+									field : 'gname',
+									title : '分组名'
+								}, {
+									field : 'userCount',
+									title : '组员数量',
+									sort : true,
+									width : 160
+								}, {
+									field : 'establishTime',
+									title : '创建时间',
+									sort : true,
+									width : 260
+								}, {
+									align : 'center',
+									toolbar : '#tableBar',
+									title : '操作',
+									width : 160
+								} ] ],
+								response : {
+
+									statusCode : 0
+								//规定成功的状态码，默认：0
+
+								},
+
+								parseData : function(res) { //将原始数据解析成 table 组件所规定的数据
+									return {
+										"code" : res.data.code, //解析接口状态
+										"msg" : res.data.msg, //解析提示文本
+										"count" : res.data.count, //解析数据长度
+										"data" : res.data.data
+									//解析数据列表
+									}
+
+								}
+							});
+
+						});
+	</script>
+</body>
+
+</html>

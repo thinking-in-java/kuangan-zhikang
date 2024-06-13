@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, maximum-scale=1">
+<title>聊天记录管理</title>
+<link rel="stylesheet" th:href="@{/assets/libs/layui/css/layui.css}" />
+<link rel="stylesheet" th:href="@{/assets/module/admin.css}" />
+<link rel="stylesheet" th:href="@{/assets/css/chat/reset.min.css}" />
+<link rel="stylesheet" th:href="@{/assets/css/chat/style.css}" />
+</head>
+<body>
+<div class="wrapper">
+	<div class="container">
+        <div class="left"></div>
+        <div class="right">
+            <div class="top"><span>To: <span class="name">[[${username}]]</span></span></div>
+           
+            <div class="chat active-chat" data-chat="person1">
+                <!-- <div class="conversation-start">
+                    <span>Today, 5:38 PM</span>
+                </div> -->
+                <block th:each="chat : ${chatList}">
+                	<block th:if="${chat.userCode==usercode}">
+                		   <div class="bubble you">
+                   			[[${chat.message}]]
+               				 </div>
+               				 <div class="bubble you2" style="float: left;padding:0px;font-size: 13px;">
+				   				 [[${chat.addtimeinfo}]]
+							</div>
+                 			
+					</block>
+					<block th:if="${chat.userCode!=usercode}">
+                		   <div class="bubble me">
+                   			[[${chat.message}]]
+               				 </div>
+               				 <div class="bubble me2" style="float: right;padding:0px; font-size: 13px;">
+				   				 [[${chat.addtimeinfo}]]
+							</div>
+                 			
+					</block>
+					
+               </block>
+            </div>
+            
+            <div class="write">
+                
+                <input id="content" type="text" />
+                <button type="button"  class="layui-btn fasong">发送</button>
+            </div>
+            
+        </div>
+    </div>
+</div>
+
+ 
+<!-- js部分 -->
+<script type="text/javascript" th:src="@{/assets/js/jquery-1.11.1.js}"></script>
+<script type="text/javascript" th:src="@{/assets/libs/layui/layui.js}"></script>
+<script type="text/javascript" th:src="@{/assets/js/common.js}"></script>
+
+ <script type="text/javascript" src="https://cdn-hangzhou.goeasy.io/goeasy.js"></script>
+
+
+<script type="text/javascript" th:inline="javascript">
+var data1=[[${usercode}]];
+console.log("data1",data1)
+
+//获取高度
+$(".active-chat").scrollTop($(".active-chat")[0].scrollHeight);
+	layui.use([ 'layer', 'form', 'laydate', 'notice' ],function() {
+						var $ = layui.jquery;
+						var layer = layui.layer;
+						var form = layui.form;
+						var laydate = layui.laydate;
+						var notice = layui.notice;
+						
+						//执行一个laydate实例
+						laydate.render({
+							trigger: 'click',
+							elem : '#test1' //指定元素
+						});
+						
+						 function getCurrentDate(date){
+					          var y = date.getFullYear();
+					          var m = date.getMonth()+1;
+					          var d = date.getDate();
+					          var h = date.getHours();
+					          var min = date.getMinutes();
+					          var s = date.getSeconds();
+					          var str=y+'-'+(m<10?('0'+m):m)+'-'+(d<10?('0'+d):d)+' '+(h<10?('0'+h):h)+':'+(min<10?('0'+min):min)+':'+(s<10?('0'+s):s);
+					         
+							  return str;
+					      }
+						
+						 var usercode= [[${usercode}]];
+						 var doctorid= [[${doctorid}]];
+							
+							
+						
+						
+						//回车事件绑定
+						$('#content').bind('keyup', function(event) {
+						　　if (event.keyCode == "13") {
+						　　　　//回车执行查询
+						　　　　$('.fasong').click();
+						　　}
+						});
+						
+						
+						
+					    $(".person").click(function(){
+					    	
+					    	console.log($(this).data('usercode'));
+					    	usercode=$(this).data('usercode');
+					    	$(".active-chat").scrollTop($(".active-chat")[0].scrollHeight);
+					    	
+					    })
+					    $(".fasong").click(function(){
+					    	console.log(usercode) 
+					    	 
+					    		var publishMessage = document.getElementById("content").value;
+					    	if(''==publishMessage){
+					    		return;
+					    	}
+					    	
+					    	
+					    	 $.ajax({
+									type:"post",
+									url:"/instantChat/statusWXUser",
+									data:{usercode:usercode},
+									success:function(data){
+										 	 console.log("查询在线状态返回",data.data)
+										 	if(data.data==1){
+										 		sendPublishMessage(usercode);
+									    	}else{
+									    	
+									    		console.log("不在线发送订阅通知");
+									    		sendDingYue();
+									    		appendHtmlMe(publishMessage);
+							    				addChatMessage(publishMessage);
+							    				document.getElementById("content").value='';
+							    				$(".active-chat").scrollTop($(".active-chat")[0].scrollHeight);
+									    	}
+									} 
+								}); 
+					    	 
+					    	 
+						    	
+						    }) 
+						    
+						    //查询在线状态
+						/*     function statusWxUser(){
+					    	var status=null;
+					    	  $.ajax({
+									type:"post",
+									url:"/instantChat/statusWXUser",
+									data:{usercode:usercode},
+									success:function(data){
+										 	 console.log("查询在线状态返回",data.data)
+										 	status=data.data;
+									} 
+								});  
+					    	  return status;
+					    } */
+						    
+						    //发送订阅消息
+						    function sendDingYue(){
+						    	var publishMessage = document.getElementById("content").value;
+					    		  $.ajax({
+										type:"post",
+										url:"/instantChat/sendMessage",
+										data:{usercode:usercode,message:publishMessage},
+										success:function(data){
+											 	console.log(data)
+											 	if("success"==data.data){
+											 		
+											 	}
+										} 
+									});  
+					    }
+						    
+						 
+						    var goeasy = new GoEasy({
+					    		appkey: 'BC-263ee595e9cf42d1a74c8ef3148a91c5'
+					    	});
+					    
+					    modifyRead(); 
+					    goeasy.subscribe({
+							channel: doctorid,
+							onMessage: function(message){
+								//收到消息的第一行，打出日志，以这个时间作为检查的标准
+								
+								  console.log("Channel:" + message.channel + " content:" + message.content);
+								  console.log(JSON.stringify(message));
+								appendHtmlYou(message.content);
+								$(".active-chat").scrollTop($(".active-chat")[0].scrollHeight);
+							}
+						});
+					   
+					    	
+					    	function appendHtmlMe(value){
+					    		var content='<div class="bubble me">'
+		                   			+ value
+		               				+' </div>'
+		               				+' <div class="bubble me2" style="float: right;padding:0px; font-size: 13px;">'
+						   				+  getCurrentDate(new Date());
+									+'</div>';
+									$(".active-chat").append(content)
+					    	}
+					    	
+					    	function appendHtmlYou(value,usercode){
+					    		var content='<div class="bubble you">'
+		                   			+ value
+		               				+' </div>'
+		               				+' <div class="bubble you2" style="float: left;padding:0px; font-size: 13px;">'
+						   				+  getCurrentDate(new Date());
+									+'</div>';
+									$(".active-chat").append(content)
+									modifyRead();
+					    	}
+
+					    	function sendPublishMessage(usercodeValue) {
+					    		console.log("usercodesend",usercodeValue);
+					    		var publishMessage = document.getElementById("content").value;
+					    		goeasy.publish({
+					    			channel: usercodeValue,
+					    			message: publishMessage,
+					    			onFailed: function (error) {
+					    				alert(error.code+" : "+error.content);
+					    			},
+					    			onSuccess: function(){
+					    				appendHtmlMe(publishMessage);
+					    				addChatMessage(publishMessage);
+					    				document.getElementById("content").value='';
+					    				$(".active-chat").scrollTop($(".active-chat")[0].scrollHeight);
+					    			}
+					    		});
+					    	}
+			
+					    	
+					    	//添加聊天记录
+					    	function addChatMessage(value){
+					    		  $.ajax({
+										type:"post",
+										url:"/instantChat/addChatListInfo",
+										contentType:'application/json;charset=UTF-8',	//发送信息至服务器时内容编码类型
+										data:JSON.stringify({"toUserCode":usercode,"message":value}),
+										success:function(data){
+											 	console.log(data)
+										} 
+									});  
+					    	}
+					    	
+					    	function modifyRead(){
+					    		var data={usercode:usercode}
+					    		console.log(data)
+					    		  $.ajax({
+										type:"post",
+										url:"/instantChat/readInfo",
+										data:{usercode:usercode},
+										success:function(data){
+											 	console.log(data)
+										} 
+									});  
+					    	}
+						 
+					    	
+					    	 
+						  
+						 
+						
+					   
+					   
+					});
+</script>
+<script type="text/javascript" th:src="@{/assets/js/chat/index.js}"></script>
+</html>
+

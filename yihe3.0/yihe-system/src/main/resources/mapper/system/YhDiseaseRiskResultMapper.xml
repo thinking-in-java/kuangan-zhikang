@@ -1,0 +1,709 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yihe.system.mapper.YhDiseaseRiskResultMapper">
+  <resultMap id="BaseResultMap" type="com.yihe.system.domain.YhDiseaseRiskResult">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="diseaseId" jdbcType="VARCHAR" property="diseaseid" />
+    <result column="user_code" jdbcType="VARCHAR" property="userCode" />
+    <result column="request_serialize" jdbcType="VARCHAR" property="requestSerialize" />
+    <result column="qname" jdbcType="VARCHAR" property="qname" />
+    <result column="qcode" jdbcType="VARCHAR" property="qcode" />
+    <result column="qvalue" jdbcType="VARCHAR" property="qvalue" />
+    <result column="last_value" jdbcType="VARCHAR" property="lastValue" />
+    <result column="changes" jdbcType="VARCHAR" property="changes" />
+    <result column="optimal" jdbcType="VARCHAR" property="optimal" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+    <result column="qtime" jdbcType="TIMESTAMP" property="qtime" />
+    <result column="isRadar" jdbcType="INTEGER" property="isradar" />
+  </resultMap>
+      <resultMap type="com.yihe.system.domain.YhDiseaseRiskResult2" id="YhDiseaseRiskResultResult">
+           <result property="id" column="id"/>
+        <result property="diseaseid" column="diseaseId"/>
+        <result property="userCode" column="user_code"/>
+        <result property="requestSerialize" column="request_serialize"/>
+        <result property="age" column="age"/>
+        <result property="hdlc" column="hdlc"/>
+        <result property="ldlc" column="ldlc"/>
+        <result property="food" column="food"/>
+        <result property="sport" column="sport"/>
+        <result property="b4" column="b4"/>
+        <result property="smoke" column="smoke"/>
+        <result property="drink" column="drink"/>
+        <result property="hwCheck" column="hw_check"/>
+        <result property="bmi" column="BMI"/>
+        <result property="waist" column="waist"/>
+        <result property="diabHis" column="diab_his"/>
+        <result property="hbpHis" column="hbp_his"/>
+        <result property="fbg" column="FBG"/>
+        <result property="sbp" column="sbp"/>
+        <result property="cholesterol" column="cholesterol"/>
+        <result property="tg" column="TG"/>
+        <result property="bf" column="BF"/>
+        <result property="dbp" column="dbp"/>
+        <result property="hbps" column="HBPS"/>
+        <result property="hfs" column="HFS"/>
+        <result property="hfHis" column="hf_his"/>
+        <result property="c1" column="C1"/>
+        <result property="milk" column="milk"/>
+        <result property="tfa" column="tfa"/>
+        <result property="chds" column="chds"/>
+        <result property="dms" column="dms"/>
+        <result property="smokeSencod" column="smoke_sencod"/>
+        <result property="lungs" column="lungs"/>
+        <result property="emphyHis" column="emphy_his"/>
+        <result property="asbestosContactHis" column="asbestos_contact_his"/>
+        <result property="decorateHouse" column="decorate_house"/>
+        <result property="psyNervous" column="psy_nervous"/>
+        <result property="bronchHis" column="bronch_his"/>
+        <result property="lampblackContact" column="lampblack_contact"/>
+        <result property="gouts" column="gouts"/>
+        <result property="tea" column="tea"/>
+        <result property="foodPurine" column="food_purine"/>
+        <result property="chdHis" column="chd_his"/>
+        <result property="bua" column="bua"/>
+        <result property="medUsePill" column="med_use_pill"/>
+        <result property="breastPlasticSurgery" column="breast_plastic_surgery"/>
+        <result property="bcs" column="BCS"/>
+        <result property="begindBreastHis" column="begind_breast_his"/>
+        <result property="femaleMenstruation" column="female_menstruation"/>
+        <result property="femaleTire" column="female_tire"/>
+        <result property="femaleBreastTime" column="female_breast_time"/>
+        <result property="femaleMenopauseAge" column="female_menopause_age"/>
+        <result property="hasMedErt" column="has_med_ert"/>
+        <result property="css" column="CSS"/>
+        <result property="cardHis" column="card_his"/>
+        <result property="lvdHis" column="lvd_his"/>
+        <result property="afHis" column="af_his"/>
+        <result property="pcs" column="PCS"/>
+        <result property="prostateDisease" column="prostate_disease"/>
+        <result property="urinaryTractInfection" column="urinary_tract_infection"/>
+        <result property="urineSymptom" column="urine_symptom"/>
+        <result property="tScore" column="t_score"/>
+        <result property="raHis" column="ra_his"/>
+        <result property="livingEnvir" column="living_envir"/>
+        <result property="foodDrinkBeer" column="food_drink_beer"/>
+        <result property="femaleMenstruationRegular" column="female_menstruation_regular"/>
+        <result property="chemicalOccupation" column="chemical_occupation"/>
+        <result property="foodVegetables" column="food_vegetables"/>
+        <result property="remark" column="remark"/>
+        <result property="qtime" column="qtime"/>
+    </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, diseaseId, user_code, request_serialize, qname, qcode, qvalue, last_value, changes, 
+    optimal, remark, qtime, isRadar
+  </sql>
+  
+   
+<!--   <select id="selectByImprovability" parameterType="map" resultMap="BaseResultMap">
+   select * from (select ult.* from yh_disease_risk_result ult,yh_user_reginfo reg where ult.user_code=reg.user_code and ult.qname like CONCAT(CONCAT('%', #{qname}), '%') and (ult.changes like '%恶化%' or ult.changes like '%不%') and  (${orgCode}) order by ult.qtime desc) w group by w.user_code;
+  </select>
+   -->
+  <!-- 查询已改善人群 -->
+   <select id="selectHasimproved" parameterType="map" resultMap="BaseResultMap">
+   select * from (select ult.* from yh_disease_risk_result ult,yh_user_reginfo reg  where ult.qname like CONCAT(CONCAT('%', #{qname}), '%') and ult.changes like '%好%' and (${orgCode}) order by ult.qtime desc) w group by w.user_code;
+  </select>
+  
+    <!-- 查询可改善人群 -->
+    <select id="selectByImprovability" resultMap="YhDiseaseRiskResultResult" parameterType="map">
+      <!-- SELECT * FROM(select ult.* from yh_disease_risk_result2 ult,yh_user_reginfo reg where ult.user_code=reg.user_code   and  (${orgCode})   order by ult.qtime desc) w group by w.user_code;-->
+      SELECT ult.* FROM yh_disease_risk_result2 ult,yh_user_reginfo reg
+      WHERE ult.user_code=reg.user_code
+      AND ult.qtime IN (SELECT MAX(qtime) FROM yh_disease_risk_result2 GROUP BY user_code)
+      AND (${orgCode})
+    </select>
+  <select id="selectByImprovabilityNew2" resultType="map">
+    SELECT
+	count(
+
+		IF (
+			ult.b4 LIKE CONCAT(
+				'%',
+				'"change_value":"不良"',
+				'%'
+			) or ult.b4 LIKE CONCAT(
+				'%',
+				'"change_value":"恶化"',
+				'%'
+			),
+			1,
+			NULL
+		)
+	) AS b4,
+	count(
+
+		IF (
+			ult.food LIKE CONCAT(
+				'%',
+				'"change_value":"不良"',
+				'%'
+			) or ult.food LIKE CONCAT(
+				'%',
+				'"change_value":"恶化"',
+				'%'
+			),
+			1,
+			NULL
+		)
+	) AS food,
+	count(
+
+		IF (
+				ult.drink LIKE CONCAT(
+				'%',
+				'"change_value":"不良"',
+				'%'
+			) or ult.drink LIKE CONCAT(
+				'%',
+				'"change_value":"恶化"',
+				'%'
+			),
+			1,
+			NULL
+		)
+	) AS drink,
+	count(
+
+		IF (
+			ult.smoke LIKE CONCAT(
+				'%',
+				'"change_value":"不良"',
+				'%'
+			) or ult.smoke LIKE CONCAT(
+				'%',
+				'"change_value":"恶化"',
+				'%'
+			),
+			1,
+			NULL
+		)
+	) AS smoke,
+	count(
+
+		IF (
+			ult.BF LIKE CONCAT(
+				'%',
+				'"change_value":"不良"',
+				'%'
+			) or ult.BF LIKE CONCAT(
+				'%',
+				'"change_value":"恶化"',
+				'%'
+			),
+			1,
+			NULL
+		)
+	) AS BF,
+	count(
+
+		IF (
+			ult.sbp LIKE CONCAT(
+				'%',
+				'"change_value":"不良变化趋势"',
+				'%'
+			) or ult.sbp LIKE CONCAT(
+				'%',
+				'"change_value":"恶化趋势"',
+				'%'
+			) or ult.dbp LIKE CONCAT(
+				'%',
+				'"change_value":"不良变化趋势"',
+				'%'
+			) or ult.dbp LIKE CONCAT(
+				'%',
+				'"change_value":"恶化趋势"',
+				'%'
+			),
+			1,
+			NULL
+		)
+	) AS sbp,
+	count(
+
+		IF (
+			ult.BMI LIKE CONCAT(
+				'%',
+				'"change_value":"不良变化趋势"',
+				'%'
+			) or ult.BMI LIKE CONCAT(
+				'%',
+				'"change_value":"恶化趋势"',
+				'%'
+			),
+			1,
+			NULL
+		)
+	) AS BMI
+FROM
+	yh_disease_risk_result2 ult,
+	yh_user_reginfo reg
+WHERE
+	ult.user_code = reg.user_code
+AND ult.qtime IN (
+	SELECT
+		MAX(qtime)
+	FROM
+		yh_disease_risk_result2
+	GROUP BY
+		user_code
+)
+    <if test="flag==1">
+      AND (
+      reg.Org_Code in (select Org_Code from yh_org_tree where  province=#{orgCode} or city=#{orgCode}  or county=#{orgCode})
+      )
+    </if>
+    <if test="flag==2">
+      AND (
+      reg.Org_Code LIKE CONCAT(CONCAT('', #{orgCode}), '%')
+      )
+    </if>
+
+  </select>
+
+  <select id="selectByImprovabilityNew" resultType="map">
+
+    SELECT
+    count(
+
+    IF (
+    ult.b4 LIKE CONCAT(
+    '%',
+    '"change_value":"好转"',
+    '%'
+    ),
+    1,
+    NULL
+    )
+    ) AS b4,
+    count(
+
+    IF (
+    ult.food LIKE CONCAT(
+    '%',
+    '"change_value":"好转"',
+    '%'
+    ),
+    1,
+    NULL
+    )
+    ) AS food,
+    count(
+
+    IF (
+    ult.drink LIKE CONCAT(
+    '%',
+    '"change_value":"好转"',
+    '%'
+    ),
+    1,
+    NULL
+    )
+    ) AS drink,
+    count(
+
+    IF (
+    ult.smoke LIKE CONCAT(
+    '%',
+    '"change_value":"好转"',
+    '%'
+    ),
+    1,
+    NULL
+    )
+    ) AS smoke,
+    count(
+
+    IF (
+    ult.BF LIKE CONCAT(
+    '%',
+    '"change_value":"好转"',
+    '%'
+    ),
+    1,
+    NULL
+    )
+    ) AS BF,
+    count(
+
+    IF (
+    ult.sbp LIKE CONCAT(
+    '%',
+    '"change_value":"好转变化趋势"',
+    '%'
+    )
+    OR ult.dbp LIKE CONCAT(
+    '%',
+    '"change_value":"好转变化趋势"',
+    '%'
+    ),
+    1,
+    NULL
+    )
+    ) AS sbp,
+    count(
+
+    IF (
+    ult.BMI LIKE CONCAT(
+    '%',
+    '"change_value":"好转变化趋势"',
+    '%'
+    ),
+    1,
+    NULL
+    )
+    ) AS BMI
+    FROM
+    yh_disease_risk_result2 ult,
+    yh_user_reginfo reg
+    WHERE
+    ult.user_code = reg.user_code
+    AND ult.qtime IN (
+    SELECT
+    MAX(qtime)
+    FROM
+    yh_disease_risk_result2
+    GROUP BY
+    user_code
+    )
+    <if test="flag==1">
+      AND (
+      reg.Org_Code in (select Org_Code from yh_org_tree where  province=#{orgCode} or city=#{orgCode}  or county=#{orgCode})
+      )
+    </if>
+    <if test="flag==2">
+      AND (
+      reg.Org_Code LIKE CONCAT(CONCAT('', #{orgCode}), '%')
+      )
+    </if>
+
+
+
+  </select>
+
+
+
+  <select id="selectRiskResulByRequestNum"   resultMap="YhDiseaseRiskResultResult">
+      select
+          *
+          from yh_disease_risk_result2
+          where request_serialize = #{RequestNum} limit 1
+  </select>
+
+
+
+<select id="selectByExample" parameterType="com.yihe.system.domain.YhDiseaseRiskResultExample" resultMap="BaseResultMap">
+  select
+  <if test="distinct">
+    distinct
+  </if>
+  <include refid="Base_Column_List" />
+  from yh_disease_risk_result
+  <if test="_parameter != null">
+    <include refid="Example_Where_Clause" />
+  </if>
+  <if test="orderByClause != null">
+    order by ${orderByClause}
+  </if>
+</select>
+<select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+  select
+  <include refid="Base_Column_List" />
+  from yh_disease_risk_result
+  where id = #{id,jdbcType=INTEGER}
+</select>
+<delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+  delete from yh_disease_risk_result
+  where id = #{id,jdbcType=INTEGER}
+</delete>
+<delete id="deleteByExample" parameterType="com.yihe.system.domain.YhDiseaseRiskResultExample">
+  delete from yh_disease_risk_result
+  <if test="_parameter != null">
+    <include refid="Example_Where_Clause" />
+  </if>
+</delete>
+<insert id="insert" parameterType="com.yihe.system.domain.YhDiseaseRiskResult">
+  <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+    SELECT LAST_INSERT_ID()
+  </selectKey>
+  insert into yh_disease_risk_result (diseaseId, user_code, request_serialize,
+    qname, qcode, qvalue,
+    last_value, changes, optimal,
+    remark, qtime, isRadar
+    )
+  values (#{diseaseid,jdbcType=VARCHAR}, #{userCode,jdbcType=VARCHAR}, #{requestSerialize,jdbcType=VARCHAR},
+    #{qname,jdbcType=VARCHAR}, #{qcode,jdbcType=VARCHAR}, #{qvalue,jdbcType=VARCHAR},
+    #{lastValue,jdbcType=VARCHAR}, #{changes,jdbcType=VARCHAR}, #{optimal,jdbcType=VARCHAR},
+    #{remark,jdbcType=VARCHAR}, #{qtime,jdbcType=TIMESTAMP}, #{isradar,jdbcType=INTEGER}
+    )
+</insert>
+<insert id="insertSelective" parameterType="com.yihe.system.domain.YhDiseaseRiskResult">
+  <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+    SELECT LAST_INSERT_ID()
+  </selectKey>
+  insert into yh_disease_risk_result
+  <trim prefix="(" suffix=")" suffixOverrides=",">
+    <if test="diseaseid != null">
+      diseaseId,
+    </if>
+    <if test="userCode != null">
+      user_code,
+    </if>
+    <if test="requestSerialize != null">
+      request_serialize,
+    </if>
+    <if test="qname != null">
+      qname,
+    </if>
+    <if test="qcode != null">
+      qcode,
+    </if>
+    <if test="qvalue != null">
+      qvalue,
+    </if>
+    <if test="lastValue != null">
+      last_value,
+    </if>
+    <if test="changes != null">
+      changes,
+    </if>
+    <if test="optimal != null">
+      optimal,
+    </if>
+    <if test="remark != null">
+      remark,
+    </if>
+    <if test="qtime != null">
+      qtime,
+    </if>
+    <if test="isradar != null">
+      isRadar,
+    </if>
+  </trim>
+  <trim prefix="values (" suffix=")" suffixOverrides=",">
+    <if test="diseaseid != null">
+      #{diseaseid,jdbcType=VARCHAR},
+    </if>
+    <if test="userCode != null">
+      #{userCode,jdbcType=VARCHAR},
+    </if>
+    <if test="requestSerialize != null">
+      #{requestSerialize,jdbcType=VARCHAR},
+    </if>
+    <if test="qname != null">
+      #{qname,jdbcType=VARCHAR},
+    </if>
+    <if test="qcode != null">
+      #{qcode,jdbcType=VARCHAR},
+    </if>
+    <if test="qvalue != null">
+      #{qvalue,jdbcType=VARCHAR},
+    </if>
+    <if test="lastValue != null">
+      #{lastValue,jdbcType=VARCHAR},
+    </if>
+    <if test="changes != null">
+      #{changes,jdbcType=VARCHAR},
+    </if>
+    <if test="optimal != null">
+      #{optimal,jdbcType=VARCHAR},
+    </if>
+    <if test="remark != null">
+      #{remark,jdbcType=VARCHAR},
+    </if>
+    <if test="qtime != null">
+      #{qtime,jdbcType=TIMESTAMP},
+    </if>
+    <if test="isradar != null">
+      #{isradar,jdbcType=INTEGER},
+    </if>
+  </trim>
+</insert>
+<select id="countByExample" parameterType="com.yihe.system.domain.YhDiseaseRiskResultExample" resultType="java.lang.Long">
+  select count(*) from yh_disease_risk_result
+  <if test="_parameter != null">
+    <include refid="Example_Where_Clause" />
+  </if>
+</select>
+<update id="updateByExampleSelective" parameterType="map">
+  update yh_disease_risk_result
+  <set>
+    <if test="record.id != null">
+      id = #{record.id,jdbcType=INTEGER},
+    </if>
+    <if test="record.diseaseid != null">
+      diseaseId = #{record.diseaseid,jdbcType=VARCHAR},
+    </if>
+    <if test="record.userCode != null">
+      user_code = #{record.userCode,jdbcType=VARCHAR},
+    </if>
+    <if test="record.requestSerialize != null">
+      request_serialize = #{record.requestSerialize,jdbcType=VARCHAR},
+    </if>
+    <if test="record.qname != null">
+      qname = #{record.qname,jdbcType=VARCHAR},
+    </if>
+    <if test="record.qcode != null">
+      qcode = #{record.qcode,jdbcType=VARCHAR},
+    </if>
+    <if test="record.qvalue != null">
+      qvalue = #{record.qvalue,jdbcType=VARCHAR},
+    </if>
+    <if test="record.lastValue != null">
+      last_value = #{record.lastValue,jdbcType=VARCHAR},
+    </if>
+    <if test="record.changes != null">
+      changes = #{record.changes,jdbcType=VARCHAR},
+    </if>
+    <if test="record.optimal != null">
+      optimal = #{record.optimal,jdbcType=VARCHAR},
+    </if>
+    <if test="record.remark != null">
+      remark = #{record.remark,jdbcType=VARCHAR},
+    </if>
+    <if test="record.qtime != null">
+      qtime = #{record.qtime,jdbcType=TIMESTAMP},
+    </if>
+    <if test="record.isradar != null">
+      isRadar = #{record.isradar,jdbcType=INTEGER},
+    </if>
+  </set>
+  <if test="_parameter != null">
+    <include refid="Update_By_Example_Where_Clause" />
+  </if>
+</update>
+<update id="updateByExample" parameterType="map">
+  update yh_disease_risk_result
+  set id = #{record.id,jdbcType=INTEGER},
+    diseaseId = #{record.diseaseid,jdbcType=VARCHAR},
+    user_code = #{record.userCode,jdbcType=VARCHAR},
+    request_serialize = #{record.requestSerialize,jdbcType=VARCHAR},
+    qname = #{record.qname,jdbcType=VARCHAR},
+    qcode = #{record.qcode,jdbcType=VARCHAR},
+    qvalue = #{record.qvalue,jdbcType=VARCHAR},
+    last_value = #{record.lastValue,jdbcType=VARCHAR},
+    changes = #{record.changes,jdbcType=VARCHAR},
+    optimal = #{record.optimal,jdbcType=VARCHAR},
+    remark = #{record.remark,jdbcType=VARCHAR},
+    qtime = #{record.qtime,jdbcType=TIMESTAMP},
+    isRadar = #{record.isradar,jdbcType=INTEGER}
+  <if test="_parameter != null">
+    <include refid="Update_By_Example_Where_Clause" />
+  </if>
+</update>
+<update id="updateByPrimaryKeySelective" parameterType="com.yihe.system.domain.YhDiseaseRiskResult">
+  update yh_disease_risk_result
+  <set>
+    <if test="diseaseid != null">
+      diseaseId = #{diseaseid,jdbcType=VARCHAR},
+    </if>
+    <if test="userCode != null">
+      user_code = #{userCode,jdbcType=VARCHAR},
+    </if>
+    <if test="requestSerialize != null">
+      request_serialize = #{requestSerialize,jdbcType=VARCHAR},
+    </if>
+    <if test="qname != null">
+      qname = #{qname,jdbcType=VARCHAR},
+    </if>
+    <if test="qcode != null">
+      qcode = #{qcode,jdbcType=VARCHAR},
+    </if>
+    <if test="qvalue != null">
+      qvalue = #{qvalue,jdbcType=VARCHAR},
+    </if>
+    <if test="lastValue != null">
+      last_value = #{lastValue,jdbcType=VARCHAR},
+    </if>
+    <if test="changes != null">
+      changes = #{changes,jdbcType=VARCHAR},
+    </if>
+    <if test="optimal != null">
+      optimal = #{optimal,jdbcType=VARCHAR},
+    </if>
+    <if test="remark != null">
+      remark = #{remark,jdbcType=VARCHAR},
+    </if>
+    <if test="qtime != null">
+      qtime = #{qtime,jdbcType=TIMESTAMP},
+    </if>
+    <if test="isradar != null">
+      isRadar = #{isradar,jdbcType=INTEGER},
+    </if>
+  </set>
+  where id = #{id,jdbcType=INTEGER}
+</update>
+<update id="updateByPrimaryKey" parameterType="com.yihe.system.domain.YhDiseaseRiskResult">
+  update yh_disease_risk_result
+  set diseaseId = #{diseaseid,jdbcType=VARCHAR},
+    user_code = #{userCode,jdbcType=VARCHAR},
+    request_serialize = #{requestSerialize,jdbcType=VARCHAR},
+    qname = #{qname,jdbcType=VARCHAR},
+    qcode = #{qcode,jdbcType=VARCHAR},
+    qvalue = #{qvalue,jdbcType=VARCHAR},
+    last_value = #{lastValue,jdbcType=VARCHAR},
+    changes = #{changes,jdbcType=VARCHAR},
+    optimal = #{optimal,jdbcType=VARCHAR},
+    remark = #{remark,jdbcType=VARCHAR},
+    qtime = #{qtime,jdbcType=TIMESTAMP},
+    isRadar = #{isradar,jdbcType=INTEGER}
+  where id = #{id,jdbcType=INTEGER}
+</update>
+
+</mapper>

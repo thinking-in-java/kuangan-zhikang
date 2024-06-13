@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yihe.applet.api.mapper.YhUserSportChRecordAppMapper">
+  <resultMap id="BaseResultMap" type="com.yihe.applet.api.domain.YhUserSportChRecordApp">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="ch_id" jdbcType="INTEGER" property="chId" />
+    <result column="upload_tome" jdbcType="DATE" property="uploadTome" />
+    <result column="step" jdbcType="VARCHAR" property="step" />
+    <result column="whether" jdbcType="VARCHAR" property="whether" />
+    <result column="reach" jdbcType="VARCHAR" property="reach" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, ch_id, upload_tome, step, whether, reach
+  </sql>
+  
+  <!-- 根据总表id查询数据 -->
+  <select id="showChidRecord"  parameterType="java.lang.Integer" resultMap="BaseResultMap">
+  	select * from yh_user_sport_ch_record where ch_id=#{chId,jdbcType=INTEGER} and whether = 1
+  </select>
+  
+  
+  <select id="selectByWhetherCount" parameterType="java.lang.Integer"  resultType="int">
+ 	 select count(*) from yh_user_sport_ch_record where ch_id=#{chId,jdbcType=INTEGER}  and whether=1
+  </select>
+  
+  <select id="showChidRecordMap"  parameterType="map" resultMap="BaseResultMap">
+  	select * from yh_user_sport_ch_record where ch_id=#{chId,jdbcType=INTEGER} and upload_tome= #{uploadTome};
+  </select>
+  
+  <!-- 根据时间查询数据 -->
+  <select id="showIploadTomeCh" parameterType="java.lang.String" resultMap="BaseResultMap">
+  	select * from yh_user_sport_ch_record where upload_tome= #{uploadTome};
+  </select>
+  
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from yh_user_sport_ch_record
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectByChId" resultType="com.yihe.system.domain.YhUserReginfo">
+    select cha.user_code as userCode from yh_user_sport_ch_record re
+    join yh_user_sport_challenge cha on re.ch_id = cha.ch_id
+    where re.ch_id = #{chId} and re.upload_tome = #{currentTime}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from yh_user_sport_ch_record
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.yihe.applet.api.domain.YhUserSportChRecordApp">
+    insert into yh_user_sport_ch_record (id, ch_id, upload_tome, 
+      step, whether, reach
+      )
+    values (#{id,jdbcType=INTEGER}, #{chId,jdbcType=INTEGER}, #{uploadTome,jdbcType=DATE}, 
+      #{step,jdbcType=VARCHAR}, #{whether,jdbcType=VARCHAR}, #{reach,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.yihe.applet.api.domain.YhUserSportChRecordApp">
+    insert into yh_user_sport_ch_record
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="chId != null">
+        ch_id,
+      </if>
+      <if test="uploadTome != null">
+        upload_tome,
+      </if>
+      <if test="step != null">
+        step,
+      </if>
+      <if test="whether != null">
+        whether,
+      </if>
+      <if test="reach != null">
+        reach,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="chId != null">
+        #{chId,jdbcType=INTEGER},
+      </if>
+      <if test="uploadTome != null">
+        #{uploadTome,jdbcType=DATE},
+      </if>
+      <if test="step != null">
+        #{step,jdbcType=VARCHAR},
+      </if>
+      <if test="whether != null">
+        #{whether,jdbcType=VARCHAR},
+      </if>
+      <if test="reach != null">
+        #{reach,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.yihe.applet.api.domain.YhUserSportChRecordApp">
+    update yh_user_sport_ch_record
+    <set>
+      <if test="chId != null">
+        ch_id = #{chId,jdbcType=INTEGER},
+      </if>
+      <if test="uploadTome != null">
+        upload_tome = #{uploadTome,jdbcType=DATE},
+      </if>
+      <if test="step != null">
+        step = #{step,jdbcType=VARCHAR},
+      </if>
+      <if test="whether != null">
+        whether = #{whether,jdbcType=VARCHAR},
+      </if>
+      <if test="reach != null">
+        reach = #{reach,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.yihe.applet.api.domain.YhUserSportChRecordApp">
+    update yh_user_sport_ch_record
+    set ch_id = #{chId,jdbcType=INTEGER},
+      upload_tome = #{uploadTome,jdbcType=DATE},
+      step = #{step,jdbcType=VARCHAR},
+      whether = #{whether,jdbcType=VARCHAR},
+      reach = #{reach,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

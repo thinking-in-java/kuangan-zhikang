@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yihe.applet.api.mapper.YhUserSportChallengeAppMapper" >
+  <resultMap id="BaseResultMap" type="com.yihe.applet.api.domain.YhUserSportChallengeApp" >
+    <id column="ch_id" property="chId" jdbcType="INTEGER" />
+    <result column="user_code" property="userCode" jdbcType="VARCHAR" />
+    <result column="ch_begin_time" property="chBeginTime" jdbcType="DATE" />
+    <result column="ch_fiaish_time" property="chFiaishTime" jdbcType="DATE" />
+    <result column="ch_average_step" property="chAverageStep" jdbcType="VARCHAR" />
+    <result column="ch_whether" property="chWhether" jdbcType="VARCHAR" />
+    <result column="ch_reach" property="chReach" jdbcType="VARCHAR" />
+    <result column="backups" property="backups" jdbcType="VARCHAR" />
+    <result column="backups1" property="backups1" jdbcType="VARCHAR" />
+    <result column="backups2" property="backups2" jdbcType="VARCHAR" />
+     <result column="name" property="name" jdbcType="VARCHAR" />
+      <result column="post_code" property="postCode" jdbcType="VARCHAR" />
+         <result column="gender" property="gender" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    ch_id, user_code, ch_begin_time, ch_fiaish_time, ch_average_step, ch_whether, ch_reach, 
+    backups, backups1, backups2
+  </sql>
+  
+  
+  <select id="showChWhetherNow" resultType="int" parameterType="map">
+  	select count(*) from yh_user_sport_challenge 
+  	<where>
+  		 user_code=#{userCode,jdbcType=VARCHAR}
+  			<if test="chWhether!=null and chWhether !=''">
+  			and  ch_whether= #{chWhether,jdbcType=VARCHAR}
+  			</if>
+  			 and ch_fiaish_time &lt; now()-1
+  		</where>
+  </select>
+  
+  
+  <!-- 查询还在执行的数据 -->
+  <select id="selectByDnow" resultMap="BaseResultMap" parameterType="map">
+  select ge.*,re.name,re.post_code,re.gender from yh_user_sport_challenge ge,yh_user_reginfo re where ge.user_code=re.user_code and  date(ge.ch_fiaish_time) &gt;= curdate() limit #{curPage},#{pageSize}
+  </select>
+  
+  
+  
+  <!-- 根据code查询是否有执行的数据 -->
+  <select id="selectByCodeDnow" resultMap="BaseResultMap" parameterType="java.lang.String">
+  	select * from yh_user_sport_challenge where user_code=#{userCode,jdbcType=VARCHAR} and date(ch_fiaish_time) &gt;= curdate();
+  </select>
+  
+  <select id="selectByCodeXnow" resultMap="BaseResultMap" parameterType="map">
+  	select * from yh_user_sport_challenge where user_code=#{userCode,jdbcType=VARCHAR} and ch_fiaish_time &lt; now()-1 limit #{curPage},#{pageSize}
+  </select>
+  
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from yh_user_sport_challenge
+    where ch_id = #{chId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from yh_user_sport_challenge
+    where ch_id = #{chId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.yihe.applet.api.domain.YhUserSportChallengeApp" >
+    insert into yh_user_sport_challenge (ch_id, user_code, ch_begin_time, 
+      ch_fiaish_time, ch_average_step, ch_whether, 
+      ch_reach, backups, backups1, 
+      backups2)
+    values (#{chId,jdbcType=INTEGER}, #{userCode,jdbcType=VARCHAR}, #{chBeginTime,jdbcType=DATE}, 
+      #{chFiaishTime,jdbcType=DATE}, #{chAverageStep,jdbcType=VARCHAR}, #{chWhether,jdbcType=VARCHAR}, 
+      #{chReach,jdbcType=VARCHAR}, #{backups,jdbcType=VARCHAR}, #{backups1,jdbcType=VARCHAR}, 
+      #{backups2,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.yihe.applet.api.domain.YhUserSportChallengeApp" >
+    insert into yh_user_sport_challenge
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="chId != null" >
+        ch_id,
+      </if>
+      <if test="userCode != null" >
+        user_code,
+      </if>
+      <if test="chBeginTime != null" >
+        ch_begin_time,
+      </if>
+      <if test="chFiaishTime != null" >
+        ch_fiaish_time,
+      </if>
+      <if test="chAverageStep != null" >
+        ch_average_step,
+      </if>
+      <if test="chWhether != null" >
+        ch_whether,
+      </if>
+      <if test="chReach != null" >
+        ch_reach,
+      </if>
+      <if test="backups != null" >
+        backups,
+      </if>
+      <if test="backups1 != null" >
+        backups1,
+      </if>
+      <if test="backups2 != null" >
+        backups2,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="chId != null" >
+        #{chId,jdbcType=INTEGER},
+      </if>
+      <if test="userCode != null" >
+        #{userCode,jdbcType=VARCHAR},
+      </if>
+      <if test="chBeginTime != null" >
+        #{chBeginTime,jdbcType=DATE},
+      </if>
+      <if test="chFiaishTime != null" >
+        #{chFiaishTime,jdbcType=DATE},
+      </if>
+      <if test="chAverageStep != null" >
+        #{chAverageStep,jdbcType=VARCHAR},
+      </if>
+      <if test="chWhether != null" >
+        #{chWhether,jdbcType=VARCHAR},
+      </if>
+      <if test="chReach != null" >
+        #{chReach,jdbcType=VARCHAR},
+      </if>
+      <if test="backups != null" >
+        #{backups,jdbcType=VARCHAR},
+      </if>
+      <if test="backups1 != null" >
+        #{backups1,jdbcType=VARCHAR},
+      </if>
+      <if test="backups2 != null" >
+        #{backups2,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.yihe.applet.api.domain.YhUserSportChallengeApp" >
+    update yh_user_sport_challenge
+    <set >
+      <if test="userCode != null" >
+        user_code = #{userCode,jdbcType=VARCHAR},
+      </if>
+      <if test="chBeginTime != null" >
+        ch_begin_time = #{chBeginTime,jdbcType=DATE},
+      </if>
+      <if test="chFiaishTime != null" >
+        ch_fiaish_time = #{chFiaishTime,jdbcType=DATE},
+      </if>
+      <if test="chAverageStep != null" >
+        ch_average_step = #{chAverageStep,jdbcType=VARCHAR},
+      </if>
+      <if test="chWhether != null" >
+        ch_whether = #{chWhether,jdbcType=VARCHAR},
+      </if>
+      <if test="chReach != null" >
+        ch_reach = #{chReach,jdbcType=VARCHAR},
+      </if>
+      <if test="backups != null" >
+        backups = #{backups,jdbcType=VARCHAR},
+      </if>
+      <if test="backups1 != null" >
+        backups1 = #{backups1,jdbcType=VARCHAR},
+      </if>
+      <if test="backups2 != null" >
+        backups2 = #{backups2,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where ch_id = #{chId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.yihe.applet.api.domain.YhUserSportChallengeApp" >
+    update yh_user_sport_challenge
+    set user_code = #{userCode,jdbcType=VARCHAR},
+      ch_begin_time = #{chBeginTime,jdbcType=DATE},
+      ch_fiaish_time = #{chFiaishTime,jdbcType=DATE},
+      ch_average_step = #{chAverageStep,jdbcType=VARCHAR},
+      ch_whether = #{chWhether,jdbcType=VARCHAR},
+      ch_reach = #{chReach,jdbcType=VARCHAR},
+      backups = #{backups,jdbcType=VARCHAR},
+      backups1 = #{backups1,jdbcType=VARCHAR},
+      backups2 = #{backups2,jdbcType=VARCHAR}
+    where ch_id = #{chId,jdbcType=INTEGER}
+  </update>
+</mapper>

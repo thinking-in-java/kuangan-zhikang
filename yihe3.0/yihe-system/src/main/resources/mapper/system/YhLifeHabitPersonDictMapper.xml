@@ -1,0 +1,269 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yihe.system.mapper.YhLifeHabitPersonDictMapper" >
+  <resultMap id="BaseResultMap" type="com.yihe.system.domain.YhLifeHabitPersonDict" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="user_code" property="userCode" jdbcType="VARCHAR" />
+    <result column="habit_id" property="habitId" jdbcType="INTEGER" />
+    <result column="continue_day" property="continueDay" jdbcType="INTEGER" />
+    <result column="missing_day" property="missingDay" jdbcType="INTEGER" />
+    <result column="total_day" property="totalDay" jdbcType="INTEGER" />
+    <result column="begin_time" property="beginTime" jdbcType="VARCHAR" />
+    <result column="finish_tim" property="finishTim" jdbcType="VARCHAR" />
+    <result column="period" property="period" jdbcType="VARCHAR" />
+    <result column="begin_date" property="beginDate" jdbcType="VARCHAR" />
+    <result column="finish_date" property="finishDate" jdbcType="VARCHAR" />
+    <result column="accomplish_type" property="accomplishType" jdbcType="VARCHAR" />
+    <result column="increase_date" property="increaseDate" jdbcType="TIMESTAMP" />
+    <result column="standby" property="standby" jdbcType="VARCHAR" />
+    <result column="standby1" property="standby1" jdbcType="VARCHAR" />
+    <result column="standby2" property="standby2" jdbcType="VARCHAR" />
+      <result column="habit_name" property="habitName" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, user_code, habit_id, continue_day, missing_day, total_day, begin_time, finish_tim, 
+    period, begin_date, finish_date, accomplish_type, increase_date, standby, standby1, 
+    standby2
+  </sql>
+  
+  <!-- 查询2个时间段中间的数据 -->
+  <select id="selectByDictStandby" parameterType="map"  resultMap="BaseResultMap">
+  	SELECT * FROM yh_life_habit_person_dict WHERE   standby=1 and standby1  between #{signidDate} and #{signidDate1} order by standby1 asc  limit 1;
+  </select>
+  
+  <select id="showdictdate" parameterType="map"  resultMap="BaseResultMap">
+  	select * from yh_life_habit_person_dict dict,yh_life_habit_dict habit where dict.habit_id=habit.id and (dict.begin_time&lt;=#{signidDate1} and dict.finish_tim&gt;=#{signidDate} or  dict.finish_tim is null) and dict.user_code=#{userCode,jdbcType=VARCHAR} and dict.missing_day=1
+  </select>
+  
+  
+  <select id="selectBynullDict1" parameterType="map"  resultMap="BaseResultMap">
+  	select * from yh_life_habit_person_dict dict,yh_life_habit_dict habit where dict.habit_id=habit.id and dict.finish_tim is null  and dict.accomplish_type = 3 and date(dict.increase_date)&lt;=#{signidDate} and dict.user_code=#{userCode,jdbcType=VARCHAR}
+    </select>
+    
+    
+  
+    <select id="selectBynullDict" parameterType="java.lang.String"  resultMap="BaseResultMap">
+  	select * from yh_life_habit_person_dict dict,yh_life_habit_dict habit where dict.habit_id=habit.id
+  	and dict.finish_tim is null and dict.accomplish_type = 3 and dict.user_code=#{userCode,jdbcType=VARCHAR}
+    </select>
+  
+  <select id="selectBydict" parameterType="map"  resultMap="BaseResultMap">
+  select * from yh_life_habit_person_dict dict,yh_life_habit_dict habit where dict.habit_id=habit.id and dict.begin_time&lt;=#{signidDate1} and dict.finish_tim&gt;=#{signidDate} and dict.user_code=#{userCode,jdbcType=VARCHAR}
+  </select>
+  
+  
+   <select id="seelctByHabitCodeCount"  resultType="int" parameterType="map">
+    	select count(*) from yh_life_habit_person_dict where user_code=#{userCode,jdbcType=VARCHAR} and accomplish_type=3 and habit_id= #{habitId,jdbcType=INTEGER}
+    </select>
+  
+  
+  <select id="selectByPersoncode" resultMap="BaseResultMap" parameterType="java.lang.String">
+  	select * from yh_life_habit_person_dict where user_code=#{userCode,jdbcType=VARCHAR} and accomplish_type=3
+  </select>
+  
+  <select id="showPersonHabit" resultMap="BaseResultMap" parameterType="map">
+  	select * from yh_life_habit_person_dict dict,yh_life_habit_dict habit where dict.habit_id=habit.id and dict.user_code=#{userCode,jdbcType=VARCHAR} order by increase_date desc LIMIT  #{page},#{limit}
+  </select>
+  
+  <select id="showPersonHabitCount" resultType="int" parameterType="map">
+  	select count(*) from yh_life_habit_person_dict dict,yh_life_habit_dict habit where dict.habit_id=habit.id and dict.user_code=#{userCode,jdbcType=VARCHAR}
+  </select>
+  
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from yh_life_habit_person_dict
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from yh_life_habit_person_dict
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.yihe.system.domain.YhLifeHabitPersonDict" >
+    insert into yh_life_habit_person_dict (id, user_code, habit_id, 
+      continue_day, missing_day, total_day, 
+      begin_time, finish_tim, period, 
+      begin_date, finish_date, accomplish_type, 
+      increase_date, standby, standby1, 
+      standby2)
+    values (#{id,jdbcType=INTEGER}, #{userCode,jdbcType=VARCHAR}, #{habitId,jdbcType=INTEGER}, 
+      #{continueDay,jdbcType=INTEGER}, #{missingDay,jdbcType=INTEGER}, #{totalDay,jdbcType=INTEGER}, 
+      #{beginTime,jdbcType=VARCHAR}, #{finishTim,jdbcType=VARCHAR}, #{period,jdbcType=VARCHAR}, 
+      #{beginDate,jdbcType=VARCHAR}, #{finishDate,jdbcType=VARCHAR}, #{accomplishType,jdbcType=VARCHAR}, 
+      #{increaseDate,jdbcType=TIMESTAMP}, #{standby,jdbcType=VARCHAR}, #{standby1,jdbcType=VARCHAR}, 
+      #{standby2,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.yihe.system.domain.YhLifeHabitPersonDict" >
+    insert into yh_life_habit_person_dict
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="userCode != null" >
+        user_code,
+      </if>
+      <if test="habitId != null" >
+        habit_id,
+      </if>
+      <if test="continueDay != null" >
+        continue_day,
+      </if>
+      <if test="missingDay != null" >
+        missing_day,
+      </if>
+      <if test="totalDay != null" >
+        total_day,
+      </if>
+      <if test="beginTime != null" >
+        begin_time,
+      </if>
+      <if test="finishTim != null" >
+        finish_tim,
+      </if>
+      <if test="period != null" >
+        period,
+      </if>
+      <if test="beginDate != null" >
+        begin_date,
+      </if>
+      <if test="finishDate != null" >
+        finish_date,
+      </if>
+      <if test="accomplishType != null" >
+        accomplish_type,
+      </if>
+      <if test="increaseDate != null" >
+        increase_date,
+      </if>
+      <if test="standby != null" >
+        standby,
+      </if>
+      <if test="standby1 != null" >
+        standby1,
+      </if>
+      <if test="standby2 != null" >
+        standby2,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="userCode != null" >
+        #{userCode,jdbcType=VARCHAR},
+      </if>
+      <if test="habitId != null" >
+        #{habitId,jdbcType=INTEGER},
+      </if>
+      <if test="continueDay != null" >
+        #{continueDay,jdbcType=INTEGER},
+      </if>
+      <if test="missingDay != null" >
+        #{missingDay,jdbcType=INTEGER},
+      </if>
+      <if test="totalDay != null" >
+        #{totalDay,jdbcType=INTEGER},
+      </if>
+      <if test="beginTime != null" >
+        #{beginTime,jdbcType=VARCHAR},
+      </if>
+      <if test="finishTim != null" >
+        #{finishTim,jdbcType=VARCHAR},
+      </if>
+      <if test="period != null" >
+        #{period,jdbcType=VARCHAR},
+      </if>
+      <if test="beginDate != null" >
+        #{beginDate,jdbcType=VARCHAR},
+      </if>
+      <if test="finishDate != null" >
+        #{finishDate,jdbcType=VARCHAR},
+      </if>
+      <if test="accomplishType != null" >
+        #{accomplishType,jdbcType=VARCHAR},
+      </if>
+      <if test="increaseDate != null" >
+        #{increaseDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="standby != null" >
+        #{standby,jdbcType=VARCHAR},
+      </if>
+      <if test="standby1 != null" >
+        #{standby1,jdbcType=VARCHAR},
+      </if>
+      <if test="standby2 != null" >
+        #{standby2,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.yihe.system.domain.YhLifeHabitPersonDict" >
+    update yh_life_habit_person_dict
+    <set >
+      <if test="userCode != null" >
+        user_code = #{userCode,jdbcType=VARCHAR},
+      </if>
+      <if test="habitId != null" >
+        habit_id = #{habitId,jdbcType=INTEGER},
+      </if>
+      <if test="continueDay != null" >
+        continue_day = #{continueDay,jdbcType=INTEGER},
+      </if>
+      <if test="missingDay != null" >
+        missing_day = #{missingDay,jdbcType=INTEGER},
+      </if>
+      <if test="totalDay != null" >
+        total_day = #{totalDay,jdbcType=INTEGER},
+      </if>
+      <if test="beginTime != null" >
+        begin_time = #{beginTime,jdbcType=VARCHAR},
+      </if>
+      <if test="finishTim != null" >
+        finish_tim = #{finishTim,jdbcType=VARCHAR},
+      </if>
+      <if test="period != null" >
+        period = #{period,jdbcType=VARCHAR},
+      </if>
+      <if test="beginDate != null" >
+        begin_date = #{beginDate,jdbcType=VARCHAR},
+      </if>
+      <if test="finishDate != null" >
+        finish_date = #{finishDate,jdbcType=VARCHAR},
+      </if>
+      <if test="accomplishType != null" >
+        accomplish_type = #{accomplishType,jdbcType=VARCHAR},
+      </if>
+      <if test="increaseDate != null" >
+        increase_date = #{increaseDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="standby != null" >
+        standby = #{standby,jdbcType=VARCHAR},
+      </if>
+      <if test="standby1 != null" >
+        standby1 = #{standby1,jdbcType=VARCHAR},
+      </if>
+      <if test="standby2 != null" >
+        standby2 = #{standby2,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.yihe.system.domain.YhLifeHabitPersonDict" >
+    update yh_life_habit_person_dict
+    set user_code = #{userCode,jdbcType=VARCHAR},
+      habit_id = #{habitId,jdbcType=INTEGER},
+      continue_day = #{continueDay,jdbcType=INTEGER},
+      missing_day = #{missingDay,jdbcType=INTEGER},
+      total_day = #{totalDay,jdbcType=INTEGER},
+      begin_time = #{beginTime,jdbcType=VARCHAR},
+      finish_tim = #{finishTim,jdbcType=VARCHAR},
+      period = #{period,jdbcType=VARCHAR},
+      begin_date = #{beginDate,jdbcType=VARCHAR},
+      finish_date = #{finishDate,jdbcType=VARCHAR},
+      accomplish_type = #{accomplishType,jdbcType=VARCHAR},
+      increase_date = #{increaseDate,jdbcType=TIMESTAMP},
+      standby = #{standby,jdbcType=VARCHAR},
+      standby1 = #{standby1,jdbcType=VARCHAR},
+      standby2 = #{standby2,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

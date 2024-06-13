@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yihe.system.mapper.JiaiEnclosureMapper" >
+  <resultMap id="BaseResultMap" type="com.yihe.system.domain.JiaiEnclosure" >
+    <id column="eid" property="eid" jdbcType="INTEGER" />
+    <result column="terminalId" property="terminalid" jdbcType="VARCHAR" />
+    <result column="longitude" property="longitude" jdbcType="VARCHAR" />
+    <result column="latitude" property="latitude" jdbcType="VARCHAR" />
+    <result column="radius" property="radius" jdbcType="INTEGER" />
+    <result column="establishTime" property="establishtime" jdbcType="VARCHAR" />
+  </resultMap>
+  <select id="findEnclosureNewInfo" resultMap="BaseResultMap">
+    select * from jiai_enclosure where terminalId=#{imei} order by establishtime desc limit 1
+  </select>
+  <insert id="insert" parameterType="com.yihe.system.domain.JiaiEnclosure" >
+    insert into jiai_enclosure (terminalId, longitude, latitude, 
+      radius, establishTime)
+    values (#{terminalid,jdbcType=VARCHAR}, #{longitude,jdbcType=VARCHAR}, #{latitude,jdbcType=VARCHAR}, 
+      #{radius,jdbcType=INTEGER}, #{establishtime,jdbcType=VARCHAR})
+  </insert>
+  <delete id="deljiaiEncloInfo">
+    DELETE
+FROM
+  `jiai_enclosure`
+WHERE `terminalId` = #{terminalId}
+  </delete>
+  <update id="updateByPrimaryKeySelective" parameterType="com.yihe.system.domain.JiaiEnclosure" >
+    update jiai_enclosure
+    <set >
+      <if test="longitude != null" >
+        longitude = #{longitude,jdbcType=VARCHAR},
+      </if>
+      <if test="latitude != null" >
+        latitude = #{latitude,jdbcType=VARCHAR},
+      </if>
+      <if test="radius != null" >
+        radius = #{radius,jdbcType=INTEGER},
+      </if>
+      <if test="establishtime != null" >
+        establishTime = #{establishtime,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where terminalId = #{terminalid,jdbcType=VARCHAR}
+  </update>
+  <insert id="insertSelective" parameterType="com.yihe.system.domain.JiaiEnclosure" >
+    insert into jiai_enclosure
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="terminalid != null" >
+        terminalId,
+      </if>
+      <if test="longitude != null" >
+        longitude,
+      </if>
+      <if test="latitude != null" >
+        latitude,
+      </if>
+      <if test="radius != null" >
+        radius,
+      </if>
+      <if test="establishtime != null" >
+        establishTime,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="terminalid != null" >
+        #{terminalid,jdbcType=VARCHAR},
+      </if>
+      <if test="longitude != null" >
+        #{longitude,jdbcType=VARCHAR},
+      </if>
+      <if test="latitude != null" >
+        #{latitude,jdbcType=VARCHAR},
+      </if>
+      <if test="radius != null" >
+        #{radius,jdbcType=INTEGER},
+      </if>
+      <if test="establishtime != null" >
+        #{establishtime,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+</mapper>

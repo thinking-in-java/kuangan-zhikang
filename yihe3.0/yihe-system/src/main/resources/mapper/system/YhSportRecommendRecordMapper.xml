@@ -1,0 +1,389 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yihe.system.mapper.YhSportRecommendRecordMapper" >
+  <resultMap id="BaseResultMap" type="com.yihe.system.domain.YhSportRecommendRecord" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="record_data" property="recordData" jdbcType="TIMESTAMP" />
+    <result column="user_code" property="userCode" jdbcType="VARCHAR" />
+    <result column="diseaseid" property="diseaseid" jdbcType="VARCHAR" />
+    <result column="setmealid" property="setmealid" jdbcType="VARCHAR" />
+    <result column="number" property="number" jdbcType="VARCHAR" />
+    <result column="finishid" property="finishid" jdbcType="VARCHAR" />
+    <result column="record_type" property="recordType" jdbcType="INTEGER" />
+    <result column="record_kay" property="recordKay" jdbcType="INTEGER" />
+    <result column="record_mode" property="recordMode" jdbcType="VARCHAR" />
+    <result column="standby" property="standby" jdbcType="VARCHAR" />
+    <result column="disease_name" property="name" jdbcType="VARCHAR" />
+    <result column="oneself" property="oneself" jdbcType="INTEGER" />
+     <result property="sportName"    column="sport_name"   jdbcType="VARCHAR" />
+  </resultMap>
+  
+   <resultMap id="BaseResultMap1" type="com.yihe.system.domain.YhSportRecommendRecordVojo">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="user_code" jdbcType="VARCHAR" property="userCode" />
+    <result column="diseaseid" jdbcType="VARCHAR" property="diseaseid" />
+    <result column="setmealid" jdbcType="VARCHAR" property="setmealid" />
+    <result column="number" jdbcType="VARCHAR" property="number" />
+    <result column="finishid" jdbcType="VARCHAR" property="finishid" />
+    <result column="standby" jdbcType="VARCHAR" property="standby" />
+    <result column="setmeal_mame" jdbcType="VARCHAR" property="diseaseName" />
+    <result column="setmeal_img" jdbcType="VARCHAR" property="riskGroup" />
+    <result column="subject_id" jdbcType="VARCHAR" property="subjectId" />
+     <result column="recid" jdbcType="INTEGER" property="recid" />
+     <result property="sportName"    column="sport_name"   jdbcType="VARCHAR" />
+  </resultMap>
+  
+  <sql id="Base_Column_List" >
+    id, record_data, user_code, diseaseid, setmealid, number, finishid, record_type, 
+    record_kay, record_mode, standby,sport_name
+  </sql>
+  
+  
+  <!-- 查询运动干预 -->
+  <select id="SportInterveneInfo" resultType="com.yihe.system.domain.SportInterveneVojo" parameterType="map">
+      SELECT
+      a.user_code AS usercode,
+      a.user_name,
+      a.`name`,
+      c.age,
+      c.bmi AS bmi,
+      d.fr_frequency AS frequency,
+      f.Flag_Dgroup,
+      e.record_data
+      FROM
+      `yh_user_reginfo` AS a
+      LEFT JOIN `yh_user_make_card` AS b ON a.user_code = b.user_code
+      LEFT JOIN (
+      SELECT
+      tr1.user_code,
+      tr1.age,
+      tr1.bmi
+      FROM
+      yh_disease_assess_total_report2 AS tr1
+      INNER JOIN (
+      SELECT
+      max(id) AS id
+      FROM
+      yh_disease_assess_total_report2
+      GROUP BY
+      user_code
+      ) AS tr2 ON tr1.id = tr2.id
+      ) AS c ON a.user_code = c.user_code
+      LEFT JOIN `yh_sport_frequency` AS d ON a.user_code = d.user_code
+      LEFT JOIN `yh_user_enrolinfo` AS f ON a.user_code = f.user_code
+      LEFT JOIN (
+      SELECT
+      rr1.user_code,
+      rr1.record_data
+      FROM
+      yh_sport_recommend_record AS rr1
+      INNER JOIN (
+      SELECT
+      max(id) AS id
+      FROM
+      yh_sport_recommend_record
+      GROUP BY
+      user_code
+      ) AS rr2 ON rr1.id = rr2.id
+      ) AS e ON e.user_code = a.user_code
+      <where>
+          b.doctor=(SELECT id FROM `yh_user_admin_info` WHERE user_code=#{usercode})
+
+          <if test="orgid !=null and orgid != ''">
+              and b.Org_Id=#{orgid}
+          </if>
+          <if test="groupid != null and groupid != ''">
+              and  f.Flag_Dgroup LIKE CONCAT('%',#{groupid},'%')
+          </if>
+          <if test="mode != null and mode != ''">
+              and   e.record_mode=#{mode} and e.record_type=1
+          </if>
+
+          <if test="Bimweight != null and Bimweight != ''">
+              <if test="Bimweight=='消瘦'">
+                  and   c.bmi &lt; 18.5
+              </if>
+              <if test="Bimweight=='正常'">
+                  and   c.bmi &gt;=18.5 and  c.bmi &lt;=23.9
+              </if>
+              <if test="Bimweight=='超重'">
+                  and   c.bmi &gt;=24 and   c.bmi &lt;=27.9
+              </if>
+              <if test="Bimweight=='肥胖'">
+                  and   c.bmi &gt;28
+              </if>
+          </if>
+
+          <if test="ageStr !=null and ageStr != ''">
+              and  c.age &gt;= #{ageStr}
+          </if>
+          <if test="ageEnd !=null and ageEnd != ''">
+              and c.age &lt;= #{ageEnd}
+          </if>
+
+          <if test="recordname != null and recordname != ''">
+              and e.sport_name LIKE CONCAT('%',#{recordname},'%') and e.record_type=1
+          </if>
+
+
+          <if test="username != null and username != ''">
+              and a.`name` LIKE CONCAT('%',#{username},'%')
+          </if>
+      </where>
+      GROUP BY
+      a.user_code
+      
+  </select>
+  
+    <!--增-->
+    <insert id="insertYhSportRecommendRecord" parameterType="com.yihe.system.domain.YhSportRecommendRecord" useGeneratedKeys="true" keyProperty="id">
+        insert into yh_sport_recommend_record
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="recordData != null ">record_data,</if>
+            <if test="userCode != null  and userCode != ''">user_code,</if>
+            <if test="diseaseid != null  and diseaseid != ''">diseaseid,</if>
+            <if test="setmealid != null  and setmealid != ''">setmealid,</if>
+            <if test="number != null  and number != ''">number,</if>
+            <if test="finishid != null  and finishid != ''">finishid,</if>
+            <if test="recordType != null ">record_type,</if>
+            <if test="recordKay != null ">record_kay,</if>
+            <if test="recordMode != null  and recordMode != ''">record_mode,</if>
+            <if test="standby != null  and standby != ''">standby,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="recordData != null ">#{recordData},</if>
+            <if test="userCode != null  and userCode != ''">#{userCode},</if>
+            <if test="diseaseid != null  and diseaseid != ''">#{diseaseid},</if>
+            <if test="setmealid != null  and setmealid != ''">#{setmealid},</if>
+            <if test="number != null  and number != ''">#{number},</if>
+            <if test="finishid != null  and finishid != ''">#{finishid},</if>
+            <if test="recordType != null ">#{recordType},</if>
+            <if test="recordKay != null ">#{recordKay},</if>
+            <if test="recordMode != null  and recordMode != ''">#{recordMode},</if>
+            <if test="standby != null  and standby != ''">#{standby},</if>
+        </trim>
+    </insert>
+  <!--根据疾病id与userCode查询是否已存在推荐，存在则改为过期状态-->
+    <update id="uptYhSportRecommendRecord" parameterType="com.yihe.system.domain.YhSportRecommendRecord">
+        UPDATE yh_sport_recommend_record SET record_type=2
+        WHERE user_code=#{userCode} AND diseaseid=#{diseaseid}
+    </update>
+    <!--根据疾病id与userCode查询是否已存在推荐-->
+    <select id="selYhSportRecordCount" resultType="int" parameterType="com.yihe.system.domain.YhSportRecommendRecord">
+        SELECT count(1) FROM yh_sport_recommend_record
+        WHERE user_code=#{userCode} AND diseaseid=#{diseaseid}
+    </select>
+  
+  
+  <!-- 模糊查询是否打卡 -->
+  <select id="selectByRecord" parameterType="map" resultMap="BaseResultMap">
+   select 
+    <include refid="Base_Column_List" />
+    from yh_sport_recommend_record
+    where  id=#{recid}
+  </select>
+  
+  <!-- 根据code查询运动推荐类型 -->
+  <select id="showSportRecommended" parameterType="java.lang.String" resultMap="BaseResultMap1">
+  	select *,re.id as recid from yh_sport_setmeal ca,yh_sport_recommend_record re where ca.id=re.setmealid and re.user_code=#{userCode,jdbcType=VARCHAR} and re.record_type=1
+  </select>
+  
+  <!-- 健康健身 -->
+  <select id="showfitness" resultMap="BaseResultMap1">
+  	select * from yh_sport_setmeal where setmeal_mame like  '%健康健身%';
+  </select>
+  
+   <!-- 根据code查询运动推荐类型 -->
+  <select id="showSportRecommendedCount" parameterType="java.lang.String" resultType="int">
+  	select count(*) from yh_sport_recommend_record where user_code=#{userCode,jdbcType=VARCHAR} and record_type='1'
+  </select>
+  
+  
+  
+  <!-- 根据code查询出有几分 套餐 -->
+  <select id="seelctCode" resultMap="BaseResultMap" parameterType="java.lang.String">
+  	select * from yh_sport_recommend_record where user_code=#{userCode,jdbcType=VARCHAR} and record_type=1
+  </select>
+  
+   <select id="seelctCodeCount"  resultType="int" parameterType="map">
+  	select count(*) from yh_sport_recommend_record where user_code=#{userCode,jdbcType=VARCHAR} and record_type=1 and setmealid=#{setmealid,jdbcType=VARCHAR}
+  </select>
+  
+    
+     <!-- 用户查看运动套餐 -->
+    <select id="selectPersonageSport" resultMap="BaseResultMap" parameterType="map">
+  		select * from yh_sport_recommend_record rd,yh_disease_category ry,yh_sport_setmeal yh
+  		<where>
+  		rd.diseaseid=ry.id
+  		and yh.id=rd.setmealid
+  		and
+  		rd.user_code=#{userCode,jdbcType=VARCHAR}
+  		</where>
+  		order by rd.record_data desc LIMIT  #{page},#{limit}
+  </select>
+  
+  
+  <!-- 用户查看运动套餐总行数 -->
+    <select id="selectPersonageSportConut" resultType="int" parameterType="map">
+  		select count(*) from yh_sport_recommend_record rd,yh_disease_category ry,yh_sport_setmeal yh
+  		<where>
+  		rd.diseaseid=ry.id
+  		and yh.id=rd.setmealid
+  		and
+  		rd.user_code=#{userCode,jdbcType=VARCHAR}
+  		</where>
+  		order by rd.record_data desc
+  </select>
+  
+  
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from yh_sport_recommend_record
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from yh_sport_recommend_record
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.yihe.system.domain.YhSportRecommendRecord" >
+    insert into yh_sport_recommend_record (id, record_data, user_code, 
+      diseaseid, setmealid, number, 
+      finishid, record_type, record_kay, 
+      record_mode, standby)
+    values (#{id,jdbcType=INTEGER}, #{recordData,jdbcType=TIMESTAMP}, #{userCode,jdbcType=VARCHAR}, 
+      #{diseaseid,jdbcType=VARCHAR}, #{setmealid,jdbcType=VARCHAR}, #{number,jdbcType=VARCHAR}, 
+      #{finishid,jdbcType=VARCHAR}, #{recordType,jdbcType=INTEGER}, #{recordKay,jdbcType=INTEGER}, 
+      #{recordMode,jdbcType=VARCHAR}, #{standby,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.yihe.system.domain.YhSportRecommendRecord" >
+    insert into yh_sport_recommend_record
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="recordData != null" >
+        record_data,
+      </if>
+      <if test="userCode != null" >
+        user_code,
+      </if>
+      <if test="diseaseid != null" >
+        diseaseid,
+      </if>
+      <if test="setmealid != null" >
+        setmealid,
+      </if>
+      <if test="number != null" >
+        number,
+      </if>
+      <if test="finishid != null" >
+        finishid,
+      </if>
+      <if test="recordType != null" >
+        record_type,
+      </if>
+      <if test="recordKay != null" >
+        record_kay,
+      </if>
+      <if test="recordMode != null" >
+        record_mode,
+      </if>
+      <if test="sportName != null" >
+        sport_name,
+      </if>
+      <if test="standby != null" >
+        standby,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="recordData != null" >
+        #{recordData,jdbcType=TIMESTAMP},
+      </if>
+      <if test="userCode != null" >
+        #{userCode,jdbcType=VARCHAR},
+      </if>
+      <if test="diseaseid != null" >
+        #{diseaseid,jdbcType=VARCHAR},
+      </if>
+      <if test="setmealid != null" >
+        #{setmealid,jdbcType=VARCHAR},
+      </if>
+      <if test="number != null" >
+        #{number,jdbcType=VARCHAR},
+      </if>
+      <if test="finishid != null" >
+        #{finishid,jdbcType=VARCHAR},
+      </if>
+      <if test="recordType != null" >
+        #{recordType,jdbcType=INTEGER},
+      </if>
+      <if test="recordKay != null" >
+        #{recordKay,jdbcType=INTEGER},
+      </if>
+      <if test="recordMode != null" >
+        #{recordMode,jdbcType=VARCHAR},
+      </if>
+      <if test="sportName != null" >
+        #{sportName,jdbcType=VARCHAR},
+      </if>
+      <if test="standby != null" >
+        #{standby,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.yihe.system.domain.YhSportRecommendRecord" >
+    update yh_sport_recommend_record
+    <set >
+      <if test="recordData != null" >
+        record_data = #{recordData,jdbcType=TIMESTAMP},
+      </if>
+      <if test="userCode != null" >
+        user_code = #{userCode,jdbcType=VARCHAR},
+      </if>
+      <if test="diseaseid != null" >
+        diseaseid = #{diseaseid,jdbcType=VARCHAR},
+      </if>
+      <if test="setmealid != null" >
+        setmealid = #{setmealid,jdbcType=VARCHAR},
+      </if>
+      <if test="number != null" >
+        number = #{number,jdbcType=VARCHAR},
+      </if>
+        finishid = #{finishid,jdbcType=VARCHAR},
+      <if test="recordType != null" >
+        record_type = #{recordType,jdbcType=INTEGER},
+      </if>
+      <if test="recordKay != null" >
+        record_kay = #{recordKay,jdbcType=INTEGER},
+      </if>
+      <if test="recordMode != null" >
+        record_mode = #{recordMode,jdbcType=VARCHAR},
+      </if>
+      <if test="sportName != null" >
+        sport_name = #{sportName,jdbcType=VARCHAR},
+      </if>
+      <if test="standby != null" >
+        standby = #{standby,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.yihe.system.domain.YhSportRecommendRecord" >
+    update yh_sport_recommend_record
+    set record_data = #{recordData,jdbcType=TIMESTAMP},
+      user_code = #{userCode,jdbcType=VARCHAR},
+      diseaseid = #{diseaseid,jdbcType=VARCHAR},
+      setmealid = #{setmealid,jdbcType=VARCHAR},
+      number = #{number,jdbcType=VARCHAR},
+      finishid = #{finishid,jdbcType=VARCHAR},
+      record_type = #{recordType,jdbcType=INTEGER},
+      record_kay = #{recordKay,jdbcType=INTEGER},
+      record_mode = #{recordMode,jdbcType=VARCHAR},
+      standby = #{standby,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

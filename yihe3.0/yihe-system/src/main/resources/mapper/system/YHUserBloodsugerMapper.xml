@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yihe.system.mapper.YHUserBloodsugerMapper" >
+  <resultMap id="BaseResultMap" type="com.yihe.system.domain.YHUserBloodsuger" >
+    <id column="U_Bloodsuger_Id" property="uBloodsugerId" jdbcType="INTEGER" />
+    <result column="Bs" property="bs" jdbcType="REAL" />
+    <result column="Entry_Time" property="entryTime" jdbcType="VARCHAR" />
+    <result column="Is_Del" property="isDel" jdbcType="INTEGER" />
+    <result column="E_User_Id" property="eUserId" jdbcType="INTEGER" />
+    <result column="Env" property="env" jdbcType="VARCHAR" />
+    <result column="Data_Source" property="dataSource" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    U_Bloodsuger_Id, Bs, Entry_Time, Is_Del, E_User_Id, Env, Data_Source
+  </sql>
+  
+  <!-- 血糖总数 -->
+   <select id="selectByBloodsugerCount" resultType="int" >
+  	select count(*) from yh_user_bloodsuger
+  </select>
+  
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from yh_user_bloodsuger
+    where U_Bloodsuger_Id = #{uBloodsugerId,jdbcType=INTEGER}
+  </select>
+  
+  <select id="selectByPrimaryKeyByUsercodeLimit" resultMap="BaseResultMap" parameterType="java.lang.String" >
+   SELECT  <include refid="Base_Column_List" /> FROM yh_user_bloodsuger WHERE E_user_id=#{usercode} and is_Del=2  ORDER BY Entry_Time DESC LIMIT 1
+  </select>
+  
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from yh_user_bloodsuger
+    where U_Bloodsuger_Id = #{uBloodsugerId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.yihe.system.domain.YHUserBloodsuger" >
+    insert into yh_user_bloodsuger (U_Bloodsuger_Id, Bs, Entry_Time, 
+      Is_Del, E_User_Id, Env, 
+      Data_Source)
+    values (#{uBloodsugerId,jdbcType=INTEGER}, #{bs,jdbcType=REAL}, #{entryTime,jdbcType=VARCHAR}, 
+      #{isDel,jdbcType=INTEGER}, #{eUserId,jdbcType=INTEGER}, #{env,jdbcType=VARCHAR}, 
+      #{dataSource,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.yihe.system.domain.YHUserBloodsuger" >
+    insert into yh_user_bloodsuger
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="uBloodsugerId != null" >
+        U_Bloodsuger_Id,
+      </if>
+      <if test="bs != null" >
+        Bs,
+      </if>
+      <if test="entryTime != null" >
+        Entry_Time,
+      </if>
+      <if test="isDel != null" >
+        Is_Del,
+      </if>
+      <if test="eUserId != null" >
+        E_User_Id,
+      </if>
+      <if test="env != null" >
+        Env,
+      </if>
+      <if test="dataSource != null" >
+        Data_Source,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="uBloodsugerId != null" >
+        #{uBloodsugerId,jdbcType=INTEGER},
+      </if>
+      <if test="bs != null" >
+        #{bs,jdbcType=REAL},
+      </if>
+      <if test="entryTime != null" >
+        #{entryTime,jdbcType=VARCHAR},
+      </if>
+      <if test="isDel != null" >
+        #{isDel,jdbcType=INTEGER},
+      </if>
+      <if test="eUserId != null" >
+        #{eUserId,jdbcType=INTEGER},
+      </if>
+      <if test="env != null" >
+        #{env,jdbcType=VARCHAR},
+      </if>
+      <if test="dataSource != null" >
+        #{dataSource,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.yihe.system.domain.YHUserBloodsuger" >
+    update yh_user_bloodsuger
+    <set >
+      <if test="bs != null" >
+        Bs = #{bs,jdbcType=REAL},
+      </if>
+      <if test="entryTime != null" >
+        Entry_Time = #{entryTime,jdbcType=VARCHAR},
+      </if>
+      <if test="isDel != null" >
+        Is_Del = #{isDel,jdbcType=INTEGER},
+      </if>
+      <if test="eUserId != null" >
+        E_User_Id = #{eUserId,jdbcType=INTEGER},
+      </if>
+      <if test="env != null" >
+        Env = #{env,jdbcType=VARCHAR},
+      </if>
+      <if test="dataSource != null" >
+        Data_Source = #{dataSource,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where U_Bloodsuger_Id = #{uBloodsugerId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.yihe.system.domain.YHUserBloodsuger" >
+    update yh_user_bloodsuger
+    set Bs = #{bs,jdbcType=REAL},
+      Entry_Time = #{entryTime,jdbcType=VARCHAR},
+      Is_Del = #{isDel,jdbcType=INTEGER},
+      E_User_Id = #{eUserId,jdbcType=INTEGER},
+      Env = #{env,jdbcType=VARCHAR},
+      Data_Source = #{dataSource,jdbcType=VARCHAR}
+    where U_Bloodsuger_Id = #{uBloodsugerId,jdbcType=INTEGER}
+  </update>
+  <!--  查询用户血糖 -->
+  <select id="selectYHUserBloodsuger" resultType="map" parameterType="java.lang.String" >
+    select  yub.Bs, yub.Env,
+(select count(1) from yh_user_bloodsuger where E_User_Id=#{ eUserId,jdbcType=INTEGER} and Is_Del = 2) as num,
+yub.Data_Source,yub.Entry_Time
+from yh_user_reginfo as reg 
+left join yh_user_bloodsuger yub
+on reg.user_code = yub.E_User_Id
+where yub.U_Bloodsuger_Id = (select U_Bloodsuger_Id from yh_user_bloodsuger where E_User_Id=#{ eUserId,jdbcType=INTEGER} and Is_Del = 2 order by Entry_Time desc limit 1)
+  </select>
+<select id="selectPageByParam" resultMap="BaseResultMap" parameterType="java.lang.String"  >
+  select  yub.Bs,yub.Env,yub.Entry_Time
+	from yh_user_reginfo as reg 
+	inner join yh_user_bloodsuger yub
+	on reg.user_code = yub.E_User_Id
+	and Is_Del = 2
+	 where reg.user_code=#{ eUserId,jdbcType=INTEGER} order by Entry_Time DESC 
+  </select>
+
+  <select id="selectBloodsuger" resultMap="BaseResultMap" parameterType="map"  >
+     select  yub.Bs,yub.Env,yub.Entry_Time
+	from yh_user_reginfo as reg 
+	inner join yh_user_bloodsuger yub
+	on reg.user_code = yub.E_User_Id
+	 where reg.user_code=#{ userCode,jdbcType=INTEGER} 
+	 and Env = #{env,jdbcType=VARCHAR} and Is_Del = 2 order by Entry_Time desc 
+  </select>
+
+	<!--  导入 -->
+	
+ <insert id="importYHUserBloodsugerData" parameterType="java.util.List">
+           insert into yh_user_bloodsuger (Bs, Entry_Time, 
+      Is_Del, E_User_Id, Env, 
+      Data_Source) value
+           <foreach collection="Onlist" index="index" item="item" separator=",">
+     ( #{item.bs,jdbcType=REAL}, #{item.entryTime,jdbcType=VARCHAR}, 
+      #{item.isDel,jdbcType=INTEGER}, #{item.eUserId,jdbcType=INTEGER}, #{item.env,jdbcType=VARCHAR}, 
+      #{item.dataSource,jdbcType=VARCHAR})
+           </foreach>
+     </insert>
+
+<!--       insert into yh_user_bloodsuger (
+           <if test="bs != null" >
+        		Bs,
+      		</if>
+      		 Entry_Time, 
+      Is_Del, E_User_Id, Env, 
+      Data_Source) value
+    <foreach collection="Onlist" index="index" item="item" separator=",">
+     (  <if test="bs != null" >
+        #{item.bs,jdbcType=REAL},
+      </if>
+       #{item.entryTime,jdbcType=VARCHAR}, 
+      #{item.isDel,jdbcType=INTEGER}, #{item.eUserId,jdbcType=INTEGER}, #{item.env,jdbcType=VARCHAR}, 
+      #{item.dataSource,jdbcType=VARCHAR})
+           </foreach> -->
+	
+
+  
+</mapper>

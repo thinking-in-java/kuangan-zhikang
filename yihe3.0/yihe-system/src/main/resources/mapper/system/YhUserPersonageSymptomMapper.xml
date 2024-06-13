@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yihe.system.mapper.YhUserPersonageSymptomMapper" >
+  <resultMap id="BaseResultMap" type="com.yihe.system.domain.YhUserPersonageSymptom" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="personage_name" property="personageName" jdbcType="VARCHAR" />
+    <result column="user_code" property="userCode" jdbcType="VARCHAR" />
+    <result column="standby" property="standby" jdbcType="VARCHAR" />
+    <result column="addtime" property="addtime" jdbcType="VARCHAR" />
+    <result column="updatetime" property="updatetime" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, personage_name, user_code, standby,addtime,updatetime
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="String" >
+    select 
+    <include refid="Base_Column_List" />
+    from yh_user_personage_symptom
+    where user_code = #{userCode,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from yh_user_personage_symptom
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.yihe.system.domain.YhUserPersonageSymptom" >
+    insert into yh_user_personage_symptom (id, personage_name, user_code, 
+      standby)
+    values (#{id,jdbcType=INTEGER}, #{personageName,jdbcType=VARCHAR}, #{userCode,jdbcType=VARCHAR}, 
+      #{standby,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.yihe.system.domain.YhUserPersonageSymptom" >
+    insert into yh_user_personage_symptom
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="personageName != null" >
+        personage_name,
+      </if>
+      <if test="userCode != null" >
+        user_code,
+      </if>
+      <if test="standby != null" >
+        standby,
+      </if>
+       <if test="addtime != null" >
+        addtime,
+      </if>
+       <if test="updatetime != null" >
+        updatetime,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="personageName != null" >
+        #{personageName,jdbcType=VARCHAR},
+      </if>
+      <if test="userCode != null" >
+        #{userCode,jdbcType=VARCHAR},
+      </if> 
+      <if test="standby != null" >
+        #{standby,jdbcType=VARCHAR},
+      </if>
+      <if test="addtime != null" >
+        #{addtime,jdbcType=VARCHAR},
+      </if>
+      <if test="updatetime != null" >
+        #{updatetime,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.yihe.system.domain.YhUserPersonageSymptom" >
+    update yh_user_personage_symptom
+    <set >
+      <if test="personageName != null" >
+        personage_name = #{personageName,jdbcType=VARCHAR},
+      </if>
+      <if test="userCode != null" >
+     	 id = #{id,jdbcType=INTEGER},
+      </if>
+      <if test="standby != null" >
+        standby = #{standby,jdbcType=VARCHAR},
+      </if>
+      <if test="addtime != null" >
+        addtime = #{addtime,jdbcType=VARCHAR},
+      </if>
+      <if test="updatetime != null" >
+        updatetime = #{updatetime,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where user_code = #{userCode,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.yihe.system.domain.YhUserPersonageSymptom" >
+    update yh_user_personage_symptom
+    set personage_name = #{personageName,jdbcType=VARCHAR},
+    id = #{id,jdbcType=INTEGER},
+     standby = #{standby,jdbcType=VARCHAR},
+     addtime = #{addtime,jdbcType=VARCHAR},
+      updatetime = #{updatetime,jdbcType=VARCHAR}
+    where  user_code = #{userCode,jdbcType=VARCHAR}
+  </update>
+</mapper>

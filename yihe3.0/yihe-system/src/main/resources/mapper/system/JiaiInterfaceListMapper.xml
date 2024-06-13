@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yihe.system.mapper.JiaiInterfaceListMapper" >
+  <resultMap id="BaseResultMap" type="com.yihe.system.domain.JiaiInterfaceList" >
+    <id column="jid" property="jid" jdbcType="INTEGER" />
+    <result column="api" property="api" jdbcType="VARCHAR" />
+    <result column="describe" property="describe" jdbcType="VARCHAR" />
+    <result column="key" property="key" jdbcType="VARCHAR" />
+    <result column="cpid" property="cpid" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    jid, api, describe, key, cpid
+  </sql>
+  <select id="selectByPrimaryKeyByDescribe" resultMap="BaseResultMap">
+select * from jiai_interface_list where `describe` like #{describe}
+</select>
+
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from jiai_interface_list
+    where jid = #{jid,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from jiai_interface_list
+    where jid = #{jid,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.yihe.system.domain.JiaiInterfaceList" >
+    insert into jiai_interface_list (jid, api, describe, 
+      key, cpid)
+    values (#{jid,jdbcType=INTEGER}, #{api,jdbcType=VARCHAR}, #{describe,jdbcType=VARCHAR}, 
+      #{key,jdbcType=VARCHAR}, #{cpid,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.yihe.system.domain.JiaiInterfaceList" >
+    insert into jiai_interface_list
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="jid != null" >
+        jid,
+      </if>
+      <if test="api != null" >
+        api,
+      </if>
+      <if test="describe != null" >
+        describe,
+      </if>
+      <if test="key != null" >
+        key,
+      </if>
+      <if test="cpid != null" >
+        cpid,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="jid != null" >
+        #{jid,jdbcType=INTEGER},
+      </if>
+      <if test="api != null" >
+        #{api,jdbcType=VARCHAR},
+      </if>
+      <if test="describe != null" >
+        #{describe,jdbcType=VARCHAR},
+      </if>
+      <if test="key != null" >
+        #{key,jdbcType=VARCHAR},
+      </if>
+      <if test="cpid != null" >
+        #{cpid,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.yihe.system.domain.JiaiInterfaceList" >
+    update jiai_interface_list
+    <set >
+      <if test="api != null" >
+        api = #{api,jdbcType=VARCHAR},
+      </if>
+      <if test="describe != null" >
+        describe = #{describe,jdbcType=VARCHAR},
+      </if>
+      <if test="key != null" >
+        key = #{key,jdbcType=VARCHAR},
+      </if>
+      <if test="cpid != null" >
+        cpid = #{cpid,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where jid = #{jid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.yihe.system.domain.JiaiInterfaceList" >
+    update jiai_interface_list
+    set api = #{api,jdbcType=VARCHAR},
+      describe = #{describe,jdbcType=VARCHAR},
+      key = #{key,jdbcType=VARCHAR},
+      cpid = #{cpid,jdbcType=VARCHAR}
+    where jid = #{jid,jdbcType=INTEGER}
+  </update>
+</mapper>

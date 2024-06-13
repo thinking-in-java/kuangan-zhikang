@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yihe.system.mapper.JiaiWatchInfoMapper" >
+  <resultMap id="BaseResultMap" type="com.yihe.system.domain.JiaiWatchInfo" >
+    <id column="terminalId" property="terminalid" jdbcType="VARCHAR" />
+    <result column="id" property="id" jdbcType="INTEGER" />
+    <result column="gpsflag" property="gpsflag" jdbcType="INTEGER" />
+    <result column="positInterval" property="positinterval" jdbcType="VARCHAR" />
+    <result column="sosname1" property="sosname1" jdbcType="VARCHAR" />
+    <result column="mobile1" property="mobile1" jdbcType="VARCHAR" />
+    <result column="sosname2" property="sosname2" jdbcType="VARCHAR" />
+    <result column="mobile2" property="mobile2" jdbcType="VARCHAR" />
+    <result column="sosname3" property="sosname3" jdbcType="VARCHAR" />
+    <result column="mobile3" property="mobile3" jdbcType="VARCHAR" />
+    <result column="heartInterval" property="heartinterval" jdbcType="VARCHAR" />
+    <result column="bloodPressureInterval" property="bloodpressureinterval" jdbcType="VARCHAR" />
+    <result column="temperaturePressureInterval" property="temperaturepressureinterval" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    terminalId, id, gpsflag, positInterval, sosname1, mobile1, sosname2, mobile2, sosname3, 
+    mobile3, heartInterval, bloodPressureInterval, temperaturePressureInterval
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from jiai_watch_info
+    where terminalId = #{terminalid,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from jiai_watch_info
+    where terminalId = #{terminalid,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.yihe.system.domain.JiaiWatchInfo" >
+    insert into jiai_watch_info (terminalId, id, gpsflag, 
+      positInterval, sosname1, mobile1, 
+      sosname2, mobile2, sosname3, 
+      mobile3, heartInterval, bloodPressureInterval, 
+      temperaturePressureInterval)
+    values (#{terminalid,jdbcType=VARCHAR}, #{id,jdbcType=INTEGER}, #{gpsflag,jdbcType=INTEGER}, 
+      #{positinterval,jdbcType=VARCHAR}, #{sosname1,jdbcType=VARCHAR}, #{mobile1,jdbcType=VARCHAR}, 
+      #{sosname2,jdbcType=VARCHAR}, #{mobile2,jdbcType=VARCHAR}, #{sosname3,jdbcType=VARCHAR}, 
+      #{mobile3,jdbcType=VARCHAR}, #{heartinterval,jdbcType=VARCHAR}, #{bloodpressureinterval,jdbcType=VARCHAR}, 
+      #{temperaturepressureinterval,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.yihe.system.domain.JiaiWatchInfo" >
+    insert into jiai_watch_info
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="terminalid != null" >
+        terminalId,
+      </if>
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="gpsflag != null" >
+        gpsflag,
+      </if>
+      <if test="positinterval != null" >
+        positInterval,
+      </if>
+      <if test="sosname1 != null" >
+        sosname1,
+      </if>
+      <if test="mobile1 != null" >
+        mobile1,
+      </if>
+      <if test="sosname2 != null" >
+        sosname2,
+      </if>
+      <if test="mobile2 != null" >
+        mobile2,
+      </if>
+      <if test="sosname3 != null" >
+        sosname3,
+      </if>
+      <if test="mobile3 != null" >
+        mobile3,
+      </if>
+      <if test="heartinterval != null" >
+        heartInterval,
+      </if>
+      <if test="bloodpressureinterval != null" >
+        bloodPressureInterval,
+      </if>
+      <if test="temperaturepressureinterval != null" >
+        temperaturePressureInterval,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="terminalid != null" >
+        #{terminalid,jdbcType=VARCHAR},
+      </if>
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="gpsflag != null" >
+        #{gpsflag,jdbcType=INTEGER},
+      </if>
+      <if test="positinterval != null" >
+        #{positinterval,jdbcType=VARCHAR},
+      </if>
+      <if test="sosname1 != null" >
+        #{sosname1,jdbcType=VARCHAR},
+      </if>
+      <if test="mobile1 != null" >
+        #{mobile1,jdbcType=VARCHAR},
+      </if>
+      <if test="sosname2 != null" >
+        #{sosname2,jdbcType=VARCHAR},
+      </if>
+      <if test="mobile2 != null" >
+        #{mobile2,jdbcType=VARCHAR},
+      </if>
+      <if test="sosname3 != null" >
+        #{sosname3,jdbcType=VARCHAR},
+      </if>
+      <if test="mobile3 != null" >
+        #{mobile3,jdbcType=VARCHAR},
+      </if>
+      <if test="heartinterval != null" >
+        #{heartinterval,jdbcType=VARCHAR},
+      </if>
+      <if test="bloodpressureinterval != null" >
+        #{bloodpressureinterval,jdbcType=VARCHAR},
+      </if>
+      <if test="temperaturepressureinterval != null" >
+        #{temperaturepressureinterval,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.yihe.system.domain.JiaiWatchInfo" >
+    update jiai_watch_info
+    <set >
+      <if test="id != null" >
+        id = #{id,jdbcType=INTEGER},
+      </if>
+      <if test="gpsflag != null" >
+        gpsflag = #{gpsflag,jdbcType=INTEGER},
+      </if>
+      <if test="positinterval != null" >
+        positInterval = #{positinterval,jdbcType=VARCHAR},
+      </if>
+      <if test="sosname1 != null" >
+        sosname1 = #{sosname1,jdbcType=VARCHAR},
+      </if>
+      <if test="mobile1 != null" >
+        mobile1 = #{mobile1,jdbcType=VARCHAR},
+      </if>
+      <if test="sosname2 != null" >
+        sosname2 = #{sosname2,jdbcType=VARCHAR},
+      </if>
+      <if test="mobile2 != null" >
+        mobile2 = #{mobile2,jdbcType=VARCHAR},
+      </if>
+      <if test="sosname3 != null" >
+        sosname3 = #{sosname3,jdbcType=VARCHAR},
+      </if>
+      <if test="mobile3 != null" >
+        mobile3 = #{mobile3,jdbcType=VARCHAR},
+      </if>
+      <if test="heartinterval != null" >
+        heartInterval = #{heartinterval,jdbcType=VARCHAR},
+      </if>
+      <if test="bloodpressureinterval != null" >
+        bloodPressureInterval = #{bloodpressureinterval,jdbcType=VARCHAR},
+      </if>
+      <if test="temperaturepressureinterval != null" >
+        temperaturePressureInterval = #{temperaturepressureinterval,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where terminalId = #{terminalid,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.yihe.system.domain.JiaiWatchInfo" >
+    update jiai_watch_info
+    set id = #{id,jdbcType=INTEGER},
+      gpsflag = #{gpsflag,jdbcType=INTEGER},
+      positInterval = #{positinterval,jdbcType=VARCHAR},
+      sosname1 = #{sosname1,jdbcType=VARCHAR},
+      mobile1 = #{mobile1,jdbcType=VARCHAR},
+      sosname2 = #{sosname2,jdbcType=VARCHAR},
+      mobile2 = #{mobile2,jdbcType=VARCHAR},
+      sosname3 = #{sosname3,jdbcType=VARCHAR},
+      mobile3 = #{mobile3,jdbcType=VARCHAR},
+      heartInterval = #{heartinterval,jdbcType=VARCHAR},
+      bloodPressureInterval = #{bloodpressureinterval,jdbcType=VARCHAR},
+      temperaturePressureInterval = #{temperaturepressureinterval,jdbcType=VARCHAR}
+    where terminalId = #{terminalid,jdbcType=VARCHAR}
+  </update>
+</mapper>

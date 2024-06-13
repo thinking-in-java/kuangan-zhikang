@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>运动库管理</title>
+   <link rel="stylesheet"  th:href="@{/assets/libs/layui/css/layui.css}" />
+    <link rel="stylesheet"  th:href="@{/assets/module/admin.css}"  />
+</head>
+<body>
+ <!-- 页面加载loading -->
+<div class="page-loading">
+    <div class="ball-loader">
+        <span></span><span></span><span></span><span></span>
+    </div>
+</div>
+
+<a id="cancel" target="_self" style="display: none" href="/manage/content/manageaudit" lay-text="运动管理">"运动管理"</a>
+<div class="layui-fluid">
+		<div class="layui-row">
+			<div style="width: 100%; height: 100%; background-color: #FFF; position: relative;">
+				<div style="font-size: 20px; font-weight: bold; margin-left: 20px; padding-top: 30px;">新建运动</div>
+				
+				<form class="layui-form" id="express">
+				
+				<input id="id" name="id" type="hidden" th:value="${id}">
+				
+				 <div class="layui-form-item">
+				    <div class="layui-inline">
+				      <label style="width: 10%;;"
+							class="layui-form-label layui-form-required">名称</label>
+						<div class="layui-input-block">
+							<div class="layui-row">
+							
+								<input style="margin-left: -89px; width: 450px;" type="text"
+									name="sportName" id="sportName"  lay-verify="required" lay-reqtext="名称是必填项，岂能为空？" maxlength="10"
+									placeholder="请输入名称，最大限制10个字符" autocomplete="off" lay-verType="tips"
+									class="layui-input">
+							</div>
+						</div>
+				    </div>
+				    
+				    
+				<input id="sportImg" name="sportImg" type="hidden" value="">
+
+				    <div class="layui-inline">
+				      <div class="layui-input-block">
+					     <div class="layui-upload-drag" id="test10">
+							  <i class="layui-icon"></i>
+							  <p>点击上传，或将图片拖拽到此处</p>
+							  <div class="layui-hide" id="uploadDemoView" >
+							    <hr>
+							    <img src="" alt="上传成功后渲染" style="max-width: 196px">
+							  </div>
+							</div>
+					</div>
+				    </div>
+				  </div>
+				
+					
+					<div class="layui-form-item">
+					
+					    <div class="layui-inline">
+					      <label style="width: 30%;"
+							class="layui-form-label layui-form-required">数量(秒)</label>
+						<div class="layui-input-block">
+							<div class="layui-row">
+									 <input type="text" style="margin-left: -89px; width: 200px;" disabled name="number" id="number" value="60" lay-verify="required|number" autocomplete="off" class="layui-input">
+							</div>
+						</div>
+					    </div>
+					    
+					    
+					    <div class="layui-inline">
+					      <label style="width: 40%;"
+							class="layui-form-label layui-form-required">能耗(千卡)</label>
+						<div class="layui-input-block">
+							<div class="layui-row">
+									 <input type="number" style="margin-left: -89px; width: 200px;" placeholder="请输入热量"  id="kcal" name="kcal" lay-verify="required|number" autocomplete="off" class="layui-input">
+							</div>
+						</div>
+					    </div>
+					    
+					  </div>
+					
+					
+					<div class="layui-form-item">
+						<label style="width: 72px;"
+							class="layui-form-label layui-form-required">动作步骤</label>
+						<div class="layui-input-block">
+							<div class="layui-row">
+								<textarea placeholder="请输入内容"  style="margin-left: -89px;" id="sportSteps" name="sportSteps" class="layui-textarea"></textarea>
+							</div>
+						</div>
+					</div>
+					
+					<div class="layui-form-item">
+						<label style="width: 72px;"
+							class="layui-form-label layui-form-required">动作感觉</label>
+						<div class="layui-input-block">
+							<div class="layui-row">
+								<textarea placeholder="请输入内容"  style="margin-left: -89px;" id="sportFell" name="sportFell" class="layui-textarea"></textarea>
+							</div>
+						</div>
+					</div>
+					
+					<div class="layui-form-item">
+						<label style="width: 72px;"
+							class="layui-form-label layui-form-required">呼吸节奏</label>
+						<div class="layui-input-block">
+							<div class="layui-row">
+								<textarea placeholder="请输入内容"  style="margin-left: -89px;" id="sportBreath" name="sportBreath" class="layui-textarea"></textarea>
+							</div>
+						</div>
+					</div>
+					
+					
+				
+
+					
+					<div class="layui-form-item" style="margin-left: -88px;padding-bottom: 40px;">
+						 <div class="layui-input-block" >
+	      <button type="button" onclick="add()" class="layui-btn layui-btn-normal">立即添加</button>
+	     <button type="reset" onclick="cancel()" class="layui-btn layui-btn-primary">&emsp;取消&emsp;</button>
+	 </div>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+
+
+</body>
+<script type="text/javascript" th:src="@{/assets/libs/layui/layui.js}"></script>
+<script type="text/javascript" th:src="@{/assets/js/common.js}"></script>
+<script type="text/javascript" th:src="@{/assets/js/jquery-1.11.1.js}"></script>
+<script type="text/javascript">
+
+$(function(){
+	var id=$("#id").val();
+	if(id!=0 || id!=""){
+		 $.ajax({
+	    	 type: "post",
+	         url: "/YhSportMotion/selectidSport",
+	         dataType:"json",
+	         data:{"id":id},
+	         success: function(data){
+	        	 $("#kcal").val(data.data.kcal);
+	        	 $("#sportBreath").val(data.data.sportBreath);
+	        	 $("#sportFell").val(data.data.sportFell);
+	        	 $("#sportImg").val(data.data.sportImg);
+	        	 $("#sportName").val(data.data.sportName);
+	        	 $("#sportSteps").val(data.data.sportSteps);
+	        	 layui.$('#uploadDemoView').removeClass('layui-hide').find('img').attr('src', data.data.sportImg);
+	         }   	
+	    });
+	}
+})
+
+function add(){
+	  var d =$("#express").serialize();
+	  	 $.ajax({
+        	 type: "post",
+             url: "/YhSportMotion/insertSport",
+             dataType:"json",
+             data:d,
+             success: function(data){
+          	   if(data.data==1){
+          		    layer.msg('操作成功');
+						cancel();
+          	   }else{
+	            	   layer.msg('操作失败');
+          	   }
+             }   	
+        });
+}
+
+cancel=function(){
+	document.getElementById("cancel").click();
+}
+	
+	layui.use('upload', function(){
+	  var $ = layui.jquery
+	  ,upload = layui.upload;
+	  
+	  //拖拽上传图片
+	  upload.render({
+	    elem: '#test10'
+	    ,url: '/Uploading/addEnrollImg' //改成您自己的上传接口
+	    ,done: function(res){
+	      layer.msg('上传成功');
+	      layui.$('#uploadDemoView').removeClass('layui-hide').find('img').attr('src', res.files);
+	      layui.$("#sportImg").val(res.files);
+	      console.log(res)
+	    }
+	  });
+
+	
+	  
+	});
+</script>
+</html>

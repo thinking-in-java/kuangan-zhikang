@@ -1,0 +1,402 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yihe.applet.api.mapper.YhUserTemperatureAppMapper">
+  <resultMap id="BaseResultMap" type="com.yihe.applet.api.domain.YhUserTemperatureApp">
+    <id column="tid" jdbcType="INTEGER" property="tid" />
+    <result column="temperature" jdbcType="REAL" property="temperature" />
+    <result column="Entry_Time" jdbcType="VARCHAR" property="entryTime" />
+    <result column="Is_Del" jdbcType="INTEGER" property="isDel" />
+    <result column="E_User_Id" jdbcType="VARCHAR" property="eUserId" />
+    <result column="Data_Source" jdbcType="VARCHAR" property="dataSource" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    tid, temperature, Entry_Time, Is_Del, E_User_Id, Data_Source
+  </sql>
+  <select id="findTiwenAllInfoByUserCode" resultMap="BaseResultMap">
+    SELECT * FROM yh_user_temperature
+ WHERE  e_user_id=#{usercode} AND Is_Del=2
+    <if test="timetype==0">
+      AND Entry_Time &gt;=  #{strTime} AND Entry_Time &lt;= #{endTime}
+    </if>
+    <if test="timetype==1">
+      AND Entry_Time LIKE CONCAT('',#{strTime},'%')
+    </if>
+    <if test="timetype==2">
+      AND YEAR(Entry_Time) =#{strTime}
+    </if>
+
+  </select>
+  <!--查询体温某年数据-->
+  <select id="findTemperatureByYear" resultMap="BaseResultMap">
+    SELECT * FROM yh_user_temperature WHERE  YEAR(Entry_Time) =#{time} AND is_del=2 AND E_User_Id=#{usercode} LIMIT #{page}, #{pagesize}
+  </select>
+  <!--查询体温某月记录-->
+<select id="findTemperatureByMonth" resultMap="BaseResultMap">
+  SELECT * FROM yh_user_temperature WHERE Entry_Time LIKE CONCAT('',#{month},'%') AND is_del=2 AND E_User_Id=#{usercode}  LIMIT #{page}, #{pagesize}
+</select>
+  <!--查询体温某周数据-->
+  <select id="findTemperatureByWeek" resultMap="BaseResultMap">
+    SELECT * FROM yh_user_temperature WHERE   Entry_Time &gt;=  #{strTime} AND Entry_Time &lt;= #{endTime}  AND is_del=2 AND E_User_Id=#{usercode}  LIMIT #{page}, #{pagesize}
+  </select>
+  <!-- 低热数 -->
+   <select id="findTemperatureByDiRe"  resultType="java.lang.Integer">
+   
+     SELECT COUNT(1) FROM (SELECT * FROM `yh_user_temperature` WHERE `E_User_Id`=#{usercode} AND Is_Del=2
+     <if test="timetype==0">
+       AND  Entry_Time &gt;=  #{strTime} AND Entry_Time &lt;= #{endTime}
+     </if>
+     <if test="timetype==1">
+       AND  Entry_Time LIKE CONCAT('',#{strTime},'%')
+     </if>
+     <if test="timetype==2">
+       AND YEAR(Entry_Time) =#{strTime}
+     </if>
+
+     LIMIT #{page}) AS a
+WHERE 	  CAST(a.temperature AS DECIMAL(10,2))&gt;=37.3 AND CAST(a.temperature AS DECIMAL(10,2))	&lt;=38
+   </select>
+   <!-- 高热数 -->
+   <select id="findTemperatureByGaoRe" resultType="java.lang.Integer">
+  
+   SELECT COUNT(1) FROM (SELECT * FROM `yh_user_temperature` WHERE `E_User_Id`=#{usercode} AND Is_Del=2
+     <if test="timetype==0">
+       AND Entry_Time &gt;=  #{strTime} AND Entry_Time &lt;= #{endTime}
+     </if>
+     <if test="timetype==1">
+       AND  Entry_Time LIKE CONCAT('',#{strTime},'%')
+     </if>
+     <if test="timetype==2">
+       AND  YEAR(Entry_Time) =#{strTime}
+     </if>
+
+     LIMIT #{page}) AS a
+WHERE 	 CAST(a.temperature AS DECIMAL(10,2)) &gt; 38
+</select>
+   <!-- 正常数 -->
+   <select id="findTemperatureByZC" resultType="java.lang.Integer">
+   
+   SELECT COUNT(1) FROM (SELECT * FROM `yh_user_temperature` WHERE `E_User_Id`=#{usercode} AND Is_Del=2
+     <if test="timetype==0">
+       AND Entry_Time &gt;=  #{strTime} AND Entry_Time &lt;= #{endTime}
+     </if>
+     <if test="timetype==1">
+       AND Entry_Time LIKE CONCAT('',#{strTime},'%')
+     </if>
+     <if test="timetype==2">
+       AND YEAR(Entry_Time) =#{strTime}
+     </if>
+
+     LIMIT #{page}) AS a
+WHERE 	  CAST(a.temperature AS DECIMAL(10,2))&gt;=36 AND CAST(a.temperature AS DECIMAL(10,2))&lt;=37.2
+   </select>
+   <!-- 过低 -->
+   <select id="findTemperatureByGD" resultType="java.lang.Integer">
+   
+   SELECT COUNT(1) FROM (SELECT * FROM `yh_user_temperature` WHERE `E_User_Id`=#{usercode} AND Is_Del=2
+
+     <if test="timetype==0">
+       AND Entry_Time &gt;=  #{strTime} AND Entry_Time &lt;= #{endTime}
+     </if>
+     <if test="timetype==1">
+       AND Entry_Time LIKE CONCAT('',#{strTime},'%')
+     </if>
+     <if test="timetype==2">
+       AND YEAR(Entry_Time) =#{strTime}
+     </if>
+
+     LIMIT #{page}) AS a
+WHERE 	  CAST(a.temperature AS DECIMAL(10,2))  &lt; 36
+   </select>
+  <!-- 查询时间段分布 -->
+  <select id="findtemperatureTimeFenBuYear" resultType="java.lang.Integer">
+ SELECT COUNT(1) FROM (SELECT * FROM `yh_user_temperature` WHERE `E_User_Id`=#{usercode} AND   YEAR(Entry_Time) =#{time} AND is_del=2  LIMIT #{page}) AS a
+WHERE 	 HOUR(a.Entry_Time)&gt;=5 AND HOUR(a.Entry_Time)&lt;8 AND a.E_User_Id=#{usercode} and a.Is_Del=2
+		UNION ALL
+		SELECT COUNT(1) FROM (SELECT * FROM `yh_user_temperature` WHERE `E_User_Id`=#{usercode} AND   YEAR(Entry_Time) =#{time} AND is_del=2 LIMIT #{page}) AS a
+WHERE 	HOUR(a.Entry_Time)&gt;=8 AND HOUR(a.Entry_Time) &lt;12 AND a.E_User_Id=#{usercode} and a.Is_Del=2
+		UNION ALL
+		SELECT COUNT(1) FROM (SELECT * FROM `yh_user_temperature` WHERE `E_User_Id`=#{usercode} AND   YEAR(Entry_Time) =#{time} AND is_del=2 LIMIT #{page}) AS a
+WHERE 	 HOUR(a.Entry_Time)&gt;=12 AND HOUR(a.Entry_Time) &lt;14 AND a.E_User_Id=#{usercode} and a.Is_Del=2
+		UNION ALL
+		SELECT COUNT(1) FROM (SELECT * FROM `yh_user_temperature` WHERE `E_User_Id`=#{usercode} AND   YEAR(Entry_Time) =#{time} AND is_del=2 LIMIT #{page}) AS a
+WHERE 	 HOUR(a.Entry_Time) &gt;=14 AND HOUR(a.Entry_Time)&lt;18 AND a.E_User_Id=#{usercode} and a.Is_Del=2
+		UNION ALL
+		SELECT COUNT(1) FROM (SELECT * FROM `yh_user_temperature` WHERE `E_User_Id`=#{usercode} AND   YEAR(Entry_Time) =#{time} AND is_del=2 LIMIT #{page}) AS a
+WHERE 	 HOUR(a.Entry_Time)&gt;=18 AND HOUR(a.Entry_Time)&lt;22 AND a.E_User_Id=#{usercode} and a.Is_Del=2
+		UNION ALL
+		SELECT COUNT(1) FROM (SELECT * FROM `yh_user_temperature` WHERE `E_User_Id`=#{usercode} AND   YEAR(Entry_Time) =#{time} AND is_del=2 LIMIT #{page}) AS a
+WHERE 	 HOUR(a.Entry_Time)&gt;=22 AND HOUR(a.Entry_Time)&lt;24 AND a.E_User_Id=#{usercode} and a.Is_Del=2
+		UNION ALL
+		SELECT COUNT(1) FROM (SELECT * FROM `yh_user_temperature` WHERE `E_User_Id`=#{usercode} AND   YEAR(Entry_Time) =#{time} AND is_del=2 LIMIT #{page}) AS a
+WHERE 	 HOUR(a.Entry_Time)&gt;=0 AND HOUR(a.Entry_Time)&lt;5 AND a.E_User_Id=#{usercode} and a.Is_Del=2
+ 
+  </select>
+
+  <!-- 查询时间段分布 -->
+  <select id="findtemperatureTimeFenBuMonth" resultType="java.lang.Integer">
+ SELECT COUNT(1) FROM (SELECT * FROM `yh_user_temperature` WHERE `E_User_Id`=#{usercode} AND   Entry_Time LIKE CONCAT('',#{month},'%') AND is_del=2  LIMIT #{page}) AS a
+WHERE 	 HOUR(a.Entry_Time)&gt;=5 AND HOUR(a.Entry_Time)&lt;8 AND a.E_User_Id=#{usercode} and a.Is_Del=2
+		UNION ALL
+		SELECT COUNT(1) FROM (SELECT * FROM `yh_user_temperature` WHERE `E_User_Id`=#{usercode} AND Entry_Time LIKE CONCAT('',#{month},'%')  AND is_del=2 LIMIT #{page}) AS a
+WHERE 	HOUR(a.Entry_Time)&gt;=8 AND HOUR(a.Entry_Time) &lt;12 AND a.E_User_Id=#{usercode} and a.Is_Del=2
+		UNION ALL
+		SELECT COUNT(1) FROM (SELECT * FROM `yh_user_temperature` WHERE `E_User_Id`=#{usercode} AND  Entry_Time LIKE CONCAT('',#{month},'%')  AND is_del=2 LIMIT #{page}) AS a
+WHERE 	 HOUR(a.Entry_Time)&gt;=12 AND HOUR(a.Entry_Time) &lt;14 AND a.E_User_Id=#{usercode} and a.Is_Del=2
+		UNION ALL
+		SELECT COUNT(1) FROM (SELECT * FROM `yh_user_temperature` WHERE `E_User_Id`=#{usercode} AND   Entry_Time LIKE CONCAT('',#{month},'%')  AND is_del=2 LIMIT #{page}) AS a
+WHERE 	 HOUR(a.Entry_Time) &gt;=14 AND HOUR(a.Entry_Time)&lt;18 AND a.E_User_Id=#{usercode} and a.Is_Del=2
+		UNION ALL
+		SELECT COUNT(1) FROM (SELECT * FROM `yh_user_temperature` WHERE `E_User_Id`=#{usercode} AND   Entry_Time LIKE CONCAT('',#{month},'%')  AND is_del=2 LIMIT #{page}) AS a
+WHERE 	 HOUR(a.Entry_Time)&gt;=18 AND HOUR(a.Entry_Time)&lt;22 AND a.E_User_Id=#{usercode} and a.Is_Del=2
+		UNION ALL
+		SELECT COUNT(1) FROM (SELECT * FROM `yh_user_temperature` WHERE `E_User_Id`=#{usercode} AND   Entry_Time LIKE CONCAT('',#{month},'%')  AND is_del=2 LIMIT #{page}) AS a
+WHERE 	 HOUR(a.Entry_Time)&gt;=22 AND HOUR(a.Entry_Time)&lt;24 AND a.E_User_Id=#{usercode} and a.Is_Del=2
+		UNION ALL
+		SELECT COUNT(1) FROM (SELECT * FROM `yh_user_temperature` WHERE `E_User_Id`=#{usercode} AND   Entry_Time LIKE CONCAT('',#{month},'%')  LIMIT #{page}) AS a
+WHERE 	 HOUR(a.Entry_Time)&gt;=0 AND HOUR(a.Entry_Time)&lt;5 AND a.E_User_Id=#{usercode} and a.Is_Del=2
+
+  </select>
+
+
+  <!-- 查询时间段分布 -->
+  <select id="findtemperatureTimeFenBuWeek" resultType="java.lang.Integer">
+ SELECT COUNT(1) FROM (SELECT * FROM `yh_user_temperature` WHERE `E_User_Id`=#{usercode} AND  Entry_Time &gt;=  #{strTime} AND Entry_Time &lt;= #{endTime} AND is_del=2  LIMIT #{page}) AS a
+WHERE 	 HOUR(a.Entry_Time)&gt;=5 AND HOUR(a.Entry_Time)&lt;8 AND a.E_User_Id=#{usercode} and a.Is_Del=2
+		UNION ALL
+		SELECT COUNT(1) FROM (SELECT * FROM `yh_user_temperature` WHERE `E_User_Id`=#{usercode} AND Entry_Time &gt;=  #{strTime} AND Entry_Time &lt;= #{endTime}  AND is_del=2 LIMIT #{page}) AS a
+WHERE 	HOUR(a.Entry_Time)&gt;=8 AND HOUR(a.Entry_Time) &lt;12 AND a.E_User_Id=#{usercode} and a.Is_Del=2
+		UNION ALL
+		SELECT COUNT(1) FROM (SELECT * FROM `yh_user_temperature` WHERE `E_User_Id`=#{usercode} AND Entry_Time &gt;=  #{strTime} AND Entry_Time &lt;= #{endTime}  AND is_del=2 LIMIT #{page}) AS a
+WHERE 	 HOUR(a.Entry_Time)&gt;=12 AND HOUR(a.Entry_Time) &lt;14 AND a.E_User_Id=#{usercode} and a.Is_Del=2
+		UNION ALL
+		SELECT COUNT(1) FROM (SELECT * FROM `yh_user_temperature` WHERE `E_User_Id`=#{usercode} AND   Entry_Time &gt;=  #{strTime} AND Entry_Time &lt;= #{endTime} AND is_del=2 LIMIT #{page}) AS a
+WHERE 	 HOUR(a.Entry_Time) &gt;=14 AND HOUR(a.Entry_Time)&lt;18 AND a.E_User_Id=#{usercode} and a.Is_Del=2
+		UNION ALL
+		SELECT COUNT(1) FROM (SELECT * FROM `yh_user_temperature` WHERE `E_User_Id`=#{usercode} AND   Entry_Time &gt;=  #{strTime} AND Entry_Time &lt;= #{endTime}  AND is_del=2 LIMIT #{page}) AS a
+WHERE 	 HOUR(a.Entry_Time)&gt;=18 AND HOUR(a.Entry_Time)&lt;22 AND a.E_User_Id=#{usercode} and a.Is_Del=2
+		UNION ALL
+		SELECT COUNT(1) FROM (SELECT * FROM `yh_user_temperature` WHERE `E_User_Id`=#{usercode} AND  Entry_Time &gt;=  #{strTime} AND Entry_Time &lt;= #{endTime} AND is_del=2 LIMIT #{page}) AS a
+WHERE 	 HOUR(a.Entry_Time)&gt;=22 AND HOUR(a.Entry_Time)&lt;24 AND a.E_User_Id=#{usercode} and a.Is_Del=2
+		UNION ALL
+		SELECT COUNT(1) FROM (SELECT * FROM `yh_user_temperature` WHERE `E_User_Id`=#{usercode} AND   Entry_Time &gt;=  #{strTime} AND Entry_Time &lt;= #{endTime}  LIMIT #{page}) AS a
+WHERE 	 HOUR(a.Entry_Time)&gt;=0 AND HOUR(a.Entry_Time)&lt;5 AND a.E_User_Id=#{usercode} and a.Is_Del=2
+
+  </select>
+
+
+  <select id="findUserTemPerAtureByUsercode" resultMap="BaseResultMap">
+  SELECT a.* FROM (SELECT * FROM `yh_user_temperature` WHERE `E_User_Id`=#{usercode} AND Is_Del=2 ORDER BY `Entry_Time` DESC LIMIT 7) AS a ORDER BY a.Entry_Time
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from yh_user_temperature
+    where tid = #{tid,jdbcType=INTEGER}
+  </select>
+  
+   <select id="selectByPrimaryKeyFindEntryTime" parameterType="java.lang.String" resultType="java.lang.String">
+    select 
+    Entry_Time
+    from yh_user_temperature
+    where E_User_Id = #{E_User_Id} and  Is_Del=2
+    
+  </select>
+  
+   <select id="selectByPrimaryKeyFindEntryTimeAnduserid"   resultMap="BaseResultMap">
+   SELECT 
+	<include refid="Base_Column_List" />
+	FROM `yh_user_temperature` WHERE Entry_Time LIKE concat(concat('',#{time}),'%') AND E_User_Id=#{usercode} and Is_Del=2 order by Entry_Time desc
+    
+  </select>
+  
+  
+    <select id="selectByPrimaryKeyOrderTime" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from yh_user_temperature
+    where E_User_Id = #{E_User_Id} AND Is_Del=2
+    order by Entry_Time desc
+    limit 1
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from yh_user_temperature
+    where tid = #{tid,jdbcType=INTEGER}
+  </delete>
+  
+  <insert id="insert" parameterType="com.yihe.applet.api.domain.YhUserTemperatureApp">
+    <selectKey keyProperty="tid" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into yh_user_temperature (temperature, Entry_Time, Is_Del, 
+      E_User_Id, Data_Source)
+    values (#{temperature,jdbcType=REAL}, #{entryTime,jdbcType=VARCHAR}, #{isDel,jdbcType=INTEGER}, 
+      #{eUserId,jdbcType=INTEGER}, #{dataSource,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.yihe.applet.api.domain.YhUserTemperatureApp">
+    <selectKey keyProperty="tid" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into yh_user_temperature
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="temperature != null">
+        temperature,
+      </if>
+      <if test="entryTime != null">
+        Entry_Time,
+      </if>
+      <if test="isDel != null">
+        Is_Del,
+      </if>
+      <if test="eUserId != null">
+        E_User_Id,
+      </if>
+      <if test="dataSource != null">
+        Data_Source,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="temperature != null">
+        #{temperature,jdbcType=REAL},
+      </if>
+      <if test="entryTime != null">
+        #{entryTime,jdbcType=VARCHAR},
+      </if>
+      <if test="isDel != null">
+        #{isDel,jdbcType=INTEGER},
+      </if>
+      <if test="eUserId != null">
+        #{eUserId,jdbcType=INTEGER},
+      </if>
+      <if test="dataSource != null">
+        #{dataSource,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  
+  <update id="updateByExampleSelective" parameterType="map">
+    update yh_user_temperature
+    <set>
+      <if test="record.tid != null">
+        tid = #{record.tid,jdbcType=INTEGER},
+      </if>
+      <if test="record.temperature != null">
+        temperature = #{record.temperature,jdbcType=REAL},
+      </if>
+      <if test="record.entryTime != null">
+        Entry_Time = #{record.entryTime,jdbcType=VARCHAR},
+      </if>
+      <if test="record.isDel != null">
+        Is_Del = #{record.isDel,jdbcType=INTEGER},
+      </if>
+      <if test="record.eUserId != null">
+        E_User_Id = #{record.eUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.dataSource != null">
+        Data_Source = #{record.dataSource,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update yh_user_temperature
+    set tid = #{record.tid,jdbcType=INTEGER},
+      temperature = #{record.temperature,jdbcType=REAL},
+      Entry_Time = #{record.entryTime,jdbcType=VARCHAR},
+      Is_Del = #{record.isDel,jdbcType=INTEGER},
+      E_User_Id = #{record.eUserId,jdbcType=VARCHAR},
+      Data_Source = #{record.dataSource,jdbcType=VARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.yihe.applet.api.domain.YhUserTemperatureApp">
+    update yh_user_temperature
+    <set>
+      <if test="temperature != null">
+        temperature = #{temperature,jdbcType=REAL},
+      </if>
+      <if test="entryTime != null">
+        Entry_Time = #{entryTime,jdbcType=VARCHAR},
+      </if>
+      <if test="isDel != null">
+        Is_Del = #{isDel,jdbcType=INTEGER},
+      </if>
+      <if test="eUserId != null">
+        E_User_Id = #{eUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="dataSource != null">
+        Data_Source = #{dataSource,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where tid = #{tid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.yihe.applet.api.domain.YhUserTemperatureApp">
+    update yh_user_temperature
+    set temperature = #{temperature,jdbcType=REAL},
+      Entry_Time = #{entryTime,jdbcType=VARCHAR},
+      Is_Del = #{isDel,jdbcType=INTEGER},
+      E_User_Id = #{eUserId,jdbcType=VARCHAR},
+      Data_Source = #{dataSource,jdbcType=VARCHAR}
+    where tid = #{tid,jdbcType=INTEGER}
+  </update>
+</mapper>

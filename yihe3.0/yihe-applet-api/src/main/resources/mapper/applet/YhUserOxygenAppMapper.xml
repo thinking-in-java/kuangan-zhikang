@@ -1,0 +1,419 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yihe.applet.api.mapper.YhUserOxygenAppMapper">
+  <resultMap id="BaseResultMap" type="com.yihe.applet.api.domain.YhUserOxygenApp">
+    <id column="U_oxygen_Id" jdbcType="INTEGER" property="uOxygenId" />
+    <result column="oxygen" jdbcType="REAL" property="oxygen" />
+    <result column="heart_rate" jdbcType="INTEGER" property="heartRate" />
+    <result column="Entry_Time" jdbcType="VARCHAR" property="entryTime" />
+    <result column="Is_Del" jdbcType="INTEGER" property="isDel" />
+    <result column="E_User_Id" jdbcType="INTEGER" property="eUserId" />
+    <result column="test_hj" jdbcType="VARCHAR" property="testHj" />
+    <result column="type" jdbcType="VARCHAR" property="type" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    U_oxygen_Id, oxygen, heart_rate, Entry_Time, Is_Del, E_User_Id, test_hj, type
+  </sql>
+  <select id="findOxygenAllByUserCode" resultMap="BaseResultMap">
+    select * from yh_user_oxygen where is_del=2 AND E_User_Id=#{usercode}
+    <if test="timetype==0">
+      AND Entry_Time &gt;=  #{strTime} AND Entry_Time &lt;= #{endTime}
+    </if>
+    <if test="timetype==1">
+      AND Entry_Time LIKE CONCAT('',#{strTime},'%')
+    </if>
+    <if test="timetype==2">
+      AND YEAR(Entry_Time) =#{strTime}
+    </if>
+  </select>
+  <!--查询血糖某年数据-->
+  <select id="findOxygenByYear" resultMap="BaseResultMap">
+    SELECT * FROM yh_user_oxygen WHERE  YEAR(Entry_Time) =#{time}    AND is_del=2 AND E_User_Id=#{usercode} LIMIT #{page}, #{pagesize}
+  </select>
+  <!--查询血糖某月记录-->
+  <select id="findOxygenByMonth" resultMap="BaseResultMap">
+  SELECT * FROM yh_user_oxygen WHERE Entry_Time LIKE CONCAT('',#{month},'%')   AND is_del=2 AND E_User_Id=#{usercode}  LIMIT #{page}, #{pagesize}
+</select>
+  <!--查询血糖某周数据-->
+  <select id="findOxygenByWeek" resultMap="BaseResultMap">
+    SELECT * FROM yh_user_oxygen WHERE   Entry_Time &gt;=  #{strTime} AND Entry_Time &lt;= #{endTime}    AND is_del=2 AND E_User_Id=#{usercode}  LIMIT #{page}, #{pagesize}
+  </select>
+
+  <select id="findUserOxygenByZhengchang"  resultType="java.lang.Integer">
+  SELECT COUNT(*) FROM (
+	SELECT * FROM `yh_user_oxygen` WHERE  E_User_Id=#{usercode} AND Is_Del=2
+    <if test="timetype==0">
+      AND  Entry_Time &gt;=  #{strTime} AND Entry_Time &lt;= #{endTime}
+    </if>
+    <if test="timetype==1">
+      AND  Entry_Time LIKE CONCAT('',#{strTime},'%')
+    </if>
+    <if test="timetype==2">
+      AND YEAR(Entry_Time) =#{strTime}
+    </if>
+
+    LIMIT #{page}
+	) AS a  WHERE a.oxygen&gt;=95
+  </select>
+  
+   <select id="findUserOxygenByYichang"  resultType="java.lang.Integer">
+  SELECT COUNT(*) FROM (
+	SELECT * FROM `yh_user_oxygen` WHERE  E_User_Id=#{usercode} AND Is_Del=2
+     <if test="timetype==0">
+       AND  Entry_Time &gt;=  #{strTime} AND Entry_Time &lt;= #{endTime}
+     </if>
+     <if test="timetype==1">
+       AND  Entry_Time LIKE CONCAT('',#{strTime},'%')
+     </if>
+     <if test="timetype==2">
+       AND YEAR(Entry_Time) =#{strTime}
+     </if>
+
+     LIMIT #{page}
+	) AS a  WHERE a.oxygen&lt;95
+  </select>
+    <select id="findtemperatureTimeFenBu" resultType="java.lang.Integer">
+  SELECT COUNT(1) FROM (SELECT * FROM `yh_user_oxygen` WHERE `E_User_Id`=#{usercode} AND Is_Del=2 ORDER BY `Entry_Time` DESC LIMIT 7) AS a
+WHERE 	 HOUR(a.Entry_Time)&gt;=5 AND HOUR(a.Entry_Time)&lt;8 
+		UNION ALL
+		SELECT COUNT(1) FROM (SELECT * FROM `yh_user_oxygen` WHERE `E_User_Id`=#{usercode} AND Is_Del=2 ORDER BY `Entry_Time` DESC LIMIT 7) AS a 
+WHERE 	HOUR(a.Entry_Time)&gt;=8 AND HOUR(a.Entry_Time) &lt;12 
+		UNION ALL
+		SELECT COUNT(1) FROM (SELECT * FROM `yh_user_oxygen` WHERE `E_User_Id`=#{usercode} AND Is_Del=2 ORDER BY `Entry_Time` DESC LIMIT 7) AS a
+WHERE 	 HOUR(a.Entry_Time)&gt;=12 AND HOUR(a.Entry_Time) &lt;14 
+		UNION ALL
+		SELECT COUNT(1) FROM (SELECT * FROM `yh_user_oxygen` WHERE `E_User_Id`=#{usercode} AND Is_Del=2 ORDER BY `Entry_Time` DESC LIMIT 7) AS a
+WHERE 	 HOUR(a.Entry_Time) &gt;=14 AND HOUR(a.Entry_Time)&lt;18 
+		UNION ALL
+		SELECT COUNT(1) FROM (SELECT * FROM `yh_user_oxygen` WHERE `E_User_Id`=#{usercode} AND Is_Del=2 ORDER BY `Entry_Time` DESC LIMIT 7) AS a
+WHERE 	 HOUR(a.Entry_Time)&gt;=18 AND HOUR(a.Entry_Time)&lt;22 
+		UNION ALL
+		SELECT COUNT(1) FROM (SELECT * FROM `yh_user_oxygen` WHERE `E_User_Id`=#{usercode} AND Is_Del=2 ORDER BY `Entry_Time` DESC LIMIT 7) AS a
+WHERE 	 HOUR(a.Entry_Time)&gt;=22 AND HOUR(a.Entry_Time)&lt;24  
+		UNION ALL
+		SELECT COUNT(1) FROM (SELECT * FROM `yh_user_oxygen` WHERE `E_User_Id`=#{usercode} AND Is_Del=2 ORDER BY `Entry_Time` DESC LIMIT 7) AS a
+WHERE 	 HOUR(a.Entry_Time)&gt;=0 AND HOUR(a.Entry_Time)&lt;5  
+ 
+  </select>
+
+  <select id="findOxygenTimeFenBuYear" resultType="java.lang.Integer">
+  SELECT COUNT(1) FROM (SELECT * FROM `yh_user_oxygen` WHERE `E_User_Id`=#{usercode} AND   YEAR(Entry_Time) =#{time} AND is_del=2  LIMIT #{page}) AS a
+WHERE 	 HOUR(a.Entry_Time)&gt;=5 AND HOUR(a.Entry_Time)&lt;8
+		UNION ALL
+		SELECT COUNT(1) FROM (SELECT * FROM `yh_user_oxygen` WHERE `E_User_Id`=#{usercode} AND   YEAR(Entry_Time) =#{time} AND is_del=2  LIMIT #{page}) AS a
+WHERE 	HOUR(a.Entry_Time)&gt;=8 AND HOUR(a.Entry_Time) &lt;12
+		UNION ALL
+		SELECT COUNT(1) FROM (SELECT * FROM `yh_user_oxygen` WHERE `E_User_Id`=#{usercode} AND   YEAR(Entry_Time) =#{time} AND is_del=2  LIMIT #{page}) AS a
+WHERE 	 HOUR(a.Entry_Time)&gt;=12 AND HOUR(a.Entry_Time) &lt;14
+		UNION ALL
+		SELECT COUNT(1) FROM (SELECT * FROM `yh_user_oxygen` WHERE `E_User_Id`=#{usercode} AND   YEAR(Entry_Time) =#{time} AND is_del=2  LIMIT #{page}) AS a
+WHERE 	 HOUR(a.Entry_Time) &gt;=14 AND HOUR(a.Entry_Time)&lt;18
+		UNION ALL
+		SELECT COUNT(1) FROM (SELECT * FROM `yh_user_oxygen` WHERE `E_User_Id`=#{usercode} AND   YEAR(Entry_Time) =#{time} AND is_del=2  LIMIT #{page}) AS a
+WHERE 	 HOUR(a.Entry_Time)&gt;=18 AND HOUR(a.Entry_Time)&lt;22
+		UNION ALL
+		SELECT COUNT(1) FROM (SELECT * FROM `yh_user_oxygen` WHERE `E_User_Id`=#{usercode} AND   YEAR(Entry_Time) =#{time} AND is_del=2  LIMIT #{page}) AS a
+WHERE 	 HOUR(a.Entry_Time)&gt;=22 AND HOUR(a.Entry_Time)&lt;24
+		UNION ALL
+		SELECT COUNT(1) FROM (SELECT * FROM `yh_user_oxygen` WHERE `E_User_Id`=#{usercode} AND   YEAR(Entry_Time) =#{time} AND is_del=2  LIMIT #{page}) AS a
+WHERE 	 HOUR(a.Entry_Time)&gt;=0 AND HOUR(a.Entry_Time)&lt;5
+
+  </select>
+
+  <select id="findOxygenTimeFenBuMonth" resultType="java.lang.Integer">
+  SELECT COUNT(1) FROM (SELECT * FROM `yh_user_oxygen` WHERE `E_User_Id`=#{usercode} AND   Entry_Time LIKE CONCAT('',#{month},'%') AND is_del=2  LIMIT #{page}) AS a
+WHERE 	 HOUR(a.Entry_Time)&gt;=5 AND HOUR(a.Entry_Time)&lt;8
+		UNION ALL
+		SELECT COUNT(1) FROM (SELECT * FROM `yh_user_oxygen` WHERE `E_User_Id`=#{usercode} AND   Entry_Time LIKE CONCAT('',#{month},'%') AND is_del=2  LIMIT #{page}) AS a
+WHERE 	HOUR(a.Entry_Time)&gt;=8 AND HOUR(a.Entry_Time) &lt;12
+		UNION ALL
+		SELECT COUNT(1) FROM (SELECT * FROM `yh_user_oxygen` WHERE `E_User_Id`=#{usercode} AND   Entry_Time LIKE CONCAT('',#{month},'%') AND is_del=2  LIMIT #{page}) AS a
+WHERE 	 HOUR(a.Entry_Time)&gt;=12 AND HOUR(a.Entry_Time) &lt;14
+		UNION ALL
+		SELECT COUNT(1) FROM (SELECT * FROM `yh_user_oxygen` WHERE `E_User_Id`=#{usercode} AND   Entry_Time LIKE CONCAT('',#{month},'%') AND is_del=2  LIMIT #{page}) AS a
+WHERE 	 HOUR(a.Entry_Time) &gt;=14 AND HOUR(a.Entry_Time)&lt;18
+		UNION ALL
+		SELECT COUNT(1) FROM (SELECT * FROM `yh_user_oxygen` WHERE `E_User_Id`=#{usercode} AND   Entry_Time LIKE CONCAT('',#{month},'%') AND is_del=2  LIMIT #{page}) AS a
+WHERE 	 HOUR(a.Entry_Time)&gt;=18 AND HOUR(a.Entry_Time)&lt;22
+		UNION ALL
+		SELECT COUNT(1) FROM (SELECT * FROM `yh_user_oxygen` WHERE `E_User_Id`=#{usercode} AND   Entry_Time LIKE CONCAT('',#{month},'%') AND is_del=2  LIMIT #{page}) AS a
+WHERE 	 HOUR(a.Entry_Time)&gt;=22 AND HOUR(a.Entry_Time)&lt;24
+		UNION ALL
+		SELECT COUNT(1) FROM (SELECT * FROM `yh_user_oxygen` WHERE `E_User_Id`=#{usercode} AND   Entry_Time LIKE CONCAT('',#{month},'%') AND is_del=2  LIMIT #{page}) AS a
+WHERE 	 HOUR(a.Entry_Time)&gt;=0 AND HOUR(a.Entry_Time)&lt;5
+
+  </select>
+  <select id="findOxygenTimeFenBuWeek" resultType="java.lang.Integer">
+  SELECT COUNT(1) FROM (SELECT * FROM `yh_user_oxygen` WHERE `E_User_Id`=#{usercode} AND  Entry_Time &gt;=  #{strTime} AND Entry_Time &lt;= #{endTime} AND is_del=2  LIMIT #{page}) AS a
+WHERE 	 HOUR(a.Entry_Time)&gt;=5 AND HOUR(a.Entry_Time)&lt;8
+		UNION ALL
+		SELECT COUNT(1) FROM (SELECT * FROM `yh_user_oxygen` WHERE `E_User_Id`=#{usercode} AND  Entry_Time &gt;=  #{strTime} AND Entry_Time &lt;= #{endTime} AND is_del=2  LIMIT #{page}) AS a
+WHERE 	HOUR(a.Entry_Time)&gt;=8 AND HOUR(a.Entry_Time) &lt;12
+		UNION ALL
+		SELECT COUNT(1) FROM (SELECT * FROM `yh_user_oxygen` WHERE `E_User_Id`=#{usercode} AND  Entry_Time &gt;=  #{strTime} AND Entry_Time &lt;= #{endTime} AND is_del=2  LIMIT #{page}) AS a
+WHERE 	 HOUR(a.Entry_Time)&gt;=12 AND HOUR(a.Entry_Time) &lt;14
+		UNION ALL
+		SELECT COUNT(1) FROM (SELECT * FROM `yh_user_oxygen` WHERE `E_User_Id`=#{usercode} AND  Entry_Time &gt;=  #{strTime} AND Entry_Time &lt;= #{endTime} AND is_del=2  LIMIT #{page}) AS a
+WHERE 	 HOUR(a.Entry_Time) &gt;=14 AND HOUR(a.Entry_Time)&lt;18
+		UNION ALL
+		SELECT COUNT(1) FROM (SELECT * FROM `yh_user_oxygen` WHERE `E_User_Id`=#{usercode} AND  Entry_Time &gt;=  #{strTime} AND Entry_Time &lt;= #{endTime} AND is_del=2  LIMIT #{page}) AS a
+WHERE 	 HOUR(a.Entry_Time)&gt;=18 AND HOUR(a.Entry_Time)&lt;22
+		UNION ALL
+		SELECT COUNT(1) FROM (SELECT * FROM `yh_user_oxygen` WHERE `E_User_Id`=#{usercode} AND  Entry_Time &gt;=  #{strTime} AND Entry_Time &lt;= #{endTime} AND is_del=2  LIMIT #{page}) AS a
+WHERE 	 HOUR(a.Entry_Time)&gt;=22 AND HOUR(a.Entry_Time)&lt;24
+		UNION ALL
+		SELECT COUNT(1) FROM (SELECT * FROM `yh_user_oxygen` WHERE `E_User_Id`=#{usercode} AND  Entry_Time &gt;=  #{strTime} AND Entry_Time &lt;= #{endTime} AND is_del=2  LIMIT #{page}) AS a
+WHERE 	 HOUR(a.Entry_Time)&gt;=0 AND HOUR(a.Entry_Time)&lt;5
+
+  </select>
+  <select id="findUserOxyGenInfoByeidLimit7Order" resultMap="BaseResultMap">
+  SELECT a.* FROM (SELECT * FROM `yh_user_oxygen` WHERE `E_User_Id`=#{eid} AND Is_Del=2 ORDER BY `Entry_Time` DESC LIMIT 7) AS a ORDER BY a.Entry_Time
+ 
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from yh_user_oxygen
+    where U_oxygen_Id = #{uOxygenId,jdbcType=INTEGER}
+  </select>
+   <select id="selectByPrimaryKeyAllInfo" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from yh_user_oxygen
+    where E_User_Id = #{E_User_Id,jdbcType=INTEGER} and  Is_Del=2
+  </select>
+  <select id="selectByPrimaryKeyFindEntryTime" parameterType="java.lang.String"
+		resultType="java.lang.String">
+		select
+		Entry_Time
+		from yh_user_oxygen
+		where E_User_Id = #{E_User_Id} and  Is_Del=2
+		order by Entry_Time desc
+	</select>
+	
+	<select id="selectByPrimaryKeyFindEntryTimeAnduserid"   resultMap="BaseResultMap">
+   SELECT 
+	<include refid="Base_Column_List" />
+	FROM `yh_user_oxygen` WHERE Entry_Time LIKE concat(concat('',#{time}),'%') AND E_User_Id=#{usercode} AND Is_Del=2 order by Entry_Time desc
+    
+  </select>
+  <select id="selectByPrimaryKeyBytime" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from yh_user_oxygen
+    where E_User_Id = #{E_User_Id} AND Is_Del=2
+    order by Entry_Time desc
+    limit 1
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from yh_user_oxygen
+    where U_oxygen_Id = #{uOxygenId,jdbcType=INTEGER}
+  </delete>
+   
+  <insert id="insert" parameterType="com.yihe.applet.api.domain.YhUserOxygenApp">
+    <selectKey keyProperty="uOxygenId" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into yh_user_oxygen (oxygen, heart_rate, Entry_Time, 
+      Is_Del, E_User_Id, test_hj, 
+      type)
+    values (#{oxygen,jdbcType=REAL}, #{heartRate,jdbcType=INTEGER}, #{entryTime,jdbcType=VARCHAR}, 
+      #{isDel,jdbcType=INTEGER}, #{eUserId,jdbcType=INTEGER}, #{testHj,jdbcType=VARCHAR}, 
+      #{type,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.yihe.applet.api.domain.YhUserOxygenApp">
+    <selectKey keyProperty="uOxygenId" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into yh_user_oxygen
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="oxygen != null">
+        oxygen,
+      </if>
+      <if test="heartRate != null">
+        heart_rate,
+      </if>
+      <if test="entryTime != null">
+        Entry_Time,
+      </if>
+      <if test="isDel != null">
+        Is_Del,
+      </if>
+      <if test="eUserId != null">
+        E_User_Id,
+      </if>
+      <if test="testHj != null">
+        test_hj,
+      </if>
+      <if test="type != null">
+        type,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="oxygen != null">
+        #{oxygen,jdbcType=REAL},
+      </if>
+      <if test="heartRate != null">
+        #{heartRate,jdbcType=INTEGER},
+      </if>
+      <if test="entryTime != null">
+        #{entryTime,jdbcType=VARCHAR},
+      </if>
+      <if test="isDel != null">
+        #{isDel,jdbcType=INTEGER},
+      </if>
+      <if test="eUserId != null">
+        #{eUserId,jdbcType=INTEGER},
+      </if>
+      <if test="testHj != null">
+        #{testHj,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null">
+        #{type,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  
+  <update id="updateByExampleSelective" parameterType="map">
+    update yh_user_oxygen
+    <set>
+      <if test="record.uOxygenId != null">
+        U_oxygen_Id = #{record.uOxygenId,jdbcType=INTEGER},
+      </if>
+      <if test="record.oxygen != null">
+        oxygen = #{record.oxygen,jdbcType=REAL},
+      </if>
+      <if test="record.heartRate != null">
+        heart_rate = #{record.heartRate,jdbcType=INTEGER},
+      </if>
+      <if test="record.entryTime != null">
+        Entry_Time = #{record.entryTime,jdbcType=VARCHAR},
+      </if>
+      <if test="record.isDel != null">
+        Is_Del = #{record.isDel,jdbcType=INTEGER},
+      </if>
+      <if test="record.eUserId != null">
+        E_User_Id = #{record.eUserId,jdbcType=INTEGER},
+      </if>
+      <if test="record.testHj != null">
+        test_hj = #{record.testHj,jdbcType=VARCHAR},
+      </if>
+      <if test="record.type != null">
+        type = #{record.type,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update yh_user_oxygen
+    set U_oxygen_Id = #{record.uOxygenId,jdbcType=INTEGER},
+      oxygen = #{record.oxygen,jdbcType=REAL},
+      heart_rate = #{record.heartRate,jdbcType=INTEGER},
+      Entry_Time = #{record.entryTime,jdbcType=VARCHAR},
+      Is_Del = #{record.isDel,jdbcType=INTEGER},
+      E_User_Id = #{record.eUserId,jdbcType=INTEGER},
+      test_hj = #{record.testHj,jdbcType=VARCHAR},
+      type = #{record.type,jdbcType=VARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.yihe.applet.api.domain.YhUserOxygenApp">
+    update yh_user_oxygen
+    <set>
+      <if test="oxygen != null">
+        oxygen = #{oxygen,jdbcType=REAL},
+      </if>
+      <if test="heartRate != null">
+        heart_rate = #{heartRate,jdbcType=INTEGER},
+      </if>
+      <if test="entryTime != null">
+        Entry_Time = #{entryTime,jdbcType=VARCHAR},
+      </if>
+      <if test="isDel != null">
+        Is_Del = #{isDel,jdbcType=INTEGER},
+      </if>
+      <if test="eUserId != null">
+        E_User_Id = #{eUserId,jdbcType=INTEGER},
+      </if>
+      <if test="testHj != null">
+        test_hj = #{testHj,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null">
+        type = #{type,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where U_oxygen_Id = #{uOxygenId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.yihe.applet.api.domain.YhUserOxygenApp">
+    update yh_user_oxygen
+    set oxygen = #{oxygen,jdbcType=REAL},
+      heart_rate = #{heartRate,jdbcType=INTEGER},
+      Entry_Time = #{entryTime,jdbcType=VARCHAR},
+      Is_Del = #{isDel,jdbcType=INTEGER},
+      E_User_Id = #{eUserId,jdbcType=INTEGER},
+      test_hj = #{testHj,jdbcType=VARCHAR},
+      type = #{type,jdbcType=VARCHAR}
+    where U_oxygen_Id = #{uOxygenId,jdbcType=INTEGER}
+  </update>
+</mapper>

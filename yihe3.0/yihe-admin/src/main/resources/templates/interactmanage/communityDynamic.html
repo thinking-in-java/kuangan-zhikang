@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, maximum-scale=1">
+<title>社区 </title>
+<link rel="stylesheet" th:href="@{/assets/libs/layui/css/layui.css}" />
+<link rel="stylesheet" th:href="@{/assets/module/admin.css}" />
+<style type="text/css">
+.theme-colorful{
+background-color: white; 
+}
+.layui-form-label {
+
+    float: left;
+    display: block;
+    padding: 9px 5px;
+    width: 80px;
+    font-weight: 400;
+    line-height: 20px;
+    text-align: right;
+
+}
+.layui-form-onswitch {
+
+    border-color: rgba(24, 144, 255, 1);
+    background-color: rgba(24, 144, 255, 1);
+
+}
+
+.layui-table-box {
+	min-height:500px;
+}
+</style>
+</head>
+<body style="margin: 20px;">
+<!-- 页面加载loading -->
+<div class="page-loading">
+    <div class="ball-loader">
+        <span></span><span></span><span></span><span></span>
+    </div>
+</div>
+
+    	<div class="layui-tab layui-tab-brief" lay-filter="indexTab">
+		  <ul class="layui-tab-title">
+		    <li class="layui-this">课堂评论</li>
+		    <li>习惯打卡</li>
+		   <!--  <li>戒烟日记</li> -->
+		  </ul>
+  		<div class="layui-tab-content">
+  		    <div class="layui-tab-item layui-show">
+  		    	 <iframe  frameborder="no" id="mainiframe" border="0" scrolling="auto" style="height:500px;width: 100%;"src="/manage/content/comments"></iframe>
+  		    </div>
+		    <div class="layui-tab-item">
+		    <iframe  frameborder="no" id="mainiframe" border="0" scrolling="auto" style="height:500px;width: 100%;"src="/manage/content/Habitcomments"></iframe>
+		    </div>
+		<!--     <div class="layui-tab-item">
+		     <iframe   frameborder="no" border="0"  style="height:600px;width: 100%;"src="/manage/shopping/commodityGroup"></iframe>
+		    </div>
+		     <div class="layui-tab-item">
+		     		 <iframe  frameborder="no" id="mainiframe" border="0" scrolling="auto" style="height:600px;width: 100%;"src="/manage/shopping/IntegralSset"></iframe>
+		    </div> -->
+		</div>
+</div>      
+    
+        <div class="layui-card-body">
+		
+       <!--  <table id="tableAuth"></table> -->
+        </div>
+ 
+</body>	
+
+
+	
+<script type="text/javascript" th:src="@{/assets/libs/layui/layui.js}"></script>
+<script type="text/javascript" th:src="@{/assets/js/common.js}"></script>
+<script type="text/javascript" th:src="@{/assets/js/jquery-1.11.1.js}"></script>
+<script th:src="@{/assets/libs/echarts/echarts.min.js}"></script>
+<script type="text/javascript" th:inline="javascript">
+function changeFrameHeight(){
+    var ifm= document.getElementById("mainiframe");
+    ifm.height=document.documentElement.clientHeight-56;
+}
+window.onresize=function(){ changeFrameHeight();}
+$(function(){changeFrameHeight();});
+	layui.use(['laypage', 'layer','element', 'treeTable','table','form','treeSelect','laydate','util','upload'], function(){
+		  var laypage = layui.laypage;
+		  var layer = layui.layer;
+		  var element = layui.element;
+		  var table = layui.table;
+		  var form = layui.form;
+		  var $ = layui.jquery;
+		  var laydate = layui.laydate;
+		  var util = layui.util;
+		  var treeSelect= layui.treeSelect;
+		  var upload = layui.upload;
+		  
+		  laydate.render({
+			    elem: '#test10'
+			    ,type: 'datetime'
+			    ,range: true,
+			  trigger: 'click'
+			  });
+		  
+		
+		    
+		    
+	
+	
+	
+		    
+	
+
+});
+</script>

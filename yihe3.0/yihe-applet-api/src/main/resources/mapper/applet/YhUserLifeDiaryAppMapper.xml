@@ -1,0 +1,334 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yihe.applet.api.mapper.YhUserLifeDiaryAppMapper" >
+  <resultMap id="BaseResultMap" type="com.yihe.applet.api.domain.YhUserLifeDiaryApp" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="begin_time" property="beginTime" jdbcType="VARCHAR" />
+    <result column="finish_time" property="finishTime" jdbcType="VARCHAR" />
+    <result column="type" property="type" jdbcType="INTEGER" />
+    <result column="user_code" property="userCode" jdbcType="VARCHAR" />
+    <result column="food_practical_num" property="foodPracticalNum" jdbcType="VARCHAR" />
+    <result column="food_recommend_heat" property="foodRecommendHeat" jdbcType="VARCHAR" />
+    <result column="food_practical_heat" property="foodPracticalHeat" jdbcType="VARCHAR" />
+    <result column="sport_practical_num" property="sportPracticalNum" jdbcType="VARCHAR" />
+    <result column="sport_recommend_heat" property="sportRecommendHeat" jdbcType="VARCHAR" />
+    <result column="sport_practical_heat" property="sportPracticalHeat" jdbcType="VARCHAR" />
+    <result column="sleep_week" property="sleepWeek" jdbcType="VARCHAR" />
+    <result column="sleep_duration" property="sleepDuration" jdbcType="VARCHAR" />
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="com.yihe.applet.api.domain.YhUserLifeDiaryAppWithBLOBs" extends="BaseResultMap" >
+    <result column="food_rational_nutrient" property="foodRationalNutrient" jdbcType="LONGVARCHAR" />
+    <result column="food_unreasonable_nutrient" property="foodUnreasonableNutrient" jdbcType="LONGVARCHAR" />
+    <result column="food_rational_guide" property="foodRationalGuide" jdbcType="LONGVARCHAR" />
+    <result column="food_unreasonable_guide" property="foodUnreasonableGuide" jdbcType="LONGVARCHAR" />
+    <result column="food_language" property="foodLanguage" jdbcType="LONGVARCHAR" />
+    <result column="sport_recommend_content" property="sportRecommendContent" jdbcType="LONGVARCHAR" />
+    <result column="sport_language" property="sportLanguage" jdbcType="LONGVARCHAR" />
+    <result column="sleep_duration_content" property="sleepDurationContent" jdbcType="LONGVARCHAR" />
+    <result column="sleep_time_content" property="sleepTimeContent" jdbcType="LONGVARCHAR" />
+    <result column="sleep_language" property="sleepLanguage" jdbcType="LONGVARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, begin_time, finish_time, type, user_code, food_practical_num, food_recommend_heat, 
+    food_practical_heat, sport_practical_num, sport_recommend_heat, sport_practical_heat, 
+    sleep_week, sleep_duration
+  </sql>
+  <sql id="Blob_Column_List" >
+    food_rational_nutrient, food_unreasonable_nutrient, food_rational_guide, food_unreasonable_guide, 
+    food_language, sport_recommend_content, sport_language, sleep_duration_content, sleep_time_content, 
+    sleep_language
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from yh_user_life_diary
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from yh_user_life_diary
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.yihe.applet.api.domain.YhUserLifeDiaryAppWithBLOBs" >
+    insert into yh_user_life_diary (id, begin_time, finish_time, 
+      type, user_code, food_practical_num, 
+      food_recommend_heat, food_practical_heat, sport_practical_num, 
+      sport_recommend_heat, sport_practical_heat, 
+      sleep_week, sleep_duration, food_rational_nutrient, 
+      food_unreasonable_nutrient, food_rational_guide, 
+      food_unreasonable_guide, food_language, 
+      sport_recommend_content, sport_language, 
+      sleep_duration_content, sleep_time_content, 
+      sleep_language)
+    values (#{id,jdbcType=INTEGER}, #{beginTime,jdbcType=VARCHAR}, #{finishTime,jdbcType=VARCHAR}, 
+      #{type,jdbcType=INTEGER}, #{userCode,jdbcType=VARCHAR}, #{foodPracticalNum,jdbcType=VARCHAR}, 
+      #{foodRecommendHeat,jdbcType=VARCHAR}, #{foodPracticalHeat,jdbcType=VARCHAR}, #{sportPracticalNum,jdbcType=VARCHAR}, 
+      #{sportRecommendHeat,jdbcType=VARCHAR}, #{sportPracticalHeat,jdbcType=VARCHAR}, 
+      #{sleepWeek,jdbcType=VARCHAR}, #{sleepDuration,jdbcType=VARCHAR}, #{foodRationalNutrient,jdbcType=LONGVARCHAR}, 
+      #{foodUnreasonableNutrient,jdbcType=LONGVARCHAR}, #{foodRationalGuide,jdbcType=LONGVARCHAR}, 
+      #{foodUnreasonableGuide,jdbcType=LONGVARCHAR}, #{foodLanguage,jdbcType=LONGVARCHAR}, 
+      #{sportRecommendContent,jdbcType=LONGVARCHAR}, #{sportLanguage,jdbcType=LONGVARCHAR}, 
+      #{sleepDurationContent,jdbcType=LONGVARCHAR}, #{sleepTimeContent,jdbcType=LONGVARCHAR}, 
+      #{sleepLanguage,jdbcType=LONGVARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.yihe.applet.api.domain.YhUserLifeDiaryAppWithBLOBs" useGeneratedKeys="true" keyProperty="id">
+    insert into yh_user_life_diary
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="beginTime != null" >
+        begin_time,
+      </if>
+      <if test="finishTime != null" >
+        finish_time,
+      </if>
+      <if test="type != null" >
+        type,
+      </if>
+      <if test="userCode != null" >
+        user_code,
+      </if>
+      <if test="foodPracticalNum != null" >
+        food_practical_num,
+      </if>
+      <if test="foodRecommendHeat != null" >
+        food_recommend_heat,
+      </if>
+      <if test="foodPracticalHeat != null" >
+        food_practical_heat,
+      </if>
+      <if test="sportPracticalNum != null" >
+        sport_practical_num,
+      </if>
+      <if test="sportRecommendHeat != null" >
+        sport_recommend_heat,
+      </if>
+      <if test="sportPracticalHeat != null" >
+        sport_practical_heat,
+      </if>
+      <if test="sleepWeek != null" >
+        sleep_week,
+      </if>
+      <if test="sleepDuration != null" >
+        sleep_duration,
+      </if>
+      <if test="foodRationalNutrient != null" >
+        food_rational_nutrient,
+      </if>
+      <if test="foodUnreasonableNutrient != null" >
+        food_unreasonable_nutrient,
+      </if>
+      <if test="foodRationalGuide != null" >
+        food_rational_guide,
+      </if>
+      <if test="foodUnreasonableGuide != null" >
+        food_unreasonable_guide,
+      </if>
+      <if test="foodLanguage != null" >
+        food_language,
+      </if>
+      <if test="sportRecommendContent != null" >
+        sport_recommend_content,
+      </if>
+      <if test="sportLanguage != null" >
+        sport_language,
+      </if>
+      <if test="sleepDurationContent != null" >
+        sleep_duration_content,
+      </if>
+      <if test="sleepTimeContent != null" >
+        sleep_time_content,
+      </if>
+      <if test="sleepLanguage != null" >
+        sleep_language,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="beginTime != null" >
+        #{beginTime,jdbcType=VARCHAR},
+      </if>
+      <if test="finishTime != null" >
+        #{finishTime,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null" >
+        #{type,jdbcType=INTEGER},
+      </if>
+      <if test="userCode != null" >
+        #{userCode,jdbcType=VARCHAR},
+      </if>
+      <if test="foodPracticalNum != null" >
+        #{foodPracticalNum,jdbcType=VARCHAR},
+      </if>
+      <if test="foodRecommendHeat != null" >
+        #{foodRecommendHeat,jdbcType=VARCHAR},
+      </if>
+      <if test="foodPracticalHeat != null" >
+        #{foodPracticalHeat,jdbcType=VARCHAR},
+      </if>
+      <if test="sportPracticalNum != null" >
+        #{sportPracticalNum,jdbcType=VARCHAR},
+      </if>
+      <if test="sportRecommendHeat != null" >
+        #{sportRecommendHeat,jdbcType=VARCHAR},
+      </if>
+      <if test="sportPracticalHeat != null" >
+        #{sportPracticalHeat,jdbcType=VARCHAR},
+      </if>
+      <if test="sleepWeek != null" >
+        #{sleepWeek,jdbcType=VARCHAR},
+      </if>
+      <if test="sleepDuration != null" >
+        #{sleepDuration,jdbcType=VARCHAR},
+      </if>
+      <if test="foodRationalNutrient != null" >
+        #{foodRationalNutrient,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="foodUnreasonableNutrient != null" >
+        #{foodUnreasonableNutrient,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="foodRationalGuide != null" >
+        #{foodRationalGuide,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="foodUnreasonableGuide != null" >
+        #{foodUnreasonableGuide,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="foodLanguage != null" >
+        #{foodLanguage,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="sportRecommendContent != null" >
+        #{sportRecommendContent,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="sportLanguage != null" >
+        #{sportLanguage,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="sleepDurationContent != null" >
+        #{sleepDurationContent,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="sleepTimeContent != null" >
+        #{sleepTimeContent,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="sleepLanguage != null" >
+        #{sleepLanguage,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.yihe.applet.api.domain.YhUserLifeDiaryAppWithBLOBs" >
+    update yh_user_life_diary
+    <set >
+      <if test="beginTime != null" >
+        begin_time = #{beginTime,jdbcType=VARCHAR},
+      </if>
+      <if test="finishTime != null" >
+        finish_time = #{finishTime,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null" >
+        type = #{type,jdbcType=INTEGER},
+      </if>
+      <if test="userCode != null" >
+        user_code = #{userCode,jdbcType=VARCHAR},
+      </if>
+      <if test="foodPracticalNum != null" >
+        food_practical_num = #{foodPracticalNum,jdbcType=VARCHAR},
+      </if>
+      <if test="foodRecommendHeat != null" >
+        food_recommend_heat = #{foodRecommendHeat,jdbcType=VARCHAR},
+      </if>
+      <if test="foodPracticalHeat != null" >
+        food_practical_heat = #{foodPracticalHeat,jdbcType=VARCHAR},
+      </if>
+      <if test="sportPracticalNum != null" >
+        sport_practical_num = #{sportPracticalNum,jdbcType=VARCHAR},
+      </if>
+      <if test="sportRecommendHeat != null" >
+        sport_recommend_heat = #{sportRecommendHeat,jdbcType=VARCHAR},
+      </if>
+      <if test="sportPracticalHeat != null" >
+        sport_practical_heat = #{sportPracticalHeat,jdbcType=VARCHAR},
+      </if>
+      <if test="sleepWeek != null" >
+        sleep_week = #{sleepWeek,jdbcType=VARCHAR},
+      </if>
+      <if test="sleepDuration != null" >
+        sleep_duration = #{sleepDuration,jdbcType=VARCHAR},
+      </if>
+      <if test="foodRationalNutrient != null" >
+        food_rational_nutrient = #{foodRationalNutrient,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="foodUnreasonableNutrient != null" >
+        food_unreasonable_nutrient = #{foodUnreasonableNutrient,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="foodRationalGuide != null" >
+        food_rational_guide = #{foodRationalGuide,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="foodUnreasonableGuide != null" >
+        food_unreasonable_guide = #{foodUnreasonableGuide,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="foodLanguage != null" >
+        food_language = #{foodLanguage,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="sportRecommendContent != null" >
+        sport_recommend_content = #{sportRecommendContent,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="sportLanguage != null" >
+        sport_language = #{sportLanguage,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="sleepDurationContent != null" >
+        sleep_duration_content = #{sleepDurationContent,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="sleepTimeContent != null" >
+        sleep_time_content = #{sleepTimeContent,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="sleepLanguage != null" >
+        sleep_language = #{sleepLanguage,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.yihe.applet.api.domain.YhUserLifeDiaryAppWithBLOBs" >
+    update yh_user_life_diary
+    set begin_time = #{beginTime,jdbcType=VARCHAR},
+      finish_time = #{finishTime,jdbcType=VARCHAR},
+      type = #{type,jdbcType=INTEGER},
+      user_code = #{userCode,jdbcType=VARCHAR},
+      food_practical_num = #{foodPracticalNum,jdbcType=VARCHAR},
+      food_recommend_heat = #{foodRecommendHeat,jdbcType=VARCHAR},
+      food_practical_heat = #{foodPracticalHeat,jdbcType=VARCHAR},
+      sport_practical_num = #{sportPracticalNum,jdbcType=VARCHAR},
+      sport_recommend_heat = #{sportRecommendHeat,jdbcType=VARCHAR},
+      sport_practical_heat = #{sportPracticalHeat,jdbcType=VARCHAR},
+      sleep_week = #{sleepWeek,jdbcType=VARCHAR},
+      sleep_duration = #{sleepDuration,jdbcType=VARCHAR},
+      food_rational_nutrient = #{foodRationalNutrient,jdbcType=LONGVARCHAR},
+      food_unreasonable_nutrient = #{foodUnreasonableNutrient,jdbcType=LONGVARCHAR},
+      food_rational_guide = #{foodRationalGuide,jdbcType=LONGVARCHAR},
+      food_unreasonable_guide = #{foodUnreasonableGuide,jdbcType=LONGVARCHAR},
+      food_language = #{foodLanguage,jdbcType=LONGVARCHAR},
+      sport_recommend_content = #{sportRecommendContent,jdbcType=LONGVARCHAR},
+      sport_language = #{sportLanguage,jdbcType=LONGVARCHAR},
+      sleep_duration_content = #{sleepDurationContent,jdbcType=LONGVARCHAR},
+      sleep_time_content = #{sleepTimeContent,jdbcType=LONGVARCHAR},
+      sleep_language = #{sleepLanguage,jdbcType=LONGVARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.yihe.applet.api.domain.YhUserLifeDiaryApp" >
+    update yh_user_life_diary
+    set begin_time = #{beginTime,jdbcType=VARCHAR},
+      finish_time = #{finishTime,jdbcType=VARCHAR},
+      type = #{type,jdbcType=INTEGER},
+      user_code = #{userCode,jdbcType=VARCHAR},
+      food_practical_num = #{foodPracticalNum,jdbcType=VARCHAR},
+      food_recommend_heat = #{foodRecommendHeat,jdbcType=VARCHAR},
+      food_practical_heat = #{foodPracticalHeat,jdbcType=VARCHAR},
+      sport_practical_num = #{sportPracticalNum,jdbcType=VARCHAR},
+      sport_recommend_heat = #{sportRecommendHeat,jdbcType=VARCHAR},
+      sport_practical_heat = #{sportPracticalHeat,jdbcType=VARCHAR},
+      sleep_week = #{sleepWeek,jdbcType=VARCHAR},
+      sleep_duration = #{sleepDuration,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

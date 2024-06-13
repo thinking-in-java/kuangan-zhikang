@@ -1,0 +1,673 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yihe.system.mapper.YhHeThreshold2WebMapper" >
+  <resultMap id="BaseResultMap" type="com.yihe.system.domain.YhHeThreshold2Web" >
+    <id column="ID" property="id" jdbcType="INTEGER" />
+    <result column="user_code" property="userCode" jdbcType="VARCHAR" />
+    <result column="blood_pressure_sys_min" property="bloodPressureSysMin" jdbcType="VARCHAR" />
+    <result column="blood_pressure_sys_max" property="bloodPressureSysMax" jdbcType="VARCHAR" />
+    <result column="temperature_min" property="temperatureMin" jdbcType="VARCHAR" />
+    <result column="temperature_max" property="temperatureMax" jdbcType="VARCHAR" />
+    <result column="pulse_min" property="pulseMin" jdbcType="VARCHAR" />
+    <result column="pulse_max" property="pulseMax" jdbcType="VARCHAR" />
+    <result column="blood_sugar_min" property="bloodSugarMin" jdbcType="VARCHAR" />
+    <result column="blood_sugar_max" property="bloodSugarMax" jdbcType="VARCHAR" />
+    <result column="blood_pressure_dia_min" property="bloodPressureDiaMin" jdbcType="VARCHAR" />
+    <result column="blood_pressure_dia_max" property="bloodPressureDiaMax" jdbcType="VARCHAR" />
+    <result column="trig_min" property="trigMin" jdbcType="VARCHAR" />
+    <result column="trig_max" property="trigMax" jdbcType="VARCHAR" />
+    <result column="hdlc_min" property="hdlcMin" jdbcType="VARCHAR" />
+    <result column="hdlc_max" property="hdlcMax" jdbcType="VARCHAR" />
+    <result column="ldlc_min" property="ldlcMin" jdbcType="VARCHAR" />
+    <result column="ldlc_max" property="ldlcMax" jdbcType="VARCHAR" />
+    <result column="boold_oxygen_min" property="booldOxygenMin" jdbcType="VARCHAR" />
+    <result column="boold_oxygen_max" property="booldOxygenMax" jdbcType="VARCHAR" />
+    <result column="BMI_min" property="bmiMin" jdbcType="VARCHAR" />
+    <result column="BMI_max" property="bmiMax" jdbcType="VARCHAR" />
+    <result column="blood_muscle_anhydride_min" property="bloodMuscleAnhydrideMin" jdbcType="VARCHAR" />
+    <result column="blood_muscle_anhydride_max" property="bloodMuscleAnhydrideMax" jdbcType="VARCHAR" />
+    <result column="blood_urea_nitrogen_min" property="bloodUreaNitrogenMin" jdbcType="VARCHAR" />
+    <result column="blood_urea_nitrogen_max" property="bloodUreaNitrogenMax" jdbcType="VARCHAR" />
+    <result column="blood_uric_acid_min" property="bloodUricAcidMin" jdbcType="VARCHAR" />
+    <result column="blood_uric_acid_max" property="bloodUricAcidMax" jdbcType="VARCHAR" />
+    <result column="alanine_transaminase_min" property="alanineTransaminaseMin" jdbcType="VARCHAR" />
+    <result column="alanine_transaminase_max" property="alanineTransaminaseMax" jdbcType="VARCHAR" />
+    <result column="transaminase_millet_grass_min" property="transaminaseMilletGrassMin" jdbcType="VARCHAR" />
+    <result column="transaminase_millet_grass_max" property="transaminaseMilletGrassMax" jdbcType="VARCHAR" />
+    <result column="serum_serum_protein_min" property="serumSerumProteinMin" jdbcType="VARCHAR" />
+    <result column="serum_serum_protein_max" property="serumSerumProteinMax" jdbcType="VARCHAR" />
+    <result column="serum_globulin_min" property="serumGlobulinMin" jdbcType="VARCHAR" />
+    <result column="serum_globulin_max" property="serumGlobulinMax" jdbcType="VARCHAR" />
+    <result column="urinary_microprotein_min" property="urinaryMicroproteinMin" jdbcType="VARCHAR" />
+    <result column="urinary_microprotein_max" property="urinaryMicroproteinMax" jdbcType="VARCHAR" />
+    <result column="Hba1c_and_protein_min" property="hba1cAndProteinMin" jdbcType="VARCHAR" />
+    <result column="Hba1c_and_protein_max" property="hba1cAndProteinMax" jdbcType="VARCHAR" />
+    <result column="homocysteine_min" property="homocysteineMin" jdbcType="VARCHAR" />
+    <result column="homocysteine_max" property="homocysteineMax" jdbcType="VARCHAR" />
+    <result column="urinalysis_erythrocyte" property="urinalysisErythrocyte" jdbcType="VARCHAR" />
+    <result column="urine_protein" property="urineProtein" jdbcType="VARCHAR" />
+    <result column="the_ketone_body" property="theKetoneBody" jdbcType="VARCHAR" />
+    <result column="tc_min" property="tcMin" jdbcType="VARCHAR" />
+    <result column="tc_max" property="tcMax" jdbcType="VARCHAR" />
+    <result column="blood_muscle_anhydride_min_girl" property="bloodMuscleAnhydrideMinGirl" jdbcType="VARCHAR" />
+    <result column="blood_muscle_anhydride_max_girl" property="bloodMuscleAnhydrideMaxGirl" jdbcType="VARCHAR" />
+    <result column="blood_urea_nitrogen_max_girl" property="bloodUreaNitrogenMaxGirl" jdbcType="VARCHAR" />
+    <result column="blood_urea_nitrogen_min_girl" property="bloodUreaNitrogenMinGirl" jdbcType="VARCHAR" />
+    <result column="blood_sugar2_min" property="bloodSugar2Min" jdbcType="VARCHAR" />
+    <result column="blood_sugar2_max" property="bloodSugar2Max" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    ID, user_code, blood_pressure_sys_min, blood_pressure_sys_max, temperature_min, temperature_max, 
+    pulse_min, pulse_max, blood_sugar_min, blood_sugar_max, blood_pressure_dia_min, blood_pressure_dia_max, 
+    trig_min, trig_max, hdlc_min, hdlc_max, ldlc_min, ldlc_max, boold_oxygen_min, boold_oxygen_max, 
+    BMI_min, BMI_max, blood_muscle_anhydride_min, blood_muscle_anhydride_max, blood_urea_nitrogen_min, 
+    blood_urea_nitrogen_max, blood_uric_acid_min, blood_uric_acid_max, alanine_transaminase_min, 
+    alanine_transaminase_max, transaminase_millet_grass_min, transaminase_millet_grass_max, 
+    serum_serum_protein_min, serum_serum_protein_max, serum_globulin_min, serum_globulin_max, 
+    urinary_microprotein_min, urinary_microprotein_max, Hba1c_and_protein_min, Hba1c_and_protein_max, 
+    homocysteine_min, homocysteine_max, urinalysis_erythrocyte, urine_protein, the_ketone_body, 
+    tc_min, tc_max, blood_muscle_anhydride_min_girl, blood_muscle_anhydride_max_girl, 
+    blood_urea_nitrogen_max_girl, blood_urea_nitrogen_min_girl, blood_sugar2_min, blood_sugar2_max
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from yh_he_threshold2
+    where ID = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from yh_he_threshold2
+    where ID = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.yihe.system.domain.YhHeThreshold2Web" >
+    insert into yh_he_threshold2 (ID, user_code, blood_pressure_sys_min, 
+      blood_pressure_sys_max, temperature_min, temperature_max, 
+      pulse_min, pulse_max, blood_sugar_min, 
+      blood_sugar_max, blood_pressure_dia_min, blood_pressure_dia_max, 
+      trig_min, trig_max, hdlc_min, 
+      hdlc_max, ldlc_min, ldlc_max, 
+      boold_oxygen_min, boold_oxygen_max, BMI_min, 
+      BMI_max, blood_muscle_anhydride_min, blood_muscle_anhydride_max, 
+      blood_urea_nitrogen_min, blood_urea_nitrogen_max, 
+      blood_uric_acid_min, blood_uric_acid_max, alanine_transaminase_min, 
+      alanine_transaminase_max, transaminase_millet_grass_min, 
+      transaminase_millet_grass_max, serum_serum_protein_min, 
+      serum_serum_protein_max, serum_globulin_min, 
+      serum_globulin_max, urinary_microprotein_min, 
+      urinary_microprotein_max, Hba1c_and_protein_min, 
+      Hba1c_and_protein_max, homocysteine_min, homocysteine_max, 
+      urinalysis_erythrocyte, urine_protein, the_ketone_body, 
+      tc_min, tc_max, blood_muscle_anhydride_min_girl, 
+      blood_muscle_anhydride_max_girl, blood_urea_nitrogen_max_girl, 
+      blood_urea_nitrogen_min_girl, blood_sugar2_min, 
+      blood_sugar2_max)
+    values (#{id,jdbcType=INTEGER}, #{userCode,jdbcType=VARCHAR}, #{bloodPressureSysMin,jdbcType=VARCHAR}, 
+      #{bloodPressureSysMax,jdbcType=VARCHAR}, #{temperatureMin,jdbcType=VARCHAR}, #{temperatureMax,jdbcType=VARCHAR}, 
+      #{pulseMin,jdbcType=VARCHAR}, #{pulseMax,jdbcType=VARCHAR}, #{bloodSugarMin,jdbcType=VARCHAR}, 
+      #{bloodSugarMax,jdbcType=VARCHAR}, #{bloodPressureDiaMin,jdbcType=VARCHAR}, #{bloodPressureDiaMax,jdbcType=VARCHAR}, 
+      #{trigMin,jdbcType=VARCHAR}, #{trigMax,jdbcType=VARCHAR}, #{hdlcMin,jdbcType=VARCHAR}, 
+      #{hdlcMax,jdbcType=VARCHAR}, #{ldlcMin,jdbcType=VARCHAR}, #{ldlcMax,jdbcType=VARCHAR}, 
+      #{booldOxygenMin,jdbcType=VARCHAR}, #{booldOxygenMax,jdbcType=VARCHAR}, #{bmiMin,jdbcType=VARCHAR}, 
+      #{bmiMax,jdbcType=VARCHAR}, #{bloodMuscleAnhydrideMin,jdbcType=VARCHAR}, #{bloodMuscleAnhydrideMax,jdbcType=VARCHAR}, 
+      #{bloodUreaNitrogenMin,jdbcType=VARCHAR}, #{bloodUreaNitrogenMax,jdbcType=VARCHAR}, 
+      #{bloodUricAcidMin,jdbcType=VARCHAR}, #{bloodUricAcidMax,jdbcType=VARCHAR}, #{alanineTransaminaseMin,jdbcType=VARCHAR}, 
+      #{alanineTransaminaseMax,jdbcType=VARCHAR}, #{transaminaseMilletGrassMin,jdbcType=VARCHAR}, 
+      #{transaminaseMilletGrassMax,jdbcType=VARCHAR}, #{serumSerumProteinMin,jdbcType=VARCHAR}, 
+      #{serumSerumProteinMax,jdbcType=VARCHAR}, #{serumGlobulinMin,jdbcType=VARCHAR}, 
+      #{serumGlobulinMax,jdbcType=VARCHAR}, #{urinaryMicroproteinMin,jdbcType=VARCHAR}, 
+      #{urinaryMicroproteinMax,jdbcType=VARCHAR}, #{hba1cAndProteinMin,jdbcType=VARCHAR}, 
+      #{hba1cAndProteinMax,jdbcType=VARCHAR}, #{homocysteineMin,jdbcType=VARCHAR}, #{homocysteineMax,jdbcType=VARCHAR}, 
+      #{urinalysisErythrocyte,jdbcType=VARCHAR}, #{urineProtein,jdbcType=VARCHAR}, #{theKetoneBody,jdbcType=VARCHAR}, 
+      #{tcMin,jdbcType=VARCHAR}, #{tcMax,jdbcType=VARCHAR}, #{bloodMuscleAnhydrideMinGirl,jdbcType=VARCHAR}, 
+      #{bloodMuscleAnhydrideMaxGirl,jdbcType=VARCHAR}, #{bloodUreaNitrogenMaxGirl,jdbcType=VARCHAR}, 
+      #{bloodUreaNitrogenMinGirl,jdbcType=VARCHAR}, #{bloodSugar2Min,jdbcType=VARCHAR}, 
+      #{bloodSugar2Max,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.yihe.system.domain.YhHeThreshold2Web" >
+    insert into yh_he_threshold2
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        ID,
+      </if>
+      <if test="userCode != null" >
+        user_code,
+      </if>
+      <if test="bloodPressureSysMin != null" >
+        blood_pressure_sys_min,
+      </if>
+      <if test="bloodPressureSysMax != null" >
+        blood_pressure_sys_max,
+      </if>
+      <if test="temperatureMin != null" >
+        temperature_min,
+      </if>
+      <if test="temperatureMax != null" >
+        temperature_max,
+      </if>
+      <if test="pulseMin != null" >
+        pulse_min,
+      </if>
+      <if test="pulseMax != null" >
+        pulse_max,
+      </if>
+      <if test="bloodSugarMin != null" >
+        blood_sugar_min,
+      </if>
+      <if test="bloodSugarMax != null" >
+        blood_sugar_max,
+      </if>
+      <if test="bloodPressureDiaMin != null" >
+        blood_pressure_dia_min,
+      </if>
+      <if test="bloodPressureDiaMax != null" >
+        blood_pressure_dia_max,
+      </if>
+      <if test="trigMin != null" >
+        trig_min,
+      </if>
+      <if test="trigMax != null" >
+        trig_max,
+      </if>
+      <if test="hdlcMin != null" >
+        hdlc_min,
+      </if>
+      <if test="hdlcMax != null" >
+        hdlc_max,
+      </if>
+      <if test="ldlcMin != null" >
+        ldlc_min,
+      </if>
+      <if test="ldlcMax != null" >
+        ldlc_max,
+      </if>
+      <if test="booldOxygenMin != null" >
+        boold_oxygen_min,
+      </if>
+      <if test="booldOxygenMax != null" >
+        boold_oxygen_max,
+      </if>
+      <if test="bmiMin != null" >
+        BMI_min,
+      </if>
+      <if test="bmiMax != null" >
+        BMI_max,
+      </if>
+      <if test="bloodMuscleAnhydrideMin != null" >
+        blood_muscle_anhydride_min,
+      </if>
+      <if test="bloodMuscleAnhydrideMax != null" >
+        blood_muscle_anhydride_max,
+      </if>
+      <if test="bloodUreaNitrogenMin != null" >
+        blood_urea_nitrogen_min,
+      </if>
+      <if test="bloodUreaNitrogenMax != null" >
+        blood_urea_nitrogen_max,
+      </if>
+      <if test="bloodUricAcidMin != null" >
+        blood_uric_acid_min,
+      </if>
+      <if test="bloodUricAcidMax != null" >
+        blood_uric_acid_max,
+      </if>
+      <if test="alanineTransaminaseMin != null" >
+        alanine_transaminase_min,
+      </if>
+      <if test="alanineTransaminaseMax != null" >
+        alanine_transaminase_max,
+      </if>
+      <if test="transaminaseMilletGrassMin != null" >
+        transaminase_millet_grass_min,
+      </if>
+      <if test="transaminaseMilletGrassMax != null" >
+        transaminase_millet_grass_max,
+      </if>
+      <if test="serumSerumProteinMin != null" >
+        serum_serum_protein_min,
+      </if>
+      <if test="serumSerumProteinMax != null" >
+        serum_serum_protein_max,
+      </if>
+      <if test="serumGlobulinMin != null" >
+        serum_globulin_min,
+      </if>
+      <if test="serumGlobulinMax != null" >
+        serum_globulin_max,
+      </if>
+      <if test="urinaryMicroproteinMin != null" >
+        urinary_microprotein_min,
+      </if>
+      <if test="urinaryMicroproteinMax != null" >
+        urinary_microprotein_max,
+      </if>
+      <if test="hba1cAndProteinMin != null" >
+        Hba1c_and_protein_min,
+      </if>
+      <if test="hba1cAndProteinMax != null" >
+        Hba1c_and_protein_max,
+      </if>
+      <if test="homocysteineMin != null" >
+        homocysteine_min,
+      </if>
+      <if test="homocysteineMax != null" >
+        homocysteine_max,
+      </if>
+      <if test="urinalysisErythrocyte != null" >
+        urinalysis_erythrocyte,
+      </if>
+      <if test="urineProtein != null" >
+        urine_protein,
+      </if>
+      <if test="theKetoneBody != null" >
+        the_ketone_body,
+      </if>
+      <if test="tcMin != null" >
+        tc_min,
+      </if>
+      <if test="tcMax != null" >
+        tc_max,
+      </if>
+      <if test="bloodMuscleAnhydrideMinGirl != null" >
+        blood_muscle_anhydride_min_girl,
+      </if>
+      <if test="bloodMuscleAnhydrideMaxGirl != null" >
+        blood_muscle_anhydride_max_girl,
+      </if>
+      <if test="bloodUreaNitrogenMaxGirl != null" >
+        blood_urea_nitrogen_max_girl,
+      </if>
+      <if test="bloodUreaNitrogenMinGirl != null" >
+        blood_urea_nitrogen_min_girl,
+      </if>
+      <if test="bloodSugar2Min != null" >
+        blood_sugar2_min,
+      </if>
+      <if test="bloodSugar2Max != null" >
+        blood_sugar2_max,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="userCode != null" >
+        #{userCode,jdbcType=VARCHAR},
+      </if>
+      <if test="bloodPressureSysMin != null" >
+        #{bloodPressureSysMin,jdbcType=VARCHAR},
+      </if>
+      <if test="bloodPressureSysMax != null" >
+        #{bloodPressureSysMax,jdbcType=VARCHAR},
+      </if>
+      <if test="temperatureMin != null" >
+        #{temperatureMin,jdbcType=VARCHAR},
+      </if>
+      <if test="temperatureMax != null" >
+        #{temperatureMax,jdbcType=VARCHAR},
+      </if>
+      <if test="pulseMin != null" >
+        #{pulseMin,jdbcType=VARCHAR},
+      </if>
+      <if test="pulseMax != null" >
+        #{pulseMax,jdbcType=VARCHAR},
+      </if>
+      <if test="bloodSugarMin != null" >
+        #{bloodSugarMin,jdbcType=VARCHAR},
+      </if>
+      <if test="bloodSugarMax != null" >
+        #{bloodSugarMax,jdbcType=VARCHAR},
+      </if>
+      <if test="bloodPressureDiaMin != null" >
+        #{bloodPressureDiaMin,jdbcType=VARCHAR},
+      </if>
+      <if test="bloodPressureDiaMax != null" >
+        #{bloodPressureDiaMax,jdbcType=VARCHAR},
+      </if>
+      <if test="trigMin != null" >
+        #{trigMin,jdbcType=VARCHAR},
+      </if>
+      <if test="trigMax != null" >
+        #{trigMax,jdbcType=VARCHAR},
+      </if>
+      <if test="hdlcMin != null" >
+        #{hdlcMin,jdbcType=VARCHAR},
+      </if>
+      <if test="hdlcMax != null" >
+        #{hdlcMax,jdbcType=VARCHAR},
+      </if>
+      <if test="ldlcMin != null" >
+        #{ldlcMin,jdbcType=VARCHAR},
+      </if>
+      <if test="ldlcMax != null" >
+        #{ldlcMax,jdbcType=VARCHAR},
+      </if>
+      <if test="booldOxygenMin != null" >
+        #{booldOxygenMin,jdbcType=VARCHAR},
+      </if>
+      <if test="booldOxygenMax != null" >
+        #{booldOxygenMax,jdbcType=VARCHAR},
+      </if>
+      <if test="bmiMin != null" >
+        #{bmiMin,jdbcType=VARCHAR},
+      </if>
+      <if test="bmiMax != null" >
+        #{bmiMax,jdbcType=VARCHAR},
+      </if>
+      <if test="bloodMuscleAnhydrideMin != null" >
+        #{bloodMuscleAnhydrideMin,jdbcType=VARCHAR},
+      </if>
+      <if test="bloodMuscleAnhydrideMax != null" >
+        #{bloodMuscleAnhydrideMax,jdbcType=VARCHAR},
+      </if>
+      <if test="bloodUreaNitrogenMin != null" >
+        #{bloodUreaNitrogenMin,jdbcType=VARCHAR},
+      </if>
+      <if test="bloodUreaNitrogenMax != null" >
+        #{bloodUreaNitrogenMax,jdbcType=VARCHAR},
+      </if>
+      <if test="bloodUricAcidMin != null" >
+        #{bloodUricAcidMin,jdbcType=VARCHAR},
+      </if>
+      <if test="bloodUricAcidMax != null" >
+        #{bloodUricAcidMax,jdbcType=VARCHAR},
+      </if>
+      <if test="alanineTransaminaseMin != null" >
+        #{alanineTransaminaseMin,jdbcType=VARCHAR},
+      </if>
+      <if test="alanineTransaminaseMax != null" >
+        #{alanineTransaminaseMax,jdbcType=VARCHAR},
+      </if>
+      <if test="transaminaseMilletGrassMin != null" >
+        #{transaminaseMilletGrassMin,jdbcType=VARCHAR},
+      </if>
+      <if test="transaminaseMilletGrassMax != null" >
+        #{transaminaseMilletGrassMax,jdbcType=VARCHAR},
+      </if>
+      <if test="serumSerumProteinMin != null" >
+        #{serumSerumProteinMin,jdbcType=VARCHAR},
+      </if>
+      <if test="serumSerumProteinMax != null" >
+        #{serumSerumProteinMax,jdbcType=VARCHAR},
+      </if>
+      <if test="serumGlobulinMin != null" >
+        #{serumGlobulinMin,jdbcType=VARCHAR},
+      </if>
+      <if test="serumGlobulinMax != null" >
+        #{serumGlobulinMax,jdbcType=VARCHAR},
+      </if>
+      <if test="urinaryMicroproteinMin != null" >
+        #{urinaryMicroproteinMin,jdbcType=VARCHAR},
+      </if>
+      <if test="urinaryMicroproteinMax != null" >
+        #{urinaryMicroproteinMax,jdbcType=VARCHAR},
+      </if>
+      <if test="hba1cAndProteinMin != null" >
+        #{hba1cAndProteinMin,jdbcType=VARCHAR},
+      </if>
+      <if test="hba1cAndProteinMax != null" >
+        #{hba1cAndProteinMax,jdbcType=VARCHAR},
+      </if>
+      <if test="homocysteineMin != null" >
+        #{homocysteineMin,jdbcType=VARCHAR},
+      </if>
+      <if test="homocysteineMax != null" >
+        #{homocysteineMax,jdbcType=VARCHAR},
+      </if>
+      <if test="urinalysisErythrocyte != null" >
+        #{urinalysisErythrocyte,jdbcType=VARCHAR},
+      </if>
+      <if test="urineProtein != null" >
+        #{urineProtein,jdbcType=VARCHAR},
+      </if>
+      <if test="theKetoneBody != null" >
+        #{theKetoneBody,jdbcType=VARCHAR},
+      </if>
+      <if test="tcMin != null" >
+        #{tcMin,jdbcType=VARCHAR},
+      </if>
+      <if test="tcMax != null" >
+        #{tcMax,jdbcType=VARCHAR},
+      </if>
+      <if test="bloodMuscleAnhydrideMinGirl != null" >
+        #{bloodMuscleAnhydrideMinGirl,jdbcType=VARCHAR},
+      </if>
+      <if test="bloodMuscleAnhydrideMaxGirl != null" >
+        #{bloodMuscleAnhydrideMaxGirl,jdbcType=VARCHAR},
+      </if>
+      <if test="bloodUreaNitrogenMaxGirl != null" >
+        #{bloodUreaNitrogenMaxGirl,jdbcType=VARCHAR},
+      </if>
+      <if test="bloodUreaNitrogenMinGirl != null" >
+        #{bloodUreaNitrogenMinGirl,jdbcType=VARCHAR},
+      </if>
+      <if test="bloodSugar2Min != null" >
+        #{bloodSugar2Min,jdbcType=VARCHAR},
+      </if>
+      <if test="bloodSugar2Max != null" >
+        #{bloodSugar2Max,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.yihe.system.domain.YhHeThreshold2Web" >
+    update yh_he_threshold2
+    <set >
+      <if test="userCode != null" >
+        user_code = #{userCode,jdbcType=VARCHAR},
+      </if>
+      <if test="bloodPressureSysMin != null" >
+        blood_pressure_sys_min = #{bloodPressureSysMin,jdbcType=VARCHAR},
+      </if>
+      <if test="bloodPressureSysMax != null" >
+        blood_pressure_sys_max = #{bloodPressureSysMax,jdbcType=VARCHAR},
+      </if>
+      <if test="temperatureMin != null" >
+        temperature_min = #{temperatureMin,jdbcType=VARCHAR},
+      </if>
+      <if test="temperatureMax != null" >
+        temperature_max = #{temperatureMax,jdbcType=VARCHAR},
+      </if>
+      <if test="pulseMin != null" >
+        pulse_min = #{pulseMin,jdbcType=VARCHAR},
+      </if>
+      <if test="pulseMax != null" >
+        pulse_max = #{pulseMax,jdbcType=VARCHAR},
+      </if>
+      <if test="bloodSugarMin != null" >
+        blood_sugar_min = #{bloodSugarMin,jdbcType=VARCHAR},
+      </if>
+      <if test="bloodSugarMax != null" >
+        blood_sugar_max = #{bloodSugarMax,jdbcType=VARCHAR},
+      </if>
+      <if test="bloodPressureDiaMin != null" >
+        blood_pressure_dia_min = #{bloodPressureDiaMin,jdbcType=VARCHAR},
+      </if>
+      <if test="bloodPressureDiaMax != null" >
+        blood_pressure_dia_max = #{bloodPressureDiaMax,jdbcType=VARCHAR},
+      </if>
+      <if test="trigMin != null" >
+        trig_min = #{trigMin,jdbcType=VARCHAR},
+      </if>
+      <if test="trigMax != null" >
+        trig_max = #{trigMax,jdbcType=VARCHAR},
+      </if>
+      <if test="hdlcMin != null" >
+        hdlc_min = #{hdlcMin,jdbcType=VARCHAR},
+      </if>
+      <if test="hdlcMax != null" >
+        hdlc_max = #{hdlcMax,jdbcType=VARCHAR},
+      </if>
+      <if test="ldlcMin != null" >
+        ldlc_min = #{ldlcMin,jdbcType=VARCHAR},
+      </if>
+      <if test="ldlcMax != null" >
+        ldlc_max = #{ldlcMax,jdbcType=VARCHAR},
+      </if>
+      <if test="booldOxygenMin != null" >
+        boold_oxygen_min = #{booldOxygenMin,jdbcType=VARCHAR},
+      </if>
+      <if test="booldOxygenMax != null" >
+        boold_oxygen_max = #{booldOxygenMax,jdbcType=VARCHAR},
+      </if>
+      <if test="bmiMin != null" >
+        BMI_min = #{bmiMin,jdbcType=VARCHAR},
+      </if>
+      <if test="bmiMax != null" >
+        BMI_max = #{bmiMax,jdbcType=VARCHAR},
+      </if>
+      <if test="bloodMuscleAnhydrideMin != null" >
+        blood_muscle_anhydride_min = #{bloodMuscleAnhydrideMin,jdbcType=VARCHAR},
+      </if>
+      <if test="bloodMuscleAnhydrideMax != null" >
+        blood_muscle_anhydride_max = #{bloodMuscleAnhydrideMax,jdbcType=VARCHAR},
+      </if>
+      <if test="bloodUreaNitrogenMin != null" >
+        blood_urea_nitrogen_min = #{bloodUreaNitrogenMin,jdbcType=VARCHAR},
+      </if>
+      <if test="bloodUreaNitrogenMax != null" >
+        blood_urea_nitrogen_max = #{bloodUreaNitrogenMax,jdbcType=VARCHAR},
+      </if>
+      <if test="bloodUricAcidMin != null" >
+        blood_uric_acid_min = #{bloodUricAcidMin,jdbcType=VARCHAR},
+      </if>
+      <if test="bloodUricAcidMax != null" >
+        blood_uric_acid_max = #{bloodUricAcidMax,jdbcType=VARCHAR},
+      </if>
+      <if test="alanineTransaminaseMin != null" >
+        alanine_transaminase_min = #{alanineTransaminaseMin,jdbcType=VARCHAR},
+      </if>
+      <if test="alanineTransaminaseMax != null" >
+        alanine_transaminase_max = #{alanineTransaminaseMax,jdbcType=VARCHAR},
+      </if>
+      <if test="transaminaseMilletGrassMin != null" >
+        transaminase_millet_grass_min = #{transaminaseMilletGrassMin,jdbcType=VARCHAR},
+      </if>
+      <if test="transaminaseMilletGrassMax != null" >
+        transaminase_millet_grass_max = #{transaminaseMilletGrassMax,jdbcType=VARCHAR},
+      </if>
+      <if test="serumSerumProteinMin != null" >
+        serum_serum_protein_min = #{serumSerumProteinMin,jdbcType=VARCHAR},
+      </if>
+      <if test="serumSerumProteinMax != null" >
+        serum_serum_protein_max = #{serumSerumProteinMax,jdbcType=VARCHAR},
+      </if>
+      <if test="serumGlobulinMin != null" >
+        serum_globulin_min = #{serumGlobulinMin,jdbcType=VARCHAR},
+      </if>
+      <if test="serumGlobulinMax != null" >
+        serum_globulin_max = #{serumGlobulinMax,jdbcType=VARCHAR},
+      </if>
+      <if test="urinaryMicroproteinMin != null" >
+        urinary_microprotein_min = #{urinaryMicroproteinMin,jdbcType=VARCHAR},
+      </if>
+      <if test="urinaryMicroproteinMax != null" >
+        urinary_microprotein_max = #{urinaryMicroproteinMax,jdbcType=VARCHAR},
+      </if>
+      <if test="hba1cAndProteinMin != null" >
+        Hba1c_and_protein_min = #{hba1cAndProteinMin,jdbcType=VARCHAR},
+      </if>
+      <if test="hba1cAndProteinMax != null" >
+        Hba1c_and_protein_max = #{hba1cAndProteinMax,jdbcType=VARCHAR},
+      </if>
+      <if test="homocysteineMin != null" >
+        homocysteine_min = #{homocysteineMin,jdbcType=VARCHAR},
+      </if>
+      <if test="homocysteineMax != null" >
+        homocysteine_max = #{homocysteineMax,jdbcType=VARCHAR},
+      </if>
+      <if test="urinalysisErythrocyte != null" >
+        urinalysis_erythrocyte = #{urinalysisErythrocyte,jdbcType=VARCHAR},
+      </if>
+      <if test="urineProtein != null" >
+        urine_protein = #{urineProtein,jdbcType=VARCHAR},
+      </if>
+      <if test="theKetoneBody != null" >
+        the_ketone_body = #{theKetoneBody,jdbcType=VARCHAR},
+      </if>
+      <if test="tcMin != null" >
+        tc_min = #{tcMin,jdbcType=VARCHAR},
+      </if>
+      <if test="tcMax != null" >
+        tc_max = #{tcMax,jdbcType=VARCHAR},
+      </if>
+      <if test="bloodMuscleAnhydrideMinGirl != null" >
+        blood_muscle_anhydride_min_girl = #{bloodMuscleAnhydrideMinGirl,jdbcType=VARCHAR},
+      </if>
+      <if test="bloodMuscleAnhydrideMaxGirl != null" >
+        blood_muscle_anhydride_max_girl = #{bloodMuscleAnhydrideMaxGirl,jdbcType=VARCHAR},
+      </if>
+      <if test="bloodUreaNitrogenMaxGirl != null" >
+        blood_urea_nitrogen_max_girl = #{bloodUreaNitrogenMaxGirl,jdbcType=VARCHAR},
+      </if>
+      <if test="bloodUreaNitrogenMinGirl != null" >
+        blood_urea_nitrogen_min_girl = #{bloodUreaNitrogenMinGirl,jdbcType=VARCHAR},
+      </if>
+      <if test="bloodSugar2Min != null" >
+        blood_sugar2_min = #{bloodSugar2Min,jdbcType=VARCHAR},
+      </if>
+      <if test="bloodSugar2Max != null" >
+        blood_sugar2_max = #{bloodSugar2Max,jdbcType=VARCHAR},
+      </if>
+    </set>
+   where user_code = #{userCode,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.yihe.system.domain.YhHeThreshold2Web" >
+    update yh_he_threshold2
+    set user_code = #{userCode,jdbcType=VARCHAR},
+      blood_pressure_sys_min = #{bloodPressureSysMin,jdbcType=VARCHAR},
+      blood_pressure_sys_max = #{bloodPressureSysMax,jdbcType=VARCHAR},
+      temperature_min = #{temperatureMin,jdbcType=VARCHAR},
+      temperature_max = #{temperatureMax,jdbcType=VARCHAR},
+      pulse_min = #{pulseMin,jdbcType=VARCHAR},
+      pulse_max = #{pulseMax,jdbcType=VARCHAR},
+      blood_sugar_min = #{bloodSugarMin,jdbcType=VARCHAR},
+      blood_sugar_max = #{bloodSugarMax,jdbcType=VARCHAR},
+      blood_pressure_dia_min = #{bloodPressureDiaMin,jdbcType=VARCHAR},
+      blood_pressure_dia_max = #{bloodPressureDiaMax,jdbcType=VARCHAR},
+      trig_min = #{trigMin,jdbcType=VARCHAR},
+      trig_max = #{trigMax,jdbcType=VARCHAR},
+      hdlc_min = #{hdlcMin,jdbcType=VARCHAR},
+      hdlc_max = #{hdlcMax,jdbcType=VARCHAR},
+      ldlc_min = #{ldlcMin,jdbcType=VARCHAR},
+      ldlc_max = #{ldlcMax,jdbcType=VARCHAR},
+      boold_oxygen_min = #{booldOxygenMin,jdbcType=VARCHAR},
+      boold_oxygen_max = #{booldOxygenMax,jdbcType=VARCHAR},
+      BMI_min = #{bmiMin,jdbcType=VARCHAR},
+      BMI_max = #{bmiMax,jdbcType=VARCHAR},
+      blood_muscle_anhydride_min = #{bloodMuscleAnhydrideMin,jdbcType=VARCHAR},
+      blood_muscle_anhydride_max = #{bloodMuscleAnhydrideMax,jdbcType=VARCHAR},
+      blood_urea_nitrogen_min = #{bloodUreaNitrogenMin,jdbcType=VARCHAR},
+      blood_urea_nitrogen_max = #{bloodUreaNitrogenMax,jdbcType=VARCHAR},
+      blood_uric_acid_min = #{bloodUricAcidMin,jdbcType=VARCHAR},
+      blood_uric_acid_max = #{bloodUricAcidMax,jdbcType=VARCHAR},
+      alanine_transaminase_min = #{alanineTransaminaseMin,jdbcType=VARCHAR},
+      alanine_transaminase_max = #{alanineTransaminaseMax,jdbcType=VARCHAR},
+      transaminase_millet_grass_min = #{transaminaseMilletGrassMin,jdbcType=VARCHAR},
+      transaminase_millet_grass_max = #{transaminaseMilletGrassMax,jdbcType=VARCHAR},
+      serum_serum_protein_min = #{serumSerumProteinMin,jdbcType=VARCHAR},
+      serum_serum_protein_max = #{serumSerumProteinMax,jdbcType=VARCHAR},
+      serum_globulin_min = #{serumGlobulinMin,jdbcType=VARCHAR},
+      serum_globulin_max = #{serumGlobulinMax,jdbcType=VARCHAR},
+      urinary_microprotein_min = #{urinaryMicroproteinMin,jdbcType=VARCHAR},
+      urinary_microprotein_max = #{urinaryMicroproteinMax,jdbcType=VARCHAR},
+      Hba1c_and_protein_min = #{hba1cAndProteinMin,jdbcType=VARCHAR},
+      Hba1c_and_protein_max = #{hba1cAndProteinMax,jdbcType=VARCHAR},
+      homocysteine_min = #{homocysteineMin,jdbcType=VARCHAR},
+      homocysteine_max = #{homocysteineMax,jdbcType=VARCHAR},
+      urinalysis_erythrocyte = #{urinalysisErythrocyte,jdbcType=VARCHAR},
+      urine_protein = #{urineProtein,jdbcType=VARCHAR},
+      the_ketone_body = #{theKetoneBody,jdbcType=VARCHAR},
+      tc_min = #{tcMin,jdbcType=VARCHAR},
+      tc_max = #{tcMax,jdbcType=VARCHAR},
+      blood_muscle_anhydride_min_girl = #{bloodMuscleAnhydrideMinGirl,jdbcType=VARCHAR},
+      blood_muscle_anhydride_max_girl = #{bloodMuscleAnhydrideMaxGirl,jdbcType=VARCHAR},
+      blood_urea_nitrogen_max_girl = #{bloodUreaNitrogenMaxGirl,jdbcType=VARCHAR},
+      blood_urea_nitrogen_min_girl = #{bloodUreaNitrogenMinGirl,jdbcType=VARCHAR},
+      blood_sugar2_min = #{bloodSugar2Min,jdbcType=VARCHAR},
+      blood_sugar2_max = #{bloodSugar2Max,jdbcType=VARCHAR}
+    where ID = #{id,jdbcType=INTEGER}
+  </update>
+     <select id="selectUserYhHeThreshold2" resultMap="BaseResultMap" parameterType="java.lang.String" >
+	    select * from yh_he_threshold2
+	    where user_code = #{userCode,jdbcType=VARCHAR}
+ 	 </select> 
+</mapper>

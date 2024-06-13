@@ -1,0 +1,377 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yihe.system.mapper.YhLifeHabitSignMapper" >
+  <resultMap id="BaseResultMap" type="com.yihe.system.domain.YhLifeHabitSign" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="habit_id" property="habitId" jdbcType="INTEGER" />
+    <result column="signId_date" property="signidDate" jdbcType="DATE" />
+    <result column="mark" property="mark" jdbcType="VARCHAR" />
+    <result column="user_code" property="userCode" jdbcType="VARCHAR" />
+    <result column="life_add" property="lifeAdd" jdbcType="INTEGER" />
+    <result column="sign_img" property="signImg" jdbcType="VARCHAR" />
+    <result column="increase_time" property="increaseTime" jdbcType="TIMESTAMP" />
+    <result column="category_name" property="categoryName" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, habit_id, signId_date, mark, user_code, life_add, sign_img, increase_time
+  </sql>
+  
+  
+  
+  
+    <select id="selectHabitDiaryUserAll" resultType="com.yihe.system.domain.HabitDiaryVojo">
+  		
+	 select * from (SELECT a.birth_date AS birthDate,a.user_code AS usercode,a.user_name AS username,a.name,
+	CASE
+	 WHEN a.gender = 1 
+              THEN '男' 
+              ELSE '女' 
+            END AS sex,
+		c.signId_date AS diaryTime,c.habit_id   FROM yh_user_reginfo AS a
+	INNER JOIN yh_user_make_card AS b
+	ON a.user_code=b.user_code
+	INNER JOIN `yh_life_habit_sign` AS c
+	ON a.user_code=c.user_code
+	WHERE b.doctor=(SELECT id FROM `yh_user_admin_info` WHERE user_code=#{usercode})
+	<if test="nameLike != null">
+		AND a.name LIKE CONCAT('%',#{nameLike},'%')
+		</if>
+		<if test="usernameLike != null">
+		AND a.user_name LIKE CONCAT('%',#{usernameLike},'%')
+		</if>
+		<if test="strTime != null and endTime != null and strTime != '' and endTime != ''">
+		AND c.signId_date BETWEEN DATE_FORMAT(#{strTime},'%Y-%m-%d') AND DATE_FORMAT(#{endTime},'%Y-%m-%d')
+		</if>
+	) AS b GROUP BY b.diaryTime 
+	
+	<if test="standard ==1">
+  		 HAVING (select count(*) from  yh_life_habit_sign where signId_date=b.diaryTime and user_code=b.usercode)&gt;=(select count(*) from yh_life_habit_person_dict dict,yh_life_habit_dict habit where dict.habit_id=habit.id and dict.finish_tim is null and dict.increase_date&lt;=b.diaryTime and dict.user_code=b.usercode)
+  	</if>
+  		
+	<if test="standard ==2">
+	 HAVING (select count(*) from  yh_life_habit_sign where signId_date=b.diaryTime and user_code=b.usercode)&lt;(select count(*) from yh_life_habit_person_dict dict,yh_life_habit_dict habit where dict.habit_id=habit.id and dict.finish_tim is null and dict.increase_date&lt;=b.diaryTime and dict.user_code=b.usercode)
+	</if>
+	
+	 order by diaryTime desc 
+  		
+  </select>
+  
+  
+  
+   <!-- 根据当前时间获取近30天的习惯数据，去重usercode -->
+    <select id="HebdomadRecordHabit" resultMap="BaseResultMap">
+       	 SELECT * FROM(select * from yh_life_habit_sign  where DATE_SUB(CURDATE(), INTERVAL 30 DAY) &lt;= date(signId_date)) AS b GROUP BY b.user_code;
+    </select>
+    
+  
+  
+  <!-- 统计图 -->
+  <select  id="showCartogram" parameterType="map" resultMap="BaseResultMap">
+  	SELECT * FROM(select * from yh_life_habit_sign
+  	where
+  		user_code=#{userCode,jdbcType=VARCHAR}
+  			and signId_date between #{signidDate} and #{signidDate1}
+  			
+  		) AS b GROUP BY b.signId_date order by signId_date asc 
+  </select>
+  
+  <select id="showpunch" parameterType="map" resultMap="BaseResultMap">
+  	 SELECT * FROM(select sig.*,cate.category_name from yh_life_habit_sign sig,yh_life_habit_dict dict,yh_life_habit_dict_category cate where sig.habit_id=dict.id and dict.habit_type=cate.id and sig.user_code=#{userCode,jdbcType=VARCHAR} and sig.signId_date&gt;=#{signidDate} and sig.signId_date&lt;=#{signidDate1}) AS b GROUP BY b.habit_id;
+ </select>
+  
+  <!-- 我的习惯 -->
+  <select id="showmyhabit" parameterType="map" resultMap="BaseResultMap">
+  	 SELECT * FROM(select sig.*,cate.category_name from yh_life_habit_sign sig,yh_life_habit_dict dict,yh_life_habit_dict_category cate where sig.habit_id=dict.id and dict.habit_type=cate.id and sig.user_code=#{userCode,jdbcType=VARCHAR} and sig.signId_date&gt;=#{signidDate} and sig.signId_date&lt;=#{signidDate1}) AS b GROUP BY b.habit_id;
+  </select>
+  
+  <!-- 累计天数 -->
+ <select id="accumulativenum" parameterType="map" resultMap="BaseResultMap">
+ 	SELECT * FROM(select sig.*,cate.category_name from yh_life_habit_sign sig,yh_life_habit_dict dict,yh_life_habit_dict_category cate where sig.habit_id=dict.id and dict.habit_type=cate.id and sig.user_code=#{userCode,jdbcType=VARCHAR} and sig.signId_date&gt;=#{signidDate} and sig.signId_date&lt;=#{signidDate1}) AS b GROUP BY b.signId_date;
+ </select>
+  
+  
+  <select id="ShowDaysStatisticspunch" parameterType="map" resultType="int">
+	select max(days) incessancy_days
+	from
+	(
+	select user_code
+	,@cont_day :=
+	(
+	case when (@last_uid = user_code and DATEDIFF(ot, @last_ot)=1) then
+	(@cont_day + 1)
+	when (@last_uid = user_code and DATEDIFF(ot, @last_ot)&lt;1) then
+	(@cont_day + 0)
+	else 1
+	end
+	) as days
+	,(@cont_ix := (@cont_ix + if(@cont_day = 1, 1, 0))) AS cont_ix
+	,@last_uid := user_code
+	,@last_ot := ot ot
+	from
+	(
+	select user_code
+	,signId_date as ot
+	from yh_life_habit_sign
+	where signId_date &gt;= #{signidDate}
+	and signId_date &lt;= #{signidDate1}
+	and user_code=#{userCode,jdbcType=VARCHAR}
+	order by user_code ,signId_date
+	) as t1,
+	(
+	select @last_uid := '',
+	@last_ot  := '',
+	@cont_ix  := 0,
+	@cont_day := 0
+	) as t2
+	) as t
+	group by user_code;
+	  
+	  	
+  </select>
+  
+  
+  <select id="ShowDaysStatistics" parameterType="map" resultType="int">
+	select max(days) incessancy_days
+	from
+	(
+	select user_code
+	,@cont_day :=
+	(
+	case when (@last_uid = user_code and DATEDIFF(ot, @last_ot)=1) then
+	(@cont_day + 1)
+	when (@last_uid = user_code and DATEDIFF(ot, @last_ot)&lt;1) then
+	(@cont_day + 0)
+	else 1
+	end
+	) as days
+	,(@cont_ix := (@cont_ix + if(@cont_day = 1, 1, 0))) AS cont_ix
+	,@last_uid := user_code
+	,@last_ot := ot ot
+	from
+	(
+	select user_code
+	,signId_date as ot
+	from yh_life_habit_sign
+	where signId_date &gt;= #{signidDate}
+	and signId_date &lt;= #{signidDate1}
+	and habit_id=#{habitId,jdbcType=INTEGER}
+	and user_code=#{userCode,jdbcType=VARCHAR}
+	order by user_code ,signId_date
+	) as t1,
+	(
+	select @last_uid := '',
+	@last_ot  := '',
+	@cont_ix  := 0,
+	@cont_day := 0
+	) as t2
+	) as t
+	group by user_code;
+	  
+	  	
+  </select>
+  
+  
+  
+   <select id="selectBySign" parameterType="map" resultMap="BaseResultMap">
+  select sig.*,cate.category_name from yh_life_habit_sign sig,yh_life_habit_dict dict,yh_life_habit_dict_category cate where sig.habit_id=dict.id and dict.habit_type=cate.id and sig.signId_date=#{signidDate} and sig.user_code=#{userCode,jdbcType=VARCHAR}
+  </select>
+  
+  <select id="selectBySignDate" parameterType="map" resultMap="BaseResultMap">
+  	select * from yh_life_habit_sign where signId_date=#{signidDate} and user_code=#{userCode,jdbcType=VARCHAR}
+  </select>
+  
+  <select id="showSignCount" parameterType="map"  resultMap="BaseResultMap">
+  	select * from   yh_life_habit_sign where habit_id=#{habitId,jdbcType=INTEGER} and user_code=#{userCode,jdbcType=VARCHAR}
+  </select>
+  
+  <!-- 查询所有习惯记录模糊查询统计图 -->
+    <select id="selectHabitSignCtime" resultMap="BaseResultMap" parameterType="map">
+  		
+  		SELECT * FROM(select * from yh_life_habit_sign
+  		<where>
+  		user_code=#{userCode,jdbcType=VARCHAR}
+  			<if test="signidDate!=null and signidDate !=''">
+  			and signId_date between #{signidDate} and #{signidDate1}
+  			</if>
+  		</where>
+  		) AS b GROUP BY b.signId_date 
+  		
+  		<if test="standard!=null and standard !=''">
+  		 HAVING (select count(*) from  yh_life_habit_sign where signId_date=b.signId_date and user_code=#{userCode,jdbcType=VARCHAR})&gt;=#{nul}
+  		</if>
+  		
+  		<if test="standard1!=null and standard1 !=''">
+  		 HAVING (select count(*) from  yh_life_habit_sign where signId_date=b.signId_date and user_code=#{userCode,jdbcType=VARCHAR})&lt;#{nul}
+  		</if>
+ 
+  		order by signId_date desc 
+  		
+  		<if test="signidDate==null or signidDate ==''">
+  			  LIMIT  0,15
+  			</if>
+  		
+  </select>
+  
+  
+   <!-- 查询所有习惯记录模糊查询 -->
+    <select id="selectSignDiary" resultMap="BaseResultMap" parameterType="map">
+  		SELECT * FROM(select * from yh_life_habit_sign
+  		<where>
+  		user_code=#{userCode,jdbcType=VARCHAR}
+  			<if test="signidDate!=null and signidDate !=''">
+  			and signId_date between #{signidDate} and #{signidDate1}
+  			</if>
+  		</where>
+  		) AS b GROUP BY b.signId_date 
+  		
+  		<if test="standard!=null and standard !=''">
+  		 HAVING (select count(*) from  yh_life_habit_sign where signId_date=b.signId_date and user_code=#{userCode,jdbcType=VARCHAR})&gt;=#{nul}
+  		</if>
+  		
+  		<if test="standard1!=null and standard1 !=''">
+  		 HAVING (select count(*) from  yh_life_habit_sign where signId_date=b.signId_date and user_code=#{userCode,jdbcType=VARCHAR})&lt;#{nul}
+  		</if>
+  		
+  		order by signId_date desc LIMIT #{page},#{limit}
+  </select>
+  
+   <!-- 查询所有习惯记录模糊查询 -->
+    <select id="selectSignDiaryCount" resultMap="BaseResultMap" parameterType="map">
+  			SELECT * FROM(select * from yh_life_habit_sign
+  		<where>
+  		user_code=#{userCode,jdbcType=VARCHAR}
+  			<if test="signidDate!=null and signidDate !=''">
+  			and signId_date between #{signidDate} and #{signidDate1}
+  			</if>
+  		</where>
+  		) AS b GROUP BY b.signId_date
+  		<if test="standard!=null and standard !=''">
+  		 HAVING (select count(*) from  yh_life_habit_sign where signId_date=b.signId_date and user_code=#{userCode,jdbcType=VARCHAR})&gt;=#{nul}
+  		</if>
+  		
+  		<if test="standard1!=null and standard1 !=''">
+  		 HAVING (select count(*) from  yh_life_habit_sign where signId_date=b.signId_date and user_code=#{userCode,jdbcType=VARCHAR})&lt;#{nul}
+  		</if>
+  		 order by signId_date desc
+  </select>
+  
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from yh_life_habit_sign
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  
+  <delete id="deleteByPrimaryKeyCode" parameterType="map" >
+    delete from yh_life_habit_sign
+    where habit_id = #{habitId,jdbcType=INTEGER} and user_code=#{usercode,jdbcType=VARCHAR}
+  </delete>
+  
+  
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from yh_life_habit_sign
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.yihe.system.domain.YhLifeHabitSign" >
+    insert into yh_life_habit_sign (id, habit_id, signId_date, 
+      mark, user_code, life_add, 
+      sign_img, increase_time)
+    values (#{id,jdbcType=INTEGER}, #{habitId,jdbcType=INTEGER}, #{signidDate,jdbcType=DATE}, 
+      #{mark,jdbcType=VARCHAR}, #{userCode,jdbcType=VARCHAR}, #{lifeAdd,jdbcType=INTEGER}, 
+      #{signImg,jdbcType=VARCHAR}, #{increaseTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.yihe.system.domain.YhLifeHabitSign" >
+    insert into yh_life_habit_sign
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="habitId != null" >
+        habit_id,
+      </if>
+      <if test="signidDate != null" >
+        signId_date,
+      </if>
+      <if test="mark != null" >
+        mark,
+      </if>
+      <if test="userCode != null" >
+        user_code,
+      </if>
+      <if test="lifeAdd != null" >
+        life_add,
+      </if>
+      <if test="signImg != null" >
+        sign_img,
+      </if>
+      <if test="increaseTime != null" >
+        increase_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="habitId != null" >
+        #{habitId,jdbcType=INTEGER},
+      </if>
+      <if test="signidDate != null" >
+        #{signidDate,jdbcType=DATE},
+      </if>
+      <if test="mark != null" >
+        #{mark,jdbcType=VARCHAR},
+      </if>
+      <if test="userCode != null" >
+        #{userCode,jdbcType=VARCHAR},
+      </if>
+      <if test="lifeAdd != null" >
+        #{lifeAdd,jdbcType=INTEGER},
+      </if>
+      <if test="signImg != null" >
+        #{signImg,jdbcType=VARCHAR},
+      </if>
+      <if test="increaseTime != null" >
+        #{increaseTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.yihe.system.domain.YhLifeHabitSign" >
+    update yh_life_habit_sign
+    <set >
+      <if test="habitId != null" >
+        habit_id = #{habitId,jdbcType=INTEGER},
+      </if>
+      <if test="signidDate != null" >
+        signId_date = #{signidDate,jdbcType=DATE},
+      </if>
+      <if test="mark != null" >
+        mark = #{mark,jdbcType=VARCHAR},
+      </if>
+      <if test="userCode != null" >
+        user_code = #{userCode,jdbcType=VARCHAR},
+      </if>
+      <if test="lifeAdd != null" >
+        life_add = #{lifeAdd,jdbcType=INTEGER},
+      </if>
+      <if test="signImg != null" >
+        sign_img = #{signImg,jdbcType=VARCHAR},
+      </if>
+      <if test="increaseTime != null" >
+        increase_time = #{increaseTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.yihe.system.domain.YhLifeHabitSign" >
+    update yh_life_habit_sign
+    set habit_id = #{habitId,jdbcType=INTEGER},
+      signId_date = #{signidDate,jdbcType=DATE},
+      mark = #{mark,jdbcType=VARCHAR},
+      user_code = #{userCode,jdbcType=VARCHAR},
+      life_add = #{lifeAdd,jdbcType=INTEGER},
+      sign_img = #{signImg,jdbcType=VARCHAR},
+      increase_time = #{increaseTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

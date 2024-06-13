@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yihe.system.mapper.YHUserBloodfatMapper">
+  <resultMap id="BaseResultMap" type="com.yihe.system.domain.YHUserBloodfat">
+    <id column="U_Bloodfat_Id" jdbcType="INTEGER" property="uBloodfatId" />
+    <result column="Cholesterin" jdbcType="REAL" property="cholesterin" />
+    <result column="Tring" jdbcType="REAL" property="tring" />
+    <result column="Hdl" jdbcType="REAL" property="hdl" />
+    <result column="Ldl" jdbcType="REAL" property="ldl" />
+    <result column="Entry_Time" jdbcType="VARCHAR" property="entryTime" />
+    <result column="Is_Del" jdbcType="INTEGER" property="isDel" />
+    <result column="E_User_Id" jdbcType="INTEGER" property="eUserId" />
+    <result column="Data_Source" jdbcType="VARCHAR" property="dataSource" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    U_Bloodfat_Id, Cholesterin, Tring, Hdl, Ldl, Entry_Time, Is_Del, E_User_Id, Data_Source
+  </sql>
+  
+  <!-- 血脂四项总数 -->
+   <select id="selectByBloodfatCount" resultType="int" >
+  	select count(*) from yh_user_bloodfat
+  </select>
+  
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from yh_user_bloodfat
+    where U_Bloodfat_Id = #{uBloodfatId,jdbcType=INTEGER}
+  </select>
+  <select id="selectByPrimaryKeyByUsercodeLimit" resultMap="BaseResultMap" parameterType="java.lang.String" >
+   SELECT  <include refid="Base_Column_List" /> FROM yh_user_bloodfat WHERE E_user_id=#{usercode} and is_Del=2  ORDER BY Entry_Time DESC LIMIT 1
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from yh_user_bloodfat
+    where U_Bloodfat_Id = #{uBloodfatId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.yihe.system.domain.YHUserBloodfat">
+    insert into yh_user_bloodfat (U_Bloodfat_Id, Cholesterin, Tring, 
+      Hdl, Ldl, Entry_Time, Is_Del, 
+      E_User_Id, Data_Source)
+    values (#{uBloodfatId,jdbcType=INTEGER}, #{cholesterin,jdbcType=REAL}, #{tring,jdbcType=REAL}, 
+      #{hdl,jdbcType=REAL}, #{ldl,jdbcType=REAL}, #{entryTime,jdbcType=VARCHAR}, #{isDel,jdbcType=INTEGER}, 
+      #{eUserId,jdbcType=INTEGER}, #{dataSource,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.yihe.system.domain.YHUserBloodfat">
+    insert into yh_user_bloodfat
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="uBloodfatId != null">
+        U_Bloodfat_Id,
+      </if>
+      <if test="cholesterin != null">
+        Cholesterin,
+      </if>
+      <if test="tring != null">
+        Tring,
+      </if>
+      <if test="hdl != null">
+        Hdl,
+      </if>
+      <if test="ldl != null">
+        Ldl,
+      </if>
+      <if test="entryTime != null">
+        Entry_Time,
+      </if>
+      <if test="isDel != null">
+        Is_Del,
+      </if>
+      <if test="eUserId != null">
+        E_User_Id,
+      </if>
+      <if test="dataSource != null">
+        Data_Source,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="uBloodfatId != null">
+        #{uBloodfatId,jdbcType=INTEGER},
+      </if>
+      <if test="cholesterin != null">
+        #{cholesterin,jdbcType=REAL},
+      </if>
+      <if test="tring != null">
+        #{tring,jdbcType=REAL},
+      </if>
+      <if test="hdl != null">
+        #{hdl,jdbcType=REAL},
+      </if>
+      <if test="ldl != null">
+        #{ldl,jdbcType=REAL},
+      </if>
+      <if test="entryTime != null">
+        #{entryTime,jdbcType=VARCHAR},
+      </if>
+      <if test="isDel != null">
+        #{isDel,jdbcType=INTEGER},
+      </if>
+      <if test="eUserId != null">
+        #{eUserId,jdbcType=INTEGER},
+      </if>
+      <if test="dataSource != null">
+        #{dataSource,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.yihe.system.domain.YHUserBloodfat">
+    update yh_user_bloodfat
+    <set>
+      <if test="cholesterin != null">
+        Cholesterin = #{cholesterin,jdbcType=REAL},
+      </if>
+      <if test="tring != null">
+        Tring = #{tring,jdbcType=REAL},
+      </if>
+      <if test="hdl != null">
+        Hdl = #{hdl,jdbcType=REAL},
+      </if>
+      <if test="ldl != null">
+        Ldl = #{ldl,jdbcType=REAL},
+      </if>
+      <if test="entryTime != null">
+        Entry_Time = #{entryTime,jdbcType=VARCHAR},
+      </if>
+      <if test="isDel != null">
+        Is_Del = #{isDel,jdbcType=INTEGER},
+      </if>
+      <if test="eUserId != null">
+        E_User_Id = #{eUserId,jdbcType=INTEGER},
+      </if>
+      <if test="dataSource != null">
+        Data_Source = #{dataSource,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where U_Bloodfat_Id = #{uBloodfatId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.yihe.system.domain.YHUserBloodfat">
+    update yh_user_bloodfat
+    set Cholesterin = #{cholesterin,jdbcType=REAL},
+      Tring = #{tring,jdbcType=REAL},
+      Hdl = #{hdl,jdbcType=REAL},
+      Ldl = #{ldl,jdbcType=REAL},
+      Entry_Time = #{entryTime,jdbcType=VARCHAR},
+      Is_Del = #{isDel,jdbcType=INTEGER},
+      E_User_Id = #{eUserId,jdbcType=INTEGER},
+      Data_Source = #{dataSource,jdbcType=VARCHAR}
+    where U_Bloodfat_Id = #{uBloodfatId,jdbcType=INTEGER}
+  </update>
+ 	<!--  查询用户血脂4项 -->
+  <select id="selectYHUserBloodfat" resultType="map" parameterType="java.lang.String" >
+    select yuxz.Cholesterin,yuxz.Tring,yuxz.Hdl,yuxz.Ldl,
+(select count(1) from yh_user_bloodfat where E_User_Id=#{ eUserId,jdbcType=INTEGER} and Is_Del = 2) as num,
+yuxz.Data_Source,yuxz.Entry_Time
+from yh_user_reginfo as reg 
+left join yh_user_bloodfat yuxz
+on reg.user_code = yuxz.E_User_Id
+where yuxz.U_Bloodfat_Id = (select U_Bloodfat_Id from yh_user_bloodfat where E_User_Id=#{ eUserId,jdbcType=INTEGER} and Is_Del = 2 order by Entry_Time desc limit 1)
+  </select>
+ 	
+ 	<select id="selectPageByParam" resultMap="BaseResultMap" parameterType="java.lang.String"  >
+	   select yuxz.Cholesterin,yuxz.Tring,yuxz.Hdl,yuxz.Ldl,yuxz.Entry_Time
+		from yh_user_reginfo as reg 
+		inner join yh_user_bloodfat yuxz
+		on reg.user_code = yuxz.E_User_Id
+		 where reg.user_code=#{ eUserId,jdbcType=INTEGER} and Is_Del = 2 order by Entry_Time desc 
+  </select>
+  
+   <!--  导入 -->
+ <insert id="importYHUserBloodfatData" parameterType="java.util.List">
+           insert into yh_user_bloodfat (Cholesterin, Tring, 
+      Hdl, Ldl, Entry_Time, Is_Del, 
+      E_User_Id, Data_Source) value
+           <foreach collection="Onlist" index="index" item="item" separator=",">
+      (#{item.cholesterin,jdbcType=REAL}, #{item.tring,jdbcType=REAL}, 
+      #{item.hdl,jdbcType=REAL}, #{item.ldl,jdbcType=REAL}, #{item.entryTime,jdbcType=VARCHAR}, #{item.isDel,jdbcType=INTEGER}, 
+      #{item.eUserId,jdbcType=INTEGER}, #{item.dataSource,jdbcType=VARCHAR})
+           </foreach>
+     </insert>
+ 	
+</mapper>

@@ -1,0 +1,1481 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yihe.system.mapper.YhUserReginfoMapper">
+  <resultMap id="BaseResultMap" type="com.yihe.system.domain.YhUserReginfo">
+    <id column="user_code" jdbcType="VARCHAR" property="userCode" />
+    <result column="User_Type" jdbcType="INTEGER" property="userType" />
+    <result column="user_name" jdbcType="VARCHAR" property="userName" />
+    <result column="user_pwd" jdbcType="VARCHAR" property="userPwd" />
+    <result column="gender" jdbcType="INTEGER" property="gender" />
+    <result column="birth_date" jdbcType="TIMESTAMP" property="birthDate" />
+    <result column="email" jdbcType="VARCHAR" property="email" />
+    <result column="province_id" jdbcType="VARCHAR" property="provinceId" />
+    <result column="city_id" jdbcType="VARCHAR" property="cityId" />
+    <result column="area_id" jdbcType="VARCHAR" property="areaId" />
+    <result column="reg_time" jdbcType="TIMESTAMP" property="regTime" />
+    <result column="Login_times" jdbcType="INTEGER" property="loginTimes" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="address" jdbcType="VARCHAR" property="address" />
+    <result column="post_code" jdbcType="VARCHAR" property="postCode" />
+    <result column="relation" jdbcType="VARCHAR" property="relation" />
+    <result column="mobile" jdbcType="VARCHAR" property="mobile" />
+    <result column="occupation" jdbcType="INTEGER" property="occupation" />
+    <result column="ed_background" jdbcType="INTEGER" property="edBackground" />
+    <result column="marital_status" jdbcType="INTEGER" property="maritalStatus" />
+    <result column="lock_flag" jdbcType="INTEGER" property="lockFlag" />
+    <result column="reg_source" jdbcType="INTEGER" property="regSource" />
+    <result column="Cert_Type" jdbcType="INTEGER" property="certType" />
+    <result column="Cert_NO" jdbcType="VARCHAR" property="certNo" />
+    <result column="Org_Code" jdbcType="VARCHAR" property="orgCode" />
+    <result column="Blood_Type" jdbcType="VARCHAR" property="bloodType" />
+    <result column="Enrol_Card_Id" jdbcType="VARCHAR" property="enrolCardId" />
+    <result column="key" jdbcType="VARCHAR" property="key" />
+    <result column="cardidentity" jdbcType="VARCHAR" property="cardidentity" />
+    <result column="nation" jdbcType="VARCHAR" property="nation" />
+    <result column="permanentaddress" jdbcType="VARCHAR" property="permanentaddress" />
+    <result column="rhfeminine" jdbcType="VARCHAR" property="rhfeminine" />
+    <result column="login_time" jdbcType="TIMESTAMP" property="loginTime" />
+    <result column="unit" jdbcType="VARCHAR" property="unit" />
+    <result column="is_association" jdbcType="INTEGER" property="isAssociation" />
+    <result column="association_name" jdbcType="VARCHAR" property="associationName" />
+    <result column="is_alone" jdbcType="INTEGER" property="isAlone" />
+    <result column="is_allergy" jdbcType="INTEGER" property="isAllergy" />
+    <result column="allergy_name" jdbcType="VARCHAR" property="allergyName" />
+    <result column="doctor" jdbcType="VARCHAR" property="doctor" />
+      <result column="treedate" jdbcType="VARCHAR" property="treedate" />
+      <result column="role_name" jdbcType="VARCHAR" property="roleName" />
+       <result column="roleId" jdbcType="VARCHAR" property="roleId" />
+  </resultMap>
+
+    <resultMap id="BaseResultMap1" type="com.yihe.system.domain.YhUserAdminInfo">
+        <result column="user_name" property="name"/>
+        <result column="org_code" property="orgCode"/>
+        <result column="user_code" property="userCode"/>
+    </resultMap>
+
+    <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    user_code, User_Type, user_name, user_pwd, gender, birth_date, email, province_id,
+    city_id, area_id, reg_time, Login_times, name, address, post_code, relation, mobile, occupation,
+    ed_background, marital_status, lock_flag, reg_source, Cert_Type, Cert_NO, Org_Code,
+    Blood_Type, Enrol_Card_Id, login_time, unit, is_association, association_name, is_alone,
+    is_allergy, allergy_name, cardidentity
+  </sql>
+
+
+
+  <select id="finddoctorHderer1" parameterType="java.lang.String" resultMap="BaseResultMap">
+     select * from yh_user_reginfo as reg where reg.user_code=(
+   select info.user_code from yh_user_admin_info as info
+   where id=( select card.doctor
+   from yh_user_reginfo as reg
+   inner join yh_user_make_card as card
+   on reg.user_code = card.User_Code
+   where reg.user_code=#{userCode})
+  )
+  </select>
+
+  <select id="selectUserCodeByIdCard"  resultMap="BaseResultMap">
+      select user_code
+      from yh_user_reginfo
+      where cardidentity = #{cardidentity}
+      order by reg_time asc limit 1
+  </select>
+
+
+  <select id="showOrgrenCount" parameterType="java.lang.String" resultType="int">
+  	select count(*) from yh_user_reginfo where Org_Code=#{orgCode,jdbcType=VARCHAR} and User_Type=5;
+  </select>
+
+    <select id="yhuserenrolinfo" resultMap="BaseResultMap">
+  		select * from yh_user_reginfo as a
+		left join yh_user_role_power as b
+		on a.user_code=b.userId
+		where b.userId is null
+		and a.User_Type = 5
+  	</select>
+
+  <!-- 查询用户信息 -->
+    <select id="findYhUserReginfo" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from yh_user_reginfo
+    where user_code = #{userCode,jdbcType=VARCHAR}
+  </select>
+
+
+    <select id="showdoctorCode" parameterType="java.lang.String" resultMap="BaseResultMap">
+  	  select * from yh_user_reginfo as reg where reg.user_code=(
+  	select info.user_code from yh_user_admin_info as info
+  	where id=( select card.doctor
+  	from yh_user_reginfo as reg
+ 	 inner join yh_user_make_card as card
+ 	 on reg.user_code = card.User_Code
+  	where reg.user_code=#{userCode,jdbcType=VARCHAR})  )
+  </select>
+
+  <select id="selecttotalservice" resultType="com.yihe.system.domain.YhJzService">
+      select user_code as service_name,doctor_code as service_content from yh_jz_service_total_person
+  </select>
+
+    <update id="updateshidoctor" parameterType="com.yihe.system.domain.YhJzService">
+        update yh_jz_service_person set finishi_doctor=(select doctor_code from  yh_jz_service_total_person where user_code=#{service_name}) where user_code=#{service_name}
+    </update>
+
+  <select id="selectuser" resultType="java.lang.String">
+ 	  select max(User_Code) from yh_user_reginfo w where w.User_Type='5';
+  </select>
+
+
+  <select id="showchushen" parameterType="map" resultType="Integer">
+		select count(*) from yh_user_reginfo where user_name=#{username}
+	</select>
+
+  	<update id="updateByUserCodeNew"
+		parameterType="com.yihe.system.domain.YhUserReginfo">
+		UPDATE
+		yh_user_reginfo
+		<set>
+			<if test="null != gender">
+				gender = #{gender,jdbcType=INTEGER},
+			</if>
+			<if test="null!= birthDate ">
+				birth_date = #{birthDate,jdbcType=TIMESTAMP},
+			</if>
+
+			<if test="null!=name">
+				name = #{name,jdbcType=VARCHAR},
+			</if>
+
+			<if test="null != mobile">
+				mobile = #{mobile,jdbcType=VARCHAR}
+			</if>
+		</set>
+		where user_code = #{userCode,jdbcType=VARCHAR}
+	</update>
+
+
+  <!-- 根据电话查询 -->
+	<select id="selectphone" resultType="Integer">
+		select count(*) from yh_user_reginfo where
+		mobile=#{mobile,jdbcType=VARCHAR}
+	</select>
+
+  <select id="inquire" parameterType="map" resultMap="BaseResultMap">
+		select * from yh_user_reginfo where user_name=#{username} and birth_date=#{birthDate}
+	</select>
+
+
+ <select id="showmobile" parameterType="java.lang.String" resultMap="BaseResultMap">
+   select * from yh_user_reginfo where mobile = #{mobile,jdbcType=VARCHAR}
+ </select>
+
+    <select id="showmobileByUserName" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select * from yh_user_reginfo where user_name = #{userName,jdbcType=VARCHAR}
+    </select>
+
+  <select id="showCardId" parameterType="java.lang.String" resultMap="BaseResultMap">
+   select * from yh_user_reginfo where cardidentity = #{cardId,jdbcType=VARCHAR} limit 1
+ </select>
+   <!--  根据手机号查询usercode -->
+ <select id="findByMoblie" parameterType="java.lang.String" resultType="java.lang.String">
+   select user_code from yh_user_reginfo where mobile = #{mobile,jdbcType=VARCHAR}  limit 1
+ </select>
+
+
+  <select id="findinterveneByUserCode" resultType="com.yihe.system.domain.InterveneVOJO">
+  SELECT Flag_Dgroup as `grouping`,evaluateFlag,evaluateFlag_Uptime as evaTime FROM `yh_user_enrolinfo` WHERE user_code=#{usercode} limit 1
+  </select>
+
+  <update id="modifyinterveneByUserCode">
+
+UPDATE
+  `yh_user_enrolinfo`
+SET
+
+  `Flag_Dgroup` = '',
+
+  `evaluateFlag` = '0',
+
+  `evaluateFlag_Uptime` = NOW()
+WHERE user_code=#{usercode}
+  </update>
+
+
+<update id="modifyinterveneByUserCodeAndGroupInfo">
+UPDATE
+  `yh_user_enrolinfo`
+SET
+
+  `Flag_Dgroup` = #{groupInfo}
+
+
+WHERE user_code=#{usercode}
+</update>
+
+
+
+    <!--根据机构id查询机构名下的医生-->
+    <select id="showOrgCodedoctorFacility" parameterType="java.lang.String" resultMap="BaseResultMap">
+		select * from yh_user_reginfo where Org_Code=#{orgCode,jdbcType=VARCHAR} and User_Type=4;
+	</select>
+
+    <!--根据机构id查询注册卡对应的医生（2021/10/20 hp）-->
+    <select id="showOrgCodeDoctorById" parameterType="java.lang.String" resultMap="BaseResultMap1">
+        select i.* from yh_user_make_card c
+        left join yh_user_admin_info i on c.doctor = i.id
+        where org_id = #{orgCode}
+        and i.user_code is not null
+        group by c.doctor
+    </select>
+
+	<select id="showOrgCodedoctor" parameterType="java.lang.String" resultMap="BaseResultMap">
+		select * from yh_user_reginfo where Org_Code LIKE CONCAT('%',#{orgCode,jdbcType=VARCHAR},'%') and User_Type=4;
+	</select>
+
+<!-- 根据机构查询用户账号 -->
+  <select id="showUser" parameterType="map" resultMap="BaseResultMap">
+  select admi.user_name doctor,info.*,card.End_Time as treedate,role.role_name
+    from yh_user_reginfo info
+    inner join yh_user_role_power role_power on info.user_code=role_power.userId
+    inner join yh_user_role role on role_power.roleId=role.role_id
+    inner join yh_user_make_card card on info.user_code=card.User_Code
+    inner join yh_user_admin_info admi on card.doctor=admi.id
+  		<where>
+  		info.User_Type=5
+  			<if test="orgCode !=null and orgCode !=''">
+  			and info.Org_Code LIKE CONCAT(#{orgCode},'%')
+  			</if>
+  			<if test="lockFlag !=null and lockFlag !=''">
+  			and info.lock_flag = #{lockFlag}
+  			</if>
+  			<if test="name !=null and name !=''">
+  			and info.name LIKE CONCAT('%',#{name},'%')
+  			</if>
+  			<if test="userName !=null and userName !=''">
+  			and info.user_name LIKE CONCAT('%',#{userName},'%')
+  			</if>
+  			<if test="doctor !=null and doctor !=''">
+  			and admi.user_code=#{doctor}
+  			</if>
+  			<if test="mobile !=null and mobile !=''">
+  			and info.mobile=#{mobile}
+  			</if>
+  		</where>
+    order by info.reg_time desc LIMIT  #{page},#{limit}
+  </select>
+
+   <!-- 根据机构查询用户账号总数 -->
+  <select id="showUserCount" parameterType="map" resultType="int" >
+	 select count(*) from yh_user_reginfo info
+	inner join
+	yh_user_make_card card on info.user_code=card.User_Code
+	inner join
+	yh_user_admin_info admi on card.doctor=admi.id
+  		<where>
+  		info.User_Type=5
+  			<if test="orgCode !=null and orgCode !=''">
+  			and info.Org_Code LIKE CONCAT(#{orgCode},'%')
+  			</if>
+  			<if test="lockFlag !=null and lockFlag !=''">
+  			and info.lock_flag = #{lockFlag}
+  			</if>
+  			<if test="name !=null and name !=''">
+  			and info.name LIKE CONCAT('%',#{name},'%')
+  			</if>
+  			<if test="userName !=null and userName !=''">
+  			and info.user_name LIKE CONCAT('%',#{userName},'%')
+  			</if>
+  			<if test="doctor !=null and doctor !=''">
+  			and admi.user_code=#{doctor}
+  			</if>
+  			<if test="mobile !=null and mobile !=''">
+  			and info.mobile=#{mobile}
+  			</if>
+  		</where>
+  		order by info.reg_time desc
+  </select>
+
+ <!-- 根据机构查询管理员账号 -->
+  <select id="showAdministrator" parameterType="map" resultMap="BaseResultMap">
+  select reg.reg_time,reg.user_code,reg.user_name,reg.name,reg.Org_Code,reg.lock_flag,role.role_name from yh_user_reginfo reg left join yh_user_role_power role_power on reg.user_code=role_power.userId left  join yh_user_role role on role_power.roleId=role.role_id
+  		<where>
+  		reg.User_Type=1
+  			<if test="orgCode !=null and orgCode !=''">
+  			and reg.Org_Code LIKE CONCAT('%',#{orgCode},'%') and reg.Org_Code!=#{orgCode}
+  			</if>
+  			<if test="lockFlag !=null and lockFlag !=''">
+  			and reg.lock_flag = #{lockFlag}
+  			</if>
+  			<if test="userName !=null and userName !=''">
+  			and reg.user_name LIKE CONCAT('%',#{userName},'%')
+  			</if>
+  			<if test="mobile !=null and mobile !=''">
+  			and reg.mobile=#{mobile}
+  			</if>
+            <if test="roleid !=null and roleid !=''">
+                and role_power.roleId = #{roleid}
+            </if>
+  		</where>
+  		order by reg_time desc LIMIT  #{page},#{limit}
+  </select>
+
+   <!-- 根据机构查询管理员账号总数 -->
+  <select id="showAdministratorCount" parameterType="map" resultType="int" >
+	select count(*) from yh_user_reginfo reg
+  		<where>
+  		reg.User_Type=1
+  			<if test="orgCode !=null and orgCode !=''">
+  			and reg.Org_Code LIKE CONCAT('%',#{orgCode},'%')
+  			</if>
+  			<if test="lockFlag !=null and lockFlag !=''">
+  			and reg.lock_flag = #{lockFlag}
+  			</if>
+  			<if test="userName !=null and userName !=''">
+  			and reg.user_name LIKE CONCAT('%',#{userName},'%')
+  			</if>
+  			<if test="mobile !=null and mobile !=''">
+  			and reg.mobile=#{mobile}
+  			</if>
+  		</where>
+  		order by reg_time desc
+  </select>
+
+
+   <!-- 根据机构查询医生账号 -->
+  <select id="showDoctor" parameterType="map" resultMap="BaseResultMap">
+  select reg.user_code,reg.user_name,reg.name,reg.Org_Code,reg.lock_flag,role.role_name  from yh_user_reginfo reg left join yh_user_role_power role_power on reg.user_code=role_power.userId left  join yh_user_role role on role_power.roleId=role.role_id
+  		<where>
+  		reg.User_Type=4
+  			<if test="orgCode !=null and orgCode !=''">
+  			and reg.Org_Code LIKE CONCAT('%',#{orgCode},'%')
+  			</if>
+  			<if test="lockFlag !=null and lockFlag !=''">
+  			and reg.lock_flag = #{lockFlag}
+  			</if>
+  			<if test="name !=null and name !=''">
+  			and reg.name LIKE CONCAT('%',#{name},'%')
+  			</if>
+  			<if test="userName !=null and userName !=''">
+  			and reg.user_name LIKE CONCAT('%',#{userName},'%')
+  			</if>
+  			<if test="mobile !=null and mobile !=''">
+  			and reg.mobile=#{mobile}
+  			</if>
+            <if test="roleid !=null and roleid !=''">
+                and role_power.roleId=#{roleid}
+            </if>
+  		</where>
+  		order by reg_time desc LIMIT  #{page},#{limit}
+  </select>
+
+   <!-- 根据机构查询医生账号总数 -->
+  <select id="showDoctorCount" parameterType="map" resultType="int" >
+	select count(*) from yh_user_reginfo reg
+  		<where>
+  		reg.User_Type=4
+  			<if test="orgCode !=null and orgCode !=''">
+  			and reg.Org_Code LIKE CONCAT('%',#{orgCode},'%')
+  			</if>
+  			<if test="lockFlag !=null and lockFlag !=''">
+  			and reg.lock_flag = #{lockFlag}
+  			</if>
+  			<if test="name !=null and name !=''">
+  			and reg.name LIKE CONCAT('%',#{name},'%')
+  			</if>
+  			<if test="userName !=null and userName !=''">
+  			and reg.user_name LIKE CONCAT('%',#{userName},'%')
+  			</if>
+  			<if test="mobile !=null and mobile !=''">
+  			and reg.mobile=#{mobile}
+  			</if>
+  		</where>
+  		order by reg_time desc
+  </select>
+
+  <!-- 根据机构查询服务任务总数 -->
+  <select id="showPersonnum" resultType="int">
+  	select count(*) from yh_jz_service_person son,yh_user_reginfo reg where son.user_code=reg.user_code  and DATE_FORMAT(son.insert_time, '%Y%m' ) = DATE_FORMAT( CURDATE( ) , '%Y%m' ) and  reg.User_Type='5'
+  </select>
+
+
+  <!-- 根据机构查询当前机构人数 -->
+  <select id="indexnum" resultType="int" parameterType="map">
+  	select count(*) from yh_user_reginfo reg where reg.User_Type='5' and (${orgCode})
+  </select>
+
+  <!-- 查询最近半年新增用户 -->
+  <select id="showaddCount" resultType="int">
+  	select count(*) from yh_user_reginfo where  DATE_FORMAT(reg_time, '%Y%m' ) = DATE_FORMAT( CURDATE( ) , '%Y%m' )and User_Type=5
+  </select>
+
+
+    <!--  查询用户名是否存在，并且避免与自己相同  -->
+ <select id="showuserNameFalse" parameterType="map" resultType="int" >
+   select count(*) from yh_user_reginfo where user_name = #{userName,jdbcType=VARCHAR} and user_code!=#{userCode}
+ </select>
+
+
+  <!--  查询手机号是否存在，并且避免与自己相同 -->
+ <select id="showMobileFalse" parameterType="map" resultType="int" >
+   select count(*) from yh_user_reginfo where mobile = #{mobile,jdbcType=VARCHAR} and user_code!=#{userCode}
+ </select>
+
+
+  <!-- 查询年龄小于30 -->
+  <select id="showageLessThirty" resultType="int" parameterType="map">
+  	SELECT count(*) FROM yh_user_reginfo reg WHERE TIMESTAMPDIFF(YEAR,reg.birth_date,CURDATE()) &lt;= 30 and reg.User_Type=5 and (${orgCode})
+  </select>
+
+  <!-- 查询年龄30到40直接 -->
+  <select id="showageThirtyForty" resultType="int" parameterType="map">
+  	SELECT count(*) FROM yh_user_reginfo reg WHERE TIMESTAMPDIFF(YEAR,reg.birth_date,CURDATE()) &gt;='30' and  TIMESTAMPDIFF(YEAR,reg.birth_date,CURDATE())&lt;='40' and reg.User_Type=5 and (${orgCode})
+  </select>
+
+  <!-- 查询年龄40到45 -->
+  <select id="showageFortyFive" resultType="int" parameterType="map">
+  	SELECT count(*) FROM yh_user_reginfo reg WHERE TIMESTAMPDIFF(YEAR,reg.birth_date,CURDATE())&gt;='40' and  TIMESTAMPDIFF(YEAR,reg.birth_date,CURDATE())&lt;='45' and reg.User_Type=5 and (${orgCode})
+  </select>
+
+  <!-- 查询年龄45到50 -->
+  <select id="showageFortyFiveFifty" resultType="int" parameterType="map">
+  	SELECT count(*) FROM yh_user_reginfo reg WHERE TIMESTAMPDIFF(YEAR,reg.birth_date,CURDATE())&gt;='45' and  TIMESTAMPDIFF(YEAR,reg.birth_date,CURDATE())&lt;='50' and reg.User_Type=5 and (${orgCode})
+  </select>
+
+  <!-- 查询年龄50到55 -->
+  <select id="showageFiftyFive" resultType="int" parameterType="map">
+  SELECT count(*) FROM yh_user_reginfo reg WHERE TIMESTAMPDIFF(YEAR,reg.birth_date,CURDATE())&gt;='50' and  TIMESTAMPDIFF(YEAR,reg.birth_date,CURDATE())&lt;='55' and reg.User_Type=5 and (${orgCode})
+  </select>
+
+  <!-- 查询年龄55到60 -->
+  <select id="showageFiftyFiveSixty" resultType="int" parameterType="map">
+  	SELECT count(*) FROM yh_user_reginfo reg WHERE TIMESTAMPDIFF(YEAR,reg.birth_date,CURDATE())&gt;='55' and  TIMESTAMPDIFF(YEAR,reg.birth_date,CURDATE())&lt;='60' and reg.User_Type=5 and (${orgCode})
+  </select>
+
+  <!-- 查询年龄60以上 -->
+  <select id="showageSixty" resultType="int" parameterType="map">
+  	SELECT count(*) FROM yh_user_reginfo reg WHERE TIMESTAMPDIFF(YEAR,reg.birth_date,CURDATE())&gt;='60' and reg.User_Type=5 and (${orgCode})
+  </select>
+
+
+  	<!-- 查询所有男性总数 -->
+  <select id="showReginfoGenderNan" resultType="int">
+  	select count(*) from yh_user_reginfo where gender='1';
+  </select>
+
+   <!-- 查询所有女性总数 -->
+  <select id="showReginfoGenderNv" resultType="int">
+  	select count(*) from yh_user_reginfo where gender='2';
+  </select>
+
+
+  <select id="selectByExample" parameterType="com.yihe.system.domain.YhUserReginfoExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from yh_user_reginfo
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from yh_user_reginfo
+    where user_code = #{userCode,jdbcType=VARCHAR}
+  </select>
+
+    <select id="selectOrgName" parameterType="java.lang.String" resultType="java.lang.String">
+     SELECT Org_Name FROM `yh_org_tree` WHERE  org_code=(SELECT Org_Id FROM `yh_user_make_card` WHERE user_code=#{usercode} limit 1) limit 1
+
+    </select>
+
+
+    <select id="selectByPrimaryKeyBydoctor" parameterType="java.lang.String" resultMap="BaseResultMap">
+
+   SELECT a.* FROM `yh_user_reginfo`   AS a
+     INNER JOIN `yh_user_make_card` AS c
+        ON c.user_code = a.`user_code`
+        INNER JOIN `yh_user_enrolinfo` AS b
+        ON b.`user_code`=a.`user_code`
+         WHERE c.doctor =
+      (SELECT
+        id
+      FROM
+        `yh_user_admin_info`
+      WHERE user_code = #{usercode})  and b.evaluateFlag=1
+  </select>
+  <select id="findMonitorInfoByTimeOrder" resultType="java.lang.String">
+   SELECT a.Entry_Time FROM (
+ (SELECT Entry_Time FROM yh_user_temperature WHERE E_User_Id=#{usercode} ORDER BY Entry_Time DESC LIMIT 1)
+     UNION
+      (SELECT Entry_Time FROM yh_user_oxygen WHERE E_User_Id=#{usercode} ORDER BY Entry_Time DESC LIMIT 1)
+     UNION
+      (SELECT Entry_Time FROM yh_user_bmi WHERE E_User_Id=#{usercode} ORDER BY Entry_Time DESC LIMIT 1)
+      UNION
+      (SELECT Entry_Time FROM yh_user_bloodpressure WHERE E_User_Id=#{usercode} ORDER BY Entry_Time DESC LIMIT 1)
+       UNION
+      (SELECT Entry_Time FROM yh_user_bloodsuger WHERE E_User_Id=#{usercode} ORDER BY Entry_Time DESC LIMIT 1)
+       UNION
+      (SELECT Entry_Time FROM yh_user_heart_rate WHERE E_User_Id=#{usercode} ORDER BY Entry_Time DESC LIMIT 1)
+      UNION
+      (SELECT Entry_Time FROM yh_user_body_fat WHERE E_User_Id=#{usercode} ORDER BY Entry_Time DESC LIMIT 1)
+      UNION
+      (SELECT Entry_Time FROM yh_user_bloodfat WHERE E_User_Id=#{usercode} ORDER BY Entry_Time DESC LIMIT 1)
+      UNION
+      (SELECT inertTime FROM yh_user_renalfunction WHERE user_id=#{usercode} ORDER BY inertTime DESC LIMIT 1)
+      UNION
+      (SELECT insertTime FROM yh_user_liverfunction WHERE user_id=#{usercode} ORDER BY insertTime DESC LIMIT 1)
+       UNION
+      (SELECT Entry_Time FROM yh_user_ecg WHERE E_User_Id=#{usercode} ORDER BY Entry_Time DESC LIMIT 1)
+       UNION
+      (SELECT `addDate` FROM yh_user_uba WHERE E_User_Id=#{usercode} ORDER BY `addDate` DESC LIMIT 1)
+        UNION
+      (SELECT insertTime FROM yh_user_otherfunction WHERE user_id=#{usercode} ORDER BY insertTime DESC LIMIT 1)
+
+    )AS a
+
+    ORDER BY a.Entry_Time DESC LIMIT 1
+
+  </select>
+   <select id="selectByPrimaryKeyBydoctorNew"   resultType="com.yihe.system.domain.InterveneVOJO">
+
+   SELECT * FROM (
+SELECT a.`user_code` AS usercode,a.user_name AS username,a.name,CASE
+              WHEN a.gender = 1
+              THEN '男'
+              ELSE '女'
+            END AS sex , f.`Entry_Time` AS 'bmiTime',g.`Entry_Time` AS 'bloodPreTime',
+h.`Entry_Time` AS 'bsTime',
+b.`evaluateFlag_Uptime` AS 'evaTime',b.`Flag_Dgroup` AS 'groupInfo'
+FROM `yh_user_reginfo` AS a
+LEFT JOIN `yh_user_enrolinfo` AS b
+ON a.`user_code`=b.`user_code`
+LEFT JOIN `yh_user_make_card` AS c
+ON a.`user_code`=c.`User_Code`
+
+LEFT JOIN yh_user_bmi AS f
+    ON a.user_code=f.`E_User_Id`
+     LEFT JOIN yh_user_bloodpressure AS g
+    ON a.user_code=g.`E_User_Id`
+     LEFT JOIN yh_user_bloodsuger AS h
+    ON a.user_code=h.`E_User_Id`
+
+ WHERE c.`doctor` IN (SELECT id FROM `yh_user_admin_info` WHERE user_code=#{usercode})
+ AND b.evaluateFlag=1
+<if test="strTime!='' and strTime!=null and endTime!='' and endTime!=null">
+AND b.`evaluateFlag_Uptime` BETWEEN #{strTime}
+  AND #{endTime}
+</if>
+<if test="dgroup!=null and dgroup!=''">
+AND b.`Flag_Dgroup` LIKE CONCAT('%',#{dgroup},'%')
+</if>
+<if test="nameLike!=null">
+ AND  a.name LIKE CONCAT('%',#{nameLike},'%')
+</if>
+ORDER BY f.`Entry_Time` DESC,g.`Entry_Time` DESC,h.`Entry_Time` DESC
+) AS a
+
+GROUP BY a.`usercode`
+
+  </select>
+
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from yh_user_reginfo
+    where user_code = #{userCode,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.yihe.system.domain.YhUserReginfoExample">
+    delete from yh_user_reginfo
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.yihe.system.domain.YhUserReginfo">
+    <selectKey keyProperty="userCode" order="AFTER" resultType="java.lang.String">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into yh_user_reginfo (User_Type, user_name, user_pwd,
+      gender, birth_date, email,
+      province_id, city_id, area_id,
+      reg_time, Login_times, name,
+      address, post_code, relation,
+      mobile, occupation, ed_background,
+      marital_status, lock_flag, reg_source,
+      Cert_Type, Cert_NO, Org_Code,
+      Blood_Type, Enrol_Card_Id, login_time,
+      unit, is_association, association_name,
+      is_alone, is_allergy, allergy_name
+      )
+    values (#{userType,jdbcType=INTEGER}, #{userName,jdbcType=VARCHAR}, #{userPwd,jdbcType=VARCHAR},
+      #{gender,jdbcType=INTEGER}, #{birthDate,jdbcType=TIMESTAMP}, #{email,jdbcType=VARCHAR},
+      #{provinceId,jdbcType=VARCHAR}, #{cityId,jdbcType=VARCHAR}, #{areaId,jdbcType=VARCHAR},
+      #{regTime,jdbcType=TIMESTAMP}, #{loginTimes,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR},
+      #{address,jdbcType=VARCHAR}, #{postCode,jdbcType=VARCHAR}, #{relation,jdbcType=VARCHAR},
+      #{mobile,jdbcType=VARCHAR}, #{occupation,jdbcType=INTEGER}, #{edBackground,jdbcType=INTEGER},
+      #{maritalStatus,jdbcType=INTEGER}, #{lockFlag,jdbcType=INTEGER}, #{regSource,jdbcType=INTEGER},
+      #{certType,jdbcType=INTEGER}, #{certNo,jdbcType=VARCHAR}, #{orgCode,jdbcType=VARCHAR},
+     #{bloodType,jdbcType=VARCHAR}, #{enrolCardId,jdbcType=VARCHAR}, #{loginTime,jdbcType=TIMESTAMP},
+      #{unit,jdbcType=VARCHAR}, #{isAssociation,jdbcType=INTEGER}, #{associationName,jdbcType=VARCHAR},
+      #{isAlone,jdbcType=INTEGER}, #{isAllergy,jdbcType=INTEGER}, #{allergyName,jdbcType=VARCHAR}
+      )
+  </insert>
+
+
+  <insert id="insertSelective" parameterType="com.yihe.system.domain.YhUserReginfo">
+    <selectKey keyProperty="userCode" order="AFTER" resultType="java.lang.String">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into yh_user_reginfo
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+	<if test="userCode != null">
+        user_code,
+      </if>
+      <if test="userType != null">
+        User_Type,
+      </if>
+      <if test="userName != null">
+        user_name,
+      </if>
+      <if test="userPwd != null">
+        user_pwd,
+      </if>
+      <if test="gender != null">
+        gender,
+      </if>
+      <if test="birthDate != null">
+        birth_date,
+      </if>
+      <if test="email != null">
+        email,
+      </if>
+      <if test="provinceId != null">
+        province_id,
+      </if>
+      <if test="cityId != null">
+        city_id,
+      </if>
+      <if test="areaId != null">
+        area_id,
+      </if>
+      <if test="regTime != null">
+        reg_time,
+      </if>
+      <if test="loginTimes != null">
+        Login_times,
+      </if>
+      <if test="name != null">
+        name,
+      </if>
+      <if test="address != null">
+        address,
+      </if>
+      <if test="postCode != null">
+        post_code,
+      </if>
+      <if test="relation != null">
+        relation,
+      </if>
+      <if test="mobile != null">
+        mobile,
+      </if>
+      <if test="occupation != null">
+        occupation,
+      </if>
+      <if test="edBackground != null">
+        ed_background,
+      </if>
+      <if test="maritalStatus != null">
+        marital_status,
+      </if>
+      <if test="lockFlag != null">
+        lock_flag,
+      </if>
+      <if test="regSource != null">
+        reg_source,
+      </if>
+      <if test="certType != null">
+        Cert_Type,
+      </if>
+      <if test="certNo != null">
+        Cert_NO,
+      </if>
+      <if test="orgCode != null">
+        Org_Code,
+      </if>
+      <if test="bloodType != null">
+        Blood_Type,
+      </if>
+      <if test="enrolCardId != null">
+        Enrol_Card_Id,
+      </if>
+      <if test="loginTime != null">
+        login_time,
+      </if>
+      <if test="unit != null">
+        unit,
+      </if>
+      <if test="isAssociation != null">
+        is_association,
+      </if>
+      <if test="associationName != null">
+        association_name,
+      </if>
+      <if test="isAlone != null">
+        is_alone,
+      </if>
+      <if test="isAllergy != null">
+        is_allergy,
+      </if>
+      <if test="allergyName != null">
+        allergy_name,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+    <if test="userCode != null">
+        #{userCode,jdbcType=VARCHAR},
+      </if>
+
+      <if test="userType != null">
+        #{userType,jdbcType=INTEGER},
+      </if>
+      <if test="userName != null">
+        #{userName,jdbcType=VARCHAR},
+      </if>
+      <if test="userPwd != null">
+        #{userPwd,jdbcType=VARCHAR},
+      </if>
+      <if test="gender != null">
+        #{gender,jdbcType=INTEGER},
+      </if>
+      <if test="birthDate != null">
+        #{birthDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="email != null">
+        #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="provinceId != null">
+        #{provinceId,jdbcType=VARCHAR},
+      </if>
+      <if test="cityId != null">
+        #{cityId,jdbcType=VARCHAR},
+      </if>
+      <if test="areaId != null">
+        #{areaId,jdbcType=VARCHAR},
+      </if>
+      <if test="regTime != null">
+        #{regTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="loginTimes != null">
+        #{loginTimes,jdbcType=INTEGER},
+      </if>
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null">
+        #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="postCode != null">
+        #{postCode,jdbcType=VARCHAR},
+      </if>
+      <if test="relation != null">
+        #{relation,jdbcType=VARCHAR},
+      </if>
+      <if test="mobile != null">
+        #{mobile,jdbcType=VARCHAR},
+      </if>
+      <if test="occupation != null">
+        #{occupation,jdbcType=INTEGER},
+      </if>
+      <if test="edBackground != null">
+        #{edBackground,jdbcType=INTEGER},
+      </if>
+      <if test="maritalStatus != null">
+        #{maritalStatus,jdbcType=INTEGER},
+      </if>
+      <if test="lockFlag != null">
+        #{lockFlag,jdbcType=INTEGER},
+      </if>
+      <if test="regSource != null">
+        #{regSource,jdbcType=INTEGER},
+      </if>
+      <if test="certType != null">
+        #{certType,jdbcType=INTEGER},
+      </if>
+      <if test="certNo != null">
+        #{certNo,jdbcType=VARCHAR},
+      </if>
+      <if test="orgCode != null">
+        #{orgCode,jdbcType=VARCHAR},
+      </if>
+      <if test="bloodType != null">
+       #{bloodType,jdbcType=VARCHAR},
+      </if>
+      <if test="enrolCardId != null">
+        #{enrolCardId,jdbcType=VARCHAR},
+      </if>
+      <if test="loginTime != null">
+        #{loginTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="unit != null">
+        #{unit,jdbcType=VARCHAR},
+      </if>
+      <if test="isAssociation != null">
+        #{isAssociation,jdbcType=INTEGER},
+      </if>
+      <if test="associationName != null">
+        #{associationName,jdbcType=VARCHAR},
+      </if>
+      <if test="isAlone != null">
+        #{isAlone,jdbcType=INTEGER},
+      </if>
+      <if test="isAllergy != null">
+        #{isAllergy,jdbcType=INTEGER},
+      </if>
+      <if test="allergyName != null">
+        #{allergyName,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.yihe.system.domain.YhUserReginfoExample" resultType="java.lang.Long">
+    select count(*) from yh_user_reginfo
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update yh_user_reginfo
+    <set>
+      <if test="record.userCode != null">
+        user_code = #{record.userCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.userType != null">
+        User_Type = #{record.userType,jdbcType=INTEGER},
+      </if>
+      <if test="record.userName != null">
+        user_name = #{record.userName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.userPwd != null">
+        user_pwd = #{record.userPwd,jdbcType=VARCHAR},
+      </if>
+      <if test="record.gender != null">
+        gender = #{record.gender,jdbcType=INTEGER},
+      </if>
+      <if test="record.birthDate != null">
+        birth_date = #{record.birthDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.email != null">
+        email = #{record.email,jdbcType=VARCHAR},
+      </if>
+      <if test="record.provinceId != null">
+        province_id = #{record.provinceId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.cityId != null">
+        city_id = #{record.cityId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.areaId != null">
+        area_id = #{record.areaId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.regTime != null">
+        reg_time = #{record.regTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.loginTimes != null">
+        Login_times = #{record.loginTimes,jdbcType=INTEGER},
+      </if>
+      <if test="record.name != null">
+        name = #{record.name,jdbcType=VARCHAR},
+      </if>
+      <if test="record.address != null">
+        address = #{record.address,jdbcType=VARCHAR},
+      </if>
+      <if test="record.postCode != null">
+        post_code = #{record.postCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.relation != null">
+        relation = #{record.relation,jdbcType=VARCHAR},
+      </if>
+      <if test="record.mobile != null">
+        mobile = #{record.mobile,jdbcType=VARCHAR},
+      </if>
+      <if test="record.occupation != null">
+        occupation = #{record.occupation,jdbcType=INTEGER},
+      </if>
+      <if test="record.edBackground != null">
+        ed_background = #{record.edBackground,jdbcType=INTEGER},
+      </if>
+      <if test="record.maritalStatus != null">
+        marital_status = #{record.maritalStatus,jdbcType=INTEGER},
+      </if>
+      <if test="record.lockFlag != null">
+        lock_flag = #{record.lockFlag,jdbcType=INTEGER},
+      </if>
+      <if test="record.regSource != null">
+        reg_source = #{record.regSource,jdbcType=INTEGER},
+      </if>
+      <if test="record.certType != null">
+        Cert_Type = #{record.certType,jdbcType=INTEGER},
+      </if>
+      <if test="record.certNo != null">
+        Cert_NO = #{record.certNo,jdbcType=VARCHAR},
+      </if>
+      <if test="record.orgCode != null">
+        Org_Code = #{record.orgCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.bloodType != null">
+        Blood_Type = #{record.bloodType,jdbcType=INTEGER},
+      </if>
+      <if test="record.enrolCardId != null">
+        Enrol_Card_Id = #{record.enrolCardId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.loginTime != null">
+        login_time = #{record.loginTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.unit != null">
+        unit = #{record.unit,jdbcType=VARCHAR},
+      </if>
+      <if test="record.isAssociation != null">
+        is_association = #{record.isAssociation,jdbcType=INTEGER},
+      </if>
+      <if test="record.associationName != null">
+        association_name = #{record.associationName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.isAlone != null">
+        is_alone = #{record.isAlone,jdbcType=INTEGER},
+      </if>
+      <if test="record.isAllergy != null">
+        is_allergy = #{record.isAllergy,jdbcType=INTEGER},
+      </if>
+      <if test="record.allergyName != null">
+        allergy_name = #{record.allergyName,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update yh_user_reginfo
+    set user_code = #{record.userCode,jdbcType=VARCHAR},
+      User_Type = #{record.userType,jdbcType=INTEGER},
+      user_name = #{record.userName,jdbcType=VARCHAR},
+      user_pwd = #{record.userPwd,jdbcType=VARCHAR},
+      gender = #{record.gender,jdbcType=INTEGER},
+      birth_date = #{record.birthDate,jdbcType=TIMESTAMP},
+      email = #{record.email,jdbcType=VARCHAR},
+      province_id = #{record.provinceId,jdbcType=VARCHAR},
+      city_id = #{record.cityId,jdbcType=VARCHAR},
+      area_id = #{record.areaId,jdbcType=VARCHAR},
+      reg_time = #{record.regTime,jdbcType=TIMESTAMP},
+      Login_times = #{record.loginTimes,jdbcType=INTEGER},
+      name = #{record.name,jdbcType=VARCHAR},
+      address = #{record.address,jdbcType=VARCHAR},
+      post_code = #{record.postCode,jdbcType=VARCHAR},
+      relation = #{record.relation,jdbcType=VARCHAR},
+      mobile = #{record.mobile,jdbcType=VARCHAR},
+      occupation = #{record.occupation,jdbcType=INTEGER},
+      ed_background = #{record.edBackground,jdbcType=INTEGER},
+      marital_status = #{record.maritalStatus,jdbcType=INTEGER},
+      lock_flag = #{record.lockFlag,jdbcType=INTEGER},
+      reg_source = #{record.regSource,jdbcType=INTEGER},
+      Cert_Type = #{record.certType,jdbcType=INTEGER},
+      Cert_NO = #{record.certNo,jdbcType=VARCHAR},
+      Org_Code = #{record.orgCode,jdbcType=VARCHAR},
+      Blood_Type = #{record.bloodType,jdbcType=INTEGER},
+      Enrol_Card_Id = #{record.enrolCardId,jdbcType=VARCHAR},
+      login_time = #{record.loginTime,jdbcType=TIMESTAMP},
+      unit = #{record.unit,jdbcType=VARCHAR},
+      is_association = #{record.isAssociation,jdbcType=INTEGER},
+      association_name = #{record.associationName,jdbcType=VARCHAR},
+      is_alone = #{record.isAlone,jdbcType=INTEGER},
+      is_allergy = #{record.isAllergy,jdbcType=INTEGER},
+      allergy_name = #{record.allergyName,jdbcType=VARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+
+  <select id="selectorgcrd" parameterType="String" resultType="String">
+      select Enrol_Card_Id from yh_user_make_card where User_Code=#{usercode}
+  </select>
+
+  <update id="updateByPrimaryKeySelective" parameterType="com.yihe.system.domain.YhUserReginfo">
+    update yh_user_reginfo
+    <set>
+      <if test="userType != null">
+        User_Type = #{userType,jdbcType=INTEGER},
+      </if>
+      <if test="userName != null">
+        user_name = #{userName,jdbcType=VARCHAR},
+      </if>
+      <if test="userPwd != null">
+        user_pwd = #{userPwd,jdbcType=VARCHAR},
+      </if>
+      <if test="gender != null">
+        gender = #{gender,jdbcType=INTEGER},
+      </if>
+      <if test="birthDate != null">
+        birth_date = #{birthDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="email != null">
+        email = #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="provinceId != null">
+        province_id = #{provinceId,jdbcType=VARCHAR},
+      </if>
+      <if test="cityId != null">
+        city_id = #{cityId,jdbcType=VARCHAR},
+      </if>
+      <if test="areaId != null">
+        area_id = #{areaId,jdbcType=VARCHAR},
+      </if>
+      <if test="regTime != null">
+        reg_time = #{regTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="loginTimes != null">
+        Login_times = #{loginTimes,jdbcType=INTEGER},
+      </if>
+      <if test="name != null">
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null">
+        address = #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="postCode != null">
+        post_code = #{postCode,jdbcType=VARCHAR},
+      </if>
+      <if test="relation != null">
+        relation = #{relation,jdbcType=VARCHAR},
+      </if>
+      <if test="mobile != null">
+        mobile = #{mobile,jdbcType=VARCHAR},
+      </if>
+      <if test="occupation != null">
+        occupation = #{occupation,jdbcType=INTEGER},
+      </if>
+      <if test="edBackground != null">
+        ed_background = #{edBackground,jdbcType=INTEGER},
+      </if>
+      <if test="maritalStatus != null">
+        marital_status = #{maritalStatus,jdbcType=INTEGER},
+      </if>
+      <if test="lockFlag != null">
+        lock_flag = #{lockFlag,jdbcType=INTEGER},
+      </if>
+      <if test="regSource != null">
+        reg_source = #{regSource,jdbcType=INTEGER},
+      </if>
+      <if test="certType != null">
+        Cert_Type = #{certType,jdbcType=INTEGER},
+      </if>
+      <if test="certNo != null">
+        Cert_NO = #{certNo,jdbcType=VARCHAR},
+      </if>
+      <if test="orgCode != null">
+        Org_Code = #{orgCode,jdbcType=VARCHAR},
+      </if>
+      <if test="bloodType != null">
+        Blood_Type =#{bloodType,jdbcType=VARCHAR},
+      </if>
+      <if test="enrolCardId != null">
+        Enrol_Card_Id = #{enrolCardId,jdbcType=VARCHAR},
+      </if>
+      <if test="loginTime != null">
+        login_time = #{loginTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="unit != null">
+        unit = #{unit,jdbcType=VARCHAR},
+      </if>
+      <if test="isAssociation != null">
+        is_association = #{isAssociation,jdbcType=INTEGER},
+      </if>
+      <if test="associationName != null">
+        association_name = #{associationName,jdbcType=VARCHAR},
+      </if>
+      <if test="isAlone != null">
+        is_alone = #{isAlone,jdbcType=INTEGER},
+      </if>
+      <if test="isAllergy != null">
+        is_allergy = #{isAllergy,jdbcType=INTEGER},
+      </if>
+      <if test="allergyName != null">
+        allergy_name = #{allergyName,jdbcType=VARCHAR},
+      </if>
+      <if test="nation != null">
+        nation = #{nation,jdbcType=VARCHAR},
+      </if>
+      <if test="cardidentity != null">
+        cardidentity = #{cardidentity,jdbcType=VARCHAR},
+      </if>
+      <if test="rhfeminine != null">
+        rhfeminine = #{rhfeminine,jdbcType=VARCHAR},
+      </if>
+      <if test="permanentaddress != null">
+        permanentaddress = #{permanentaddress,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where user_code = #{userCode,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.yihe.system.domain.YhUserReginfo">
+    update yh_user_reginfo
+    set User_Type = #{userType,jdbcType=INTEGER},
+      user_name = #{userName,jdbcType=VARCHAR},
+      user_pwd = #{userPwd,jdbcType=VARCHAR},
+      gender = #{gender,jdbcType=INTEGER},
+      birth_date = #{birthDate,jdbcType=TIMESTAMP},
+      email = #{email,jdbcType=VARCHAR},
+      province_id = #{provinceId,jdbcType=VARCHAR},
+      city_id = #{cityId,jdbcType=VARCHAR},
+      area_id = #{areaId,jdbcType=VARCHAR},
+      reg_time = #{regTime,jdbcType=TIMESTAMP},
+      Login_times = #{loginTimes,jdbcType=INTEGER},
+      name = #{name,jdbcType=VARCHAR},
+      address = #{address,jdbcType=VARCHAR},
+      post_code = #{postCode,jdbcType=VARCHAR},
+      relation = #{relation,jdbcType=VARCHAR},
+      mobile = #{mobile,jdbcType=VARCHAR},
+      occupation = #{occupation,jdbcType=INTEGER},
+      ed_background = #{edBackground,jdbcType=INTEGER},
+      marital_status = #{maritalStatus,jdbcType=INTEGER},
+      lock_flag = #{lockFlag,jdbcType=INTEGER},
+      reg_source = #{regSource,jdbcType=INTEGER},
+      Cert_Type = #{certType,jdbcType=INTEGER},
+      Cert_NO = #{certNo,jdbcType=VARCHAR},
+      Org_Code = #{orgCode,jdbcType=VARCHAR},
+      Blood_Type =#{bloodType,jdbcType=VARCHAR},
+      Enrol_Card_Id = #{enrolCardId,jdbcType=VARCHAR},
+      login_time = #{loginTime,jdbcType=TIMESTAMP},
+      unit = #{unit,jdbcType=VARCHAR},
+      is_association = #{isAssociation,jdbcType=INTEGER},
+      association_name = #{associationName,jdbcType=VARCHAR},
+      is_alone = #{isAlone,jdbcType=INTEGER},
+      is_allergy = #{isAllergy,jdbcType=INTEGER},
+      allergy_name = #{allergyName,jdbcType=VARCHAR}
+    where user_code = #{userCode,jdbcType=VARCHAR}
+  </update>
+
+  <!--  添加 -->
+  <insert id="regSubmit" parameterType="com.yihe.system.domain.YhUserReginfo">
+   insert into yh_user_reginfo (user_code,name,gender,post_code,birth_date,mobile,user_name,user_pwd,reg_time,User_Type,Org_Code,Enrol_Card_Id,cardidentity) values (#{userCode,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, #{gender,jdbcType=INTEGER},
+    #{postCode,jdbcType=VARCHAR},#{birthDate,jdbcType=TIMESTAMP}, #{mobile,jdbcType=VARCHAR}, #{userName,jdbcType=VARCHAR}, #{userPwd,jdbcType=VARCHAR},sysdate(), #{userType,jdbcType=INTEGER},#{orgCode,jdbcType=VARCHAR},#{enrolCardId},#{cardidentity})
+  </insert>
+    <!--  激活码注册 -->
+    <insert id="regSubmitActivation" parameterType="com.yihe.system.domain.YhUserReginfo">
+   insert into yh_user_reginfo (user_code,mobile,user_name,user_pwd,reg_time,User_Type,Org_Code,Enrol_Card_Id,cardidentity) values (
+   #{userCode,jdbcType=VARCHAR},#{mobile,jdbcType=VARCHAR}, #{userName,jdbcType=VARCHAR}, #{userPwd,jdbcType=VARCHAR},sysdate(), #{userType,jdbcType=INTEGER},#{orgCode,jdbcType=VARCHAR},#{enrolCardId},#{cardidentity})
+  </insert>
+
+
+
+    <!--  查询最大值的userCode -->
+ <select id="selectMaxUserCodeDa"  parameterType="java.lang.Integer" resultType="java.lang.String">
+   select * from yh_user_reginfo where User_Type=4  order by reg_time desc limit 0,1
+ </select>
+
+    <!-- 查询注册卡是否被注册 -->
+  <select id="selectCardId" parameterType="com.yihe.system.domain.YhUserMakeCard"
+          resultType="java.lang.String">
+     select user_code from yh_user_make_card where Enrol_Card_Id=#{enrolCardId,jdbcType=VARCHAR} and Org_Id=#{orgId,jdbcType=VARCHAR}
+  </select>
+
+    <!-- 查询激活码是否被注册 -->
+    <select id="selectActivationCardId" parameterType="com.yihe.system.domain.YhUserMakeCard"
+            resultType="com.yihe.system.domain.YhUserMakeCard">
+     SELECT Enrol_Card_Id AS enrolCardId,End_Time AS endTime,User_Code AS userCode,Org_Id AS orgId from yh_user_make_card where `key`=#{key} limit 1
+  </select>
+
+
+    <!--  查询最大值的userCode -->
+ <select id="selectMaxUserCode"  parameterType="java.lang.Integer" resultType="java.lang.String">
+   select max(user_code) from yh_user_reginfo  where User_Type=5
+ </select>
+
+ <!--  查询最大值的userCode -->
+ <select id="selectMaxUserCode1"  parameterType="java.lang.Integer" resultType="java.lang.String">
+   select user_code from yh_user_reginfo  where User_Type=1 order by reg_time desc limit 1
+ </select>
+
+ <select id="selectMaxUserCode2"  resultType="java.lang.String">
+   select max(user_code) from yh_user_reginfo  where User_Type=5
+ </select>
+  <!--  查询手机号和用户名 -->
+ <select id="selectMobileAndName" parameterType="java.lang.String" resultMap="BaseResultMap" >
+   select user_code,user_name,mobile from yh_user_reginfo where user_name = #{userName,jdbcType=VARCHAR}
+ </select>
+
+  <!--  查询用户密码 -->
+ <select id="selectUserPwd" parameterType="java.lang.String" resultMap="BaseResultMap" >
+   select user_pwd from yh_user_reginfo where user_code = #{userCode,jdbcType=VARCHAR} and user_pwd=#{userPwd,jdbcType=VARCHAR}
+ </select>
+
+ <!--  查询手机号和用户名 -->
+ <select id="selectMobileAndName2" parameterType="java.lang.String" resultMap="BaseResultMap" >
+   select user_code,user_name,mobile from yh_user_reginfo where mobile = #{mobile,jdbcType=VARCHAR} limit 1
+ </select>
+
+  <select id="selectPhoneAndName" parameterType="java.lang.String" resultMap="BaseResultMap" >
+   select user_code,user_name,mobile from yh_user_reginfo where mobile = #{mobile,jdbcType=VARCHAR} or user_name = #{userName,jdbcType=VARCHAR}
+ </select>
+
+ <!--  查询类型 -->
+ <select id="selectType" parameterType="java.lang.Integer" resultType="java.lang.Integer" >
+   select  max(user_code) from yh_user_reginfo where User_Type = 4
+ </select>
+
+ <!--  查询注册卡剩余 -->
+ <select id="selectRegCardSurplus" resultType="java.lang.Integer" >
+
+   select count(*)
+		  from yh_user_admin_info as info
+		  inner join yh_user_make_card as card
+		  on info.id=card.doctor
+		  where (card.User_Code is null or card.User_Code='')
+		   and info.user_code=#{userCode,jdbcType=VARCHAR}
+			<if test="orgCode != null and orgCode!='' ">
+	         and card.Org_Id=#{orgCode}
+	      </if>
+
+ </select>
+
+ <select id="selectRegCard" resultMap="BaseResultMap" >
+    select t1.*
+  	from yh_user_make_card t1
+	inner join yh_user_admin_info t2 on t1.doctor = t2.id
+   where  (t1.User_Code is null or t1.User_Code='')and (t1.key is null or t1.key='') and t2.user_code=#{userCode,jdbcType=VARCHAR}
+  	<if test="orgCode != null and orgCode!='' ">
+         and t1.Org_Id=#{orgCode}
+      </if>
+ </select>
+
+ <select id="selectYhUserReginfoData" parameterType="java.lang.String" resultMap="BaseResultMap" >
+   	select po.roleId,re.* from yh_user_reginfo re,yh_user_role_power po where re.user_code=po.userId and  user_code=#{userCode,jdbcType=VARCHAR} limit 1
+ </select>
+
+ <update id="resetPwd" parameterType="java.lang.String">
+ 	 update yh_user_reginfo set user_pwd=#{userPwd,jdbcType=VARCHAR} where user_code=#{userCode,jdbcType=VARCHAR}
+ </update>
+
+<!--  导出注册数据 -->
+<select id="exportYhUserReginfoData" parameterType="java.lang.String" resultMap="BaseResultMap" >
+   select card.Enrol_Card_Id,tree.Org_Code,regin.name,regin.user_name,regin.mobile,regin.reg_time,regin.User_Code
+   ,regin.gender,regin.birth_date,card.key
+		from yh_user_make_card as card
+		  LEFT JOIN yh_org_tree as tree
+		  ON card.Org_Id=tree.Org_Code
+		  LEFT JOIN yh_user_reginfo as regin
+		  on regin.user_code=card.User_Code
+		  LEFT JOIN yh_user_admin_info as yuai
+		  ON yuai.id=card.doctor
+		  where yuai.user_code=#{userCode,jdbcType=VARCHAR}
+
+ </select>
+
+    <select id="exportYhUserReginfoData1" resultMap="BaseResultMap">
+        select card.Enrol_Card_Id,tree.Org_Code,regin.name,regin.user_name,regin.mobile,regin.reg_time,regin.User_Code
+            ,regin.gender,regin.birth_date,card.key
+		from yh_user_make_card as card
+		  LEFT JOIN yh_org_tree as tree
+		  ON card.Org_Id=tree.Org_Code
+		  LEFT JOIN yh_user_reginfo as regin
+		  on regin.user_code=card.User_Code
+		  LEFT JOIN yh_user_admin_info as yuai
+		  ON yuai.id=card.doctor
+		  where card.Enrol_Card_Id in
+		  <foreach collection="userCode" separator="," close=")" open="(" index="index" item="item">
+              #{item}
+          </foreach>
+    </select>
+
+<!--  导入 -->
+ <insert id="importYhUserReginfoData" parameterType="java.util.List">
+		insert into yh_user_reginfo (user_code,User_Type, user_name, user_pwd,
+								      gender, birth_date, email,
+								      province_id, city_id, area_id,
+								      reg_time, name,
+								      address, post_code, relation,
+								      mobile, occupation, ed_background,
+								      marital_status, lock_flag, reg_source,
+								      Cert_Type, Cert_NO, Org_Code,
+								      Blood_Type, Enrol_Card_Id, login_time,
+								      unit, is_association, association_name,
+								      is_alone, is_allergy, allergy_name,nation,
+								      permanentaddress,rhfeminine,cardidentity) value
+		<foreach collection="Onlist" index="index" item="item" separator=",">
+	 (#{item.userCode,jdbcType=VARCHAR}, #{item.userType,jdbcType=INTEGER}, #{item.userName,jdbcType=VARCHAR}, #{item.userPwd,jdbcType=VARCHAR},
+      #{item.gender,jdbcType=INTEGER}, #{item.birthDate,jdbcType=TIMESTAMP}, #{item.email,jdbcType=VARCHAR},
+      #{item.provinceId,jdbcType=VARCHAR}, #{item.cityId,jdbcType=VARCHAR}, #{item.areaId,jdbcType=VARCHAR},
+      #{item.regTime,jdbcType=TIMESTAMP}, #{item.name,jdbcType=VARCHAR},
+      #{item.address,jdbcType=VARCHAR}, #{item.postCode,jdbcType=VARCHAR}, #{item.relation,jdbcType=VARCHAR},
+      #{item.mobile,jdbcType=VARCHAR}, #{item.occupation,jdbcType=INTEGER}, #{item.edBackground,jdbcType=INTEGER},
+      #{item.maritalStatus,jdbcType=INTEGER}, #{item.lockFlag,jdbcType=INTEGER}, #{item.regSource,jdbcType=INTEGER},
+      #{item.certType,jdbcType=INTEGER}, #{item.certNo,jdbcType=VARCHAR}, #{item.orgCode,jdbcType=VARCHAR},
+     #{item.bloodType,jdbcType=VARCHAR}, #{item.enrolCardId,jdbcType=VARCHAR}, #{item.loginTime,jdbcType=TIMESTAMP},
+      #{item.unit,jdbcType=VARCHAR}, #{item.isAssociation,jdbcType=INTEGER}, #{item.associationName,jdbcType=VARCHAR},
+      #{item.isAlone,jdbcType=INTEGER}, #{item.isAllergy,jdbcType=INTEGER}, #{item.allergyName,jdbcType=VARCHAR},
+      #{item.nation,jdbcType=VARCHAR}, #{item.permanentaddress,jdbcType=VARCHAR},
+      #{item.rhfeminine,jdbcType=VARCHAR},#{item.cardidentity,jdbcType=VARCHAR})
+		</foreach>
+	</insert>
+	 <!--  健康档案管理分页 -->
+<select id="selecthealthRecordManagePageByParam" parameterType="map" resultType="map" >
+select * from ( select regin.user_code,regin.user_name,regin.name,tree.Org_Code,regin.reg_time,card.End_Time as Add_Date,regin.lock_flag,ydatr.classify,ydatr.qtime,card.Org_Id
+		  from  yh_user_reginfo as regin
+		  LEFT JOIN yh_user_make_card as card
+		  on regin.user_code=card.User_Code
+		  LEFT JOIN  yh_org_tree as tree
+		   ON regin.Org_code=tree.Org_Code
+		  LEFT JOIN yh_user_admin_info as yuai
+		  ON yuai.id=card.doctor
+		   LEFT JOIN (SELECT a.* FROM (  SELECT * FROM yh_disease_assess_total_report2 ORDER BY qtime DESC ) AS a GROUP BY  a.user_code ) as ydatr
+		  ON regin.user_code = ydatr.user_code
+		  where yuai.user_code=#{userCode,jdbcType=VARCHAR} and regin.`name` is not null and regin.birth_date is not null
+		  	<if test="orgCodes != null and orgCodes.size()>0">
+		  	and card.Org_Id in
+		  	<foreach collection="orgCodes" item="item" open="(" close=")" separator=",">
+            	#{item}
+        	</foreach>
+		  </if>
+		  <if test="validity != null and validity =='Y'.toString()">
+		  	and (card.End_Time &gt; current_date or card.End_Time is null)
+		  </if>
+		  <if test="validity != null and validity =='N'.toString()">
+		  	and card.End_Time &lt; current_date
+		  </if>
+		  <if test="userName!=null and userName!=''">
+	   		    and  regin.user_name like '%${userName}%'
+	   		</if>
+
+	   		<if test="name!=null and name!=''">
+	   		    and  regin.name like '%${name}%'
+	   		</if>
+	   		<!-- int类型不要 判断是否 为 '' -->
+	   		<if test="lockFlag!=null and lockFlag!=''">
+	   		    and regin.lock_flag = #{lockFlag}
+	   		</if>
+
+	   		<if test="regdate1!=null and regdate2!=null">
+	   		    and regin.reg_time between #{regdate1} AND #{regdate2}
+	   		</if>
+	   	  order by reg_time desc) w
+		  group by user_code
+		   having    w.user_code IN(select userId from yh_user_role_power where roleId = 17)
+		   order by w.reg_time desc
+
+
+
+
+
+ </select>
+
+
+ <select id="selecthealthRecordManagePageByParam2"  resultType="map" >
+select * from ( select regin.user_code,regin.user_name,regin.name,tree.Org_Code,regin.reg_time,card.End_Time as Add_Date,regin.lock_flag,ydatr.classify,ydatr.qtime,card.Org_Id
+		  from  yh_user_reginfo as regin
+		  LEFT JOIN yh_user_make_card as card
+		  on regin.user_code=card.User_Code
+		  LEFT JOIN  yh_org_tree as tree
+		   ON regin.Org_code=tree.Org_Code
+		  LEFT JOIN yh_user_admin_info as yuai
+		  ON yuai.id=card.doctor
+		   LEFT JOIN yh_disease_assess_total_report2 as ydatr
+		  ON regin.user_code = ydatr.user_code
+		  where yuai.user_code=#{userCode,jdbcType=VARCHAR}
+	   	  order by reg_time desc) w
+		  group by user_code
+		   having    w.user_code IN(select userId from yh_user_role_power where roleId = 17)
+		   order by w.reg_time desc
+ </select>
+
+ <update id="updateuserStatus" parameterType="java.lang.String">
+		update yh_user_reginfo set lock_flag=#{lockFlag,jdbcType=INTEGER} where user_code=#{userCode,jdbcType=VARCHAR}
+ </update>
+
+    <update id="setmakecardlinetime" parameterType="String">
+        update yh_user_make_card set `End_Time`=(SELECT a.Add_Date from (select `Add_Date` from yh_org_tree where Org_Code=(select `Org_Id` from yh_user_make_card where `Enrol_Card_Id`=#{orgcard}) )a)
+        where Enrol_Card_Id=#{orgcard}
+    </update>
+
+    <select id="selectlintime" parameterType="String" resultType="String">
+        select Add_Date from yh_org_tree where  Org_Code=(select Org_Id from yh_user_make_card where Enrol_Card_Id=#{cardtime})
+    </select>
+
+    <update id="setmakecarlinetimes" parameterType="string">
+        update yh_user_make_card set  End_Time=#{linetime} where Enrol_Card_Id=#{orgcode}
+    </update>
+    <update id="updatelinetime" parameterType="string">
+        update yh_user_make_card set
+        <if test="time !=null">
+        End_Time=#{time}
+        </if>
+         <if test="time ==null">
+        End_Time = Null
+        </if>
+
+        where Enrol_Card_Id=#{orgcode}
+    </update>
+
+    <select id="selectAllUserinfoByuserCode" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select * from yh_user_reginfo where user_code=#{userCode}
+    </select>
+</mapper>

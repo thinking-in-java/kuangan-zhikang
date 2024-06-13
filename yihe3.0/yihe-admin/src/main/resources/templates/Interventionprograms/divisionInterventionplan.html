@@ -1,0 +1,1778 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>干预计划</title>
+    <link rel="stylesheet" th:href="@{/assets/libs/layui/css/layui.css}" />
+    <link rel="stylesheet" th:href="@{/assets/module/admin.css}" />
+    <style>
+        .yincang{
+            display: none;
+        }
+        .xianshi{
+            display: block;
+        }
+        .layui-form-item {
+            margin-bottom: 25px;
+        }
+        .layui-form-item .layui-form-checkbox[lay-skin=primary] {
+
+            width: 30%;
+        }
+        .layui-input-block{
+            margin-left: 50px;
+            min-height: 36px;
+        }
+        .layui-form-item .layui-form-checkbox[lay-skin=primary] {
+            margin-top: 18px;
+        }
+        .fontsize{
+            font-size: 16px;
+        }
+        .layui-table-box {
+            min-height:400px;
+        }
+        @media screen and (max-width: 1060px) {
+            .lay-step {
+                padding-left: 50px !important;
+                width: 100%;
+            }
+        }
+        .step-item-main-title{
+            margin-top: 0%  !important;
+        }
+        .step-item-main{
+            margin-left: -38%  !important;
+        }
+    </style>
+    <style type="text/css">
+        .step-item-head-active{
+            height:52px	!important;
+            width:52px	!important;
+            line-height: 52px	!important;
+            position: relative;
+            top: -10px;
+        }
+        .step-item-head {
+            line-height: 26px;
+        }
+        .step-item{
+            line-height: 52px	!important;
+        }
+        .step-item-main-title{
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body style="overflow-x:hidden" >
+<input id="types" type="hidden" th:value="${type}">
+<form class="layui-form" id="test" style="display:none">
+    <div  style="margin-top: 20px;width: 50%;float: left">
+        <label class="layui-form-label" >执行时间:</label>
+        <div class="layui-input-inline">
+            <div class="layui-input-inline"  ><input type="text"  class="layui-input" id="time2" placeholder="yyyy-MM-dd"></div>
+        </div>
+    </div>
+    <div  style="margin-top: 20px;width: 50%;float: left">
+        <label class="layui-form-label" >服务方式:</label>
+        <div class="layui-input-inline">
+            <select name="infoType" id="managelis">
+                <option value="1">电话回访</option>
+                <option value="2">微信回访</option>
+                <option value="3">小程序聊天回访</option>
+                <option value="4">上门回访</option>
+                <option value="5">不限</option>
+            </select>
+        </div>
+    </div>
+    <div  style="margin-top: 20px;width: 100%;float: left" lay-filter="group">
+        <label class="layui-form-label" >计划内容:</label>
+        <div class="layui-input-inline" style="width: 70%">
+            <select name="infoType" id="jihuaneirong">
+            </select>
+        </div>
+    </div>
+    <div class="layui-form-item layui-form-text" style="position: relative;top: 40px">
+        <label class="layui-form-label" >内容提示:</label>
+        <div class="layui-input-block" style="width: 80%">
+            <textarea id='acceptsituation' lay-verify="required" name="desc" placeholder="最大限制500个字符" class="layui-textarea"></textarea>
+        </div>
+    </div>
+</form>
+
+<form id="testznx" class="layui-form" style="display:none">
+    <div class="layui-form-item">
+        <label class="layui-form-label layui-form-required">标题:</label>
+        <div class="layui-input-block" style="margin-right:50px">
+            <input style="margin-right: 50px" type="text" name="title" id="title" lay-verify="required" lay-reqtext="标题不能为空" maxlength="16"
+                   placeholder="请输入标题，最大限制16个字符" autocomplete="off"  class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <div class="layui-form-item layui-form-text">
+            <label class="layui-form-label">消息</label>
+            <div class="layui-input-block" style="margin-right: 50px;margin-top: 10px;">
+                <textarea class="layui-textarea" placeholder="最大限制200字符" id="instruction" maxlength="200" name="instruction"style="display: none"> </textarea>
+
+            </div>
+        </div>
+    </div>
+</form>
+
+
+<div class="layui-row layui-col-space15" style="padding: 20px;height: 900px;min-height: 500px">
+    <div class="layui-card" style="height: 900px;">
+                <!--头部的tab切换栏-->
+                <div class="layui-tab layui-tab-brief" lay-filter="docDemoTabBrief">
+
+                    <div class="layui-tab-content" style="min-height: 500px">
+                        <div class="layui-tab-item layui-show">
+                            <div class="layui-tab " lay-filter="docDemoTabBrief2">
+                                <ul class="layui-tab-title">
+                                    <li class="layui-this">制定干预计划</li>
+                                    <li id="thisclicks">计划模板管理</li>
+                                </ul>
+                                <div  class="layui-tab-content" style="padding: 10px 0px 10px 0px;min-height: 500px">
+                                    <div class="layui-tab-item layui-show" >
+                                            <div  style="padding-top: 40px;">
+                                                <div class="layui-carousel" id="stepForm" lay-filter="stepForm"
+                                                     style="margin: 0 auto;min-height: 500px;margin-bottom: 40px;">
+                                                    <div carousel-item style="min-height: 500px">
+                                                        <div>
+                                                            <form class="layui-form" style="margin: 0 auto;
+                                                            max-width: 100%; margin-bottom: 40px;background: #fff;">
+                                                                                                <div class="layui-form toolbar">
+                                                                                                    <div class="layui-form-item">
+                                                                                                        <div  class="layui-inline" style="width: 20%">
+                                                                                                            <label class="layui-form-label" style="text-align: left;width: 50px;padding: 9px 15px 9px 0px;">归属：</label>
+                                                                                                            <div  class="layui-input-inline" style="width: 70%">
+                                                                                                                <input type="text" id="tree" lay-filter="tree"
+                                                                                                                       class="layui-input">
+                                                                                                            </div>
+                                                                                                        </div>
+                                                                                                        <div class="layui-inline">
+                                                                                                            <label class="layui-form-label">干预分组：</label>
+                                                                                                            <div class="layui-input-inline">
+                                                                                                                <select name="infoType" id="dis">
+                                                                                                                    <option value="">全部</option>
+                                                                                                                    <option th:each="glist:${selectAllInfo}"
+                                                                                                                            th:value="${glist.uDocgroupId}">[[${glist.gname}]]</option>
+                                                                                                                </select>
+                                                                                                            </div>
+                                                                                                        </div>
+                                                                                                        <div class="layui-inline">
+                                                                                                            <label class="layui-form-label">管理等级：</label>
+                                                                                                            <div class="layui-input-inline">
+                                                                                                                <select name="infoType" id="manageli">
+                                                                                                                    <option value="">不限</option>
+                                                                                                                    <option value="g0">未分级</option>
+                                                                                                                    <option value="g1">一级</option>
+                                                                                                                    <option value="g2">二级</option>
+                                                                                                                    <option value="g3">三级</option>
+                                                                                                                    <option value="g4">四级</option>
+                                                                                                                    <option value="g5">五级</option>
+                                                                                                                </select>
+                                                                                                            </div>
+                                                                                                        </div>
+                                                                                                        <div class="layui-inline" >
+                                                                                                            <label class="layui-form-label" >干预计划：</label>
+                                                                                                            <div class="layui-input-inline" style="width: 50%">
+                                                                                                                <select name="infoType" id="plan" >
+                                                                                                                    <option value="">全部</option>
+                                                                                                                    <option value="1">有</option>
+                                                                                                                    <option value="2">无</option>
+                                                                                                                </select>
+                                                                                                            </div>
+                                                                                                        </div>
+                                                                                                        <div class="layui-inline" >
+                                                                                                            <label class="layui-form-label" >性别：</label>
+                                                                                                            <div class="layui-input-inline"  style="width: 50%">
+                                                                                                                <select name="infoType" id="sex">
+                                                                                                                    <option value="">全部</option>
+                                                                                                                    <option value="1">男</option>
+                                                                                                                    <option value="2">女</option>
+
+                                                                                                                </select>
+                                                                                                            </div>
+                                                                                                        </div>
+                                                                                                        <div>
+                                                                                                        <label class="layui-form-label" style="text-align: left;width: 50px;padding: 9px 15px 9px 0px;">年龄：</label>
+                                                                                                        <div  class="layui-input-inline">
+                                                                                                            <input  name="username" id="agemin" class="layui-input" type="text"
+                                                                                                                    placeholder="请输入" style="width: 40%;display: inline-block" /> <span style="margin-left: 4%">至</span>
+                                                                                                            <input  name="username" id="agemax" class="layui-input" type="text"
+                                                                                                                    placeholder="请输入" style="width: 40%;display: inline-block;margin-left: 4%" />
+                                                                                                        </div>
+                                                                                                        </div>
+                                                                                                        <!--<label style="width: 10%" class="layui-form-label">体重指数(BMI)：</label>
+                                                                                                        <div  class="layui-input-inline">
+
+                                                                                                            <input  name="username" id="bmimin" class="layui-input" type="text"
+                                                                                                                    placeholder="请输入" style="width: 40%;display: inline-block" /> <span style="margin-left: 4%">至</span>
+                                                                                                            <input  name="username" id="bmimax" class="layui-input" type="text"
+                                                                                                                    placeholder="请输入" style="width: 40%;display: inline-block;margin-left: 4%" />
+                                                                                                        </div>-->
+
+                                                                                                        <div class="layui-inline">
+                                                                                                            <label class="layui-form-label">姓名：</label>
+                                                                                                            <div class="layui-input-inline">
+
+                                                                                                                <input name="username" id="username" class="layui-input" type="text"
+                                                                                                                       placeholder="请输入" />
+                                                                                                            </div>
+
+                                                                                                        </div>
+                                                                                                        <div class="layui-inline" style="padding-left: 20px;">
+                                                                                                            <button type="button" value="" class="layui-btn layui-icon    layui-icon-search " id="selectbyconditions" data-type="selectby">搜索</button>
+                                                                                                            <button class="layui-btn layui-btn-primary" id="btnempty" lay-submit=""
+                                                                                                                    lay-filter="reset">清除</button>
+
+                                                                                                        </div>
+                                                                                                    </div>
+                                                                                                </div>
+
+                                                                                                <table class="layui-hide" id="duixiang" lay-filter="duixiang" style="background-color: #FFFFff"></table>
+                                                                <div style="height: 38px;"></div>
+                                                                <div class="layui-form-item" style="position: fixed;bottom: 0px;width: 98%;left: 0px;margin: 0;background-color: #FFF;">
+                                                                    <div class="layui-input-block" style="position: fixed;bottom: 0px;width: 98%;left: 0px;margin: 0;background-color: #FFF">
+                                                                        <button class="layui-btn" lay-submit lay-filter="formDemo" style="margin-left: 45%">&emsp;下一步&emsp;
+                                                                        </button>
+                                                                    </div>
+                                                                </div>
+                                                            </form>
+
+                                                        </div>
+
+                                                        <!--选择干预模板-->
+                                                        <div>
+
+                                                            <form class="layui-form" style="margin: 0 auto; max-width: 100%; padding-top: 60px;">
+                                                                <div class="layui-form toolbar">
+                                                                    <div class="layui-form-item">
+                                                                        <div  class="layui-inline" style="width: 25%">
+                                                                            <label class="layui-form-label" style="text-align: left;width: 80px;padding: 9px 15px 0px 0px;">模板来源：</label>
+                                                                            <div  class="layui-input-inline" style="width: 70%">
+                                                                                <select name="infoType" id="templatesouce" >
+                                                                                    <option value="">全部</option>
+                                                                                    <option value="1">系统提供模板</option>
+                                                                                    <option value="2">我创建的模板</option>
+                                                                                    <option value="3">其他人创建的模板</option>
+                                                                                </select>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="">
+                                                                            <label class="layui-form-label" style="text-align: left;width: 80px;padding: 9px 15px 0px 0px;">模板条件：</label>
+                                                                            <div class="layui-input-inline">
+                                                                                <select name="infoType" id="jibing">
+                                                                                    <option value="">全部</option>
+                                                                                    <option th:each="glist:${category}"
+                                                                                            th:value="${glist.diseaseCode}">[[${glist.diseaseName}]]</option>
+                                                                                    <option value="14">不限</option>
+                                                                                </select>
+                                                                            </div>
+                                                                            <div class="layui-input-inline">
+                                                                                <select name="infoType" id="fengxian">
+                                                                                    <option value="">不限</option>
+                                                                                    <option value="1">一级</option>
+                                                                                    <option value="2">二级</option>
+                                                                                    <option value="3">三级</option>
+                                                                                    <option value="4">四级</option>
+                                                                                    <option value="5">五级</option>
+                                                                                </select>
+                                                                            </div>
+                                                                            <div class="layui-input-inline">
+                                                                                <select name="infoType" id="xingbie">
+                                                                                    <option value="">性别不限</option>
+                                                                                    <option value="1">男</option>
+                                                                                    <option value="2">女</option>
+                                                                                </select>
+                                                                            </div>
+                                                                        </div>
+                                                                        <label class="layui-form-label">年龄：</label>
+                                                                        <div  class="layui-input-inline">
+                                                                            <input  name="username" id="agemin1" class="layui-input" type="text"
+                                                                                    placeholder="请输入" style="width: 40%;display: inline-block" /> <span style="margin-left: 4%">至</span>
+                                                                            <input  name="username" id="agemax1" class="layui-input" type="text"
+                                                                                    placeholder="请输入" style="width: 40%;display: inline-block;margin-left: 4%" />
+                                                                        </div>
+
+
+
+
+
+                                                                        <label style="width: 10%" class="layui-form-label">体重指数(BMI)：</label>
+                                                                        <div  class="layui-input-inline">
+
+                                                                            <input  name="username" id="bmimin1" class="layui-input" type="text"
+                                                                                    placeholder="请输入" style="width: 40%;display: inline-block" /> <span style="margin-left: 4%">至</span>
+                                                                            <input  name="username" id="bmimax1" class="layui-input" type="text"
+                                                                                    placeholder="请输入" style="width: 40%;display: inline-block;margin-left: 4%" />
+                                                                        </div>
+
+                                                                        <div class="layui-inline" style="margin-top: 10px;margin-left: 0px;">
+                                                                            <label class="layui-form-label" style="text-align: left;width: 80px;padding: 9px 15px 0px 0px;">模板名称：</label>
+                                                                            <div class="layui-input-inline">
+
+                                                                                <input name="username" id="name" class="layui-input" type="text"
+                                                                                       placeholder="输入账号" />
+                                                                            </div>
+
+                                                                        </div>
+                                                                        <div class="layui-inline" style="padding-left: 20px;margin-top: 10px;">
+                                                                            <button type="button" class="layui-btn layui-icon layui-icon-search" id="sousuo" data-type="selectby" value="">搜索</button>
+                                                                            <button class="layui-btn layui-btn-primary" id="qingchu" lay-submit=""
+                                                                                    lay-filter="reset">清除</button>
+
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+
+
+
+                                                                <form id="RoleForm" lay-filter="RoleForm" class="layui-form model-form">
+                                                                        <ul style="width: 100%;height: 40px;background-color:#e6f7ff;">
+                                                                            <li style='float: left;'><span style="position: relative;left: 30%;top: 10px">名称</span></li>
+                                                                            <li style='float: left;width: 35%'><span style="position: relative;left: 58%;top: 10px">条件</span></li>
+                                                                        </ul>
+                                                                    <div style='width: 100%;height:400px;border-radius:4px;overflow:auto'>
+                                                                        <ul id='changedoctor' style="width:100%;">
+                                                                            <li style='margin-top: 10px;display: block;float: left;width: 100%;'><span style="margin-left: 4%"><input type='checkbox'  lay-filter='filter' value='1' name='like1' lay-skin='primary'><label style="width: 20%;display: inline-block"  class='yishiname'>啦啦啦啦</label><label style="width: 70%;display: inline-block" class='killOrder1'>正常       使用啦啦啦啦患者</label></span></li>
+                                                                            <li style='margin-top: 10px;display: block;float: left;width: 100%;'><span style="margin-left: 4%"><input type='checkbox'  lay-filter='filter' value='2' name='like1' lay-skin='primary'><label style="width: 20%;display: inline-block"  class='yishiname'>啦啦啦啦</label><label style="width: 70%;display: inline-block" class='killOrder1'>正常       使用啦啦啦啦患者</label></span></li>
+                                                                            <li style='margin-top: 10px;display: block;float: left;width: 100%;'><span style="margin-left: 4%"><input type='checkbox'  lay-filter='filter' value='1' name='like1' lay-skin='primary'><label style="width: 20%;display: inline-block"  class='yishiname'>啦啦啦啦</label><label style="width: 70%;display: inline-block" class='killOrder1'>正常       使用啦啦啦啦患者</label></span></li>
+                                                                            <li style='margin-top: 10px;display: block;float: left;width: 100%;'><span style="margin-left: 4%"><input type='checkbox'  lay-filter='filter' value='2' name='like1' lay-skin='primary'><label style="width: 20%;display: inline-block"  class='yishiname'>啦啦啦啦</label><label style="width: 70%;display: inline-block" class='killOrder1'>正常       使用啦啦啦啦患者</label></span></li>
+
+                                                                        </ul>
+                                                                    </div>
+                                                            </form>
+
+
+                                                            <div class="layui-form-item">
+                                                                    <div class="layui-input-block" style="margin: 0;position: fixed;bottom: 0px;width: 98%;left: 0px;margin: 0;background-color: #FFF;">
+                                                                        <button  class="layui-btn layui-btn-primary pre" style="margin-left: 43%;width: 8%">上一步</button>
+                                                                        <button class="layui-btn" lay-submit lay-filter="formDemo2" style="width: 8%">&emsp;下一步&emsp;
+                                                                        </button>
+                                                                    </div>
+                                                                </div>
+                                                            </form>
+
+                                                        </div>
+
+                                                        <div>
+
+                                                            <form class="layui-form" style="margin: 0 auto; max-width: 100%; padding-top: 60px;">
+                                                                <div class="layui-input-inline" style="width: 100%">
+                                                                    <label class="layui-form-label" style="text-align: left;width: 80px;padding: 9px 15px 0px 0px;">开始日期：</label><div class="layui-input-inline" style="width: 20%" ><input type="text"  class="layui-input" id="test1" placeholder="yyyy-MM-dd">
+
+                                                                </div>
+                                                                    <input type="button" class="layui-btn" id="addplantemps" data-type="selectby" style="float: right;margin-right: 1%" value="添加"></input>
+                                                                   <!-- <input type="button" class="layui-btn" id="lingcunwei" data-type="selectby" style="float: right;margin-right: 1%" value="另存为模板"></input>
+                                                                    <input type="button" class="layui-btn" id="hebing" data-type="selectby" style="float: right;margin-right: 0.5%" value="合并计划"></input>-->
+                                                                </div>
+                                                                <table class="layui-hide" id="xiangxijihua" lay-filter="xiangxijihua" ></table>
+                                                                <div class="layui-form-item">
+                                                                    <div class="layui-input-block" style="margin: 0;position: fixed;bottom: 0px;width: 98%;left: 0px;margin: 0;background-color: #FFF;">
+                                                                        <button type="button" class="layui-btn layui-btn-primary pre" style="margin-left: 48%;width: 8%">上一步</button>
+                                                                        <button class="layui-btn" lay-submit lay-filter="formDemo3" style="width: 8%">&emsp;提交&emsp;
+                                                                        </button>
+                                                                    </div>
+                                                                </div>
+                                                            </form>
+
+                                                        </div>
+                                                        <div>
+
+                                                            <div style="text-align: center; margin-top: 90px;">
+                                                                <i class="layui-icon layui-circle"
+                                                                   style="color: white; font-size: 30px; font-weight: bold; background: #52C41A; padding: 20px; line-height: 80px;">&#xe605;</i>
+                                                                <div
+                                                                        style="font-size: 24px; color: #333; font-weight: 500; margin-top: 30px;">已完成
+                                                                </div>
+                                                                <div style="font-size: 14px; color: #666; margin-top: 20px;"></div>
+                                                            </div>
+
+                                                            <div style="text-align: center; margin-top: 50px;">
+                                                                <button class="layui-btn next">继续创建</button>
+                                                            </div>
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+
+                                            </div>
+                                    </div>
+                                    <!--计划模板管理-->
+                                    <div class="layui-tab-item">
+                                                                        <div class="layui-form toolbar">
+                                                                            <div class="layui-form-item">
+                                                                                <div  class="layui-inline">
+                                                                                    <label style="padding: 9px 15px 9px 0;text-align: left;" class="layui-form-label">模板来源：</label>
+                                                                                    <div  class="layui-input-inline">
+                                                                                        <select name="infoType" id="souce">
+                                                                                            <option value="">全部</option>
+                                                                                            <option value="1">系统提供的模板</option>
+                                                                                            <option value="2">我创建的模板</option>
+                                                                                            <option value="3">其他人创建的模板</option>
+                                                                                        </select>
+                                                                                    </div>
+                                                                                </div>
+                                                                                <div class="layui-inline">
+                                                                                    <label class="layui-form-label">模板条件：</label>
+                                                                                    <div class="layui-input-inline">
+                                                                                        <select name="infoType" id="dis2">
+                                                                                            <option value="">不限</option>
+                                                                                            <option value="1">冠心病</option>
+                                                                                            <option value="2">脑卒中</option>
+                                                                                            <option value="3">高血压</option>
+                                                                                            <option value="4">糖尿病</option>
+                                                                                            <option value="5">痛风</option>
+                                                                                            <option value="6">血脂异常</option>
+                                                                                            <option value="7">骨质疏松症</option>
+                                                                                            <option value="8">肺癌</option>
+                                                                                            <option value="9">前列腺癌</option>
+                                                                                            <option value="10">乳腺癌</option>
+                                                                                            <option value="11">肥胖症</option>
+                                                                                            <option value="13">健康</option>
+                                                                                        </select>
+                                                                                    </div>
+                                                                                    <div style="margin-left: 20px" class="layui-input-inline">
+                                                                                        <select name="infoType" id="infoType2">
+                                                                                            <option value="">不限</option>
+                                                                                            <option value="1">一级</option>
+                                                                                            <option value="2">二级</option>
+                                                                                            <option value="3">三级</option>
+                                                                                            <option value="4">四级</option>
+                                                                                        </select>
+                                                                                    </div>
+                                                                                </div>
+                                                                                <div class="layui-inline">
+                                                                                    <label class="layui-form-label">模板名称：</label>
+                                                                                    <div class="layui-input-inline">
+                                                                                        <input name="username" id="username2" class="layui-input" type="text"
+                                                                                               placeholder="输入账号" />
+                                                                                    </div>
+
+                                                                                </div>
+
+
+                                                                                <div class="layui-inline" style="padding-left: 20px;">
+                                                                                    <button class="layui-btn icon-btn sousuoDN" id="selectbyconditions2" data-type="selectby"><i
+                                                                                            class="layui-icon"></i>搜索</button>
+                                                                                    <button class="layui-btn layui-btn-primary" id="btnempty2" lay-submit=""
+                                                                                            lay-filter="reset">清除</button>
+
+                                                                                </div>
+                                                                                <div id="addplan" class="layui-inline" style="float: right">
+                                                                                    <button class="layui-btn icon-btn " data-type="reloadd"><i
+                                                                                            class="layui-icon layui-icon-addition"></i>添加</button>
+                                                                                </div>
+
+                                                                            </div>
+                                                                        </div>
+
+                                                                        <table class="layui-hide" id="pinggu" lay-filter="pinggu"></table>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+            </div>
+        </div>
+
+    </div>
+</div>
+<script type="text/html" id="tableBars">
+    {{#if (d.operation == 0) { }}
+    <span>- -</span>
+    {{# }else if(d.roleid == 20 || d.nowusercode==d.operation){ }}
+    <a style="background-color:#fff;color: #0C0C0C;border: 1px solid ;border-color:#9F9F9F !important; " class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a> <a style="background-color:#fff;color: #2a9ce4;border: 1px solid ;border-color:#9F9F9F !important; " class="layui-btn layui-btn-xs" lay-event="edit">修改</a>
+    {{# } }}
+</script>
+<script type="text/javascript" th:src="@{/assets/libs/layui/layui.js}"></script>
+<script type="text/javascript" th:src="@{/assets/js/common.js}"></script>
+<!--<script type="text/javascript" th:src="@{/assets/js/tableCheckBoxUtil.js}"></script>-->
+<script type="text/html" id="tableBar">
+<!--    <a class="layui-btn layui-btn-normal layui-btn-xs"  lay-event="znx">站内信</a>-->
+    <a class="layui-btn layui-btn-xs" lay-event="edit">查看</a>
+</script>
+<script type="text/html" id="tableBar3">
+
+    {{# if(d.sort==1){ }}
+    <a class="layui-btn layui-btn-normal layui-btn-xs"  lay-event="guan">管理</a>
+
+    {{# }else{ }}
+    <a class="layui-btn layui-btn-xs "  lay-event="xiu">修改</a>
+    <a class="layui-btn  layui-btn-xs layui-btn-primary"  lay-event="shan">删除</a>
+    <a class="layui-btn layui-btn-normal layui-btn-xs"  lay-event="guan">管理</a>
+
+    {{# } }}
+
+</script>
+<form class="layui-form" id="test2" style="display:none">
+
+
+    <div class="layui-form-item layui-form-text">
+        <label class="layui-form-label" style="margin-top: 20px">名称：</label>
+        <div  class="layui-input-inline" style="width: 70%;margin-top: 20px">
+            <input type="text" id="chongmingming"  lay-filter="tree"
+                   class="layui-input">
+        </div>
+    </div>
+</form>
+<!-- 表单弹窗 -->
+<script type="text/html" id="modelUser">
+    <form id="modelUserForm" lay-filter="modelUserForm" class="layui-form model-form">
+        <div class="layui-form-item">
+            <label class="layui-form-label">分组名称</label>
+            <div class="layui-input-block">
+                <input name="gname" placeholder="请输入名称" type="text" class="layui-input"
+                       lay-verType="tips" lay-verify="required" required/>
+            </div>
+            <div class="layui-input-block">
+                <input name="uDocgroupId"  type="hidden" />
+            </div>
+        </div>
+
+
+        <div class="layui-form-item text-right">
+            <button class="layui-btn layui-btn-primary" type="button" ew-event="closePageDialog">取消</button>
+            <button class="layui-btn" lay-filter="modelSubmitUser" lay-submit>保存</button>
+        </div>
+    </form>
+</script>
+<!-- 注意：如果你直接复制所有代码到本地，上述js路径需要改成你本地的 -->
+<script type="text/html" id="tableBar2">
+    <a class="layui-btn layui-btn-xs" lay-event="edit">修改</a>
+</script>
+<script>
+    layui.use(['layer', 'form', 'step','element', 'table','laydate', 'treeSelect', 'notice', 'admin','layedit'], function(){
+        var $ = layui.jquery
+            ,element = layui.element; //Tab的切换功能，切换事件监听等，需要依赖element模块
+        var layer = layui.layer;
+        var form = layui.form;
+        var step = layui.step;
+        var table = layui.table;
+        var laydate = layui.laydate;
+        var laypage = layui.laypage;
+        var notice = layui.notice;
+        var layedit = layui.layedit;
+        var treeSelect = layui.treeSelect;
+        var admin = layui.admin;
+        var templatnow=[];
+        var choosedate=new Date().getTime()+24*60*60*1000;
+        var orgcode='';
+        var choosedata="";
+        //注意:layedit.set 一定要放在 build 前面，否则配置全局接口将无效。
+
+        var type=$("#types").val();
+        if(type==1){
+            $("#isclicks").trigger("click");
+        }
+        if(type==3){
+            $("#thisclicks").trigger("click");
+        }
+        randtreesone();
+
+        //渲染内容的下拉框
+        $.ajax({
+            type: "GET",
+            dataType: "json",
+            url: "/YhGroupIntervention/selectplancount",
+            success:function(res){
+                console.log(res);
+                for (var i=0;i<res.data.length;i++){
+                    $('#jihuaneirong').append("<option value="+res.data[i].plancount_id+">"+res.data[i].plan_count+"</option>")
+                }
+                form.render('select','group');
+            }
+        })
+        $('#btnAdd').click(function() {
+            showEditModel();
+        });
+        //点击添加计划
+        $("#addplantemps").click(function(){
+            var time1=$("#test1").val();
+            var standardDate = new Date(time1);
+            standardDate.setTime(standardDate.getTime()+24*60*60*1000)
+            var s4 = standardDate.getFullYear()+"-" + (standardDate.getMonth()+1) + "-" + standardDate.getDate();
+            $("#time2").val(s4);
+            var index=layer.open({
+                type:1,
+                area:['50%','450px'],
+                title: '添加计划'
+                ,content: $("#test"),
+                shade: 0.5,
+                btn: ['提交', '取消']
+                ,btn1: function(index, layero){
+
+                    var kk=$("#time2").val();
+                    var taidu=$("#managelis").val();
+                    var jihuaneirong=$("#jihuaneirong").val();
+                    var acceptsituation=$("#acceptsituation").val();
+                    if(acceptsituation.replace(/[^\x00-\xff]/g, 'AA').length>500){
+                        layer.msg('内容提示不能超过500个字符！', {icon: 5});
+                        return false;
+                    }
+                    var time2=$("#time2").val();
+                    var timechuo1 = new Date(time1);
+                    var timechuo2 = new Date(time2);
+                    timechuo2=timechuo2.setDate(timechuo2.getDate()+1)
+
+                    timechuo2== new Date(timechuo2)
+                    var utc= timechuo2-timechuo1;
+                    utc=utc/(24*60*60*1000);
+                    console.log(utc)
+                    var zhou=(utc-1)/7;
+                    zhou=Math.floor(zhou)+1
+                    console.log(zhou+"周")
+                    var tian=utc-(zhou-1)*7
+                    console.log(tian+"天");
+                    $.ajax({
+                        type:"POST",
+                        url:'/YhInterventiongroupingController/addtemplatetempro',
+                        dataType:"json",
+                        data:{programsWeeks:zhou,programsDays:tian,planContent:jihuaneirong,contentPrompt:acceptsituation,serviceWay:taidu},
+                        success:function(res){
+                            console.log(res);
+                            var datas={};
+                            loadplan(datas);
+                        }
+                    });
+                    layer.close(index);
+                    notice.success({
+                        title: '消息通知',
+                        message: '服务任务完成!'
+                    });
+                },
+                btn2: function(index, layero){
+                    layer.close(index);
+                    return false;
+                },
+                cancel: function(layero,index){
+                    layer.closeAll();
+                }
+            });
+        });
+        function randtreesone(){
+            treeSelect.render({
+                // 选择器
+                elem : '#tree',
+                // 数据
+                data : '/YhUserMakeCard/showPullDownTree',
+                // 异步加载方式：get/post，默认get
+                type : 'get',
+                // 占位符
+                placeholder : '全部',
+                // 是否开启搜索功能：true/false，默认false
+                search : true,
+                // 点击回调
+                click : function(d) {
+                    console.log(d);
+                    orgcode=d.current.id
+                },
+                // 加载完成后的回调函数
+                success : function(d) {
+
+                }
+            });
+        }
+        var date= new Date()
+        //常规用法
+        date.setTime(date.getTime()+24*60*60*1000);
+        laydate.render({
+            elem: '#test1',
+            min: date.getFullYear()+"-" + (date.getMonth()+1) + "-" + date.getDate(),
+            value:date
+            ,done: function(value, date, endDate){
+            $('#test1').change();  // 一定要加上这句！！！不然没有回调！！！
+            //得到日期生成的值，如：2017-08-18
+                choosedate=split_time(value);
+                var datas={};
+                loadplan(datas);
+        }
+        });
+        var day3 = new Date();
+        day3.setTime(day3.getTime()+24*60*60*1000);
+        var s3 = day3.getFullYear()+"-" + (day3.getMonth()+1) + "-" + day3.getDate();
+        laydate.render({
+            elem: '#time2',
+            value: s3,
+            min:date.getFullYear()+"-" + (date.getMonth()+1) + "-" + date.getDate() //指定元素
+            ,done: function(value, date, endDate){
+            }
+        });
+        // 设置最小可选的日期
+        function minDate(){
+            var now = new Date();
+            return now.getFullYear()+"-" + (now.getMonth()+1) + "-" + now.getDate();
+        }
+        function split_time(time){//将当前时间转换成时间搓 例如2013-09-11 12:12:12
+            let d = new Date(time)
+            return d.getTime(d); //将当前时间转换成时间搓
+        }//
+        form.on('checkbox(filter)', function(data){
+
+            var idnum = data.elem.id; //得到dom的id
+
+            var chk_value =[];
+
+            /*   var pitc=$("#pitch").val();
+              if(pitc!=null){
+                  chk_value=pitc;
+              } */
+
+            $('input[name="like1"]:checked').each(function(){
+                chk_value.push($(this).val());
+            });
+            //layer.msg(chk_value.toString());
+            $("#pitch").val(chk_value.toString());
+            form.render('checkbox');
+            templatnow=chk_value;
+            //layer.msg(templatnow.toString());
+        });
+        var date={};
+        selecttemplate(date);
+        function selecttemplate(date){
+            $.ajax({
+                type:"GET",
+                url:'/YhInterventionTemplateController/selecttemplatebyconditions',
+                dataType:"json",
+                data:date,
+                success:function(res){
+                    var html="";
+                    for(var i=0;i<res.data.length;i++){
+                        html+="<li style='margin-top: 15px;display: block;float: left;width: 100%;'><span ><input type='checkbox'  lay-filter='filter' value='"+res.data[i].interventionId+"' name='like1' lay-skin='primary'><label style='width: 20%;display: inline-block'  class='yishiname'>"+res.data[i].templateName+"</label><label style='width: 70%;display: inline-block' class='killOrder1'>"+res.data[i].disease_name+"</label></span></li>"
+                    }
+                    html+="<li style='margin-top: 15px;display: block;float: left;width: 100%;height: 20px'></li>"
+                    $("#changedoctor").empty().append(html);
+                    form.render();
+                }
+            });
+        }
+        //触发事件
+        var active = {
+          tabChange: function(){
+                //切换到指定Tab项
+                element.tabChange('demo', '22'); //切换到：用户管理
+            }
+        };
+        step.render({
+            elem: '#stepForm',
+            filter: 'stepForm',
+            width: '100%', //设置容器宽度
+            stepWidth: '750px',
+            stepItems: [{
+                title: '选择干预对象'
+            }, {
+                title: '选择干预模板'
+            }, {
+                title: '选择具体计划'
+            }, {
+                title: '创建干预计划'
+            }]
+        });
+        lode();
+        // 设置全局变量以保存选中行信息
+        let ids = new Array();
+        // 保存当前页全部数据id，点击全选时使用
+        let tableIds = new Array();
+        var date1=null;
+        function lode(){
+            var insTb1 = table.render({
+                elem: '#duixiang',
+                url: "/YhInterventiongroupingController/selectnameandplan",
+                where:date1,
+                limit:10,
+                page: true,
+                limits:[10,20,30,40,50,60,70,80,90],
+                cols: [
+                    [ {type:'checkbox'},
+                        {
+                            field:"user_code",
+                            title:"user_code",
+                            width : 1,
+                        },
+                        {
+                            title: '姓名',
+                            width : 150,
+                            align : 'center',
+
+                            templet:function(d){
+                                return d.name+"("+d.user_name+")"
+                            }
+                        }, {
+                        title: '性别',
+                        width : 100,
+                        align : 'center',
+                        templet:function(d){
+                            if(d.gender==1){
+                                return "男"
+                            }else if(d.gender==2){
+                                return "女"
+                            }
+                        }
+                    }, {
+                        title: '年龄',
+                        width : 100,
+                        align : 'center',
+                        templet:function(d){
+                            return jsGetAge(d.birth_date)
+                          }
+                    }, {
+                        field: 'org_name',
+                        title: '归属',
+                        align : 'center',
+
+                    }, {
+                        field: 'flag_Dgroup',
+                        title: '分组',
+                        align : 'center',
+                        width : 350,
+                        templet:function(d){
+                            if(d.flag_Dgroup==null){
+                                return "未分组"
+                            }else{
+                                return d.flag_Dgroup
+                            }
+                        }
+                    }, {
+                        title: '剩余计划',
+                        align : 'center',
+                        width : 100,
+                        templet:function(d){
+                           if(d.plan_count==null){
+                               return "--"
+                           }else{
+                               return d.plan_count;
+                           }
+                        }
+                    }, {
+                        title: '最后计划日期',
+                        align : 'center',
+                        width : 200,
+                        templet:function(d){
+                            if(d.last_plan_time==null){
+                                return "--"
+                            }else{
+                                return d.last_plan_time.split(" 00:00:00")[0];
+                            }
+                        }
+
+                    }, {
+                        align: 'center',
+                        toolbar: '#tableBar',
+                        title: '操作',
+                        width : 150,
+
+                    }]
+                ],done:function (res,curr,count) {
+                    console.log(res)
+                    if(count > insTb1.config.limit) {
+                        $(".layui-table-page").eq(0).show();
+                    }else {
+                        $(".layui-table-page").eq(0).hide();
+                    }
+                  $("[data-field='user_code']").css('display',"none");
+                        // 设置当前页全部数据id到全局变量
+                        tableIds = res.data.map(function (value) {
+                            return value.user_code;
+                        });
+                        // 设置当前页选中项
+                        $.each(res.data, function (idx, val) {
+                            if (ids.indexOf(val.user_code) > -1) {
+                                val["LAY_CHECKED"] = 'true';
+                                //找到对应数据改变勾选样式，呈现出选中效果
+                                let index = val['LAY_TABLE_INDEX'];
+                                $('tr[data-index=' + index + '] input[type="checkbox"]').click();
+                                form.render('checkbox'); //刷新checkbox选择框渲染
+                            }
+                        });
+                        // 获取表格勾选状态，全选中时设置全选框选中
+                        let checkStatus = table.checkStatus('test');
+                        if (checkStatus.isAll) {
+                            $('.layui-table-header th[data-field="0"] input[type="checkbox"]').prop('checked', true);
+                            form.render('checkbox'); //刷新checkbox选择框渲染
+                        }
+                },
+                response: {
+
+                    statusCode:20000
+                    //规定成功的状态码，默认：0
+
+                },
+
+                parseData: function (res) { //将原始数据解析成 table 组件所规定的数据
+                    // return {
+                    //     "code": res.data.code, //解析接口状态
+                    //     "msg": res.data.msg, //解析提示文本
+                    //     "count": res.data.count, //解析数据长度
+                    //     "data": res.data.data
+                    // }
+                }
+
+            });
+        }
+        $("#ganyujihua").click(function(){
+            lode();
+        });
+        //第一步的搜索
+        $("#selectbyconditions").click(function(){
+            //bmimin:$("#bmimin").val(),bmimax:$("#bmimin").val()
+            date1={gender:$("#sex").val(),agemin:$("#agemin").val(),agemax:$("#agemax").val(),Org_Code:orgcode,name:$("#username").val(),dis:$("#dis").val(),manageli:$("#manageli").val(),isplan:$("#plan").val()};
+            lode();
+
+            return false;
+        });
+        //第二步搜索
+        $("#sousuo").click(function(){
+            date={sourceType:$("#templatesouce").val(),templateRisk:$("#fengxian").val(),applySex:$("#xingbie").val(),applyAgeMin:$("#agemin1").val(),applyAgeMax:$("#agemax1").val(),applyBimMin:$("#bmimin1").val(),applyBimMax:$("#bmimax1").val(),templateName:$("#name").val(),templateDiseases:$("#jibing").val()};
+            selecttemplate(date);
+        })
+
+        table.on('checkbox(duixiang)', function (obj) {
+            if (obj.checked == true) {
+                if (obj.type == 'one') {
+                    ids.push(obj.data.user_code);
+                } else {
+                    for (let i = 0; i < tableIds.length; i++) {
+                        //当全选之前选中了部分行进行判断，避免重复
+                        if (ids.indexOf(tableIds[i]) == -1) {
+                            ids.push(tableIds[i]);
+                        }
+                    }
+                }
+            } else {
+                if (obj.type == 'one') {
+                    let i = ids.length;
+                    while (i--) {
+                        if (ids[i] == obj.data.user_code) {
+                            ids.splice(i, 1);
+                        }
+                    }
+                } else {
+                    let i = ids.length;
+                    while (i--) {
+                        if (tableIds.indexOf(ids[i]) != -1) {
+                            ids.splice(i, 1);
+                        }
+                    }
+                }
+            }
+        });
+        form.on('submit(formDemo)', function (data) {
+            if(ids.length==0){
+                notice.msg('请选择用户后再进行操作', {icon: 3});
+                return false;
+            }else{
+                step.next('#stepForm');
+            }
+
+
+
+            return false;
+        });
+        //根据几周几天换算日期
+        function cal_twoweekago(week,day,nowday){
+            var date1 = choosedate;
+            var date2 = date1 + ((week-1)*7+day)*24*60*60*1000-24*60*60*1000;
+            return getDate("yyyy/mm/dd",date2);
+        }
+        //日期转格式
+        function getDate(format,str){
+            var oDate = new Date(str),
+                oYear = oDate.getFullYear(),
+                oMonth = oDate.getMonth()+1,
+                oDay = oDate.getDate(),
+                oHour = oDate.getHours(),
+                oMin = oDate.getMinutes(),
+                oSec = oDate.getSeconds();
+            var oTime = ''
+            if(format == 'YYYY-MM-DD HH:MM:SS') {
+                oTime = oYear +'-'+ getzf(oMonth) +'-'+ getzf(oDay) +' '+ getzf(oHour) +':'+ getzf(oMin) +':'+getzf(oSec);
+            }else if(format == 'yyyy/mm/dd'){
+                oTime = oYear +'-'+ getzf(oMonth) +'-'+ getzf(oDay);
+            }
+            return oTime;
+        }
+        //补0操作
+        function getzf(num){
+            if(parseInt(num) < 10){
+                num = '0'+num;
+            }
+            return num;
+        }
+        function getWeek(week,day,nowday) {
+            var dateString=cal_twoweekago(week,day,1);
+                var dateArray = dateString.split("-");
+                date = new Date(dateArray[0], parseInt(dateArray[1] - 1), dateArray[2]);
+            //var weeks = new Array("日", "一", "二", "三", "四", "五", "六");
+            //return "星期" + weeks[date.getDay()];
+            return "星期" + "日一二三四五六".charAt(date.getDay());
+        }
+        //第三步
+        var newdata={};
+        var tempstable;
+        function agin(){
+            var data={};
+            if(boolen){
+                loadplan(data);
+            }
+            boolen=false;
+
+        }
+        function  loadplan(data) {
+            console.log(data);
+            tempstable = table.render({
+                elem: '#xiangxijihua',
+                url: "/YhInterventiongroupingController/selectserviceplan",
+                where:data,
+                page: true,
+                limit:10,
+                limits:[10,20,30,40,50,60,70,80,90],
+                cols: [
+                    [ {type:'checkbox'},
+                        {
+                            field:"programsId",
+                            title:"programsId",
+                            width : 1,
+                        },
+                        {
+                            title: '执行时间',
+                            width : 150,
+                            align : 'center',
+                            templet:function(d){
+                                return  cal_twoweekago(d.programsWeeks,d.programsDays,1);
+                            }
+                        },{
+                        title: '星期',
+                        width : 150,
+                        align : 'center',
+                        templet:function(d){
+                            return  getWeek(d.programsWeeks,d.programsDays,1);
+                        }
+                    }, {
+                        title: '服务方式',
+                        width : 100,
+                        align : 'center',
+                        templet:function(d){
+                            if(d.serviceWay==1){
+                                return "电话"
+                            }else if(d.serviceWay==2){
+                                return "微信"
+                            }else if(d.serviceWay==3){
+                                return "小程序"
+                            }else if(d.serviceWay==4){
+                                return "上门"
+                            }else{
+                                return "不限"
+                            }
+                        }
+                    }, {
+                        title: '计划内容',
+                        width : 200,
+                        align : 'center',
+                        field:"plan_count"
+                    }, {
+                        field: 'contentPrompt',
+                        title: '内容提示',
+                        align : 'center',
+                    }, {
+                        align: 'center',
+                        toolbar: '#tableBar2',
+                        title: '操作',
+                        width : 100,
+
+                    }]
+                ],done:function (res, curr, count) {
+
+                    $("[data-field='programsId']").css('display',"none");
+
+
+                },
+                response: {
+                    statusCode:20000
+                },
+
+                parseData: function (res) { //将原始数据解析成 table 组件所规定的数据
+                    console.log("-------------------------")
+                    console.log(res)
+                    agin();
+                    for (var i=0 ;i<res.data.length;i++){
+                        if(res.data[i].lay_CHECKED==true){
+                            res.data[i]. LAY_CHECKED= true;
+                        }
+
+                    }
+                    return res;
+                }
+
+            });
+        }
+        $("#qingchu").click(function(){
+            $("#templatesouce").val("");
+            $("#jibing").val("");
+            $("#fengxian").val("");
+            $("#xingbie").val("");
+            $("#agemin1").val("");
+            $("#agemax1").val("");
+            $("#bmimin1").val("");
+            $("#bmimax1").val("");
+            $("#name").val("");
+            form.render();
+            $("#sousuo").click();
+            return false;
+        })
+        $("#btnempty").click(function(){
+            orgcode="";
+
+            $("#tree").siblings().remove();
+            randtreesone();
+            $("#dis").val("");
+            $("#manageli").val("");
+            $("#plan").val("");
+            $("#sex").val("");
+            $("#agemin").val("");
+            $("#agemax").val("");
+            $("#username").val("");
+            form.render();
+            $("#selectbyconditions").click();
+            return false;
+        })
+        //选择具体计划的添加操作
+        table.on('tool(xiangxijihua)', function (obj) { //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
+            var data = obj.data;
+            console.log("111111")
+            var layEvent = obj.event;
+            userCode = data.usercode;
+            console.log(data)
+
+            if (layEvent === 'edit') { // 查看
+                $("#acceptsituation").val(data.contentPrompt);
+                $("#jihuaneirong").val(data.planContent);
+                $("#managelis").val(data.serviceWay);
+                $("#time2").val(cal_twoweekago(data.programsWeeks,data.programsDays,1));
+                form.render();
+                var index=layer.open({
+                    type:1,
+                    area:['50%','450px'],
+                    title: '修改计划'
+                    ,content: $("#test"),
+                    shade: 0.5,
+                    btn: ['提交', '取消']
+                    ,btn1: function(index, layero){
+                        var kk=$("#time2").val();
+                        var taidu=$("#managelis").val();
+                        var jihuaneirong=$("#jihuaneirong").val();
+                        var acceptsituation=$("#acceptsituation").val();
+                        if(acceptsituation.replace(/[^\x00-\xff]/g, 'AA').length>500){
+                            layer.msg('内容提示不能超过500个字符！', {icon: 5});
+                            return false;
+                        }
+                        var time1=$("#test1").val();
+                        var time2=$("#time2").val();
+                        var timechuo1 = new Date(time1);
+                        var timechuo2 = new Date(time2);
+                        timechuo2=timechuo2.setDate(timechuo2.getDate()+1)
+
+                        timechuo2== new Date(timechuo2)
+                        var utc= timechuo2-timechuo1;
+                        utc=utc/(24*60*60*1000);
+                        console.log(utc)
+                        var zhou=(utc-1)/7;
+                        zhou=Math.floor(zhou)+1
+                        console.log(zhou+"周")
+                        var tian=utc-(zhou-1)*7
+                        console.log(tian+"天");
+                        $.ajax({
+                            type:"POST",
+                            url:'/YhInterventiongroupingController/updatetemplatetempro',
+                            dataType:"json",
+                            data:{programsWeeks:zhou,programsDays:tian,planContent:jihuaneirong,contentPrompt:acceptsituation,serviceWay:taidu,temporary_id:data.temporary_id},
+                            success:function(res){
+                                var datas={};
+                                loadplan(datas);
+                            }
+                        });
+                        layer.close(index);
+                        notice.success({
+                            title: '消息通知',
+                            message: '修改成功!'
+                        });
+                    },
+                    btn2: function(index, layero){
+                        layer.close(index);
+                        return false;
+                    },
+                    cancel: function(layero,index){
+                        layer.closeAll();
+                    }
+                });
+
+            }
+
+        });
+        var boolen;
+        form.on('submit(formDemo2)', function (data) {
+
+            if(templatnow.length==0){
+                notice.msg('请选择模板后再进行操作', {icon: 3});
+            }else {
+                step.next('#stepForm');
+                newdata={planContent:templatnow.toString()};
+                boolen=true;
+                loadplan(newdata);
+            }
+            return false;
+        });
+        table.on('checkbox(xiangxijihua)', function (obj) {
+
+            var checkStatus = table.checkStatus('duixiang')
+                ,data = checkStatus.data;
+
+            choosedata=array_diff(data,choosedata);
+
+            if(obj.type=='all'){
+                var page=$(".layui-laypage-em").eq(1).next().html();
+                var limit=tempstable.config.limit;
+                var data={page:page,limit:limit,LAY_CHECKE:obj.checked};
+                console.log(page);
+                console.log(limit);
+                $.ajax({
+                    type:"GET",
+                    url:'/YhInterventiongroupingController/updateischoose',
+                    dataType:"json",
+                    data:data,
+                    success:function(res){
+
+                    }
+                });
+            }else{
+                $.ajax({
+                    type:"GET",
+                    url:'/YhInterventiongroupingController/updateischoose',
+                    dataType:"json",
+                    data:{temporary_id:obj.data.temporary_id,LAY_CHECKE:obj.checked},
+                    success:function(res){
+
+                    }
+                });
+            }
+        });
+        form.on('submit(formDemo3)', function (data) {
+            layer.msg("正在创建,请稍后...",{
+                icon:16,
+                shade: [0.5, '#f5f5f5'],
+                time:-1
+            });
+            $.ajax({
+                type:"GET",
+                url:'/YhInterventiongroupingController/insertplans',
+                dataType:"json",
+                data:{ids:ids.toString(),time:choosedate},
+                success:function(res){
+
+                    layer.closeAll();
+                    step.next('#stepForm');
+                }
+            });
+
+            return false;
+        });
+        $('.pre').click(function () {
+
+            step.pre('#stepForm');
+
+        });
+        $('.next').click(function () {
+
+            step.next('#stepForm');
+            location.reload()
+        });
+        function jsGetAge(strBirthday){
+            var returnAge;
+            var strBirthdayArr=strBirthday.split("-");
+            var birthYear=strBirthdayArr[0];
+            var birthMonth=strBirthdayArr[1];
+            var birthDay=strBirthdayArr[2];
+
+            d=new Date();
+            var nowYear=d.getFullYear();
+            var nowMonth=d.getMonth()+1;
+            var nowDay=d.getDate();
+
+            if(nowYear==birthYear){
+                returnAge=0;//同年则为0岁
+            }
+            else{
+                var ageDiff=nowYear-birthYear;//年之差
+                if(ageDiff>0){
+                    if(nowMonth==birthMonth){
+                        var dayDiff=nowDay-birthDay;//日之差
+                        if(dayDiff<0)
+                        {
+                            returnAge=ageDiff-1;
+                        }
+                        else
+                        {
+                            returnAge=ageDiff;
+                        }
+                    }
+                    else
+                    {
+                        var  monthDiff=nowMonth-birthMonth;//月之差  
+                        if(monthDiff <0)
+                        {
+                            returnAge=ageDiff-1;
+                        }
+                        else
+                        {
+                            returnAge=ageDiff;
+                        }
+                    }
+                }
+                else
+                {
+                    returnAge=-1;//返回-1表示出生日期输入错误晚于今天
+                }
+            }
+
+            return returnAge;//返回周岁年龄
+
+        }
+        //计划模板管理js
+        var  data2={};
+        selectdate(data2);
+        function selectdate(data){
+            var insTb = table.render({
+                elem: '#pinggu',
+                url: '/YhInterventionTemplateController/selectByPrimaryKey',
+                page: true,
+                where:data,
+                limits:[10,20,30,40,50,60,70,80,90],
+                cols: [
+                    [{
+                        field: 'insertTime',
+                        title: '创建时间',
+                        width:200
+                    }, {
+                        field: 'templateName',
+                        title: '模板名称'
+                    }, {
+                        field: 'planCount',
+                        title: '计划数',
+                        width:200
+                    }, {
+                        field: 'disease_name',
+                        title: '适用病种'
+
+                    }, {
+                        templet:function (d) {
+
+                            var biaofenji='';
+                            var  s=d.templateRisk+"";
+                            var fenji=s.split(',');
+                            for(var i=0;i<fenji.length;i++){
+                                if(fenji[i]=='1'){
+                                    biaofenji=biaofenji+" 一级";
+                                }else if(fenji[i]=='2'){
+                                    biaofenji=biaofenji+" 二级";
+                                }else if(fenji[i]=='3'){
+                                    biaofenji=biaofenji+" 三级";
+                                }else if(fenji[i]=='4'){
+                                    biaofenji=biaofenji+" 四级";
+                                }else if(fenji[i]=='5'){
+                                    biaofenji=biaofenji+" 五级";
+                                }
+                            }
+                            return biaofenji;
+                        },
+                        title: '适用分级',
+                        width:150
+                    }, {
+                        width:100,
+                        title: '性别',
+                        templet: function (d) {
+                            if(d.applySex==1){
+                                return "男";
+                            }else if(d.applySex==2){
+                                return "女";
+                            }else{
+                                return "不限";
+                            }
+
+                        }
+
+                    }, {
+                        width:100,
+                        field: 'applyAgeMin',
+                        title: '年龄',
+                        templet:function (d) {
+                            console.log(d);
+                            if(d.applyAgeMin!=null && d.applyAgeMax!=null){
+                                return d.applyAgeMin+"至"+ d.applyAgeMax+"岁"
+                            }else if(d.applyAgeMin==null && d.applyAgeMax!=null){
+                                return "小于"+ d.applyAgeMax+"岁"
+                            }else if(d.applyAgeMin!=null && d.applyAgeMax==null){
+                                return "大于"+ d.applyAgeMin+"岁"
+                            }else{
+                                return "不限"
+                            }
+                        }
+                    }, {
+                        width:100,
+                        field: 'applyBimMin',
+                        title: 'BMI',
+                        templet:function (d) {
+                            if(d.applyBimMin!=null && d.applyBimMax!=null){
+                                return d.applyBimMin+"至"+ d.applyBimMax
+                            }else if(d.applyBimMin==null && d.applyBimMax!=null){
+                                return "小于"+ d.applyBimMax
+                            }else if(d.applyBimMin!=null && d.applyBimMax==null){
+                                return "大于"+ d.applyBimMin
+                            }else{
+                                return "不限"
+                            }
+                        }
+                    }, {
+                        width:100,
+                        field: 'souceName',
+                        title: '来源',
+
+                    }, {
+                        width:193,
+                        align: 'center',
+                        toolbar: '#tableBars',
+                        title: '操作',
+
+                    }]
+                ],
+                response: {
+
+                    statusCode:20000
+                    //规定成功的状态码，默认：0
+
+                },
+
+                parseData: function (res) { //将原始数据解析成 table 组件所规定的数据
+                },done: function(res, curr, count){
+                    if(count > 10) {
+                        $(".layui-table-page").eq(1).show();
+                    }else {
+                        $(".layui-table-page").eq(1).hide();
+                    }
+                }
+
+            });
+        }
+
+        table.on('tool(duixiang)', function (obj) { //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
+            var data = obj.data;
+            var layEvent = obj.event;
+            userCode = data.usercode;
+            //站内信
+            if(layEvent === 'znx'){
+                console.log(obj)
+                var index=layer.open({
+                    type:1,
+                    area:['50%','580px'],
+                    title: '站内信'
+                    ,content: $("#testznx"),
+                    shade: 0.5,
+                    btn: ['发送', '取消']
+                    ,btn1: function(index, layero){
+                        var title=$("#title").val();
+                        var content=layedit.getContent(index);
+                        var userCode=data.user_code;
+                        if(title==null|| title == ""){
+                            notice.error({
+                                title: '站内消息',
+                                message: '标题不能为空!'
+                            })
+                            return false;
+                        }
+                        if(content==null|| content == ""){
+                            notice.error({
+                                title: '站内消息',
+                                message: '内容不能为空!'
+                            })
+                            return false;
+                        }
+                        console.log(title);
+                        console.log(content);
+                        $.ajax({
+                            type:"POST",
+                            url:'/YhWxNotifyController/insertnotify?',
+                            data:{Usercode:userCode,wxNotifyContent:content,wxNotifyBackup:title},
+                            dataType:"json",
+                            success:function(res){
+                               console.log(res);
+                                layer.close(index);
+                                notice.success({
+                                    title: '站内消息',
+                                    message: '消息发送成功!'
+                                });
+                            }
+                        });
+                    },
+                    btn2: function(index, layero){
+                        layer.close(index);
+                        return false;
+                    },
+                    cancel: function(layero,index){
+                        layer.closeAll();
+                    }
+                });
+                layedit.set({
+                    uploadImage:{
+                        url: '/Uploading/upload' //接口url
+                        ,type: 'post' //默认post
+                    }
+                });
+                var index = layedit.build('instruction',{
+                    tool:['left', 'center', 'right', '|','strong','italic','underline' ,'del','image']
+                });
+            }
+            if (layEvent === 'edit') { // 查看用户详情计划
+                window.open("../register/userIndex?page=detailplan&userCode="+data.user_code+"&type2=2");
+            }
+        });
+        table.on('tool(pinggu)', function (obj) { //tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
+            var data = obj.data;
+            var layEvent = obj.event;
+            userCode = data.usercode;
+            if (layEvent === 'edit') { // 查看模板
+
+                window.location.href="/manage/Intervention/addtemplate?interventionId="+data.interventionId;
+            }
+            if (layEvent === 'modification') { //编辑模板
+
+            }
+            if(layEvent === 'del'){//删除模板
+
+                layer.confirm('你确定要删除吗?', {icon: 3, title:'提示'}, function(index){
+                    $.ajax({
+                        type:"POST",
+                        url:'/YhInterventionTemplateController/deletetempdate?interventionId='+data.interventionId,
+                        dataType:"json",
+                        success:function(res){
+                            selectdate();
+                            form.render();
+                        }
+                    });
+                    layer.close(index);
+                });
+            }
+        });
+        $("#selectbyconditions2").click(function(){
+            data={sourceType:$("#souce").val(),templateDiseases:$("#dis2").val(),templateRisk:$("#infoType2").val(),templateName:$("#username2").val()};
+            selectdate(data);
+        });
+        $("#btnempty2").click(function(){
+            data={};
+            $("#souce").val("");
+            $("#dis2").val("");
+            $("#infoType2").val("");
+            $("#username2").val("");
+            form.render();
+            selectdate(data);
+        })
+        $("#addplan").click(function(){
+            window.location.href="/manage/Intervention/addtemplate";
+        })
+
+        ganyufenzu();
+        function ganyufenzu(){
+            var insTb2 = table.render({
+                elem : '#ganyufenzu',
+                url : '/intervene/findGroupListInfo',
+                limits:[10,20,30,40,50,60,70,80,90],
+                page : true,
+                cols : [ [ {
+                    type : 'numbers',
+                    title : '序号'
+                }, {
+                    field : 'gname',
+                    title : '分组名'
+                }, {
+                    field : 'userCount',
+                    title : '组员数量',
+                    sort : true,
+                    width : 160
+                }, {
+                    field : 'establishTime',
+                    title : '创建时间',
+                    sort : true,
+                    width : 260
+                }, {
+                    align : 'center',
+                    toolbar : '#tableBar3',
+                    title : '操作',
+                    width : 200
+                } ] ],
+                response : {
+
+                    statusCode : 0
+                    //规定成功的状态码，默认：0
+
+                },
+
+                parseData : function(res) { //将原始数据解析成 table 组件所规定的数据
+                    console.log(res);
+                    return {
+                        "code" : res.data.code, //解析接口状态
+                        "msg" : res.data.msg, //解析提示文本
+                        "count" : res.data.count, //解析数据长度
+                        "data" : res.data.data
+                        //解析数据列表
+                    }
+
+                }
+            });
+        }
+        table.on('tool(ganyufenzu)', function (obj) { //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
+            var data = obj.data;
+            var layEvent = obj.event;
+            userCode = data.usercode
+            console.log(data);
+            if (layEvent === 'xiu') {
+                $("#chongmingming").val(data.gname);
+                var index=layer.open({
+                    type:1,
+                    area:['40%','400px'],
+                    title: '重命名'
+                    ,content: $("#test2"),
+                    shade: 0.5,
+                    btn: ['保存', '取消']
+                    ,btn1: function(index, layero){
+                        var acceptsituation=$("#chongmingming").val();
+                        if(acceptsituation.replace(/[^\x00-\xff]/g, 'AA').length>200){
+                            layer.msg('不能超过200个字符！', {icon: 5});
+                            return false;
+                        }
+                        updatestate({uDocgroupId:data.uDocgroupId,gname:$("#chongmingming").val()})
+                        layer.close(index);
+                        notice.success({
+                            title: '消息通知',
+                            message: '分组名修改成功!'
+                        });
+                    },
+                    btn2: function(index, layero){
+                        layer.close(index);
+                        return false;
+                    },
+                    cancel: function(layero,index){
+                        layer.closeAll();
+                    }
+
+                });
+
+            }
+            if (layEvent === 'shan') {
+                $.ajax({
+                    type:"GET",
+                    url:'/YhGroupIntervention/deletegroupintervention',
+                    dataType:"json",
+                    data:{uDocgroupId:data.uDocgroupId},
+                    success:function(res){
+                        ganyufenzu();
+                    }
+                });
+            }
+            if(layEvent === 'guan'){
+                window.location.href="/manage/YhGroupIntervention/managegroup?gropid="+data.uDocgroupId+"&groupname="+data.gname;
+            }
+        });
+        function array_diff(arr1,arr2){
+            var temp = [];
+            var temparray = [];
+            for(var i=0;i<arr1.length;i++){
+                temp[arr1[i]] = true;
+            }
+            for(var j=0;j<arr2.length;j++){
+                console.log(arr2[j])
+                if (!temp[arr2[j]]) {
+                    temparray.push(arr2[j]);
+                }
+            }
+            return temparray
+        }
+        function updatestate(data){
+            $.ajax({
+                type:"GET",
+                url:'/YhGroupIntervention/updategroupintervention',
+                dataType:"json",
+                data:data,
+                success:function(res){
+                    ganyufenzu();
+                }
+            });
+        }
+        function showEditModel(mData) {
+            admin
+                .open({
+                    type : 1,
+                    title : mData ? '修改' : '添加',
+                    content : $('#modelUser').html(),
+                    success : function(layero, dIndex) {
+                        form
+                            .val('modelUserForm',
+                                mData);
+
+
+                        form
+                            .on(
+                                'submit(modelSubmitUser)',
+                                function(data) {
+                                    if (mData) {
+                                        console
+                                            .log(data.field)
+
+                                        $
+                                            .ajax({
+                                                type : "post",
+                                                url : "/intervene/addGroupInfo",
+                                                contentType : 'application/json;charset=UTF-8', //发送信息至服务器时内容编码类型
+                                                traditional : true, //传统的方式来序列化数据
+                                                data : JSON
+                                                    .stringify(data.field),
+                                                success : function(
+                                                    data) {
+                                                    window.location.href="/manage/division/divisionInterventionplan?type=1";
+                                                }
+                                            });
+                                    } else {
+                                        console
+                                            .log(data.field)
+
+                                        $
+                                            .ajax({
+                                                type : "post",
+                                                url : "/intervene/addGroupInfo",
+                                                contentType : 'application/json;charset=UTF-8', //发送信息至服务器时内容编码类型
+                                                traditional : true, //传统的方式来序列化数据
+                                                data : JSON
+                                                    .stringify(data.field),
+                                                success : function(
+                                                    data) {
+                                                    window.location.href="/manage/division/divisionInterventionplan?type=1";
+                                                }
+                                            });
+
+                                    }
+                                    return false;
+                                    layer
+                                        .close(dIndex);
+
+                                });
+                        return false;
+                    }
+                });
+        }
+    });
+</script>
+</body>
+
+

@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>食物库管理</title>
+   <link rel="stylesheet"  th:href="@{/assets/libs/layui/css/layui.css}" />
+    <link rel="stylesheet"  th:href="@{/assets/module/admin.css}"  />
+</head>
+<body>
+ <!-- 页面加载loading -->
+<div class="page-loading">
+    <div class="ball-loader">
+        <span></span><span></span><span></span><span></span>
+    </div>
+</div>
+
+<a id="cancel" target="_self" style="display: none" href="/manage/content/habit?type=1" lay-text="习惯管理">"习惯管理"</a>
+<div class="layui-fluid">
+		<div class="layui-row">
+			<div style="width: 100%; height: 100%; background-color: #FFF; position: relative;">
+				<div th:if="${id==0}" style="font-size: 20px; font-weight: bold; margin-left: 20px; padding-top: 30px;">新建分类</div>
+				<div th:if="${id!=0}" style="font-size: 20px; font-weight: bold; margin-left: 20px; padding-top: 30px;">修改分类</div>
+				<form class="layui-form" id="express">
+				
+				<input id="id" name="id" type="hidden" th:value="${id}">
+				
+				 <div class="layui-form-item">
+				    <div class="layui-inline">
+				      <label style="width: 10%"
+							class="layui-form-label layui-form-required">名称</label>
+						<div class="layui-input-block">
+							<div class="layui-row">
+							
+								<input style="margin-left: -89px; width: 450px;" type="text"
+									name="categoryName" id="categoryName"  lay-verify="required" lay-reqtext="名称是必填项，岂能为空？" maxlength="16"
+									placeholder="请输入名称，最大限制16个字符" autocomplete="off" 
+									class="layui-input">
+							</div>
+						</div>
+				    </div>
+				    
+				  </div>
+				  
+					<div class="layui-form-item">
+						<label style="width: 72px;"
+							class="layui-form-label">分类图片</label>
+						<input id="categoryIcon" name="categoryIcon" type="hidden" value="">
+
+				    <div class="layui-inline">
+				      <div class="layui-input-block">
+					     <div class="layui-upload-drag" id="test10">
+							  <i class="layui-icon"></i>
+							  <p>点击上传，或将图片拖拽到此处</p>
+							  <p>(尺寸：4:3 )</p>
+							  <div class="layui-hide" id="uploadDemoView" >
+							    <hr>
+							    <img src="" alt="上传成功后渲染" style="max-width: 196px">
+							  </div>
+							</div>
+					</div>
+				    </div>
+					</div>
+					
+				
+
+					
+					<div class="layui-form-item" style="margin-left: -88px;padding-bottom: 40px;">
+						 <div class="layui-input-block" >
+	     <button class="layui-btn " lay-submit='' lay-filter="regSubmit" id="">保存</button>
+	     <button type="reset" onclick="cancel()" class="layui-btn layui-btn-primary">&emsp;取消&emsp;</button>
+	 </div>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+
+
+</body>
+<script type="text/javascript" th:src="@{/assets/libs/layui/layui.js}"></script>
+<script type="text/javascript" th:src="@{/assets/js/common.js}"></script>
+<script type="text/javascript" th:src="@{/assets/js/jquery-1.11.1.js}"></script>
+<script type="text/javascript">
+
+ $('#categoryName').blur(function () {
+	    var categoryName = $("#categoryName").val();
+	    var id = $("#id").val();
+	    $.ajax({
+	 		type:'get', 
+	 		url:'/YhLifeHabitDictCategoryController/selctCategoryName',
+	 		data:{categoryName:categoryName,id:id},
+	 		success : function(data){
+	 			if(data ==1){
+	 				layer.msg("分类名称已被占用!");	
+	 			}
+	 		}
+	 	});
+	 })
+
+cancel=function(){
+	document.getElementById("cancel").click();
+}
+	
+	layui.use('upload', function(){
+	  var $ = layui.jquery
+	  ,upload = layui.upload;
+	  
+	  //拖拽上传图片
+	  upload.render({
+	    elem: '#test10'
+	    ,url: '/Uploading/addEnrollImg' //改成您自己的上传接口
+    	,before: function(obj){ //obj参数包含的信息，跟 choose回调完全一致，可参见上文。
+    		this.layerIndex = layer.load(0, {shade: [0.5, '#666c7f']});
+    	}
+	    ,done: function(res){
+	      layer.close(this.layerIndex);
+	      layer.msg('上传成功');
+	      layui.$('#uploadDemoView').removeClass('layui-hide').find('img').attr('src', res.files);
+	      layui.$("#categoryIcon").val(res.files);
+	      console.log(res)
+	    }
+	  });
+
+	
+	  
+	});
+	
+	layui.use(['form', 'layedit', 'laydate'], function(){
+		  var form = layui.form
+		  ,layer = layui.layer
+		  ,layedit = layui.layedit
+		  ,laydate = layui.laydate;
+		  
+		  
+		  
+		  
+		  var id=$("#id").val();
+			if(id!=0){
+				 $.ajax({
+			    	 type: "post",
+			         url: "/YhLifeHabitDictCategoryController/selectDictId",
+			         dataType:"json",
+			         data:{"id":id},
+			         success: function(data){
+			        	 $("#categoryIcon").val(data.data.categoryIcon);
+			        	 $("#categoryName").val(data.data.categoryName);
+			        	 layui.$('#uploadDemoView').removeClass('layui-hide').find('img').attr('src', data.data.categoryIcon);
+			         }   	
+			    });
+			}
+			
+		  
+		  //监听提交
+		  form.on('submit(regSubmit)', function(dataYh){
+		  /*   layer.alert(JSON.stringify(data.field), {
+		      title: '最终的提交信息'
+		    }) */
+		    
+		    var categoryName = $("#categoryName").val();
+		    var id = $("#id").val();
+		    $.ajax({
+		 		type:'get', 
+		 		url:'/YhLifeHabitDictCategoryController/selctCategoryName',
+		 		data:{categoryName:categoryName,id:id},
+		 		success : function(data){
+		 			if(data ==1){
+		 				layer.msg("分类名称已被占用!");	
+		 			}
+		 			if(data==0){
+		 				 $.ajax({
+		 		        	 type: "post",
+		 		             url: "/YhLifeHabitDictCategoryController/insertDict",
+		 		             dataType:"json",
+		 		            data:dataYh.field,
+		 		             success: function(data){
+		 		          	   if(data.data==1){
+		 		          		    layer.msg('操作成功');
+		 								cancel();
+		 		          	   }else{
+		 			            	   layer.msg('操作失败');
+		 		          	   }
+		 		             }   	
+		 		        });
+		 			}
+		 		}
+		 	});
+		    return false;
+		  });
+		 
+		 
+		  
+		});
+	
+</script>
+</html>

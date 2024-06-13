@@ -1,0 +1,616 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yihe.system.mapper.YhInterventiongroupingMapper">
+    <resultMap id="doc" type="com.yihe.system.domain.YHDocGroup">
+        <id column="U_Docgroup_Id" jdbcType="INTEGER" property="uDocgroupId" />
+        <result column="Docid" jdbcType="INTEGER" property="docid" />
+        <result column="Gname" jdbcType="VARCHAR" property="gname" />
+        <result column="User_Count" jdbcType="VARCHAR" property="userCount" />
+        <result column="Sort" jdbcType="VARCHAR" property="sort" />
+        <result column="establishTime" jdbcType="VARCHAR" property="establishTime" />
+    </resultMap>
+
+    <resultMap id="BaseResultMapprograms" type="com.yihe.system.domain.YhProgramsTemplate" >
+        <id column="programs_id" property="programsId" jdbcType="INTEGER" />
+        <result column="Intervention_id" property="interventionId" jdbcType="INTEGER" />
+        <result column="programs_weeks" property="programsWeeks" jdbcType="INTEGER" />
+        <result column="programs_days" property="programsDays" jdbcType="INTEGER" />
+        <result column="service_way" property="serviceWay" jdbcType="VARCHAR" />
+        <result column="plan_content" property="planContent" jdbcType="VARCHAR" />
+        <result column="content_prompt" property="contentPrompt" jdbcType="VARCHAR" />
+        <result column="plan_count" property="plan_count" jdbcType="VARCHAR" />
+        <result column="remark" property="remark" jdbcType="INTEGER" />
+        <result column="LAY_CHECKED" property="LAY_CHECKED"  />
+        <result column="temporary_id" property="temporary_id"  />
+    </resultMap>
+
+
+
+    <resultMap id="BaseResultMapexcution" type="com.yihe.system.domain.yhTemplateExecution" >
+        <id column="execution_id" property="executionId" jdbcType="INTEGER" />
+        <result column="user_code" property="userCode" jdbcType="VARCHAR" />
+        <result column="group_id" property="groupId" jdbcType="VARCHAR" />
+        <result column="plan_count" property="planCount" jdbcType="INTEGER" />
+        <result column="last_plan_time" property="lastPlanTime" jdbcType="TIMESTAMP" />
+    </resultMap>
+
+    <resultMap id="BaseResultdetail" type="com.yihe.system.domain.YhTemplateDetail" >
+        <id column="details_id" property="detailsId" jdbcType="INTEGER" />
+        <result column="execute_date" property="executeDate" jdbcType="TIMESTAMP" />
+        <result column="service_way" property="serviceWay" jdbcType="INTEGER" />
+        <result column="plan_count" property="planCount" jdbcType="VARCHAR" />
+        <result column="count_prompt" property="countPrompt" jdbcType="VARCHAR" />
+        <result column="user_code" property="userCode" jdbcType="VARCHAR" />
+        <result column="gender" property="gender" jdbcType="VARCHAR" />
+        <result column="mobile" property="phone" jdbcType="VARCHAR" />
+        <result column="count" property="count" jdbcType="VARCHAR" />
+    </resultMap>
+    <select id="selectnameandplan" parameterType="com.yihe.system.domain.Interventiongrouping" resultType="com.yihe.system.domain.Interventiongrouping">
+        SELECT regin.user_code,regin.`name`,regin.user_name,regin.gender,regin.birth_date,regin.Org_Code,org.Org_Name,org.Super_Org_Code,enro.Flag_Dgroup,
+        (
+        SELECT
+        count(1)
+        FROM
+        yh_template_detail
+        WHERE
+        user_code = regin.user_code  AND  execute_date >= (SELECT now())
+        ) AS plan_count
+        ,exe.last_plan_time,
+        (SELECT COUNT(*) from yh_user_reginfo regin
+        LEFT JOIN yh_user_make_card makecard
+        ON regin.user_code=makecard.User_Code
+        LEFT JOIN yh_org_tree org
+        ON regin.Org_Code=org.Org_Code
+        LEFT JOIN yh_user_enrolinfo enro
+        ON regin.user_code=enro.user_code
+        LEFT JOIN yh_template_execution exe
+        ON regin.user_code=exe.user_code
+
+        WHERE makecard.doctor=(SELECT id FROM yh_user_admin_info WHERE User_Code=#{user_code})
+        <if test="gender != null and gender !=''" >
+            and   regin.gender = #{gender}
+        </if>
+        <if test="Org_Code != null and Org_Code !=''" >
+            and   org.Org_Code = #{Org_Code}
+        </if>
+        <if test="dis != null and dis !='' and dis!='f_' " >
+            and   enro.Flag_Dgroup  LIKE CONCAT('%',#{dis},'%')
+        </if>
+        <if test="manageli != null and manageli !=''" >
+            and   enro.Flag_Dgroup  LIKE CONCAT('%',#{manageli},'%')
+        </if>
+        <if test="isplan == 1" >
+            AND exe.plan_count >0
+        </if>
+        <if test="isplan==2" >
+            AND exe.plan_count IS NULL
+        </if>
+        <if test="minage != null and minage !=''" >
+            AND regin.birth_date &lt;=  #{minage}
+        </if>
+        <if test="maxage != null and maxage !=''" >
+            AND regin.birth_date &gt;=  #{maxage}
+        </if>
+        <if test="name != null and name !=''" >
+            and   regin.name LIKE CONCAT('%',#{name},'%')
+        </if>
+        ) AS count
+        from yh_user_reginfo regin
+        LEFT JOIN yh_user_make_card makecard
+        ON regin.user_code=makecard.User_Code
+        LEFT JOIN yh_org_tree org
+        ON regin.Org_Code=org.Org_Code
+        LEFT JOIN yh_user_enrolinfo enro
+        ON regin.user_code=enro.user_code
+        LEFT JOIN yh_template_execution exe
+        ON regin.user_code=exe.user_code
+
+        WHERE makecard.doctor=(SELECT id FROM yh_user_admin_info WHERE User_Code=#{user_code})
+        <if test="gender != null and gender !=''" >
+            and   regin.gender = #{gender}
+        </if>
+        <if test="Org_Code != null and Org_Code !=''" >
+            and   org.Org_Code = #{Org_Code}
+        </if>
+        <if test="dis != null and dis !='' and dis!='f_' " >
+            and   enro.Flag_Dgroup  LIKE CONCAT('%',#{dis},'%')
+        </if>
+        <if test="manageli != null and manageli !=''" >
+            and   enro.Flag_Dgroup  LIKE CONCAT('%',#{manageli},'%')
+        </if>
+        <if test="isplan == 1" >
+            AND exe.plan_count >0
+        </if>
+        <if test="isplan==2" >
+            AND exe.plan_count IS NULL
+        </if>
+        <if test="minage != null and minage !=''" >
+            AND regin.birth_date &lt;=  #{minage}
+        </if>
+        <if test="maxage != null and maxage !=''" >
+            AND regin.birth_date &gt;=  #{maxage}
+        </if>
+        <if test="name != null and name !=''" >
+            and   regin.name LIKE CONCAT('%',#{name},'%')
+        </if>
+        LIMIT #{page},#{limit}
+    </select>
+
+    <select id="selectalldoc" resultMap="doc">
+      SELECT  *  FROM   yh_doc_group
+    </select>
+
+    <select id="selectserviceplan" parameterType="com.yihe.system.domain.YhProgramsTemplate" resultMap="BaseResultMapprograms">
+        SELECT * FROM yh_temproary_template protem
+        LEFT JOIN yh_programs_dictionary dicon
+        ON	protem.plan_content=dicon.plancount_id
+        WHERE user_code=#{usercode} ORDER BY protem.programs_weeks,protem.programs_days,protem.temporary_id limit #{start},#{limit}
+    </select>
+
+
+    <select id="selectservicetemplateplan" parameterType="com.yihe.system.domain.YhProgramsTemplate" resultMap="BaseResultMapprograms">
+        SELECT * FROM yh_temproary_template protem
+        LEFT JOIN yh_programs_dictionary dicon
+        ON	protem.plan_content=dicon.plancount_id
+        WHERE protem.user_code=#{usercode} and protem.LAY_CHECKED="true"
+        ORDER BY programs_weeks,programs_days,protem.temporary_id
+    </select>
+    <select id="selecthavebegin" parameterType="com.yihe.system.domain.YhProgramsTemplate" resultType="int">
+        select count(*) from yh_temproary_template where user_code=#{usercode} and Intervention_id=#{interventionId}
+    </select>
+    <select id="selecttemplatecount" parameterType="com.yihe.system.domain.YhProgramsTemplate" resultType="int">
+        SELECT COUNT(*) FROM yh_temproary_template protem
+        LEFT JOIN yh_programs_dictionary dicon
+        ON	protem.plan_content=dicon.plancount_id
+        WHERE user_code=#{usercode}
+    </select>
+
+    <delete id="deletetempbyusercode" parameterType="string">
+        DELETE FROM  yh_temproary_template WHERE user_code=#{usercode}
+    </delete>
+
+    <insert id="templlatetemproary" parameterType="com.yihe.system.domain.YhProgramsTemplate">
+        insert into yh_temproary_template  (Intervention_id,programs_weeks,programs_days,service_way,plan_content,content_prompt,user_code)
+        select Intervention_id,programs_weeks,programs_days,service_way,plan_content,content_prompt,(SELECT #{usercode} as  user_code)  from yh_programs_template WHERE Intervention_id IN<foreach collection="templatid" item="Intervention_id" index="index" open="(" close=")" separator=",">#{Intervention_id}</foreach> ORDER BY programs_weeks,programs_days
+    </insert>
+
+    <select id="selectchangeid" parameterType="com.yihe.system.domain.YhProgramsTemplate" resultType="int">
+        SELECT temporary_id FROM yh_temproary_template WHERE user_code=#{usercode} ORDER BY programs_weeks,programs_days,temporary_id LIMIT #{start},#{limit}
+    </select>
+
+    <update id="changeischooes" parameterType="com.yihe.system.domain.YhProgramsTemplate">
+        UPDATE yh_temproary_template
+        SET LAY_CHECKED=#{LAY_CHECKE}
+        where temporary_id IN <foreach collection="templatid" item="temporary_id" index="index" open="(" close=")" separator=",">#{temporary_id}</foreach>
+    </update>
+
+    <update id="changeischooesbyid" parameterType="com.yihe.system.domain.YhProgramsTemplate">
+        UPDATE yh_temproary_template
+        SET LAY_CHECKED = #{LAY_CHECKE}
+        where temporary_id =#{temporary_id}
+    </update>
+
+    <select id="selectservicetemplateexcution" parameterType="string" resultMap="BaseResultMapexcution">
+      SELECT * FROM yh_template_execution WHERE user_code=#{usercode}
+    </select>
+
+
+
+    <update id="updateexecution" parameterType="com.yihe.system.domain.yhTemplateExecution">
+        update yh_template_execution
+        <set >
+            <if test="userCode != null" >
+                user_code = #{userCode,jdbcType=VARCHAR},
+            </if>
+            <if test="groupId != null" >
+                group_id = #{groupId,jdbcType=VARCHAR},
+            </if>
+            <if test="planCount != null" >
+                plan_count = #{planCount,jdbcType=INTEGER},
+            </if>
+            <if test="lastPlanTime != null" >
+                last_plan_time = #{lastPlanTime},
+            </if>
+        </set>
+        where execution_id = #{executionId,jdbcType=INTEGER}
+    </update>
+
+
+    <insert id="insertexcution" parameterType="com.yihe.system.domain.yhTemplateExecution" >
+        insert into yh_template_execution
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="userCode != null" >
+                user_code,
+            </if>
+            <if test="groupId != null" >
+                group_id,
+            </if>
+            <if test="planCount != null" >
+                plan_count,
+            </if>
+            <if test="lastPlanTime != null" >
+                last_plan_time,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="userCode != null" >
+                #{userCode,jdbcType=VARCHAR},
+            </if>
+            <if test="groupId != null" >
+                #{groupId,jdbcType=VARCHAR},
+            </if>
+            <if test="planCount != null" >
+                #{planCount,jdbcType=INTEGER},
+            </if>
+            <if test="lastPlanTime != null" >
+                #{lastPlanTime},
+            </if>
+        </trim>
+    </insert>
+
+    <insert id="insertdetail" parameterType="com.yihe.system.domain.YhProgramsTemplate">
+        insert into yh_template_detail(execute_date,service_way,plan_count,count_prompt,user_code) VALUES (#{time},#{serviceWay},#{planContent},#{contentPrompt},#{usercode})
+    </insert>
+    <update id="updatetemplatetempro" parameterType="com.yihe.system.domain.YhProgramsTemplate">
+        UPDATE yh_temproary_template
+        <set >
+            <if test="serviceWay != null" >
+                service_way = #{serviceWay,jdbcType=INTEGER},
+            </if>
+            <if test="planContent != null" >
+                plan_content = #{planContent,jdbcType=VARCHAR},
+            </if>
+            <if test="contentPrompt != null" >
+                content_prompt = #{contentPrompt,jdbcType=VARCHAR},
+            </if>
+            <if test="programsWeeks != null" >
+                programs_weeks = #{programsWeeks,jdbcType=INTEGER},
+            </if>
+            <if test="programsDays != null" >
+                programs_days = #{programsDays,jdbcType=INTEGER},
+            </if>
+        </set>
+        where temporary_id = #{temporary_id,jdbcType=INTEGER}
+    </update>
+    <insert id="addtemplatetempro" parameterType="com.yihe.system.domain.YhProgramsTemplate">
+        insert into yh_temproary_template
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="serviceWay != null" >
+                service_way,
+            </if>
+            <if test="planContent != null" >
+                plan_content,
+            </if>
+            <if test="contentPrompt != null" >
+                content_prompt,
+            </if>
+            <if test="usercode != null" >
+                user_code,
+            </if>
+            <if test="programsWeeks != null" >
+                programs_weeks,
+            </if>
+            <if test="programsDays != null" >
+                programs_days,
+            </if>
+            <if test="LAY_CHECKE != null" >
+                LAY_CHECKED,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="serviceWay != null" >
+                #{serviceWay,jdbcType=INTEGER},
+            </if>
+            <if test="planContent != null" >
+                #{planContent,jdbcType=VARCHAR},
+            </if>
+            <if test="contentPrompt != null" >
+                #{contentPrompt,jdbcType=VARCHAR},
+            </if>
+            <if test="usercode != null" >
+                #{usercode,jdbcType=VARCHAR},
+            </if>
+            <if test="programsWeeks != null" >
+                #{programsWeeks,jdbcType=INTEGER},
+            </if>
+            <if test="programsDays != null" >
+                #{programsDays,jdbcType=INTEGER},
+            </if>
+            <if test="LAY_CHECKE != null" >
+                #{LAY_CHECKE,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+
+    <select id="detail" resultMap="BaseResultdetail">
+        SELECT de.service_way,de.count_prompt,de.user_code,dic.plan_count,reg.gender,reg.mobile,de.var_count,de.plan_count as `count` FROM yh_template_detail de
+        LEFT JOIN yh_programs_dictionary dic
+        ON de.plan_count=dic.plancount_id
+        LEFT JOIN yh_user_reginfo reg
+        ON de.user_code=reg.user_code
+        WHERE  de.execute_date=DATE_FORMAT(NOW(),'%Y-%m-%d')
+    </select>
+
+    <insert id="insertserviceperson"   parameterType="com.yihe.system.domain.YhTemplateDetail">
+        INSERT INTO yh_jz_service_person(totaltype,user_code,gender,phone,insert_time,service_state,service_waiting_time,service_content,service_type,service_record,returnvisit,service_subtitle)
+        VALUE(#{totaltype},#{userCode},#{gender},#{phone},#{insert_time},#{service_state},#{watting_time},#{countPrompt},#{service_type},#{countPrompt},#{serviceWay},
+        <if test="planCount!=null">
+            #{planCount}
+        </if>
+        <if test="var_count!=null">
+            #{var_count}
+        </if>
+        );
+    </insert>
+    <select id="selectiscount" parameterType="com.yihe.system.domain.YhTemplateDetail" resultType="int">
+        SELECT COUNT(*) FROM yh_jz_service_total_person WHERE user_code=#{userCode}
+    </select>
+    <insert id="inserttotalperson" parameterType="com.yihe.system.domain.YhTemplateDetail">
+        INSERT INTO yh_jz_service_total_person(user_code,doctor_code) VALUE (#{userCode},(SELECT user_code from yh_user_admin_info WHERE id=(SELECT doctor from yh_user_make_card WHERE User_Code=#{userCode})))
+    </insert>
+
+    <update id="deletetemplat" parameterType="String" >
+        update yh_template_execution set plan_count=IF((plan_count-1)>0,(plan_count-1),0) where user_code=#{Usercode}
+    </update>
+
+    <select id="selectallysas" resultType="com.yihe.system.domain.YhJzServiceAssessmentSwitch">
+        select * from yh_jz_service_assessment_switch
+    </select>
+
+    <select id="selectpingguwatting" parameterType="string" resultType="com.yihe.system.domain.YhJzServicePerson">
+SELECT b.userCode,b.gender,b.user_check_time as serviceWaitingTime from(  SELECT a.*  from
+(	select regin.user_code as userCode,regin.gender,json.user_check_time from yh_question_check_json2 json left join yh_user_reginfo regin on json.user_code=regin.user_code ORDER BY json.user_check_time DESC) a GROUP BY a.userCode) b
+
+where DATEDIFF(NOW(),b.user_check_time)%#{nowdatetime}=0 and to_days(b.user_check_time) != to_days(now())
+
+    </select>
+
+    <select id="selectpingguhabit" parameterType="string" resultType="com.yihe.system.domain.YhJzServicePerson">
+            SELECT b.userCode,b.gender,b.Dict_time as serviceWaitingTime from(  SELECT a.*  from
+(	SELECT reg.user_code as userCode,reg.gender,dic.Dict_time from yh_life_habit_improvement_dict dic LEFT JOIN yh_user_reginfo reg
+            ON dic.user_code=reg.user_code  ORDER BY dic.Dict_time DESC) a GROUP BY a.userCode) b
+           where DATEDIFF(NOW(),b.Dict_time)%#{nowdatetime}=0 and to_days(b.Dict_time) != to_days(now())
+    </select>
+
+
+    <select id="selectpinggusleep" parameterType="string" resultType="com.yihe.system.domain.YhJzServicePerson">
+            SELECT b.userCode,b.gender,b.qtime as serviceWaitingTime from(  SELECT a.*  from
+(	SELECT reg.user_code as userCode,reg.gender,dic.qtime from yh_sleep_report dic LEFT JOIN yh_user_reginfo reg
+            ON dic.user_code=reg.user_code  ORDER BY dic.qtime DESC) a GROUP BY a.userCode) b
+           where DATEDIFF(NOW(),b.qtime)%#{nowdatetime}=0 and to_days(b.qtime) != to_days(now())
+    </select>
+
+
+    <select id="selectpingguaxing" parameterType="string" resultType="com.yihe.system.domain.YhJzServicePerson">
+            SELECT b.userCode,b.gender,b.Evaluate_Date as serviceWaitingTime from(  SELECT a.*  from
+(	SELECT reg.user_code as userCode,reg.gender,dic.Evaluate_Date from yh_pressure_evaluate dic LEFT JOIN yh_user_reginfo reg
+            ON dic.user_code=reg.user_code  WHERE dic.Evaluate_Type=1  ORDER BY dic.Evaluate_Date DESC) a GROUP BY a.userCode) b
+            where DATEDIFF(NOW(),b.Evaluate_Date)%#{nowdatetime}=0 and to_days(b.Evaluate_Date) != to_days(now())
+    </select>
+
+    <select id="selectpinggupst" parameterType="string" resultType="com.yihe.system.domain.YhJzServicePerson">
+            SELECT b.userCode,b.gender,b.Evaluate_Date as serviceWaitingTime from(  SELECT a.*  from
+(	SELECT reg.user_code as userCode,reg.gender,dic.Evaluate_Date from yh_pressure_evaluate dic LEFT JOIN yh_user_reginfo reg
+            ON dic.user_code=reg.user_code  WHERE dic.Evaluate_Type=2  ORDER BY dic.Evaluate_Date DESC) a GROUP BY a.userCode) b
+            where DATEDIFF(NOW(),b.Evaluate_Date)%#{nowdatetime}=0 and to_days(b.Evaluate_Date) != to_days(now())
+    </select>
+
+    <select id="selectpingxinli" parameterType="string" resultType="com.yihe.system.domain.YhJzServicePerson">
+            SELECT b.userCode,b.gender,b.Evaluate_Date as serviceWaitingTime from(  SELECT a.*  from
+(	SELECT reg.user_code as userCode,reg.gender,dic.Evaluate_Date from yh_pressure_evaluate dic LEFT JOIN yh_user_reginfo reg
+            ON dic.user_code=reg.user_code  WHERE dic.Evaluate_Type=3  ORDER BY dic.Evaluate_Date DESC) a GROUP BY a.userCode) b
+            where  DATEDIFF(NOW(),b.Evaluate_Date)%#{nowdatetime}=0 and to_days(b.Evaluate_Date) != to_days(now())
+    </select>
+
+    <select id="selectyueya" parameterType="string" resultType="com.yihe.system.domain.YhJzServicePerson">
+            SELECT b.userCode,b.gender,b.Entry_Time as serviceWaitingTime from(  SELECT a.*  from
+(	SELECT reg.user_code as userCode,reg.gender,dic.Entry_Time from yh_user_bloodpressure dic LEFT JOIN yh_user_reginfo reg
+            ON dic.E_User_Id=reg.user_code   ORDER BY dic.Entry_Time DESC) a GROUP BY a.userCode) b
+            where  DATEDIFF(NOW(),b.Entry_Time)%#{nowdatetime}=0 and to_days(b.Entry_Time) != to_days(now())
+    </select>
+
+    <select id="selectxuetang" parameterType="string" resultType="com.yihe.system.domain.YhJzServicePerson">
+            SELECT b.userCode,b.gender,b.Entry_Time as serviceWaitingTime from(  SELECT a.*  from
+(	SELECT reg.user_code as userCode,reg.gender,dic.Entry_Time from yh_user_bloodsuger dic LEFT JOIN yh_user_reginfo reg
+            ON dic.E_User_Id=reg.user_code   ORDER BY dic.Entry_Time DESC) a GROUP BY a.userCode) b
+            where  DATEDIFF(NOW(),b.Entry_Time)%#{nowdatetime}=0 and to_days(b.Entry_Time) != to_days(now())
+    </select>
+
+    <select id="selectxuezhi" parameterType="string" resultType="com.yihe.system.domain.YhJzServicePerson">
+                  SELECT b.userCode,b.gender,b.Entry_Time as serviceWaitingTime from(  SELECT a.*  from
+(	SELECT reg.user_code as userCode,reg.gender,dic.Entry_Time from yh_user_bloodfat dic LEFT JOIN yh_user_reginfo reg
+            ON dic.E_User_Id=reg.user_code   ORDER BY dic.Entry_Time DESC) a GROUP BY a.userCode) b
+            where  DATEDIFF(NOW(),b.Entry_Time)%#{nowdatetime}=0 and to_days(b.Entry_Time) != to_days(now())
+    </select>
+
+    <select id="selecttizhong" parameterType="string" resultType="com.yihe.system.domain.YhJzServicePerson">
+                  SELECT b.userCode,b.gender,b.Entry_Time as serviceWaitingTime from(  SELECT a.*  from
+(	SELECT reg.user_code as userCode,reg.gender,dic.Entry_Time from yh_user_bmi dic LEFT JOIN yh_user_reginfo reg
+            ON dic.E_User_Id=reg.user_code   ORDER BY dic.Entry_Time DESC) a GROUP BY a.userCode) b
+            where  DATEDIFF(NOW(),b.Entry_Time)%#{nowdatetime}=0 and to_days(b.Entry_Time) != to_days(now())
+    </select>
+
+    <select id="selectyinshiriji" parameterType="string" resultType="com.yihe.system.domain.YhJzServicePerson">
+      SELECT b.userCode,b.gender,b.C_Time as serviceWaitingTime from(  SELECT a.*  from
+(	SELECT reg.user_code as userCode,reg.gender,dic.C_Time from yh_food_user_diary dic LEFT JOIN yh_user_reginfo reg
+            ON dic.user_code=reg.user_code   ORDER BY dic.C_Time DESC) a GROUP BY a.userCode) b
+            where  DATEDIFF(NOW(),b.C_Time)%#{nowdatetime}=0 and to_days(b.C_Time) != to_days(now())
+    </select>
+
+    <select id="selectshuimian" parameterType="string" resultType="com.yihe.system.domain.YhJzServicePerson">
+      SELECT b.userCode,b.gender,b.sleep_diarytime as serviceWaitingTime from(  SELECT a.*  from
+    (	SELECT reg.user_code as userCode,reg.gender,dic.sleep_diarytime from yh_sleep_user_diary dic LEFT JOIN yh_user_reginfo reg
+            ON dic.user_code=reg.user_code   ORDER BY dic.sleep_diarytime DESC) a GROUP BY a.userCode) b
+            where  DATEDIFF(NOW(),b.sleep_diarytime)%#{nowdatetime}=0 and to_days(b.sleep_diarytime) != to_days(now())
+    </select>
+
+    <select id="selectyundongriji" parameterType="string" resultType="com.yihe.system.domain.YhJzServicePerson">
+      SELECT b.userCode,b.gender,b.Entry_Time as serviceWaitingTime from(  SELECT a.*  from
+(	SELECT reg.user_code as userCode,reg.gender,dic.Entry_Time from yh_sport_diary dic LEFT JOIN yh_user_reginfo reg
+            ON dic.user_code=reg.user_code   ORDER BY dic.Entry_Time DESC) a GROUP BY a.userCode) b
+            where  DATEDIFF(NOW(),b.Entry_Time)%#{nowdatetime}=0 and to_days(b.Entry_Time) != to_days(now())
+    </select>
+
+    <select id="selectxiguan" parameterType="string" resultType="com.yihe.system.domain.YhJzServicePerson">
+      SELECT b.userCode,b.gender,b.increase_time as serviceWaitingTime from(  SELECT a.*  from
+(	SELECT reg.user_code as userCode,reg.gender,dic.increase_time from yh_life_habit_sign dic LEFT JOIN yh_user_reginfo reg
+            ON dic.user_code=reg.user_code   ORDER BY dic.increase_time DESC) a GROUP BY a.userCode) b
+            where  DATEDIFF(NOW(),b.increase_time)%#{nowdatetime}=0 and to_days(b.increase_time) != to_days(now())
+    </select>
+    <select id="selectjiankangjihua" parameterType="string" resultType="com.yihe.system.domain.YhJzServicePerson">
+      SELECT b.userCode,b.gender,b.plan_startdate as serviceWaitingTime from(  SELECT a.*  from
+(	SELECT reg.user_code as userCode,reg.gender,dic.plan_startdate from yh_user_healthy_plan dic LEFT JOIN yh_user_reginfo reg
+            ON dic.user_code=reg.user_code where dic.plan_state=1   ORDER BY dic.plan_startdate DESC) a GROUP BY a.userCode) b
+            where  DATEDIFF(NOW(),b.plan_startdate)%#{nowdatetime}=0 and to_days(b.plan_startdate) != to_days(now())
+    </select>
+
+    <select id="selectallswich" resultType="com.yihe.system.domain.YhJzServiceSwitch">
+        select * from yh_jz_service_switch order by service_type
+    </select>
+
+    <insert id="insertSelectiveperson" parameterType="com.yihe.system.domain.YhJzServicePerson" >
+        insert into yh_jz_service_person
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="id != null" >
+                id,
+            </if>
+            <if test="userCode != null" >
+                user_code,
+            </if>
+            <if test="gender != null" >
+                gender,
+            </if>
+            <if test="endServiceTime != null" >
+                end_service_time,
+            </if>
+            <if test="phone != null" >
+                phone,
+            </if>
+            <if test="age != null" >
+                age,
+            </if>
+            <if test="startServiceTime != null" >
+                start_service_time,
+            </if>
+            <if test="serviceState != null" >
+                service_state,
+            </if>
+            <if test="serviceWaitingTime != null" >
+                service_waiting_time,
+            </if>
+            <if test="serviceContent != null" >
+                service_content,
+            </if>
+            <if test="serviceType != null" >
+                service_type,
+            </if>
+            <if test="serviceRecord != null" >
+                service_record,
+            </if>
+            <if test="isrede != null" >
+                isrede,
+            </if>
+            <if test="returnvisit != null" >
+                returnvisit,
+            </if>
+            <if test="longitude != null" >
+                longitude,
+            </if>
+            <if test="dimension != null" >
+                dimension,
+            </if>
+            <if test="insertTime != null" >
+                insert_time,
+            </if>
+            <if test="acceptsituation != null" >
+                acceptsituation,
+            </if>
+            <if test="childnodes != null" >
+                childnodes,
+            </if>
+            <if test="childtag != null" >
+                childtag,
+            </if>
+            <if test="satisfaction != null" >
+                satisfaction,
+            </if>
+            <if test="serviceSubtitle != null" >
+                service_subtitle,
+            </if>
+            <if test="totaltype != null" >
+                totaltype,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="id != null" >
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="userCode != null" >
+                #{userCode,jdbcType=VARCHAR},
+            </if>
+            <if test="gender != null" >
+                #{gender,jdbcType=INTEGER},
+            </if>
+            <if test="endServiceTime != null" >
+                #{endServiceTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="phone != null" >
+                #{phone,jdbcType=VARCHAR},
+            </if>
+            <if test="age != null" >
+                #{age,jdbcType=INTEGER},
+            </if>
+            <if test="startServiceTime != null" >
+                #{startServiceTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="serviceState != null" >
+                #{serviceState,jdbcType=INTEGER},
+            </if>
+            <if test="serviceWaitingTime != null" >
+                #{serviceWaitingTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="serviceContent != null" >
+                #{serviceContent,jdbcType=VARCHAR},
+            </if>
+            <if test="serviceType != null" >
+                #{serviceType,jdbcType=INTEGER},
+            </if>
+            <if test="serviceRecord != null" >
+                #{serviceRecord,jdbcType=VARCHAR},
+            </if>
+            <if test="isrede != null" >
+                #{isrede,jdbcType=INTEGER},
+            </if>
+            <if test="returnvisit != null" >
+                #{returnvisit,jdbcType=INTEGER},
+            </if>
+            <if test="longitude != null" >
+                #{longitude,jdbcType=DOUBLE},
+            </if>
+            <if test="dimension != null" >
+                #{dimension,jdbcType=DOUBLE},
+            </if>
+            <if test="insertTime != null" >
+                #{insertTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="acceptsituation != null" >
+                #{acceptsituation,jdbcType=VARCHAR},
+            </if>
+            <if test="childnodes != null" >
+                #{childnodes,jdbcType=INTEGER},
+            </if>
+            <if test="childtag != null" >
+                #{childtag,jdbcType=INTEGER},
+            </if>
+            <if test="satisfaction != null" >
+                #{satisfaction,jdbcType=INTEGER},
+            </if>
+            <if test="serviceSubtitle != null" >
+                #{serviceSubtitle,jdbcType=VARCHAR},
+            </if>
+            <if test="totaltype != null" >
+                #{totaltype,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+</mapper>

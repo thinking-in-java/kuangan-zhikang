@@ -1,0 +1,788 @@
+<!DOCTYPE html>
+<html  lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>干预计划模板</title>
+    <link rel="stylesheet" th:href="@{/assets/libs/layui/css/layui.css}" />
+    <link rel="stylesheet" th:href="@{/assets/module/admin.css}" />
+    <style type="text/css">
+        .layui-card-body {
+            padding: 10px 0px;
+        }
+
+        .layui-fluid {
+            padding: 15px 0px;
+        }
+
+        .toolbar {
+            margin-left: -23px;
+        }
+        .layui-form-label{
+            width: 90px;
+        }
+        .layui-unselect dl { max-height:200px; }
+    </style>
+</head>
+<body>
+<input id="bianjiid" type="hidden" th:value="${id}">
+<form class="layui-form" id="test1"  style="display:none" >
+    <div class="layui-form-item layui-form-text">
+
+        <div style="margin-top: 10px;">
+                <div style="height: 50px;width: 80%" >
+                    <label class="layui-form-label" >执行时间:</label>
+                    <div class="layui-input-inline" >
+                        <select name="infoType" id="week" >
+                            <option value="1">第1周</option>
+                            <option value="2">第2周</option>
+                            <option value="3">第3周</option>
+                            <option value="4">第4周</option>
+                            <option value="5">第5周</option>
+                            <option value="6">第6周</option>
+                            <option value="7">第7周</option>
+                            <option value="8">第8周</option>
+                            <option value="9">第9周</option>
+                            <option value="10">第10周</option>
+                            <option value="11">第11周</option>
+                            <option value="12">第12周</option>
+                            <option value="13">第13周</option>
+                            <option value="14">第14周</option>
+                            <option value="15">第15周</option>
+                            <option value="16">第16周</option>
+                            <option value="17">第17周</option>
+                            <option value="18">第18周</option>
+                            <option value="19">第19周</option>
+                            <option value="20">第20周</option>
+                            <option value="21">第21周</option>
+                            <option value="22">第22周</option>
+                            <option value="23">第23周</option>
+                            <option value="24">第24周</option>
+                            <option value="25">第25周</option>
+                            <option value="26">第26周</option>
+                            <option value="27">第27周</option>
+                            <option value="28">第28周</option>
+                            <option value="29">第29周</option>
+                            <option value="30">第30周</option>
+                            <option value="31">第31周</option>
+                            <option value="32">第32周</option>
+                            <option value="33">第33周</option>
+                            <option value="34">第34周</option>
+                            <option value="35">第35周</option>
+                            <option value="36">第36周</option>
+                            <option value="37">第37周</option>
+                            <option value="38">第38周</option>
+                            <option value="39">第39周</option>
+                            <option value="40">第40周</option>
+                            <option value="41">第41周</option>
+                            <option value="42">第42周</option>
+                            <option value="43">第43周</option>
+                            <option value="44">第44周</option>
+                            <option value="45">第45周</option>
+                            <option value="46">第46周</option>
+                            <option value="47">第47周</option>
+                            <option value="48">第48周</option>
+                            <option value="49">第49周</option>
+                            <option value="50">第50周</option>
+                            <option value="51">第51周</option>
+                            <option value="52">第52周</option>
+                            <option value="53">第53周</option>
+                        </select>
+                    </div>
+                    <div style="margin-left: 20px" class="layui-input-inline">
+                        <select name="infoType" id="day">
+                            <option value="1">第1天</option>
+                            <option value="2">第2天</option>
+                            <option value="3">第3天</option>
+                            <option value="4">第4天</option>
+                            <option value="5">第5天</option>
+                            <option value="6">第6天</option>
+                            <option value="7">第7天</option>
+                        </select>
+                    </div>
+                </div>
+
+            <div style="height: 50px;width: 80%" >
+                <label class="layui-form-label" >服务方式:</label>
+                <div  class="layui-input-inline">
+                    <select name="infoType" id="way">
+                        <option value="5">不限</option>
+                        <option value="1">电话回访</option>
+                        <option value="6">小程序订阅通知回访</option>
+                        <option value="3">小程序聊天回访</option>
+                        <option value="4">上门回访</option>
+                        <option value="7">公众号通知回访</option>
+                    </select>
+                </div>
+            </div>
+
+            <div style="height: 50px;width:100%" >
+                <label class="layui-form-label" >计划内容:</label>
+                <div  class="layui-input-inline">
+                    <select name="infoType" id="count">
+
+                    </select>
+                </div>
+            </div>
+
+
+
+
+        </div>
+        <div style="height: 50px;width:100%" >
+            <label class="layui-form-label" >内容提示:</label>
+            <div style="width: 80%"  class="layui-input-inline">
+                <textarea id='tishi' lay-verify="required" name="desc" placeholder="请输入服务过程和结果，最大限制200个字符" class="layui-textarea"></textarea>
+
+            </div>
+        </div>
+    </div>
+</form>
+
+<form class="layui-form" id="test2"  style="display:none" >
+    <div class="layui-form-item layui-form-text">
+
+        <div style="margin-top: 10px;">
+            <div style="height: 50px;width: 80%" >
+                <label class="layui-form-label" >执行时间:</label>
+                <div class="layui-input-inline" >
+                    <select name="infoType" id="updateweek" >
+                        <option value="1">第1周</option>
+                        <option value="2">第2周</option>
+                        <option value="3">第3周</option>
+                        <option value="4">第4周</option>
+                        <option value="5">第5周</option>
+                        <option value="6">第6周</option>
+                        <option value="7">第7周</option>
+                        <option value="8">第8周</option>
+                        <option value="9">第9周</option>
+                        <option value="10">第10周</option>
+                        <option value="11">第11周</option>
+                        <option value="12">第12周</option>
+                        <option value="13">第13周</option>
+                        <option value="14">第14周</option>
+                        <option value="15">第15周</option>
+                        <option value="16">第16周</option>
+                        <option value="17">第17周</option>
+                        <option value="18">第18周</option>
+                        <option value="19">第19周</option>
+                        <option value="20">第20周</option>
+                        <option value="21">第21周</option>
+                        <option value="22">第22周</option>
+                        <option value="23">第23周</option>
+                        <option value="24">第24周</option>
+                        <option value="25">第25周</option>
+                        <option value="26">第26周</option>
+                        <option value="27">第27周</option>
+                        <option value="28">第28周</option>
+                        <option value="29">第29周</option>
+                        <option value="30">第30周</option>
+                        <option value="31">第31周</option>
+                        <option value="32">第32周</option>
+                        <option value="33">第33周</option>
+                        <option value="34">第34周</option>
+                        <option value="35">第35周</option>
+                        <option value="36">第36周</option>
+                        <option value="37">第37周</option>
+                        <option value="38">第38周</option>
+                        <option value="39">第39周</option>
+                        <option value="40">第40周</option>
+                        <option value="41">第41周</option>
+                        <option value="42">第42周</option>
+                        <option value="43">第43周</option>
+                        <option value="44">第44周</option>
+                        <option value="45">第45周</option>
+                        <option value="46">第46周</option>
+                        <option value="47">第47周</option>
+                        <option value="48">第48周</option>
+                        <option value="49">第49周</option>
+                        <option value="50">第50周</option>
+                        <option value="51">第51周</option>
+                        <option value="52">第52周</option>
+                        <option value="53">第53周</option>
+                    </select>
+                </div>
+                <div style="margin-left: 20px" class="layui-input-inline">
+                    <select name="infoType" id="updateday">
+                        <option value="1">第1天</option>
+                        <option value="2">第2天</option>
+                        <option value="3">第3天</option>
+                        <option value="4">第4天</option>
+                        <option value="5">第5天</option>
+                        <option value="6">第6天</option>
+                        <option value="7">第7天</option>
+                    </select>
+                </div>
+            </div>
+
+            <div style="height: 50px;width: 80%" >
+                <label class="layui-form-label" >服务方式:</label>
+                <div  class="layui-input-inline">
+                    <select name="infoType" id="updateway">
+                        <option value="5">不限</option>
+                        <option value="1">电话回访</option>
+                        <option value="2">微信回访</option>
+                        <option value="3">小程序聊天回访</option>
+                        <option value="4">上门回访</option>
+                    </select>
+                </div>
+            </div>
+
+            <div style="height: 50px;width:100%" >
+                <label class="layui-form-label" >计划内容:</label>
+                <div  class="layui-input-inline">
+                    <select name="infoType" id="updatecount">
+
+                    </select>
+                </div>
+            </div>
+
+
+
+
+        </div>
+        <div style="height: 50px;width:100%" >
+            <label class="layui-form-label" >内容提示:</label>
+            <div style="width: 80%"  class="layui-input-inline">
+                <textarea id='updatetishi' lay-verify="required" name="desc" placeholder="请输入服务过程和结果，最大限制500个字符" class="layui-textarea"></textarea>
+
+            </div>
+        </div>
+    </div>
+</form>
+
+
+<div class="layui-row layui-col-space15" style="padding: 20px;">
+    <div class="layui-card">
+        <div class="layui-tab layui-tab-brief" lay-filter="demo">
+
+            <div class="layui-tab-content">
+                <div class="layui-tab-item layui-show">
+                    <div class="layui-fluid">
+                        <div class="layui-card">
+                            <div class="layui-card-body">
+
+                                <div class="layui-form toolbar">
+                                    <div class="layui-form-item">
+
+                                        <div style="height: 50px;width: 50%" class="layui-form-item">
+                                            <label class="layui-form-label layui-form-required">模板名称：</label>
+                                            <div class="layui-input-inline" style="width: 70%" >
+
+                                                <input  name="username" id="username" class="layui-input" type="text"
+                                                        placeholder="请输入名称，不能大于30个字符" autocomplete="off" />
+                                            </div>
+                                        </div>
+
+                                        <div style="height: 50px;width: 80%" >
+                                            <label class="layui-form-label">模板条件：</label>
+                                            <div class="layui-input-inline">
+                                                <select name="infoType" id="dis">
+                                                    <option value="14">不限</option>
+                                                    <option value="1">冠心病</option>
+                                                    <option value="2">脑卒中</option>
+                                                    <option value="3">高血压</option>
+                                                    <option value="4">糖尿病</option>
+                                                    <option value="5">痛风</option>
+                                                    <option value="6">血脂异常</option>
+                                                    <option value="7">骨质疏松症</option>
+                                                    <option value="8">肺癌</option>
+                                                    <option value="9">前列腺癌</option>
+                                                    <option value="10">乳腺癌</option>
+                                                    <option value="11">肥胖症</option>
+                                                    <option value="13">健康</option>
+                                                </select>
+                                            </div>
+                                            <div style="margin-left: 20px" class="layui-input-inline">
+                                                <select name="infoType" id="infoType">
+                                                    <option value="5">不限</option>
+                                                    <option value="1">一级 (疑似或已患)</option>
+                                                    <option value="2">二级（高风险或高危）</option>
+                                                    <option value="3">三级（中风险或中危）</option>
+                                                    <option value="4">四级（低风险或低危）</option>
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <div  style="height: 50px;width: 100%">
+                                            <label class="layui-form-label">更多条件：</label>
+                                            <div  class="layui-input-inline">
+                                                <select name="infoType" id="souce">
+                                                    <option value="3">不限性别</option>
+                                                    <option value="1">男</option>
+                                                    <option value="2">女</option>
+                                                </select>
+                                            </div>
+
+                                            <label class="layui-form-label">年龄：</label>
+                                            <div  class="layui-input-inline">
+
+                                                <input maxLength="4" autocomplete="off"  oninput = "value=value.replace(/[^\d]/g,'')" name="username" id="agemin" class="layui-input" type="text"
+                                                        placeholder="请输入" style="width: 40%;display: inline-block" /> <span style="margin-left: 4%">至</span>
+                                                <input maxLength="4" autocomplete="off" oninput = "value=value.replace(/[^\d]/g,'')"  name="username" id="agemax" class="layui-input" type="text"
+                                                        placeholder="请输入" style="width: 40%;display: inline-block;margin-left: 4%" />
+                                            </div>
+
+                                            <label style="width: 10%" class="layui-form-label">体重指数(BMI)：</label>
+                                            <div  class="layui-input-inline">
+
+                                                <input maxLength="4" autocomplete="off" oninput="value=value.replace(/^\D*(\d*(?:\.\d{0,2})?).*$/g, '$1')"  name="username" id="bmimin" class="layui-input" type="text"
+                                                        placeholder="请输入" style="width: 40%;display: inline-block" /> <span style="margin-left: 4%">至</span>
+                                                <input maxLength="4" autocomplete="off" oninput="value=value.replace(/^\D*(\d*(?:\.\d{0,2})?).*$/g, '$1')"
+                                                       name="username" id="bmimax" class="layui-input" type="text"
+                                                        placeholder="请输入" style="width: 40%;display: inline-block;margin-left: 4%" />
+                                            </div>
+                                        </div>
+
+                                        <div style="height: 50px;width: 100%">
+                                            <label class="layui-form-label">模板描述：</label>
+                                            <div class="layui-input-inline" style="width: 70%" >
+
+                                                <input  name="username" id="describe" class="layui-input" type="text"
+                                                        placeholder="请输入名称，不能大于100个字符"  autocomplete="off"/>
+                                            </div>
+                                        </div>
+
+
+
+                                        <div id="addplan" class="layui-inline" style="padding-left: 20px;">
+                                            <button class="layui-btn icon-btn " data-type="reload"><i
+                                                    class="layui-icon layui-icon-addition"></i>添加</button>
+                                        </div>
+                                        <div class="layui-inline" style="padding-left: 20px;float: right">
+                                            <button id="bianji" class="layui-btn layui-btn" data-type="reload"><i
+                                                    class="layui-icon"></i>编辑</button>
+                                            <button class="layui-btn layui-btn-primary" id="btnempty" lay-submit=""
+                                                    lay-filter="reset">删除</button>
+
+                                        </div>
+
+
+                                    </div>
+                                </div>
+
+                                <table class="layui-hide" id="pinggu" lay-filter="pinggu" ></table>
+
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div style="margin-left: 45%" class="layui-input-block">
+        <button id="baocun" style="background-color:#2a9ce4" class="layui-btn" lay-filter="formSubmitBas" lay-submit>&emsp;保存&emsp;</button>
+        <button type="reset" id="quxiao" class="layui-btn layui-btn-primary">&emsp;取消&emsp;</button>
+    </div>
+</div>
+</body>
+<script type="text/javascript" th:src="@{/assets/libs/layui/layui.js}"></script>
+<script type="text/javascript" th:src="@{/assets/js/common.js}"></script><script>
+    var  userCode="";
+    layui
+        .use(
+            ['layer', 'form', 'table',
+                'laypage', 'treeSelect', 'admin', 'element', 'laydate', 'index','notice'
+            ],
+            function () {
+                var $ = layui.jquery;
+                var layer = layui.layer;
+                var form = layui.form;
+                var table = layui.table;
+                var laypage = layui.laypage;
+                var element = layui.element;
+                var admin = layui.admin;
+                var form = layui.form;
+                var treeSelect = layui.treeSelect;
+                var laydate = layui.laydate;
+                var notice=layui.notice;
+                var bianjiid=$("#bianjiid").val();
+                selectplantop();
+                //如果有id的话查出干预计划模块的上半部
+                function selectplantop(){
+                    var templateid=$("#bianjiid").val();
+                    if(templateid!=null){
+                        $.ajax({
+                            type:"POST",
+                            url:'/YhInterventionTemplateController/selectinterventionId?interventionId='+templateid,
+                            dataType:"json",
+                            success:function(res){
+                                console.log(res);
+                                $("#username").val(res.templateName);
+                                $("#dis").val(res.templateDiseases);
+                                $("#infoType").val(res.templateRisk);
+                                $("#souce").val(res.applySex);
+                                $("#agemin").val(res.applyAgeMin);
+                                $("#agemax").val(res.applyAgeMax);
+                                $("#bmimin").val(res.applyBimMin);
+                                $("#bmimax").val(res.applyBimMax);
+                                $("#describe").val(res.templateDescribe);
+                                form.render();
+                            }
+                        });
+                    }
+                }
+                //点击保存时有id时就更改，没有id就添加
+                    $("#baocun").click(function(){
+                        baocunone();
+                    });
+                function baocunone(){
+                    var username=$("#username").val();
+                    var dis=$("#dis").val();
+                    var infoType=$("#infoType").val();
+                    var souce=$("#souce").val();
+                    var agemin=$("#agemin").val();
+                    var agemax=$("#agemax").val();
+                    var bmimin=$("#bmimin").val();
+                    var bmimax=$("#bmimax").val();
+                    var describe=$("#describe").val();
+                    if(username==null || username ==''){
+                        notice.warning({
+                            title: '消息通知',
+                            message: '模板名不能为空'
+                        });
+                        return
+                    }
+                    if(byteCount(username)>30){
+                        notice.warning({
+                            title: '消息通知',
+                            message: '最大字符不能超过30个'
+                        });
+                        return
+                    }
+                    if(( agemin!="")&&( agemax!="")) {
+                        console.log(agemin=='')
+                        console.log(agemax=='')
+                        if(agemin>agemax){
+                            notice.warning({
+                                title: '消息通知',
+                                message: '最小年龄不能大于最大年龄'
+                            });
+                            return
+                        }
+                    }
+                    if(( bmimin!="")&&( bmimax!="")) {
+                        console.log(bmimin)
+                        console.log(bmimax)
+                        if(bmimin>bmimax){
+                            notice.warning({
+                                title: '消息通知',
+                                message: '最小BMI不能大于最大BMI'
+                            });
+                            return
+                        }
+                    }
+                    if(dis==null || dis ==''){
+                        return
+                    }
+
+                    var data={interventionId:bianjiid,templateDiseases:dis,templateRisk:infoType,templateName:username,applySex:souce,applyAgeMin:agemin,applyAgeMax:agemax,applyBimMin:bmimin,applyBimMax:bmimax,templateDescribe:describe};
+                    $.ajax({
+                        type:"GET",
+                        url:'/YhInterventionTemplateController/selectcountbyname',
+                        dataType:"json",
+                        data:{templateName:username},
+                        success:function(res){
+                           if(res.data>0 && bianjiid==""){
+                               notice.warning({
+                                   title: '消息提醒',
+                                   message: '模板名称不能重复'
+                               });
+                               return;
+                           }else{
+                               insertname(data);
+                           }
+                        }
+                    });
+                }
+                function insertname(data){
+
+                    $.ajax({
+                        type:"GET",
+                        url:'/YhInterventionTemplateController/selectcountdata',
+                        dataType:"json",
+                        success:function(res){
+                            if(res.data==0){
+                                notice.warning({
+                                    title: '消息提醒',
+                                    message: '计划数量不能为0'
+                                });
+                            }else{
+                                $.ajax({
+                                    type:"POST",
+                                    url:'/YhInterventionTemplateController/changetempdate',
+                                    dataType:"json",
+                                    data:data,
+                                    success:function(res){
+                                        var strr= document.referrer;
+                                        if(strr.substr(strr.length-34)=='/division/divisionInterventionplan'){
+                                            window.location.href=document.referrer+"?type=3"
+                                        }else{
+                                            window.history.back();
+                                        }
+
+                                    }
+                                });
+                            }
+                        }
+                    })
+                }
+                function byteCount(str) {
+
+                    return str && str.replace(/[^\x00-\xff]/g,"xx").length || 0;
+
+                }
+                //点击取消时清除临时表的数据
+                    $("#quxiao").click(function(){
+                        $.ajax({
+                            type:"POST",
+                            url:'/YhInterventionTemplateController/removetemporary?interventionId='+bianjiid,
+                            dataType:"json",
+                            success:function(res){
+                                var strr= document.referrer;
+                                if(strr.substr(strr.length-34)=='/division/divisionInterventionplan'){
+                                    window.location.href=document.referrer+"?type=3"
+                                }else{
+                                    window.history.back();
+                                }
+                            }
+                        });
+                    });
+                //转移数据到临时表
+                $.ajax({
+                    type:"GET",
+                    url:'/YhInterventionTemplateController/turntomove?interventionId='+bianjiid,
+                    dataType:"json",
+                    success:function(res){
+                        lode();
+                    }
+                });
+
+                //加载任务列表
+                function lode(){
+                    var insTb = table.render({
+                        elem: '#pinggu',
+                        url: "/YhInterventionTemplateController/selectyhprograms?interventionId="+bianjiid,
+                        limit:50,
+                        page: true,
+                        cols: [
+                            [ {type:'checkbox'},
+                                {
+                                    title: '执行时间',
+                                    width : 200,
+                                    align : 'center',
+                                    templet:function (d) {
+                                        return "第"+d.programsWeeks+"周第"+d.programsDays+"天"
+                                    }
+                                }, {
+                                title: '服务方式',
+                                width : 200,
+                                align : 'center',
+                                templet:function(d){
+                                    if(d.serviceWay==1){
+                                        return "电话回访"
+                                    }else if(d.serviceWay==2){
+                                        return "微信回访"
+                                    }else if(d.serviceWay==3){
+                                        return "小程序聊天回访"
+                                    }else if(d.serviceWay==4){
+                                        return "上门回访"
+                                    }else if(d.serviceWay==5){
+                                        return "不限"
+                                    }else if(d.serviceWay==6){
+                                        return "小程序订阅回访"
+                                    }else if(d.serviceWay==7){
+                                        return "公众号通知回访"
+                                    }
+                                }
+                            }, {
+                                field: 'plan_count',
+                                title: '计划内容',
+                                width : 200,
+                                align : 'center'
+                            }, {
+                                field: 'contentPrompt',
+                                title: '内容提示',
+
+                            }]
+                        ],
+                        response: {
+
+                            statusCode:20000
+                            //规定成功的状态码，默认：0
+
+                        },
+
+                        parseData: function (res) { //将原始数据解析成 table 组件所规定的数据
+                            console.log(res);
+                            // return {
+                            //     "code": res.data.code, //解析接口状态
+                            //     "msg": res.data.msg, //解析提示文本
+                            //     "count": res.data.count, //解析数据长度
+                            //     "data": res.data.data
+                            // }
+
+                        },done: function(res, curr, count){
+                            if(count > insTb.config.limit) {
+                                $(".layui-table-page").show();
+                            }else {
+                                $(".layui-table-page").hide();
+                            }
+                        }
+
+                    });
+                }
+
+              /*  table.on('checkbox(pinggu)', function(obj) {
+                    var checkStatus = table.checkStatus('pinggu')
+                        ,data = checkStatus.data;
+                        layer.msg('选中了：'+ data.length + ' 个');
+                        console.log(data);
+                });*/
+
+              //点击编辑
+                $("#bianji").click(function(){
+                    selectservicecount(2);
+                    var checkStatus = table.checkStatus('pinggu')
+                        ,data = checkStatus.data;
+                    layer.msg('选中了：'+ data.length + ' 个');
+                    if(data.length==0){
+                        notice.warning({
+                            title: '提示',
+                            message: '请选择数据后再操作'
+                        });
+                    }else if(data.length==1){
+                        console.log(data);
+                        $("#updateweek").val(data[0].programsWeeks);
+                        $("#updateday").val(data[0].programsDays);
+                        $("#updateway").val(data[0].serviceWay);
+                        //$("#updatecount").val(data[0].planContent);
+                        $("#updatecount").find("option[value="+data[0].planContent+"]").attr("selected","true");
+                        $("#updatetishi").val(data[0].contentPrompt);
+                        form.render();
+                        var index=layer.open({
+                            type:1,
+                            area:['700px','400px'],
+                            title: '完成服务任务',
+                            content:$("#test2"),
+                            shade: 0.5,
+                            btn: ['保存', '取消']
+                            ,btn1: function(index, layero){
+                                $.ajax({
+                                    type:"POST",
+                                    url:'/YhInterventionTemplateController/updateplan',
+                                    dataType:"json",
+                                    data:{interventionId:$("#bianjiid").val(),programsWeeks:$("#updateweek").val(),programsDays:$("#updateday").val(),serviceWay:$("#updateway").val(),planContent:$("#updatecount").val(),contentPrompt:$("#updatetishi").val(),programsId:data[0].programsId},
+                                    success:function(res){
+                                        layer.close(index);
+                                        lode();
+                                    }
+                                });
+                            },
+                            btn2: function(index, layero){
+                                layer.close(index);
+                                return false;
+                            },
+                            cancel: function(layero,index){
+                                layer.closeAll();
+                            }
+                        });
+                    }else if(data.length>1){
+                        notice.warning({
+                            title: '提示',
+                            message: '多条数据不能一起编辑'
+                        });
+                    }
+
+                });
+
+                //点击删除
+                $("#btnempty").click(function(){
+                    var checkStatus = table.checkStatus('pinggu')
+                        ,date = checkStatus.data;
+                    console.log(date);
+                    $.ajax({
+                        type:"POST",
+                        url:'/YhInterventionTemplateController/deleteplan',
+                        dataType:"json",
+                        contentType:"application/json",
+                        data:JSON.stringify(date),
+                        success:function(res){
+                            lode();
+                        }
+                    });
+                });
+
+                //添加任务计划
+                $("#addplan").click(function(){
+
+                    selectservicecount(1);
+
+                    var index=layer.open({
+                        type:1,
+                        area:['700px','400px'],
+                        title: '添加计划',
+                        content:$("#test1"),
+                        shade: 0.5,
+                        btn: ['保存', '取消']
+                        ,btn1: function(index, layero){
+                            console.log($("#week").val());
+                            console.log($("#day").val());
+                            console.log($("#way").val());
+                            console.log($("#count").val());
+                            console.log($("#tishi").val());
+                            $.ajax({
+                                type:"POST",
+                                url:'/YhInterventionTemplateController/insertplan',
+                                dataType:"json",
+                                data:{interventionId:$("#bianjiid").val(),programsWeeks:$("#week").val(),programsDays:$("#day").val(),serviceWay:$("#way").val(),planContent:$("#count").val(),contentPrompt:$("#tishi").val()},
+                                success:function(res){
+                                    $("#week").val(1);
+                                    $("#day").val(1);
+                                    $("#way").val(1);
+                                    $("#count").val(1);
+                                    $("#tishi").val("");
+                                    form.render();
+                                    layer.close(index);
+                                    lode();
+                                }
+                            });
+                        },
+                        btn2: function(index, layero){
+                            layer.close(index);
+                            return false;
+                        },
+                        cancel: function(layero,index){
+                            layer.closeAll();
+                        }
+                    });
+                });
+                //查询计划内容（下拉框）
+                function selectservicecount(serviceid){
+                    $.ajax({
+                        type:"GET",
+                        url:'/YhInterventionTemplateController/selectcount',
+                        dataType:"json",
+                        success:function(res){
+                            var html="";
+                            for(var i=0;i<res.length;i++){
+                                html+="<option value="+res[i].plancount_id+">"+res[i].plan_count+"</option>";
+                            }
+                            if(serviceid==1){
+                                $("#count").empty().append(html);
+                            }else if(serviceid==2){
+                                $("#updatecount").empty().append(html);
+                            }
+
+
+                            form.render('select');
+                        }
+                    });
+                }
+
+
+            });
+</script>
+</html>

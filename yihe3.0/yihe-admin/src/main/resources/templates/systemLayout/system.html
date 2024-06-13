@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, maximum-scale=1">
+<title>系统配置</title>
+<link rel="stylesheet" th:href="@{/assets/libs/layui/css/layui.css}" />
+<link rel="stylesheet" th:href="@{/assets/module/admin.css}" />
+<!-- js部分 -->
+
+<style type="text/css">
+        .bigboders{
+            height: 300px;
+            margin-top: 25px;
+            margin-left: -13px;
+            position: relative;
+            width: 48%;
+        }
+        .innnerboders{
+            width: 90%;
+            height: 220px;
+            position: absolute;
+            margin-top: 15px;
+            margin-left: 15px;
+            border-image: initial;
+        }
+        .borderline {
+    background-color: #1890ff;
+    width: 3px;
+    height: 24px;
+    float: left;
+}
+    
+</style>
+
+</head>
+<body style="overflow-x: hidden; overflow-y: scroll">
+	<!-- 加载动画 -->
+	<div class="page-loading">
+		<div class="ball-loader">
+			<span></span><span></span><span></span><span></span>
+		</div>
+	</div>
+
+
+	<div class="layui-row layui-col-space15" style="padding: 20px;">
+		<div class="layui-card">    
+
+
+		
+		<div class="layui-tab layui-tab-brief" lay-filter="indexTab">
+			  <ul class="layui-tab-title">
+			    <li class="layui-this">基本信息</li>
+			  </ul>
+	  		<div class="layui-tab-content">
+	  		
+		
+	  		
+	  		<div class="layui-tab-item layui-show">
+	  		<div class="layui-fluid">
+	<div style="width: 100%;height: 2500px;background-color: #FFF; position:relative;">
+	
+		
+		  <div id="orgname">
+		  
+		  </div> 
+		  
+             <div  id="Logo"  class="tab" style="margin-top: 19px;">
+                 <div id="jindu3"></div>
+             </div>
+             	<form class="layui-form" id="addfolder" lay-filter="folderForm" style="display: none;">
+	
+			  <div class="layui-form-item" style="display: block;margin-top: 38px;">
+	  			  <label class="layui-form-label">名称</label>
+	    			<div class="layui-input-inline" style="width: 250px;">
+	     				 <input type="text" name="folderName" lay-verify="required"  lay-reqtext="不能为空"  placeholder="请输入名称" autocomplete="off" class="layui-input">
+	    			</div>
+	 		 </div>
+	 		 
+	 		 <div class="layui-form-item">
+						<div class="layui-input-block">
+							<button style="width: 100px; margin-left: 14px;" class="layui-btn layui-btn-normal"
+								lay-submit='' lay-filter="folderSubmit" type="button">保存</button>
+							<button style="width: 100px;" type="reset" id="cancel"  class="layui-btn layui-btn-primary">取消</button>
+						</div>
+				</div>
+	</form>
+    		<div>Logo：</div>
+    	 	<div th:each="item:${yhdic}">	
+                <div  class="layui-col-md6 bigboders noclickthistab three" th:if="${item.type eq 3}">
+                    <div style="width: 200px;height: 24px; margin-left: 14px;">
+                        <div class="borderline"></div>
+                        <span style="margin-left: 20px;" th:text="${item.name}"></span>
+                    </div>
+                    <div class="innnerboders">
+                        <form class="layui-form" style="max-width: 100%;">
+                            <div style="margin-left: 70px;margin-right: 20px;display: none" class="layui-input-block">
+                        <textarea  name="code" placeholder="" class="layui-textarea"
+                                   lay-verType="tips" th:text="${item.code}"></textarea>
+                            </div>
+                            <div style="margin-left: 70px;margin-right: 20px;display: none" class="layui-input-block">
+                        <textarea  name="name" placeholder="" class="layui-textarea"
+                                   lay-verType="tips" th:text="${item.name}"></textarea>
+                            </div>
+                            <div style="margin-left: 70px;margin-right: 20px;display: none" class="layui-input-block">
+                        <textarea  name="type" placeholder="" class="layui-textarea"
+                                   lay-verType="tips" th:text="${item.type}"></textarea>
+                            </div>
+                            <div>
+                                <input type="file" class="btn_file" style="display:none" onchange="setImg(this);">
+                                <img style="max-width: 420px;max-height: 220px;" th:src="${item.explain}" th:data-id="${item.code}" onclick="upload(this)">
+
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+    </div>
+    </div>
+	  		</div>
+	  		<!-- <div class="layui-tab-item">
+	  			
+	  		</div> -->
+	  		</div>
+		</div>  
+			
+		</div>
+	</div>
+</body>
+
+<script type="text/javascript" th:src="@{/assets/libs/layui/layui.js}"></script>
+<script type="text/javascript" th:src="@{/assets/js/common.js}"></script>
+<script type="text/javascript">
+
+layui.use(['laypage', 'layer','element', 'treeTable','table','form','treeSelect','laydate','util','upload'], function(){
+  var laypage = layui.laypage;
+  var layer = layui.layer;
+  var element = layui.element;
+  var table = layui.table;
+  var form = layui.form;
+  var $ = layui.jquery;
+  var laydate = layui.laydate;
+  var util = layui.util;
+  var treeSelect= layui.treeSelect;
+  var orgCode='';
+  orgName();
+  element.on('tab(indexTab)', function(data){
+	  var type = $(this).attr("lay-id");
+	     
+	   })
+  function orgName(){
+	   $.ajax({
+	       	 type: "get",
+	            url: "/YhUserSetting/selectorgname2",
+	            dataType:"json",
+	            success: function(data){
+						if(data.code==20000){
+							console.log("机构名称",data.data.org_Name);
+							var orgname = data.data.org_Name;
+							$("input[name=folderName]").val(orgname);
+							orgCode = data.data.org_Code;
+							$("#orgname").html("企业名称："+orgname+"<i id='update' class='layui-icon layui-icon-edit' style='font-size: 25px; color: #1E9FFF;margin-left: 8px;'></i> ");
+						}
+	            }
+	       	
+	       });
+  }
+    
+  $("body").delegate("#update","click", function(){
+     console.log("点击修改")
+ 	layer.open({
+		  title:'重命名',
+		  type: 1,
+		  skin: 'layui-layer-rim', //加上边框
+		  area: ['420px', '200px'], //宽高
+		  content: $("#addfolder"),
+		});
+  });
+  
+  
+	//监听提交
+	form.on('submit(folderSubmit)', function (dataYh) {
+		var folderName = $("input[name=folderName]").val();
+		
+		console.log("输入框的值"+folderName)
+			$.ajax({
+					type: 'post',
+					url: '/YhUserSetting/updateOrgName',
+					data: {
+						orgCode: orgCode,
+						orgName: folderName
+					},
+					success: function (data) {
+						if(data.code==20000){
+							parent.layer.msg('操作成功');
+							layer.closeAll();
+							 orgName();
+						}else{
+							parent.layer.msg('操作失败');
+						}
+					}
+
+				}); 
+		return false;
+	});
+
+  upload=function(obj){
+      console.log(obj.parentNode.children[0].click())
+      console.log(1)
+  }
+
+   setImg=function(obj){//用于进行图片上传，返回地址
+      var f=$(obj).val();
+       console.log(obj.parentNode.children[1].dataset.id)
+      if(f == null || f ==undefined || f == ''){
+          return false;
+      }
+      if(!/\.(?:png|jpg|bmp|gif|PNG|JPG|BMP|GIF)$/.test(f))
+      {
+          alertLayel("类型必须是图片(.png|jpg|bmp|gif|PNG|JPG|BMP|GIF)");
+          $(obj).val('');
+          return false;
+      }
+      var data = new FormData();
+      $.each($(obj)[0].files,function(i,file){
+          data.append('file', file);
+      });
+      $.ajax({
+          type: "POST",
+          url: "/Uploading/upload2",
+          data: data,
+          cache: false,
+          contentType: false,    //不可缺
+          processData: false,    //不可缺
+          dataType:"json",
+          success: function(suc) {
+              console.log(suc);
+              if(suc.code==0){
+                  console.log(obj.parentNode.children[1].src=suc.data.src)
+                  var datess={"code":obj.parentNode.children[1].dataset.id,"explain":suc.data.src,"type":3}
+                  changeimg(datess)
+                  $("#thumbUrl").val(suc.message);//将地址存储好
+                  $("#thumburlShow").attr("src",suc.message);//显示图片
+              }else{
+                  alertLayel("上传失败");
+                  $("#url").val("");
+                  $(obj).val('');
+              }
+          },
+          error: function(XMLHttpRequest, textStatus, errorThrown) {
+              alertLayel("上传失败，请检查网络后重试");
+              $("#url").val("");
+              $(obj).val('');
+          }
+      });
+  }
+
+  function changeimg(date){
+      $.ajax({
+          type: "POST",
+          url: "/pagesetting/updatatalldicintro",
+          data: date,
+          dataType:"json",
+          success: function(suc) {
+              console.log(suc);
+
+          }
+      });
+  }
+ 
+    
+
+});
+</script>
+	
+</html>

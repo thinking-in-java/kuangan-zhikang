@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yihe.system.mapper.IntegralShoppingGroupingMapper" >
+  <resultMap id="BaseResultMap" type="com.yihe.system.domain.IntegralShoppingGrouping" >
+    <id column="grouping_id" property="groupingId" jdbcType="INTEGER" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="parent_id" property="parentId" jdbcType="VARCHAR" />
+    <result column="sort_id" property="sortId" jdbcType="INTEGER" />
+    <result column="add_time" property="addTime" jdbcType="TIMESTAMP" />
+    <result column="org_code" property="orgCode" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    grouping_id, name, parent_id, sort_id, add_time, org_code
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from integral_shopping_grouping
+    where grouping_id = #{groupingId,jdbcType=INTEGER}
+  </select>
+      <select id="selectGroupingName" resultMap="BaseResultMap">
+    select * from integral_shopping_grouping
+   	where name = #{name,jdbcType=VARCHAR}
+  </select>
+    
+   <select id="selectAllGrouping" resultMap="BaseResultMap">
+    select * from integral_shopping_grouping where org_code like concat('%',#{orgCode},'%') order by add_time desc
+  </select>
+  
+   <select id="selectGrouping" resultMap="BaseResultMap">
+    select * from integral_shopping_grouping where name like concat('%',#{name},'%')
+  </select>
+  
+  
+    
+    <select id="queryShoppingGroupingPage" resultMap="BaseResultMap">
+		 select ing.*,(select count(*) from yh_user_commodity_data where grouping_id = ing.grouping_id and putaway = 1) as num 
+		 from integral_shopping_grouping as ing
+		 where ing.org_code like CONCAT('%',#{orgCode},'%')
+      	 order by ing.add_time desc
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from integral_shopping_grouping
+    where grouping_id = #{groupingId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.yihe.system.domain.IntegralShoppingGrouping" >
+    insert into integral_shopping_grouping (grouping_id, name, parent_id, 
+      sort_id, add_time, org_code
+      )
+    values (#{groupingId,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{parentId,jdbcType=VARCHAR}, 
+      #{sortId,jdbcType=INTEGER}, #{addTime,jdbcType=TIMESTAMP}, #{orgCode,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.yihe.system.domain.IntegralShoppingGrouping" >
+    insert into integral_shopping_grouping
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="groupingId != null" >
+        grouping_id,
+      </if>
+      <if test="name != null" >
+        name,
+      </if>
+      <if test="parentId != null" >
+        parent_id,
+      </if>
+      <if test="sortId != null" >
+        sort_id,
+      </if>
+      <if test="addTime != null" >
+        add_time,
+      </if>
+      <if test="orgCode != null" >
+        org_code,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="groupingId != null" >
+        #{groupingId,jdbcType=INTEGER},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="parentId != null" >
+        #{parentId,jdbcType=VARCHAR},
+      </if>
+      <if test="sortId != null" >
+        #{sortId,jdbcType=INTEGER},
+      </if>
+      <if test="addTime != null" >
+        #{addTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="orgCode != null" >
+        #{orgCode,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.yihe.system.domain.IntegralShoppingGrouping" >
+    update integral_shopping_grouping
+    <set >
+      <if test="name != null" >
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="parentId != null" >
+        parent_id = #{parentId,jdbcType=VARCHAR},
+      </if>
+      <if test="sortId != null" >
+        sort_id = #{sortId,jdbcType=INTEGER},
+      </if>
+      <if test="addTime != null" >
+        add_time = #{addTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="orgCode != null" >
+        org_code = #{orgCode,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where grouping_id = #{groupingId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.yihe.system.domain.IntegralShoppingGrouping" >
+    update integral_shopping_grouping
+    set name = #{name,jdbcType=VARCHAR},
+      parent_id = #{parentId,jdbcType=VARCHAR},
+      sort_id = #{sortId,jdbcType=INTEGER},
+      add_time = #{addTime,jdbcType=TIMESTAMP},
+      org_code = #{orgCode,jdbcType=VARCHAR}
+    where grouping_id = #{groupingId,jdbcType=INTEGER}
+  </update>
+</mapper>

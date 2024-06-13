@@ -1,0 +1,1597 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, maximum-scale=1">
+<title>用户查看健康检测</title>
+<link rel="stylesheet" th:href="@{/assets/libs/layui/css/layui.css}" />
+<link rel="stylesheet" th:href="@{/assets/module/admin.css}" />
+<style type="text/css">
+/*  .layui-table th {
+            text-align: center;
+	 }
+	  .layui-table tr {
+            text-align: center;
+	 } */
+.layui-table-cell {
+	height: auto !important;
+}
+
+.removestyle {layui-btn-primary;
+	
+}
+
+.addstyle {layui-btn-normal;
+	
+}
+
+.layui-table-box {
+	min-height: 600px;
+}
+
+.theme-colorful {
+	background-color: white;
+}
+</style>
+</head>
+<body style="margin: 20px;">
+	<div class="layui-tab" lay-filter="indexTab">
+	<input type="hidden" name="userCode" th:value ="${userCode}">
+		<ul class="layui-tab-title">
+			<li lay-id="tiwen" class="layui-this">体温</li>
+			<li lay-id="oxygen">血氧</li>
+			<li lay-id="weight">体重</li>
+			<li lay-id="bloodpressure">血压</li>
+			<li lay-id="env">血糖</li>
+			<li lay-id="heartrate">心率</li>
+			<li lay-id="fatrate">体脂</li>
+			<li lay-id="bloodfat">血脂四项</li>
+			<li lay-id="kidney">肾功能</li>
+			<li lay-id="liver">肝功能</li>
+			<li lay-id="artery">动脉硬化</li>
+			<li lay-id="ecg">心电图</li>
+			<li lay-id="uba">尿检</li>
+			<li lay-id="else">其他指标</li>
+			<li lay-id="hemoglobin">血红蛋白</li>
+			<li lay-id="facilityfatrate">设备体脂</li>
+			<!--<li lay-id="cellDetection">细胞检测</li>
+			<li lay-id="quantumDetection">量子检测</li>-->
+		</ul>
+		<!-- layui-icon-list layui-icon-chart -->
+		<div class="layui-tab-content">
+			<div class="layui-tab-item layui-show" id="tiwen2">
+				<div>
+					<i class="layui-icon layui-icon-list" id="list"
+						style="color: rgba(24, 144, 255, 1); ">列表展示</i>
+						<i class="layui-icon layui-icon-chart" id="chart"
+						style="color: rgba(153, 153, 153, 1);">图表展示</i>
+				</div>
+				<div id="demo2">
+					<table id="demo" lay-filter="test"></table>
+				</div>
+
+				<div id="main2" style="display: none;">
+					<div class="layui-tab layui-tab-brief" lay-filter="docDemoTabBrief">
+<!-- 						<ul class="layui-tab-title tiwen_Type" >
+							<li style="min-width: 1px;" data-type="week" class="layui-this">周</li>
+							<li style="min-width: 1px;" data-type="month">月</li>
+							<li style="min-width: 1px;" data-type="year">年</li>
+						</ul> -->
+						 <!-- <div style="text-align: center;" class="layui-tab-content">
+							<div style="margin-top: 9px;">
+							<span><img alt=""  src='../../assets/images/sanjiao.png' style="width: 12px;margin-top: -3px;"  id="imgdd"/></span>
+								<span style="color: rgba(80, 80, 80, 1); font-size: 14px;"id="beginTime">2020-05-03</span>
+									<span><img alt="" src='../../assets/images/ysanjiao.png' style="width: 12px;margin-top: -3px;" id="reduceMonth" /></span>
+							</div>
+							<div style="margin-top: 12px; font-size: 14px;">健康数据</div>
+							<div style="margin-top: 12px;">
+								<span> <img style="width: 28px; height: 28px;" alt=""
+									src="../../assets/images/jcts.svg">
+								</span> <span>检测天数</span> <span>9&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+								<span> <img style="width: 28px; height: 28px;" alt=""
+									src="../../assets/images/jccs.svg">
+								</span> <span>检测次数</span> <span>12&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+								<span> <img style="width: 28px; height: 28px;" alt=""
+									src="../../assets/images/dabl.svg">
+								</span> <span>达标率</span> <span>68%</span>
+
+							</div>
+						</div> -->
+
+					<div id="main"  style="height: 500px;"></div>
+					<div style="margin-top: -276px;">
+						<i class="layui-icon layui-icon-prev" id="left"
+							style="color: rgba(0, 0, 0, 1); position: relative; display: none;"></i>
+					</div>
+
+					<div style="text-align: right; margin-top: -12px;">
+						<i class="layui-icon layui-icon-next" id="right"
+							style="color: rgba(0, 0, 0, 1); position: relative;"></i>
+					</div>
+					<!-- <div style="margin-top: 256px;text-align: center;">检测习惯和结果分析</div> -->
+
+						<!-- <div id="histogram" style="width: 500px;height:400px;margin-left:20px"></div>
+						<div id="pieChartmy" style="width: 600px;height:400px;margin: -398px 0px 0px 500px;"></div> -->
+						<!-- <div style="margin-left: 233px;">
+							<div style="width: 10px;height: 10px;background-color: rgba(60, 144, 247, 1);display: block;"></div >
+							<div style="width: 28px;margin-left: 26px;margin-top: -15px;color:rgba(166, 166, 166, 1);">次数</div>
+						</div> -->
+						<!-- <div style="color:rgba(166, 166, 166, 1);margin-top: 5px;">清晨：5-8点；上午：8-12点；中午：12-14点；下午：14-18点；晚上：18-22点；深夜：22-24点；凌晨：0-5点</div> -->
+
+					</div>
+				</div>
+
+				<div class="tiwennoData" style="text-align: center; display: none;">
+					<img style="width: 26%; text-align: center;" alt=""
+						src="../../assets/images/zanwu.png">
+				</div>
+
+
+
+			</div>
+			<div class="layui-tab-item" id="oxygen">
+				<div >
+					<i class="layui-icon layui-icon-list" id="bloodlist"
+						style="color: rgba(24, 144, 255, 1); margin-right: 15px;">列表展示</i> <i
+						class="layui-icon layui-icon-chart" id="bloodchart"
+						style="color: rgba(153, 153, 153, 1);">图表展示</i>
+				</div>
+
+				<div id="bloodTable2">
+					<table id="bloodTable" lay-filter="test"></table>
+				</div>
+
+
+				<div id="blood2" style="display: none;">
+					<div id="blood" style="width: 100%; height: 500px;"></div>
+					<div style="margin-top: -276px;">
+						<i class="layui-icon layui-icon-prev" id="bloodleft"
+							style="color: rgba(0, 0, 0, 1); position: relative; display: none;"></i>
+					</div>
+
+					<div style="text-align: right; margin-top: -12px;">
+						<i class="layui-icon layui-icon-next" id="bloodright"
+							style="color: rgba(0, 0, 0, 1); position: relative;"></i>
+					</div>
+				</div>
+				<div class="bloodNoData" style="text-align: center; display: none;">
+					<img style="width: 26%; text-align: center;" alt=""
+						src="../../assets/images/zanwu.png">
+				</div>
+			</div>
+			<div class="layui-tab-item" id="bimVo">
+				<div>
+					<i class="layui-icon layui-icon-list" id="bimlist"
+						style="color: rgba(24, 144, 255, 1); margin-right: 15px;">列表展示</i> <i
+						class="layui-icon layui-icon-chart" id="bimchart"
+						style="color: rgba(153, 153, 153, 1);">图表展示</i>
+				</div>
+
+				<div id="bimTable2">
+					<table id="bimTable" lay-filter="test"></table>
+				</div>
+
+
+				<div id="bim2" style="display: none;">
+					<div id="bim" style="width: 100%; height: 500px;"></div>
+					<div style="margin-top: -276px;">
+						<i class="layui-icon layui-icon-prev" id="bimleft"
+							style="color: rgba(0, 0, 0, 1); position: relative; display: none;"></i>
+					</div>
+
+					<div style="text-align: right; margin-top: -12px;">
+						<i class="layui-icon layui-icon-next" id="bimright"
+							style="color: rgba(0, 0, 0, 1); position: relative;"></i>
+					</div>
+				</div>
+				<div class="bimNoData" style="text-align: center; display: none;">
+					<img style="width: 26%; text-align: center;" alt=""
+						src="../../assets/images/zanwu.png">
+				</div>
+
+
+			</div>
+			<!--  血压 -->
+			<div class="layui-tab-item" id="pressureVo">
+				<div>
+					<i class="layui-icon layui-icon-list" id="pressurelist"
+						style="color: rgba(24, 144, 255, 1); margin-right: 15px;">列表展示</i> <i
+						class="layui-icon layui-icon-chart" id="pressurechart"
+						style="color: rgba(153, 153, 153, 1);">图表展示</i>
+				</div>
+
+				<div id="pressureTable2">
+					<table id="pressureTable" lay-filter="test"></table>
+				</div>
+
+				<div style=" text-align: center;">
+					<div class="layui-btn-group  btnGroup_bloodPressureType" style="display: none; text-align: center;">
+							<button type="button" data-type="常规测量"
+								class="layui-btn layui-btn-primary layui-btn-sm">常规测量</button>
+							<button type="button" data-type="服药前"
+								class="layui-btn layui-btn-primary layui-btn-sm">服药前</button>
+							<button type="button" data-type="服药后"
+								class="layui-btn layui-btn-primary layui-btn-sm">服药后</button>
+							<button type="button" data-type="感觉不适"
+								class="layui-btn layui-btn-primary layui-btn-sm">感觉不适</button>
+						</div>
+				</div>
+
+				<div id="pressure2" style="display: none; text-align: center;">
+					<div id="pressure" style="width: 100%; height: 500px;"></div>
+					<div style="margin-top: -276px; text-align: left;">
+						<i class="layui-icon layui-icon-prev" id="pressureleft"
+							style="color: rgba(0, 0, 0, 1); position: relative; display: none;"></i>
+					</div>
+
+					<div style="text-align: right; margin-top: -12px;">
+						<i class="layui-icon layui-icon-next" id="pressureright"
+							style="color: rgba(0, 0, 0, 1); position: relative;"></i>
+					</div>
+
+					<div style="margin-top: 255px;">
+						<span style="color: rgba(60, 144, 247, 1); font-size: 17px;">~</span>
+						<span style="color: rgba(166, 166, 166, 1);">舒张压（mmHg）</span> <span
+							style="color: rgba(85, 191, 192, 1); font-size: 17px;">~</span> <span
+							style="color: rgba(166, 166, 166, 1);">收缩压（mmHg）</span>
+					</div>
+				</div>
+
+				<div class="pressureNoData"
+					style="text-align: center; display: none;">
+					<img style="width: 26%; text-align: center;margin: 53px;" alt=""
+						src="../../assets/images/zanwu.png">
+				</div>
+
+			</div>
+			<div class="layui-tab-item" id="glucoseVo">
+				<div>
+					<i class="layui-icon layui-icon-list" id="glucoselist"
+						style="color: rgba(24, 144, 255, 1); margin-right: 15px;">列表展示</i> <i
+						class="layui-icon layui-icon-chart" id="glucosechart"
+						style="color: rgba(153, 153, 153, 1);">图表展示</i>
+				</div>
+				<!-- 	血糖 -->
+				<div id="glucoseTable2">
+					<table id="glucoseTable" lay-filter="test"></table>
+				</div>
+
+				<div style="text-align: center;">
+					<div class="layui-btn-group  btnGroup_bloodGlucoseType" style="display: none; text-align: center;">
+						<button type="button" data-type="空腹"
+							class="layui-btn layui-btn-primary layui-btn-sm">空腹</button>
+						<button type="button" data-type="餐后"
+							class="layui-btn layui-btn-primary layui-btn-sm">餐后</button>
+						<button type="button" data-type="服药后"
+							class="layui-btn layui-btn-primary layui-btn-sm">服药后</button>
+						<button type="button" data-type="感觉不适"
+							class="layui-btn layui-btn-primary layui-btn-sm">感觉不适</button>
+					</div>
+				</div>
+
+
+				<div id="glucose2" style="display: none; text-align: center;">
+					<div id="glucose" style="width: 100%; height: 500px;"></div>
+					<div style="margin-top: -276px; text-align: left;">
+						<i class="layui-icon layui-icon-prev" id="glucoseleft"
+							style="color: rgba(0, 0, 0, 1); position: relative; display: none;"></i>
+					</div>
+					<div style="text-align: right; margin-top: -12px;">
+						<i class="layui-icon layui-icon-next" id="glucoseright"
+							style="color: rgba(0, 0, 0, 1); position: relative;"></i>
+					</div>
+				</div>
+				<div class="glucoseNoData"
+					style="text-align: center; display: none;">
+					<img style="width: 26%; text-align: center;" alt=""
+						src="../../assets/images/zanwu.png">
+				</div>
+			</div>
+			<!-- 心率 -->
+			<div class="layui-tab-item" id="heartVo">
+				<div >
+					<i class="layui-icon layui-icon-list" id="heartlist"
+						style="color: rgba(24, 144, 255, 1); margin-right: 15px;">列表展示</i> <i
+						class="layui-icon layui-icon-chart" id="heartchart"
+						style="color: rgba(153, 153, 153, 1);">图表展示</i>
+				</div>
+
+				<div id="heartTable2">
+					<table id="heartTable" lay-filter="test"></table>
+				</div>
+
+				<div id="heart2" style="display: none;">
+					<div id="heart" style="width: 100%; height: 500px;"></div>
+					<div style="margin-top: -276px;">
+						<i class="layui-icon layui-icon-prev" id="heartleft"
+							style="color: rgba(0, 0, 0, 1); position: relative; display: none;"></i>
+					</div>
+					<div style="text-align: right; margin-top: -12px;">
+						<i class="layui-icon layui-icon-next" id="heartright"
+							style="color: rgba(0, 0, 0, 1); position: relative;"></i>
+					</div>
+				</div>
+				<div class="heartNoData" style="text-align: center; display: none;">
+					<img style="width: 26%; text-align: center;" alt=""
+						src="../../assets/images/zanwu.png">
+				</div>
+			</div>
+			<!--   体脂 -->
+			<div class="layui-tab-item" id="bodyfatVo">
+				<div >
+					<i class="layui-icon layui-icon-list" id="bodyfatlist"
+						style="color: rgba(24, 144, 255, 1); margin-right: 15px;">列表展示</i> <i
+						class="layui-icon layui-icon-chart" id="bodyfatchart"
+						style="color: rgba(153, 153, 153, 1);">图表展示</i>
+				</div>
+
+				<div id="bodyfatTable2">
+					<table id="bodyfatTable" lay-filter="test"></table>
+				</div>
+
+				<div id="bodyfat2" style="display: none;">
+					<div id="bodyfat" style="width: 100%; height: 500px;"></div>
+					<div style="margin-top: -276px;">
+						<i class="layui-icon layui-icon-prev" id="bodyfatleft"
+							style="color: rgba(0, 0, 0, 1); position: relative; display: none;"></i>
+					</div>
+					<div style="text-align: right; margin-top: -12px;">
+						<i class="layui-icon layui-icon-next" id="bodyfatright"
+							style="color: rgba(0, 0, 0, 1); position: relative;"></i>
+					</div>
+					<div style="margin-top: 258px; text-align: center;">
+						<span style="color: rgba(60, 144, 247, 1); font-size: 17px;">~</span>
+						<span style="color: rgba(166, 166, 166, 1);">脂肪率（%）</span> <span
+							style="color: rgba(85, 191, 192, 1); font-size: 17px;">~</span> <span
+							style="color: rgba(166, 166, 166, 1);">肌肉率（%）</span> <span
+							style="color: rgba(94, 190, 103, 1); font-size: 17px;">~</span> <span
+							style="color: rgba(166, 166, 166, 1);">骨骼量（Kg）</span>
+					</div>
+				</div>
+				<div class="bodyfatNoData"
+					style="text-align: center; display: none;">
+					<img style="width: 26%; text-align: center;" alt=""
+						src="../../assets/images/zanwu.png">
+				</div>
+			</div>
+
+			<!--   血脂 -->
+			<div class="layui-tab-item" id="bloodfat">
+				<table id="bloodfatTable" lay-filter="test"></table>
+			</div>
+
+			<!--   肾功能 -->
+			<div class="layui-tab-item" id="kidney">
+				<table id="kidneyTable" lay-filter="test"></table>
+			</div>
+
+			<!--  肝功能 -->
+			<div class="layui-tab-item" id="liver">
+				<table id="liverTable" lay-filter="test"></table>
+			</div>
+			<!--  动脉硬化（仪器上传）-->
+				<div class="layui-tab-item" id="artery">
+				<table id="arteryTab" lay-filter="test"></table>
+			</div>
+			<!--  心电图-->
+			<div class="layui-tab-item" id="ecg">
+				<table id="ecgTable" lay-filter="test"></table>
+			</div>
+
+			<!--  尿检-->
+			<div class="layui-tab-item" id="urinalys">
+				<table id="urinalysisTable" lay-filter="test"></table>
+			</div>
+
+			<!--  其他指标-->
+			<div class="layui-tab-item" id="else">
+				<table id="elseTable" lay-filter="test"></table>
+			</div>
+
+			<!--  血红蛋白-->
+			<div class="layui-tab-item" id="hemoglobin">
+				<div>
+					<i class="layui-icon layui-icon-list" id="hemolist"
+					   style="color: rgba(24, 144, 255, 1); ">列表展示</i>
+					<i class="layui-icon layui-icon-chart" id="hemochart"
+					   style="color: rgba(153, 153, 153, 1);">图表展示</i>
+				</div>
+				<div id="hemoTable2">
+					<table id="hemoTable" lay-filter="test"></table>
+				</div>
+				<!-- 图表显示 -->
+				<div id="hemo" style="display: none;">
+					<div id="hemo1" style="width: 100%; height: 500px;"></div>
+					<div style="margin-top: -276px;">
+						<i class="layui-icon layui-icon-prev" id="hemoleft"
+						   style="color: rgba(0, 0, 0, 1); position: relative; display: none;"></i>
+					</div>
+					<div style="text-align: right; margin-top: -12px;">
+						<i class="layui-icon layui-icon-next" id="hemoright"
+						   style="color: rgba(0, 0, 0, 1); position: relative;"></i>
+					</div>
+				</div>
+
+				<div class="hemoNoData" style="text-align: center; display: none;">
+					<img style="width: 26%; text-align: center;" alt=""
+						 src="../../assets/images/zanwu.png">
+				</div>
+			</div>
+
+			<!--   设备体脂 -->
+			<div class="layui-tab-item" id="facilitybodyfatVo">
+			<!-- 	<div style="text-align: right;">
+					<i class="layui-icon layui-icon-list" id="bodyfatlist"
+						style="color: rgba(24, 144, 255, 1); margin-right: 15px;"></i> <i
+						class="layui-icon layui-icon-chart" id="bodyfatchart"
+						style="color: rgba(153, 153, 153, 1);"></i>
+				</div> -->
+
+				<div id="bodyfatTable2">
+					<table id="facilitybodyfatTable" lay-filter="test"></table>
+				</div>
+
+				<!-- <div id="bodyfat2" style="display: none;">
+					<div id="bodyfat" style="width: 100%; height: 500px;"></div>
+					<div style="margin-top: -276px;">
+						<i class="layui-icon layui-icon-prev" id="bodyfatleft"
+							style="color: rgba(0, 0, 0, 1); position: relative; display: none;"></i>
+					</div>
+					<div style="text-align: right; margin-top: -12px;">
+						<i class="layui-icon layui-icon-next" id="bodyfatright"
+							style="color: rgba(0, 0, 0, 1); position: relative;"></i>
+					</div>
+					<div style="margin-top: 258px; text-align: center;">
+						<span style="color: rgba(60, 144, 247, 1); font-size: 17px;">~</span>
+						<span style="color: rgba(166, 166, 166, 1);">脂肪率（%）</span> <span
+							style="color: rgba(85, 191, 192, 1); font-size: 17px;">~</span> <span
+							style="color: rgba(166, 166, 166, 1);">肌肉率（%）</span> <span
+							style="color: rgba(94, 190, 103, 1); font-size: 17px;">~</span> <span
+							style="color: rgba(166, 166, 166, 1);">骨骼量（Kg）</span>
+					</div>
+				</div>
+				<div class="bodyfatNoData"
+					style="text-align: center; display: none;">
+					<img style="width: 26%; text-align: center;" alt=""
+						src="../../assets/images/zanwu.png">
+				</div> -->
+			</div>
+			<!--  细胞检测-->
+			<!--<div class="layui-tab-item" id="cellDetection">
+				<button type="button" id="cellDetectionupload2" class="layui-btn">上传</button>
+				<table id="cellDetectionTable" lay-filter="cellDetectionTable"></table>
+			</div>-->
+			<!--  量子检测-->
+			<!--<div class="layui-tab-item" id="quantumdetection">
+				<button type="button" id="quantumdetectionnupload2" class="layui-btn">上传</button>
+				<table id="quantumdetectionTable" lay-filter="quantumdetectionTable"></table>
+			</div>-->
+
+		</div>
+	</div>
+
+	<div class="layui-form" id="file_upload_div" style="display: none">
+		<div class="layui-form-item">
+			<label class="layui-form-label" style="padding-top: 20px;">标题</label>
+			<div class="layui-input-inline">
+				<input type="text" name="resurtText" lay-verify="required" placeholder="请输入标题" autocomplete="off" class="layui-input">
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<input id="img" name="img" type="hidden" value="">
+			<label class="layui-form-label"></label>
+			<div class="layui-upload-drag" id="cellDetectionupload">
+				<i class="layui-icon"></i>
+				<p>点击上传，或将文件拖拽到此处</p>
+				<div class="layui-hide" id="uploadDemoView">
+					<hr>
+					<img src="" alt="上传成功后渲染" style="max-width: 196px">
+				</div>
+			</div>
+		</div>
+		<div class="layui-form-item" style="margin-left: -88px;padding-left: 87px; padding-bottom: 40px;">
+			<div class="layui-input-block">
+				<button class="layui-btn " lay-submit='' lay-filter="regSubmit" id="">保存</button>
+				<button type="reset" onclick="cancel()" class="layui-btn layui-btn-primary">&emsp;取消&emsp;</button>
+			</div>
+		</div>
+	</div>
+
+	<div class="layui-form" id="file_upload_div_update" style="display: none">
+		<input id="cidupdate" name="cidupdate" type="hidden" value="">
+		<div class="layui-form-item" style="padding-top: 20px;">
+			<label class="layui-form-label">标题</label>
+			<div class="layui-input-inline">
+				<input type="text" id="resurtTextupdate" name="resurtText" lay-verify="required" placeholder="请输入标题" autocomplete="off" class="layui-input">
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<input id="imgupdate" name="img" type="hidden" value="">
+			<label class="layui-form-label"></label>
+			<div class="layui-upload-drag" id="cellDetectionuploadupdate">
+				<i class="layui-icon"></i>
+				<p>点击上传，或将文件拖拽到此处</p>
+				<div class="layui-hide" id="uploadDemoViewupdate">
+					<hr>
+					<img src="" alt="上传成功后渲染" style="max-width: 196px">
+				</div>
+			</div>
+		</div>
+		<div class="layui-form-item" style="margin-left: -88px;padding-left: 87px; padding-bottom: 40px;">
+			<div class="layui-input-block">
+				<button class="layui-btn " lay-submit='' lay-filter="regSubmitupdate" id="">保存</button>
+				<button type="reset" onclick="cancel()" class="layui-btn layui-btn-primary">&emsp;取消&emsp;</button>
+			</div>
+		</div>
+	</div>
+
+	<div class="layui-form" id="file_upload_divq" style="display: none">
+		<div class="layui-form-item">
+			<label class="layui-form-label" style="padding-top: 20px;">标题</label>
+			<div class="layui-input-inline">
+				<input type="text" name="resurtText" lay-verify="required" placeholder="请输入标题" autocomplete="off" class="layui-input">
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<input id="imgq" name="img" type="hidden" value="">
+			<label class="layui-form-label"></label>
+			<div class="layui-upload-drag" id="cellDetectionuploadq">
+				<i class="layui-icon"></i>
+				<p>点击上传，或将文件拖拽到此处</p>
+				<div class="layui-hide" id="uploadDemoViewq">
+					<hr>
+					<img src="" alt="上传成功后渲染" style="max-width: 196px">
+				</div>
+			</div>
+		</div>
+		<div class="layui-form-item" style="margin-left: -88px;padding-left: 87px; padding-bottom: 40px;">
+			<div class="layui-input-block">
+				<button class="layui-btn " lay-submit='' lay-filter="regSubmitq" id="">保存</button>
+				<button type="reset" onclick="cancel()" class="layui-btn layui-btn-primary">&emsp;取消&emsp;</button>
+			</div>
+		</div>
+	</div>
+
+	<div class="layui-form" id="file_upload_div_updateq" style="display: none">
+		<input id="qidupdateq" name="qidupdate" type="hidden" value="">
+		<div class="layui-form-item" style="padding-top: 20px;">
+			<label class="layui-form-label">标题</label>
+			<div class="layui-input-inline">
+				<input type="text" id="resurtTextupdateq" name="resurtText" lay-verify="required" placeholder="请输入标题" autocomplete="off" class="layui-input">
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<input id="imgupdateq" name="img" type="hidden" value="">
+			<label class="layui-form-label"></label>
+			<div class="layui-upload-drag" id="cellDetectionuploadupdateq">
+				<i class="layui-icon"></i>
+				<p>点击上传，或将文件拖拽到此处</p>
+				<div class="layui-hide" id="uploadDemoViewupdateq">
+					<hr>
+					<img src="" alt="上传成功后渲染" style="max-width: 196px">
+				</div>
+			</div>
+		</div>
+		<div class="layui-form-item" style="margin-left: -88px;padding-left: 87px; padding-bottom: 40px;">
+			<div class="layui-input-block">
+				<button class="layui-btn " lay-submit='' lay-filter="regSubmitupdateq" id="">保存</button>
+				<button type="reset" onclick="cancel()" class="layui-btn layui-btn-primary">&emsp;取消&emsp;</button>
+			</div>
+		</div>
+	</div>
+
+</body>
+
+
+<script type="text/javascript" th:src="@{/assets/libs/layui/layui.js}"></script>
+<script type="text/javascript" th:src="@{/assets/js/common.js}"></script>
+<script type="text/javascript" th:src="@{/assets/js/jquery-1.11.1.js}"></script>
+<script type="text/javascript" th:src="@{/assets/userIndex/blood.js}"></script>
+<script type="text/javascript" th:src="@{/assets/userIndex/weight.js}"></script>
+<script type="text/javascript" th:src="@{/assets/userIndex/hypertension.js}"></script>
+<script type="text/javascript" th:src="@{/assets/userIndex/hemoglobin.js}"></script>
+<script type="text/javascript" th:src="@{/assets/userIndex/glucose.js}"></script>
+<script type="text/javascript" th:src="@{/assets/userIndex/heart.js}"></script>
+<script type="text/javascript" th:src="@{/assets/userIndex/bodyFat.js}"></script>
+<script type="text/javascript" th:src="@{/assets/userIndex/facilityBodyFat.js}"></script>
+<script type="text/javascript" th:src="@{/assets/userIndex/bloodFat.js}"></script>
+<script type="text/javascript" th:src="@{/assets/userIndex/kidney.js}"></script>
+<script type="text/javascript" th:src="@{/assets/userIndex/liver.js}"></script>
+<script type="text/javascript" th:src="@{/assets/userIndex/ecg.js}"></script>
+<script type="text/javascript" th:src="@{/assets/userIndex/urianlysis.js}"></script>
+<script type="text/javascript" th:src="@{/assets/userIndex/artery.js}"></script>
+<script type="text/javascript" th:src="@{/assets/userIndex/else.js}"></script>
+<script type="text/javascript" th:src="@{/assets/userIndex/cellDetection.js}"></script>
+<script type="text/javascript" th:src="@{/assets/userIndex/quantumdetection.js}"></script>
+<script th:src="@{/assets/libs/echarts/echarts.min.js}"></script>
+
+<script type="text/javascript" th:inline="javascript">
+
+//基于准备好的dom，初始化echarts实例
+$('#main').css('width',$(window).width()-50);
+$('#histogram').css('width',$(window));
+var myChart = echarts.init(document.getElementById('main'));
+/* var myChart2 = echarts.init(document.getElementById('histogram'));
+var pieChartmyChart = echarts.init(document.getElementById('pieChartmy')); */
+var count = 0;
+var type = [[${type}]];
+//导航栏
+layui.use([ 'layer', 'form', 'laydate', 'notice','table','index','upload' ],function() {
+	var $ = layui.jquery;
+	var layer = layui.layer;
+	var form = layui.form;
+	var laydate = layui.laydate;
+	var notice = layui.notice;
+	var table = layui.table;
+	var index = layui.index;
+	var upload = layui.upload;
+	var datetype = 'week';//当前所选的类型
+	var userCode = [[${userCode}]];
+	sessionStorage.setItem("userCode",userCode);
+	//如果数据类型为空
+	 if(datetype == ""){
+		 //点击第一个按钮
+		 $(".tiwen_Type li:first").click();
+	 }
+	week();
+	  //第一个实例
+	 var twable =  table.render({
+		 id:'twable',
+	    elem: '#demo'
+	    ,url: '/YHUserTemperature/page?userCode='+userCode//数据接口
+	    ,method : 'get'
+	    ,where : {} // 你额外要携带数据，以键值对的方式存入
+	    ,page: true //开启分页
+	    ,limit : 20// 每页显示的条数
+		,limits : [ 5, 10, 20, 50, 100 ] // 每页条数的选择项
+	    ,cols: [[ //表头
+	       {type:'numbers', title:'序号', align: 'center',width:100},
+	      {field: 'temperature',title: '体温',
+	    	   templet:function(d){
+	    		   return d.temperature + '℃';
+	    	   }
+	       }
+	      ,{field:'entryTime',align: 'center', title: '检测时间',width: 300}
+
+	    ]],
+	    done: function(res, curr, count){
+	        if(count > 20) {
+	        	$("#tiwen2 .layui-table-page").show();
+	        }else {
+	        	$("#tiwen2 .layui-table-page").hide();
+	        }
+	      }
+	  });
+
+	cancel = function() {
+		document.getElementsByClassName("layui-layer-close")[0].click()
+	}
+	 layui.use('element', function(){
+		  var element = layui.element;
+
+		  console.log(type,"当前点击的指标")
+
+		  //获取hash来切换选项卡，假设当前地址的hash为lay-id对应的值
+		  var layid = GetQueryValue('type');//location.hash.replace(/^#type=/, '');
+		  element.tabChange('indexTab', layid); //假设当前地址为：http://a.com#test1=222，那么选项卡会自动切换到“发送消息”这一项
+		  console.log("获取当前点击的指标",layid)
+		  //debugger;
+		  //监听Tab切换，以改变地址hash值
+		  element.on('tab(indexTab)', function(data){
+		    //location.hash = 'type='+ this.getAttribute('type');
+		    var testid = $(this).attr("lay-id");
+		    location.hash = 'type='+ testid;
+		    console.log("当前Tab标题所在的原始DOM元素",this); //当前Tab标题所在的原始DOM元素
+			console.log("得到当前Tab的所在下标",data.index); //得到当前Tab的所在下标
+			console.log("//得到当前的Tab大容器",data.elem); //得到当前的Tab大容器
+		    console.log("切换的类型:"+testid);
+		    //刷新当前页面
+		   // window.location.reload()
+		    table.reload('twable',{
+		    	url: '/YHUserTemperature/page?userCode='+userCode//数据接口
+			})
+			//血氧
+			 table.reload('bloodTable',{
+			    	url: '/YHUserOxygen/page?userCode='+userCode //数据接口
+				})
+			//体重
+			 table.reload('bimTable',{
+			    	url: '/YHUserBmi/page?userCode='+userCode  //数据接口
+				})
+			//血压
+			 table.reload('pressureTable',{
+			    	url: '/YHUserBloodPressure/page?userCode='+userCode  //数据接口
+				})
+			//血糖
+			 table.reload('glucoseTable',{
+			    	url: '/YHUserBloodsuger/page?userCode='+userCode   //数据接口
+				})
+		//心率
+		 table.reload('heartTable',{
+		    	url: '/YHUserOxygen/pageHeart?userCode='+userCode    //数据接口
+			})
+
+		//体脂
+		 table.reload('bodyfatTable',{
+		    	url: '/YHUserBodyFat/page?userCode='+userCode    //数据接口
+			})
+
+
+			//设备体脂
+		 table.reload('facilitybodyfatTable',{
+		    	url: '/YHUserBodyFat/page1?userCode='+userCode    //数据接口
+			})
+
+		//血脂4项
+		 table.reload('bloodfatTable',{
+		    	url:'/YHUserBloodfat/page?userCode='+userCode    //数据接口
+			})
+
+		//肾功能
+		 table.reload('kidneyTable',{
+		    	url: '/YHUserRenalfunction/page?userCode='+userCode     //数据接口
+			})
+
+		//肝功能
+		 table.reload('liverTable',{
+			 url: '/YHUserLiverfunction/page?userCode='+userCode     //数据接口
+			})
+		//心电图
+		 table.reload('ecgTable',{
+		    	url: '/YHUserEcg/page?userCode='+userCode     //数据接口
+			})
+		//尿检
+		 table.reload('urinalysisTable',{
+		    	url:  '/YHUserUba/page?userCode='+userCode     //数据接口
+			})
+		//其他指标
+		 table.reload('elseTable',{
+		    	url: '/YHUserOtherfunction/page?userCode='+userCode   //数据接口
+			})
+			//动脉硬化（仪器上传）
+			 table.reload('arteryTab',{
+				 url: '/YhUserArtery/page?userCode='+userCode
+				})
+				//细胞检测
+			  table.reload('cellDetectionTable',{
+				  url: '/YhUserCellDetectionWeb/page?usercode='+userCode
+			  })
+			  //量子检测
+			  table.reload('quantumdetectionTable',{
+				  url: '/YhUserQuantumDetectionWeb/page?usercode='+userCode
+			  })
+
+		  });
+		});
+/* 	 var tip_index;
+	 $("#list").hover(function(){
+	     tip_index =  layer.tips('列表显示', this,{
+	         tips: [3, 'rgba(0, 0, 0, 1)'],
+	         time:0
+	     });
+	 },function(){
+	     layer.close(tip_index);
+	 });
+ */
+	//页面层
+	$("#cellDetectionupload2").on('click',function (){
+
+		layer.open({
+			type: 1,
+			skin: 'layui-layer-rim', //加上边框
+			area: ['420px', '440px'], //宽高
+			content: $("#file_upload_div"),
+			cancel: function(index, layero){
+				$("#file_upload_div").css('display','none');
+			}
+		});
+	})
+	$("#quantumdetectionnupload2").on('click',function (){
+
+		layer.open({
+			type: 1,
+			skin: 'layui-layer-rim', //加上边框
+			area: ['420px', '440px'], //宽高
+			content: $("#file_upload_divq"),
+			cancel: function(index, layero){
+				$("#file_upload_divq").css('display','none');
+			}
+		});
+	})
+
+	//监听提交
+	form.on('submit(regSubmitq)', function(dataYh) {
+		if(null==dataYh.field.resurtText||''==dataYh.field.resurtText){
+			return layer.msg('未上传图片');
+			return;
+		}
+		document.getElementsByClassName("layui-layer-close")[0].click()
+		$.ajax({
+			type:'get',
+			url:'/YhUserQuantumDetectionWeb/addInfo',
+			data:{usercode:userCode,img:dataYh.field.img,resurtText:dataYh.field.resurtText},
+			success : function(data){
+				table.reload('quantumdetectionTable',{
+					url: '/YhUserQuantumDetectionWeb/page?usercode='+userCode
+				})
+				$("#uploadDemoViewq img").attr('src', '');
+				$("#file_upload_divq [name=resurtText]").val("")
+			}
+
+		})
+	})
+	//监听提交
+	form.on('submit(regSubmitupdateq)', function(dataYh) {
+
+		if(null==dataYh.field.resurtText||''==dataYh.field.resurtText){
+			return layer.msg('未上传图片');
+			return;
+		}
+		document.getElementsByClassName("layui-layer-close")[0].click()
+		$.ajax({
+			type:'get',
+			url:'/YhUserQuantumDetectionWeb/addInfo',
+			data:{usercode:userCode,img:dataYh.field.img,resurtText:dataYh.field.resurtText,qid:dataYh.field.qidupdate},
+			success : function(data){
+				table.reload('quantumdetectionTable',{
+					url: '/YhUserQuantumDetectionWeb/page?usercode='+userCode
+				})
+			}
+
+		})
+	})
+
+//监听提交
+	form.on('submit(regSubmit)', function(dataYh) {
+		if(null==dataYh.field.resurtText||''==dataYh.field.resurtText){
+			return layer.msg('未上传图片');
+			return;
+		}
+		document.getElementsByClassName("layui-layer-close")[0].click()
+		$.ajax({
+			type:'get',
+			url:'/YhUserCellDetectionWeb/addInfo',
+			data:{usercode:userCode,img:dataYh.field.img,resurtText:dataYh.field.resurtText},
+			success : function(data){
+				table.reload('cellDetectionTable',{
+					url: '/YhUserCellDetectionWeb/page?usercode='+userCode
+				})
+				$("#uploadDemoView img").attr('src', '');
+				$("#file_upload_div [name=resurtText]").val("")
+			}
+
+		})
+	})
+	//监听提交
+	form.on('submit(regSubmitupdate)', function(dataYh) {
+
+		if(null==dataYh.field.resurtText||''==dataYh.field.resurtText){
+			return layer.msg('未上传图片');
+			return;
+		}
+		document.getElementsByClassName("layui-layer-close")[0].click()
+		$.ajax({
+			type:'get',
+			url:'/YhUserCellDetectionWeb/addInfo',
+			data:{usercode:userCode,img:dataYh.field.img,resurtText:dataYh.field.resurtText,cid:dataYh.field.cidupdate},
+			success : function(data){
+				table.reload('cellDetectionTable',{
+					url: '/YhUserCellDetectionWeb/page?usercode='+userCode
+				})
+			}
+
+		})
+	})
+
+	var loading;
+	//普通图片上传
+	var uploadInst = upload.render({
+		elem: '#cellDetectionupload'
+		,url: '/Uploading/addEnrollImg' //改成您自己的上传接口
+		,accept: 'images' //只允许传图片
+		, choose: function (obj) {
+			var files = this.files = obj.pushFile();  //将每次选择的文件追加到文件队列
+			console.log(files);
+			//读取本地文件
+			obj.preview(function (index, file, result) {
+				//console.log(file.Name);
+
+			});
+		}
+
+		,before: function () {
+			loading  = layer.msg('上传中', {icon: 16, shade: 0.1, time:0});
+		}
+		,done: function(res, index, upload){
+
+			console.log("上传成功",res.files);
+			layui.$('#uploadDemoView').removeClass('layui-hide').find('img').attr('src', res.files);
+			$("#img").val(res.files);
+
+
+			//删除数组文件中上传成功的图片，防止重复上传（重点）
+			delete this.files[index]
+			layer.close(loading);
+			//如果上传失败
+			if(res.code > 0){
+				return layer.msg('上传失败');
+			}
+			//上传成功
+		}
+		, error: function (index, upload) {
+			layer.msg("上传失败，请重新选择图片！");
+		}
+	});
+
+
+	//普通图片上传
+	var uploadInst = upload.render({
+		elem: '#quantumdetectionnupload'
+		,url: '/Uploading/addEnrollImg' //改成您自己的上传接口
+		,accept: 'images' //只允许传图片
+		, choose: function (obj) {
+			var files = this.files = obj.pushFile();  //将每次选择的文件追加到文件队列
+			console.log(files);
+			//读取本地文件
+			obj.preview(function (index, file, result) {
+				//console.log(file.Name);
+
+			});
+		}
+
+		,before: function () {
+			loading  = layer.msg('上传中', {icon: 16, shade: 0.1, time:0});
+		}
+		,done: function(res, index, upload){
+
+			console.log("上传成功",res.files);
+			$.ajax({
+				type:'get',
+				url:'/YhUserQuantumDetectionWeb/addInfo',
+				data:{usercode:userCode,img:res.files},
+				success : function(data){
+					table.reload('quantumdetectionTable',{
+						url: '/YhUserQuantumDetectionWeb/page?usercode='+userCode
+					})
+				}
+
+			})
+			//删除数组文件中上传成功的图片，防止重复上传（重点）
+			delete this.files[index]
+			layer.close(loading);
+			//如果上传失败
+			if(res.code > 0){
+				return layer.msg('上传失败');
+			}
+			//上传成功
+		}
+		, error: function (index, upload) {
+			layer.msg("上传失败，请重新选择图片！");
+		}
+	});
+
+	var uploadInst = upload.render({
+		elem: '#cellDetectionuploadupdate'
+		,url: '/Uploading/addEnrollImg' //改成您自己的上传接口
+		,accept: 'images' //只允许传图片
+		, choose: function (obj) {
+			var files = this.files = obj.pushFile();  //将每次选择的文件追加到文件队列
+			console.log(files);
+			//读取本地文件
+			obj.preview(function (index, file, result) {
+				//console.log(file.Name);
+
+			});
+		}
+
+		,before: function () {
+			loading  = layer.msg('上传中', {icon: 16, shade: 0.1, time:0});
+		}
+		,done: function(res, index, upload){
+
+			console.log("上传成功",res.files);
+			layui.$('#uploadDemoViewupdate').removeClass('layui-hide').find('img').attr('src', res.files);
+			$("#imgupdate").val(res.files);
+
+
+			//删除数组文件中上传成功的图片，防止重复上传（重点）
+			delete this.files[index]
+			layer.close(loading);
+			//如果上传失败
+			if(res.code > 0){
+				return layer.msg('上传失败');
+			}
+			//上传成功
+		}
+		, error: function (index, upload) {
+			layer.msg("上传失败，请重新选择图片！");
+		}
+	});
+
+
+
+	var uploadInst = upload.render({
+		elem: '#cellDetectionuploadupdateq'
+		,url: '/Uploading/addEnrollImg' //改成您自己的上传接口
+		,accept: 'images' //只允许传图片
+		, choose: function (obj) {
+			var files = this.files = obj.pushFile();  //将每次选择的文件追加到文件队列
+			console.log(files);
+			//读取本地文件
+			obj.preview(function (index, file, result) {
+				//console.log(file.Name);
+
+			});
+		}
+
+		,before: function () {
+			loading  = layer.msg('上传中', {icon: 16, shade: 0.1, time:0});
+		}
+		,done: function(res, index, upload){
+
+			console.log("上传成功",res.files);
+			layui.$('#uploadDemoViewupdateq').removeClass('layui-hide').find('img').attr('src', res.files);
+			$("#imgupdateq").val(res.files);
+
+
+			//删除数组文件中上传成功的图片，防止重复上传（重点）
+			delete this.files[index]
+			layer.close(loading);
+			//如果上传失败
+			if(res.code > 0){
+				return layer.msg('上传失败');
+			}
+			//上传成功
+		}
+		, error: function (index, upload) {
+			layer.msg("上传失败，请重新选择图片！");
+		}
+	});
+
+
+	var uploadInst = upload.render({
+		elem: '#cellDetectionuploadq'
+		,url: '/Uploading/addEnrollImg' //改成您自己的上传接口
+		,accept: 'images' //只允许传图片
+		, choose: function (obj) {
+			var files = this.files = obj.pushFile();  //将每次选择的文件追加到文件队列
+			console.log(files);
+			//读取本地文件
+			obj.preview(function (index, file, result) {
+				//console.log(file.Name);
+
+			});
+		}
+
+		,before: function () {
+			loading  = layer.msg('上传中', {icon: 16, shade: 0.1, time:0});
+		}
+		,done: function(res, index, upload){
+
+			console.log("上传成功",res.files);
+			layui.$('#uploadDemoViewq').removeClass('layui-hide').find('img').attr('src', res.files);
+			$("#imgq").val(res.files);
+
+
+			//删除数组文件中上传成功的图片，防止重复上传（重点）
+			delete this.files[index]
+			layer.close(loading);
+			//如果上传失败
+			if(res.code > 0){
+				return layer.msg('上传失败');
+			}
+			//上传成功
+		}
+		, error: function (index, upload) {
+			layer.msg("上传失败，请重新选择图片！");
+		}
+	});
+
+
+
+	$("#list").on('click',function(){
+			$(".tiwennoData").hide();
+			 $("#main2").hide();
+			 $("#demo2").show();
+			 var chart=document.querySelector("#chart");
+			 chart.style.color="rgba(153, 153, 153, 1)";
+			 
+			 var list=document.querySelector("#list");
+			 list.style.color="rgba(24, 144, 255, 1)";
+			
+		})  
+	    $("#chart").on('click',function(){
+	    	temperatureData();
+	    	$("#main2").show();
+			 $("#demo2").hide();
+			 var chart=document.querySelector("#chart");
+			 chart.style.color="rgba(24, 144, 255, 1)";
+			 
+			 var list=document.querySelector("#list");
+			 list.style.color="rgba(153, 153, 153, 1)";
+	  })
+		 
+	/*  var tip_index;
+	 $("#chart").hover(function(){
+	     tip_index =  layer.tips('图表显示', this,{
+	         tips: [3, 'rgba(0, 0, 0, 1)'],
+	         time:0
+	     });
+	 },function(){
+	     layer.close(tip_index);
+	 }); */
+	 
+	 
+
+	  
+	  $("#left").on('click',function(){
+		  $("#right").show();
+		  page = page-1;
+		  temperatureData();
+		  if(page == 1){
+			 	//$('#left').removeAttr('click');//去掉标签中的onclick事件
+			 	$("#left").hide();
+		 		 notice.error({
+						title : '消息通知',
+						message : '没有更多数据了!'
+					});  
+			 	
+			}
+		 
+	  })
+	  
+	   // 总数据：91 
+	  // 每页显示30条
+	  // 1,30 1*30 =30
+	  // 2,30 2*30 =60
+	  // 3,30 3*30 =90
+	  // 4,30 4*30 =120
+	  // page*size >= sumSize 没有下一页
+	  // page*size < sumSize 有下一页
+	 $("#right").on('click',function(){
+		 $("#left").show();
+		page = page+1;
+		//当前page乘以size
+		presentPage = page*limit
+		if(presentPage>=count){
+		 	notice.error({
+				title : '消息通知',
+				message : '没有更多数据了!'
+			});
+		 	//return ;
+		 	$("#right").hide();
+		 	//$('#right').removeAttr('click');//去掉标签中的onclick事件
+		}
+		
+		temperatureData();
+	  })
+	  
+	  
+	  var page = 1;
+	  var limit = 30;
+	  function temperatureData(){
+		  $.ajax({
+				type:'get', 
+				url:'/YHUserTemperature/selectTemperature',
+				data:{userCode:userCode,page:page,limit:limit}, 
+				success : function(data){
+					console.log("后台返回的体重数据：",data)
+					if(data.count==0){
+						$("#main2").hide();
+						$(".tiwennoData").show();
+					}
+					count = data.count;
+					 var temperatureArray = data.data.map( item => {
+					    return item.temperature;
+					  }) 
+					  console.log(temperatureArray,"!!!")
+				 	var entryTimeArray = data.data.map( item => {
+						  return dateFormat(item.entryTime, "MM-dd");
+					  })
+					  initEchars(temperatureArray,entryTimeArray); 	
+					
+				}
+				
+			})
+			
+	  }
+	  /* 周日期 */
+	  var listIndex;
+	  var weekAll = [];
+	  $("#imgdd").on('click',function(){
+		  console.log("点击减",listIndex)
+		  if(listIndex!=0){
+			  listIndex--;    
+		  }
+		  var weekdate = weekAll[listIndex]
+		  document.getElementById("beginTime").innerHTML = weekdate;	      
+	  })
+	  	  $("#reduceMonth").on('click',function(){
+	  		  console.log("数组长度",weekAll.length )
+		  if(listIndex < weekAll.length-1 ){
+			  console.log("-------")
+			  listIndex++;    
+		  }
+		  console.log("-------",listIndex)
+		  var weekdate = weekAll[listIndex]
+		  document.getElementById("beginTime").innerHTML = weekdate;	      
+	  })
+	  
+	  	  //体温年月日点击事件
+		  $(".tiwen_Type li").click(function(){
+			  datetype = $(this).attr("data-type");
+			  
+			  console.log("年月日类型",datetype)
+			  week();
+		  });
+	  
+	  function week(){
+		  $.ajax({
+			  type:'get', 
+				url:'/YHUserTemperature/getTimeListForXcx2',
+				data:'', 
+				success : function(data){
+					console.log("后台返回的日期：",data)
+					if(datetype == 'week'){
+						weekAll = data.data.week;
+					}else if(datetype == 'month'){
+						weekAll = data.data.month;
+					}else if(datetype == 'year'){
+						weekAll = data.data.year;
+					}
+					
+					listIndex = weekAll.length-1;
+					console.log("数组长度1",listIndex)
+					document.getElementById("beginTime").innerHTML = weekAll[weekAll.length-1];	  
+				}
+			})
+	  }
+	  
+	//月份加减处理
+	  function addMonth() {
+	  	var s = document.getElementById("beginTime").innerHTML;
+	  	console.log(s);
+	  	var arr = s.split("-");
+	  	var year = parseInt(arr[0]);
+	  	var month = parseInt(arr[1]);
+	  	//判断month
+	  	
+	  	if (month == 12) {
+	  		year = year + 1;
+	  		month = 1;
+	  	} else {
+	  		month = month + 1;
+	  	}
+	  	if(month<10){
+	  		document.getElementById("beginTime").innerHTML = year + "-0" + month;
+	  	}else{
+	  		document.getElementById("beginTime").innerHTML = year + "-" + month;
+	  	}
+	  	
+	  	/* initTable(year, month-1); */
+	  }
+	/*   $("#reduceMonth").on('click',function(){
+		  reduceMonth();
+	  }) */
+	  function reduceMonth() {
+	  	var s = document.getElementById("beginTime").innerHTML;
+	  	var arr = s.split("-");
+	  	var year = parseInt(arr[0]);
+	  	var month = parseInt(arr[1]);
+	  	console.log(year + "/" + month);
+	  	//判断month
+	  	if (month == 1) {
+	  		year = year - 1;
+	  		month = 12;
+	  	} else {
+	  		month = month - 1;
+	  	}
+	  	if(month<10){
+	  		document.getElementById("beginTime").innerHTML = year + "-0" + month;
+	  	}else{
+	  		document.getElementById("beginTime").innerHTML = year + "-" + month;
+	  	}
+	  	
+	  	/* initTable(year, month-1); */
+	  }
+	
+		
+		function dateFormat(dateStr, fmt) {
+		    var date = new Date(dateStr);
+		    var o = {
+		        "M+": date.getMonth() + 1, //月份
+		        "d+": date.getDate(), //日
+		        "h+": date.getHours(), //小时
+		        "m+": date.getMinutes(), //分
+		        "s+": date.getSeconds(), //秒
+		        "q+": Math.floor((date.getMonth() + 3) / 3), //季度
+		        "S": date.getMilliseconds() //毫秒
+		    };
+		    if (/(y+)/.test(fmt))
+		        fmt = fmt.replace(RegExp.$1, (date.getFullYear() + "").substr(4 - RegExp.$1.length));
+		    for (var k in o)
+		        if (new RegExp("(" + k + ")").test(fmt))
+		            fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
+		    return fmt;
+		}
+		
+});
+
+
+function initEchars(temperatureArray,entryTimeArray){
+    // 指定图表的配置项和数据
+	/* 	option = {
+				   color: ["#036BC8"],
+		    xAxis: {
+		        type: 'category',
+		        data: entryTimeArray,
+		        nameTextStyle:{
+	                fontSize:15,
+	                color:'red'
+	            }
+		    },
+		    yAxis: {
+		    	name: '℃',
+		        type: 'value',
+		        scale:true,
+		        axisLine:{
+	                show:false
+	            },
+	            axisTick:{
+	                show:false
+	            },
+	            splitLine: {
+	                show: true,
+	                lineStyle:{
+	                    type:'dashed'
+	                }
+	            },
+		    },
+		    
+		    tooltip:{
+		        trigger :'item',
+		        formatter:'体温 （℃）{c0}'
+		    },
+		    series: [{
+		        data: temperatureArray,
+		        type: 'line',
+		        smooth: true
+		    }]
+		}; */
+		option = {
+				color: ["rgba(42, 130, 228, 1)"],
+			    tooltip: {
+			        trigger: 'axis'
+			    },
+			    
+			    grid: {
+			        left: '3%',
+			        right: '4%',
+			        bottom: '3%',
+			        containLabel: true
+			    },
+			    /* toolbox: {//保存为图片的属性
+			        feature: {
+			            saveAsImage: {}
+			        }
+			    }, */
+			    xAxis: {
+			        type: 'category',
+			        data: entryTimeArray,
+			        nameTextStyle:{
+		                fontSize:15,
+		                color:'red'
+		            }
+			    },
+			    yAxis: {
+			    	name: '℃',
+			        type: 'value',
+			        scale:true,
+			        axisLine:{
+		                show:false
+		            },
+		            axisTick:{
+		                show:false
+		            },
+		            splitLine: {
+		                show: true,
+		                lineStyle:{
+		                    type:'dashed'
+		                }
+		            },
+			    },
+			    series: [
+			    	{
+			    	name:'体温 （℃）',
+			    	 data: temperatureArray,
+				        type: 'line',
+				        smooth: true
+			    },
+			    
+			  ]
+			};
+    // 使用刚指定的配置项和数据显示图表。
+    myChart.setOption(option);	
+}
+
+option = {
+	    color: ['#3398DB'],
+	    tooltip: {
+	        trigger: 'axis',
+	        axisPointer: {            // 坐标轴指示器，坐标轴触发有效
+	            type: 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+	        }
+	    },
+	    grid: {
+	        left: '3%',
+	        right: '4%',
+	        bottom: '3%',
+	        containLabel: true
+	    },
+	    xAxis: [
+	        {
+	            type: 'category',
+	            data: ['清晨', '上午', '中午', '下午', '晚上', '深夜', '凌晨'],
+	            axisTick: {
+	                alignWithLabel: true
+	            }
+	        }
+	    ],
+	    yAxis: [
+	        {
+	            type: 'value'
+	        }
+	    ],
+	    series: [
+	        {
+	            name: '次数',
+	            type: 'bar',
+	            barWidth: '60%',
+	            data: [10, 52, 200, 334, 390, 330, 220]
+	        }
+	    ]
+	};
+
+//使用刚指定的配置项和数据显示图表。
+//myChart2.setOption(option);	
+/*  option = {
+		  
+	    tooltip: {
+	        trigger: 'item',
+	        formatter: '{b} : {c} ({d}%)'
+	    },
+	    legend: {
+	        type: 'scroll',
+	        orient: 'vertical',
+	        right: 10,
+	        top: 170,
+	        bottom: 20,
+	        data: ['1', '2', '联盟广告', '视频广告', '搜索引擎']
+	    },
+	    series: [
+	        {
+	            
+	            type: 'pie',
+	            radius: '55%',
+	            center: ['50%', '60%'],
+	            label: {
+                    normal: {
+                       position: 'inner',
+                       show : false
+                    }
+                  },
+	            data: [
+	                {value: 335, name: '1'},
+	                {value: 310, name: '2'},
+	                {value: 234, name: '联盟广告'},
+	                {value: 135, name: '视频广告'},
+	                {value: 1548, name: '搜索引擎'}
+	            ],
+	            itemStyle: {
+                    emphasis: {
+                        shadowBlur: 10,
+                        shadowOffsetX: 0,
+                        shadowColor: 'rgba(0, 0, 0, 0.5)'
+                     },
+                    normal:{
+                        color:function(params) {
+                        //自定义颜色
+                        var colorList = [          
+                                '#00FFFF', '#00FF00', '#FFFF00', '#FF8C00', '#FF0000', '#FE8463',
+                            ];
+                            return colorList[params.dataIndex]
+                         }
+                    }
+              },
+	            emphasis: {
+	                itemStyle: {
+	                    shadowBlur: 10,
+	                    shadowOffsetX: 0,
+	                    shadowColor: 'rgba(0, 0, 0, 0.5)'
+	                }
+	            }
+	        }
+	    ]
+	}; */ 
+	var option = {
+
+			color: ['rgba(0, 157, 255, 1)', 'rgba(67, 217, 184, 1)','rgba(255, 135, 0, 1)','rgba(236, 93, 81, 1)'],
+
+			legend: {
+				orient: 'vertical',
+				right: '0px',
+				top: '135px',
+				data: ['过低', '正常', '低热', '高热 '],
+				 formatter: function(name) {
+                     var index = 0;
+                     var clientlabels = ['过低','正常','低热','高热'];
+                     var clientcounts = [11+'%',1+'%',10+'%',15+'%'];
+                     clientlabels.forEach(function(value,i){
+                    	 console.info("类型："+value+"索引:"+i)
+                    	
+                         if(value == name){
+                             index = i;
+                         }
+                    	 console.info("循环的每一项："+clientcounts[index])
+                     });
+                     return name + "  " + clientcounts[index];
+                    
+                 }
+			},
+
+calculable : false,
+
+			tooltip: {
+				trigger: 'item',
+				 formatter: '{b} : {c} ({d}%)'
+			},
+			series: [{
+
+				type: 'pie',
+
+				label: {
+					normal: {
+						show: false
+					}
+				}
+			}]
+		}; 
+//使用刚指定的配置项和数据显示图表。
+//pieChartmyChart.setOption(option);	
+// 赋值
+/*  pieChartmyChart.setOption({
+
+	series: [{
+		data: [{
+			name: '过低',
+			value: '4'
+		}, {
+			name: '正常',
+			value:'6'
+		}, {
+			name: '低热',
+			value:'8'
+		}, {
+			name: '高热 ',
+			value: '11'
+		}]
+	}]
+});  */
+/**
+ * [通过参数名获取url中的参数值]
+ * 示例URL:http://htmlJsTest/getrequest.html?uid=admin&rid=1&fid=2&name=小明
+ * @param  {[string]} queryName [参数名]
+ * @return {[string]}           [参数值]
+ */
+function GetQueryValue(queryName) {
+    var query = decodeURI(window.location.search.substring(1));
+    var vars = query.split("&");
+    for (var i = 0; i < vars.length; i++) {
+        var pair = vars[i].split("=");
+        if (pair[0] == queryName) { return pair[1]; }
+    }
+    return null;
+}
+</script>

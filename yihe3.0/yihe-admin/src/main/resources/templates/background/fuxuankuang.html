@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet"  th:href="@{/assets/libs/layui/css/layui.css}" />
+    <link rel="stylesheet"  th:href="@{/assets/module/admin.css}"  />
+
+    <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+</head>
+<style>
+    .layui-input-block{
+        margin-left: 50px;
+    }
+    .layui-form-item .layui-form-checkbox{
+        margin-top: 35px;
+    }
+</style>
+<body>
+<form class="layui-form" action="">
+    <div class="layui-form-item">
+<div class="layui-input-block" id="fuxuan">
+
+</div>
+    </div>
+    <div class="layui-input-block" style="position: fixed;bottom: 0px;width: 100%;left: 0px;margin: 0;background-color: #FFF">
+        <button type="submit" style="margin-left: 45%" class="layui-btn" lay-submit="" lay-filter="demo">确认</button>
+        <button type="reset" class="layui-btn layui-btn-primary" lay-submit="" lay-filter="demo2">关闭</button>
+    </div>
+
+</form>
+</body>
+    <script type="text/javascript" th:src="@{/assets/libs/layui/layui.js}"></script>
+    <script type="text/javascript" th:src="@{/assets/js/common.js}"></script>
+    <script >
+        layui.use(['layer', 'form', 'table', 'util', 'admin', 'zTree','element'], function () {
+            var $ = layui.jquery;
+            var layer = layui.layer;
+            var form = layui.form;
+            var table = layui.table;
+            var util = layui.util;
+            var admin = layui.admin;
+            var element = layui.element;
+            var roleid = [[${roleid}]];
+            getchekbox();
+            function getchekbox(){
+                $.ajax({
+                    type : 'post',
+                    url : '/YhUserManage/changerolepowerbyroleids',
+                    data : {roleid:roleid},
+                    traditional: true, //是否使用传统的方式浅层序列化,若有数组参数或对象参数需要设置true!!!!!!
+                    success : function(data) {
+                        console.log(data);
+                        var html="";
+                        for (var i=0;i<data.data.length;i++){
+                            if(data.data[i].ishava){
+                                html+="<input  checked=''  type='checkbox' name='"+data.data[i].roleId+"' title='"+data.data[i].roleName+"'>"
+                            }else{
+                                html+="<input  type='checkbox' name='"+data.data[i].roleId+"' title='"+data.data[i].roleName+"'>"
+                            }
+
+                        }
+                        $("#fuxuan").empty().append(html);
+                        form.render('checkbox');
+                    }
+
+                });
+            }
+
+            form.on('submit(demo2)', function (data) {
+                var nespase = parent.layer.getFrameIndex(window.name);
+                parent.layer.close(nespase);
+            })
+            form.on('submit(demo)', function (data) {
+                var arry=[];
+                if($.isEmptyObject(data.field)){
+
+                }else{
+
+                    for(let key  in data.field){
+                        arry.push(parseInt(key));
+
+                    }
+
+                }
+                console.log(arry);
+                $.ajax({
+                    type : 'post',
+                    url : '/YhUserManage/changemanager',
+                    data : {roleid:roleid,arry:arry},
+                    traditional: true, //是否使用传统的方式浅层序列化,若有数组参数或对象参数需要设置true!!!!!!
+                    success : function(data) {
+                        var nespase = parent.layer.getFrameIndex(window.name);
+                        parent.layer.close(nespase);
+
+                    }
+
+                });
+                return false;
+            });
+        });
+    </script>
+</html>

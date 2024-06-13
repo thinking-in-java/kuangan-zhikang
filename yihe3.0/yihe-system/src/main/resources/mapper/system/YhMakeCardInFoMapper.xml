@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yihe.system.mapper.YhMakeCardInFoMapper">
+	<resultMap id="BaseResultMap" type="com.yihe.system.domain.YhUserMakeCard">
+		<id column="Enrol_Card_Id" jdbcType="VARCHAR" property="enrolCardId" />
+		<result column="Enrol_Card_Code" jdbcType="VARCHAR" property="enrolCardCode" />
+		<result column="Enrol_Time" jdbcType="TIMESTAMP" property="enrolTime" />
+		<result column="Enrol_User_Id" jdbcType="VARCHAR" property="enrolUserId" />
+		<result column="Card_Type" jdbcType="INTEGER" property="cardType" />
+		<result column="Begin_Time" jdbcType="TIMESTAMP" property="beginTime" />
+		<result column="End_Time" jdbcType="TIMESTAMP" property="endTime" />
+		<result column="Org_Id" jdbcType="VARCHAR" property="orgId" />
+		<result column="Is_Del" jdbcType="INTEGER" property="isDel" />
+		<result column="User_Code" jdbcType="VARCHAR" property="userCode" />
+		<result column="User_Type" jdbcType="INTEGER" property="userType" />
+		<result column="doctor" jdbcType="INTEGER" property="doctor" />
+		<result column="ev_amount" jdbcType="INTEGER" property="evAmount" />
+	</resultMap>
+		<sql id="Base_Column_List">
+		Enrol_Card_Id, Enrol_Card_Code, Enrol_Time, Enrol_User_Id, Card_Type, Begin_Time,
+		End_Time, Org_Id, Is_Del, User_Code, User_Type, doctor, ev_amount
+	</sql>
+	 <select id="selectmakekardlog" resultType="com.yihe.system.domain.YhUserMakeCardLogVOJO">
+			SELECT log.*,tree.Org_Name from yh_user_make_card_log  as log
+			LEFT JOIN yh_org_tree as tree
+			on log.Org_Code=tree.Org_Code
+			<where>
+			<if test="guishu!=null and guishu!=''">
+				and tree.Org_Code=#{guishu}
+			</if>
+			<if test="begintime!=null and begintime!='' and endtime!=null and endtime!=''">
+				and Marke_Ttime between #{begintime} and #{endtime}
+			</if>
+			</where>
+			limit #{begin},#{limit}
+	 </select>
+	 <select id="selectcount" resultType="INTEGER">
+	 		SELECT count(Id) from yh_user_make_card_log  as log
+			LEFT JOIN yh_org_tree as tree
+			on log.Org_Code=tree.Org_Code
+			<where>
+			<if test="guishu!=null and guishu!=''">
+				and tree.Org_Code=#{guishu}
+			</if>
+			<if test="begintime!=null and begintime!='' and endtime!=null and endtime!=''">
+				and Marke_Ttime between #{begintime} and #{endtime}
+			</if>
+			</where>
+	 </select>
+	<select id="selectorgadddate" parameterType="string" resultType="date" >
+		select Add_Date from yh_org_tree where  Org_Code=#{orgcode}
+	</select>
+	 <select id="selectmakecard" parameterType="Date" resultMap="BaseResultMap">
+	 	select 
+	 		<include refid="Base_Column_List"/>
+	 	 from yh_user_make_card where Enrol_Time=#{data}
+	 </select>
+	 <insert id="makelistcard" parameterType="com.yihe.system.domain.YhUserMakeCard" statementType="CALLABLE" >
+                      <!--  {call makecard(
+       					#{enrolCardId, mode=IN, jdbcType=VARCHAR},
+        				#{enrolTime, mode=IN, jdbcType=TIMESTAMP},
+        				#{beginTime, mode=IN, jdbcType=TIMESTAMP},
+        				#{endTime, mode=IN, jdbcType=TIMESTAMP},
+        				#{orgId, mode=IN, jdbcType=VARCHAR}
+       				 )} -->
+        	INSERT INTO yh_user_make_card (Enrol_Card_Id,Enrol_Card_Code, Enrol_Time,Org_Id,Is_Del
+        	<if test="doctor!=null">
+				,doctor
+			</if>
+        	,number)VALUES(#{enrolCardId},'2222222', #{enrolTime},#{orgId},2
+		 <if test="doctor!=null">
+			 ,#{doctor}
+		 </if>
+        	,#{number});
+	 </insert>
+	 <insert id="makecardlog" parameterType="com.yihe.system.domain.YhUserMakeCardLogVOJO">
+	 					INSERT INTO yh_user_make_card_log ( Marke_Ttime, Marke_Amount,Begin_Number,End_Number,Marke_Note,Org_Code )
+                       VALUES
+                       (#{Marke_Ttime},#{Marke_Amount},#{Begin_Number},#{End_Number},#{Marke_Note},#{Org_Code});
+	 </insert>
+	 <select id="selectzuida" resultType="string">
+	 	SELECT Enrol_Card_Id FROM yh_user_make_card
+		ORDER BY   `number` DESC LIMIT 1;
+	 </select>
+</mapper>

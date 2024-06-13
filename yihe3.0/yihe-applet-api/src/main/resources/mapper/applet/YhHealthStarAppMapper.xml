@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yihe.applet.api.mapper.YhHealthStarAppMapper" >
+  <resultMap id="BaseResultMap" type="com.yihe.applet.api.domain.YhHealthStarApp" >
+    <id column="healthstar_ID" property="healthstarId" jdbcType="INTEGER" />
+    <result column="user_code" property="userCode" jdbcType="VARCHAR" />
+    <result column="user_type" property="userType" jdbcType="INTEGER" />
+    <result column="healthstars" property="healthstars" jdbcType="INTEGER" />
+    <result column="healthstars_events" property="healthstarsEvents" jdbcType="VARCHAR" />
+    <result column="events_time" property="eventsTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    healthstar_ID, user_code, user_type, healthstars, healthstars_events, events_time
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from yh_health_star
+    where healthstar_ID = #{healthstarId,jdbcType=INTEGER}
+  </select>
+    <select id="selectNewestStar" resultMap="BaseResultMap">
+  		select * from yh_health_star as star where star.user_code = #{userCode} and star.healthstars_events=#{healthstarsEvents}
+		and TO_DAYS( NOW( ) ) - TO_DAYS(star.events_time) &lt;= 1;
+  </select>
+  
+     <select id="selectUserContinuousRecord" resultType="java.lang.Integer">
+  		 SELECT
+        count(1)
+    FROM
+        (
+            SELECT
+                date_sub(a.events_time, INTERVAL 1 DAY) signDate,
+                (
+                    @i := DATE_ADD(@i, INTERVAL - 1 DAY)
+                ) today
+            FROM
+                (
+                    SELECT
+                        events_time
+                    FROM
+                        yh_health_star
+                    WHERE
+                        user_code = #{userCode} and healthstars_events = #{healthstarsEvents}
+                    ORDER BY
+                        events_time DESC
+                ) a
+            INNER JOIN (
+                SELECT
+                    @i := max(events_time) AS signMax
+                FROM
+                    yh_health_star
+                WHERE
+                    user_code = #{userCode} and healthstars_events = #{healthstarsEvents}
+                AND (
+                    TO_DAYS(events_time) = TO_DAYS(curdate())
+                    OR TO_DAYS(events_time) = TO_DAYS(
+                        DATE_ADD(curdate(), INTERVAL - 1 DAY)
+                    )
+                )
+            ) b ON b.signMax IS NOT NULL
+            AND TO_DAYS(DATE_ADD(@i, INTERVAL - 1 DAY)) = TO_DAYS(
+                date_sub(a.events_time, INTERVAL 1 DAY)
+            )
+        ) c
+  		
+    </select>
+ 
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from yh_health_star
+    where healthstar_ID = #{healthstarId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.yihe.applet.api.domain.YhHealthStarApp" >
+    insert into yh_health_star (healthstar_ID, user_code, user_type, 
+      healthstars, healthstars_events, events_time
+      )
+    values (#{healthstarId,jdbcType=INTEGER}, #{userCode,jdbcType=VARCHAR}, #{userType,jdbcType=INTEGER}, 
+      #{healthstars,jdbcType=INTEGER}, #{healthstarsEvents,jdbcType=VARCHAR}, #{eventsTime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.yihe.applet.api.domain.YhHealthStarApp" >
+    insert into yh_health_star
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="healthstarId != null" >
+        healthstar_ID,
+      </if>
+      <if test="userCode != null" >
+        user_code,
+      </if>
+      <if test="userType != null" >
+        user_type,
+      </if>
+      <if test="healthstars != null" >
+        healthstars,
+      </if>
+      <if test="healthstarsEvents != null" >
+        healthstars_events,
+      </if>
+      <if test="eventsTime != null" >
+        events_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="healthstarId != null" >
+        #{healthstarId,jdbcType=INTEGER},
+      </if>
+      <if test="userCode != null" >
+        #{userCode,jdbcType=VARCHAR},
+      </if>
+      <if test="userType != null" >
+        #{userType,jdbcType=INTEGER},
+      </if>
+      <if test="healthstars != null" >
+        #{healthstars,jdbcType=INTEGER},
+      </if>
+      <if test="healthstarsEvents != null" >
+        #{healthstarsEvents,jdbcType=VARCHAR},
+      </if>
+      <if test="eventsTime != null" >
+        #{eventsTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.yihe.applet.api.domain.YhHealthStarApp" >
+    update yh_health_star
+    <set >
+      <if test="userCode != null" >
+        user_code = #{userCode,jdbcType=VARCHAR},
+      </if>
+      <if test="userType != null" >
+        user_type = #{userType,jdbcType=INTEGER},
+      </if>
+      <if test="healthstars != null" >
+        healthstars = #{healthstars,jdbcType=INTEGER},
+      </if>
+      <if test="healthstarsEvents != null" >
+        healthstars_events = #{healthstarsEvents,jdbcType=VARCHAR},
+      </if>
+      <if test="eventsTime != null" >
+        events_time = #{eventsTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where healthstar_ID = #{healthstarId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.yihe.applet.api.domain.YhHealthStarApp" >
+    update yh_health_star
+    set user_code = #{userCode,jdbcType=VARCHAR},
+      user_type = #{userType,jdbcType=INTEGER},
+      healthstars = #{healthstars,jdbcType=INTEGER},
+      healthstars_events = #{healthstarsEvents,jdbcType=VARCHAR},
+      events_time = #{eventsTime,jdbcType=TIMESTAMP}
+    where healthstar_ID = #{healthstarId,jdbcType=INTEGER}
+  </update>
+   <!-- 根据event_type,userCode 和时间（每日任务为当前时间，每月任务为本月）查询积分记录表 -->
+   <select id="selectRecordtypeAndTime" parameterType="map" resultType="java.lang.String">
+   select t1.event_type
+		from yh_score_event_category t1 
+		left join yh_health_star t2 on t1.event_name=t2.healthstars_events 
+		and t2.user_code=#{userCode,jdbcType=VARCHAR}
+		where t1.event_type=#{eventType,jdbcType=VARCHAR}
+		and DATE_FORMAT(t2.events_time,'%Y-%m-%d')=DATE_FORMAT(now(),'%Y-%m-%d')
+		and `type` = 1
+  </select>
+  
+     <select id="selectRecordtypeAndTime2" parameterType="map" resultType="java.lang.String">
+   select t1.event_type
+		from yh_score_event_category t1 
+		left join yh_health_star t2 on t1.event_name=t2.healthstars_events 
+		and t2.user_code=#{userCode,jdbcType=VARCHAR}
+		where t1.event_type=#{eventType,jdbcType=VARCHAR}
+	    and DATE_FORMAT( events_time, '%Y%m' ) = DATE_FORMAT( CURDATE( ) ,'%Y%m' ) 
+		and `type` = 2
+  </select>
+
+    <select id="selectUserYhHealthStarSum"  resultType="integer">
+        SELECT IFNULL(sum(healthstars),0) FROM yh_health_star
+        WHERE  user_code=#{userCode}
+        <if test="type != null and type==0" >
+            and user_type = 5
+        </if>
+        <if test="type != null and type==1" >
+            and user_type = 4
+        </if>
+    </select>
+
+
+    <select id="selectUserYhHealthStar"  resultMap="BaseResultMap">
+   SELECT * FROM yh_health_star 
+   WHERE events_time between date_sub(now(),interval 6 month) and  DATE_SUB(CURDATE(),INTERVAL -1 DAY)
+   and user_code=#{userCode} 
+     <if test="type != null and type==0" >
+        and user_type = 5
+     </if>
+     <if test="type != null and type==1" >
+        and user_type = 4
+     </if>
+   ORDER BY events_time DESC;
+  </select>
+  
+   <select id="selectYhHealthStarAppParam"  resultMap="BaseResultMap">
+   SELECT * FROM yh_health_star 
+   WHERE  user_code=#{userCode}
+        <if test="type != null and type==0" >
+        and user_type = 5
+     </if>
+     <if test="type != null and type==1" >
+        and user_type = 4
+     </if>
+   ORDER BY events_time DESC limit #{page},#{pageSize};
+  </select>
+  
+  
+</mapper>

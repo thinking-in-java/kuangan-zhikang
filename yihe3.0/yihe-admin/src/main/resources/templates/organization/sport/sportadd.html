@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>运动库管理</title>
+   <link rel="stylesheet"  th:href="@{/assets/libs/layui/css/layui.css}" />
+    <link rel="stylesheet"  th:href="@{/assets/module/admin.css}"  />
+    <link rel="stylesheet" th:href="@{/assets/css/formSelects-v4.css}" />
+</head>
+<body>
+ <!-- 页面加载loading -->
+<div class="page-loading">
+    <div class="ball-loader">
+        <span></span><span></span><span></span><span></span>
+    </div>
+</div>
+
+<a id="cancel" target="_self" style="display: none" href="/manage/content/movel" lay-text="运动管理">"运动管理"</a>
+<div class="layui-fluid">
+		<div class="layui-row">
+			<div style="width: 100%; height: 100%; background-color: #FFF; position: relative;">
+					<div th:if="${id==0}" style="font-size: 20px; font-weight: bold; margin-left: 20px; padding-top: 30px;">新建运动</div>
+				<div th:if="${id!=0}" style="font-size: 20px; font-weight: bold; margin-left: 20px; padding-top: 30px;">修改运动</div>
+				<form class="layui-form" id="express">
+				
+				<input id="id" name="id" type="hidden" th:value="${id}">
+				
+				 <div class="layui-form-item">
+				    <div class="layui-inline">
+				      <label style="width: 10%;;"
+							class="layui-form-label layui-form-required">名称</label>
+						<div class="layui-input-block">
+							<div class="layui-row">
+							
+								<input style="margin-left: -89px; width: 450px;" type="text"
+									name="sportName" id="sportName" lay-verify="required" lay-reqtext="名称不能为空" maxlength="16"
+									placeholder="请输入名称，最大限制16个字" autocomplete="off" 
+									class="layui-input">
+							</div>
+						</div>
+				    </div>
+				    
+				    
+				  </div>
+				
+					
+					<div class="layui-form-item">
+					
+					    <div class="layui-inline">
+					      <label style="width: 30%;"
+							class="layui-form-label layui-form-required">数量</label>
+						<div class="layui-input-block">
+							<div class="layui-row">
+									 <input type="text" style="margin-left: -89px; width: 200px;" disabled name="number" id="number" value="1" lay-verify="required|number" autocomplete="off" class="layui-input">
+							</div>
+						</div>
+					    </div>
+					    
+					    
+					    <div class="layui-inline">
+					      <label style="width: 30%;"
+							class="layui-form-label layui-form-required">单位</label>
+						<div class="layui-input-block">
+							<div class="layui-row" style="margin-left: -89px; width: 200px;">
+							<select lay-filter="aihao" id="sportType" name="sportType">
+									<option value='1'>分钟</option>
+									<option value='2'>个</option>
+						    </select>
+							</div>
+						</div>
+					    </div>
+					    
+					    
+					 
+					    
+					    <div class="layui-inline">
+					      <label style="width: 40%;"
+							class="layui-form-label layui-form-required">能耗(千卡)</label>
+						<div class="layui-input-block">
+							<div class="layui-row">
+									 <input type="number" style="margin-left: -89px; width: 200px;" oninput="if(value>9999)value=9999" placeholder="请输入热量"  id="kcal" name="kcal" lay-verify="required|number" autocomplete="off" class="layui-input">
+							</div>
+						</div>
+					    </div>
+					    
+					  </div>
+					  
+					  
+					  
+					  <div class="layui-form-item">
+					
+					    
+					    <div class="layui-inline">
+					      <label style="width: 35%;"
+							class="layui-form-label layui-form-required">动作分类</label>
+						<div class="layui-input-block">
+							<div class="layui-row" style="margin-left: -89px; width: 200px;">
+							<select id="sportClassity" name="sportClassity" xm-select="sportClassity" lay-verify="required" xm-select-search="" xm-select-create="">
+									
+						    </select>
+							</div>
+						</div>
+					    </div>
+					    
+					    <div class="layui-inline">
+					      <label style="width: 35%;"
+							class="layui-form-label layui-form-required">锻炼部位</label>
+						<div class="layui-input-block">
+							<div class="layui-row" style="margin-left: -89px; width: 200px;">
+							<select id="sportPlace" name="sportPlace" xm-select="sportPlace" lay-verify="required" xm-select-search="" xm-select-create="">
+									
+						    </select>
+							</div>
+						</div>
+					    </div>
+					    
+					    
+					    <div class="layui-inline">
+					      <label style="width: 35%;"
+							class="layui-form-label layui-form-required">锻炼目标</label>
+						<div class="layui-input-block">
+							<div class="layui-row" style="margin-left: -89px; width: 200px;">
+							<select id="sportGoals" name="sportGoals" xm-select="sportGoals" lay-verify="required" xm-select-search="" xm-select-create="">
+							   
+							</select>
+							</div>
+						</div>
+					    </div>
+					    
+					    
+					    <div class="layui-inline">
+					      <label style="width: 35%;"
+							class="layui-form-label layui-form-required">动作强度</label>
+						<div class="layui-input-block">
+							<div class="layui-row" style="margin-left: -89px; width: 200px;">
+							<select lay-filter="aihao" id="sportStrength" name="sportStrength" lay-verify="required">
+									
+						    </select>
+							</div>
+						</div>
+					    </div>
+					    
+					    
+					 
+					    
+					   
+					    
+					  </div>
+					
+					
+					<div class="layui-form-item">
+						<label style="width: 72px;"
+							class="layui-form-label">动作步骤</label>
+						<div class="layui-input-block">
+							<div class="layui-row">
+								<textarea placeholder="请输入内容,最大限制200个字"  style="margin-left: -89px;" maxlength="200" id="sportSteps" name="sportSteps" class="layui-textarea"></textarea>
+							</div>
+						</div>
+					</div>
+					
+					<div class="layui-form-item">
+						<label style="width: 72px;"
+							class="layui-form-label">动作感觉</label>
+						<div class="layui-input-block">
+							<div class="layui-row">
+								<textarea placeholder="请输入内容,最大限制200个字"  style="margin-left: -89px;" maxlength="200" id="sportFell" name="sportFell" class="layui-textarea"></textarea>
+							</div>
+						</div>
+					</div>
+					
+					<div class="layui-form-item">
+						<label style="width: 72px;"
+							class="layui-form-label">呼吸节奏</label>
+						<div class="layui-input-block">
+							<div class="layui-row">
+								<textarea placeholder="请输入内容,最大限制200个字"  style="margin-left: -89px;" maxlength="200" id="sportBreath" name="sportBreath" class="layui-textarea"></textarea>
+							</div>
+						</div>
+					</div>
+					
+					
+					<div class="layui-form-item">
+						<label style="width: 95px;"
+							class="layui-form-label">动作要领说明</label>
+						<div class="layui-input-block">
+							<div class="layui-row">
+								<textarea placeholder="请输入内容,最大限制200个字"  style="margin-left: -89px;" maxlength="200" id="sportContent" name="sportContent" class="layui-textarea"></textarea>
+							</div>
+						</div>
+					</div>
+					
+					
+					
+					 <div class="layui-form-item">
+					    <div class="layui-inline">
+					      <label style="width: 72px;"
+							class="layui-form-label">运动封面图</label>
+						<input id="sportImg" name="sportImg" type="hidden" value="">
+
+						    <div class="layui-inline">
+						      <div class="layui-input-block">
+							     <div class="layui-upload-drag" id="test10">
+									  <i class="layui-icon"></i>
+									  <p>点击上传，或将图片拖拽到此处</p>
+									  <p>（尺寸：4:3 ）</p>
+									  <div class="layui-hide" id="uploadDemoView" >
+									    <hr>
+									    <img src="" alt="上传成功后渲染" style="max-width: 196px">
+									  </div>
+									</div>
+							</div>
+						    </div>	
+					    </div>
+					    
+					    
+					    
+					    <div class="layui-inline">
+					      <label style="width: 200px;"
+							class="layui-form-label">动作示范动图</label>
+						<input id="sportGif" name="sportGif" type="hidden" value="">
+
+						    <div class="layui-inline">
+						      <div class="layui-input-block">
+							     <div class="layui-upload-drag" id="test11">
+									  <i class="layui-icon"></i>
+									  <p>点击上传，或将图片拖拽到此处</p>
+									  <p>（尺寸：4:3 ）</p>
+									  <div class="layui-hide" id="uploadDemoViewGif" >
+									    <hr>
+									    <img src="" alt="上传成功后渲染" style="max-width: 196px">
+									  </div>
+									</div>
+							</div>
+						    </div>	
+					    </div>
+					    
+					    
+					    
+					  </div>
+  
+  
+  
+					
+					<div class="layui-form-item">
+						
+					</div>
+					
+					
+					
+					
+					
+					
+					
+				
+
+					
+					<div class="layui-form-item" style="margin-left: -88px;padding-bottom: 40px;">
+						 <div class="layui-input-block" >
+	      <button class="layui-btn " lay-submit='' lay-filter="regSubmit" id="">保存</button>
+	     <button type="reset" onclick="cancel()" class="layui-btn layui-btn-primary">&emsp;取消&emsp;</button>
+	 </div>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+
+
+</body>
+<script type="text/javascript" th:src="@{/assets/libs/layui/layui.js}"></script>
+<script type="text/javascript" th:src="@{/assets/js/common.js}"></script>
+<script type="text/javascript" th:src="@{/assets/js/jquery-1.11.1.js}"></script>
+<script type="text/javascript"
+		th:src="@{/assets/js/formSelects-v4.min.js}"></script>
+<script type="text/javascript">
+
+
+ $('#sportName').blur(function () {
+	    var sportName = $("#sportName").val();
+	    var id = $("#id").val();
+	    $.ajax({
+	 		type:'get', 
+	 		url:'/YhSportMotion/selctSportNmaeRepetition',
+	 		data:{sportName:sportName,id:id},
+	 		success : function(data){
+	 			if(data ==1){
+	 				layer.msg("运动名称已被占用!");	
+	 			}
+	 		}
+	 	});
+	 })
+
+cancel=function(){
+	document.getElementById("cancel").click();
+}
+	
+	layui.use('upload', function(){
+	  var $ = layui.jquery
+	  ,upload = layui.upload;
+	  //拖拽上传图片
+	  upload.render({
+	    elem: '#test10'
+	    ,url: '/Uploading/addEnrollImg' //改成您自己的上传接口
+    	,before: function(obj){ //obj参数包含的信息，跟 choose回调完全一致，可参见上文。
+    		this.layerIndex = layer.load(0, {shade: [0.5, '#666c7f']});
+    	}
+	    ,done: function(res){
+	    layer.close(this.layerIndex);
+	      layer.msg('上传成功');
+	      layui.$('#uploadDemoView').removeClass('layui-hide').find('img').attr('src', res.files);
+	      layui.$("#sportImg").val(res.files);
+	      console.log(res)
+	    }
+	  });
+	  
+	//拖拽上传图片
+	  upload.render({
+	    elem: '#test11'
+	    ,url: '/Uploading/addEnrollImg' //改成您自己的上传接口
+    	,before: function(obj){ //obj参数包含的信息，跟 choose回调完全一致，可参见上文。
+    		this.layerIndex = layer.load(0, {shade: [0.5, '#666c7f']});
+    	}
+	    ,done: function(res){
+	    layer.close(this.layerIndex);
+	      layer.msg('上传成功');
+	      layui.$('#uploadDemoViewGif').removeClass('layui-hide').find('img').attr('src', res.files);
+	      layui.$("#sportGif").val(res.files);
+	      console.log(res)
+	    }
+	  });
+
+	
+	  
+	});
+	
+	layui.use(['form', 'layedit', 'laydate', 'formSelects'], function(){
+		  var form = layui.form
+		  ,layer = layui.layer
+		  ,layedit = layui.layedit
+		  ,laydate = layui.laydate
+		  ,formSelects = layui.formSelects;
+		  
+		  
+		
+		 
+		
+		  $(function(){
+			 $.ajax({
+			 		type:'get', 
+			 		url:'/YhSportMotion/showSportCategory',
+			 		data:'',
+			 		success : function(data){
+			 			var htmld="";
+				       	var item=data;
+				        for (var i = 0; i < item.length; i++) {
+				        	if(i==item.length-1){
+				        		htmld+='{"name": "'+item[i].cateName+'", "value": '+item[i].id+'}';
+				        	}else{
+				        		htmld+='{"name": "'+item[i].cateName+'", "value": '+item[i].id+'},';
+				        	}
+				        	
+						}
+				       	var str3='[' + htmld + ']';
+				        var obj = JSON.parse(str3);
+				      //local模式
+						  formSelects.data('sportClassity', 'local', {
+						      arr: obj
+						  });
+			 		}	
+			 	});
+			 
+			 
+			 $.ajax({
+			 		type:'get', 
+			 		url:'/YhSportMotion/showSportPart',
+			 		data:'',
+			 		success : function(data){
+			 			var htmld="";
+				       	var item=data;
+				        for (var i = 0; i < item.length; i++) {
+				        	if(i==item.length-1){
+				        		htmld+='{"name": "'+item[i].partName+'", "value": '+item[i].id+'}';
+				        	}else{
+				        		htmld+='{"name": "'+item[i].partName+'", "value": '+item[i].id+'},';
+				        	}
+				        	
+						}
+				       	var str3='[' + htmld + ']';
+				        var obj = JSON.parse(str3);
+				      //local模式
+						  formSelects.data('sportPlace', 'local', {
+						      arr: obj
+						  });
+			 		}	
+			 	});
+			 
+			 $.ajax({
+			 		type:'get', 
+			 		url:'/YhSportMotion/showSportGoals',
+			 		data:'',
+			 		success : function(data){
+			 			var htmld="";
+				       	var item=data;
+				        for (var i = 0; i < item.length; i++) {
+				        	if(i==item.length-1){
+				        		htmld+='{"name": "'+item[i].goalsName+'", "value": '+item[i].id+'}';
+				        	}else{
+				        		htmld+='{"name": "'+item[i].goalsName+'", "value": '+item[i].id+'},';
+				        	}
+				        	
+						}
+				       	var str3='[' + htmld + ']';
+				        var obj = JSON.parse(str3);
+				      //local模式
+						  formSelects.data('sportGoals', 'local', {
+						      arr: obj
+						  });
+						 
+			 		}	
+			 	});
+			 
+			 
+				
+				
+				 $.ajax({
+				 		type:'get', 
+				 		url:'/YhSportMotion/showSportStrength',
+				 		data:'',
+				 		success : function(data){
+				 			var htmld="<option value=''>请选择</option>";
+					       	var item=data;
+					        for (var i = 0; i < item.length; i++) {
+					        		htmld+="<option value='"+item[i].id+"'>"+item[i].strengthName+"</option>";
+							}
+					        $("#sportStrength").append(htmld);
+					        form.render();
+				 		}	
+				 	});
+			 
+		 })
+		
+		
+		  var id=$("#id").val();
+			if(id!=0){
+				 $.ajax({
+			    	 type: "post",
+			         url: "/YhSportMotion/selectidSport",
+			         dataType:"json",
+			         data:{"id":id},
+			         success: function(data){
+			        	 
+			        	 var notfoodRecom=data.data.sportClassity.split(";");
+			        	 var sportClassity='';
+				        	 for (var i = 0; i < notfoodRecom.length-1; i++) {
+				        		 if(i==notfoodRecom.length-2){
+				        			 sportClassity+=''+notfoodRecom[i]+'';
+				        		 }else{
+				        			 sportClassity+=''+notfoodRecom[i]+',';
+				        		 }
+							}
+							let arr = JSON.parse('[' + sportClassity + ']')
+							formSelects.value('sportClassity', arr);
+							
+							 var sportPlace=data.data.sportPlace.split(";");
+				        	 var s='';
+					        	 for (var i = 0; i < sportPlace.length-1; i++) {
+					        		 if(i==sportPlace.length-2){
+					        			 s+=''+sportPlace[i]+'';
+					        		 }else{
+					        			 s+=''+sportPlace[i]+',';
+					        		 }
+								}
+								let arr1 = JSON.parse('[' + s + ']')
+								formSelects.value('sportPlace', arr1);
+							
+								 var sportGoals=data.data.sportPlace.split(";");
+					        	 var s1='';
+						        	 for (var i = 0; i < sportGoals.length-1; i++) {
+						        		 if(i==sportGoals.length-2){
+						        			 s1+=''+sportGoals[i]+'';
+						        		 }else{
+						        			 s1+=''+sportGoals[i]+',';
+						        		 }
+									}
+									let arr2 = JSON.parse('[' + s1 + ']')
+									formSelects.value('sportGoals', arr2);
+							
+						$("#sportStrength").val(data.data.sportStrength);
+			        	 $("#sportType").val(data.data.sportType);
+			        	 $("#kcal").val(data.data.kcal);
+			        	 $("#sportBreath").val(data.data.sportBreath);
+			        	 $("#sportFell").val(data.data.sportFell);
+			        	 $("#sportImg").val(data.data.sportImg);
+			        	 $("#sportContent").val(data.data.sportContent);
+			        	 $("#sportName").val(data.data.sportName);
+			        	 $("#sportSteps").val(data.data.sportSteps);
+			        	 $("#sportGif").val(data.data.sportGif);
+			        	 layui.$('#uploadDemoView').removeClass('layui-hide').find('img').attr('src', data.data.sportImg);
+			        	 layui.$('#uploadDemoViewGif').removeClass('layui-hide').find('img').attr('src', data.data.sportGif);
+			        	 
+			        	 form.render('select');
+			         }   	
+			    });
+			}
+			
+			
+		  //监听提交
+		  form.on('submit(regSubmit)', function(dataYh){
+		  /*   layer.alert(JSON.stringify(data.field), {
+		      title: '最终的提交信息'
+		    }) */
+		    var sportName = $("#sportName").val();
+		    var id = $("#id").val();
+		    $.ajax({
+		 		type:'get', 
+		 		url:'/YhSportMotion/selctSportNmaeRepetition',
+		 		async: false,
+		 		data:{sportName:sportName,id:id},
+		 		success : function(data){
+		 			if(data ==1){
+		 				layer.msg("运动名称已被占用!");	
+		 			}
+		 			
+		 			if(data==0){
+		 				$.ajax({
+				        	 type: "post",
+				             url: "/YhSportMotion/insertSport",
+				             dataType:"json",
+				             data:dataYh.field,
+				             success: function(data){
+				          	   if(data.data==1){
+				          		    layer.msg('操作成功');
+										cancel();
+				          	   }else{
+					            	   layer.msg('操作失败');
+				          	   }
+				             }   	
+				        });
+		 			}
+		 		}
+		 	});
+		    return false;
+		  });
+		 
+		 
+		  
+		});
+	
+</script>
+</html>

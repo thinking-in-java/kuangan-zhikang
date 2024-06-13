@@ -1,0 +1,263 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yihe.applet.api.mapper.YhQuestionPainTitleAppMapper" >
+  <resultMap id="BaseResultMap" type="com.yihe.applet.api.domain.YhQuestionPainTitleApp" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="type" property="type" jdbcType="VARCHAR" />
+    <result column="title" property="title" jdbcType="VARCHAR" />
+    <result column="title_img" property="titleImg" jdbcType="VARCHAR" />
+    <result column="choose1" property="choose1" jdbcType="VARCHAR" />
+    <result column="choose1_value" property="choose1Value" jdbcType="VARCHAR" />
+    <result column="choose2" property="choose2" jdbcType="VARCHAR" />
+    <result column="choose2_value" property="choose2Value" jdbcType="VARCHAR" />
+    <result column="choose3" property="choose3" jdbcType="VARCHAR" />
+    <result column="choose3_value" property="choose3Value" jdbcType="VARCHAR" />
+    <result column="choose4" property="choose4" jdbcType="VARCHAR" />
+    <result column="choose4_value" property="choose4Value" jdbcType="VARCHAR" />
+    <result column="choose5" property="choose5" jdbcType="VARCHAR" />
+    <result column="choose5_value" property="choose5Value" jdbcType="VARCHAR" />
+    <result column="choose6" property="choose6" jdbcType="VARCHAR" />
+    <result column="choose6_value" property="choose6Value" jdbcType="VARCHAR" />
+    <result column="parent_id" property="parentId" jdbcType="VARCHAR" />
+    <result column="pain_id" property="painId" jdbcType="INTEGER" />
+    <result column="del_flag" property="delFlag" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, type, title, title_img, choose1, choose1_value, choose2, choose2_value, choose3, 
+    choose3_value, choose4, choose4_value, choose5, choose5_value, choose6, choose6_value, 
+    parent_id, pain_id, del_flag
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from yh_question_pain_title
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+    <select id="selectAll" resultMap="BaseResultMap">
+   		 select * from yh_question_pain_title
+  	</select>
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from yh_question_pain_title
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.yihe.applet.api.domain.YhQuestionPainTitleApp" >
+    insert into yh_question_pain_title (id, type, title, 
+      title_img, choose1, choose1_value, 
+      choose2, choose2_value, choose3, 
+      choose3_value, choose4, choose4_value, 
+      choose5, choose5_value, choose6, 
+      choose6_value, parent_id, pain_id, 
+      del_flag)
+    values (#{id,jdbcType=INTEGER}, #{type,jdbcType=VARCHAR}, #{title,jdbcType=VARCHAR}, 
+      #{titleImg,jdbcType=VARCHAR}, #{choose1,jdbcType=VARCHAR}, #{choose1Value,jdbcType=VARCHAR}, 
+      #{choose2,jdbcType=VARCHAR}, #{choose2Value,jdbcType=VARCHAR}, #{choose3,jdbcType=VARCHAR}, 
+      #{choose3Value,jdbcType=VARCHAR}, #{choose4,jdbcType=VARCHAR}, #{choose4Value,jdbcType=VARCHAR}, 
+      #{choose5,jdbcType=VARCHAR}, #{choose5Value,jdbcType=VARCHAR}, #{choose6,jdbcType=VARCHAR}, 
+      #{choose6Value,jdbcType=VARCHAR}, #{parentId,jdbcType=VARCHAR}, #{painId,jdbcType=INTEGER}, 
+      #{delFlag,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.yihe.applet.api.domain.YhQuestionPainTitleApp" >
+    insert into yh_question_pain_title
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="type != null" >
+        type,
+      </if>
+      <if test="title != null" >
+        title,
+      </if>
+      <if test="titleImg != null" >
+        title_img,
+      </if>
+      <if test="choose1 != null" >
+        choose1,
+      </if>
+      <if test="choose1Value != null" >
+        choose1_value,
+      </if>
+      <if test="choose2 != null" >
+        choose2,
+      </if>
+      <if test="choose2Value != null" >
+        choose2_value,
+      </if>
+      <if test="choose3 != null" >
+        choose3,
+      </if>
+      <if test="choose3Value != null" >
+        choose3_value,
+      </if>
+      <if test="choose4 != null" >
+        choose4,
+      </if>
+      <if test="choose4Value != null" >
+        choose4_value,
+      </if>
+      <if test="choose5 != null" >
+        choose5,
+      </if>
+      <if test="choose5Value != null" >
+        choose5_value,
+      </if>
+      <if test="choose6 != null" >
+        choose6,
+      </if>
+      <if test="choose6Value != null" >
+        choose6_value,
+      </if>
+      <if test="parentId != null" >
+        parent_id,
+      </if>
+      <if test="painId != null" >
+        pain_id,
+      </if>
+      <if test="delFlag != null" >
+        del_flag,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="type != null" >
+        #{type,jdbcType=VARCHAR},
+      </if>
+      <if test="title != null" >
+        #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="titleImg != null" >
+        #{titleImg,jdbcType=VARCHAR},
+      </if>
+      <if test="choose1 != null" >
+        #{choose1,jdbcType=VARCHAR},
+      </if>
+      <if test="choose1Value != null" >
+        #{choose1Value,jdbcType=VARCHAR},
+      </if>
+      <if test="choose2 != null" >
+        #{choose2,jdbcType=VARCHAR},
+      </if>
+      <if test="choose2Value != null" >
+        #{choose2Value,jdbcType=VARCHAR},
+      </if>
+      <if test="choose3 != null" >
+        #{choose3,jdbcType=VARCHAR},
+      </if>
+      <if test="choose3Value != null" >
+        #{choose3Value,jdbcType=VARCHAR},
+      </if>
+      <if test="choose4 != null" >
+        #{choose4,jdbcType=VARCHAR},
+      </if>
+      <if test="choose4Value != null" >
+        #{choose4Value,jdbcType=VARCHAR},
+      </if>
+      <if test="choose5 != null" >
+        #{choose5,jdbcType=VARCHAR},
+      </if>
+      <if test="choose5Value != null" >
+        #{choose5Value,jdbcType=VARCHAR},
+      </if>
+      <if test="choose6 != null" >
+        #{choose6,jdbcType=VARCHAR},
+      </if>
+      <if test="choose6Value != null" >
+        #{choose6Value,jdbcType=VARCHAR},
+      </if>
+      <if test="parentId != null" >
+        #{parentId,jdbcType=VARCHAR},
+      </if>
+      <if test="painId != null" >
+        #{painId,jdbcType=INTEGER},
+      </if>
+      <if test="delFlag != null" >
+        #{delFlag,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.yihe.applet.api.domain.YhQuestionPainTitleApp" >
+    update yh_question_pain_title
+    <set >
+      <if test="type != null" >
+        type = #{type,jdbcType=VARCHAR},
+      </if>
+      <if test="title != null" >
+        title = #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="titleImg != null" >
+        title_img = #{titleImg,jdbcType=VARCHAR},
+      </if>
+      <if test="choose1 != null" >
+        choose1 = #{choose1,jdbcType=VARCHAR},
+      </if>
+      <if test="choose1Value != null" >
+        choose1_value = #{choose1Value,jdbcType=VARCHAR},
+      </if>
+      <if test="choose2 != null" >
+        choose2 = #{choose2,jdbcType=VARCHAR},
+      </if>
+      <if test="choose2Value != null" >
+        choose2_value = #{choose2Value,jdbcType=VARCHAR},
+      </if>
+      <if test="choose3 != null" >
+        choose3 = #{choose3,jdbcType=VARCHAR},
+      </if>
+      <if test="choose3Value != null" >
+        choose3_value = #{choose3Value,jdbcType=VARCHAR},
+      </if>
+      <if test="choose4 != null" >
+        choose4 = #{choose4,jdbcType=VARCHAR},
+      </if>
+      <if test="choose4Value != null" >
+        choose4_value = #{choose4Value,jdbcType=VARCHAR},
+      </if>
+      <if test="choose5 != null" >
+        choose5 = #{choose5,jdbcType=VARCHAR},
+      </if>
+      <if test="choose5Value != null" >
+        choose5_value = #{choose5Value,jdbcType=VARCHAR},
+      </if>
+      <if test="choose6 != null" >
+        choose6 = #{choose6,jdbcType=VARCHAR},
+      </if>
+      <if test="choose6Value != null" >
+        choose6_value = #{choose6Value,jdbcType=VARCHAR},
+      </if>
+      <if test="parentId != null" >
+        parent_id = #{parentId,jdbcType=VARCHAR},
+      </if>
+      <if test="painId != null" >
+        pain_id = #{painId,jdbcType=INTEGER},
+      </if>
+      <if test="delFlag != null" >
+        del_flag = #{delFlag,jdbcType=INTEGER},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.yihe.applet.api.domain.YhQuestionPainTitleApp" >
+    update yh_question_pain_title
+    set type = #{type,jdbcType=VARCHAR},
+      title = #{title,jdbcType=VARCHAR},
+      title_img = #{titleImg,jdbcType=VARCHAR},
+      choose1 = #{choose1,jdbcType=VARCHAR},
+      choose1_value = #{choose1Value,jdbcType=VARCHAR},
+      choose2 = #{choose2,jdbcType=VARCHAR},
+      choose2_value = #{choose2Value,jdbcType=VARCHAR},
+      choose3 = #{choose3,jdbcType=VARCHAR},
+      choose3_value = #{choose3Value,jdbcType=VARCHAR},
+      choose4 = #{choose4,jdbcType=VARCHAR},
+      choose4_value = #{choose4Value,jdbcType=VARCHAR},
+      choose5 = #{choose5,jdbcType=VARCHAR},
+      choose5_value = #{choose5Value,jdbcType=VARCHAR},
+      choose6 = #{choose6,jdbcType=VARCHAR},
+      choose6_value = #{choose6Value,jdbcType=VARCHAR},
+      parent_id = #{parentId,jdbcType=VARCHAR},
+      pain_id = #{painId,jdbcType=INTEGER},
+      del_flag = #{delFlag,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

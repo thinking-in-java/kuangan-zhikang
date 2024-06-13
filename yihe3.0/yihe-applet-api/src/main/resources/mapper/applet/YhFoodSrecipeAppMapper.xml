@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yihe.applet.api.mapper.YhFoodSrecipeAppMapper">
+    <resultMap type="com.yihe.system.domain.YhFoodSrecipe" id="YhFoodSrecipeResult">
+        <result property="fsId"    column="Fs_Id"    />
+        <result property="dType"    column="D_Type"    />
+        <result property="eLevel"    column="E_Level"    />
+        <result property="genter"    column="genter"    />
+        <result property="isUse"    column="Is_Use"    />
+        <result property="fElements"    column="F_Elements"    />
+        <result property="packageNumber"    column="Package_number"    />
+        <result property="isDel"    column="Is_Del"    />
+        <result property="diseaseid"    column="diseaseid"    />
+        <result property="oneself"    column="oneself"    />
+        <result property="fsDescribe"    column="fs_describe"    />
+    </resultMap>
+    <sql id="allColumn">
+        Fs_Id, D_Type, E_Level, genter, Is_Use, F_Elements, Package_number, Is_Del, diseaseid, oneself, fs_describe
+    </sql>
+    <!--查-->
+    <select id="selectYhFoodSrecipeById" parameterType="com.yihe.applet.api.domain.YhFoodSrecipeApp" resultMap="YhFoodSrecipeResult">
+        SELECT <include refid="allColumn"/>
+        FROM yh_food_srecipe
+        WHERE D_Type = #{dType}
+        AND genter = #{genter}
+        AND diseaseid=#{diseaseid}
+        AND oneself=1
+    </select>
+    <!--查2表-->
+    <select id="selectYhFoodSrecipeById2" parameterType="com.yihe.system.domain.YhFoodSrecipe" resultMap="YhFoodSrecipeResult">
+        SELECT <include refid="allColumn"/>
+        FROM yh_food_srecipe2
+        WHERE genter=#{genter} 
+        AND diseaseid=#{diseaseid} 
+        AND    Package_number=#{packageNumber} 
+        AND is_Use=#{isUse}  
+        AND D_Type=#{dType} LIMIT 1
+
+    </select>
+</mapper>

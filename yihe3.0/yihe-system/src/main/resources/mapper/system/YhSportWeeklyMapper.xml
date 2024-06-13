@@ -1,0 +1,329 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yihe.system.mapper.YhSportWeeklyMapper" >
+  <resultMap id="BaseResultMap" type="com.yihe.system.domain.YhSportWeekly" >
+    <id column="we_id" property="weId" jdbcType="INTEGER" />
+    <result column="nut" property="nut" jdbcType="INTEGER" />
+    <result column="userName" property="username" jdbcType="VARCHAR" />
+    <result column="age" property="age" jdbcType="INTEGER" />
+    <result column="userCode" property="usercode" jdbcType="VARCHAR" />
+    <result column="uweight" property="uweight" jdbcType="VARCHAR" />
+    <result column="tenergy" property="tenergy" jdbcType="VARCHAR" />
+    <result column="frequency" property="frequency" jdbcType="VARCHAR" />
+    <result column="number" property="number" jdbcType="VARCHAR" />
+    <result column="array" property="array" jdbcType="VARCHAR" />
+    <result column="walk" property="walk" jdbcType="VARCHAR" />
+    <result column="recommend" property="recommend" jdbcType="VARCHAR" />
+    <result column="boutique" property="boutique" jdbcType="VARCHAR" />
+    <result column="rests" property="rests" jdbcType="VARCHAR" />
+    <result column="aerobic" property="aerobic" jdbcType="VARCHAR" />
+    <result column="anaerobic" property="anaerobic" jdbcType="VARCHAR" />
+    <result column="pliable" property="pliable" jdbcType="VARCHAR" />
+    <result column="arthrosis" property="arthrosis" jdbcType="VARCHAR" />
+    <result column="walkpercent" property="walkpercent" jdbcType="VARCHAR" />
+    <result column="recommendpercent" property="recommendpercent" jdbcType="VARCHAR" />
+    <result column="boutiquepercent" property="boutiquepercent" jdbcType="VARCHAR" />
+    <result column="restspercent" property="restspercent" jdbcType="VARCHAR" />
+    <result column="durationnum" property="durationnum" jdbcType="VARCHAR" />
+    <result column="startTime" property="starttime" jdbcType="VARCHAR" />
+    <result column="endTime" property="endtime" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    we_id, nut, userName, age, userCode, uweight, tenergy, frequency, number, array, 
+    walk, recommend, boutique, rests, aerobic, anaerobic, pliable, arthrosis, walkpercent, 
+    recommendpercent, boutiquepercent, restspercent, durationnum, startTime, endTime
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from yh_sport_weekly
+    where we_id = #{weId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from yh_sport_weekly
+    where we_id = #{weId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.yihe.system.domain.YhSportWeekly" >
+    insert into yh_sport_weekly (we_id, nut, userName, 
+      age, userCode, uweight, 
+      tenergy, frequency, number, 
+      array, walk, recommend, 
+      boutique, rests, aerobic, 
+      anaerobic, pliable, arthrosis, 
+      walkpercent, recommendpercent, boutiquepercent, 
+      restspercent, durationnum, startTime, 
+      endTime)
+    values (#{weId,jdbcType=INTEGER}, #{nut,jdbcType=INTEGER}, #{username,jdbcType=VARCHAR}, 
+      #{age,jdbcType=INTEGER}, #{usercode,jdbcType=VARCHAR}, #{uweight,jdbcType=VARCHAR}, 
+      #{tenergy,jdbcType=VARCHAR}, #{frequency,jdbcType=VARCHAR}, #{number,jdbcType=VARCHAR}, 
+      #{array,jdbcType=VARCHAR}, #{walk,jdbcType=VARCHAR}, #{recommend,jdbcType=VARCHAR}, 
+      #{boutique,jdbcType=VARCHAR}, #{rests,jdbcType=VARCHAR}, #{aerobic,jdbcType=VARCHAR}, 
+      #{anaerobic,jdbcType=VARCHAR}, #{pliable,jdbcType=VARCHAR}, #{arthrosis,jdbcType=VARCHAR}, 
+      #{walkpercent,jdbcType=VARCHAR}, #{recommendpercent,jdbcType=VARCHAR}, #{boutiquepercent,jdbcType=VARCHAR}, 
+      #{restspercent,jdbcType=VARCHAR}, #{durationnum,jdbcType=VARCHAR}, #{starttime,jdbcType=VARCHAR}, 
+      #{endtime,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.yihe.system.domain.YhSportWeekly" useGeneratedKeys="true" keyProperty="weId">
+    insert into yh_sport_weekly
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="weId != null" >
+        we_id,
+      </if>
+      <if test="nut != null" >
+        nut,
+      </if>
+      <if test="username != null" >
+        userName,
+      </if>
+      <if test="age != null" >
+        age,
+      </if>
+      <if test="usercode != null" >
+        userCode,
+      </if>
+      <if test="uweight != null" >
+        uweight,
+      </if>
+      <if test="tenergy != null" >
+        tenergy,
+      </if>
+      <if test="frequency != null" >
+        frequency,
+      </if>
+      <if test="number != null" >
+        number,
+      </if>
+      <if test="array != null" >
+        array,
+      </if>
+      <if test="walk != null" >
+        walk,
+      </if>
+      <if test="recommend != null" >
+        recommend,
+      </if>
+      <if test="boutique != null" >
+        boutique,
+      </if>
+      <if test="rests != null" >
+        rests,
+      </if>
+      <if test="aerobic != null" >
+        aerobic,
+      </if>
+      <if test="anaerobic != null" >
+        anaerobic,
+      </if>
+      <if test="pliable != null" >
+        pliable,
+      </if>
+      <if test="arthrosis != null" >
+        arthrosis,
+      </if>
+      <if test="walkpercent != null" >
+        walkpercent,
+      </if>
+      <if test="recommendpercent != null" >
+        recommendpercent,
+      </if>
+      <if test="boutiquepercent != null" >
+        boutiquepercent,
+      </if>
+      <if test="restspercent != null" >
+        restspercent,
+      </if>
+      <if test="durationnum != null" >
+        durationnum,
+      </if>
+      <if test="starttime != null" >
+        startTime,
+      </if>
+      <if test="endtime != null" >
+        endTime,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="weId != null" >
+        #{weId,jdbcType=INTEGER},
+      </if>
+      <if test="nut != null" >
+        #{nut,jdbcType=INTEGER},
+      </if>
+      <if test="username != null" >
+        #{username,jdbcType=VARCHAR},
+      </if>
+      <if test="age != null" >
+        #{age,jdbcType=INTEGER},
+      </if>
+      <if test="usercode != null" >
+        #{usercode,jdbcType=VARCHAR},
+      </if>
+      <if test="uweight != null" >
+        #{uweight,jdbcType=VARCHAR},
+      </if>
+      <if test="tenergy != null" >
+        #{tenergy,jdbcType=VARCHAR},
+      </if>
+      <if test="frequency != null" >
+        #{frequency,jdbcType=VARCHAR},
+      </if>
+      <if test="number != null" >
+        #{number,jdbcType=VARCHAR},
+      </if>
+      <if test="array != null" >
+        #{array,jdbcType=VARCHAR},
+      </if>
+      <if test="walk != null" >
+        #{walk,jdbcType=VARCHAR},
+      </if>
+      <if test="recommend != null" >
+        #{recommend,jdbcType=VARCHAR},
+      </if>
+      <if test="boutique != null" >
+        #{boutique,jdbcType=VARCHAR},
+      </if>
+      <if test="rests != null" >
+        #{rests,jdbcType=VARCHAR},
+      </if>
+      <if test="aerobic != null" >
+        #{aerobic,jdbcType=VARCHAR},
+      </if>
+      <if test="anaerobic != null" >
+        #{anaerobic,jdbcType=VARCHAR},
+      </if>
+      <if test="pliable != null" >
+        #{pliable,jdbcType=VARCHAR},
+      </if>
+      <if test="arthrosis != null" >
+        #{arthrosis,jdbcType=VARCHAR},
+      </if>
+      <if test="walkpercent != null" >
+        #{walkpercent,jdbcType=VARCHAR},
+      </if>
+      <if test="recommendpercent != null" >
+        #{recommendpercent,jdbcType=VARCHAR},
+      </if>
+      <if test="boutiquepercent != null" >
+        #{boutiquepercent,jdbcType=VARCHAR},
+      </if>
+      <if test="restspercent != null" >
+        #{restspercent,jdbcType=VARCHAR},
+      </if>
+      <if test="durationnum != null" >
+        #{durationnum,jdbcType=VARCHAR},
+      </if>
+      <if test="starttime != null" >
+        #{starttime,jdbcType=VARCHAR},
+      </if>
+      <if test="endtime != null" >
+        #{endtime,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.yihe.system.domain.YhSportWeekly" >
+    update yh_sport_weekly
+    <set >
+      <if test="nut != null" >
+        nut = #{nut,jdbcType=INTEGER},
+      </if>
+      <if test="username != null" >
+        userName = #{username,jdbcType=VARCHAR},
+      </if>
+      <if test="age != null" >
+        age = #{age,jdbcType=INTEGER},
+      </if>
+      <if test="usercode != null" >
+        userCode = #{usercode,jdbcType=VARCHAR},
+      </if>
+      <if test="uweight != null" >
+        uweight = #{uweight,jdbcType=VARCHAR},
+      </if>
+      <if test="tenergy != null" >
+        tenergy = #{tenergy,jdbcType=VARCHAR},
+      </if>
+      <if test="frequency != null" >
+        frequency = #{frequency,jdbcType=VARCHAR},
+      </if>
+      <if test="number != null" >
+        number = #{number,jdbcType=VARCHAR},
+      </if>
+      <if test="array != null" >
+        array = #{array,jdbcType=VARCHAR},
+      </if>
+      <if test="walk != null" >
+        walk = #{walk,jdbcType=VARCHAR},
+      </if>
+      <if test="recommend != null" >
+        recommend = #{recommend,jdbcType=VARCHAR},
+      </if>
+      <if test="boutique != null" >
+        boutique = #{boutique,jdbcType=VARCHAR},
+      </if>
+      <if test="rests != null" >
+        rests = #{rests,jdbcType=VARCHAR},
+      </if>
+      <if test="aerobic != null" >
+        aerobic = #{aerobic,jdbcType=VARCHAR},
+      </if>
+      <if test="anaerobic != null" >
+        anaerobic = #{anaerobic,jdbcType=VARCHAR},
+      </if>
+      <if test="pliable != null" >
+        pliable = #{pliable,jdbcType=VARCHAR},
+      </if>
+      <if test="arthrosis != null" >
+        arthrosis = #{arthrosis,jdbcType=VARCHAR},
+      </if>
+      <if test="walkpercent != null" >
+        walkpercent = #{walkpercent,jdbcType=VARCHAR},
+      </if>
+      <if test="recommendpercent != null" >
+        recommendpercent = #{recommendpercent,jdbcType=VARCHAR},
+      </if>
+      <if test="boutiquepercent != null" >
+        boutiquepercent = #{boutiquepercent,jdbcType=VARCHAR},
+      </if>
+      <if test="restspercent != null" >
+        restspercent = #{restspercent,jdbcType=VARCHAR},
+      </if>
+      <if test="durationnum != null" >
+        durationnum = #{durationnum,jdbcType=VARCHAR},
+      </if>
+      <if test="starttime != null" >
+        startTime = #{starttime,jdbcType=VARCHAR},
+      </if>
+      <if test="endtime != null" >
+        endTime = #{endtime,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where we_id = #{weId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.yihe.system.domain.YhSportWeekly" >
+    update yh_sport_weekly
+    set nut = #{nut,jdbcType=INTEGER},
+      userName = #{username,jdbcType=VARCHAR},
+      age = #{age,jdbcType=INTEGER},
+      userCode = #{usercode,jdbcType=VARCHAR},
+      uweight = #{uweight,jdbcType=VARCHAR},
+      tenergy = #{tenergy,jdbcType=VARCHAR},
+      frequency = #{frequency,jdbcType=VARCHAR},
+      number = #{number,jdbcType=VARCHAR},
+      array = #{array,jdbcType=VARCHAR},
+      walk = #{walk,jdbcType=VARCHAR},
+      recommend = #{recommend,jdbcType=VARCHAR},
+      boutique = #{boutique,jdbcType=VARCHAR},
+      rests = #{rests,jdbcType=VARCHAR},
+      aerobic = #{aerobic,jdbcType=VARCHAR},
+      anaerobic = #{anaerobic,jdbcType=VARCHAR},
+      pliable = #{pliable,jdbcType=VARCHAR},
+      arthrosis = #{arthrosis,jdbcType=VARCHAR},
+      walkpercent = #{walkpercent,jdbcType=VARCHAR},
+      recommendpercent = #{recommendpercent,jdbcType=VARCHAR},
+      boutiquepercent = #{boutiquepercent,jdbcType=VARCHAR},
+      restspercent = #{restspercent,jdbcType=VARCHAR},
+      durationnum = #{durationnum,jdbcType=VARCHAR},
+      startTime = #{starttime,jdbcType=VARCHAR},
+      endTime = #{endtime,jdbcType=VARCHAR}
+    where we_id = #{weId,jdbcType=INTEGER}
+  </update>
+</mapper>

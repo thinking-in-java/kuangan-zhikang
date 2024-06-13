@@ -1,0 +1,719 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, maximum-scale=1">
+<title>基本信息</title>
+<link rel="stylesheet" th:href="@{/assets/libs/layui/css/layui.css}" />
+<link rel="stylesheet" th:href="@{/assets/module/admin.css}" />
+<style type="text/css">
+.layui-elem-quote {
+	margin-bottom: 10px;
+	padding: 9px;
+	line-height: 3px;
+	border-left: 5px solid #009688;
+	border-radius: 0 2px 2px 0;
+	background-color: white;
+	margin-top: 20px;
+	float: left;
+	margin-left: 20px;
+}
+
+.layui-form-checked span, .layui-form-checked:hover span {
+	background-color: rgb(42, 156, 228);
+}
+
+.layui-form-checked i, .layui-form-checked:hover i {
+	color: rgb(42, 156, 228);
+}
+
+.layui-input-block.f {
+	margin-left: 24px;
+	min-height: 36px;
+}
+
+.layui-form-item .layui-form-checkbox {
+	margin-top: 13px;
+}
+
+
+/* .layui-btn-primary:hover, .layui-btn-group .layui-btn-primary:hover {
+
+    color: rgb(64, 174, 252);
+    border-color: rgb(64, 174, 252);
+
+} */
+.tt {
+	width: 120px;
+	height: 35px;
+	color: rgba(64, 174, 252, 1);
+	border-radius: 8px;
+	font-size: 14px;
+	text-align: center;
+	border: 1px solid;
+	line-height: 34px;
+	display: inline-grid;
+	margin-right: 10px;
+}
+</style>
+</head>
+<body style="margin: 7px;">
+	<!-- 页面加载loading -->
+	<div class="page-loading">
+		<div class="ball-loader">
+			<span></span><span></span><span></span><span></span>
+		</div>
+	</div>
+	<div class="layui-fluid">
+		<div class="layui-row">
+			<div
+				style="width: 100%; height: 100%; background-color: #FFF; position: relative;">
+				<div class="layui-tab layui-tab-brief" lay-filter="docDemoTabBrief">
+					<!-- <ul class="layui-tab-title">
+						<li class="layui-this">基本信息</li>
+
+					</ul> -->
+					<div class="layui-tab-content">
+
+
+						<!--基本信息 -->
+						<div class="layui-tab-item layui-show">
+
+							<!-- 正文开始 -->
+							<div class="layui-fluid">
+								<div style="padding-bottom: 70px;">
+									<form class="layui-form" action="" id="userForm"
+										lay-filter="userForm">
+										<div class="layui-row layui-col-space15">
+											<div class="layui-col-md6">
+												<div class="layui-card">
+													<div class="layui-card-header">
+														<blockquote class="layui-elem-quote"
+															style="text-align: center;">基本信息</blockquote>
+													</div>
+
+													<div class="layui-card-body">
+
+														<div class="layui-form-item">
+															<label style="width: 72px;"
+																class="layui-form-label layui-form-required">真实姓名</label>
+															<div class="layui-input-block">
+																<div class="layui-row">
+																	<input type="hidden" name="userCode"
+																		lay-verify="userCode"> <input
+																		style="margin-left: -89px; width: 450px;" type="text"
+																		name="name" lay-verify="name"
+																		lay-reqtext="不能为空" 
+																		placeholder="请输入名称，最大限制20个字符" autocomplete="off"
+																		 class="layui-input">
+																</div>
+															</div>
+														</div>
+														<!-- 性别 -->
+														<div class="layui-form-item">
+															<label class="layui-form-label "
+																style="margin-left: -43px;">性别</label>
+															<div class="layui-input-block">
+																<div class="layui-row" style="margin-left: -89px;">
+																	<input type="radio" name="gender" value="1" title="男">
+																	<input type="radio" name="gender" value="2" title="女"
+																		checked>
+																</div>
+															</div>
+														</div>
+
+														<!-- 	出生日期 -->
+														<div>
+															<div class="layui-form-item">
+																<label style="width: 35px" class="layui-form-label">民族</label>
+																<div class="layui-input-block">
+																	<div class="layui-row"
+																		style="margin-left: -89px; width: 200px;">
+																		<select name="nation" id="nation">
+																			<option value=" "></option>
+																		</select>
+																	</div>
+																</div>
+															</div>
+
+															<div class="layui-form-item"
+																style="float: right;margin-right: 128px;margin-top: -87px;">
+																<label style="width: 63px" class="layui-form-label">出生日期</label>
+																<div class="layui-input-block">
+																	<div class="layui-row">
+																		<input class="layui-input icon-date"
+																			style="margin-left: -89px; width: 200px;" type="text"
+																			name="birthDate" id="test1" placeholder="请选择日期"
+																			autocomplete="off" lay-verType="tips">
+																	</div>
+																</div>
+															</div>
+														</div>
+
+														<div class="layui-form-item">
+															<label style="width: 63px;" class="layui-form-label">身份证号</label>
+															<div class="layui-input-block">
+																<div class="layui-row">
+																	<input style="margin-left: -89px; width: 450px;"
+																		type="text" lay-verify="cardidentity"
+																		name="cardidentity" lay-reqtext="请输入正确的身份证号码"
+																		placeholder="请输入身份证号" autocomplete="off"
+																		lay-verType="tips" class="layui-input">
+																</div>
+															</div>
+														</div>
+
+														<div class="layui-form-item">
+															<label style="width: 63px;" class="layui-form-label ">户籍地址</label>
+															<div class="layui-input-block">
+																<div class="layui-row">
+																	<input style="margin-left: -89px; width: 450px;"
+																		type="text" name="address" placeholder="请输入户籍地址"
+																		autocomplete="off" lay-verType="tips"
+																		class="layui-input">
+																</div>
+															</div>
+														</div>
+
+
+
+													</div>
+												</div>
+											</div>
+											<div class="layui-col-md6">
+												<div class="layui-card">
+													<div class="layui-card-header">
+														<blockquote class="layui-elem-quote"
+															style="text-align: center;">联系信息</blockquote>
+													</div>
+													<div class="layui-card-body">
+														<!-- 手机号 -->
+														<div class="layui-form-item">
+															<label style="width: 97px;"
+																class="layui-form-label layui-form-required	">手机号码&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+																<i  style="z-index: 999;position: absolute;" class="layui-icon layui-icon-help" id="help"></i>
+															</label>
+															<div class="layui-input-block">
+																<div class="layui-row">
+																	<input 
+																		style="margin-left: -89px; width: 250px;"
+																		lay-reqtext="不能为空" id="mobile" name="mobile"
+																		lay-verify="mobile" placeholder="请输入手机号码"
+																		autocomplete="off" class="layui-input">
+																</div>
+															</div>
+														</div>
+
+														<div class="layui-form-item">
+															<label style="width: 63px;" class="layui-form-label ">工作单位</label>
+															<div class="layui-input-block">
+																<div class="layui-row">
+																	<input style="margin-left: -89px; width: 450px;"
+																		type="text" name="unit" placeholder="请输工作单位"
+																		autocomplete="off" lay-verType="tips"
+																		class="layui-input">
+																</div>
+															</div>
+														</div>
+
+														<div class="layui-form-item">
+															<label style="width: 63px;" class="layui-form-label ">常住地址</label>
+															<div class="layui-input-block">
+																<div class="layui-row">
+																	<input style="margin-left: -89px; width: 450px;"
+																		type="text" name="permanentaddress"
+																		placeholder="请输常住地址" autocomplete="off"
+																		lay-verType="tips" class="layui-input">
+																</div>
+															</div>
+														</div>
+
+														<div class="layui-form-item">
+															<label style="width: 341px; margin-left: -208px;"
+																class="layui-form-label">紧急联系人手机号码 </label>
+															<div class="layui-input-block">
+																<div class="layui-row">
+																	<input type="tel"
+																		style="margin-left: -89px; width: 250px;"
+																		lay-verType="tips" name="relation"
+																		 placeholder="请输入紧急联系人手机号码"
+																		autocomplete="off" class="layui-input">
+																</div>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+											<div class="layui-col-md6">
+												<div class="layui-card">
+													<div class="layui-card-header">
+														<blockquote class="layui-elem-quote"
+															style="text-align: center;">其他信息</blockquote>
+													</div>
+													<div class="layui-card-body">
+
+
+														<!-- 婚姻状况 -->
+														<div>
+															<div class="layui-form-item">
+																<label style="width: 64px" class="layui-form-label">婚姻状况</label>
+																<div class="layui-input-block">
+																	<div class="layui-row"
+																		style="margin-left: -89px; width: 200px;">
+																		<select id="maritalStatus" name="maritalStatus"
+																			lay-verType="tips">
+																			<option value=""></option>
+																			<option value="未婚">未婚</option>
+																			<option value="丧偶">丧偶</option>
+																			<option value="离婚">离婚</option>
+																			<option value="已婚">已婚</option>
+																			<option value="其它">其它</option>
+																		</select>
+																	</div>
+																</div>
+															</div>
+
+															<div class="layui-form-item"
+																style="float: right; margin-right: 100px; margin-top: -91px;">
+																<label style="width: 62px" class="layui-form-label">文化程度</label>
+																<div class="layui-input-block">
+																	<div class="layui-row"
+																		style="margin-left: -89px; width: 200px;">
+																		<select id="edBackground" name="edBackground"
+																			lay-verType="tips">
+																			<option value=""></option>
+																			<option value="研究生">研究生</option>
+																			<option value="大学本科">大学本科</option>
+																			<option value="大学专科">大学专科</option>
+																			<option value="中专">中专</option>
+																			<option value="高中">高中</option>
+																			<option value="初中">初中</option>
+																			<option value="小学">小学</option>
+																			<option value="小学">小学</option>
+																			<option value="小学以下">小学以下</option>
+																			<option value="其他">其他</option>
+																		</select>
+																	</div>
+																</div>
+															</div>
+														</div>
+
+
+														<!-- 血型 -->
+														<div>
+															<div class="layui-form-item">
+																<label style="width: 36px" class="layui-form-label ">血型</label>
+																<div class="layui-input-block">
+																	<div class="layui-row"
+																		style="margin-left: -89px; width: 200px;">
+																		<select name="bloodType" lay-verType="tips">
+																			<option value=""></option>
+																			<option value="O型">O型</option>
+																			<option value="A型">A型</option>
+																			<option value="B型">B型</option>
+																			<option value="AB型">AB型</option>
+																			<option value="不详">不详</option>
+																		</select>
+																	</div>
+																</div>
+															</div>
+
+															<div class="layui-form-item"
+																style="float: right; margin-right: 100px; margin-top: -91px;">
+																<label style="width: 52px" class="layui-form-label">Rh阴性</label>
+																<div class="layui-input-block">
+																	<div class="layui-row"
+																		style="margin-left: -89px; width: 200px;">
+																		<select name="rhfeminine" lay-verType="tips">
+																			<option value=""></option>
+																			<option value="是">是</option>
+																			<option value="否">否</option>
+																			<option value="不详">不详</option>
+
+																		</select>
+																	</div>
+																</div>
+															</div>
+														</div>
+
+														<div class="layui-form-item">
+															<label style="width: 36px" class="layui-form-label ">职业</label>
+															<div class="layui-input-block">
+																<div class="layui-row"
+																	style="margin-left: -89px; width: 400px;">
+																	<select name="occupation" lay-verType="tips">
+																		<option value=""></option>
+																		<option value="国家机关、党群组织、企业、事业单位负责人">国家机关、党群组织、企业、事业单位负责人</option>
+																		<option value="专业技术人员">专业技术人员</option>
+																		<option value="办事人员和有关人员">办事人员和有关人员</option>
+																		<option value="商业、服务业人员">商业、服务业人员</option>
+																		<option value="农、林、牧、渔、水利业生产人员">农、林、牧、渔、水利业生产人员</option>
+																		<option value="生产、运输设备操作人员及有关人员">生产、运输设备操作人员及有关人员</option>
+																		<option value="军人">军人</option>
+																		<option value="不便分类的其他从业人员">不便分类的其他从业人员</option>
+																		<option value="婴幼儿、学龄前儿童">婴幼儿、学龄前儿童</option>
+																		<option value="学生">学生</option>
+																		<option value="家务">家务</option>
+																		<option value="无业或待业">无业或待业</option>
+
+																	</select>
+																</div>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+											<div class="layui-col-md6">
+												<div class="layui-card" style="margin-top: -270px;">
+													<div class="layui-card-header">
+														<blockquote class="layui-elem-quote"
+															style="text-align: center;">账号信息</blockquote>
+													</div>
+													<div class="layui-card-body">
+														<!-- 登录账号 -->
+														<div class="layui-form-item">
+															<label style="width: 72px;"
+																class="layui-form-label layui-form-required">登录账号
+															</label>
+															<div class="layui-input-block">
+																<div class="layui-row">
+																	<input style="margin-left: -89px; width: 450px;"
+																		name="userName" lay-verify="userName" id="userName"
+																		lay-reqtext="不能为空" placeholder="请输入账号，由4到20位字符组成"
+																		autocomplete="off"  class="layui-input layui-disabled" disabled>
+																</div>
+															</div>
+														</div>
+														
+												<!-- 		
+												<div class="layui-form-item">
+														<label style="width: 72px;"
+															class="layui-form-label layui-form-required">原始密码</label>
+															<div class="layui-input-block">
+																<div class="layui-row">
+																	<input style="margin-left: -89px; width: 450px;" type="text" id="original"
+																		lay-verify="required"  lay-verType="tips"
+																		placeholder="请输入账号原始密码" autocomplete="off" 
+																		class="layui-input">
+																</div>
+															</div>
+														</div> -->
+														
+													<!-- <div class="layui-form-item">
+															<label style="width: 59px;"
+																class="layui-form-label layui-form-required">新密码 </label>
+															<div class="layui-input-block">
+																<div class="layui-row">
+																	<input style="margin-left: -89px; width: 450px;" type="text"
+																	name="userPwd" required lay-verify="userPwd" lay-verType="tips"
+																		placeholder="请输入账号登录密码，6~20位任意字母和数字" autocomplete="off" 
+																		class="layui-input">
+																</div>
+															</div>
+														</div> -->
+														
+													<!-- <div class="layui-form-item">
+															<label style="width: 72px;"
+																class="layui-form-label layui-form-required">确认密码 </label>
+															<div class="layui-input-block">
+																<div class="layui-row">
+																	<input style="margin-left: -89px; width: 450px;" type="text"
+																		lay-verify="required|confirmPass" lay-verType="tips"
+																		placeholder="请输入账号登录密码，6~20位任意字母和数字" autocomplete="off" 
+																		class="layui-input">
+																</div>
+															</div>
+														</div>
+														 -->
+												
+														
+													</div>
+												</div>
+											</div>
+										</div>
+										<div class="layui-form-item"
+											style="margin-left: -88px; padding-bottom: 40px;">
+											<div class="layui-input-block">
+												<button style="width: 100px; margin-left: 14px;"
+													class="layui-btn layui-btn-normal" lay-submit=''
+													lay-filter="saveupdate">保存</button>
+												<button style="width: 100px;" type="reset" 
+													class="layui-btn layui-btn-primary" id="cancel">取消</button>
+											</div>
+										</div>
+									</form>
+								</div>
+							</div>
+						</div>
+
+	
+						<!-- 体检信息-->
+						
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+</body>
+<!-- js部分 -->
+<script type="text/javascript" th:src="@{/assets/js/jquery-1.11.1.js}"></script>
+<script type="text/javascript" th:src="@{/assets/libs/layui/layui.js}"></script>
+<script type="text/javascript" th:src="@{/assets/js/common.js}"></script>
+
+
+
+<script type="text/javascript" th:inline="javascript">
+var userCode = [[${userCode}]]; 
+var pwd ="";
+ 
+	//导航栏
+	layui.use('element', function() {
+		var $ = layui.jquery, element = layui.element; //Tab的切换功能，切换事件监听等，需要依赖element模块
+
+		$('.site-demo-active').on('click', function() {
+			var othis = $(this), type = othis.data('type');
+			active[type] ? active[type].call(this, othis) : '';
+		});
+
+	});
+	console.log("用户ID",userCode)
+	layui.use([ 'layer', 'form', 'laydate', 'notice' ],function() {
+						var $ = layui.jquery;
+						var layer = layui.layer;
+						var form = layui.form;
+						var laydate = layui.laydate;
+						var notice = layui.notice;
+
+						  
+						 var tip_index;
+							$("#help").hover(function(){
+							    tip_index =  layer.tips('可以通过手机号码找回登录密码', this,{
+							        tips: [2, 'rgba(0, 0, 0, 1)'],
+							        time:0
+							    });
+							},function(){
+							    layer.close(tip_index);
+							});
+							
+						// 校验两次密码是否一
+					     form.verify({
+					         confirmPass:function(value){
+					             if($('input[name=userPwd]').val() !== value)
+					                 return '两次密码输入不一致！';	
+					         	
+					         }
+					     
+					     }); 
+						//执行一个laydate实例
+						laydate.render({
+							elem : '#test1',//指定元素
+							trigger: 'click'
+						});
+						
+					/* 	//输入框的属性事件
+						 $('#original').blur(function() {
+								var original =  $("#original").val();
+								//debugger
+								console.log(original+"输入")
+								$.ajax({
+									type : 'GET',
+									url : '/YhUserReginfo/yhUserPwd',
+									data :{userCode:userCode,original:original},
+									success : function(data) {
+										console.log("后台返回的对象：",data)
+										//debugger
+									 if(data==""){
+										 layer.msg("原始密码错误");
+									 }
+									}
+
+								});
+						 });  */
+						
+						
+						 $("#cancel").click(function(){
+							 window.history.back(-1);
+						    }) 	
+						
+						 $('#mobile').blur(function () {
+								    var mobile = $("#mobile").val();
+								    $.ajax({
+								 		type:'get', 
+								 		url:'/YhUserReginfo/selectMobile',
+								 		data:{mobile:mobile},
+								 		success : function(data){
+								 			console.log(data,"返回的手机号和code")
+								 			if(data.mobile ==mobile && data.userCode!=userCode){
+								 				layer.msg("手机号码已被其他用户使用");	
+								 			}
+								 		}
+								 	});
+								 })
+						    
+							  //监听提交
+						  form.on('submit(saveupdate)', function(dataYh){
+							  //var userName = $("#userName").val();
+							    var mobile = $("#mobile").val();
+							    $.ajax({
+							 		type:'get', 
+							 		url:'/YhUserReginfo/selectPhoneAndName',
+							 		  async: false,
+							 		data:{mobile:mobile},
+							 		success : function(result){
+							 			console.info("11111111111111",result)
+							 			var flag = true;
+							 			if (result != null) {
+							 				for(var i = 0; i < result.length; i++) {
+							 					if (result[i].userCode != userCode && result[i].userName == userName) {
+									 				console.info("用户名重复")
+									 				layer.msg("登录账号已存在，不能重名创建");
+									 				flag = false;
+									 			}
+									 			if (result[i].userCode != userCode && result[i].mobile == mobile) {
+									 				console.info("手机重复")
+									 				layer.msg("手机号码已被其他用户使用");
+									 				flag = false;
+									 			}
+							 				}
+							 			}
+							 			console.info("2222222222222",flag)
+							 			if (flag) {
+							 				console.info("33333333333333333")
+							 				$.ajax({
+												type : 'post',
+												url : '/YhUserReginfo/save',
+												data : dataYh.field,
+												success : function(data) {
+													console.log(data)
+													if (data == 1) {
+														layer.msg("操作成功");
+														parent.location.reload(); 
+													} else {
+														layer.msg("操作失败");
+													}
+												}
+
+											});
+							 			}
+							 		}
+							 	});
+							    console.info("44444444444444444444")
+							// 阻止表单跳转。如果需要表单跳转，去掉这段即可。
+							return false;
+						  });
+						
+						
+						
+				
+						var nations = [ "汉族", "蒙古族", "回族", "藏族", "维吾尔族", "苗族",
+								"彝族", "壮族", "布依族", "朝鲜族", "满族", "侗族", "瑶族",
+								"白族", "土家族", "哈尼族", "哈萨克族", "傣族", "黎族", "傈僳族",
+								"佤族", "畲族", "高山族", "拉祜族", "水族", "东乡族", "纳西族",
+								"景颇族", "柯尔克孜族", "土族", "达斡尔族", "仫佬族", "羌族",
+								"布朗族", "撒拉族", "毛南族", "仡佬族", "锡伯族", "阿昌族",
+								"普米族", "塔吉克族", "怒族", "乌孜别克族", "俄罗斯族", "鄂温克族",
+								"德昂族", "保安族", "裕固族", "京族", "塔塔尔族", "独龙族",
+								"鄂伦春族", "赫哲族", "门巴族", "珞巴族", "基诺族" ];
+
+						var option = "";
+						for (var i = 0; i < nations.length; i++) {
+							option += '<option value="' + nations[i] + '">'
+									+ nations[i] + '</option>';
+						}
+						/*  console.log(option+"-----------");  */
+						$(option).appendTo("#nation");
+						//下拉框回显
+						form.render("select");
+						
+						
+						 $.ajax({
+					   		 type:'get',
+					   		 url:'/YhUserReginfo/loginMessage',
+					   		 data:{userCode:userCode},
+					   		success : function(data){
+					   			form.val('userForm', {
+									"userCode" : data.userCode,
+									"name" : data.name,
+									"gender" : data.gender,
+									"birthDate" : data.birthtime,
+									"nation" : data.nation,
+									"cardidentity" : data.cardidentity,
+									"address" : data.address,
+									"mobile" : data.mobile,
+									"unit" : data.unit,
+									"permanentaddress" : data.permanentaddress,
+									"relation" : data.relation,
+									"maritalStatus" : data.maritalStatus,
+									"edBackground" : data.edBackground,
+									"bloodType" : data.bloodType,
+									"rhfeminine" : data.rhfeminine,
+									"occupation" : data.occupation,
+									"userName" : data.userName,
+									
+								});
+							}
+					   })
+
+						//自定义验证规则
+
+					   form.verify({
+							/*  name: [
+								 /^[\u4e00-\u9fa5]{2,10}$/
+						      ,'真实姓名必须是2到10个汉字'
+						    ], */
+							/* userPwd: [
+						    	/^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{6,20}$/
+						    	,'请输入账号登录密码，6~20位任意数字和字母组成'
+							    ], */
+						   mobile: function(value){
+						    	console.info(value)
+								 if(value==null || value==""){
+									 return '不能为空';
+								 }else if(value.length < 11){
+							        return '手机号不能低于11位数字';
+							      }else if(value.length > 11){
+							    	  return '手机号不能超过11位数字';
+							      }
+							    },
+							    userName: function(value){
+									 var name = 0;
+									  for(var i = 0; i<value.length;i++){
+										  if (escape(value[i]).indexOf("%u")!=-1) {
+											  name = name + 2;
+										  }else{
+											  name = name + 1;
+										  }
+									  }
+									 if(name<0){
+										 return '不能为空';
+									  }else if(name<4 || name>20){
+										  return '账号必须是4到20位字符'; 
+									  } 
+								 },
+								 name: function(value){
+									 var name2 = 0;
+									  for(var i = 0; i<value.length;i++){
+										  if (escape(value[i]).indexOf("%u")!=-1) {
+											  name2 = name2 + 2;
+										  }else{
+											  name2 = name2 + 1;
+										  } 
+									  }
+									 if(name2<=0){
+										 return '不能为空';
+									  }else if(name2>20){
+										  return '最大限制20个字符'; 
+									  } 
+								 },
+								 cardidentity : [ 
+										/(^$)|^[1-9]\d{5}(18|19|([23]\d))\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\d{3}[0-9Xx]$/,
+										'请输入正确的身份证号码']
+						  });
+					});
+</script>
+
+</html>
+

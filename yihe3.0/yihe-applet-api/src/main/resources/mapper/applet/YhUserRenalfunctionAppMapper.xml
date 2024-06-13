@@ -1,0 +1,279 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yihe.applet.api.mapper.YhUserRenalfunctionAppMapper">
+  <resultMap id="BaseResultMap" type="com.yihe.applet.api.domain.YhUserRenalfunctionApp">
+    <id column="renalid" jdbcType="INTEGER" property="renalid" />
+    <result column="creatinine" jdbcType="VARCHAR" property="creatinine" />
+    <result column="urea_nitrogen" jdbcType="VARCHAR" property="ureaNitrogen" />
+    <result column="uric_acid" jdbcType="VARCHAR" property="uricAcid" />
+    <result column="user_id" jdbcType="INTEGER" property="userId" />
+    <result column="Is_Del" jdbcType="INTEGER" property="isDel" />
+    <result column="inertTime" jdbcType="VARCHAR" property="inerttime" />
+    <result column="Data_Source" jdbcType="VARCHAR" property="dataSource" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    renalid, creatinine, urea_nitrogen, uric_acid, user_id,Is_Del, inertTime, Data_Source
+  </sql>
+  <select id="findRenInfoAllByUserCode" resultMap="BaseResultMap">
+    select * from yh_user_renalfunction WHERE  user_id=#{usercode} and Is_Del =2
+    <if test="timetype==0">
+      AND inertTime &gt;=  #{strTime} AND inertTime &lt;= #{endTime}
+    </if>
+    <if test="timetype==1">
+      AND inertTime LIKE CONCAT('',#{strTime},'%')
+    </if>
+    <if test="timetype==2">
+      AND YEAR(inertTime) =#{strTime}
+    </if>
+  </select>
+  <select id="findRenInfoByTimeType" resultMap="BaseResultMap">
+SELECT * FROM `yh_user_renalfunction` WHERE  user_id=#{usercode} and Is_Del =2
+<if test="timetype==0">
+    AND inertTime &gt;=  #{strTime} AND inertTime &lt;= #{endTime}
+  </if>
+    <if test="timetype==1">
+      AND inertTime LIKE CONCAT('',#{strTime},'%')
+    </if>
+    <if test="timetype==2">
+      AND YEAR(inertTime) =#{strTime}
+    </if>
+
+  </select>
+   <select id="selectByPrimaryKeyNewest" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    FROM `yh_user_renalfunction` WHERE Is_Del=2 AND user_id=#{eid}
+		ORDER BY inertTime DESC LIMIT 1
+  </select>
+   
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from yh_user_renalfunction
+    where renalid = #{renalid,jdbcType=INTEGER}
+  </select>
+      <select id="selectByPrimaryKeyBYeid" parameterType="java.lang.String" resultMap="BaseResultMap">
+    SELECT 
+    <include refid="Base_Column_List" />
+    FROM yh_user_renalfunction
+    WHERE  user_id=#{eid} AND Is_Del=2 order by inertTime DESC limit 7
+  </select>
+  
+   <select id="selectByPrimaryKeyFindEntryTime" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    inertTime
+    from yh_user_renalfunction
+    where user_id = #{E_User_Id,jdbcType=INTEGER} and  Is_Del=2
+    
+  </select>
+  
+   <select id="selectByPrimaryKeyFindEntryTimeAnduserid"   resultMap="BaseResultMap">
+   SELECT 
+	<include refid="Base_Column_List" />
+	FROM `yh_user_renalfunction` WHERE inertTime LIKE concat(concat('',#{time}),'%') AND user_id=#{usercode} and  Is_Del=2  order by inertTime desc
+    
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from yh_user_renalfunction
+    where renalid = #{renalid,jdbcType=INTEGER}
+  </delete>
+   
+  <insert id="insert" parameterType="com.yihe.applet.api.domain.YhUserRenalfunctionApp">
+    insert into yh_user_renalfunction (renalid, creatinine, urea_nitrogen, 
+      uric_acid, user_id, inertTime, 
+      Data_Source)
+    values (#{renalid,jdbcType=INTEGER}, #{creatinine,jdbcType=VARCHAR}, #{ureaNitrogen,jdbcType=VARCHAR}, 
+      #{uricAcid,jdbcType=VARCHAR}, #{userId,jdbcType=INTEGER}, #{inerttime,jdbcType=TIMESTAMP}, 
+      #{dataSource,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.yihe.applet.api.domain.YhUserRenalfunctionApp">
+    insert into yh_user_renalfunction
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="renalid != null">
+        renalid,
+      </if>
+      <if test="creatinine != null">
+        creatinine,
+      </if>
+      <if test="ureaNitrogen != null">
+        urea_nitrogen,
+      </if>
+      <if test="uricAcid != null">
+        uric_acid,
+      </if>
+      <if test="userId != null">
+        user_id,
+      </if>
+      <if test="inerttime != null">
+        inertTime,
+      </if>
+      <if test="dataSource != null">
+        Data_Source,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="renalid != null">
+        #{renalid,jdbcType=INTEGER},
+      </if>
+      <if test="creatinine != null">
+        #{creatinine,jdbcType=VARCHAR},
+      </if>
+      <if test="ureaNitrogen != null">
+        #{ureaNitrogen,jdbcType=VARCHAR},
+      </if>
+      <if test="uricAcid != null">
+        #{uricAcid,jdbcType=VARCHAR},
+      </if>
+      <if test="userId != null">
+        #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="inerttime != null">
+        #{inerttime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="dataSource != null">
+        #{dataSource,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  
+  <update id="updateByExampleSelective" parameterType="map">
+    update yh_user_renalfunction
+    <set>
+      <if test="record.renalid != null">
+        renalid = #{record.renalid,jdbcType=INTEGER},
+      </if>
+      <if test="record.creatinine != null">
+        creatinine = #{record.creatinine,jdbcType=VARCHAR},
+      </if>
+      <if test="record.ureaNitrogen != null">
+        urea_nitrogen = #{record.ureaNitrogen,jdbcType=VARCHAR},
+      </if>
+      <if test="record.uricAcid != null">
+        uric_acid = #{record.uricAcid,jdbcType=VARCHAR},
+      </if>
+      <if test="record.userId != null">
+        user_id = #{record.userId,jdbcType=INTEGER},
+      </if>
+      <if test="record.inerttime != null">
+        inertTime = #{record.inerttime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.dataSource != null">
+        Data_Source = #{record.dataSource,jdbcType=VARCHAR},
+      </if>
+      <if test="record.isDel != null">
+        Is_Del = #{record.isDel,jdbcType=INTEGER},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update yh_user_renalfunction
+    set renalid = #{record.renalid,jdbcType=INTEGER},
+      creatinine = #{record.creatinine,jdbcType=VARCHAR},
+      urea_nitrogen = #{record.ureaNitrogen,jdbcType=VARCHAR},
+      uric_acid = #{record.uricAcid,jdbcType=VARCHAR},
+      user_id = #{record.userId,jdbcType=INTEGER},
+      inertTime = #{record.inerttime,jdbcType=TIMESTAMP},
+      Data_Source = #{record.dataSource,jdbcType=VARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.yihe.applet.api.domain.YhUserRenalfunctionApp">
+    update yh_user_renalfunction
+    <set>
+      <if test="creatinine != null">
+        creatinine = #{creatinine,jdbcType=VARCHAR},
+      </if>
+      <if test="ureaNitrogen != null">
+        urea_nitrogen = #{ureaNitrogen,jdbcType=VARCHAR},
+      </if>
+      <if test="uricAcid != null">
+        uric_acid = #{uricAcid,jdbcType=VARCHAR},
+      </if>
+      <if test="userId != null">
+        user_id = #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="inerttime != null">
+        inertTime = #{inerttime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="dataSource != null">
+        Data_Source = #{dataSource,jdbcType=VARCHAR},
+      </if>
+       <if test="isDel != null">
+        is_Del = #{isDel,jdbcType=INTEGER},
+      </if>
+    </set>
+    where renalid = #{renalid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.yihe.applet.api.domain.YhUserRenalfunctionApp">
+    update yh_user_renalfunction
+    set creatinine = #{creatinine,jdbcType=VARCHAR},
+      urea_nitrogen = #{ureaNitrogen,jdbcType=VARCHAR},
+      uric_acid = #{uricAcid,jdbcType=VARCHAR},
+      user_id = #{userId,jdbcType=INTEGER},
+      inertTime = #{inerttime,jdbcType=TIMESTAMP},
+      Data_Source = #{dataSource,jdbcType=VARCHAR}
+    where renalid = #{renalid,jdbcType=INTEGER}
+  </update>
+</mapper>

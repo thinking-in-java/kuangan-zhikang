@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yihe.system.mapper.YhScoreEventCategoryWebMapper" >
+  <resultMap id="BaseResultMap" type="com.yihe.system.domain.YhScoreEventCategoryWeb" >
+    <id column="scoreEvent_ID" property="scoreeventId" jdbcType="INTEGER" />
+    <result column="event_name" property="eventName" jdbcType="VARCHAR" />
+    <result column="score" property="score" jdbcType="INTEGER" />
+    <result column="event_type" property="eventType" jdbcType="VARCHAR" />
+    <result column="type" property="type" jdbcType="INTEGER" />
+    <result column="continuous_status" property="continuousStatus" jdbcType="INTEGER" />
+    <result column="putaway" property="putaway" jdbcType="INTEGER" />
+    <result column="update_date" property="updateDate" jdbcType="TIMESTAMP" />
+    <result column="creator" property="creator" jdbcType="VARCHAR" />
+    <result column="standby" property="standby" jdbcType="VARCHAR" />
+    <result column="standby2" property="standby2" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    scoreEvent_ID, event_name, score, event_type, type, continuous_status, putaway, update_date, 
+    creator, standby, standby2
+  </sql>
+  
+  
+    <select id="selectYhScoreEventCategoryPage" resultMap="BaseResultMap">
+      select * from yh_score_event_category where scoreEvent_ID is not null
+       <if test="type != null" >
+       		and type = #{type}
+      </if>
+        <if test="putaway != null" >
+       		and putaway = #{putaway}
+      </if>
+       <if test="eventName != null and eventName !=''" >
+       		and event_name like concat('%',#{eventName},'%')
+      </if>
+      order by update_date desc
+  </select>
+  
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from yh_score_event_category
+    where scoreEvent_ID = #{scoreeventId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from yh_score_event_category
+    where scoreEvent_ID = #{scoreeventId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.yihe.system.domain.YhScoreEventCategoryWeb" >
+    insert into yh_score_event_category (scoreEvent_ID, event_name, score, 
+      event_type, type, continuous_status, 
+      putaway, update_date, creator, 
+      standby, standby2)
+    values (#{scoreeventId,jdbcType=INTEGER}, #{eventName,jdbcType=VARCHAR}, #{score,jdbcType=INTEGER}, 
+      #{eventType,jdbcType=VARCHAR}, #{type,jdbcType=INTEGER}, #{continuousStatus,jdbcType=INTEGER}, 
+      #{putaway,jdbcType=INTEGER}, #{updateDate,jdbcType=TIMESTAMP}, #{creator,jdbcType=VARCHAR}, 
+      #{standby,jdbcType=VARCHAR}, #{standby2,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.yihe.system.domain.YhScoreEventCategoryWeb" >
+    insert into yh_score_event_category
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="scoreeventId != null" >
+        scoreEvent_ID,
+      </if>
+      <if test="eventName != null" >
+        event_name,
+      </if>
+      <if test="score != null" >
+        score,
+      </if>
+      <if test="eventType != null" >
+        event_type,
+      </if>
+      <if test="type != null" >
+        type,
+      </if>
+      <if test="continuousStatus != null" >
+        continuous_status,
+      </if>
+      <if test="putaway != null" >
+        putaway,
+      </if>
+      <if test="updateDate != null" >
+        update_date,
+      </if>
+      <if test="creator != null" >
+        creator,
+      </if>
+      <if test="standby != null" >
+        standby,
+      </if>
+      <if test="standby2 != null" >
+        standby2,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="scoreeventId != null" >
+        #{scoreeventId,jdbcType=INTEGER},
+      </if>
+      <if test="eventName != null" >
+        #{eventName,jdbcType=VARCHAR},
+      </if>
+      <if test="score != null" >
+        #{score,jdbcType=INTEGER},
+      </if>
+      <if test="eventType != null" >
+        #{eventType,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null" >
+        #{type,jdbcType=INTEGER},
+      </if>
+      <if test="continuousStatus != null" >
+        #{continuousStatus,jdbcType=INTEGER},
+      </if>
+      <if test="putaway != null" >
+        #{putaway,jdbcType=INTEGER},
+      </if>
+      <if test="updateDate != null" >
+        #{updateDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="creator != null" >
+        #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="standby != null" >
+        #{standby,jdbcType=VARCHAR},
+      </if>
+      <if test="standby2 != null" >
+        #{standby2,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.yihe.system.domain.YhScoreEventCategoryWeb" >
+    update yh_score_event_category
+    <set >
+      <if test="eventName != null" >
+        event_name = #{eventName,jdbcType=VARCHAR},
+      </if>
+      <if test="score != null" >
+        score = #{score,jdbcType=INTEGER},
+      </if>
+      <if test="eventType != null" >
+        event_type = #{eventType,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null" >
+        type = #{type,jdbcType=INTEGER},
+      </if>
+      <if test="continuousStatus != null" >
+        continuous_status = #{continuousStatus,jdbcType=INTEGER},
+      </if>
+      <if test="putaway != null" >
+        putaway = #{putaway,jdbcType=INTEGER},
+      </if>
+      <if test="updateDate != null" >
+        update_date = #{updateDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="creator != null" >
+        creator = #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="standby != null" >
+        standby = #{standby,jdbcType=VARCHAR},
+      </if>
+      <if test="standby2 != null" >
+        standby2 = #{standby2,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where scoreEvent_ID = #{scoreeventId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.yihe.system.domain.YhScoreEventCategoryWeb" >
+    update yh_score_event_category
+    set event_name = #{eventName,jdbcType=VARCHAR},
+      score = #{score,jdbcType=INTEGER},
+      event_type = #{eventType,jdbcType=VARCHAR},
+      type = #{type,jdbcType=INTEGER},
+      continuous_status = #{continuousStatus,jdbcType=INTEGER},
+      putaway = #{putaway,jdbcType=INTEGER},
+      update_date = #{updateDate,jdbcType=TIMESTAMP},
+      creator = #{creator,jdbcType=VARCHAR},
+      standby = #{standby,jdbcType=VARCHAR},
+      standby2 = #{standby2,jdbcType=VARCHAR}
+    where scoreEvent_ID = #{scoreeventId,jdbcType=INTEGER}
+  </update>
+</mapper>

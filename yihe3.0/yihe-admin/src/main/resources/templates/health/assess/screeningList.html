@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, maximum-scale=1">
+<title>高级筛选</title>
+<link rel="stylesheet" th:href="@{/assets/libs/layui/css/layui.css}" />
+<link rel="stylesheet" th:href="@{/assets/module/admin.css}" />
+<!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    <style type="text/css">
+    .layui-table-tool{
+     background-color: #fff;
+    }
+   
+    </style>
+</head>
+<body>
+	<!-- 加载动画 -->
+	<div class="page-loading">
+		<div class="ball-loader">
+			<span></span><span></span><span></span><span></span>
+		</div>
+	</div>
+
+	<!-- 正文开始 -->
+	<div class="layui-fluid">
+		
+		<div class="layui-card">
+			<div class="layui-card-body">
+				<div class="layui-form toolbar">
+					<div class="layui-form-item">
+					<h1 style="padding-bottom: 15px;float: left;">高级筛选规则</h1>
+						<div class="layui-inline" style="float: right;">
+							<button id="btnAdd" class="layui-btn icon-btn">
+								<i class="layui-icon">&#xe654;</i>添加
+							</button>
+							<button id="btnSubmit" class="layui-btn icon-btn">
+								<i class="layui-icon">&#xe609;</i>返回
+							</button>
+						</div>
+					</div>
+				</div>
+
+				<table id="tb1" lay-filter="tb1"></table>
+
+				
+			</div>
+		</div>
+	</div>
+
+
+	<!-- 表格操作列 -->
+	<script type="text/html" id="tableBar">
+
+    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="del">删除</a>
+	<a class="layui-btn  layui-btn-xs" lay-event="edit">修改</a>
+</script>
+
+	<!-- js部分 -->
+		<script type="text/javascript" th:src="@{/assets/libs/layui/layui.js}"></script>
+	<script type="text/javascript" th:src="@{/assets/js/common.js}"></script>
+		<script type="text/html" id="test-table-radio-toolbarDemo">
+					<span>请在列表中选择筛选规则后，点击执行筛选；可以新建规则后，再点击执行筛选</span>
+			<div class="layui-btn-container">
+                <button class="layui-btn layui-btn-sm" lay-event="getCheckData">执行筛选</button>
+
+              </div>
+			
+            </script>
+	<script>
+		layui
+				.use(
+						[ 'layer', 'table', 'admin' ],
+						function() {
+							var $ = layui.jquery;
+							var layer = layui.layer;
+							var table = layui.table;
+							var admin = layui.admin;
+
+							var mDataList = [];
+
+							var insTb = table
+									.render({
+										
+										elem : '#tb1',
+										url : '/manage/YhDiseaseAssessReport/findListInfo',
+										page : true,
+										toolbar: '#test-table-radio-toolbarDemo',
+										cellMinWidth : 100,
+										cols : [ [ {
+											type : 'radio'
+										}, {
+											field : 'title',
+											title : '标题',
+											width: '20%'
+										}, {
+											field : 'explain',
+											title : '说明',
+											width: '40%'
+										}, {
+											field : 'screeningtime',
+											title : '上次筛选时间',
+											width: '20%'
+											
+										}, {
+											align : 'center',
+											toolbar : '#tableBar',
+											title : '操作',
+											width: '17%'
+										} ] ],
+										
+										response : {
+
+											statusCode : 0
+										//规定成功的状态码，默认：0
+
+										},
+										parseData : function(res) { //将原始数据解析成 table 组件所规定的数据
+											return {
+												"code" : res.data.code, //解析接口状态
+												"msg" : res.data.msg, //解析提示文本
+												"count" : res.data.count, //解析数据长度
+												"data" : res.data.data
+											//解析数据列表
+											}
+
+										},
+										done: function(res, curr, count){
+								 	         if(count > 10) {
+								 	          $(".layui-table-page").show();
+								 	         }else {
+								 	          $(".layui-table-page").hide();
+								 	         }
+								 	       }
+									});
+							
+							$('#btnSubmit')
+							.click(
+									function() {
+										window.location.href = "/manage/health/healthAssessment"
+									});
+							$('#btnAdd')
+									.click(
+											function() {
+												window.location.href = "/manage/YhDiseaseAssessReport/screeningAdd"
+											});
+
+							// 工具条点击事件
+							table.on('tool(tb1)', function(obj) {
+								var data = obj.data;
+								var sid=data.sid;
+								var layEvent = obj.event;
+								if (layEvent === 'edit') { // 修改
+									 
+									window.location.href = "/manage/YhDiseaseAssessReport/screeningAdd?id="+data.sid;
+								} else if (layEvent === 'del') { // 删除
+									
+									layer.confirm('真的删除行么', function(index){
+								        obj.del(); //删除对应行（tr）的DOM结构
+								        layer.close(index);
+								        //向服务端发送删除指令
+								        $.post("/manage/YhDiseaseAssessReport/delInfo",{sid:sid},function(result){
+									        
+									    });
+								      });
+								
+									 
+									
+									
+								}
+							});
+
+							//头工具栏事件
+							table.on('toolbar(tb1)', function(obj) {
+								var checkStatus = table.checkStatus(obj.config.id); //获取选中行状态
+								console.log(obj.config)
+								switch (obj.event) {
+									case 'getCheckData':
+										var data = checkStatus.data[0].sid; //获取选中行数据
+										//layer.alert(data);
+										window.location.href = "/manage/health/healthAssessment?url="+data
+									 
+										break;
+								};
+							});
+
+						});
+	</script>
+</body>
+</html>

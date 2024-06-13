@@ -1,0 +1,343 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yihe.system.mapper.YhHeThresholdMapper">
+  <resultMap id="BaseResultMap" type="com.yihe.system.domain.YhHeThreshold">
+    <id column="ID" jdbcType="VARCHAR" property="id" />
+    <result column="TYPE" jdbcType="VARCHAR" property="type" />
+    <result column="NAME" jdbcType="VARCHAR" property="name" />
+    <result column="LOW" jdbcType="VARCHAR" property="low" />
+    <result column="HIGH" jdbcType="VARCHAR" property="high" />
+    <result column="LOW1" jdbcType="VARCHAR" property="low1" />
+    <result column="HIGH1" jdbcType="VARCHAR" property="high1" />
+    <result column="LOW2" jdbcType="VARCHAR" property="low2" />
+    <result column="HIGH2" jdbcType="VARCHAR" property="high2" />
+    <result column="INVALID_LOW" jdbcType="VARCHAR" property="invalidLow" />
+    <result column="INVALID_HIGH" jdbcType="VARCHAR" property="invalidHigh" />
+    <result column="DESCRIPTION" jdbcType="VARCHAR" property="description" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    ID, TYPE, NAME, LOW, HIGH, LOW1, HIGH1, LOW2, HIGH2, INVALID_LOW, INVALID_HIGH, DESCRIPTION,ISTRUE
+  </sql>
+  
+  <!-- 根据Type查询是否开启 -->
+  <select id="selectBythresType" parameterType="java.lang.String" resultMap="BaseResultMap">
+  	select * from yh_he_threshold where TYPE=#{type,jdbcType=VARCHAR}
+  </select>
+  
+  <select id="selectByExample" parameterType="com.yihe.system.domain.YhHeThresholdExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from yh_he_threshold
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from yh_he_threshold
+    where ID = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from yh_he_threshold
+    where ID = #{id,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.yihe.system.domain.YhHeThresholdExample">
+    delete from yh_he_threshold
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.yihe.system.domain.YhHeThreshold">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.String">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into yh_he_threshold (TYPE, NAME, LOW, 
+      HIGH, LOW1, HIGH1, 
+      LOW2, HIGH2, INVALID_LOW, 
+      INVALID_HIGH, DESCRIPTION)
+    values (#{type,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, #{low,jdbcType=VARCHAR}, 
+      #{high,jdbcType=VARCHAR}, #{low1,jdbcType=VARCHAR}, #{high1,jdbcType=VARCHAR}, 
+      #{low2,jdbcType=VARCHAR}, #{high2,jdbcType=VARCHAR}, #{invalidLow,jdbcType=VARCHAR}, 
+      #{invalidHigh,jdbcType=VARCHAR}, #{description,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.yihe.system.domain.YhHeThreshold">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.String">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into yh_he_threshold
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="type != null">
+        TYPE,
+      </if>
+      <if test="name != null">
+        NAME,
+      </if>
+      <if test="low != null">
+        LOW,
+      </if>
+      <if test="high != null">
+        HIGH,
+      </if>
+      <if test="low1 != null">
+        LOW1,
+      </if>
+      <if test="high1 != null">
+        HIGH1,
+      </if>
+      <if test="low2 != null">
+        LOW2,
+      </if>
+      <if test="high2 != null">
+        HIGH2,
+      </if>
+      <if test="invalidLow != null">
+        INVALID_LOW,
+      </if>
+      <if test="invalidHigh != null">
+        INVALID_HIGH,
+      </if>
+      <if test="description != null">
+        DESCRIPTION,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="type != null">
+        #{type,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="low != null">
+        #{low,jdbcType=VARCHAR},
+      </if>
+      <if test="high != null">
+        #{high,jdbcType=VARCHAR},
+      </if>
+      <if test="low1 != null">
+        #{low1,jdbcType=VARCHAR},
+      </if>
+      <if test="high1 != null">
+        #{high1,jdbcType=VARCHAR},
+      </if>
+      <if test="low2 != null">
+        #{low2,jdbcType=VARCHAR},
+      </if>
+      <if test="high2 != null">
+        #{high2,jdbcType=VARCHAR},
+      </if>
+      <if test="invalidLow != null">
+        #{invalidLow,jdbcType=VARCHAR},
+      </if>
+      <if test="invalidHigh != null">
+        #{invalidHigh,jdbcType=VARCHAR},
+      </if>
+      <if test="description != null">
+        #{description,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.yihe.system.domain.YhHeThresholdExample" resultType="java.lang.Long">
+    select count(*) from yh_he_threshold
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update yh_he_threshold
+    <set>
+      <if test="record.id != null">
+        ID = #{record.id,jdbcType=VARCHAR},
+      </if>
+      <if test="record.type != null">
+        TYPE = #{record.type,jdbcType=VARCHAR},
+      </if>
+      <if test="record.name != null">
+        NAME = #{record.name,jdbcType=VARCHAR},
+      </if>
+      <if test="record.low != null">
+        LOW = #{record.low,jdbcType=VARCHAR},
+      </if>
+      <if test="record.high != null">
+        HIGH = #{record.high,jdbcType=VARCHAR},
+      </if>
+      <if test="record.low1 != null">
+        LOW1 = #{record.low1,jdbcType=VARCHAR},
+      </if>
+      <if test="record.high1 != null">
+        HIGH1 = #{record.high1,jdbcType=VARCHAR},
+      </if>
+      <if test="record.low2 != null">
+        LOW2 = #{record.low2,jdbcType=VARCHAR},
+      </if>
+      <if test="record.high2 != null">
+        HIGH2 = #{record.high2,jdbcType=VARCHAR},
+      </if>
+      <if test="record.invalidLow != null">
+        INVALID_LOW = #{record.invalidLow,jdbcType=VARCHAR},
+      </if>
+      <if test="record.invalidHigh != null">
+        INVALID_HIGH = #{record.invalidHigh,jdbcType=VARCHAR},
+      </if>
+      <if test="record.description != null">
+        DESCRIPTION = #{record.description,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update yh_he_threshold
+    set ID = #{record.id,jdbcType=VARCHAR},
+      TYPE = #{record.type,jdbcType=VARCHAR},
+      NAME = #{record.name,jdbcType=VARCHAR},
+      LOW = #{record.low,jdbcType=VARCHAR},
+      HIGH = #{record.high,jdbcType=VARCHAR},
+      LOW1 = #{record.low1,jdbcType=VARCHAR},
+      HIGH1 = #{record.high1,jdbcType=VARCHAR},
+      LOW2 = #{record.low2,jdbcType=VARCHAR},
+      HIGH2 = #{record.high2,jdbcType=VARCHAR},
+      INVALID_LOW = #{record.invalidLow,jdbcType=VARCHAR},
+      INVALID_HIGH = #{record.invalidHigh,jdbcType=VARCHAR},
+      DESCRIPTION = #{record.description,jdbcType=VARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.yihe.system.domain.YhHeThreshold">
+    update yh_he_threshold
+    <set>
+      <if test="type != null">
+        TYPE = #{type,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null">
+        NAME = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="low != null">
+        LOW = #{low,jdbcType=VARCHAR},
+      </if>
+      <if test="high != null">
+        HIGH = #{high,jdbcType=VARCHAR},
+      </if>
+      <if test="low1 != null">
+        LOW1 = #{low1,jdbcType=VARCHAR},
+      </if>
+      <if test="high1 != null">
+        HIGH1 = #{high1,jdbcType=VARCHAR},
+      </if>
+      <if test="low2 != null">
+        LOW2 = #{low2,jdbcType=VARCHAR},
+      </if>
+      <if test="high2 != null">
+        HIGH2 = #{high2,jdbcType=VARCHAR},
+      </if>
+      <if test="invalidLow != null">
+        INVALID_LOW = #{invalidLow,jdbcType=VARCHAR},
+      </if>
+      <if test="invalidHigh != null">
+        INVALID_HIGH = #{invalidHigh,jdbcType=VARCHAR},
+      </if>
+      <if test="description != null">
+        DESCRIPTION = #{description,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.yihe.system.domain.YhHeThreshold">
+    update yh_he_threshold
+    set TYPE = #{type,jdbcType=VARCHAR},
+      NAME = #{name,jdbcType=VARCHAR},
+      LOW = #{low,jdbcType=VARCHAR},
+      HIGH = #{high,jdbcType=VARCHAR},
+      LOW1 = #{low1,jdbcType=VARCHAR},
+      HIGH1 = #{high1,jdbcType=VARCHAR},
+      LOW2 = #{low2,jdbcType=VARCHAR},
+      HIGH2 = #{high2,jdbcType=VARCHAR},
+      INVALID_LOW = #{invalidLow,jdbcType=VARCHAR},
+      INVALID_HIGH = #{invalidHigh,jdbcType=VARCHAR},
+      DESCRIPTION = #{description,jdbcType=VARCHAR}
+    where ID = #{id,jdbcType=VARCHAR}
+  </update>
+  <select id="selectallheath" resultType="com.yihe.system.domain.YhHeThreshold">
+  		select
+  		<include refid="Base_Column_List"/>
+  		from yh_he_threshold order by `Order` ASC
+  </select>
+  
+  <update id="updatasetting" parameterType="com.yihe.system.domain.YhHealthSetting">
+  	update yh_he_threshold 
+	 <set>
+  		low=#{low},
+  		<if test="high != null">
+		HIGH=#{high},
+		</if>
+		ISTRUE=#{istrue}
+		 </set>
+  		where NAME=#{name}
+  </update>
+</mapper>

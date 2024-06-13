@@ -1,0 +1,300 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yihe.system.mapper.YhUserOrderWebMapper" >
+  <resultMap id="BaseResultMap" type="com.yihe.system.domain.YhUserOrderWeb" >
+    <id column="order_id" property="orderId" jdbcType="INTEGER" />
+    <result column="user_code" property="userCode" jdbcType="VARCHAR" />
+    <result column="order_number" property="orderNumber" jdbcType="VARCHAR" />
+    <result column="site_id" property="siteId" jdbcType="INTEGER" />
+    <result column="merchandise_id" property="merchandiseId" jdbcType="INTEGER" />
+    <result column="order_ status" property="orderStatus" jdbcType="INTEGER" />
+    <result column="consume_ integral" property="consumeIntegral" jdbcType="INTEGER" />
+    <result column="money" property="money" jdbcType="INTEGER" />
+    <result column="logistics_company" property="logisticsCompany" jdbcType="VARCHAR" />
+    <result column="logistics_odd" property="logisticsOdd" jdbcType="VARCHAR" />
+    <result column="ssm" property="ssm" jdbcType="INTEGER" />
+    <result column="creator" property="creator" jdbcType="VARCHAR" />
+    <result column="standby" property="standby" jdbcType="VARCHAR" />
+    <result column="add_date" property="addDate" jdbcType="TIMESTAMP" />
+    <result column="update_date" property="updateDate" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    order_id, user_code, order_number, site_id, merchandise_id, `order_ status`, `consume_ integral`, 
+    money, logistics_company, logistics_odd, ssm, creator, standby, add_date, update_date
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from yh_user_order
+    where order_id = #{orderId,jdbcType=INTEGER}
+  </select>
+  
+    <select id="selectAllYhUserOrderExport" resultType="com.yihe.system.domain.YhUserOrderWeb">
+    select reg.name,com.merchandise_name as merchandiseName,com.merchandise_type as merchandiseType,com.merchandise_id as merchandiseId,der.`consume_ integral` as consumeIntegral,
+   der.`logistics_odd`as logisticsOdd,der.`logistics_company` as logisticsCompany,der.`order_ status` as orderStatus,der.order_id as orderId,
+   der.standby,der.add_date as addDate,der.user_code as userCode,ress.site,ress.detailed_site as detailedSite,ress.consignee_name as consigneeName,
+   ress.consignee_phone as consigneePhone,ress.site_id as siteId
+   from yh_user_order as der
+   left join yh_user_reginfo as reg
+   on der.user_code = reg.user_code
+   inner join yh_user_commodity_data as com
+   on der.merchandise_id = com.merchandise_id
+   inner join yh_user_shipping_address as ress
+   on der.site_id = ress.site_id
+   order by der.add_date desc
+  </select>
+  
+    <select id="selectAllYhUserOrderWebPage" resultType="com.yihe.system.domain.YhUserOrderWeb">
+   select reg.name,com.merchandise_name as merchandiseName,com.merchandise_id as merchandiseId,der.`consume_ integral` as consumeIntegral,
+   der.`logistics_odd`as logisticsOdd,der.`logistics_company` as logisticsCompany,der.`order_ status` as orderStatus,der.order_id as orderId,
+   der.standby,der.add_date as addDate,der.user_code as userCode,der.order_number as orderNumber,ress.site,ress.detailed_site as detailedSite,ress.consignee_name as consigneeName,
+   ress.consignee_phone as consigneePhone,ress.site_id as siteId
+   from yh_user_order as der
+   left join yh_user_reginfo as reg
+   on der.user_code = reg.user_code
+   inner join yh_user_commodity_data as com
+   on der.merchandise_id = com.merchandise_id
+   <if test="merchandiseType != null" >
+       and com.merchandise_type = #{merchandiseType}
+   </if>
+     <if test="groupingId != null" >
+       and com.grouping_id = #{groupingId}
+   </if>
+     <if test="merchandiseName != null and merchandiseName!=''" >
+       and com.merchandise_name like CONCAT('%',#{merchandiseName},'%')
+   </if>
+   inner join yh_user_shipping_address as ress
+   on der.site_id = ress.site_id
+     <if test="name != null and name!=''" >
+       and reg.name like CONCAT('%',#{name},'%')
+   </if>
+    <if test="orderStatus != null" >
+       and der.`order_ status` = #{orderStatus}
+   </if>
+   <if test="qtstrTime !=null and qtstrTime !='' and qtendTime !=null and qtendTime !=''">
+	 and der.add_date BETWEEN  #{qtstrTime}  AND #{qtendTime} 
+ </if>
+ where com.org_code like CONCAT('%',#{orgCode},'%') 
+   order by der.add_date desc
+  </select>
+  
+      <select id="selectAllYhUserOrderWebPage2" resultType="com.yihe.system.domain.YhUserOrderWeb">
+   select reg.name,com.merchandise_name as merchandiseName,com.merchandise_id as merchandiseId,der.`consume_ integral` as consumeIntegral,
+   der.`logistics_odd`as logisticsOdd,der.`logistics_company` as logisticsCompany,der.`order_ status` as orderStatus,der.order_id as orderId,
+   der.standby,der.add_date as addDate,der.user_code as userCode,der.order_number as orderNumber,ress.site,ress.detailed_site as detailedSite,ress.consignee_name as consigneeName,
+   ress.consignee_phone as consigneePhone,ress.site_id as siteId
+   from yh_user_order as der
+   left join yh_user_reginfo as reg
+   on der.user_code = reg.user_code
+   inner join yh_user_commodity_data as com
+   on der.merchandise_id = com.merchandise_id
+   <if test="merchandiseType != null" >
+       and com.merchandise_type = #{merchandiseType}
+   </if>
+     <if test="groupingId != null" >
+       and com.grouping_id = #{groupingId}
+   </if>
+     <if test="merchandiseName != null and merchandiseName!=''" >
+       and com.merchandise_name = #{merchandiseName}
+   </if>
+   inner join yh_user_shipping_address as ress
+   on der.site_id = ress.site_id
+     <if test="name != null and name!=''" >
+       and reg.name like CONCAT('%',#{name},'%')
+   </if>
+    <if test="orderStatus != null" >
+       and der.`order_ status` = #{orderStatus}
+   </if>
+   <if test="qtstrTime !=null and qtstrTime !='' and qtendTime !=null and qtendTime !=''">
+	 and der.add_date BETWEEN  #{qtstrTime}  AND #{qtendTime} 
+ </if>
+   left join yh_user_make_card as card
+   on card.User_Code = reg.user_code
+	LEFT JOIN yh_user_admin_info as yuai
+	on yuai.id=card.doctor
+	where yuai.user_code=#{orgCode}
+   order by der.add_date desc
+  </select>
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from yh_user_order
+    where order_id = #{orderId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.yihe.system.domain.YhUserOrderWeb" >
+    insert into yh_user_order (order_id, user_code, order_number, 
+      site_id, merchandise_id, `order_ status`, 
+      "consume_ integral", money, logistics_company, 
+      logistics_odd, ssm, creator, 
+      standby, add_date, update_date
+      )
+    values (#{orderId,jdbcType=INTEGER}, #{userCode,jdbcType=VARCHAR}, #{orderNumber,jdbcType=VARCHAR}, 
+      #{siteId,jdbcType=INTEGER}, #{merchandiseId,jdbcType=INTEGER}, #{orderStatus,jdbcType=INTEGER}, 
+      #{consumeIntegral,jdbcType=INTEGER}, #{money,jdbcType=INTEGER}, #{logisticsCompany,jdbcType=VARCHAR}, 
+      #{logisticsOdd,jdbcType=VARCHAR}, #{ssm,jdbcType=INTEGER}, #{creator,jdbcType=VARCHAR}, 
+      #{standby,jdbcType=VARCHAR}, #{addDate,jdbcType=TIMESTAMP}, #{updateDate,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.yihe.system.domain.YhUserOrderWeb" >
+    insert into yh_user_order
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="orderId != null" >
+        order_id,
+      </if>
+      <if test="userCode != null" >
+        user_code,
+      </if>
+      <if test="orderNumber != null" >
+        order_number,
+      </if>
+      <if test="siteId != null" >
+        site_id,
+      </if>
+      <if test="merchandiseId != null" >
+        merchandise_id,
+      </if>
+      <if test="orderStatus != null" >
+        `order_ status`,
+      </if>
+      <if test="consumeIntegral != null" >
+        "consume_ integral",
+      </if>
+      <if test="money != null" >
+        money,
+      </if>
+      <if test="logisticsCompany != null" >
+        logistics_company,
+      </if>
+      <if test="logisticsOdd != null" >
+        logistics_odd,
+      </if>
+      <if test="ssm != null" >
+        ssm,
+      </if>
+      <if test="creator != null" >
+        creator,
+      </if>
+      <if test="standby != null" >
+        standby,
+      </if>
+      <if test="addDate != null" >
+        add_date,
+      </if>
+      <if test="updateDate != null" >
+        update_date,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="orderId != null" >
+        #{orderId,jdbcType=INTEGER},
+      </if>
+      <if test="userCode != null" >
+        #{userCode,jdbcType=VARCHAR},
+      </if>
+      <if test="orderNumber != null" >
+        #{orderNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="siteId != null" >
+        #{siteId,jdbcType=INTEGER},
+      </if>
+      <if test="merchandiseId != null" >
+        #{merchandiseId,jdbcType=INTEGER},
+      </if>
+      <if test="orderStatus != null" >
+        #{orderStatus,jdbcType=INTEGER},
+      </if>
+      <if test="consumeIntegral != null" >
+        #{consumeIntegral,jdbcType=INTEGER},
+      </if>
+      <if test="money != null" >
+        #{money,jdbcType=INTEGER},
+      </if>
+      <if test="logisticsCompany != null" >
+        #{logisticsCompany,jdbcType=VARCHAR},
+      </if>
+      <if test="logisticsOdd != null" >
+        #{logisticsOdd,jdbcType=VARCHAR},
+      </if>
+      <if test="ssm != null" >
+        #{ssm,jdbcType=INTEGER},
+      </if>
+      <if test="creator != null" >
+        #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="standby != null" >
+        #{standby,jdbcType=VARCHAR},
+      </if>
+      <if test="addDate != null" >
+        #{addDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateDate != null" >
+        #{updateDate,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.yihe.system.domain.YhUserOrderWeb" >
+    update yh_user_order
+    <set >
+      <if test="userCode != null" >
+        user_code = #{userCode,jdbcType=VARCHAR},
+      </if>
+      <if test="orderNumber != null" >
+        order_number = #{orderNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="siteId != null" >
+        site_id = #{siteId,jdbcType=INTEGER},
+      </if>
+      <if test="merchandiseId != null" >
+        merchandise_id = #{merchandiseId,jdbcType=INTEGER},
+      </if>
+      <if test="orderStatus != null" >
+        `order_ status` = #{orderStatus,jdbcType=INTEGER},
+      </if>
+      <if test="consumeIntegral != null" >
+        "consume_ integral" = #{consumeIntegral,jdbcType=INTEGER},
+      </if>
+      <if test="money != null" >
+        money = #{money,jdbcType=INTEGER},
+      </if>
+      <if test="logisticsCompany != null" >
+        logistics_company = #{logisticsCompany,jdbcType=VARCHAR},
+      </if>
+      <if test="logisticsOdd != null" >
+        logistics_odd = #{logisticsOdd,jdbcType=VARCHAR},
+      </if>
+      <if test="ssm != null" >
+        ssm = #{ssm,jdbcType=INTEGER},
+      </if>
+      <if test="creator != null" >
+        creator = #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="standby != null" >
+        standby = #{standby,jdbcType=VARCHAR},
+      </if>
+      <if test="addDate != null" >
+        add_date = #{addDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateDate != null" >
+        update_date = #{updateDate,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where order_id = #{orderId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.yihe.system.domain.YhUserOrderWeb" >
+    update yh_user_order
+    set user_code = #{userCode,jdbcType=VARCHAR},
+      order_number = #{orderNumber,jdbcType=VARCHAR},
+      site_id = #{siteId,jdbcType=INTEGER},
+      merchandise_id = #{merchandiseId,jdbcType=INTEGER},
+      `order_ status` = #{orderStatus,jdbcType=INTEGER},
+      "consume_ integral" = #{consumeIntegral,jdbcType=INTEGER},
+      money = #{money,jdbcType=INTEGER},
+      logistics_company = #{logisticsCompany,jdbcType=VARCHAR},
+      logistics_odd = #{logisticsOdd,jdbcType=VARCHAR},
+      ssm = #{ssm,jdbcType=INTEGER},
+      creator = #{creator,jdbcType=VARCHAR},
+      standby = #{standby,jdbcType=VARCHAR},
+      add_date = #{addDate,jdbcType=TIMESTAMP},
+      update_date = #{updateDate,jdbcType=TIMESTAMP}
+    where order_id = #{orderId,jdbcType=INTEGER}
+  </update>
+</mapper>

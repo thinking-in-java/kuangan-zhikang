@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<link rel="stylesheet"  th:href="@{/assets/libs/layui/css/layui.css}" />
+		<title>查看运动分析报告</title>
+		<style type="text/css">
+			body {
+	padding: 20px;
+	background-color: white;
+}
+#back {
+	line-height: 20px;
+	text-align: right;
+}
+
+#back a {
+	color: black;
+	text-decoration: none;
+}
+
+.content {
+	font-size: 14px;
+}
+
+.tableDemo {
+	border: #D2D2D2 1px solid;
+	margin: 70px 30px;
+}
+
+.tableDemo table {
+	width: 100%;
+}
+
+.tableDemo table tr td {
+	padding: 10px;
+}
+
+.tableDemo table tr:not(:first-child) td:first-child {
+	color: #9F9F9F;
+}
+.send {
+		margin-left: 70%;
+    position:relative;
+    width:100px;
+    height:35px;
+    background:#FFAF5F;
+    border-radius:5px; /* 圆角 */
+}
+ 
+.send .arrow {
+    position:absolute;
+    top:35px;
+    right:40px; /* 圆角的位置需要细心调试哦 */
+    width:0;
+    height:0;
+    font-size:0;
+    border:solid 8px;
+    border-color:#FFAF5F white white white;
+}
+#sportLink {
+	width: 100%;
+	height: 400px;
+}
+#sportCircular {
+	width: 100%;
+	height: 400px;
+}
+
+#sportCircular1 {
+	width: 100%;
+	height: 400px;
+}
+		</style>
+	</head>
+	<body class="layui-view-body">
+		<div class="layui-content">
+			<div class="layui-col-xs6">
+				<div class="grid-demo grid-demo-bg1">
+					<h2>运动分析报告</h2>
+				</div>
+			</div>
+			<div class="layui-col-xs6" id="back">
+				<div><a  href="#">返回上一页</a></div>
+			</div>
+		</div>
+		<div class="layui-row layui-col-space20">
+			<div class="layui-col-xs6">
+				<div class="grid-demo grid-demo-bg1">
+					<table class="layui-table" lay-size="lg">
+					  <thead>
+					    <tr>
+					      <th >姓名</th>
+						  <th >性别</th>
+						  <th >年龄</th>
+						  <th >编码</th>
+					    </tr> 
+					  </thead>
+					  <tbody>
+					    <tr>
+					      <td id="userName"></td>
+						      <td id="gender"></td>
+						      <td id="age"></td>
+						      <td id="userCode"></td>
+					    </tr>
+					  </tbody>
+					</table>
+				</div>
+			</div>
+			<div class="layui-col-xs6">
+				<div>
+					<img height="100px" th:src="${getrepotimg}" />
+				</div>
+			</div>
+			<div style="margin-top: 160px;">
+				<p class="content">报告是根据您过去一周（<samp id="startTime"></samp>至<samp id="endTime"></samp>）所记录的运动日记与推荐的运动能耗之间的比较做出的评价，你记录的天数越多，报告结果更精确。它不但可以使您很好地了解过去一周的总体运动能耗情况，维持或修改相关内容；而且可以使健康管理师根据您完成的情况确定下一周的推荐运动，给您个性化的运动指导。希望您能仔细阅读这份报告，小结每周的运动情况，有任何问题可随时咨询健康管理师。</p>
+			</div>
+			<hr style="padding: 0px;">
+			<div>
+				<div class="progress" style="height: 20px;width:100%;margin:20px auto;">
+					<div class="send" style="margin-bottom: 20px;">
+						<p style="width: 100%;line-height: 35px;text-align: center;color: white;">您在这里</p>
+						<div class="arrow">
+						</div>
+					</div>
+					<div class="layui-progress" style="width: 33%; float: left;">
+						<div class="layui-progress-bar layui-bg-orange" lay-percent="100%"></div>
+						<div style="margin-top: 10px;text-align: center;">
+							不足
+						</div>
+					</div>
+					<div class="layui-progress" style="margin-left: 2px;width: 33%;float: left;">
+						<div class="layui-progress-bar layui-bg-blue" lay-percent="100%"></div>
+						<div style="margin-top: 10px;text-align: center;">
+							中等
+						</div>
+					</div>
+					<div class="layui-progress" style="margin-left: 2px;width: 33%;float: left;">
+						<div class="layui-progress-bar layui-bg-green" lay-percent="100%"></div>
+						<div style="margin-top: 10px;text-align: center;">
+							充足
+						</div>
+					</div>
+				</div>
+			</div>
+			<div style="margin-top: 50px;">
+				<p class="content">规律的体力活动可以显著降低血糖、血压、血脂等异常指标，改善慢性病患者的健康状况。坚持适当运动的人其心脏、肌肉和骨骼的健康水平以及精神状态与不锻炼的同龄人相比，要“年轻”许多。因此请继续保持现在的运动水平吧，它会带给您更多的健康与快乐。想了解更多运动与健康的知识，请进入“健康课堂”。
+				</p>
+			</div>
+			<hr style="padding: 0px;">
+			<div class="layui-row">
+				<div class="layui-col-xs6">
+					<div id="sportLink"></div>
+				</div>
+				<div class="layui-col-xs4">
+					<!-- <div id="sportCircular"></div> -->
+					
+					<div class="tableDemo">
+						<div style="width:100%;padding-top: 10px;">
+							<div style="width:33%;float: left;"><span style="margin-left: 10px;margin-right: 10px;" class="layui-badge-dot layui-bg-blue"></span>记录天数</div>
+							<div style="width:33%;float: left;" id="daysnumber"></div>
+							<div style="width:33%;float: left;" id="daysnumberpj"></div>
+						</div>
+						<div style="margin-top: 24px;margin-left: 26px;">
+							<div>4天</div>
+						</div>
+						<hr>
+						<div style="width:100%">
+							<div style="width:33%;float: left;"><span style="margin-left: 10px;margin-right: 10px;" class="layui-badge-dot layui-bg-blue"></span>达标天数</div>
+							<div style="width:33%;float: left;" id="number"></div>
+							<div style="width:33%;float: left;" id="numberpj"></div>
+						</div>
+						<div style="margin-top: 24px;margin-left: 26px;">
+							<div>4天</div>
+						</div>
+						<hr>
+						<div style="width:100%">
+							<div style="width:33%;float: left;"><span style="margin-left: 10px;margin-right: 10px;" class="layui-badge-dot layui-bg-blue"></span>运动总时长</div>
+							<div style="width:33%;float: left;" id="durationnum"></div>
+							<div style="width:33%;float: left;" id="durationnumpj"> </div>
+						</div>
+						<div style="margin-top: 24px;margin-left: 26px;">
+							<div>150 分钟/周</div>
+						</div>
+						<hr>
+						<div style="width:100%">
+							<div style="width:33%;float: left;"><span style="margin-left: 10px;margin-right: 10px;" class="layui-badge-dot layui-bg-blue"></span>平均能耗</div>
+							<div style="width:33%;float: left;" id="average"></div>
+							<div style="width:33%;float: left;" id="averagepj"></div>
+						</div>
+						<div style="margin-top: 24px;margin-left: 26px;">
+							<div id="uweight"></div>
+						</div>
+					</div>
+					
+					
+				</div>
+			</div>
+			
+			<div class="layui-row">
+				<div class="layui-col-md3">
+					<div id="sportCircular"></div>
+				</div>
+				<div class="layui-col-md3">
+					<div class="tableDemo">
+						<div style="width:100%;padding-top: 10px;">
+							<div style="width:33%;float: left;"><span style="margin-left: 10px;margin-right: 10px;background-color:#ffd3a6;" class="layui-badge-dot"></span>无氧运动</div>
+							<div style="width:33%;float: left;" id="anaerobic"></div>
+							<div style="width:33%;float: left;" id="anaerobicpj"></div>
+						</div>
+						<div style="margin-top: 24px;margin-left: 26px;">
+							<div>2  天/周</div>
+						</div>
+						<hr>
+						<div style="width:100%">
+							<div style="width:33%;float: left;"><span style="margin-left: 10px;margin-right: 10px;background-color:#fd9f9a;" class="layui-badge-dot"></span>有氧运动</div>
+							<div style="width:33%;float: left;" id="aerobic"></div>
+							<div style="width:33%;float: left;" id="aerobicpj"></div>
+						</div>
+						<div style="margin-top: 24px;margin-left: 26px;">
+							<div>3  天/周</div>
+						</div>
+						<hr>
+						<div style="width:100%">
+							<div style="width:33%;float: left;"><span style="margin-left: 10px;margin-right: 10px;background-color:#b0b2ff;" class="layui-badge-dot"></span>柔韧运动</div>
+							<div style="width:33%;float: left;" id="pliable"></div>
+							<div style="width:33%;float: left;" id="pliablepj"></div>
+						</div>
+						<div style="margin-top: 24px;margin-left: 26px;">
+							<div>2  天/周</div>
+						</div>
+						<hr>
+						<div style="width:100%">
+							<div style="width:33%;float: left;"><span style="margin-left: 10px;margin-right: 10px;background-color:#fa6a7c;" class="layui-badge-dot"></span>关节活动</div>
+							<div style="width:33%;float: left;" id="arthrosis"></div>
+							<div style="width:33%;float: left;" id="arthrosispj"></div>
+						</div>
+						<div style="margin-top: 24px;margin-left: 26px;">
+							<div>4  天/周</div>
+						</div>
+					</div>
+				</div>
+				<div class="layui-col-md3">
+					<div id="sportCircular1"></div>
+				</div>
+				<div class="layui-col-md3">
+					<div class="tableDemo">
+						<div style="width:100%;padding-top: 10px;">
+							<div style="width:50%;float: left;"><span style="margin-left: 10px;margin-right: 10px;background-color:#26A5F6;" class="layui-badge-dot"></span>步数</div>
+							<div style="width:50%;float: left;" id="walkpercent"></div>
+						</div>
+						<hr style="margin-top: 40px;">
+						<div style="width:100%">
+							<div style="width:50%;float: left;"><span style="margin-left: 10px;margin-right: 10px;background-color:#16D1A4;" class="layui-badge-dot"></span>运动推荐</div>
+							<div style="width:50%;float: left;" id="recommendpercent"></div>
+						</div>
+						<hr style="margin-top: 40px;">
+						<div style="width:100%">
+							<div style="width:50%;float: left;"><span style="margin-left: 10px;margin-right: 10px;background-color:#FFA300;" class="layui-badge-dot"></span>精品课程</div>
+							<div style="width:50%;float: left;" id="boutiquepercent"></div>
+						</div>
+						<hr style="margin-top: 40px;">
+						<div style="width:100%">
+							<div style="width:50%;float: left;"><span style="margin-left: 10px;margin-right: 10px;background-color:#FFCB05;" class="layui-badge-dot"></span>其它运动</div>
+							<div style="width:50%;float: left;" id="restspercent"></div>
+						</div>
+						<p  style="margin-top: 40px;"></p>
+					</div>
+				</div>
+			</div>
+			
+			
+			<h3 style="margin-left: 25px;font-size: bolder;">运动注意事项</h3>
+			 <div class="layui-row">
+					    <div class="layui-col-xs1" style="width: 30px;">
+					      <div class="grid-demo grid-demo-bg1"><span style="margin-left: 10px;margin-right: 10px;" class="layui-badge-dot layui-bg-blue"></span></div>
+					    </div>
+					    <div class="layui-col-xs11">
+					      <div class="grid-demo">患有高血压，血压需要控制在高压130、低压80左右，然后才能进行体育运动。应该避免举重，闭气的运动。选择比较温和的运动方式。</div>
+					    </div>
+					   
+             </div>
+             <div class="layui-row">
+					    <div class="layui-col-xs1" style="width: 30px;">
+					      <div class="grid-demo grid-demo-bg1"><span style="margin-left: 10px;margin-right: 10px;" class="layui-badge-dot layui-bg-blue"></span></div>
+					    </div>
+					    <div class="layui-col-xs11">
+					      <div class="grid-demo">患有糖尿病，不要在血糖高于14mmol/L、空腹或者降糖药作用最高峰的时候运动，避免强度过高的运动。运动时随身常带一些饼干或糖果，一旦出现头晕、心慌和出冷汗等低血糖的症状可以随时吃下。应该穿宽松舒适的鞋袜，运动的时候注意做好足部的护理。</div>
+					    </div>
+					   
+             </div>
+             <div class="layui-row">
+					    <div class="layui-col-xs1" style="width: 30px;">
+					      <div class="grid-demo grid-demo-bg1"><span style="margin-left: 10px;margin-right: 10px;" class="layui-badge-dot layui-bg-blue"></span></div>
+					    </div>
+					    <div class="layui-col-xs11">
+					      <div class="grid-demo">患有心肺疾病，可以进行比较缓和的体育运动，不要做比较激烈的运动，运动过程中，要携带常用的急救药品，而且最好不要单独的活动。运动的过程中如果出现心慌气喘、胸痛胸闷等，应该立即停止运动，就地休息，同时服用携带的急救药物。</div>
+					    </div>
+             </div>
+		</div>
+				<script th:src="@{/assets/libs/echarts/echarts.min.js}"></script>
+		<script type="text/javascript" th:src="@{/assets/libs/layui/layui.js}"></script>
+		<script type="text/javascript" th:src="@{/assets/js/common.js}"></script>
+		<script type="text/javascript" th:src="@{/assets/js/jquery-1.11.1.js}"></script>
+		<script type="text/javascript">
+		layui.use(['layer', 'form', 'admin', 'table','laydate', 'util'], function () {
+			var table = layui.table;
+
+		//转换静态表格
+		table.init('demo', {});
+		layui.use('element', function(){
+		  var element = layui.element;
+		});
+		
+		$('#back').click(function(){
+			window.location.href="/manage/usertosee/sport?usercode="+$("#userCode").html()+"&type=3";
+		})
+		
+		
+		
+		$(function(){
+			var id = [[${id}]];
+			 $.ajax({
+		   		 type:'post',
+		   		 url:'/system/SportDiary/showSportRecordAnalyze',
+		   		 data:{id:id},
+		   		success : function(data){
+		   			$("#age").html(data.nut);
+					$("#userCode").html(data.userCode);
+					$("#userName").html(data.userName);
+					if(data.age=="1"){
+						$("#gender").html("男");
+					}else{
+						$("#gender").html("女");
+					}
+					$("#startTime").html(data.startTime);
+					$("#endTime").html(data.endTime);
+					
+					
+					if(data.durationnum>=150){
+						$(".send").css("margin-left","70%");
+						$("#durationnum").html(Math.floor(data.durationnum * 100) / 100);
+						$("#durationnumpj").html("<i style='color: rgba(0, 186, 173, 1);' class='layui-icon layui-icon-praise'></i>优秀");
+					}else if(data.durationnum>120 && data.durationnum<150){
+						$(".send").css("margin-left","40%");
+						$("#durationnum").html(Math.floor(data.durationnum * 100) / 100);
+						$("#durationnumpj").html("<i style='color: red;' class='layui-icon layui-icon-tread'></i>中等");
+					}else{
+						$(".send").css("margin-left","10%");
+						$("#durationnum").html(Math.floor(data.durationnum * 100) / 100);
+						$("#durationnumpj").html("<i style='color: red;' class='layui-icon layui-icon-tread'></i>不足");
+					}
+					
+					$("#daysnumber").html(data.frequency);
+					if(data.frequency>=4){
+						$("#daysnumberpj").html("<i style='color: rgba(0, 186, 173, 1);' class='layui-icon layui-icon-praise'></i>优秀");
+					}else if(data.frequency>=2){
+						$("#daysnumberpj").html("<i style='color: red;' class='layui-icon layui-icon-tread'></i>中等");
+					}else{
+						$("#daysnumberpj").html("<i style='color: red;' class='layui-icon layui-icon-tread'></i>差");
+					}
+					
+					$("#number").html(data.number);
+					if(data.number>=4){
+						$("#numberpj").html("<i style='color: rgba(0, 186, 173, 1);' class='layui-icon layui-icon-praise'></i>优秀");
+					}else if(data.number>=2){
+						$("#numberpj").html("<i style='color: red;' class='layui-icon layui-icon-tread'></i>一般");
+					}else{
+						$("#numberpj").html("<i style='color: red;' class='layui-icon layui-icon-tread'></i>差");
+					}
+					
+					$("#average").html(Math.floor(data.tenergy * 100) / 100);
+					$("#uweight").html(Math.floor(data.uweight * 100) / 100+"千卡/天");
+					var average=0;
+				      if(data.tenergy!=0 || data.uweight!=0){
+				          average=data.tenergy/data.uweight*100;
+				      }
+					if(average>=100){
+						$("#averagepj").html("<i style='color: rgba(0, 186, 173, 1);' class='layui-icon layui-icon-praise'></i>优秀");
+					}else if(average<100 && average>60){
+						$("#averagepj").html("<i style='color: red;' class='layui-icon layui-icon-tread'></i>中等");
+					}else{
+						$("#averagepj").html("<i style='color: red;' class='layui-icon layui-icon-tread'></i>不足");
+					}
+					
+					$("#anaerobic").html(data.anaerobic);
+					if(data.anaerobic>=2){
+						$("#anaerobicpj").html("<i style='color: rgba(0, 186, 173, 1);' class='layui-icon layui-icon-praise'></i>优秀");
+					}else{
+						$("#anaerobicpj").html("<i style='color: red;' class='layui-icon layui-icon-tread'></i>一般");
+					}
+					
+					$("#aerobic").html(data.aerobic);
+					if(data.aerobic>=3){
+						$("#aerobicpj").html("<i style='color: rgba(0, 186, 173, 1);' class='layui-icon layui-icon-praise'></i>优秀");
+					}else{
+						$("#aerobicpj").html("<i style='color: red;' class='layui-icon layui-icon-tread'></i>一般");
+					}
+					
+					$("#pliable").html(data.pliable);
+					if(data.pliable>=3){
+						$("#pliablepj").html("<i style='color: rgba(0, 186, 173, 1);' class='layui-icon layui-icon-praise'></i>优秀");
+					}else{
+						$("#pliablepj").html("<i style='color: red;' class='layui-icon layui-icon-tread'></i>一般");
+					}
+					
+					$("#arthrosis").html(data.arthrosis);
+					if(data.arthrosis>=4){
+						$("#arthrosispj").html("<i style='color: rgba(0, 186, 173, 1);' class='layui-icon layui-icon-praise'></i>优秀");
+					}else{
+						$("#arthrosispj").html("<i style='color: red;' class='layui-icon layui-icon-tread'></i>一般");
+					}
+					
+					var mycars = new Array()
+					mycars[0]=['product', '推荐能耗', '运动不足', '运动充足'];
+					 for(var j=0;j<data.array.length;j++){
+							mycars[j+1]=[''+data.array[j].time+'', data.array[j].recommend, data.array[j].notoverweight,data.array[j].beenoverweight];
+					}
+					 sportLink(mycars);
+					
+					 
+					 var val=[{name: "无氧运动", value: Math.floor(data.anaerobic * 100) / 100},{name: "有氧运动",value: Math.floor(data.aerobic * 100) / 100},{name: "柔韧运动",value: Math.floor(data.pliable * 100) / 100},{name: "关节活动",value: Math.floor(data.arthrosis * 100) / 100}]
+					 sportCircular(val);
+					 
+					 $("#walkpercent").html(data.walkpercent+"%");
+					 $("#recommendpercent").html(data.recommendpercent+"%");
+					 $("#boutiquepercent").html(data.boutiquepercent+"%");
+					 $("#restspercent").html(data.restspercent+"%");
+					 var val1=[{name: "步行", value: Math.floor(data.walk * 100) / 100},{name: "运动推荐",value: Math.floor(data.recommend * 100) / 100},{name: "精品课程",value: Math.floor(data.boutique * 100) / 100},{name: "其它运动",value: Math.floor(data.rests * 100) / 100}]
+					 sportCircular1(val1);
+					
+		   		}
+		   	 })
+		})
+		
+		
+		});
+		
+		
+		
+		function sportLink(mycars){
+			var myChart = echarts.init(document.getElementById('sportLink'), 'light');
+			option = {
+				legend: {},
+				tooltip: {},
+				dataset: {
+					source: mycars
+				},
+				xAxis: {
+					type: 'category'
+				},
+				yAxis: {
+					name: '能耗(千卡)',
+					nameTextStyle: {
+						fontWeight: 'bolder',
+						fontSize: 16
+					}
+				},
+				// Declare several bar series, each will be mapped
+				// to a column of dataset.source by default.
+				series: [{
+						type: 'bar'
+					},
+					{
+						type: 'bar'
+					},
+					{
+						type: 'bar'
+					}
+				]
+			};
+			// 使用刚指定的配置项和数据显示图表。
+			myChart.setOption(option);
+			window.addEventListener("resize", function() {
+				myChart.resize();
+			});
+		}
+
+		function sportCircular(val){
+			var myChart = echarts.init(document.getElementById('sportCircular'),'light');
+			option = {
+					  title: {
+					    	text: '运动分类统计',
+					        left: 'center'
+					    },
+			        tooltip: {
+			          trigger: 'item',
+			          formatter: '{a} {b} : {c} ({d}%)'
+			        },
+			        
+			        color: ['#ffd3a6', '#fd9f9a', '#b0b2ff', '#fa6a7c'],
+			        series: [
+			          {
+			            name: '运动统计',
+			            type: 'pie',
+			            radius: '55%',
+			            center: ['50%', '50%'],
+			             label: {
+					                normal: {
+			                        show: false,
+			                        position: 'inside',
+			                        formatter:"{b}:{d}%"
+			                        },
+					            },
+			            data: val,
+			            emphasis: {
+			              itemStyle: {
+			                shadowBlur: 10,
+			                shadowOffsetX: 0,
+			                shadowColor: 'rgba(0, 0, 0, 0.5)'
+			              }
+			            }
+			          }
+			        ]
+			      };
+			myChart.setOption(option);
+			window.addEventListener("resize", function() {
+				myChart.resize();
+			});
+		}
+		
+		
+		function sportCircular1(val){
+			var myChart = echarts.init(document.getElementById('sportCircular1'),'light');
+			option = {
+					  title: {
+					    	text: '运动方式统计',
+					        left: 'center'
+					    },
+			        tooltip: {
+			          trigger: 'item',
+			          formatter: '{a} {b} : {c} ({d}%)'
+			        },
+			        
+			        color: ['#26A5F6', '#16D1A4', '#FFA300', '#FFCB05'],
+			        series: [
+			          {
+			            name: '运动统计',
+			            type: 'pie',
+			            radius: '55%',
+			            center: ['50%', '50%'],
+			             label: {
+					                normal: {
+			                        show: false,
+			                        position: 'inside',
+			                        formatter:"{b}:{d}%"
+			                        },
+					            },
+			            data: val,
+			            emphasis: {
+			              itemStyle: {
+			                shadowBlur: 10,
+			                shadowOffsetX: 0,
+			                shadowColor: 'rgba(0, 0, 0, 0.5)'
+			              }
+			            }
+			          }
+			        ]
+			      };
+			myChart.setOption(option);
+			window.addEventListener("resize", function() {
+				myChart.resize();
+			});
+		}
+		</script>
+	</body>
+</html>

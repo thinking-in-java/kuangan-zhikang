@@ -1,0 +1,767 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yihe.system.mapper.YhOrgTreeMapper">
+  <resultMap id="BaseResultMap" type="com.yihe.system.domain.YhOrgTree">
+    <id column="Org_Code" property="orgCode" jdbcType="VARCHAR" />
+    <result column="Org_Name" property="orgName" jdbcType="VARCHAR" />
+    <result column="Super_Org_Code" property="superOrgCode" jdbcType="VARCHAR" />
+    <result column="Is_Del" property="isDel" jdbcType="INTEGER" />
+    <result column="Add_Date" property="addDate" jdbcType="DATE" />
+    <result column="Class_Number" property="classNumber" jdbcType="INTEGER" />
+    <result column="User_Code" property="userCode" jdbcType="VARCHAR" />
+    <result column="Docdor_Code" property="docdorCode" jdbcType="VARCHAR" />
+    <result column="org_tree_upload_id" property="orgTreeUploadId" jdbcType="INTEGER" />
+    <result column="org_customer_code" property="orgCustomerCode" jdbcType="VARCHAR" />
+    <result column="province" property="province" jdbcType="VARCHAR" />
+    <result column="city" property="city" jdbcType="VARCHAR" />
+    <result column="county" property="county" jdbcType="VARCHAR" />
+    <result column="standby" property="standby" jdbcType="VARCHAR" />
+    <result column="user_name" jdbcType="VARCHAR" property="userName" />
+     <result column="name" property="name" jdbcType="VARCHAR" />
+     <result column="mobile" property="mobile" jdbcType="VARCHAR" />
+     <result column="user_pwd" property="userPwd" jdbcType="VARCHAR" />
+       <result column="num" property="num" jdbcType="INTEGER" />
+  </resultMap>
+  <resultMap id="yhorgtreevojo" type="com.yihe.system.domain.YhOrgTreeVojo">
+    <id column="Org_Code" jdbcType="VARCHAR" property="id" />
+    <result column="Org_Name" jdbcType="VARCHAR" property="name" />
+    <result column="Super_Org_Code" jdbcType="VARCHAR" property="superOrgCode" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  
+  <resultMap id="ResultMapWithBLOBs" type="com.yihe.system.domain.YhOrgTree" extends="BaseResultMap" >
+    <result column="Org_Note" property="orgNote" jdbcType="LONGVARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    Org_Code, Org_Name, Super_Org_Code, Is_Del, Add_Date, Class_Number, User_Code, Docdor_Code, 
+    org_tree_upload_id, org_customer_code, province, city, county, standby
+  </sql>
+  <sql id="Blob_Column_List" >
+    Org_Note
+  </sql>
+
+  <select id="selectadddate" parameterType="string" resultType="string">
+    select Add_Date from yh_org_tree where Org_Code=(select Org_Id from yh_user_make_card where Enrol_Card_Id=#{cardid})
+  </select>
+  
+  <select id="showAddDate" parameterType="java.lang.String" resultType="java.lang.String">
+  	select Add_Date from yh_org_tree where Org_Code=#{orgCode,jdbcType=VARCHAR}
+  </select>
+ 
+ <!-- 根据市级查询所有数据 -->
+ <select id="indexprovince" resultMap="ResultMapWithBLOBs" parameterType="java.lang.String">
+  	select * from yh_org_tree where  province=#{province} or city=#{province}  or county=#{province}
+  </select>
+  
+  <!-- 查询区级数据 -->
+  <select id="showCounty" resultMap="ResultMapWithBLOBs" parameterType="java.lang.String">
+  	select Org_Code,county,count(*) as num from yh_org_tree where city LIKE CONCAT(CONCAT('%', #{name}), '%') group by county having count(1)>1 or count(1)>0;
+  </select>
+  
+  <!-- 查询市级数据 -->
+  <select id="showCity" resultMap="ResultMapWithBLOBs" parameterType="java.lang.String">
+  	 select Org_Code,city,count(*) as num from yh_org_tree where province=#{name} group by city having count(1)>1 or count(1)>0;
+  </select>
+  
+  <!-- 查询省级数据 -->
+  <select id="showprovincial" resultMap="ResultMapWithBLOBs" parameterType="java.lang.String">
+  	select Org_Code,province,count(*) as num from yh_org_tree where  Org_Code LIKE CONCAT(CONCAT('%', #{orgCode}), '%') group by province having count(1)>1 or count(1)>0 ;
+  </select>
+  
+  <select id="selectByPrimaryKeyshowinfo" resultMap="ResultMapWithBLOBs" parameterType="java.lang.String">
+  	select tr.*,info.user_name,info.name,info.mobile,info.user_pwd from yh_org_tree tr  left join yh_user_reginfo info on tr.User_Code=info.user_code where  tr.Org_Code= #{orgCode,jdbcType=VARCHAR}
+  </select>
+  
+  
+  <select id="showNameByOrg" parameterType="java.lang.String" resultMap="ResultMapWithBLOBs">
+	select * from yh_org_tree where Org_Name=#{orgName,jdbcType=VARCHAR}
+  </select>
+  
+  <!-- 根据code查询当前机构下的二级机构 -->
+  <select id="showCodeByOrg" parameterType="java.lang.String" resultMap="ResultMapWithBLOBs">
+	select * from yh_org_tree where Super_Org_Code=#{superOrgCode,jdbcType=VARCHAR}
+  </select>
+  
+  <!-- 机构需要的子节点 -->
+  <select id="selectalltreeOrg" resultMap="yhorgtreevojo" parameterType="java.lang.String">
+  	select Org_Code,Org_Name,Org_Note,Super_Org_Code from yh_org_tree  WHERE Org_Code LIKE CONCAT(CONCAT('%', #{orgCode}), '%');
+  </select>
+
+	<resultMap id="treeOrg1Map" type="com.yihe.system.domain.YhOrgTreeVojo">
+		<id column="Org_Code" jdbcType="VARCHAR" property="id" />
+		<result column="Org_Name" jdbcType="VARCHAR" property="name" />
+		<result column="Super_Org_Code" jdbcType="VARCHAR" property="superOrgCode" />
+		<collection property="children" ofType="com.yihe.system.domain.YhOrgTreeVojo">
+			<id column="doctor" jdbcType="VARCHAR" property="id" />
+			<result column="doctorName" jdbcType="VARCHAR" property="name" />
+		</collection>
+	</resultMap>
+	<select id="selectalltreeOrg1" resultMap="treeOrg1Map" parameterType="java.lang.String">
+		select yot.Org_Code,Org_Name,Org_Note,Super_Org_Code, yumc.doctor, concat(yuai.user_name, "(", count(1),")") as doctorName
+		from yh_org_tree yot
+				 inner join yh_user_make_card yumc on yumc.Org_Id = yot.Org_Code and yumc.User_Code is null
+				 inner join yh_user_admin_info yuai on yuai.id = yumc.doctor
+		WHERE yot.Org_Code LIKE CONCAT(#{orgCode}, '%')
+		group by yot.Org_Code, yumc.doctor
+	</select>
+
+  <!-- 查询当前机构以及所有子机构 -->
+  <select id="selectallOrgLowerLevel" resultType="java.lang.String" parameterType="java.lang.String">
+    select Org_Code from yh_org_tree  WHERE Org_Code LIKE CONCAT(#{orgCode}, '%');
+  </select>
+  
+   <select id="selectalltreeOrg3" resultMap="yhorgtreevojo" parameterType="java.lang.String">
+  	select Org_Code,Org_Name,Org_Note,Super_Org_Code from yh_org_tree  WHERE Org_Code =#{orgCode} limit 1	
+  </select>
+  
+   <!-- 机构需要的子节点 -->
+  <select id="selectalltreeOrg2" resultMap="yhorgtreevojo">
+  	SELECT Org_Code,Org_Name,Org_Note,Super_Org_Code FROM yh_org_tree  WHERE Org_Code IN ( SELECT Org_Id FROM `yh_user_make_card` WHERE doctor=#{doctorid} GROUP BY Org_id)
+  
+  </select>
+  
+  <!-- 根据子节点查询下级最大的code -->
+  <select id="selectChildnodeMax" resultType="java.lang.String" parameterType="java.lang.String">
+  	select max(Org_Code) from yh_org_tree where Super_Org_Code=#{superOrgCode,jdbcType=VARCHAR}
+  </select>
+  
+  <!-- 查询所有 -->
+  <select id="showlistTree" resultMap="BaseResultMap">
+   select tr.Org_Code,tr.Org_Name,tr.Super_Org_Code,tr.Add_Date,tr.User_Code,info.user_name from yh_org_tree tr 
+	left join yh_user_reginfo info on tr.User_Code=info.user_code
+  </select>
+  
+  <!-- 根据code查询下级机构 -->
+  <select id="selectBYLikeCode" parameterType="java.lang.String"  resultMap="BaseResultMap">
+  	 SELECT
+	tr.Org_Code,
+	tr.Org_Name,
+	tr.Super_Org_Code,
+	tr.Add_Date,
+	tr.User_Code,
+	info.user_name,
+	CONCAT(
+		count(mc.User_Code),
+		'/',
+		count(mc.Org_Id)
+	) AS stuck,
+	(
+		SELECT
+			count(*)
+		FROM
+			yh_user_admin_info
+		WHERE
+			org_code = tr.Org_Code
+	) AS doctor,
+  	tr.standby
+FROM
+	yh_org_tree tr
+LEFT JOIN yh_user_reginfo info ON tr.User_Code = info.user_code COLLATE utf8_general_ci
+LEFT JOIN yh_user_make_card AS mc ON tr.Org_Code = mc.Org_Id
+WHERE
+	tr.Org_Code LIKE CONCAT(CONCAT('%', #{orgCode}), '%')
+GROUP BY
+	tr.Org_Code
+  </select>
+
+	<select id="getOrgNameInfo" parameterType="string" resultType="string">
+		select standby from yh_org_tree
+		<where>
+			<if test="orgName != null and orgName != ''">
+				Org_Code = #{orgName}
+			</if>
+			<if test="orgName == null or orgName == ''">
+				Super_Org_Code = '0'
+			</if>
+		</where>
+		limit 1
+	</select>
+
+	<update id="updateOrg" parameterType="string">
+		update yh_org_tree set standby = #{info} where Super_Org_Code = '0'
+	</update>
+  <select id="selectBYLikeCodeByNew" parameterType="java.lang.String"  resultType="com.yihe.system.domain.YhOrgTree">
+  	SELECT
+	tr.Org_Code as orgCode,
+	tr.Org_Name as orgName,
+	IFNULL(
+		(
+			SELECT
+				`name`
+			FROM
+				yh_user_reginfo
+			WHERE
+				user_code = tr.user_code
+		),
+		'--'
+	) as name,
+	tr.Super_Org_Code as superOrgCode,
+	(
+		SELECT
+			count(DISTINCT ort.user_code)
+		FROM
+			yh_disease_assess_total_report2 ort,
+			yh_user_reginfo reg
+		WHERE
+			ort.user_code = reg.user_code
+		AND (
+			reg.Org_Code LIKE CONCAT(
+				CONCAT('%', tr.Org_Code),
+				'%'
+			)
+		)
+	) AS hasnum,
+	(
+		SELECT
+			count(1)
+		FROM
+			yh_user_reginfo
+		WHERE
+			Org_Code = tr.Org_Code
+		AND User_Type = 5
+	) AS asset_num,
+	(
+		SELECT
+			count(1)
+		FROM
+			yh_disease_assess_total_report2 AS ort
+		INNER JOIN (
+			SELECT
+				max(w.id) AS max_chat_time,
+				w.user_code,
+				w.sk_names
+			FROM
+				(
+					SELECT
+						ort.id,
+						ort.user_code,
+						ort.sk_names
+					FROM
+						yh_disease_assess_total_report2 ort
+					ORDER BY
+						qtime DESC
+				) w
+			GROUP BY
+				w.user_code
+			HAVING
+				w.sk_names != ''
+		) AS ort2 ON ort2.max_chat_time = ort.id
+		LEFT JOIN yh_user_reginfo AS reg ON ort.user_code = reg.user_code
+		WHERE
+			reg.Org_Code LIKE CONCAT(
+				CONCAT('%', tr.Org_Code),
+				'%'
+			)
+	) AS hasdise,
+	(
+		SELECT
+			count(1)
+		FROM
+			yh_disease_assess_total_report2 AS ort
+		INNER JOIN (
+			SELECT
+				max(w.id) AS max_chat_time,
+				w.user_code,
+				w.sk_names,
+				w.df_names
+			FROM
+				(
+					SELECT
+						ort.id,
+						ort.user_code,
+						ort.sk_names,
+						ort.df_names
+					FROM
+						yh_disease_assess_total_report2 ort
+					ORDER BY
+						qtime DESC
+				) w
+			GROUP BY
+				w.user_code
+			HAVING
+				ISNULL(w.sk_names)
+			AND w.df_names != ''
+		) AS ort2 ON ort2.max_chat_time = ort.id
+		LEFT JOIN yh_user_reginfo AS reg ON ort.user_code = reg.user_code
+		WHERE
+			reg.Org_Code LIKE CONCAT(
+				CONCAT('%', tr.Org_Code),
+				'%'
+			)
+	) AS highrisk,
+	(
+		SELECT
+			count(1)
+		FROM
+			yh_disease_assess_total_report2 AS ort
+		INNER JOIN (
+			SELECT
+				max(w.id) AS max_chat_time,
+				w.user_code,
+				w.sk_names,
+				w.df_names
+			FROM
+				(
+					SELECT
+						ort.id,
+						ort.user_code,
+						ort.sk_names,
+						ort.df_names
+					FROM
+						yh_disease_assess_total_report2 ort
+					ORDER BY
+						qtime DESC
+				) w
+			GROUP BY
+				w.user_code
+			HAVING
+				ISNULL(w.sk_names)
+			AND ISNULL(w.df_names)
+		) AS ort2 ON ort2.max_chat_time = ort.id
+		LEFT JOIN yh_user_reginfo AS reg ON ort.user_code = reg.user_code
+		WHERE
+			reg.Org_Code LIKE CONCAT(
+				CONCAT('%', tr.Org_Code),
+				'%'
+			)
+	) AS health
+FROM
+	yh_org_tree AS tr
+WHERE
+	tr.Org_Code LIKE CONCAT(CONCAT('%', #{orgCode}), '%')
+GROUP BY
+	tr.Org_Code
+  </select>
+
+
+
+    <select id="selectBYCodeByNew" parameterType="java.lang.String"  resultType="com.yihe.system.domain.YhOrgTree">
+  	SELECT
+	tr.Org_Code as orgCode,
+	tr.Org_Name as orgName,
+	IFNULL(
+		(
+			SELECT
+				`name`
+			FROM
+				yh_user_reginfo
+			WHERE
+				user_code = tr.user_code
+		),
+		'--'
+	) as name,
+	tr.Super_Org_Code as superOrgCode,
+	(
+		SELECT
+			count(DISTINCT ort.user_code)
+		FROM
+			yh_disease_assess_total_report2 ort,
+			yh_user_reginfo reg
+		WHERE
+			ort.user_code = reg.user_code
+		AND (
+			reg.Org_Code LIKE CONCAT(
+				CONCAT('%', tr.Org_Code),
+				'%'
+			)
+		)
+	) AS hasnum,
+	(
+		SELECT
+			count(1)
+		FROM
+			yh_user_reginfo
+		WHERE
+			Org_Code = tr.Org_Code
+		AND User_Type = 5
+	) AS asset_num,
+	(
+		SELECT
+			count(1)
+		FROM
+			yh_disease_assess_total_report2 AS ort
+		INNER JOIN (
+			SELECT
+				max(w.id) AS max_chat_time,
+				w.user_code,
+				w.sk_names
+			FROM
+				(
+					SELECT
+						ort.id,
+						ort.user_code,
+						ort.sk_names
+					FROM
+						yh_disease_assess_total_report2 ort
+					ORDER BY
+						qtime DESC
+				) w
+			GROUP BY
+				w.user_code
+			HAVING
+				w.sk_names != ''
+		) AS ort2 ON ort2.max_chat_time = ort.id
+		LEFT JOIN yh_user_reginfo AS reg ON ort.user_code = reg.user_code
+		WHERE
+			reg.Org_Code LIKE CONCAT(
+				CONCAT('%', tr.Org_Code),
+				'%'
+			)
+	) AS hasdise,
+	(
+		SELECT
+			count(1)
+		FROM
+			yh_disease_assess_total_report2 AS ort
+		INNER JOIN (
+			SELECT
+				max(w.id) AS max_chat_time,
+				w.user_code,
+				w.sk_names,
+				w.df_names
+			FROM
+				(
+					SELECT
+						ort.id,
+						ort.user_code,
+						ort.sk_names,
+						ort.df_names
+					FROM
+						yh_disease_assess_total_report2 ort
+					ORDER BY
+						qtime DESC
+				) w
+			GROUP BY
+				w.user_code
+			HAVING
+				ISNULL(w.sk_names)
+			AND w.df_names != ''
+		) AS ort2 ON ort2.max_chat_time = ort.id
+		LEFT JOIN yh_user_reginfo AS reg ON ort.user_code = reg.user_code
+		WHERE
+			reg.Org_Code LIKE CONCAT(
+				CONCAT('%', tr.Org_Code),
+				'%'
+			)
+	) AS highrisk,
+	(
+		SELECT
+			count(1)
+		FROM
+			yh_disease_assess_total_report2 AS ort
+		INNER JOIN (
+			SELECT
+				max(w.id) AS max_chat_time,
+				w.user_code,
+				w.sk_names,
+				w.df_names
+			FROM
+				(
+					SELECT
+						ort.id,
+						ort.user_code,
+						ort.sk_names,
+						ort.df_names
+					FROM
+						yh_disease_assess_total_report2 ort
+					ORDER BY
+						qtime DESC
+				) w
+			GROUP BY
+				w.user_code
+			HAVING
+				ISNULL(w.sk_names)
+			AND ISNULL(w.df_names)
+		) AS ort2 ON ort2.max_chat_time = ort.id
+		LEFT JOIN yh_user_reginfo AS reg ON ort.user_code = reg.user_code
+		WHERE
+			reg.Org_Code LIKE CONCAT(
+				CONCAT('%', tr.Org_Code),
+				'%'
+			)
+	) AS health
+FROM
+	yh_org_tree AS tr
+WHERE
+	tr.Org_Code LIKE CONCAT(CONCAT('', #{orgCode}), '')
+GROUP BY
+	tr.Org_Code LIMIT 1
+  </select>
+   <select id="selectalltree" resultMap="yhorgtreevojo">
+  	select Org_Code,Org_Name,Org_Note,Super_Org_Code from yh_org_tree
+  </select>
+  <!-- 查询所有子节点 -->
+  <select id="selectAllChild" parameterType="java.lang.String"  resultMap="yhorgtreevojo">
+  	select Org_Code,Org_Name,Org_Note,Super_Org_Code from yh_org_tree  WHERE Super_Org_Code = #{superOrgCode}
+  </select>
+
+  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.String" >
+    select
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from yh_org_tree
+    where Org_Code = #{orgCode,jdbcType=VARCHAR}
+  </select>
+
+  <select id="selectorg" resultMap="ResultMapWithBLOBs" parameterType="java.lang.String">
+    select End_Time as Add_Date from yh_user_make_card where User_Code=#{orgCode}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from yh_org_tree
+    where Org_Code = #{orgCode,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.yihe.system.domain.YhOrgTree" >
+    insert into yh_org_tree (Org_Code, Org_Name, Super_Org_Code, 
+      Is_Del, Add_Date, Class_Number, 
+      User_Code, Docdor_Code, org_tree_upload_id, 
+      org_customer_code, province, city, 
+      county, standby, Org_Note
+      )
+    values (#{orgCode,jdbcType=VARCHAR}, #{orgName,jdbcType=VARCHAR}, #{superOrgCode,jdbcType=VARCHAR}, 
+      #{isDel,jdbcType=INTEGER}, #{addDate,jdbcType=DATE}, #{classNumber,jdbcType=INTEGER}, 
+      #{userCode,jdbcType=VARCHAR}, #{docdorCode,jdbcType=VARCHAR}, #{orgTreeUploadId,jdbcType=INTEGER}, 
+      #{orgCustomerCode,jdbcType=VARCHAR}, #{province,jdbcType=VARCHAR}, #{city,jdbcType=VARCHAR}, 
+      #{county,jdbcType=VARCHAR}, #{standby,jdbcType=VARCHAR}, #{orgNote,jdbcType=LONGVARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.yihe.system.domain.YhOrgTree" >
+    insert into yh_org_tree
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="orgCode != null" >
+        Org_Code,
+      </if>
+      <if test="orgName != null" >
+        Org_Name,
+      </if>
+      <if test="superOrgCode != null" >
+        Super_Org_Code,
+      </if>
+      <if test="isDel != null" >
+        Is_Del,
+      </if>
+      <if test="addDate != null" >
+        Add_Date,
+      </if>
+      <if test="classNumber != null" >
+        Class_Number,
+      </if>
+      <if test="userCode != null" >
+        User_Code,
+      </if>
+      <if test="docdorCode != null" >
+        Docdor_Code,
+      </if>
+      <if test="orgTreeUploadId != null" >
+        org_tree_upload_id,
+      </if>
+      <if test="orgCustomerCode != null" >
+        org_customer_code,
+      </if>
+      <if test="province != null" >
+        province,
+      </if>
+      <if test="city != null" >
+        city,
+      </if>
+      <if test="county != null" >
+        county,
+      </if>
+      <if test="standby != null" >
+        standby,
+      </if>
+      <if test="orgNote != null" >
+        Org_Note,
+      </if>
+		<if test="oaTreeId != null" >
+			oa_tree_id,
+		</if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="orgCode != null" >
+        #{orgCode,jdbcType=VARCHAR},
+      </if>
+      <if test="orgName != null" >
+        #{orgName,jdbcType=VARCHAR},
+      </if>
+      <if test="superOrgCode != null" >
+        #{superOrgCode,jdbcType=VARCHAR},
+      </if>
+      <if test="isDel != null" >
+        #{isDel,jdbcType=INTEGER},
+      </if>
+      <if test="addDate != null" >
+        #{addDate,jdbcType=DATE},
+      </if>
+      <if test="classNumber != null" >
+        #{classNumber,jdbcType=INTEGER},
+      </if>
+      <if test="userCode != null" >
+        #{userCode,jdbcType=VARCHAR},
+      </if>
+      <if test="docdorCode != null" >
+        #{docdorCode,jdbcType=VARCHAR},
+      </if>
+      <if test="orgTreeUploadId != null" >
+        #{orgTreeUploadId,jdbcType=INTEGER},
+      </if>
+      <if test="orgCustomerCode != null" >
+        #{orgCustomerCode,jdbcType=VARCHAR},
+      </if>
+      <if test="province != null" >
+        #{province,jdbcType=VARCHAR},
+      </if>
+      <if test="city != null" >
+        #{city,jdbcType=VARCHAR},
+      </if>
+      <if test="county != null" >
+        #{county,jdbcType=VARCHAR},
+      </if>
+      <if test="standby != null" >
+        #{standby,jdbcType=VARCHAR},
+      </if>
+      <if test="orgNote != null" >
+        #{orgNote,jdbcType=LONGVARCHAR},
+      </if>
+		<if test="oaTreeId != null" >
+			#{oaTreeId,jdbcType=VARCHAR},
+		</if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.yihe.system.domain.YhOrgTree" >
+    update yh_org_tree
+    <set >
+      <if test="orgName != null" >
+        Org_Name = #{orgName,jdbcType=VARCHAR},
+      </if>
+      <if test="superOrgCode != null" >
+        Super_Org_Code = #{superOrgCode,jdbcType=VARCHAR},
+      </if>
+      <if test="isDel != null" >
+        Is_Del = #{isDel,jdbcType=INTEGER},
+      </if>
+        Add_Date = #{addDate,jdbcType=DATE},
+      <if test="classNumber != null" >
+        Class_Number = #{classNumber,jdbcType=INTEGER},
+      </if>
+      <if test="userCode != null" >
+        User_Code = #{userCode,jdbcType=VARCHAR},
+      </if>
+      <if test="docdorCode != null" >
+        Docdor_Code = #{docdorCode,jdbcType=VARCHAR},
+      </if>
+      <if test="orgTreeUploadId != null" >
+        org_tree_upload_id = #{orgTreeUploadId,jdbcType=INTEGER},
+      </if>
+      <if test="orgCustomerCode != null" >
+        org_customer_code = #{orgCustomerCode,jdbcType=VARCHAR},
+      </if>
+      <if test="province != null" >
+        province = #{province,jdbcType=VARCHAR},
+      </if>
+      <if test="city != null" >
+        city = #{city,jdbcType=VARCHAR},
+      </if>
+      <if test="county != null" >
+        county = #{county,jdbcType=VARCHAR},
+      </if>
+      <if test="standby != null" >
+        standby = #{standby,jdbcType=VARCHAR},
+      </if>
+      <if test="orgNote != null" >
+        Org_Note = #{orgNote,jdbcType=LONGVARCHAR},
+      </if>
+		<if test="oaTreeId != null" >
+			oa_tree_id = #{oaTreeId,jdbcType=VARCHAR},
+		</if>
+    </set>
+    where Org_Code = #{orgCode,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.yihe.system.domain.YhOrgTree" >
+    update yh_org_tree
+    set Org_Name = #{orgName,jdbcType=VARCHAR},
+      Super_Org_Code = #{superOrgCode,jdbcType=VARCHAR},
+      Is_Del = #{isDel,jdbcType=INTEGER},
+      Add_Date = #{addDate,jdbcType=DATE},
+      Class_Number = #{classNumber,jdbcType=INTEGER},
+      User_Code = #{userCode,jdbcType=VARCHAR},
+      Docdor_Code = #{docdorCode,jdbcType=VARCHAR},
+      org_tree_upload_id = #{orgTreeUploadId,jdbcType=INTEGER},
+      org_customer_code = #{orgCustomerCode,jdbcType=VARCHAR},
+      province = #{province,jdbcType=VARCHAR},
+      city = #{city,jdbcType=VARCHAR},
+      county = #{county,jdbcType=VARCHAR},
+      standby = #{standby,jdbcType=VARCHAR},
+      Org_Note = #{orgNote,jdbcType=LONGVARCHAR}
+    where Org_Code = #{orgCode,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.yihe.system.domain.YhOrgTree" >
+    update yh_org_tree
+    set Org_Name = #{orgName,jdbcType=VARCHAR},
+      Super_Org_Code = #{superOrgCode,jdbcType=VARCHAR},
+      Is_Del = #{isDel,jdbcType=INTEGER},
+      Add_Date = #{addDate,jdbcType=DATE},
+      Class_Number = #{classNumber,jdbcType=INTEGER},
+      User_Code = #{userCode,jdbcType=VARCHAR},
+      Docdor_Code = #{docdorCode,jdbcType=VARCHAR},
+      org_tree_upload_id = #{orgTreeUploadId,jdbcType=INTEGER},
+      org_customer_code = #{orgCustomerCode,jdbcType=VARCHAR},
+      province = #{province,jdbcType=VARCHAR},
+      city = #{city,jdbcType=VARCHAR},
+      county = #{county,jdbcType=VARCHAR},
+      standby = #{standby,jdbcType=VARCHAR}
+    where Org_Code = #{orgCode,jdbcType=VARCHAR}
+  </update>
+
+
+  <select id="selectcardid" parameterType="string" resultType="string">
+    select  Enrol_Card_Id from yh_user_make_card where User_Code=#{usercode} order by Enrol_Time limit 1
+  </select>
+ 
+  <select id="selectlinetime" parameterType="String" resultType="String">
+    select End_Time from yh_user_make_card where Enrol_Card_Id=#{cardid}
+  </select>
+
+  <update id="setlasttime" parameterType="com.yihe.system.domain.YhOrgTree" >
+    update  yh_user_make_card set End_Time =#{addDate}
+    where (End_Time>#{addDate} or End_Time is null) and Org_Id=#{orgCode}
+  </update>
+
+	<select id="queryOaTreeId" parameterType="string" resultType="string">
+		select oa_tree_id from yh_org_tree where Org_Code = #{orgCode}
+	</select>
+
+	<select id="queryOaTreeId2" parameterType="string" resultType="string">
+		select oa_tree_id from yh_org_tree as yor
+		left join yh_user_make_card as yumc on yumc.Org_Id = yor.Org_Code
+		where Enrol_Card_Id = #{enrolCardId,jdbcType=VARCHAR}
+	</select>
+</mapper>

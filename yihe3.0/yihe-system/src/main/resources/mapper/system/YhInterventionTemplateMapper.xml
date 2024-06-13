@@ -1,0 +1,492 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yihe.system.mapper.YhInterventionTemplateMapper" >
+  <resultMap id="BaseResultMap" type="com.yihe.system.domain.YhInterventionTemplate" >
+    <id column="intervention_id" property="interventionId" jdbcType="INTEGER" />
+    <result column="source_type" property="sourceType" jdbcType="INTEGER" />
+    <result column="template_diseases" property="templateDiseases" jdbcType="INTEGER" />
+    <result column="template_risk" property="templateRisk" jdbcType="VARCHAR" />
+    <result column="template_name" property="templateName" jdbcType="VARCHAR" />
+    <result column="insert_time" property="insertTime" jdbcType="TIMESTAMP" />
+    <result column="plan_count" property="planCount" jdbcType="INTEGER" />
+    <result column="apply_sex" property="applySex" jdbcType="INTEGER" />
+    <result column="apply_age_min" property="applyAgeMin" jdbcType="INTEGER" />
+    <result column="apply_age_max" property="applyAgeMax" jdbcType="INTEGER" />
+    <result column="apply_bim_min" property="applyBimMin" jdbcType="REAL" />
+    <result column="apply_bim_max" property="applyBimMax" jdbcType="REAL" />
+    <result column="souce_name" property="souceName" jdbcType="VARCHAR" />
+    <result column="souce_isdelete" property="souceIsdelete" jdbcType="INTEGER" />
+    <result column="operation" property="operation" jdbcType="VARCHAR" />
+    <result column="template_describe" property="templateDescribe" jdbcType="VARCHAR" />
+    <result column="disease_name" property="disease_name" jdbcType="VARCHAR" />
+  </resultMap>
+
+
+  <resultMap id="BaseResultMapprograms" type="com.yihe.system.domain.YhProgramsTemplate" >
+    <id column="programs_id" property="programsId" jdbcType="INTEGER" />
+    <result column="Intervention_id" property="interventionId" jdbcType="INTEGER" />
+    <result column="programs_weeks" property="programsWeeks" jdbcType="INTEGER" />
+    <result column="programs_days" property="programsDays" jdbcType="INTEGER" />
+    <result column="service_way" property="serviceWay" jdbcType="VARCHAR" />
+    <result column="plan_content" property="planContent" jdbcType="VARCHAR" />
+    <result column="content_prompt" property="contentPrompt" jdbcType="VARCHAR" />
+    <result column="plan_count" property="plan_count" jdbcType="VARCHAR" />
+    <result column="remark" property="remark" jdbcType="INTEGER" />
+  </resultMap>
+
+  <resultMap id="BaseResultcategory" type="com.yihe.system.domain.YhDiseaseCategory" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="disease_code" property="diseaseCode" jdbcType="INTEGER" />
+    <result column="disease_name" property="diseaseName" jdbcType="VARCHAR" />
+    <result column="risk_group" property="riskGroup" jdbcType="VARCHAR" />
+  </resultMap>
+
+  <sql id="Base_Column_List" >
+    intervention_id, source_type, template_diseases, template_risk, template_name, insert_time,
+    plan_count, apply_sex, apply_age_min, apply_age_max, apply_bim_min, apply_bim_max, 
+    souce_name, souce_isdelete, operation, template_describe
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from yh_intervention_template
+    where intervention_id = #{interventionId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from yh_intervention_template
+    where intervention_id = #{interventionId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.yihe.system.domain.YhInterventionTemplate" >
+    insert into yh_intervention_template (intervention_id, source_type, template_diseases, 
+      template_risk, template_name, insert_time, 
+      plan_count, apply_sex, apply_age_min, 
+      apply_age_max, apply_bim_min, apply_bim_max, 
+      souce_name, souce_isdelete, operation, 
+      template_describe)
+    values (#{interventionId,jdbcType=INTEGER}, #{sourceType,jdbcType=INTEGER}, #{templateDiseases,jdbcType=INTEGER}, 
+      #{templateRisk,jdbcType=INTEGER}, #{templateName,jdbcType=VARCHAR}, #{insertTime,jdbcType=TIMESTAMP}, 
+      #{planCount,jdbcType=INTEGER}, #{applySex,jdbcType=INTEGER}, #{applyAgeMin,jdbcType=INTEGER}, 
+      #{applyAgeMax,jdbcType=INTEGER}, #{applyBimMin,jdbcType=REAL}, #{applyBimMax,jdbcType=REAL}, 
+      #{souceName,jdbcType=VARCHAR}, #{souceIsdelete,jdbcType=INTEGER}, #{operation,jdbcType=VARCHAR}, 
+      #{templateDescribe,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.yihe.system.domain.YhInterventionTemplate"  useGeneratedKeys="true" keyProperty="interventionId" >
+    insert into yh_intervention_template
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="interventionId != null" >
+        intervention_id,
+      </if>
+      <if test="sourceType != null" >
+        source_type,
+      </if>
+      <if test="templateDiseases != null" >
+        template_diseases,
+      </if>
+      <if test="templateRisk != null" >
+        template_risk,
+      </if>
+      <if test="templateName != null" >
+        template_name,
+      </if>
+      <if test="insertTime != null" >
+        insert_time,
+      </if>
+      <if test="planCount != null" >
+        plan_count,
+      </if>
+      <if test="applySex != null" >
+        apply_sex,
+      </if>
+      <if test="applyAgeMin != null" >
+        apply_age_min,
+      </if>
+      <if test="applyAgeMax != null" >
+        apply_age_max,
+      </if>
+      <if test="applyBimMin != null" >
+        apply_bim_min,
+      </if>
+      <if test="applyBimMax != null" >
+        apply_bim_max,
+      </if>
+      <if test="souceName != null" >
+        souce_name,
+      </if>
+      <if test="souceIsdelete != null" >
+        souce_isdelete,
+      </if>
+      <if test="usercode != null" >
+        operation,
+      </if>
+      <if test="templateDescribe != null" >
+        template_describe,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="interventionId != null" >
+        #{interventionId,jdbcType=INTEGER},
+      </if>
+      <if test="sourceType != null" >
+        #{sourceType,jdbcType=INTEGER},
+      </if>
+      <if test="templateDiseases != null" >
+        #{templateDiseases,jdbcType=INTEGER},
+      </if>
+      <if test="templateRisk != null" >
+        #{templateRisk,jdbcType=INTEGER},
+      </if>
+      <if test="templateName != null" >
+        #{templateName,jdbcType=VARCHAR},
+      </if>
+      <if test="insertTime != null" >
+        #{insertTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="planCount != null" >
+        #{planCount,jdbcType=INTEGER},
+      </if>
+      <if test="applySex != null" >
+        #{applySex,jdbcType=INTEGER},
+      </if>
+      <if test="applyAgeMin != null" >
+        #{applyAgeMin,jdbcType=INTEGER},
+      </if>
+      <if test="applyAgeMax != null" >
+        #{applyAgeMax,jdbcType=INTEGER},
+      </if>
+      <if test="applyBimMin != null" >
+        #{applyBimMin,jdbcType=REAL},
+      </if>
+      <if test="applyBimMax != null" >
+        #{applyBimMax,jdbcType=REAL},
+      </if>
+      <if test="souceName != null" >
+        #{souceName,jdbcType=VARCHAR},
+      </if>
+      <if test="souceIsdelete != null" >
+        #{souceIsdelete,jdbcType=INTEGER},
+      </if>
+      <if test="usercode != null" >
+        #{usercode,jdbcType=VARCHAR},
+      </if>
+      <if test="templateDescribe != null" >
+        #{templateDescribe,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.yihe.system.domain.YhInterventionTemplate" >
+    update yh_intervention_template
+    <set >
+      <if test="sourceType != null" >
+        source_type = #{sourceType,jdbcType=INTEGER},
+      </if>
+      <if test="templateDiseases != null" >
+        template_diseases = #{templateDiseases,jdbcType=INTEGER},
+      </if>
+      <if test="templateRisk != null" >
+        template_risk = #{templateRisk,jdbcType=INTEGER},
+      </if>
+      <if test="templateName != null" >
+        template_name = #{templateName,jdbcType=VARCHAR},
+      </if>
+      <if test="insertTime != null" >
+        insert_time = #{insertTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="planCount != null" >
+        plan_count = #{planCount,jdbcType=INTEGER},
+      </if>
+      <if test="applySex != null" >
+        apply_sex = #{applySex,jdbcType=INTEGER},
+      </if>
+      <if test="applyAgeMin != null" >
+        apply_age_min = #{applyAgeMin,jdbcType=INTEGER},
+      </if>
+      <if test="applyAgeMax != null" >
+        apply_age_max = #{applyAgeMax,jdbcType=INTEGER},
+      </if>
+      <if test="applyBimMin != null" >
+        apply_bim_min = #{applyBimMin,jdbcType=REAL},
+      </if>
+      <if test="applyBimMax != null" >
+        apply_bim_max = #{applyBimMax,jdbcType=REAL},
+      </if>
+      <if test="souceName != null" >
+        souce_name = #{souceName,jdbcType=VARCHAR},
+      </if>
+      <if test="souceIsdelete != null" >
+        souce_isdelete = #{souceIsdelete,jdbcType=INTEGER},
+      </if>
+      <if test="operation != null" >
+        operation = #{operation,jdbcType=VARCHAR},
+      </if>
+      <if test="templateDescribe != null" >
+        template_describe = #{templateDescribe,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where intervention_id = #{interventionId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.yihe.system.domain.YhInterventionTemplate" >
+    update yh_intervention_template
+    set source_type = #{sourceType,jdbcType=INTEGER},
+      template_diseases = #{templateDiseases,jdbcType=INTEGER},
+      template_risk = #{templateRisk,jdbcType=INTEGER},
+      template_name = #{templateName,jdbcType=VARCHAR},
+      insert_time = #{insertTime,jdbcType=TIMESTAMP},
+      plan_count = #{planCount,jdbcType=INTEGER},
+      apply_sex = #{applySex,jdbcType=INTEGER},
+      apply_age_min = #{applyAgeMin,jdbcType=INTEGER},
+      apply_age_max = #{applyAgeMax,jdbcType=INTEGER},
+      apply_bim_min = #{applyBimMin,jdbcType=REAL},
+      apply_bim_max = #{applyBimMax,jdbcType=REAL},
+      souce_name = #{souceName,jdbcType=VARCHAR},
+      souce_isdelete = #{souceIsdelete,jdbcType=INTEGER},
+      operation = #{operation,jdbcType=VARCHAR},
+      template_describe = #{templateDescribe,jdbcType=VARCHAR}
+    where intervention_id = #{interventionId,jdbcType=INTEGER}
+  </update>
+
+  <select id="selectBypage" resultMap="BaseResultMap"  parameterType="com.yihe.system.domain.YhInterventionTemplate">
+    select
+    <include refid="Base_Column_List" />,cat.*
+    from yh_intervention_template tem LEFT JOIN yh_disease_category cat
+    ON tem.template_diseases=cat.disease_code
+    <where>
+        <if test="templateDiseases!=null and templateDiseases!=''">
+            AND (template_diseases=#{templateDiseases} or template_diseases=14 )
+        </if>
+        <if test="templateRisk!=null and templateRisk!=''">
+            AND template_risk like CONCAT('%',#{templateRisk},'%')
+        </if>
+        <if test="templateName!=null and templateName!=''">
+          AND template_name  like CONCAT('%',#{templateName},'%')
+        </if>
+        <if test="operation!=null and sourceType==null">
+          and operation  in (#{operation,jdbcType=VARCHAR})
+        </if>
+      <if test="operation!=null and sourceType!=null">
+        and operation not in (#{operation,jdbcType=VARCHAR},#{sourceType,jdbcType=VARCHAR})
+      </if>
+    </where>
+    ORDER BY insert_time DESC
+    LIMIT #{start},#{limit}
+  </select>
+
+
+  <select id="selecttemplate" resultMap="BaseResultMap"  parameterType="com.yihe.system.domain.YhInterventionTemplate">
+    select
+    <include refid="Base_Column_List" />,cat.*
+    from yh_intervention_template tem LEFT JOIN yh_disease_category cat
+    ON tem.template_diseases=cat.disease_code
+    <where>
+      <if test="sourceType==1 or sourceType==2">
+        AND operation=#{souceName}
+      </if>
+      <if test="sourceType==3">
+        AND operation NOT IN (#{souceName},'0')
+      </if>
+      <if test="templateDiseases!=null and templateDiseases!=''">
+        AND (template_diseases =#{templateDiseases} or template_diseases=14)
+      </if>
+      <if test="templateRisk!=null and templateRisk!=''">
+          AND (template_risk like CONCAT('%',#{templateRisk},'%') or template_risk is null or template_risk='')
+      </if>
+      <if test="templateName!=null and templateName!=''">
+        AND template_name  like CONCAT('%',#{templateName},'%')
+      </if>
+      <if test="applySex!=null and applySex!=''">
+        AND (apply_sex  =#{applySex} or (apply_sex =3))
+      </if>
+      <if test="applyAgeMin!=null and applyAgeMin!=''">
+        AND (apply_age_min  &gt;= #{applyAgeMin} or(apply_age_min is null and apply_age_max is null))
+      </if>
+      <if test="applyAgeMax!=null and applyAgeMax!=''">
+        AND (apply_age_max  &lt;= #{applyAgeMax} or(apply_age_min is null and apply_age_max is null))
+      </if>
+      <if test="applyBimMin!=null and applyBimMin!=''">
+        AND (apply_bim_min  &gt;= #{applyBimMin} or(apply_bim_min is null and apply_bim_max is null))
+      </if>
+      <if test="applyBimMax!=null and applyBimMax!=''">
+        AND (apply_bim_max  &lt;= #{applyBimMax} or(apply_bim_min is null and apply_bim_max is null))
+      </if>
+    </where>
+    ORDER BY intervention_id
+  </select>
+  
+  <select id="selectcount" resultType="int" parameterType="com.yihe.system.domain.YhInterventionTemplate">
+      SELECT count(*) FROM yh_intervention_template
+    <where>
+      <if test="templateDiseases!=null and templateDiseases!=''">
+        AND template_diseases=#{templateDiseases}
+      </if>
+      <if test="templateRisk!=null and templateRisk!=''">
+          AND template_risk  like CONCAT('%',#{templateRisk},'%')
+      </if>
+      <if test="templateName!=null and templateName!=''">
+        AND template_name  like CONCAT('%',#{templateName},'%')
+      </if>
+      <if test="operation!=null and sourceType==null">
+        and operation  in (#{operation,jdbcType=VARCHAR})
+      </if>
+      <if test="operation!=null and sourceType!=null">
+        and operation not in (#{operation,jdbcType=VARCHAR},#{sourceType,jdbcType=VARCHAR})
+      </if>
+    </where>
+  </select>
+
+  <select id="roleid" parameterType="string" resultType="string">
+      SELECT roleId FROM  yh_user_role_power WHERE  userId=#{Usercode} limit 1
+  </select>
+
+
+  <select id="selectyhprogramstemplatecount" parameterType="com.yihe.system.domain.YhProgramsTemplate" resultType="int">
+    SELECT count(*)  FROM yh_temporary_programs_template WHERE  Intervention_id=#{interventionId}
+  </select>
+  
+  <select id="selectbyprograms" parameterType="com.yihe.system.domain.YhProgramsTemplate" resultMap="BaseResultMapprograms">
+			SELECT * FROM yh_temporary_programs_template as ypt
+			LEFT JOIN yh_programs_dictionary as ypd
+			ON ypt.plan_content=ypd.plancount_id
+			WHERE
+			<if test="interventionId==null">
+               ypt.Intervention_id IS NULL
+            </if>
+            <if test="interventionId!=null">
+               ypt.Intervention_id=#{interventionId}
+            </if>
+			 and ypt.usercode=#{usercode}
+              ORDER BY ypt.programs_weeks,ypt.programs_days
+              LIMIT #{start},#{limit}
+  </select>
+
+
+  <select id="selectyhprogramsdictionary" resultType="com.yihe.system.domain.YhProgramsDictionary">
+      SELECT  * FROM  yh_programs_dictionary
+  </select>
+
+  <insert id="changetable" parameterType="com.yihe.system.domain.YhInterventionTemplate">
+      insert into yh_temporary_programs_template  (Intervention_id,programs_weeks,programs_days,service_way,plan_content,content_prompt,remark,usercode)
+      select Intervention_id,programs_weeks,programs_days,service_way,plan_content,content_prompt,programs_id,(SELECT #{usercode}) from yh_programs_template WHERE Intervention_id=#{interventionId}
+  </insert>
+  
+  <select id="temporarycount" parameterType="com.yihe.system.domain.YhInterventionTemplate" resultType="int">
+    SELECT count(*) FROM yh_temporary_programs_template WHERE Intervention_id=#{interventionId} and usercode=#{usercode}
+  </select>
+  
+  
+  <insert id="insertproogram" parameterType="com.yihe.system.domain.YhProgramsTemplate">
+      INSERT  INTO yh_temporary_programs_template
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+          <if test="interventionId != null ">Intervention_id,</if>
+          <if test="programsWeeks != null ">programs_weeks,</if>
+          <if test="programsDays != null ">programs_days,</if>
+          <if test="serviceWay != null ">service_way,</if>
+          <if test="planContent != null ">plan_content,</if>
+          <if test="contentPrompt != null ">content_prompt,</if>
+          <if test="usercode != null ">usercode,</if>
+          <if test="remark != null ">remark,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+          <if test="interventionId != null">#{interventionId},</if>
+          <if test="programsWeeks != null ">#{programsWeeks},</if>
+          <if test="programsDays != null ">#{programsDays},</if>
+          <if test="serviceWay != null ">#{serviceWay},</if>
+          <if test="planContent != null ">#{planContent},</if>
+          <if test="contentPrompt != null ">#{contentPrompt},</if>
+          <if test="usercode != null ">#{usercode},</if>
+          <if test="remark != null ">#{remark},</if>
+        </trim>
+  </insert>
+
+
+  <update id="updateplan" parameterType="com.yihe.system.domain.YhProgramsTemplate">
+    update yh_temporary_programs_template
+    <set >
+      <if test="interventionId != null" >
+        Intervention_id = #{interventionId,jdbcType=INTEGER},
+      </if>
+      <if test="programsWeeks != null" >
+        programs_weeks = #{programsWeeks,jdbcType=INTEGER},
+      </if>
+      <if test="programsDays != null" >
+        programs_days = #{programsDays,jdbcType=INTEGER},
+      </if>
+      <if test="serviceWay != null" >
+        service_way = #{serviceWay,jdbcType=VARCHAR},
+      </if>
+      <if test="planContent != null" >
+        plan_content = #{planContent,jdbcType=VARCHAR},
+      </if>
+      <if test="contentPrompt != null" >
+        content_prompt = #{contentPrompt,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=INTEGER},
+      </if>
+    </set>
+    where programs_id = #{programsId,jdbcType=INTEGER}
+  </update>
+
+  <delete id="deleteplan" parameterType="com.yihe.system.domain.YhProgramsTemplate">
+    DELETE   FROM yh_temporary_programs_template WHERE programs_id=#{programsId}
+  </delete>
+  
+  <select id="interventionId" parameterType="com.yihe.system.domain.YhInterventionTemplate" resultMap="BaseResultMap">
+    SELECT * FROM  yh_intervention_template WHERE intervention_id=#{interventionId}
+  </select>
+
+  <delete id="removetemporary" parameterType="com.yihe.system.domain.YhProgramsTemplate">
+     DELETE   FROM yh_temporary_programs_template WHERE
+     <if test="interventionId ==null">
+       Intervention_id is NULL
+     </if>
+    <if test="interventionId !=null">
+      Intervention_id=#{interventionId}
+    </if>
+    <if test="usercode != null">
+      and usercode=#{usercode}
+    </if>
+
+  </delete>
+
+  <delete id="removetemporaryformal" parameterType="com.yihe.system.domain.YhProgramsTemplate">
+    DELETE   FROM yh_programs_template WHERE
+      Intervention_id=#{interventionId}
+  </delete>
+
+  <insert id="changetableformal" parameterType="com.yihe.system.domain.YhInterventionTemplate">
+    insert into yh_programs_template  (Intervention_id,programs_weeks,programs_days,service_way,plan_content,content_prompt)
+    select Intervention_id,programs_weeks,programs_days,service_way,plan_content,content_prompt  from yh_temporary_programs_template WHERE Intervention_id=#{interventionId} and usercode=#{usercode}
+  </insert>
+
+  <select id="selecttemporary" parameterType="com.yihe.system.domain.YhInterventionTemplate" resultType="int">
+      SELECT COUNT(*) FROM  yh_temporary_programs_template WHERE
+      <if test="interventionId==null">
+        Intervention_id IS  NULL
+      </if>
+      <if test="interventionId!=null">
+        Intervention_id=#{interventionId}
+      </if>
+       and usercode=#{usercode}
+  </select>
+
+  <select id="selectname" parameterType="com.yihe.system.domain.YhInterventionTemplate" resultType="string">
+    SELECT `name`  FROM  yh_user_reginfo  WHERE user_code=#{usercode}
+  </select>
+
+  <update id="changesave" parameterType="com.yihe.system.domain.YhInterventionTemplate">
+      UPDATE yh_temporary_programs_template
+      SET Intervention_id=#{interventionId}
+      where usercode=#{usercode} and Intervention_id is null
+  </update>
+
+  <select id="selectallcategory" resultMap="BaseResultcategory">
+      SELECT * from yh_disease_category WHERE id !=14
+  </select>
+
+  <select id="selectcountdata" parameterType="string" resultType="integer">
+      SELECT count(*) from yh_temporary_programs_template WHERE usercode=#{usercode}
+  </select>
+
+  <select id="selectcountbyname" parameterType="string" resultType="integer">
+      SELECT COUNT(*) from yh_intervention_template WHERE template_name=#{templateName}
+  </select>
+</mapper>

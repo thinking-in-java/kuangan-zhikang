@@ -1,0 +1,1702 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, maximum-scale=1">
+<title>检查告警</title> 
+<link rel="stylesheet" th:href="@{/assets/libs/layui/css/layui.css}" />
+<link rel="stylesheet" th:href="@{/assets/module/admin.css}" />
+
+<style type="text/css">
+.nowinput {
+	width: 100%
+}
+.layui-tab-content {
+    padding: 0px 10px 0px 10px;
+}
+</style>
+<body style="margin: 17px;"> 
+	<!-- 页面加载loading -->
+<div class="page-loading">
+    <div class="ball-loader">
+        <span></span><span></span><span></span><span></span>
+    </div>
+</div>
+<!-- <a id="clicksetting" target="_self" style="display: none" href="/manage/setting/clientservice" lay-text="客户服务配置">"健康检查告警配置"</a> -->
+<!-- 正文开始 -->
+  <div class="layui-fluid" style="background-color: white;">
+<div class="layui-tab layui-tab-brief" lay-filter="indexTab">
+  <ul class="layui-tab-title">
+    <li lay-id="equipment">设备设置</li>
+     <li lay-id="detectionalarm">检测告警设置</li>
+   <!-- <li lay-id="tixin">久未检测提醒设置</li> -->
+   
+  </ul>
+  <div class="layui-tab-content">
+    <div class="layui-tab-item">
+	<div style="height: 100%;">
+	<div style="margin-left: 20px;margin-top: 17px;">
+		<span>[[${name}]]</span>
+		<span  id="sex" style="margin-left: 30px;">[[${sex}]]</span>
+		<span style="margin-left: 30px;">[[${age}]]岁</span>
+		<div style="float: right;">
+		<span>已绑定[[${selectCount}]]个设备</span>
+	
+		<!-- style="height: 30px;line-height: 32px;" -->
+		<button  class="layui-btn" type="button" id="addData">
+				<i class="layui-icon layui-icon-addition"></i> 添加
+		</button>
+		</div>
+	
+	</div>
+	<div id="increase"></div>		
+			
+		
+	 
+	 	
+    	
+    	
+    	</div>
+  </div> 
+    <div class="layui-tab-item">
+   <div class="layui-fluid" style="background-color: white;">
+	<div style="height: 100%;">
+	<input  type="hidden" id="thresholdid">
+	<div>
+		<span>[[${name}]]</span>
+		<span style="margin-left: 30px;">[[${sex}]]</span>
+		<span style="margin-left: 30px;">[[${age}]]岁</span>
+		
+	</div>
+	 
+<form class="layui-form" action="">	
+	<div style="margin-top: 20px;">用户数据不在阈值范围内时，以系统设置的提醒方式给医师生成服务任务</div>
+	   <div class="layui-row layui-col-space10" style="margin-top: 10px;height: 831px;">
+		  <div class="layui-col-md4" id="tw"  style="display: none;">
+		   <div style="background-color: #1890ff;width: 3px;height: 24px;float: left">
+    		</div>
+    		<input style="display: none;" name="tiwen_name" value="体温">
+    		<span style="line-height: 24px;">&nbsp;&nbsp;体温</span>
+    		 <div  style="float: right;margin-top: -10px;display: none;">
+     		 	    <input type="checkbox"  name="tiwen_close" lay-skin="switch" lay-text="ON|OFF" class='temperature'>
+  			</div>
+	  		<div class="layui-inline" style="float: left;margin-top: 10px;width: 100%">
+	    		<div class="layui-input-inline" style="width: 40%;float: left;">
+	      			<input type="number" id="tiwenpricemin" name="tiwen_price_min"  autocomplete="off" class="layui-input nowinput">
+	   			</div>
+	    		<div class="layui-form-mid" style="float: left;">~</div>
+	    		<div class="layui-input-inline" style="width: 40%;float: left;">
+	    			<input type="number" id="tiwenpricemax" name="tiwen_price_max"  autocomplete="off" class="layui-input nowinput">
+	    		</div>
+	    		<div style="float: left;line-height: 50px;">℃</div>
+	    	</div>
+		  </div>
+		  <div class="layui-col-md4" id="oxygen" style="display: none;">
+		   <div style="background-color: #1890ff;width: 3px;height: 24px;float: left">
+    		</div>
+    		<input style="display: none;" name="tiwen_name" value="体温">
+    		<span style="line-height: 24px;">&nbsp;&nbsp;血氧</span>
+    		 <div  style="float: right;margin-top: -10px;display: none;">
+     		 	    <input type="checkbox" name="tiwen_close" lay-skin="switch" lay-text="ON|OFF" class='temperature'>
+  			</div>
+	  		<div class="layui-inline" style="float: left;margin-top: 10px;width: 100%">
+	    		<div class="layui-input-inline" style="width: 40%;float: left;">
+	      			<input type="text" id="xueyang_price_min"   autocomplete="off" class="layui-input nowinput">
+	   			</div>
+	    		<div class="layui-form-mid" style="float: left;">~</div>
+	    		<div class="layui-input-inline" style="width: 40%;float: left;">
+	    			<input type="text" id="xueyang_price_max" autocomplete="off" class="layui-input nowinput">
+	    		</div>
+	    		<div style="float: left;line-height: 50px;">%</div>
+	    	</div>
+		  </div>
+		  <div class="layui-col-md4" id="BMI" style="display: none;">
+		   <div style="background-color: #1890ff;width: 3px;height: 24px;float: left">
+    		</div>
+    		<input style="display: none;" name="tiwen_name" value="体温">
+    		<span style="line-height: 24px;">&nbsp;&nbsp;BMI</span>
+    		 <div  style="float: right;margin-top: -10px;display: none;">
+     		 	    <input type="checkbox" name="tiwen_close" lay-skin="switch" lay-text="ON|OFF" class='temperature'>
+  			</div>
+	  		<div class="layui-inline" style="float: left;margin-top: 10px;width: 100%">
+	    		<div class="layui-input-inline" style="width: 40%;float: left;">
+	      			<input type="text" id="BMI_price_min" name="tiwen_price_min"  autocomplete="off" class="layui-input nowinput">
+	   			</div>
+	    		<div class="layui-form-mid" style="float: left;">~</div>
+	    		<div class="layui-input-inline" style="width: 40%;float: left;">
+	    			<input type="text"  id="BMI_price_max" name="tiwen_price_max"  autocomplete="off" class="layui-input nowinput">
+	    		</div>
+	    		<div style="float: left;line-height: 50px;">℃</div>
+	    	</div>
+		  </div>
+		
+		
+		
+		  <div class="layui-col-md4" id="blood_pressure" style="display: none;">
+		   <div style="background-color: #1890ff;width: 3px;height: 24px;float: left">
+    		</div>
+    		<input style="display: none;" name="tiwen_name" value="体温">
+    		<span style="line-height: 24px;">&nbsp;&nbsp;收缩压</span>
+    		 <div  style="float: right;margin-top: -10px;display: none;">
+     		 	    <input type="checkbox" name="tiwen_close" lay-skin="switch" lay-text="ON|OFF" class='temperature'>
+  			</div>
+	  		<div class="layui-inline" style="float: left;margin-top: 10px;width: 100%">
+	    		<div class="layui-input-inline" style="width: 40%;float: left;">
+	      			<input type="text" id="shousuoya_price_min"   autocomplete="off" class="layui-input nowinput">
+	   			</div>
+	    		<div class="layui-form-mid" style="float: left;">~</div>
+	    		<div class="layui-input-inline" style="width: 40%;float: left;">
+	    			<input type="text" id="shousuoya_price_max"  autocomplete="off" class="layui-input nowinput">
+	    		</div>
+	    		<div style="float: left;line-height: 50px;">mmHg</div>
+	    	</div>
+		  </div>
+		  <div class="layui-col-md4" id="pressure_dia" style="display: none;">
+		   <div style="background-color: #1890ff;width: 3px;height: 24px;float: left">
+    		</div>
+    		<input style="display: none;" name="tiwen_name" value="体温">
+    		<span style="line-height: 24px;">&nbsp;&nbsp;舒张压</span>
+    		 <div  style="float: right;margin-top: -10px;display: none;">
+     		 	    <input type="checkbox" name="tiwen_close" lay-skin="switch" lay-text="ON|OFF" class='temperature'>
+  			</div>
+	  		<div class="layui-inline" style="float: left;margin-top: 10px;width: 100%">
+	    		<div class="layui-input-inline" style="width: 40%;float: left;">
+	      			<input type="text" id="shuzhangya_price_min"  autocomplete="off" class="layui-input nowinput">
+	   			</div>
+	    		<div class="layui-form-mid" style="float: left;">~</div>
+	    		<div class="layui-input-inline" style="width: 40%;float: left;">
+	    			<input type="text" id="shuzhangya_price_max"   autocomplete="off" class="layui-input nowinput">
+	    		</div>
+	    		<div style="float: left;line-height: 50px;">mmHg</div>
+	    	</div>
+		  </div>
+		  <div class="layui-col-md4" id="xtsugar" style="display: none;">
+		   <div style="background-color: #1890ff;width: 3px;height: 24px;float: left">
+    		</div>
+    		<input style="display: none;" name="tiwen_name" value="体温">
+    		<span style="line-height: 24px;">&nbsp;&nbsp;血糖</span>
+    		 <div  style="float: right;margin-top: -10px;display: none;">
+     		 	    <input type="checkbox" name="tiwen_close" lay-skin="switch" lay-text="ON|OFF" class='temperature'>
+  			</div>
+	  		<div class="layui-inline" style="float: left;margin-top: 10px;width: 100%">
+	    		<div class="layui-input-inline" style="width: 40%;float: left;">
+	      			<input type="text" id="xt_price_min"  autocomplete="off" class="layui-input nowinput">
+	   			</div>
+	    		<div class="layui-form-mid" style="float: left;">~</div>
+	    		<div class="layui-input-inline" style="width: 40%;float: left;">
+	    			<input type="text" id="xt_price_max"  autocomplete="off" class="layui-input nowinput">
+	    		</div>
+	    		<div style="float: left;line-height: 50px;">mmol/L</div>
+	    	</div>
+		  </div>
+		  
+		  
+		  
+		  <div class="layui-col-md4" id="xtsugar2" style="display: none;">
+		   <div style="background-color: #1890ff;width: 3px;height: 24px;float: left">
+    		</div>
+    		<input style="display: none;" name="tiwen_name" value="体温">
+    		<span style="line-height: 24px;">&nbsp;&nbsp;餐后2小时血糖</span>
+    		 <div  style="float: right;margin-top: -10px;display: none;">
+     		 	    <input type="checkbox" name="tiwen_close" lay-skin="switch" lay-text="ON|OFF" class='temperature'>
+  			</div>
+	  		<div class="layui-inline" style="float: left;margin-top: 10px;width: 100%">
+	    		<div class="layui-input-inline" style="width: 40%;float: left;">
+	      			<input type="text" id="bloodSugar2Min"  autocomplete="off" class="layui-input nowinput">
+	   			</div>
+	    		<div class="layui-form-mid" style="float: left;">~</div>
+	    		<div class="layui-input-inline" style="width: 40%;float: left;">
+	    			<input type="text" id="bloodSugar2Max"  autocomplete="off" class="layui-input nowinput">
+	    		</div>
+	    		<div style="float: left;line-height: 50px;">Bpm</div>
+	    	</div>
+		  </div>
+		  
+		
+		  <div class="layui-col-md4" id="pulse" style="display: none;">
+		   <div style="background-color: #1890ff;width: 3px;height: 24px;float: left">
+    		</div>
+    		<input style="display: none;" name="tiwen_name" value="体温">
+    		<span style="line-height: 24px;">&nbsp;&nbsp;心率</span>
+    		 <div  style="float: right;margin-top: -10px;display: none;">
+     		 	    <input type="checkbox" name="tiwen_close" lay-skin="switch" lay-text="ON|OFF" class='temperature'>
+  			</div>
+	  		<div class="layui-inline" style="float: left;margin-top: 10px;width: 100%">
+	    		<div class="layui-input-inline" style="width: 40%;float: left;">
+	      			<input type="text" id="pulse_price_min"  autocomplete="off" class="layui-input nowinput">
+	   			</div>
+	    		<div class="layui-form-mid" style="float: left;">~</div>
+	    		<div class="layui-input-inline" style="width: 40%;float: left;">
+	    			<input type="text" id="pulse_price_max"  autocomplete="off" class="layui-input nowinput">
+	    		</div>
+	    		<div style="float: left;line-height: 50px;">Bpm</div>
+	    	</div>
+		  </div>
+		  <div class="layui-col-md4" id="tc" style="display: none;">
+		   <div style="background-color: #1890ff;width: 3px;height: 24px;float: left">
+    		</div>
+    		<input style="display: none;" name="tiwen_name" value="体温">
+    		<span style="line-height: 24px;">&nbsp;&nbsp;总胆固醇</span>
+    		 <div  style="float: right;margin-top: -10px;display: none;">
+     		 	    <input type="checkbox"  lay-skin="switch" lay-text="ON|OFF" class='temperature'>
+  			</div>
+	  		<div class="layui-inline" style="float: left;margin-top: 10px;width: 100%">
+	    		<div class="layui-input-inline" style="width: 40%;float: left;">
+	      			<input type="text" id="tc_price_min"  autocomplete="off" class="layui-input nowinput">
+	   			</div>
+	    		<div class="layui-form-mid" style="float: left;">~</div>
+	    		<div class="layui-input-inline" style="width: 40%;float: left;">
+	    			<input type="text" id="tc_price_max"  autocomplete="off" class="layui-input nowinput">
+	    		</div>
+	    		<div style="float: left;line-height: 50px;">mmol/L</div>
+	    	</div>
+		  </div>
+		  <div class="layui-col-md4" id="trig"  style="display: none;">
+		   <div style="background-color: #1890ff;width: 3px;height: 24px;float: left">
+    		</div>
+    		<input style="display: none;" name="tiwen_name" value="体温">
+    		<span style="line-height: 24px;">&nbsp;&nbsp;甘油三脂</span>
+    		 <div  style="float: right;margin-top: -10px;display: none;">
+     		 	    <input type="checkbox" name="tiwen_close" lay-skin="switch" lay-text="ON|OFF" class='temperature'>
+  			</div>
+	  		<div class="layui-inline" style="float: left;margin-top: 10px;width: 100%">
+	    		<div class="layui-input-inline" style="width: 40%;float: left;">
+	      			<input type="text" id="trig_price_min"  autocomplete="off" class="layui-input nowinput">
+	   			</div>
+	    		<div class="layui-form-mid" style="float: left;">~</div>
+	    		<div class="layui-input-inline" style="width: 40%;float: left;">
+	    			<input type="text" id="trig_price_max"  autocomplete="off" class="layui-input nowinput">
+	    		</div>
+	    		<div style="float: left;line-height: 50px;">mmol/L</div>
+	    	</div>
+		  </div>
+		  
+		  
+		    <div class="layui-col-md4" id="hdl-c" style="display: none;">
+		   <div style="background-color: #1890ff;width: 3px;height: 24px;float: left">
+    		</div>
+    		<input style="display: none;" name="tiwen_name" value="体温">
+    		<span style="line-height: 24px;">&nbsp;&nbsp;高密度脂蛋白胆固醇</span>
+	  		<div class="layui-inline" style="float: left;margin-top: 10px;width: 100%">
+	    		<div class="layui-input-inline" style="width: 40%;float: left;">
+	      			<input type="text" id="hdl_price_min"  autocomplete="off" class="layui-input nowinput">
+	   			</div>
+	    		<div class="layui-form-mid" style="float: left;">~</div>
+	    		<div class="layui-input-inline" style="width: 40%;float: left;">
+	    			<input type="text" id="hdl_price_max"  autocomplete="off" class="layui-input nowinput">
+	    		</div>
+	    		<div style="float: left;line-height: 50px;">mmol/L</div>
+	    	</div>
+		  </div>
+		    <div class="layui-col-md4" id="ldl-c" style="display: none;">
+		   <div style="background-color: #1890ff;width: 3px;height: 24px;float: left">
+    		</div>
+    		<input style="display: none;" name="tiwen_name" value="体温">
+    		<span style="line-height: 24px;">&nbsp;&nbsp;低密度脂蛋白胆固醇</span>
+    		 <div  style="float: right;margin-top: -10px;display: none;">
+     		 	    <input type="checkbox" name="tiwen_close" lay-skin="switch" lay-text="ON|OFF" class='temperature'>
+  			</div>
+	  		<div class="layui-inline" style="float: left;margin-top: 10px;width: 100%">
+	    		<div class="layui-input-inline" style="width: 40%;float: left;">
+	      			<input type="text" id="ldl_price_min"  autocomplete="off" class="layui-input nowinput">
+	   			</div>
+	    		<div class="layui-form-mid" style="float: left;">~</div>
+	    		<div class="layui-input-inline" style="width: 40%;float: left;">
+	    			<input type="text" id="ldl_price_max"  autocomplete="off" class="layui-input nowinput">
+	    		</div>
+	    		<div style="float: left;line-height: 50px;">mmol/L</div>
+	    	</div>
+		  </div>
+		  
+		  <div class="layui-col-md4" id="blood_muscle_anhydride" style="display: none;">
+		   <div style="background-color: #1890ff;width: 3px;height: 24px;float: left">
+    		</div>
+    		<input style="display: none;" name="tiwen_name" value="体温">
+    		<span style="line-height: 24px;">&nbsp;&nbsp;血肌酐 &nbsp;&nbsp;[[${sex}]]</span>
+    		 <div  style="float: right;margin-top: -10px;display: none;">
+     		 	    <input type="checkbox" name="tiwen_close" lay-skin="switch" lay-text="ON|OFF" class='temperature'>
+  			</div>
+	  		<div class="layui-inline" style="float: left;margin-top: 10px;width: 100%">
+	    		<div class="layui-input-inline" style="width: 40%;float: left;">
+	      			<input type="text" id="anhydride_price_min"  autocomplete="off" class="layui-input nowinput">
+	   			</div>
+	    		<div class="layui-form-mid" style="float: left;">~</div>
+	    		<div class="layui-input-inline" style="width: 40%;float: left;">
+	    			<input type="text" id="anhydride_price_max"  autocomplete="off" class="layui-input nowinput">
+	    		</div>
+	    		<div style="float: left;line-height: 50px;">μmol/L</div>
+	    	</div>
+		  </div>
+		  	  <div class="layui-col-md4" id="blood_urea_nitrogen" style="display: none;">
+		   <div style="background-color: #1890ff;width: 3px;height: 24px;float: left">
+    		</div>
+    		<input style="display: none;" name="tiwen_name" value="体温">
+    		<span style="line-height: 24px;">&nbsp;&nbsp;血尿素氮</span>
+    		 <div  style="float: right;margin-top: -10px;display: none;">
+     		 	    <input type="checkbox" name="tiwen_close" lay-skin="switch" lay-text="ON|OFF" class='temperature'>
+  			</div>
+	  		<div class="layui-inline" style="float: left;margin-top: 10px;width: 100%">
+	    		<div class="layui-input-inline" style="width: 40%;float: left;">
+	      			<input type="text" id="nitrogen_price_min"  autocomplete="off" class="layui-input nowinput">
+	   			</div>
+	    		<div class="layui-form-mid" style="float: left;">~</div>
+	    		<div class="layui-input-inline" style="width: 40%;float: left;">
+	    			<input type="text" id="nitrogen_price_max"  autocomplete="off" class="layui-input nowinput">
+	    		</div>
+	    		<div style="float: left;line-height: 50px;">mmol/L</div>
+	    	</div>
+		  </div>
+		  	  <div class="layui-col-md4" id="blood_uric_acid" style="display: none;">
+		   <div style="background-color: #1890ff;width: 3px;height: 24px;float: left">
+    		</div>
+    		<input style="display: none;" name="tiwen_name" value="体温">
+    		<span style="line-height: 24px;">&nbsp;&nbsp;血尿酸&nbsp;&nbsp;[[${sex}]]</span>
+    		 <div  style="float: right;margin-top: -10px;display: none;">
+     		 	    <input type="checkbox" name="tiwen_close" lay-skin="switch" lay-text="ON|OFF" class='temperature'>
+  			</div>
+	  		<div class="layui-inline" style="float: left;margin-top: 10px;width: 100%">
+	    		<div class="layui-input-inline" style="width: 40%;float: left;">
+	      			<input type="text" id="acid_price_min"  autocomplete="off" class="layui-input nowinput">
+	   			</div>
+	    		<div class="layui-form-mid" style="float: left;">~</div>
+	    		<div class="layui-input-inline" style="width: 40%;float: left;">
+	    			<input type="text" id="acid_price_max"  autocomplete="off" class="layui-input nowinput">
+	    		</div>
+	    		<div style="float: left;line-height: 50px;">μmol/L</div>
+	    	</div>
+		  </div>
+		  	  <div class="layui-col-md4" id="alanine_transaminase" style="display: none;">
+		   <div style="background-color: #1890ff;width: 3px;height: 24px;float: left">
+    		</div>
+    		<input style="display: none;" name="tiwen_name" value="体温">
+    		<span style="line-height: 24px;">&nbsp;&nbsp;谷丙转氨酶</span>
+    		 <div  style="float: right;margin-top: -10px;display: none;">
+     		 	    <input type="checkbox" name="tiwen_close" lay-skin="switch" lay-text="ON|OFF" class='temperature'>
+  			</div>
+	  		<div class="layui-inline" style="float: left;margin-top: 10px;width: 100%">
+	    		<div class="layui-input-inline" style="width: 40%;float: left;">
+	      			<input type="text" id="transaminase_price_min"  autocomplete="off" class="layui-input nowinput">
+	   			</div>
+	    		<div class="layui-form-mid" style="float: left;">~</div>
+	    		<div class="layui-input-inline" style="width: 40%;float: left;">
+	    			<input type="text" id="transaminase_price_max"  autocomplete="off" class="layui-input nowinput">
+	    		</div>
+	    		<div style="float: left;line-height: 50px;">u/L</div>
+	    	</div>
+		  </div>
+		  
+		  <div class="layui-col-md4" id="transaminase_millet_grass" style="display: none;">
+		   <div style="background-color: #1890ff;width: 3px;height: 24px;float: left">
+    		</div>
+    		<input style="display: none;" name="tiwen_name" value="体温">
+    		<span style="line-height: 24px;">&nbsp;&nbsp;谷草转氨酶</span>
+    		 <div  style="float: right;margin-top: -10px;display: none;">
+     		 	    <input type="checkbox" name="tiwen_close" lay-skin="switch" lay-text="ON|OFF" class='temperature'>
+  			</div>
+	  		<div class="layui-inline" style="float: left;margin-top: 10px;width: 100%">
+	    		<div class="layui-input-inline" style="width: 40%;float: left;">
+	      			<input type="text" id="grass_price_min"  autocomplete="off" class="layui-input nowinput">
+	   			</div>
+	    		<div class="layui-form-mid" style="float: left;">~</div>
+	    		<div class="layui-input-inline" style="width: 40%;float: left;">
+	    			<input type="text" id="grass_price_max"  autocomplete="off" class="layui-input nowinput">
+	    		</div>
+	    		<div style="float: left;line-height: 50px;">u/L</div>
+	    	</div>
+		  </div>
+		  		  <div class="layui-col-md4" id="serum_serum_protein" style="display: none;">
+		   <div style="background-color: #1890ff;width: 3px;height: 24px;float: left">
+    		</div>
+    		<input style="display: none;" name="tiwen_name" value="体温">
+    		<span style="line-height: 24px;">&nbsp;&nbsp;血清白蛋白</span>
+    		 <div  style="float: right;margin-top: -10px;display: none;">
+     		 	    <input type="checkbox" name="tiwen_close" lay-skin="switch" lay-text="ON|OFF" class='temperature'>
+  			</div>
+	  		<div class="layui-inline" style="float: left;margin-top: 10px;width: 100%">
+	    		<div class="layui-input-inline" style="width: 40%;float: left;">
+	      			<input type="text" id="protein_price_min"  autocomplete="off" class="layui-input nowinput">
+	   			</div>
+	    		<div class="layui-form-mid" style="float: left;">~</div>
+	    		<div class="layui-input-inline" style="width: 40%;float: left;">
+	    			<input type="text" id="protein_price_max"  autocomplete="off" class="layui-input nowinput">
+	    		</div>
+	    		<div style="float: left;line-height: 50px;">g/l</div>
+	    	</div>
+		  </div>
+		  
+		    	  <div class="layui-col-md4" id="serum_globulin" style="display: none;">
+		   <div style="background-color: #1890ff;width: 3px;height: 24px;float: left">
+    		</div>
+    		<input style="display: none;" name="tiwen_name" value="体温">
+    		<span style="line-height: 24px;">&nbsp;&nbsp;血清球蛋白</span>
+    		 <div  style="float: right;margin-top: -10px;display: none;">
+     		 	    <input type="checkbox" name="tiwen_close" lay-skin="switch" lay-text="ON|OFF" class='temperature'>
+  			</div>
+	  		<div class="layui-inline" style="float: left;margin-top: 10px;width: 100%">
+	    		<div class="layui-input-inline" style="width: 40%;float: left;">
+	      			<input type="text" id="serum_globulin_price_min"  autocomplete="off" class="layui-input nowinput">
+	   			</div>
+	    		<div class="layui-form-mid" style="float: left;">~</div>
+	    		<div class="layui-input-inline" style="width: 40%;float: left;">
+	    			<input type="text" id="serum_globulin_price_max"  autocomplete="off" class="layui-input nowinput">
+	    		</div>
+	    		<div style="float: left;line-height: 50px;">g/l</div>
+	    	</div>
+		  </div>
+		  
+		  <div class="layui-col-md4" id="urinary_microprotein" style="display: none;">
+		   <div style="background-color: #1890ff;width: 3px;height: 24px;float: left">
+    		</div>
+    		<input style="display: none;" name="tiwen_name" value="体温">
+    		<span style="line-height: 24px;">&nbsp;&nbsp;尿微量蛋白</span>
+    		 <div  style="float: right;margin-top: -10px;display: none;">
+     		 	    <input type="checkbox" name="tiwen_close" lay-skin="switch" lay-text="ON|OFF" class='temperature'>
+  			</div>
+	  		<div class="layui-inline" style="float: left;margin-top: 10px;width: 100%">
+	    		<div class="layui-input-inline" style="width: 40%;float: left;">
+	      			<input type="text" id="microprotein_price_min"  autocomplete="off" class="layui-input nowinput">
+	   			</div>
+	    		<div class="layui-form-mid" style="float: left;">~</div>
+	    		<div class="layui-input-inline" style="width: 40%;float: left;">
+	    			<input type="text" id="microprotein_price_max"  autocomplete="off" class="layui-input nowinput">
+	    		</div>
+	    		<div style="float: left;line-height: 50px;">mg/mmol</div>
+	    	</div>
+		  </div>
+		  	  <div class="layui-col-md4" id="Hba1c_and_protein" style="display: none;">
+		   <div style="background-color: #1890ff;width: 3px;height: 24px;float: left">
+    		</div>
+    		<input style="display: none;" name="tiwen_name" value="体温">
+    		<span style="line-height: 24px;">&nbsp;&nbsp;糖化血红蛋白</span>
+    		 <div  style="float: right;margin-top: -10px;display: none;">
+     		 	    <input type="checkbox" name="tiwen_close" lay-skin="switch" lay-text="ON|OFF" class='temperature'>
+  			</div>
+	  		<div class="layui-inline" style="float: left;margin-top: 10px;width: 100%">
+	    		<div class="layui-input-inline" style="width: 40%;float: left;">
+	      			<input type="text" id="Hba1c_and_price_min"  autocomplete="off" class="layui-input nowinput">
+	   			</div>
+	    		<div class="layui-form-mid" style="float: left;">~</div>
+	    		<div class="layui-input-inline" style="width: 40%;float: left;">
+	    			<input type="text" id="Hba1c_and_price_max"  autocomplete="off" class="layui-input nowinput">
+	    		</div>
+	    		<div style="float: left;line-height: 50px;">%</div>
+	    	</div>
+		  </div>
+		  <div class="layui-col-md4" id="homocysteine" style="display: none;">
+		   <div style="background-color: #1890ff;width: 3px;height: 24px;float: left">
+    		</div>
+    		<input style="display: none;" name="tiwen_name" value="体温">
+    		<span style="line-height: 24px;">&nbsp;&nbsp;同型半胱氨酸</span>
+    		 <div  style="float: right;margin-top: -10px;display: none;">
+     		 	    <input type="checkbox" name="tiwen_close" lay-skin="switch" lay-text="ON|OFF" class='temperature'>
+  			</div>
+	  		<div class="layui-inline" style="float: left;margin-top: 10px;width: 100%">
+	    		<div class="layui-input-inline" style="width: 40%;float: left;">
+	      			<input type="text" id="homocysteine_price_min"  autocomplete="off" class="layui-input nowinput">
+	   			</div>
+	    		<div class="layui-form-mid" style="float: left;">~</div>
+	    		<div class="layui-input-inline" style="width: 40%;float: left;">
+	    			<input type="text" id="homocysteine_price_max"  autocomplete="off" class="layui-input nowinput">
+	    		</div>
+	    		<div style="float: left;line-height: 50px;">μmol/L</div>
+	    	</div>
+		  </div>
+		  
+		 <div class="layui-row layui-col-space10" style="margin-top: 10px;">  
+		    <div class="layui-col-md4" id="urinalysis_erythrocyte" style="display: none;">
+			  	<div style="background-color: #1890ff;width: 3px;height: 24px;float: left">
+	    		</div>
+	    		<div style="line-height: 24px;">&nbsp;&nbsp;尿检白细胞</div>
+	  			<div class="layui-inline" style="float: left;margin-top: 10px;">
+		    		<div class="layui-input-inline" style="width: 350px;float: left;">
+		      			<input type="radio" name="urinalysis" value="0"  autocomplete="off" class="layui-input">阳性
+		      			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="radio" name="urinalysis" value="1"  autocomplete="off" class="layui-input">阴性
+		   			</div>
+		    	</div>
+		  </div>
+ 		<div class="layui-col-md4" style="display: none;" id="urine_protein">
+			  	<div style="background-color: #1890ff;width: 3px;height: 24px;float: left">
+	    		</div>
+	    		<div style="line-height: 24px;">&nbsp;&nbsp;尿蛋白</div>
+	  			<div class="layui-inline" style="float: left;margin-top: 10px;">
+		    		<div class="layui-input-inline" style="width: 350px;float: left;">
+		      			<input type="radio" name="urine_protein" value="0"  autocomplete="off" class="layui-input">阳性
+		      			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="radio" name="urine_protein" value="1"  autocomplete="off" class="layui-input">阴性
+		   			</div>
+		    	</div>
+		  </div>
+		  
+ 		<div class="layui-col-md4" style="display: none;" id="the_ketone_body">
+			  	<div style="background-color: #1890ff;width: 3px;height: 24px;float: left">
+	    		</div>
+	    		<div style="line-height: 24px;">&nbsp;&nbsp;酮体</div>
+	  			<div class="layui-inline" style="float: left;margin-top: 10px;">
+		    		<div class="layui-input-inline" style="width: 350px;float: left;">
+		      			<input type="radio"name="the_ketone_body" value="0"  autocomplete="off" class="layui-input">阳性
+		      			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="radio" name="the_ketone_body" value="1"  autocomplete="off" class="layui-input">阴性
+		   			</div>
+		    	</div>
+		  </div>
+	 </div>  
+		  
+		</div>
+	</form>
+		
+   </div> 
+</div>
+ 		<div style="position: fixed;bottom: 0;left: 0;right: 0;background-color: #fff;padding: 10px 20px;box-shadow: 0 -1px 2px 0 rgba(0, 0, 0, .05);text-align: center;">
+												<button style="width: 100px; margin-left: 14px;"
+													class="layui-btn layui-btn-normal" lay-submit=''
+													 type="button" id="savethreshold">保存</button>
+												<button style="width: 100px;" type="button" id="hiufu"
+													class="layui-btn layui-btn-primary">恢复初始值</button>
+											</div>
+    
+    </div>
+    <div class="layui-tab-item">
+    
+    </div>
+    <div class="layui-tab-item">内容4</div>
+    <div class="layui-tab-item">内容5</div>
+  </div>
+</div> 
+</div> 
+</body>
+
+
+
+
+
+
+
+	<script type="text/javascript" th:src="@{/assets/libs/layui/layui.js}"></script>
+	<script type="text/javascript" th:src="@{/assets/js/common.js}"></script>
+	<script type="text/javascript" th:inline="javascript">
+var userCode = [[${userCode}]];
+var type = [[${type}]];
+console.log("用户"+userCode);
+var istrue2 = false;
+var arrlist = [];
+var code;
+
+    layui.use(['layer', 'form', 'laydate','notice'], function () {
+        var $ = layui.jquery;
+        var layer = layui.layer;
+        var form = layui.form;
+        var laydate = layui.laydate;
+        var notice = layui.notice;
+        var newdata=null;
+        var calldata=null;
+        var sex = $("#sex").text();
+        
+        layui.use('element', function(){
+  		  var element = layui.element;
+  		 
+  		  console.log(type,"当前点击的指标")
+  		 
+  		  //获取hash来切换选项卡，假设当前地址的hash为lay-id对应的值
+  		  var layid = GetQueryValue('type');//location.hash.replace(/^#type=/, '');
+  		  element.tabChange('indexTab', layid); //假设当前地址为：http://a.com#test1=222，那么选项卡会自动切换到“发送消息”这一项
+  		  console.log("获取当前点击的指标",layid)
+  		  
+  		  
+  		    element.on('tab(indexTab)', function(data){
+		    //location.hash = 'type='+ this.getAttribute('type');
+		    var testid = $(this).attr("lay-id");
+		    location.hash = 'type='+ testid;
+		    //console.log("当前Tab标题所在的原始DOM元素",this); //当前Tab标题所在的原始DOM元素
+			//console.log("得到当前Tab的所在下标",data.index); //得到当前Tab的所在下标
+			//console.log("//得到当前的Tab大容器",data.elem); //得到当前的Tab大容器
+		    //console.log("切换的类型:"+testid);
+  		    })
+        })
+        
+        //查询用户的所有设备信息
+        	
+            $.ajax({
+	 		type:'post', 
+	 		url:'/YhHeThreshold2Web/selectUserAll',
+	 		data:{userCode:userCode},
+	 		success : function(data){
+	 			console.log("用户的所有数据",data)
+	 			arrlist=data;
+	 			personList();
+	 			for (var i = 0; i < arrlist.length; i++) {
+ 				 code = arrlist[i].identityCode;
+ 				 console.log(code+"111")
+	 			 form.val(code,JSON.parse(JSON.stringify(arrlist[i])));   //这样写才能渲染
+	 			 console.log(JSON.parse(JSON.stringify(arrlist[i])),"遍历数据")
+	 			 
+	 	form.on('submit('+ code +')', function (datafrom) {
+      		console.log("报存",datafrom.field)
+      		var terminalId = datafrom.field.terminalid;
+      		var usercode = datafrom.field.usercode;
+      			$.ajax({
+				type: 'GET',
+				url: '/YhHeThreshold2Web/selectTerminalId',
+				 async: false,
+				data: {
+					terminalId: terminalId
+				},
+				success: function (data) {
+					console.log("后台返回的对象：", data)
+					//debugger
+					if(data.data != null){
+						if (data.data.terminalid == terminalId && usercode!=data.data.usercode) {
+							layer.msg('序列号已被其他用户使用');
+							return 
+					}
+					}
+					
+				 	$.ajax({
+						type: 'GET',
+						url: '/YhHeThreshold2Web/addYhUserDevice',
+						data:datafrom.field,
+						success: function (data) {
+							console.log(data,"fhui")
+							if(data.code==20000){
+								parent.layer.msg('操作成功');
+								layer.closeAll();
+								 location.reload();
+							}else{
+								parent.layer.msg('操作失败');
+							}
+						}
+
+					});  
+				}
+
+			});
+			return false;
+      		
+      	})
+	 		
+	 			}		
+	 			
+	 		 }
+          })
+          
+       
+        
+  
+          //追加模板
+		function addpersonList() {
+			var Html = "";
+			
+			let identityCode = makeCode(8)
+	/* 		let _tempObj = {
+					id: -1,
+					terminaltype: '',
+					userCode: userCode,
+					terminalid:'',
+					timedeta: '',
+					note: '',
+					identityCode: identityCode
+				};
+			arrlist.push(_tempObj); */
+			console.log(arrlist);
+				Html += "<form class='layui-form rowContainer' style='border-bottom: 1px solid #DCDCDC;' action=''  code = '"+ identityCode +"'  id='YhUserDevice' lay-filter='" + identityCode + "'>";
+				Html += "		<input type='hidden'name='usercode' value='"+ userCode +"'>";
+				Html += "		<input type='hidden' name='tid'>";
+				Html += "<div class='layui-row layui-col-space10' style='margin-top: 40px;'>";
+				
+				Html += "	<div class='layui-col-md4'>";
+				Html += "		<div class='layui-form-item'>";
+				Html += "			<label style='width: 46px' class='layui-form-label layui-form-required'>类型</label>";
+				Html += "				<div class='layui-input-block'>";
+				Html += "					<div class='layui-row' style='margin-left: -89px; width: 200px;'>";
+				Html += "						<select name='terminaltype' required lay-verify='required' lay-reqtext='不能为空'>";
+				Html += "							<option value=''></option>";
+				Html += "							<option value='1'>智能血压仪</option>";
+				Html += "							<option value='2'>智能血糖仪</option>";
+				Html += "							<option value='3'>智能血压血糖仪</option>";
+				Html += "							<option value='4'>即爱智能手环</option>";
+				Html += "						</select>";
+				Html += "					</div>";
+				Html += "				</div>";
+				Html += "		   </div>";
+				Html += "	</div>";
+				
+				Html += "	<div class='layui-col-md4' style='margin-left: -141px;'>";
+				Html += "		<div class='layui-form-item'>";
+				Html += "			<label style='width: 59px' class='layui-form-label layui-form-required'>序列号</label>";
+				Html += "				<div class='layui-input-block'>";
+				Html += "					<div class='layui-row'>";
+				Html += "					<input style='margin-left: -89px; width:450px;'type='text' name='terminalid'  required lay-verify='required'lay-reqtext='不能为空' autocomplete='off' class='layui-input'>";
+				Html += "					</div>";
+				Html += "				</div>";
+				Html += "		   </div>";
+				Html += "	</div>";
+				Html += "	</div>";
+				
+				Html += "<div class='layui-row layui-col-space10' style='margin-top: 10px;'>";
+				
+				Html += "	<div class='layui-col-md4'>";
+				Html += "		<div class='layui-form-item'>";
+				Html += "			<label style='width: 40px' class='layui-form-label'>备注</label>";
+				Html += "				<div class='layui-input-block'>";
+				Html += "					<div class='layui-row'>";
+				Html += "					<input style='margin-left: -89px; width:450px;'type='text' name='note'  placeholder='请填写，最大限制200个字符 '  autocomplete='off' class='layui-input'>";
+				Html += "					</div>";
+				Html += "				</div>";
+				Html += "		   </div>";
+				Html += "	</div>";
+				Html += "	</div>";
+				
+				Html += "		<div class='layui-form-item' style='margin-top: 20px; margin-left: -90px;margin-bottom: 46px;'>";
+				Html += "				<div class='layui-input-block'>";
+				Html += "					<button type='button' class='layui-btn' lay-submit='' lay-filter='"+ identityCode +"'>保存</button>";
+				Html += "						<div οnclick='btnAction()' class='delectda' style='float: right; margin-right: 500px; margin-top: 13px;'data-code='" + identityCode + "' data-id='-1'>";
+				Html += "						<i class='layui-icon layui-icon-delete' style='font-size: 18px;'></i>删除";
+				Html += "						</div>";
+				Html += "					<div style='float: right; margin-right: -162px; margin-top: 7px; color: rgba(255, 141, 26, 1);'>";
+				Html += "					</div>";
+				Html += "				</div>";
+				Html += "		</div>";
+				Html += "	<div style='border-bottom: 1px solid #DCDCDC;'>	</div>";
+				Html += "	</form>";
+			
+			 $("#increase").before(Html);
+			 form.render();
+				form.on('submit('+ identityCode +')', function (dataFrom) {
+		      		console.log("保存",dataFrom.field)
+		     		 var terminalId = dataFrom.field.terminalid;
+      			var usercode = dataFrom.field.usercode;
+      			$.ajax({
+				type: 'GET',
+				url: '/YhHeThreshold2Web/selectTerminalId',
+				 async: false,
+				data: {
+					terminalId: terminalId
+				},
+				success: function (data) {
+					console.log("后台返回的对象：", data)
+					//debugger
+					if(data.data != null){
+						if (data.data.terminalid == terminalId && usercode!=data.data.usercode) {
+							layer.msg('序列号已被其他用户使用');
+							return 
+					}
+					}
+					
+					$.ajax({
+				 		type:'GET', 
+				 		url:'/YhHeThreshold2Web/addYhUserDevice',
+				 		data:dataFrom.field,
+				 		success : function(result){
+				 			console.log("操作返回",result)	
+				 			if(result.code==20000){
+								console.log("提示成功")
+								 form.val(identityCode, {
+								      "tid": result.data // "name": "value"
+								     
+								    });
+								 
+					 			notice.success({
+					 				title: '消息通知',
+					 				message: '操作成功!'
+					 			});
+					 		    setTimeout(function () {
+				 		        	 location.reload();
+						            }, 2000);
+					 			
+					 		} else {
+					 			notice.error({
+					 				title: '消息通知',
+					 				message: '操作失败!'
+					 			});
+					 		}
+				 			
+				 		}
+		      		 }) 
+				}
+
+			});
+			return false;
+		      		
+		      	/* 	 $.ajax({
+				 		type:'post', 
+				 		url:'/YhHeThreshold2Web/addYhUserDevice',
+				 		data:data.field,
+				 		success : function(result){
+				 			console.log("操作返回",result)	
+				 			if(result.code==20000){
+								console.log("提示成功")
+								 form.val(identityCode, {
+								      "tid": result.data // "name": "value"
+								     
+								    });
+								 
+					 			notice.success({
+					 				title: '消息通知',
+					 				message: '操作成功!'
+					 			});
+					 		    setTimeout(function () {
+				 		        	 location.reload();
+						            }, 2000);
+					 			
+					 		} else {
+					 			notice.error({
+					 				title: '消息通知',
+					 				message: '操作失败!'
+					 			});
+					 		}
+				 			
+				 		}
+		      		 }) */
+		      		
+		      	})
+
+		      	
+		
+         }	
+          
+          $("#addData").click(function(){
+        	  addpersonList();
+        	  
+          })
+             $("body").delegate(".delectda","click", function(){
+     			//获取ID
+     			const id = $(this).data('id');
+     			//获取对象的唯一标识
+     			const code = $(this).data('code');
+     			//通过对象的唯一标识，从数据集合中寻找所在下标（页面上的每一个表单与集合的对象通过唯一标识都可以一一对应上）
+     			layer.confirm('是否确认删除？', {
+     				btn: ['确定', '取消'] // 可以无限个按钮
+     			}, function (index, layero) {
+     				//console.log('刪除的當前下标为：', rowindex, '删除的当前ID为：', id);
+     				if(id===-1){
+     					$(".rowContainer[code='" + code + "']").remove();
+     				}else{
+     					
+     				}
+     				
+     				layer.close(index);
+     			}, function (index) {
+     				// 按钮【按钮二】的回调
+     			});
+             })
+      
+       
+
+        	//用户数据渲染
+		function personList() {
+			var personHtml = "";
+			var arr = [];
+			
+			// 遍历数据，给每一个对象都增加一个唯一标识码的属性
+			arrlist = arrlist.map(item => {
+				item.identityCode = makeCode(8);
+				return item;
+				
+			});
+			
+			for (var i = 0; i < arrlist.length; i++) {
+				const item = arrlist[i];
+
+
+
+				
+				
+				personHtml += "<form class='layui-form rowContainer'  action=''  code='" + item.identityCode + "' id='YhUserDevice' lay-filter='" + item.identityCode + "'>";
+				personHtml += "		<input type='hidden'name='usercode'>";
+				personHtml += "		<input type='hidden' name='tid'>";
+				personHtml += "<div class='layui-row layui-col-space10' style='margin-top: 30px;'>";
+				
+				personHtml += "	<div class='layui-col-md4'>";
+				personHtml += "		<div class='layui-form-item'>";
+				personHtml += "			<label style='width: 46px' class='layui-form-label layui-form-required'>类型</label>";
+				personHtml += "				<div class='layui-input-block'>";
+				personHtml += "					<div class='layui-row' style='margin-left: -89px; width: 200px;'>";
+				personHtml += "						<select name='terminaltype' required lay-verify='required' lay-reqtext='不能为空'>";
+				personHtml += "							<option value=''></option>";
+				personHtml += "							<option value='1'>智能血压仪</option>";
+				personHtml += "							<option value='2'>智能血糖仪</option>";
+				personHtml += "							<option value='3'>智能血压血糖仪</option>";
+				personHtml += "							<option value='4'>即爱智能手环</option>";
+				personHtml += "						</select>";
+				personHtml += "					</div>";
+				personHtml += "				</div>";
+				personHtml += "		   </div>";
+				personHtml += "	</div>";
+				
+				personHtml += "	<div class='layui-col-md4' style='margin-left: -141px;'>";
+				personHtml += "		<div class='layui-form-item'>";
+				personHtml += "			<label style='width: 59px' class='layui-form-label layui-form-required'>序列号</label>";
+				personHtml += "				<div class='layui-input-block'>";
+				personHtml += "					<div class='layui-row'>";
+				personHtml += "					<input style='margin-left: -89px; width:450px;'type='text' name='terminalid'  required lay-verify='required'lay-reqtext='不能为空' autocomplete='off' class='layui-input'>";
+				personHtml += "					</div>";
+				personHtml += "				</div>";
+				personHtml += "		   </div>";
+				personHtml += "	</div>";
+				personHtml += "	</div>";
+				
+				personHtml += "<div class='layui-row layui-col-space10' style='margin-top: 10px;'>";
+				
+				personHtml += "	<div class='layui-col-md4'>";
+				personHtml += "		<div class='layui-form-item'>";
+				personHtml += "			<label style='width: 40px' class='layui-form-label'>备注</label>";
+				personHtml += "				<div class='layui-input-block'>";
+				personHtml += "					<div class='layui-row'>";
+				personHtml += "					<input style='margin-left: -89px; width:450px;'type='text' name='note'  placeholder='请填写，最大限制200个字符 '  autocomplete='off' class='layui-input'>";
+				personHtml += "					</div>";
+				personHtml += "				</div>";
+				personHtml += "		   </div>";
+				personHtml += "	</div>";
+				personHtml += "	</div>";
+				
+				personHtml += "		<div class='layui-form-item' style='margin-top: 20px; margin-left: -90px;margin-bottom: 46px;'>";
+				personHtml += "				<div class='layui-input-block'>";
+				personHtml += "					<button type='button' class='layui-btn' lay-submit='' lay-filter='"+ item.identityCode +"'>保存</button>";
+				if(item.terminaltype==4){
+					personHtml += "					<div type='button' class='layui-btn gengduoshezhi'  data-code='" + item.identityCode + "' data-id='"+item.terminalid+"'>更多设置</div>";
+					personHtml += "						<div class='Dingweiimmune' style='float: right; padding-left: 15px; margin-top: 13px;' data-code='" + item.identityCode + "' data-id='"+item.terminalid+"'>";
+					personHtml += "						<i class='layui-icon layui-icon-location' style='font-size: 18px;color:#F59A00'></i><span style='color:#e0cc1f'>查看定位</span>";
+					personHtml += "						</div>";
+				}
+				personHtml += "						<div class='deleteimmune' style='float: right; margin-right: 0px; margin-top: 13px;' data-code='" + item.identityCode + "' data-id='"+item.tid+"'>";
+				personHtml += "						<i class='layui-icon layui-icon-delete' style='font-size: 18px;'></i>删除";
+				personHtml += "						</div>";
+
+				personHtml += "					<div style='float: right; margin-right: -162px; margin-top: 7px; color: rgba(255, 141, 26, 1);'>";
+				personHtml += "					</div>";
+				personHtml += "				</div>";
+				personHtml += "		</div>";
+				personHtml += "	<div style='border-bottom: 1px solid #DCDCDC;'>	</div>";
+				personHtml += "	</form>";
+			}
+			 $("#increase").html(personHtml)
+			 form.render('select');
+        }
+
+		$("#increase").on('click','.Dingweiimmune',function(){
+			const id = $(this).data('id');
+
+			window.location.href="/manage/setting/thealarmdetectionMap?usercode="+userCode+"&tid="+id;
+		})
+
+
+		$("#increase").on('click','.gengduoshezhi',function(){
+			const id = $(this).data('id');
+
+			window.location.href="/manage/setting/thealarmdetectionSetting?usercode="+userCode+"&tid="+id;
+		})
+
+
+
+		$("#increase").on('click','.deleteimmune',function(){
+			console.log("11111111")
+			//debugger;
+			//获取ID
+			const id = $(this).data('id');
+			//获取对象的唯一标识
+			const code = $(this).data('code');
+			//通过对象的唯一标识，从数据集合中寻找所在下标（页面上的每一个表单与集合的对象通过唯一标识都可以一一对应上）
+			const rowindex = arrlist.findIndex(x => x.identityCode === code);
+			layer.confirm('是否确认删除？', {
+				btn: ['确定', '取消'] // 可以无限个按钮
+			}, function (index, layero) {
+				//console.log('刪除的當前下标为：', rowindex, '删除的当前ID为：', id);
+				if(id===-1){
+					$(".rowContainer[code='" + code + "']").remove();
+					arrlist.splice(rowindex, 1);
+					console.log('刪除完最新數組：', arrlist);
+				}else{
+					 $.ajax({
+						 	type: 'delete',
+						 	url: '/YhHeThreshold2Web/deleteData',
+						 	data: {
+						 		_method: 'delete',
+						 		tid: id
+						 	},
+						 	success: function (data) {
+						 		console.log("删除",data)
+						 		if (data.code === 20000) {
+									$(".rowContainer[code='" + code + "']").remove();
+									arrlist.splice(rowindex, 1);
+									console.log('刪除完最新數組：', arrlist);
+						 			notice.success({
+						 				title: '消息通知',
+						 				message: '操作成功!'
+						 			});
+						 		    setTimeout(function () {
+					 		        	 location.reload();
+							            }, 1000);
+						 		} else {
+						 			notice.error({
+						 				title: '消息通知',
+						 				message: '操作失败!'
+						 			});
+						 		}
+						 	}
+						 })
+				}
+				
+				layer.close(index);
+			}, function (index) {
+				// 按钮【按钮二】的回调
+			});
+		})
+       
+        
+	    $.ajax({
+	 		type:'post', 
+	 		url:'/YhHeThreshold2Web/selectYhHeThreshold2Web',
+	 		data:{userCode:userCode},
+	 		success : function(data){
+	 			console.log("告警数据",data)
+	 			threshold2 = data.data.threshold2;
+	 			list = data.data.list;
+	 			//如果对象是null的全部使用机构端表的数据
+	 			if(threshold2=="" || threshold2==null){
+	 				console.log("进来了")
+	 				selectdate()
+	 				 
+	 			}else{
+	 				 for (let i = 0; i < list.length; i++) {
+	    					if(list[i].type=='temperature'){
+	    						var istrue = list[i].istrue;
+	    						if(istrue==1){
+	    							$("#tw").show();
+	    						}
+	    					}
+	    					if(list[i].type=='boold_oxygen'){
+	    						if(list[i].istrue==1){
+	    							$("#oxygen").show();
+	    						}
+	    					}
+	    					if(list[i].type=='BMI'){
+	    						if(list[i].istrue==1){
+	    							$("#BMI").show();
+	    						}
+	    					}
+	    					if(list[i].type=='blood_pressure_sys'){
+	    						if(list[i].istrue==1){
+	    							$("#blood_pressure").show();
+	    						}
+	    					}
+	    					if(list[i].type=='blood_pressure_dia'){
+	    						if(list[i].istrue==1){
+	    							$("#pressure_dia").show();
+	    						}
+	    					}
+	    					if(list[i].type=='blood_sugar'){
+	    						if(list[i].istrue==1){
+	    							$("#xtsugar").show();
+	    						}
+	    					}
+	    					if(list[i].type=='blood_sugar2'){
+	    						if(list[i].istrue==1){
+	    							$("#xtsugar2").show();
+	    						}
+	    					}
+	    					if(list[i].type=='pulse'){
+	    						if(list[i].istrue==1){
+	    							$("#pulse").show();
+	    						}
+	    					}
+	    					if(list[i].type=='tc'){
+	    						if(list[i].istrue==1){
+	    							$("#tc").show();
+	    						}
+	    					}
+	    					if(list[i].type=='trig'){
+	    						if(list[i].istrue==1){
+	    							$("#trig").show();
+	    						}
+	    					}
+	    					if(list[i].type=='hdl-c'){
+	    						if(list[i].istrue==1){
+	    							$("#hdl-c").show();
+	    						}
+	    					}
+	    					if(list[i].type=='ldl-c'){
+	    						if(list[i].istrue==1){
+	    							$("#ldl-c").show();
+	    						}
+	    					}
+	    					if(list[i].type=='blood_muscle_anhydride'){
+	    						if(list[i].istrue==1){
+	    							$("#blood_muscle_anhydride").show();
+	    						}
+	    					}
+	    					if(list[i].type=='blood_urea_nitrogen'){
+	    						if(list[i].istrue==1){
+	    							$("#blood_urea_nitrogen").show();
+	    						}
+	    					}
+	    					if(list[i].type=='blood_uric_acid'){
+	    						if(list[i].istrue==1){
+	    							$("#blood_uric_acid").show();
+	    						}
+	    					}
+	    					if(list[i].type=='alanine_transaminase'){
+	    						if(list[i].istrue==1){
+	    							$("#alanine_transaminase").show();
+	    						}
+	    					}
+	    					if(list[i].type=='transaminase_millet_grass'){
+	    						if(list[i].istrue==1){
+	    							$("#transaminase_millet_grass").show();
+	    						}
+	    					}
+	    					if(list[i].type=='serum_serum_protein'){
+	    						if(list[i].istrue==1){
+	    							$("#serum_serum_protein").show();
+	    						}
+	    					}
+	    					if(list[i].type=='serum_globulin'){
+	    						if(list[i].istrue==1){
+	    							$("#serum_globulin").show();
+	    						}
+	    					}
+	    					if(list[i].type=='urinary_microprotein'){
+	    						if(list[i].istrue==1){
+	    							$("#urinary_microprotein").show();
+	    						}
+	    					}
+	    					if(list[i].type=='Hba1c_and_protein'){
+	    						if(list[i].istrue==1){
+	    							$("#Hba1c_and_protein").show();
+	    						}
+	    					}
+	    					if(list[i].type=='homocysteine'){
+	    						if(list[i].istrue==1){
+	    							$("#homocysteine").show();
+	    						}
+	    					}
+	    					if(list[i].type=='urinalysis_erythrocyte'){
+	    						if(list[i].istrue==1){
+	    							$("#urinalysis_erythrocyte").show();
+	    						}
+	    						
+	    					}
+	    					if(list[i].type=='urine_protein'){
+	    						if(list[i].istrue==1){
+	    							$("#urine_protein").show();
+	    						}
+	    					
+	    					}
+	    					if(list[i].type=='the_ketone_body'){
+	    						if(list[i].istrue==1){
+	    							$("#the_ketone_body").show();
+	    						}
+	    					
+	    					}
+	 				       
+	 				    }
+	 				$("#thresholdid").val(threshold2.id);
+						$("#tiwenpricemax").val(threshold2.temperatureMax);
+						$("#tiwenpricemin").val(threshold2.temperatureMin);
+
+    						$("#xueyang_price_min").val(threshold2.booldOxygenMin);
+    						$("#xueyang_price_max").val(threshold2.booldOxygenMax);
+
+						$("#BMI_price_min").val(threshold2.bmiMin);
+    						$("#BMI_price_max").val(threshold2.bmiMax);
+						$("#shousuoya_price_min").val(threshold2.bloodPressureSysMin);
+    						$("#shousuoya_price_max").val(threshold2.bloodPressureSysMax);
+						$("#shuzhangya_price_min").val(threshold2.bloodPressureDiaMin);
+    						$("#shuzhangya_price_max").val(threshold2.bloodPressureDiaMax);
+						$("#xt_price_min").val(threshold2.bloodSugarMin);
+    						$("#xt_price_max").val(threshold2.bloodSugarMax);
+
+						$("#pulse_price_min").val(threshold2.pulseMin);
+    						$("#pulse_price_max").val(threshold2.pulseMax);
+						$("#tc_price_min").val(threshold2.tcMin);
+    						$("#tc_price_max").val(threshold2.tcMax);
+						$("#trig_price_min").val(threshold2.trigMin);
+    						$("#trig_price_max").val(threshold2.trigMax);
+						$("#hdl_price_min").val(threshold2.hdlcMin);
+    						$("#hdl_price_max").val(threshold2.hdlcMax);
+						$("#ldl_price_min").val(threshold2.ldlcMin);
+    						$("#ldl_price_max").val(threshold2.ldlcMax);
+    						if(sex == "男"){
+    							$("#anhydride_price_min").val(threshold2.bloodMuscleAnhydrideMin);
+        						$("#anhydride_price_max").val(threshold2.bloodMuscleAnhydrideMax);
+    						}
+    						if(sex == "女"){
+    							$("#anhydride_price_min").val(threshold2.bloodMuscleAnhydrideMinGirl);
+        						$("#anhydride_price_max").val(threshold2.bloodMuscleAnhydrideMaxGirl);
+    						}
+							
+    						
+						$("#nitrogen_price_min").val(threshold2.bloodUreaNitrogenMin);
+    						$("#nitrogen_price_max").val(threshold2.bloodUreaNitrogenMax);
+    						if(sex == "男"){
+    							 $("#acid_price_min").val(threshold2.bloodUricAcidMin);
+    	    						$("#acid_price_max").val(threshold2.bloodUricAcidMax);
+    						}
+    						if(sex == "女"){
+   							 $("#acid_price_min").val(threshold2.bloodUreaNitrogenMinGirl);
+   	    						$("#acid_price_max").val(threshold2.bloodUreaNitrogenMaxGirl);
+   						}
+						  
+						$("#transaminase_price_min").val(threshold2.alanineTransaminaseMin);
+    						$("#transaminase_price_max").val(threshold2.alanineTransaminaseMax);
+						$("#grass_price_min").val(threshold2.transaminaseMilletGrassMin);
+    						$("#grass_price_max").val(threshold2.transaminaseMilletGrassMax);
+						
+						$("#protein_price_min").val(threshold2.serumSerumProteinMin);
+    						$("#protein_price_max").val(threshold2.serumSerumProteinMax);
+						$("#serum_globulin_price_min").val(threshold2.serumGlobulinMin);
+    						$("#serum_globulin_price_max").val(threshold2.serumGlobulinMax);
+						$("#microprotein_price_min").val(threshold2.urinaryMicroproteinMin);
+    						$("#microprotein_price_max").val(threshold2.urinaryMicroproteinMax);
+						$("#Hba1c_and_price_min").val(threshold2.hba1cAndProteinMin);
+    						$("#Hba1c_and_price_max").val(threshold2.hba1cAndProteinMax);
+							$("#homocysteine_price_min").val(threshold2.homocysteineMin);
+    						$("#homocysteine_price_max").val(threshold2.homocysteineMax);
+    						$("#bloodSugar2Min").val(threshold2.bloodSugar2Min);
+    						$("#bloodSugar2Max").val(threshold2.bloodSugar2Max);
+    						
+    						if(threshold2.urinalysisErythrocyte==0){
+    							$("input[name=urinalysis]").eq(0).prop("checked",true);	
+    						}else{
+    							$("input[name=urinalysis]").eq(1).prop("checked",true);	
+    						}
+    						
+    						 if(threshold2.urineProtein==0){
+     							$("input[name=urine_protein]").eq(0).prop("checked",true);	
+     						}else{
+     							$("input[name=urine_protein]").eq(1).prop("checked",true);	
+     						}
+     						
+     						 
+     						if(threshold2.theKetoneBody==0){
+    							$("input[name=the_ketone_body]").eq(0).prop("checked",true);	
+    						}else{
+    							$("input[name=the_ketone_body]").eq(1).prop("checked",true);	
+    						}
+    						 form.render();
+	 			}
+	 			
+	 			
+	 		}
+	 	});
+        //删除
+       function deletegaojin(){
+    	   var id = $("#thresholdid").val();
+    		$.ajax({
+    			type: "delete",
+    			url: "/YhHeThreshold2Web/deleteYhHeThreshold2Web",
+    			data:{userCode:userCode},
+    			success:function(data){	
+    				
+    			}
+    		})
+       }
+	    
+        function selectdate(){
+        	$.ajax({
+    			type: "GET",
+    			url: "/YhHeThreshold/selectallheath",
+    			
+    			success:function(data){	
+    				if(istrue2){
+    					console.log("进入提示判断")
+    					if(data.code==20000){
+    						console.log("提示成功")
+    						
+    			 			notice.success({
+    			 				title: '消息通知',
+    			 				message: '操作成功!'
+    			 			});
+    			 		} else {
+    			 			notice.error({
+    			 				title: '消息通知',
+    			 				message: '操作失败!'
+    			 			});
+    			 		}
+    					deletegaojin();
+    				}
+    				
+    	 		
+    				console.log(data.data);
+    				var date = data.data;
+    				for(var key in date){
+    					if(date[key].type=='temperature'){
+    						var istrue = date[key].istrue;
+    						$("#tiwenpricemax").val(date[key].high);
+    						$("#tiwenpricemin").val(date[key].low);
+    						if(istrue==1){
+    							$("#tw").show();
+    						}
+    					}
+    					if(date[key].type=='boold_oxygen'){
+    						var high = date[key].high;
+    						$("#xueyang_price_min").val(date[key].low);
+    						$("#xueyang_price_max").val(date[key].high);
+    						if(date[key].istrue==1){
+    							$("#oxygen").show();
+    						}
+    					}
+    					if(date[key].type=='BMI'){
+    						$("#BMI_price_min").val(date[key].low);
+    						$("#BMI_price_max").val(date[key].high);
+    						if(date[key].istrue==1){
+    							$("#BMI").show();
+    						}
+    					}
+    					if(date[key].type=='blood_pressure_sys'){
+    						var high = date[key].high;
+    						$("#shousuoya_price_min").val(date[key].low);
+    						$("#shousuoya_price_max").val(date[key].high);
+    						if(date[key].istrue==1){
+    							$("#blood_pressure").show();
+    						}
+    					}
+    					if(date[key].type=='blood_pressure_dia'){
+    						var high = date[key].high;
+    						$("#shuzhangya_price_min").val(date[key].low);
+    						$("#shuzhangya_price_max").val(date[key].high);
+    						if(date[key].istrue==1){
+    							$("#pressure_dia").show();
+    						}
+    					}
+    					if(date[key].type=='blood_sugar'){
+    						var high = date[key].high;
+    						$("#xt_price_min").val(date[key].low);
+    						$("#xt_price_max").val(date[key].high);
+    						if(date[key].istrue==1){
+    							$("#xtsugar").show();
+    						}
+    					}
+    					if(date[key].type=='blood_sugar2'){
+    						var high = date[key].high;
+    						$("#bloodSugar2Min").val(date[key].low);
+    						$("#bloodSugar2Max").val(date[key].high);
+    						if(date[key].istrue==1){
+    							$("#xtsugar2").show();
+    						}
+    					}
+    					if(date[key].type=='pulse'){
+    						var high = date[key].high;
+    						$("#pulse_price_min").val(date[key].low);
+    						$("#pulse_price_max").val(date[key].high);
+    						if(date[key].istrue==1){
+    							$("#pulse").show();
+    						}
+    					}
+    					if(date[key].type=='tc'){
+    						var high = date[key].high;
+    						$("#tc_price_min").val(date[key].low);
+    						$("#tc_price_max").val(date[key].high);
+    						if(date[key].istrue==1){
+    							$("#tc").show();
+    						}
+    					}
+    					if(date[key].type=='trig'){
+    						var high = date[key].high;
+    						$("#trig_price_min").val(date[key].low);
+    						$("#trig_price_max").val(date[key].high);
+    						if(date[key].istrue==1){
+    							$("#trig").show();
+    						}
+    					}
+    					if(date[key].type=='hdl-c'){
+    						var high = date[key].high;
+    						$("#hdl_price_min").val(date[key].low);
+    						$("#hdl_price_max").val(date[key].high);
+    						if(date[key].istrue==1){
+    							$("#hdl-c").show();
+    						}
+    					}
+    					if(date[key].type=='ldl-c'){
+    						var high = date[key].high;
+    						$("#ldl_price_min").val(date[key].low);
+    						$("#ldl_price_max").val(date[key].high);
+    						if(date[key].istrue==1){
+    							$("#ldl-c").show();
+    						}
+    					}
+    					if(sex == "男"){
+        					if(date[key].type=='blood_muscle_anhydride'){
+        						var high = date[key].high;
+        						$("#anhydride_price_min").val(date[key].low);
+        						$("#anhydride_price_max").val(date[key].high);
+        						if(date[key].istrue==1){
+        							$("#blood_muscle_anhydride").show();
+        						}
+        					}
+    					}
+
+    					if(sex == "女"){
+        					if(date[key].type=='blood_muscle_anhydride_woman'){
+        						var high = date[key].high;
+        						$("#anhydride_price_min").val(date[key].low);
+        						$("#anhydride_price_max").val(date[key].high);
+        						if(date[key].istrue==1){
+        							$("#blood_muscle_anhydride").show();
+        						}
+        					}
+    					}
+    					
+    					if(date[key].type=='blood_urea_nitrogen'){
+    						var high = date[key].high;
+    						$("#nitrogen_price_min").val(date[key].low);
+    						$("#nitrogen_price_max").val(date[key].high);
+    						if(date[key].istrue==1){
+    							$("#blood_urea_nitrogen").show();
+    						}
+    					}
+    					if(sex == "男"){
+    						if(date[key].type=='blood_uric_acid'){
+        						var high = date[key].high;
+        						$("#acid_price_min").val(date[key].low);
+        						$("#acid_price_max").val(date[key].high);
+        						if(date[key].istrue==1){
+        							$("#blood_uric_acid").show();
+        						}
+        					}
+    					}
+       					if(sex == "女"){
+    						if(date[key].type=='blood_uric_acid_woman'){
+        						var high = date[key].high;
+        						$("#acid_price_min").val(date[key].low);
+        						$("#acid_price_max").val(date[key].high);
+        						if(date[key].istrue==1){
+        							$("#blood_uric_acid").show();
+        						}
+        					}
+    					}
+    				
+    					if(date[key].type=='alanine_transaminase'){
+    						var high = date[key].high;
+    						$("#transaminase_price_min").val(date[key].low);
+    						$("#transaminase_price_max").val(date[key].high);
+    						if(date[key].istrue==1){
+    							$("#alanine_transaminase").show();
+    						}
+    					}
+    					if(date[key].type=='transaminase_millet_grass'){
+    						var high = date[key].high;
+    						$("#grass_price_min").val(date[key].low);
+    						$("#grass_price_max").val(date[key].high);
+    						if(date[key].istrue==1){
+    							$("#transaminase_millet_grass").show();
+    						}
+    					}
+    					if(date[key].type=='serum_serum_protein'){
+    						var high = date[key].high;
+    						$("#protein_price_min").val(date[key].low);
+    						$("#protein_price_max").val(date[key].high);
+    						if(date[key].istrue==1){
+    							$("#serum_serum_protein").show();
+    						}
+    					}
+    					if(date[key].type=='serum_globulin'){
+    						var high = date[key].high;  
+    						$("#serum_globulin_price_min").val(date[key].low);
+    						$("#serum_globulin_price_max").val(date[key].high);
+    						if(date[key].istrue==1){
+    							$("#serum_globulin").show();
+    						}
+    					}
+    					if(date[key].type=='urinary_microprotein'){
+    						var high = date[key].high;  
+    						$("#microprotein_price_min").val(date[key].low);
+    						$("#microprotein_price_max").val(date[key].high);
+    						if(date[key].istrue==1){
+    							$("#urinary_microprotein").show();
+    						}
+    					}
+    					if(date[key].type=='Hba1c_and_protein'){
+    						var high = date[key].high;  
+    						$("#Hba1c_and_price_min").val(date[key].low);
+    						$("#Hba1c_and_price_max").val(date[key].high);
+    						if(date[key].istrue==1){
+    							$("#Hba1c_and_protein").show();
+    						}
+    					}
+    					if(date[key].type=='homocysteine'){
+    						var high = date[key].high;  
+    						$("#homocysteine_price_min").val(date[key].low);
+    						$("#homocysteine_price_max").val(date[key].high);
+    						if(date[key].istrue==1){
+    							$("#homocysteine").show();
+    						}
+    					}
+    					if(date[key].type=='urinalysis_erythrocyte'){
+    						var low = date[key].low;  
+    						if(date[key].istrue==1){
+    							$("#urinalysis_erythrocyte").show();
+    						}
+    						if(low==0){
+    							$("input[name=urinalysis]").eq(0).prop("checked",true);	
+    						}else{
+    							$("input[name=urinalysis]").eq(1).prop("checked",true);	
+    						}
+    						 form.render();
+    					}
+    					if(date[key].type=='urine_protein'){
+    						var low = date[key].low;  
+    						if(date[key].istrue==1){
+    							$("#urine_protein").show();
+    						}
+    						if(low==0){
+    							$("input[name=urine_protein]").eq(0).prop("checked",true);	
+    						}else{
+    							$("input[name=urine_protein]").eq(1).prop("checked",true);	
+    						}
+    						 form.render();
+    					}
+    					if(date[key].type=='the_ketone_body'){
+    						var low = date[key].low;  
+    						if(date[key].istrue==1){
+    							$("#the_ketone_body").show();
+    						}
+    						if(low==0){
+    							$("input[name=the_ketone_body]").eq(0).prop("checked",true);	
+    						}else{
+    							$("input[name=the_ketone_body]").eq(1).prop("checked",true);	
+    						}
+    						 form.render();
+    					}	
+    				}
+    			 }
+        	
+    		})
+        }
+        //恢复
+        $("#hiufu").click(function(){
+        	istrue2=true;
+        	selectdate();
+        })
+
+      //保存数据
+      $("#savethreshold").click(function(){
+    	  var id = $("#thresholdid").val();
+			var temperatureMax = $("#tiwenpricemax").val();
+			var temperatureMin = $("#tiwenpricemin").val();
+			var booldOxygenMin = $("#xueyang_price_min").val();
+			var booldOxygenMax = $("#xueyang_price_max").val();
+			var bmiMin = $("#BMI_price_min").val();
+			var bmiMax = $("#BMI_price_max").val();
+			var bloodPressureSysMin = $("#shousuoya_price_min").val();
+			var bloodPressureSysMax = $("#shousuoya_price_max").val();
+			var bloodPressureDiaMin = $("#shuzhangya_price_min").val();
+			var bloodPressureDiaMax = $("#shuzhangya_price_max").val();
+			var bloodSugarMin = $("#xt_price_min").val();
+			var bloodSugarMax = $("#xt_price_max").val();
+			var pulseMin = $("#pulse_price_min").val();
+			var pulseMax = $("#pulse_price_max").val();
+			var tcMin = $("#tc_price_min").val();
+			var tcMax = $("#tc_price_max").val();
+			var trigMin = $("#trig_price_min").val();
+			var trigMax = $("#trig_price_max").val();
+			var hdlcMin = $("#hdl_price_min").val();
+			var hdlcMax = $("#hdl_price_max").val();
+			var ldlcMin = $("#ldl_price_min").val();
+			var ldlcMax = $("#ldl_price_max").val();
+		if(sex == "男"){
+			var bloodMuscleAnhydrideMin = $("#anhydride_price_min").val();
+			var bloodMuscleAnhydrideMax = $("#anhydride_price_max").val();
+		}
+		if(sex == "女"){
+			var bloodMuscleAnhydrideMinGirl = $("#anhydride_price_min").val();
+			var bloodMuscleAnhydrideMaxGirl = $("#anhydride_price_max").val();
+		}
+			
+				var bloodUreaNitrogenMin = $("#nitrogen_price_min").val();
+				var bloodUreaNitrogenMax = $("#nitrogen_price_max").val();
+			
+			
+				
+			if(sex == "男" ){
+				var bloodUricAcidMin = $("#acid_price_min").val();
+				var bloodUricAcidMax = $("#acid_price_max").val();
+			}
+			if(sex == "女" ){
+				var bloodUreaNitrogenMinGirl = $("#acid_price_min").val();
+				var bloodUreaNitrogenMaxGirl = $("#acid_price_max").val();
+			}
+			
+			
+			
+			var alanineTransaminaseMin = $("#transaminase_price_min").val();
+			var alanineTransaminaseMax = $("#transaminase_price_max").val();
+			var transaminaseMilletGrassMin = $("#grass_price_min").val();
+			var transaminaseMilletGrassMax = $("#grass_price_max").val();
+			var serumSerumProteinMin = $("#protein_price_min").val();
+			var serumSerumProteinMax = $("#protein_price_max").val();
+			var serumGlobulinMin = $("#serum_globulin_price_min").val();
+			var serumGlobulinMax = $("#serum_globulin_price_max").val();
+			var urinaryMicroproteinMin = $("#microprotein_price_min").val();
+			var urinaryMicroproteinMax = $("#microprotein_price_max").val();
+			var hba1cAndProteinMin = $("#Hba1c_and_price_min").val();
+			var hba1cAndProteinMax = $("#Hba1c_and_price_max").val();
+			var homocysteineMin = $("#homocysteine_price_min").val();
+			var homocysteineMax = $("#homocysteine_price_max").val();
+			
+			var urinalysisErythrocyte = $("input[name=urinalysis]:checked").val();
+			var urineProtein = $("input[name=urine_protein]:checked").val();
+			var theKetoneBody = $("input[name=the_ketone_body]:checked").val();
+			var bloodSugar2Min = $("#bloodSugar2Min").val();
+			var bloodSugar2Max = $("#bloodSugar2Max").val();
+    	    $.ajax({
+    	 		type:'post', 
+    	 		url:'/YhHeThreshold2Web/addYhHeThreshold2Web',
+    	 		data:{id:id,userCode:userCode,bloodPressureSysMin:bloodPressureSysMin, bloodPressureSysMax:bloodPressureSysMax,
+    	 			temperatureMin:temperatureMin,temperatureMax:temperatureMax,pulseMin:pulseMin,pulseMax:pulseMax,bloodSugarMin:bloodSugarMin,
+    	 			bloodSugarMax:bloodSugarMax,bloodPressureDiaMin:bloodPressureDiaMin,bloodPressureDiaMax:bloodPressureDiaMax,
+    	 			trigMin:trigMin,trigMax:trigMax,hdlcMin:hdlcMin,hdlcMax:hdlcMax,ldlcMin:ldlcMin,ldlcMax:ldlcMax,
+    	 			booldOxygenMin:booldOxygenMin,booldOxygenMax:booldOxygenMax,bmiMin:bmiMin,bmiMax:bmiMax,bloodMuscleAnhydrideMin:bloodMuscleAnhydrideMin,
+    	 			bloodMuscleAnhydrideMax:bloodMuscleAnhydrideMax,bloodUreaNitrogenMin:bloodUreaNitrogenMin,bloodUreaNitrogenMax:bloodUreaNitrogenMax,
+    	 			bloodUricAcidMin:bloodUricAcidMin,bloodUricAcidMax:bloodUricAcidMax,alanineTransaminaseMin:alanineTransaminaseMin,
+    	 			alanineTransaminaseMax:alanineTransaminaseMax,transaminaseMilletGrassMin:transaminaseMilletGrassMin,transaminaseMilletGrassMax:transaminaseMilletGrassMax,
+    	 			serumSerumProteinMin:serumSerumProteinMin,serumSerumProteinMax:serumSerumProteinMax,serumGlobulinMin:serumGlobulinMin,
+    	 			serumGlobulinMax:serumGlobulinMax,urinaryMicroproteinMin:urinaryMicroproteinMin,urinaryMicroproteinMax:urinaryMicroproteinMax,
+    	 			hba1cAndProteinMin:hba1cAndProteinMin,hba1cAndProteinMax:hba1cAndProteinMax,homocysteineMin:homocysteineMin,
+    	 			homocysteineMax:homocysteineMax,tcMin:tcMin,tcMax:tcMax,urinalysisErythrocyte:urinalysisErythrocyte,
+    	 			urineProtein:urineProtein,theKetoneBody:theKetoneBody,bloodMuscleAnhydrideMinGirl:bloodMuscleAnhydrideMinGirl,
+    	 			bloodMuscleAnhydrideMaxGirl:bloodMuscleAnhydrideMaxGirl,bloodUreaNitrogenMinGirl:bloodUreaNitrogenMinGirl,
+    	 			bloodUreaNitrogenMaxGirl:bloodUreaNitrogenMaxGirl,bloodSugar2Min:bloodSugar2Min,bloodSugar2Max:bloodSugar2Max
+    	 			},
+    	 		success : function(data){
+    	 			if(data.code==20000){
+			 			notice.success({
+			 				title: '消息通知',
+			 				message: '操作成功!'
+			 			});
+			 		} else {
+			 			notice.error({
+			 				title: '消息通知',
+			 				message: '操作失败!'
+			 			});
+			 		}
+    	 		}
+    	 	});
+    	    
+    
+    	  
+      })
+        
+    });
+    
+    function GetQueryValue(queryName) {
+        var query = decodeURI(window.location.search.substring(1));
+        var vars = query.split("&");
+        for (var i = 0; i < vars.length; i++) {
+            var pair = vars[i].split("=");
+            if (pair[0] == queryName) { return pair[1]; }
+        }
+        return null;
+    }
+		// pasLen是你想要的密码的长度
+	function makeCode(pasLen) {
+		let pasArr = ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z','A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z','0','1','2','3','4','5','6','7','8','9'];
+		var password = '';
+		var pasArrLen = pasArr.length;
+		for (var i=0; i<pasLen; i++){
+			var x = Math.floor(Math.random()*pasArrLen);
+			password += pasArr[x];
+		}
+		return password;
+	}
+</script>
+</body>
+</html>

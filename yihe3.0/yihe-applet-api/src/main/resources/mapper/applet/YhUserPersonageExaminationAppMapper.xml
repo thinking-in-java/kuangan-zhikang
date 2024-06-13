@@ -1,0 +1,440 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yihe.applet.api.mapper.YhUserPersonageExaminationAppMapper" >
+  <resultMap id="BaseResultMap" type="com.yihe.applet.api.domain.YhUserPersonageExaminationApp" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="user_code" property="userCode" jdbcType="VARCHAR" />
+    <result column="fbg" property="fbg" jdbcType="VARCHAR" />
+    <result column="hemoglobin" property="hemoglobin" jdbcType="VARCHAR" />
+    <result column="hemocyte" property="hemocyte" jdbcType="VARCHAR" />
+    <result column="blood" property="blood" jdbcType="VARCHAR" />
+    <result column="bloodelse" property="bloodelse" jdbcType="VARCHAR" />
+    <result column="urine" property="urine" jdbcType="VARCHAR" />
+    <result column="uriensugar" property="uriensugar" jdbcType="VARCHAR" />
+    <result column="urineacetone" property="urineacetone" jdbcType="VARCHAR" />
+    <result column="urineblood" property="urineblood" jdbcType="VARCHAR" />
+    <result column="urineelse" property="urineelse" jdbcType="VARCHAR" />
+    <result column="urinarymicro" property="urinarymicro" jdbcType="VARCHAR" />
+    <result column="excrement" property="excrement" jdbcType="VARCHAR" />
+    <result column="cerealthird" property="cerealthird" jdbcType="VARCHAR" />
+    <result column="milletstraw" property="milletstraw" jdbcType="VARCHAR" />
+    <result column="albumin" property="albumin" jdbcType="VARCHAR" />
+    <result column="sweetpotato" property="sweetpotato" jdbcType="VARCHAR" />
+    <result column="combine" property="combine" jdbcType="VARCHAR" />
+    <result column="serum" property="serum" jdbcType="VARCHAR" />
+    <result column="hematuresis" property="hematuresis" jdbcType="VARCHAR" />
+    <result column="potassium" property="potassium" jdbcType="VARCHAR" />
+    <result column="sodium" property="sodium" jdbcType="VARCHAR" />
+    <result column="tc" property="tc" jdbcType="VARCHAR" />
+    <result column="tg" property="tg" jdbcType="VARCHAR" />
+    <result column="tctall" property="tctall" jdbcType="VARCHAR" />
+    <result column="tcbottom" property="tcbottom" jdbcType="VARCHAR" />
+    <result column="saccharify" property="saccharify" jdbcType="VARCHAR" />
+    <result column="hepatitis" property="hepatitis" jdbcType="VARCHAR" />
+    <result column="chest" property="chest" jdbcType="VARCHAR" />
+    <result column="cervix" property="cervix" jdbcType="VARCHAR" />
+    <result column="ecg" property="ecg" jdbcType="VARCHAR" />
+    <result column="fundus" property="fundus" jdbcType="VARCHAR" />
+    <result column="bultrasound" property="bultrasound" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, user_code, fbg, hemoglobin, hemocyte, blood, bloodelse, urine, uriensugar, urineacetone, 
+    urineblood, urineelse, urinarymicro, excrement, cerealthird, milletstraw, albumin, 
+    sweetpotato, combine, serum, hematuresis, potassium, sodium, tc, tg, tctall, tcbottom, 
+    saccharify, hepatitis, chest, cervix, ecg, fundus, bultrasound
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from yh_user_personage_examination
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from yh_user_personage_examination
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.yihe.applet.api.domain.YhUserPersonageExaminationApp" >
+    insert into yh_user_personage_examination (id, user_code, fbg, 
+      hemoglobin, hemocyte, blood, 
+      bloodelse, urine, uriensugar, 
+      urineacetone, urineblood, urineelse, 
+      urinarymicro, excrement, cerealthird, 
+      milletstraw, albumin, sweetpotato, 
+      combine, serum, hematuresis, 
+      potassium, sodium, tc, 
+      tg, tctall, tcbottom, 
+      saccharify, hepatitis, chest, 
+      cervix, ecg, fundus, 
+      bultrasound)
+    values (#{id,jdbcType=INTEGER}, #{userCode,jdbcType=VARCHAR}, #{fbg,jdbcType=VARCHAR}, 
+      #{hemoglobin,jdbcType=VARCHAR}, #{hemocyte,jdbcType=VARCHAR}, #{blood,jdbcType=VARCHAR}, 
+      #{bloodelse,jdbcType=VARCHAR}, #{urine,jdbcType=VARCHAR}, #{uriensugar,jdbcType=VARCHAR}, 
+      #{urineacetone,jdbcType=VARCHAR}, #{urineblood,jdbcType=VARCHAR}, #{urineelse,jdbcType=VARCHAR}, 
+      #{urinarymicro,jdbcType=VARCHAR}, #{excrement,jdbcType=VARCHAR}, #{cerealthird,jdbcType=VARCHAR}, 
+      #{milletstraw,jdbcType=VARCHAR}, #{albumin,jdbcType=VARCHAR}, #{sweetpotato,jdbcType=VARCHAR}, 
+      #{combine,jdbcType=VARCHAR}, #{serum,jdbcType=VARCHAR}, #{hematuresis,jdbcType=VARCHAR}, 
+      #{potassium,jdbcType=VARCHAR}, #{sodium,jdbcType=VARCHAR}, #{tc,jdbcType=VARCHAR}, 
+      #{tg,jdbcType=VARCHAR}, #{tctall,jdbcType=VARCHAR}, #{tcbottom,jdbcType=VARCHAR}, 
+      #{saccharify,jdbcType=VARCHAR}, #{hepatitis,jdbcType=VARCHAR}, #{chest,jdbcType=VARCHAR}, 
+      #{cervix,jdbcType=VARCHAR}, #{ecg,jdbcType=VARCHAR}, #{fundus,jdbcType=VARCHAR}, 
+      #{bultrasound,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.yihe.applet.api.domain.YhUserPersonageExaminationApp" >
+    insert into yh_user_personage_examination
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="userCode != null" >
+        user_code,
+      </if>
+      <if test="fbg != null" >
+        fbg,
+      </if>
+      <if test="hemoglobin != null" >
+        hemoglobin,
+      </if>
+      <if test="hemocyte != null" >
+        hemocyte,
+      </if>
+      <if test="blood != null" >
+        blood,
+      </if>
+      <if test="bloodelse != null" >
+        bloodelse,
+      </if>
+      <if test="urine != null" >
+        urine,
+      </if>
+      <if test="uriensugar != null" >
+        uriensugar,
+      </if>
+      <if test="urineacetone != null" >
+        urineacetone,
+      </if>
+      <if test="urineblood != null" >
+        urineblood,
+      </if>
+      <if test="urineelse != null" >
+        urineelse,
+      </if>
+      <if test="urinarymicro != null" >
+        urinarymicro,
+      </if>
+      <if test="excrement != null" >
+        excrement,
+      </if>
+      <if test="cerealthird != null" >
+        cerealthird,
+      </if>
+      <if test="milletstraw != null" >
+        milletstraw,
+      </if>
+      <if test="albumin != null" >
+        albumin,
+      </if>
+      <if test="sweetpotato != null" >
+        sweetpotato,
+      </if>
+      <if test="combine != null" >
+        combine,
+      </if>
+      <if test="serum != null" >
+        serum,
+      </if>
+      <if test="hematuresis != null" >
+        hematuresis,
+      </if>
+      <if test="potassium != null" >
+        potassium,
+      </if>
+      <if test="sodium != null" >
+        sodium,
+      </if>
+      <if test="tc != null" >
+        tc,
+      </if>
+      <if test="tg != null" >
+        tg,
+      </if>
+      <if test="tctall != null" >
+        tctall,
+      </if>
+      <if test="tcbottom != null" >
+        tcbottom,
+      </if>
+      <if test="saccharify != null" >
+        saccharify,
+      </if>
+      <if test="hepatitis != null" >
+        hepatitis,
+      </if>
+      <if test="chest != null" >
+        chest,
+      </if>
+      <if test="cervix != null" >
+        cervix,
+      </if>
+      <if test="ecg != null" >
+        ecg,
+      </if>
+      <if test="fundus != null" >
+        fundus,
+      </if>
+      <if test="bultrasound != null" >
+        bultrasound,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="userCode != null" >
+        #{userCode,jdbcType=VARCHAR},
+      </if>
+      <if test="fbg != null" >
+        #{fbg,jdbcType=VARCHAR},
+      </if>
+      <if test="hemoglobin != null" >
+        #{hemoglobin,jdbcType=VARCHAR},
+      </if>
+      <if test="hemocyte != null" >
+        #{hemocyte,jdbcType=VARCHAR},
+      </if>
+      <if test="blood != null" >
+        #{blood,jdbcType=VARCHAR},
+      </if>
+      <if test="bloodelse != null" >
+        #{bloodelse,jdbcType=VARCHAR},
+      </if>
+      <if test="urine != null" >
+        #{urine,jdbcType=VARCHAR},
+      </if>
+      <if test="uriensugar != null" >
+        #{uriensugar,jdbcType=VARCHAR},
+      </if>
+      <if test="urineacetone != null" >
+        #{urineacetone,jdbcType=VARCHAR},
+      </if>
+      <if test="urineblood != null" >
+        #{urineblood,jdbcType=VARCHAR},
+      </if>
+      <if test="urineelse != null" >
+        #{urineelse,jdbcType=VARCHAR},
+      </if>
+      <if test="urinarymicro != null" >
+        #{urinarymicro,jdbcType=VARCHAR},
+      </if>
+      <if test="excrement != null" >
+        #{excrement,jdbcType=VARCHAR},
+      </if>
+      <if test="cerealthird != null" >
+        #{cerealthird,jdbcType=VARCHAR},
+      </if>
+      <if test="milletstraw != null" >
+        #{milletstraw,jdbcType=VARCHAR},
+      </if>
+      <if test="albumin != null" >
+        #{albumin,jdbcType=VARCHAR},
+      </if>
+      <if test="sweetpotato != null" >
+        #{sweetpotato,jdbcType=VARCHAR},
+      </if>
+      <if test="combine != null" >
+        #{combine,jdbcType=VARCHAR},
+      </if>
+      <if test="serum != null" >
+        #{serum,jdbcType=VARCHAR},
+      </if>
+      <if test="hematuresis != null" >
+        #{hematuresis,jdbcType=VARCHAR},
+      </if>
+      <if test="potassium != null" >
+        #{potassium,jdbcType=VARCHAR},
+      </if>
+      <if test="sodium != null" >
+        #{sodium,jdbcType=VARCHAR},
+      </if>
+      <if test="tc != null" >
+        #{tc,jdbcType=VARCHAR},
+      </if>
+      <if test="tg != null" >
+        #{tg,jdbcType=VARCHAR},
+      </if>
+      <if test="tctall != null" >
+        #{tctall,jdbcType=VARCHAR},
+      </if>
+      <if test="tcbottom != null" >
+        #{tcbottom,jdbcType=VARCHAR},
+      </if>
+      <if test="saccharify != null" >
+        #{saccharify,jdbcType=VARCHAR},
+      </if>
+      <if test="hepatitis != null" >
+        #{hepatitis,jdbcType=VARCHAR},
+      </if>
+      <if test="chest != null" >
+        #{chest,jdbcType=VARCHAR},
+      </if>
+      <if test="cervix != null" >
+        #{cervix,jdbcType=VARCHAR},
+      </if>
+      <if test="ecg != null" >
+        #{ecg,jdbcType=VARCHAR},
+      </if>
+      <if test="fundus != null" >
+        #{fundus,jdbcType=VARCHAR},
+      </if>
+      <if test="bultrasound != null" >
+        #{bultrasound,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.yihe.applet.api.domain.YhUserPersonageExaminationApp" >
+    update yh_user_personage_examination
+    <set >
+      <if test="userCode != null" >
+        user_code = #{userCode,jdbcType=VARCHAR},
+      </if>
+      <if test="fbg != null" >
+        fbg = #{fbg,jdbcType=VARCHAR},
+      </if>
+      <if test="hemoglobin != null" >
+        hemoglobin = #{hemoglobin,jdbcType=VARCHAR},
+      </if>
+      <if test="hemocyte != null" >
+        hemocyte = #{hemocyte,jdbcType=VARCHAR},
+      </if>
+      <if test="blood != null" >
+        blood = #{blood,jdbcType=VARCHAR},
+      </if>
+      <if test="bloodelse != null" >
+        bloodelse = #{bloodelse,jdbcType=VARCHAR},
+      </if>
+      <if test="urine != null" >
+        urine = #{urine,jdbcType=VARCHAR},
+      </if>
+      <if test="uriensugar != null" >
+        uriensugar = #{uriensugar,jdbcType=VARCHAR},
+      </if>
+      <if test="urineacetone != null" >
+        urineacetone = #{urineacetone,jdbcType=VARCHAR},
+      </if>
+      <if test="urineblood != null" >
+        urineblood = #{urineblood,jdbcType=VARCHAR},
+      </if>
+      <if test="urineelse != null" >
+        urineelse = #{urineelse,jdbcType=VARCHAR},
+      </if>
+      <if test="urinarymicro != null" >
+        urinarymicro = #{urinarymicro,jdbcType=VARCHAR},
+      </if>
+      <if test="excrement != null" >
+        excrement = #{excrement,jdbcType=VARCHAR},
+      </if>
+      <if test="cerealthird != null" >
+        cerealthird = #{cerealthird,jdbcType=VARCHAR},
+      </if>
+      <if test="milletstraw != null" >
+        milletstraw = #{milletstraw,jdbcType=VARCHAR},
+      </if>
+      <if test="albumin != null" >
+        albumin = #{albumin,jdbcType=VARCHAR},
+      </if>
+      <if test="sweetpotato != null" >
+        sweetpotato = #{sweetpotato,jdbcType=VARCHAR},
+      </if>
+      <if test="combine != null" >
+        combine = #{combine,jdbcType=VARCHAR},
+      </if>
+      <if test="serum != null" >
+        serum = #{serum,jdbcType=VARCHAR},
+      </if>
+      <if test="hematuresis != null" >
+        hematuresis = #{hematuresis,jdbcType=VARCHAR},
+      </if>
+      <if test="potassium != null" >
+        potassium = #{potassium,jdbcType=VARCHAR},
+      </if>
+      <if test="sodium != null" >
+        sodium = #{sodium,jdbcType=VARCHAR},
+      </if>
+      <if test="tc != null" >
+        tc = #{tc,jdbcType=VARCHAR},
+      </if>
+      <if test="tg != null" >
+        tg = #{tg,jdbcType=VARCHAR},
+      </if>
+      <if test="tctall != null" >
+        tctall = #{tctall,jdbcType=VARCHAR},
+      </if>
+      <if test="tcbottom != null" >
+        tcbottom = #{tcbottom,jdbcType=VARCHAR},
+      </if>
+      <if test="saccharify != null" >
+        saccharify = #{saccharify,jdbcType=VARCHAR},
+      </if>
+      <if test="hepatitis != null" >
+        hepatitis = #{hepatitis,jdbcType=VARCHAR},
+      </if>
+      <if test="chest != null" >
+        chest = #{chest,jdbcType=VARCHAR},
+      </if>
+      <if test="cervix != null" >
+        cervix = #{cervix,jdbcType=VARCHAR},
+      </if>
+      <if test="ecg != null" >
+        ecg = #{ecg,jdbcType=VARCHAR},
+      </if>
+      <if test="fundus != null" >
+        fundus = #{fundus,jdbcType=VARCHAR},
+      </if>
+      <if test="bultrasound != null" >
+        bultrasound = #{bultrasound,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.yihe.applet.api.domain.YhUserPersonageExaminationApp" >
+    update yh_user_personage_examination
+    set user_code = #{userCode,jdbcType=VARCHAR},
+      fbg = #{fbg,jdbcType=VARCHAR},
+      hemoglobin = #{hemoglobin,jdbcType=VARCHAR},
+      hemocyte = #{hemocyte,jdbcType=VARCHAR},
+      blood = #{blood,jdbcType=VARCHAR},
+      bloodelse = #{bloodelse,jdbcType=VARCHAR},
+      urine = #{urine,jdbcType=VARCHAR},
+      uriensugar = #{uriensugar,jdbcType=VARCHAR},
+      urineacetone = #{urineacetone,jdbcType=VARCHAR},
+      urineblood = #{urineblood,jdbcType=VARCHAR},
+      urineelse = #{urineelse,jdbcType=VARCHAR},
+      urinarymicro = #{urinarymicro,jdbcType=VARCHAR},
+      excrement = #{excrement,jdbcType=VARCHAR},
+      cerealthird = #{cerealthird,jdbcType=VARCHAR},
+      milletstraw = #{milletstraw,jdbcType=VARCHAR},
+      albumin = #{albumin,jdbcType=VARCHAR},
+      sweetpotato = #{sweetpotato,jdbcType=VARCHAR},
+      combine = #{combine,jdbcType=VARCHAR},
+      serum = #{serum,jdbcType=VARCHAR},
+      hematuresis = #{hematuresis,jdbcType=VARCHAR},
+      potassium = #{potassium,jdbcType=VARCHAR},
+      sodium = #{sodium,jdbcType=VARCHAR},
+      tc = #{tc,jdbcType=VARCHAR},
+      tg = #{tg,jdbcType=VARCHAR},
+      tctall = #{tctall,jdbcType=VARCHAR},
+      tcbottom = #{tcbottom,jdbcType=VARCHAR},
+      saccharify = #{saccharify,jdbcType=VARCHAR},
+      hepatitis = #{hepatitis,jdbcType=VARCHAR},
+      chest = #{chest,jdbcType=VARCHAR},
+      cervix = #{cervix,jdbcType=VARCHAR},
+      ecg = #{ecg,jdbcType=VARCHAR},
+      fundus = #{fundus,jdbcType=VARCHAR},
+      bultrasound = #{bultrasound,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+      <!-- 根据code查询辅助查询-->
+  <select id="showexamination" parameterType="java.lang.String" resultMap="BaseResultMap">
+  	select * from yh_user_personage_examination where user_code=#{userCode,jdbcType=VARCHAR}
+  </select>
+  
+</mapper>

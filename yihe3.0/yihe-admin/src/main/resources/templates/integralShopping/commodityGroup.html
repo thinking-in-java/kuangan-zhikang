@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, maximum-scale=1">
+<title>商品分组</title>
+<link rel="stylesheet" th:href="@{/assets/libs/layui/css/layui.css}" />
+<link rel="stylesheet" th:href="@{/assets/module/admin.css}" />
+<style type="text/css">
+.theme-colorful{
+background-color: white;
+}
+.layui-form-label {
+
+    float: left;
+    display: block;
+    padding: 9px 5px;
+    width: 80px;
+    font-weight: 400;
+    line-height: 20px;
+    text-align: right;
+
+}
+.layui-form-onswitch {
+
+    border-color: rgba(24, 144, 255, 1);
+    background-color: rgba(24, 144, 255, 1);
+
+}
+
+.layui-table-box {
+	min-height:500px;
+}
+</style>
+</head>
+<body >
+<div id="search-header" style="margin-top: 7px;">
+		<form id="regForm" lay-filter="regForm" class="layui-form queryForm">
+			<div class="layui-form-item" style="margin-bottom: 0px;">
+					
+				 <div class="layui-inline">
+                        <label class="layui-form-label w-auto">分组名称:</label>
+                        <div class="layui-input-inline">
+                            <input id="name" class="layui-input" placeholder="请输入" style="width: 137px;"/>
+                        </div>
+                    </div>
+                    
+
+			
+				
+				
+		 <div class="layui-inline" style="/*! padding-left: 20px; */margin-left: -48px;">
+				<button class="layui-btn icon-btn sousuoDN" lay-submit="" lay-filter="regManageQueryBtn"><i class="layui-icon"></i>搜索</button>
+				<button class="layui-btn layui-btn-primary" lay-submit=""
+							lay-filter="reset">清除</button>
+		
+			</div> 
+				
+				
+			<div class="layui-inline" style="float: inline-end;">
+						<button  class="layui-btn" type="button" id="addData">
+							<i class="layui-icon layui-icon-addition"></i> 添加
+						</button>
+			</div> 
+
+			</div>
+
+		</form>
+	</div>
+<table id="demo" lay-filter="demo"></table>
+
+
+</body>	
+<form class="layui-form" id="addfolder" lay-filter="folderForm" style="display: none;">
+	
+			  <div class="layui-form-item" style="display: block;margin-top: 38px;">
+	  			  <label class="layui-form-label">名称</label>
+	    			<div class="layui-input-inline" style="width: 250px;">
+	     				 <input type="text" name="folderName" lay-verify="folderName"  lay-reqtext="不能为空"  placeholder="请输入名称，最大限制10个字符" autocomplete="off" class="layui-input">
+	    			</div>
+	 		 </div>
+	 		 
+	 		 <div class="layui-form-item">
+						<div class="layui-input-block">
+							<button style="width: 100px;" class="layui-btn layui-btn-normal"
+								lay-submit='' lay-filter="folderSubmit" type="button">保存</button>
+							<button style="width: 100px;" type="reset" id="cancel"  class="layui-btn layui-btn-primary">取消</button>
+						</div>
+				</div>
+	</form>
+<script type="text/html" id="tableBar">
+		<a href="#" style="color:rgba(166, 166, 166, 1);" lay-event="delete">删除</a>
+    	<a href="#" style="color:#36A4FF" lay-event="lookOver">修改</a>
+	</script>
+
+	
+<script type="text/javascript" th:src="@{/assets/libs/layui/layui.js}"></script>
+<script type="text/javascript" th:src="@{/assets/js/common.js}"></script>
+<script type="text/javascript" th:src="@{/assets/js/jquery-1.11.1.js}"></script>
+<script th:src="@{/assets/libs/echarts/echarts.min.js}"></script>
+<script type="text/javascript" th:inline="javascript">
+	var userCode = [[${userCode}]]; 
+	var groupingId="";
+	layui.use(['laypage', 'layer','element', 'treeTable','table','form','treeSelect','laydate','util','upload'], function(){
+		  var laypage = layui.laypage;
+		  var layer = layui.layer;
+		  var element = layui.element;
+		  var table = layui.table;
+		  var form = layui.form;
+		  var $ = layui.jquery;
+		  var laydate = layui.laydate;
+		  var util = layui.util;
+		  var treeSelect= layui.treeSelect;
+		  var upload = layui.upload;
+	
+		  //第一个实例
+			var shoppingTab = table.render({
+			  id : 'shoppingTab',
+		    elem: '#demo'
+		    ,url: '/IntegralShoppingGrouping/shoppingGroupingPage'  //数据接口
+		     ,method : 'get'
+		    ,where : {} // 你额外要携带数据，以键值对的方式存入
+		    ,page: true //开启分页
+		    ,limit : 20// 每页显示的条数
+			,limits : [ 5, 10, 20, 50, 100 ] // 每页条数的选择项
+			,loading : true // 是否显示加载条(切换分页的时候显示）
+			,cellMinWidth : 80 // 全局定义所有常规单元格的最小宽度（默认：60）
+			 ,sort:true
+		    ,cols: [ //表头  
+		    	[
+		    	{type:'numbers', title:'序号', align: 'center',width: 50}
+		        ,{field:'name', title:'分组名称', align: 'center',templet:function(d){
+			      	//console.log("积分数据",d)
+			      	return d.name
+	        	}
+		        }
+		        ,{field: 'num', title: '商品数', align: 'center',width: 100,templet:function(d){
+			      	if(d.num == null || d.num == ""){
+			      		return "--"
+			      	}else{
+			      		return d.num
+			      	}
+			      	
+	        	}
+		       }
+		        ,{field: 'addTime', title: '创建日期', align: 'center'}
+		        ,{ title: '操作', toolbar : '#tableBar',align: 'center', width:100}
+		        
+		      ]
+		      ],
+		      done: function(res, curr, count){
+			        if(count > 20) {
+			        	$(".layui-table-page").show();
+			        }else {
+			        	$(".layui-table-page").hide();
+			        }
+			      }
+		  });
+		    
+			$("#cancel").on('click',function(){
+				layer.closeAll();
+			})
+		    
+		  table.on('tool(demo)', function(obj) { //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
+			  var data = obj.data;
+	          var layEvent = obj.event;
+	          groupingId = obj.data.groupingId;
+	          var name = obj.data.name;
+	          console.log(groupingId)
+	            form.val('folderForm', {
+	        	     'folderName':name
+	        	    });
+	          if(layEvent === 'delete'){
+	             	layer.confirm('是否确认删除？', {
+	            		  btn: [ '确认', '取消'] //可以无限个按钮
+	            		  ,btn3: function(index, layero){
+	            		    //按钮【按钮三】的回调
+	            		  }
+	            		},function(index){
+	            		  //按钮【按钮二】的回调
+	            		$.ajax({
+	            		url: '/IntegralShoppingGrouping/deleteGroupingName',
+	            		data:{groupingId:groupingId},
+	            		success: function (data) {
+							console.log(data,"删除")
+							if(data.code==20000){
+								parent.layer.msg('操作成功');
+								layer.closeAll();
+								 location.reload();
+							}else{
+								parent.layer.msg('操作失败');
+							}
+						}
+	            	})
+	            });
+	           }
+	           if(layEvent === 'lookOver'){
+	        	   Modal(groupingId);
+	           }
+	     });
+		  
+		  //添加分组
+		  $("#addData").on('click',function(){
+			$("input[name=folderName]").val('');
+			groupingId="";
+			Modal(groupingId);
+		})
+		  
+			function Modal(groupingId){
+				//页面层
+				layer.open({  
+				  title:groupingId==""?'新建':'重命名',
+				  type: 1,
+				  skin: 'layui-layer-rim', //加上边框
+				  area: ['420px', '200px'], //宽高
+				  content: $("#addfolder"),
+				});
+			}
+		 
+		  
+		  
+			//监听提交
+			form.on('submit(folderSubmit)', function (dataYh) {
+				var folderName = $("input[name=folderName]").val();
+				
+				console.log("输入框的值"+folderName)
+						$.ajax({
+							type: 'get',
+							url: '/IntegralShoppingGrouping/addGroupingName',
+							data: {
+								name: folderName,
+								groupingId :groupingId
+							},
+							success: function (data) {
+								console.log(data,"fhui")
+								if(data.code==500){
+									parent.layer.msg(data.msg);	
+								}else if(data.code==200){
+									parent.layer.msg(data.msg);	
+									layer.closeAll();
+									 location.reload();
+								}else{
+									parent.layer.msg('操作失败');
+								} 
+							}
+
+						}); 
+				return false;
+			});
+		  
+			 form.verify({
+				 folderName: function(value){
+					 
+					 var userName2 = $("input[name=folderName]").val();
+					 
+					 if(value.length<=0){
+						  return '不能为空'; 
+					  }
+					  
+			    	    if (userName2.indexOf(" ") == -1) {
+			    	       // alert("没有空格");
+			    	    } else {
+			    	    	 return '文件名存在非法字符';
+			    	    }
+					 
+					 console.log(value+"值")
+					
+						  if(value.length>10){
+							  return '最大限制10个字符'; 
+						  }
+					  
+			
+				 },
+				 
+			 })
+		  
+		  
+		
+		//头部搜素表单提交1
+		  form.on('submit(regManageQueryBtn)', function(data){
+			 /*   console.log(data.elem);//被执行事件的元素DOM对象，一般为button对象
+			  console.log(data.form); //被执行提交的form对象，一般在存在form标签时才会返回
+			 console.log(data.field); //当前容器的全部表单字段，名值对形式：{name: value} */
+			 shoppingTab.reload({
+				  where : {
+						//这里注意一定要跟Bean 里面的属性对应
+					 name:$('#name').val(), 
+					
+					},
+				  page : {
+					  curr : 1
+				  }
+				  
+			  });
+			// 阻止表单跳转。如果需要表单跳转，去掉这段即可。
+			  return false;
+		  });
+		    
+	
+
+});
+</script>

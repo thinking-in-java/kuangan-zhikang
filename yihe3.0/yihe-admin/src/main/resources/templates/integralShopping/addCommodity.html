@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, maximum-scale=1">
+<title>添加商品</title>
+<link rel="stylesheet" th:href="@{/assets/libs/layui/css/layui.css}" />
+<link rel="stylesheet" th:href="@{/assets/module/admin.css}" />
+
+ <!--引入所需依赖-->
+    <link rel="stylesheet" th:href="@{/editormd/css/style.css}"/>
+    <link rel="stylesheet" th:href="@{/editormd/css/editormd.css}"/>
+<style type="text/css">
+	div.tagsinput input {
+    color: #000;
+    font-size: 14px;
+    padding: 5px;
+    margin-bottom: 5px;
+    background: transparent;
+    border: none;
+    outline: none;
+    width: 150px;
+}
+
+	.layui-upload-img{
+		width: 80px;
+		height: 80px;
+		margin: 10px;
+	}
+</style>
+</head>
+<body>
+<!-- 页面加载loading -->
+	<div class="page-loading">
+		<div class="ball-loader">
+			<span></span><span></span><span></span><span></span>
+		</div>
+	</div>
+	
+			<div style="width: 100%; height: 100%; background-color: #FFF; position: relative;">
+				<div style="font-size: 20px; font-weight: bold; margin-left: 20px; padding-top: 12px;" id="publish">发布商品</div>
+				<div style="background-color:#F5F5F5; line-height: 50px;margin: 17px;">
+					<span style="margin-left: 10px;">商品类型</span>
+				</div>
+
+				
+				<form class="layui-form" action="" id="regForm" lay-filter="regForm">
+				<input type="hidden" name="merchandiseId">
+					<div class="layui-form-item">
+						<div class="layui-inline">
+						<label class="layui-form-label layui-form-required" style="width: 84px;">商品类型：</label>
+							<div class="layui-input-inline" style="width: 110px">
+								<select id="merchandiseType" name="merchandiseType" required  lay-verify="required">
+									<!-- <option value="">全部类型</option> -->
+									<option value="1">实物商品</option>
+								</select>
+							</div>
+							
+						</div>
+						<div class="layui-inline">
+							<label class="layui-form-label" style="width: 140px;margin-left: -28px;color: rgb(166, 166, 166);">（实物商品物流发货）</label>
+						</div>
+					</div>
+					
+				<div style="background-color:#F5F5F5; line-height: 50px;margin: 17px;">
+					<span style="margin-left: 10px;">基本信息</span>
+				</div>
+				  <div class="layui-form-item"  style="margin-left: -10px;">
+				    <label class="layui-form-label layui-form-required">商品名：</label>
+				    <div class="layui-input-block" style="width: 500px;">
+				      <input type="text" name="merchandiseName" required  lay-verify="required" placeholder="输入内容" autocomplete="off" class="layui-input">
+				    </div>
+				  </div>
+					
+					<div class="layui-form-item">
+						<label style="width: 83px;"
+							class="layui-form-label layui-form-required">商品分组： </label>
+						<div class="layui-inline">
+							<div class="layui-input-inline" style="width: 150px">
+								     <select name="groupingId" id="catalog" lay-verify="required" lay-filter="selectLouPan">
+			        
+		      						</select>
+							</div>
+						</div>
+						<div class="layui-inline">
+							<label class="layui-form-label" id="addData" style="width: 61px;margin-left: -28px;color:rgba(60, 142, 234, 1);">新建分组</label>
+						</div>
+					</div>
+
+		<div class="layui-form-item layui-form-text" style="margin-left: -8px;">
+		    <label class="layui-form-label layui-form-required">图文详情:</label>
+		    <!-- <div class="layui-input-block">
+		      <textarea class="layui-textarea" placeholder="最大限制5000字符" id="instruction" maxlength="500" name="instruction"style="display: none"> </textarea> 
+		      
+		    </div> -->
+		    
+		    <!--这里的id=editormd_id就是下面的初始化editorMD的editormd_id-->
+		<div id="editormd_id">
+		    <!-- 第一个textarea是文本输入区域-->
+		    <textarea id="htmlContent" class="editorMd-html-textarea"  name="editorMd-html-textarea" placeholder="请输入内容...">
+		    </textarea>
+		
+		    <!--第二个textarea 是展示文本区域 要隐藏起来 display->none-->
+		    <textarea class="editorMd-text-textarea" name="editorMd-text-textarea" style="display:none;" id="textContent">
+		    </textarea>
+		</div>
+		  </div>
+
+	<!-- 		<div class="layui-upload" style="padding: 19px;">
+			  <button type="button" class="layui-btn" id="test2">商品封面图上传</button> 
+			  <blockquote style="margin-top: 10px;color: rgba(166, 166, 166, 1);" class="layui-elem-quote layui-quote-nm" style="margin-top: 10px;color: rgba(166, 166, 166, 1);">
+			   建议尺寸：800*600像素，最多上传5张
+			    <div class="layui-upload-list" id="demo2"></div>
+			 </blockquote>
+			</div> -->
+					<div class="layui-form-item">
+						<label style="width: 83px;"
+							class="layui-form-label">商品封面图： </label>
+						<div class="layui-inline">
+								<div class="layui-upload">
+					  				<button type="button" class="layui-btn" id="test1">点击上传</button>
+					  				<div class="layui-upload-list">
+					    				<img class="layui-upload-img" id="demo1">
+					   			 		<p id="demoText" style="color: rgba(166, 166, 166, 1);font-size: 12px;margin-left: -9px;">建议尺寸：800*600像素</p>
+					  				</div>
+							</div> 
+						</div>
+
+					</div>
+
+			
+				<div style="background-color:#F5F5F5; line-height: 50px;margin: 17px;">
+					<span style="margin-left: 10px;">更多设置</span>
+				</div>
+			
+				  <div class="layui-form-item"  style="margin-left: -24px;">
+				    <label class="layui-form-label layui-form-required">积分：</label>
+				    <div class="layui-input-block" style="width: 110px;">
+				      <input min="1" type="number" oninput="value=value.replace(/^\D|^0(\d*(?:\.\d{0,2})?).*$/g, '$1')"  name="pzkIntegral" required  lay-verify="required" placeholder="输入内容" autocomplete="off" class="layui-input">
+				    </div>
+				  </div>
+				  
+				  <div class="layui-form-item"  style="margin-left: -24px;">
+				    <label class="layui-form-label layui-form-required">库存：</label>
+				    <div class="layui-input-block" style="width: 110px;">
+				      <input  type="number" oninput="value=value.replace(/^\D|^0(\d*(?:\.\d{0,2})?).*$/g, '$1')"  name="inventory" required  lay-verify="required" placeholder="输入内容" autocomplete="off" class="layui-input">
+				    </div>
+				  </div>
+				  
+				  				  
+				  <div class="layui-form-item"  style="margin-left: -24px;">
+				 	 <div class="layui-inline">
+					   	 <label class="layui-form-label">上架：</label>
+					   	 <input type="checkbox" name="putaway" value="1" title="立即上架" lay-skin="primary">
+				   	 </div>
+				    	<div class="layui-inline">
+							<label class="layui-form-label" style="width: 309px;margin-left: -28px;">（不勾选则不上架，未上架的商品用户不会看到）
+							</label>
+						</div>
+				  </div>
+					
+
+
+					<div class="layui-form-item" style="margin-left: -88px;padding-bottom: 40px;">
+						<div class="layui-input-block">
+							<button class="layui-btn" lay-submit='' lay-filter="addSubmit" >提交</button>
+							<button type="reset" class="layui-btn layui-btn-primary" id ="cancel">取消</button>
+						</div>
+					</div>
+				</form>
+			</div>
+		
+	
+</body>
+<form class="layui-form" id="addfolder" lay-filter="folderForm" style="display: none;">
+	
+			  <div class="layui-form-item" style="display: block;margin-top: 38px;">
+	  			  <label class="layui-form-label">名称</label>
+	    			<div class="layui-input-inline" style="width: 250px;">
+	     				 <input type="text" name="folderName" lay-verify="folderName"  lay-reqtext="不能为空"  placeholder="请输入名称，最大限制10个字符" autocomplete="off" class="layui-input">
+	    			</div>
+	 		 </div>
+	 		 
+	 		 <div class="layui-form-item" style="margin-left: 18px;">
+						<div class="layui-input-block">
+							<button style="width: 100px;" class="layui-btn layui-btn-normal"
+								lay-submit='' lay-filter="folderSubmit" type="button">保存</button>
+							<button style="width: 100px;" type="reset" id="cancel2"  class="layui-btn layui-btn-primary">取消</button>
+						</div>
+				</div>
+	</form>
+<!-- js部分 -->
+
+<script type="text/javascript" th:src="@{/assets/js/jquery-1.11.1.js}"></script>
+<script th:src="@{/editormd/editormd.js}"></script>
+<script type="text/javascript" th:src="@{/assets/libs/layui/layui.js}"></script>
+<script type="text/javascript" th:src="@{/assets/js/common.js}"></script>
+<script type="text/javascript">
+var merchandiseId = [[${merchandiseId}]]
+
+console.log("商品id",merchandiseId)
+var loanding;
+
+//初始化editorMD
+var HEADER;
+layui.$("#htmlContent").val("");
+$(function () {
+	HEADER = editormd("editormd_id", {
+        width: "90%",
+        height: 420,
+        toc: true,
+        emoji: true,//表情功能开启
+        taskList: true,
+        syncScrolling: "single",
+        imageUpload: true,
+        htmlDecode: "style,script,iframe",
+        tex: true, // 默认不解析
+        flowChart: true, // 默认不解析
+        sequenceDiagram: true, // 默认不解析
+        codeFold: true,
+        imageFormats: ["jpg", "jpeg", "gif", "png", "bmp", "webp"],
+        imageUploadURL: "/Uploading/upload",       //图片上传URL 即后台的图片上传接口URL
+        path: '/editormd/lib/',          //项目启动路径
+        toolbarIcons : function() {
+            // Or return editormd.toolbarModes[name]; // full, simple, mini
+            // Using "||" set icons align right.
+            return [ "undo", "redo", "|", 
+                "bold", "italic", "quote", "|", 
+                "h1", "h2", "h3", "h4", "h5", "h6", "|", 
+                "list-ul", "list-ol", "hr", "|",
+                "link",  "image", "|",
+                "watch"]
+        },
+        //path: '../static/editormd/lib/',    //本地路径
+        saveHTMLToTextarea: true
+    });
+});
+
+layui.use(['layer','form','upload','laydate'], function(){
+	 var $ = layui.jquery
+	 ,upload = layui.upload;
+     var layer = layui.layer;
+     var form = layui.form;
+     var laydate = layui.laydate;
+     var name='';
+     if (typeof(merchandiseId) == "undefined"){
+    	 selectAllGrouping();
+     }else{
+       	 $.ajax({
+  			type: 'get',
+  			url: '/IntegralShoppingGrouping/selectAllGrouping',
+        
+  			success: function (data) {
+  				console.log("分组",data)
+  				var groupingId = [[${groupingId}]]
+               $.each(data.data, function(index, item) {
+            	   if(item.groupingId == groupingId){
+            		   $('#catalog').append(new Option(item.name, item.groupingId));
+     		   		} 
+                  
+               });
+  		         $.each(data.data, function(index, item) {
+  		        	if(item.groupingId != groupingId){
+             		   $('#catalog').append(new Option(item.name, item.groupingId));
+      		   		} 
+                 });
+               layui.form.render("select");
+  			}
+  		});
+     }
+     
+     function selectAllGrouping(){
+       	 $.ajax({
+ 			type: 'get',
+ 			url: '/IntegralShoppingGrouping/selectAllGrouping',
+       
+ 			success: function (data) {
+ 				console.log("分组",data)
+ 				if(name==''){
+ 		   			name=data.data[0].name
+ 		   		} 
+              $.each(data.data, function(index, item) {
+                  $('#catalog')
+                      .append(new Option(item.name, item.groupingId));
+              });
+              layui.form.render("select");
+ 			}
+ 		});
+     }
+ 
+   	 
+	    $.ajax({
+	 		type:'get', 
+	 		url:'/YhUserCommodityData/selectCommodity',
+	 		data:{merchandiseId:merchandiseId},
+	 		success : function(data){
+	 			console.info(data,"查询商品")
+	 			if(data.data != null){
+	 				$("#merchandiseType").attr('disabled', 'disabled');
+	 				form.render('select'); 
+	 				$("#publish").html("修改商品");
+	 				 $('#demo1').attr('src', data.data.coverImg);
+	 				 
+	 				 if(data.data.putaway == 1){
+	 					$("input[name='putaway']").prop("checked",true); //选中
+	 					form.render(); 
+	 				 }
+
+		 				form.val('regForm', {
+		   					"merchandiseId" : data.data.merchandiseId,
+		   					"merchandiseType" : data.data.merchandiseType,
+		   					"merchandiseName" : data.data.merchandiseName,
+		   					"groupingId" : data.data.groupingId,
+		   					 "pzkIntegral" : data.data.pzkIntegral,
+		   					"inventory" : data.data.inventory
+		   					
+		   					
+		   				});
+		 			      setTimeout(function(){
+		 			    	 HEADER.setMarkdown(data.data.imageText);
+		 			        },500);
+		 				
+	 			}
+	 			 
+	 			
+	 			
+	 		}
+	 	});
+   		
+   		form.on('select(selectLouPan)', function (data) {
+   			console.log(data)
+   		     name= data.value;          
+   		     //获取value值
+   			console.info(name)
+   			
+   		});
+   	  //添加分组
+		  $("#addData").on('click',function(){
+			$("input[name=folderName]").val('');
+			Modal();
+		})
+		  
+			function Modal(){
+				//页面层
+				layer.open({  
+				  title:'新建',
+				  type: 1,
+				  skin: 'layui-layer-rim', //加上边框
+				  area: ['420px', '200px'], //宽高
+				  content: $("#addfolder"),
+				});
+			}
+			
+			//监听提交
+			form.on('submit(folderSubmit)', function (dataYh) {
+				var folderName = $("input[name=folderName]").val();
+				var groupingId = '';
+				console.log("输入框的值"+folderName)
+						$.ajax({
+							type: 'get',
+							url: '/IntegralShoppingGrouping/addGroupingName',
+							data: {
+								name: folderName,
+								groupingId:groupingId
+							},
+							success: function (data) {
+								console.log(data,"fhui")
+								if(data.code==500){
+									parent.layer.msg(data.msg);	
+								}else if(data.code==200){
+									parent.layer.msg(data.msg);	
+									layer.closeAll();
+									//selectAllGrouping();
+									window.location.reload();
+								}else{
+									parent.layer.msg('操作失败');
+								} 
+							}
+
+						}); 
+				return false;
+			});
+			
+			$("#cancel2").on('click',function(){
+				layer.closeAll();
+			})
+			
+				$("#cancel").on('click',function(){
+					window.location.href='/manage/shopping/commodityManage';
+			})
+     
+	  var imgaddress = [];
+	  //多图片上传
+/* 	  upload.render({
+	    elem: '#test2'
+	    ,url: '/Uploading/addEnrollImg' //改成您自己的上传接口
+	    ,multiple: true
+	    ,number: 5
+	    ,before: function(obj){
+	    	if(imgaddress.length>=5){
+	    		layer.msg("最多只允许上传五张", {time: 2000});
+	    		return;
+	    	}
+	    	loanding = parent.layer.load(3, {shade: [0.8, '#393D49']});
+	    	//将每次选择的文件追加到文件队列
+	  　　　　　　var files = this.files = obj.pushFile();
+			    setTimeout(function () {
+			    	parent.layer.close(loanding);
+		        }, 2000);
+	  			
+             $.each(files, function (indexs, file) {
+                 var number = $('.el-upload--picture-card-myStyle').length;
+                 console.log("数量"+number)
+                 var file_siez = file['size'];
+                 var file_name = file['name'];
+                 if (number >= 5) {
+                     layer.msg("最多只允许上传五张营业执照", {time: 1000});
+                     return delete files[indexs];
+                 }else if (file_siez>10485760){//大于10M
+                     file_name_arr.push(file_name);
+                     layer.msg("所选文件"+file_name_arr+"大于10M，此文件上传失败", {time: 2000});
+                     return delete files[indexs];
+                 }else{
+                     var index=indexs.replace(/-/, "0");
+                     $('#test-upload-more-list').append('<div class="el-upload--picture-card-myStyle" id="remove_' + index + '"><div class="handle" id="handle_' + index + '"> <i class="layui-icon" style="margin-right: 30%;color: #FF5722;font-size: 20px;" id="del_' + index + '">&#xe640;</i><i class="layui-icon" style="color: #FF5722;margin-right: 20%;font-size: 19px;" id="search_' + index + '"  onclick="showPic('+index+')">&#xe615;</i></div><img   id="id_' + index + '" alt="' + file.name + '"     style="height: 100px;width: 100px"></div>')
+                     $('#remove_' + index).bind('mouseover', function () {
+                         $("#handle_" + index).css("display", "block");
+                     });
+                     $('#remove_' + index).bind('mouseout', function () {
+                         $("#handle_" + index).css("display", "none");
+                     });
+                     layui.form.render();
+                 }
+             });
+             return true;
+	    }
+	  	,allDone: function(obj){ //当文件全部被提交后，才触发
+	  		parent.layer.close(loanding);   
+	  		layer.photos({
+				  photos: '#demo2'
+				  ,anim: 5 //0-6的选择，指定弹出图片动画类型，默认随机（请注意，3.0之前的版本用shift参数）
+				}); 
+	  		//$("#demo2 img").eq(0).click();
+			layer.closeAll();
+		}
+	    ,done: function(res,index, upload){
+	    	//删除数组文件中上传成功的图片，防止重复上传
+	  　　　　　　delete this.files[index]
+	    	 var imgFiles = res.files;
+	    	if(imgaddress.length < 5){
+	    		 imgaddress.push(imgFiles);
+	    	}
+	    	
+	    	 console.log("长度",imgaddress.length)
+		      $('#demo2').append('<img src="'+ imgFiles +'" layer-src="'+ imgFiles +'" class="layui-upload-img">')
+	    }
+	  }); */
+	  var imgs;
+	//普通图片上传
+	  var uploadInst = upload.render({
+	    elem: '#test1'
+	    ,url: '/Uploading/addEnrollImg' //改成您自己的上传接口
+	    ,before: function(obj){
+	      //预读本地文件示例，不支持ie8
+	      obj.preview(function(index, file, result){
+	        $('#demo1').attr('src', result); //图片链接（base64）
+	      });
+	    }
+	    ,done: function(res){
+	      //如果上传失败
+	      if(res.code > 0){
+	        return layer.msg('上传失败');
+	      }
+	      //上传成功
+	       imgs = res.files;
+	      console.log("图片地址",res)
+	    }
+	    ,error: function(){
+	      //演示失败状态，并实现重传
+	      var demoText = $('#demoText');
+	      demoText.html('<span style="color: #FF5722;">上传失败</span> <a class="layui-btn layui-btn-xs demo-reload">重试</a>');
+	      demoText.find('.demo-reload').on('click', function(){
+	        uploadInst.upload();
+	      });
+	    }
+	  });
+
+
+
+    
+  //监听提交
+  form.on('submit(addSubmit)', function(dataYh){
+  	var content = HEADER.getHTML();
+    dataYh.field.imageText=content;
+    dataYh.field.coverImg=imgs;//将数组合并成字符串;
+    console.log("表单数据",JSON.stringify(dataYh.field))
+    	    $.ajax({
+	 		type:'get', 
+	 		url:'/YhUserCommodityData/compileCommodity',
+	 		data:dataYh.field,
+	 		success : function(data){
+	 			console.log(data,"添加商品")
+				if(data.code==20000){
+					parent.layer.msg('操作成功');
+					 window.location.href="/manage/shopping/commodityManage";
+					//layer.closeAll();
+					 //location.reload();
+				}else{
+					parent.layer.msg('操作失败');
+				}
+	 			
+	 		}
+	 	});
+	// 阻止表单跳转。如果需要表单跳转，去掉这段即可。
+	return false;
+  });
+});
+</script>
+
+</html>
+

@@ -1,0 +1,511 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>健康大数据监控</title>
+    <script type="text/javascript" th:src="@{/assets/js/jquery.js}"></script>
+    <link rel="stylesheet" th:href="@{/assets/css/comon0.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/assets/static/css/main.css}">
+    <!-- Echarts3 -->
+    <script type="text/javascript" th:src="@{/assets/js/jquery-1.11.1.js}"></script>
+    <!-- 全国344个市、区、州对应的数字编号 -->
+    <script type="text/javascript" th:src="@{/assets/static/js/citymap.js}"></script>
+
+    <script type="text/javascript" th:src="@{/organization/index.js}"></script>
+
+    <link rel="stylesheet" th:href="@{/assets/libs/layui/css/layui.css}"/>
+</head>
+<script type="text/javascript">
+    $(document).ready(function () {
+        var html = $(".wrap ul").html()
+        $(".wrap ul").append(html)
+        var ls = $(".wrap li").length / 2 + 1
+        i = 0
+        ref = setInterval(function () {
+            i++
+            if (i == ls) {
+                i = 1
+                $(".wrap ul").css({marginTop: 0})
+                $(".wrap ul").animate({marginTop: -'.52' * i + 'rem'}, 1000)
+            }
+            $(".wrap ul").animate({marginTop: -'.52' * i + 'rem'}, 1000)
+
+
+        }, 2400);
+
+        var html2 = $(".adduser ul").html()
+        $(".adduser ul").append(html2)
+        var ls2 = $(".adduser li").length / 2 + 1
+        a = 0
+        ref = setInterval(function () {
+            a++
+            if (a == 6) {
+                a = 1
+                $(".adduser ul").css({marginTop: 0})
+                $(".adduser ul").animate({marginTop: -'.5' * a + 'rem'}, 800)
+            }
+            $(".adduser ul").animate({marginTop: -'.5' * a + 'rem'}, 800)
+
+
+        }, 4300);
+
+    })
+</script>
+<body>
+<div class="loading">
+    <div class="loadbox"><img th:src="@{/assets/images/loading.gif}"> 页面加载中...</div>
+</div>
+<div class="mainbox">
+    <ul class="clearfix">
+        <li>
+            <div class="boxall" style="height: 3.0rem">
+                <div class="alltitle">本月新增数据</div>
+                <div class="addnew">
+                    <div class="adduser" style="height: 2.0rem">
+                        <ul>
+                            <li class="clearfix"><span class="pulll_left">新增用户</span> <span class="pulll_right"
+                                                                                            id="count"></span></li>
+
+                            <li class="clearfix"><span class="pulll_left">新增风险评估</span> <span class="pulll_right"
+                                                                                              id="assesspresentDisease"></span>
+                            </li>
+
+                            <li class="clearfix"><span class="pulll_left">新增压力评估</span> <span class="pulll_right"
+                                                                                              id="evaluateCount"></span>
+                            </li>
+
+                            <li class="clearfix"><span class="pulll_left">新增睡眠评估</span> <span class="pulll_right"
+                                                                                              id="assesspresentSleep"> </span>
+                            </li>
+
+
+                            <li class="clearfix"><span class="pulll_left">新增健康计划日记</span> <span class="pulll_right"
+                                                                                                id="planCount"></span>
+                            </li>
+
+                            <li class="clearfix"><span class="pulll_left">新增饮食日记</span> <span class="pulll_right"
+                                                                                              id="presentfood"></span>
+                            </li>
+
+                            <li class="clearfix"><span class="pulll_left">新增运动日记</span> <span class="pulll_right"
+                                                                                              id="presentSport"></span>
+                            </li>
+
+                            <li class="clearfix"><span class="pulll_left">新增睡眠日记</span> <span class="pulll_right"
+                                                                                              id="presentSleep"></span>
+                            </li>
+
+                            <li class="clearfix"><span class="pulll_left">新增服务任务</span> <span class="pulll_right"
+                                                                                              id="perso"></span></li>
+
+
+                            <!-- <li class="clearfix"> <span class="pulll_left">新增食物申请</span> <span class="pulll_right" id="food"></span> </li>
+
+                            <li class="clearfix"> <span class="pulll_left">新增运动申请</span> <span class="pulll_right" id="exercise"></span> </li>
+                             -->
+
+                        </ul>
+                    </div>
+                </div>
+                <div class="boxfoot"></div>
+
+            </div>
+
+            <div class="boxall" style="height: 3.0rem">
+                <div class="alltitle">用户服务统计</div>
+
+                <div class="addnew">
+                    <div class="allnav" style="height: 2.0rem" id="wwbzl"></div>
+
+                </div>
+                <div class="boxfoot"></div>
+            </div>
+
+            <div class="boxall" style="height: 3.4rem">
+                <div class="alltitle">用户年龄</div>
+
+                <div class="addnew">
+                    <div class="allnav" style="height: 2.4rem" id="userage"></div>
+                </div>
+                <div class="boxfoot"></div>
+            </div>
+
+        </li>
+        <li>
+
+            <div class="bar">
+                <div class="barbox">
+                    <ul class="clearfix">
+                        <li class="pulll_left" id="nohasnum" style="text-align: right;">0</li>
+                        <li class="pulll_left">&nbsp;</li>
+                        <li class="pulll_left" id="hasnum" style="text-align: revert;">0</li>
+                    </ul>
+                </div>
+                <div class="barbox2">
+                    <ul class="clearfix">
+                        <li class="pulll_left" style="text-align: right;">未评估人群</li>
+                        <li class="pulll_left">&nbsp;</li>
+                        <li class="pulll_left" style="text-align: revert;">已评估人群</li>
+                    </ul>
+                </div>
+            </div>
+
+
+            <div class="bar">
+                <div class="barbox">
+                    <ul class="clearfix">
+                        <li class="pulll_left" id="health">0</li>
+                        <li class="pulll_left" id="hasdise">0</li>
+                        <li class="pulll_left" id="highrisk">0</li>
+                    </ul>
+                </div>
+                <div class="barbox2">
+                    <ul class="clearfix">
+                        <li class="pulll_left">健康人群</li>
+                        <li class="pulll_left">慢病人群</li>
+                        <li class="pulll_left">高风险人群<i class="layui-icon layui-icon-tips" id="icon"
+                                                       style="color: #fff;    padding-left: 10px;"></i></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="map">
+
+                <div id="showxs" style="width:100%;">
+                    <div class="layui-input-block" id="blok"
+                         style="margin-left: 40%;margin-top: 20px;margin-right: 40%;">
+                        <button type="button" style="color: #04baf3;border-color: #04baf3;" id="butt" value="2"
+                                class="layui-input layui-unselect">组织模式
+                        </button>
+                    </div>
+
+                    <div id="tissue" style="height:600px;"></div>
+                </div>
+
+
+                <div id="showxs1">
+                    <div class="layui-input-block" id="blokdelete"
+                         style="margin-left: 40%;margin-top: 20px;margin-right: 40%;">
+                        <button type="button" style="color: #04baf3;border-color: #04baf3;" id="butt" value="2"
+                                class="layui-input layui-unselect">地图模式
+                        </button>
+                    </div>
+                    <div id="main" style="width: 100%;height:600px;"></div>
+                </div>
+
+
+            </div>
+
+        </li>
+        <li>
+            <div class="boxall" style="height:3.0rem">
+                <div class="boxfoot"></div>
+                <div class="alltitle">高风险和慢病人群</div>
+                <div class="addnew">
+                    <div class="allnav" style="height: 2.1rem" id="wxyg"></div>
+                </div>
+                <div class="boxfoot"></div>
+            </div>
+            <div class="boxall" style="height: 6.4rem">
+                <div class="alltitle">危险因素改善分析</div>
+                <div class="addnew">
+                    <div class="allnav" style="height: 6.0rem" id="changedis"></div>
+                </div>
+                <div class="boxfoot"></div>
+            </div>
+
+        </li>
+    </ul>
+
+</div>
+<div class="back"></div>
+<script type="text/javascript" th:src="@{/assets/js/echarts.min.js}"></script>
+<script th:src="@{/assets/static/lib/vue.2.6.10.js}"></script>
+<script type="text/javascript" th:src="@{/assets/static/js/common.js}"></script>
+<script type="text/javascript" th:src="@{/assets/static/js/app.js}"></script>
+<script type="text/javascript" th:src="@{/assets/js/echarts-gl.min.js}"></script>
+<script language="JavaScript" th:src="@{/assets/js/echarts-tool.js}"></script>
+<script type="text/javascript" th:src="@{/assets/js/area_echarts.js}"></script>
+<script type="text/javascript" th:src="@{/assets/js/jquery.waypoints.min.js}"></script>
+<script type="text/javascript" th:src="@{/assets/js/jquery.countup.min.js}"></script>
+<script type="text/javascript" th:src="@{/assets/libs/layui/layui.js}"></script>
+<script type="text/javascript">
+    layui.use(['form', 'layedit', 'laydate'], function () {
+        var form = layui.form
+            , $ = layui.jquery
+            , layer = layui.layer;
+
+        var tip_index1;
+        //当鼠标移入|移出id为icon的元素时触发
+        $("#icon").hover(function () {
+            //layer.tips显示的弹窗会在鼠标所在位置显示
+            tip_index1 = layer.tips('健康人群：没有"已患"、"高风险"、"异常"和"肥胖"<br />慢病人群：至少1个"已患"、"异常"或"肥胖"<br />高风险人群：不是慢病人群范围，且至少1个"高风险"', this, {
+                tips: [2, 'rgba(0, 0, 0, 1)'],
+                time: 0
+            });
+        }, function () {
+            //关闭弹窗
+            layer.close(tip_index1);
+        });
+    });
+
+    window.onload = function () {
+        $('.counter').countUp();
+
+    }
+    //默认组织模式隐藏
+    $("#showxs").hide();
+
+    // 添加按钮点击事件
+    $('#blok').click(function () {
+        $("#butt").val("1");
+        $("#showxs").hide();
+        $("#showxs1").show();
+        if (tiqu_name != '') {
+            Userdatastatistics(tiqu_name);
+            selectByImprovability(tiqu_name);
+            selectCurrentSituation(tiqu_name);
+            showFoodExercise(tiqu_name);
+        } else {
+            Userdatastatistics();
+            selectByImprovability();
+            selectCurrentSituation();
+            showFoodExercise();
+        }
+    });
+
+    let g_org_code = '';
+
+    $('#blokdelete').click(function () {
+        $("#butt").val("2");
+        $("#showxs").show();
+        $("#showxs1").hide();
+        if (g_org_code != '') {
+            Userdatastatistics1(g_org_code);
+            selectByImprovability1(g_org_code);
+            selectCurrentSituation1(g_org_code);
+            showFoodExercise1(g_org_code);
+        } else {
+            Userdatastatistics();
+            selectByImprovability();
+            selectCurrentSituation();
+            showFoodExercise();
+        }
+    });
+
+
+    show();
+
+    //加载矩形树图所需要的数据
+    function show() {
+        var url = "/YhOrgTree/showtissue";
+        var data2 = "";
+        $.post(url, data2, function (e) {
+            showtissue(e.data);
+        })
+    }
+
+
+    function showtissue(info2) {
+        //暂时没用到
+        var struct_colors = [
+            '#ed6f6d', '#f3765d', '#f77a57', '#f98866', '#f99579',
+            '#ff9f3b', '#f0a732', '#e6a840', '#e9b253', '#ebbb66',
+            '#78b7e8', '#59b1f3', '#66bbf5', '#6ec3f2', '#75cae2',
+            '#70cccc', '#5dc4c4', '#4dbebd', '#4cc1a7', '#4fca96',
+            '#4cc686'
+        ];
+        //echars支持的富文本样式
+        RICH = {
+            name: {
+                color: '#fff',
+                fontSize: 24
+            },
+            basic: {
+                color: '#fff',
+                fontSize: 16,
+                lineHeight: 16
+
+            }
+        };
+        //记录当前机构下所有子机构的信息，树形结构
+        var structs_datas = [];
+        format_struct_data(info2.children, structs_datas);
+
+        //参数一：当前机构下的所有子机构
+        function format_struct_data(children, structs_datas) {
+            // 添加每个单位的颜色
+            for (var prop in children) {
+                //随机一个数*20向下取整
+                var index = Math.floor(Math.random() * 20);
+                //第一个元素记录每个机构用户人数，默认为1，目的是每个树节点的值，对应到面积大小。可以是number，也可以是数组，如 [2323, 43, 55]，则数组第一项对应到面积大小。
+                //第二个元素记录每个机构的机构编号，目的是点击事件可以从面包屑中的得到点击的机构对应的机构编号
+                var value = [];
+                //如果此子机构下用户不为0
+                if (children[prop].asset_num !== 0) {
+                    value[0] = children[prop].asset_num;
+                } else {
+                    value[0] = 1;
+                }
+                value[1] = children[prop].orgCode;
+
+                var tmp = {
+                    itemStyle: {
+                        //矩形树图的背景色
+                        normal: {
+                            color: '#3F74B9'
+                        }
+                    },
+                    name: children[prop].name,          //机构名
+                    value: value,
+                    manage: children[prop].manage,      //管理员名
+                    children: [],                       //子机构信息
+                    asset_num: children[prop].asset_num,//此机构的用户人数
+                    hasnum: children[prop].hasnum,      //已评估人数
+                    health: children[prop].health,      //健康人数
+                    hasdise: children[prop].hasdise,    //异患人数
+                    highrisk: children[prop].highrisk,  //高风险人数
+                    orgCode: children[prop].orgCode,
+                    text1: '{name|' + children[prop].name + '}' + "\n\n" + '{basic|管理员 ： ' + children[prop].manage + '}'
+                }
+                //如果此子机构下还存在子机构,设置不同深度的颜色
+                if (children[prop].children) {
+                    tmp.itemStyle.normal.color = '#3F74B9';
+                    //递归每一项子机构，将子机构的信息按树形结构添加
+                    format_struct_data(children[prop].children, tmp.children);
+                } else {
+                    tmp.itemStyle.normal.color = '#14488B';
+                }
+                //如果不存在子信息，则删除tmp对象的children属性
+                if (tmp.children.length === 0) {
+                    delete tmp.children;
+                }
+                //将子机构的信息按树形结构添加
+                structs_datas.push(tmp);
+            }
+        }
+
+        var chartmain2width = $("#showxs").width();
+        //给图设置固定宽度
+        $("#tissue").css('width', $("#showxs").width());
+        //将id为tissue的作为矩形树图的载体
+        var myChart = echarts.init(document.getElementById('tissue'));
+
+        myChart.setOption(option = {
+            //悬浮框
+            tooltip: {
+                //格式化内容  此处info是series的属性data值
+                //鼠标在哪一项info就是那一项对应的值
+                formatter: function (info) {
+                    var asset_num = info.data.asset_num;
+                    var name = info.name;
+                    //返回悬浮框需要显示的数据
+                    return '{' + name + '}' + "<br>" + '{用户数量：' + asset_num + '}'
+                },
+                //悬浮框中文字的样式
+                textStyle: {
+                    color: "#fff",
+                    fontWeight: 'bold'
+                }
+            },
+            series: [{
+                name: '组织',
+                type: 'treemap',
+                //如果某个节点的矩形的面积，小于这个数值（单位：px平方），这个节点就不显示。
+                visibleMin: 300,
+                //需要的数据
+                data: structs_datas,
+                //深度为1，相当于一级一级展示，不会跨级展示
+                leafDepth: 1,
+                label: {
+                    normal: {
+                        show: true,
+                        position: 'inside',
+                        formatter: function (a) {
+                            return a.data.text1;
+                        },
+                        textStyle: {
+                            color: '#fff',  //label的字体颜色
+                            fontSize: '18',
+                            fontWeight: 'bold'
+                        },
+                        //富文本样式，具体可以参考echars的rich配置
+                        rich: RICH,
+
+                    },
+                },
+                //深度，每一层级的矩形树图显示样式
+                levels: [{
+                    itemStyle: {
+                        normal: {
+                            borderWidth: 0,
+                            gapWidth: 2
+                        }
+                    }
+                }, {
+                    itemStyle: {
+                        normal: {
+                            gapWidth: 2
+                        }
+                    }
+                }, {
+                    itemStyle: {
+                        normal: {
+                            gapWidth: 2,
+                        }
+                    }
+                }],
+                //面包屑相关样式
+                breadcrumb: {
+                    show: true,
+                    "height": 35,
+                    left: "10%",
+                    top: "0%",
+                    emptyItemWidth: 25,
+                    itemStyle: {
+                        normal: {
+                            color: "#fff",
+                            borderColor: "rgba(255,255,255,0.7)",
+                            borderWidth: 1,
+                            shadowColor: "rgba(150,150,150,1)",
+                            shadowBlur: 3,
+                            shadowOffsetX: 0,
+                            shadowOffsetY: 0,
+                            textStyle: {
+                                color: "#000",
+                                fontWeight: 'bold'
+                            }
+                        },
+                        emphasis: {
+                            textStyle: {}
+                        }
+                    }
+                },
+            }]
+        });
+
+        myChart.on('click', function (params) {
+
+            let bread = params.treePathInfo;
+            //如果面包屑长度为1，则查询当前登录机构及包含的子机构信息
+            //否则就查询指定机构及包含的子机构信息
+            if (bread.length <= 1) {
+                g_org_code = '';
+                Userdatastatistics();
+                selectByImprovability();
+                selectCurrentSituation();
+                showFoodExercise();
+            } else {
+                let data = bread[bread.length - 1];
+                let org_code = data.value[1];
+                g_org_code = org_code;
+                selectCurrentSituation1(org_code);
+                selectByImprovability1(org_code);
+                Userdatastatistics1(org_code);
+                showFoodExercise1(org_code);
+            }
+        });
+    }
+</script>
+</body>
+</html>

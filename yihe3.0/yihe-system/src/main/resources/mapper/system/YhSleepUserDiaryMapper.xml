@@ -1,0 +1,397 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yihe.system.mapper.YhSleepUserDiaryMapper" >
+  <resultMap id="BaseResultMap" type="com.yihe.system.domain.YhSleepUserDiary" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="user_code" property="userCode" jdbcType="VARCHAR" />
+    <result column="sleep_time" property="sleepTime" jdbcType="TIMESTAMP" />
+    <result column="wake_time" property="wakeTime" jdbcType="TIMESTAMP" />
+    <result column="diary_desc" property="diaryDesc" jdbcType="VARCHAR" />
+    <result column="sleep_diarytime" property="sleepDiarytime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, user_code, sleep_time, wake_time, diary_desc, sleep_diarytime
+  </sql>
+  
+  <!-- 本月记录 -->
+  <select id="showsleepformatMonth" resultType="java.lang.String">
+  	SELECT user_code FROM yh_sleep_user_diary WHERE DATE_FORMAT( sleep_diarytime, '%Y%m' ) = DATE_FORMAT( CURDATE( ) , '%Y%m' ) GROUP BY user_code;
+  </select>
+  <!-- 季度记录 -->
+    <select id="showsleepQujilu" resultType="java.lang.String">
+    	SELECT user_code FROM yh_sleep_user_diary WHERE QUARTER(sleep_diarytime) = QUARTER(now()) GROUP BY user_code
+    </select>
+    
+       <!-- 年度记录 -->
+    <select id="showsleepNianjilu" resultType="java.lang.String">
+    	select user_code from yh_sleep_user_diary where  YEAR(sleep_diarytime)=YEAR(NOW()) GROUP BY user_code
+    </select>
+    
+    
+  
+       <!-- 本月记录 -->
+    <select id="showSleepMonthUser" resultMap="BaseResultMap">
+		SELECT * 
+		FROM yh_sleep_user_diary
+		WHERE 
+		  user_code=#{usercode} and
+		DATE_FORMAT( sleep_diarytime, '%Y%m' ) = DATE_FORMAT( CURDATE( ) , '%Y%m' )
+    </select>
+    
+      <!-- 本季度记录 -->
+    <select id="showSleepQuarter" resultMap="BaseResultMap">
+		select * from yh_sleep_user_diary where  user_code=#{usercode} and QUARTER(sleep_diarytime)=QUARTER(now());
+    </select>
+    
+    <!-- 本年记录 -->
+    <select id="showSleepYear" resultMap="BaseResultMap">
+		select * from yh_sleep_user_diary where user_code=#{usercode} and  YEAR(sleep_diarytime)=YEAR(NOW());
+    </select>
+    
+    
+      <!-- 根据当前时间获取近七天的睡眠数据，去重usercode -->
+    <select id="HebdomadRecordSleep" resultMap="BaseResultMap">
+   	 SELECT * FROM(select * from yh_sleep_user_diary  where DATE_SUB(CURDATE(), INTERVAL 7 DAY) &lt;= date(sleep_diarytime)) AS b GROUP BY b.user_code;
+    </select>
+    
+  
+    <!-- 根据时间查询记录分析报告 -->
+  <select id="showSleepRecordAnalyze" resultMap="BaseResultMap" parameterType="map">
+  	select di.*,info.user_name,info.gender,info.birth_date from yh_sleep_user_diary di,yh_user_reginfo info where di.user_code=info.user_code and di.user_code=#{userCode} and sleep_diarytime between #{cTime} and #{cTime1}   order by  di.sleep_diarytime asc
+  </select>
+  
+  <!-- 查询睡眠总记录数 -->
+    <select id="showSleepSum" resultType="int">
+    	select count(*) from yh_sleep_user_diary
+    </select>
+    
+    <!-- 查询用户最新睡眠日记日期 -->
+    <select id="findSleepUserDiaryByUserCodeForNew" resultType="java.lang.String">
+    
+ SELECT sleep_diarytime FROM  yh_sleep_user_diary WHERE user_code=#{usercode} ORDER BY sleep_diarytime DESC LIMIT 1
+    </select>
+    <!-- 查询睡眠每天总记录数 -->
+    <select id="showSleepTian" resultType="int">
+     select count(*) from yh_sleep_user_diary where  DATE_FORMAT(sleep_diarytime, '%Y%m' ) = DATE_FORMAT( CURDATE( ) , '%Y%m' )
+
+    </select>
+  
+  
+  <!-- 查询医生下用户的睡眠日记 -->
+  <select id="showSleepDiaryPor" resultType="com.yihe.system.domain.YHUserSleepDiaryVOJO" parameterType="map">
+  SELECT a.birth_date AS birthDate,a.user_code AS usercode,a.user_name AS username,a.name,
+	CASE
+	 WHEN a.gender = 1 
+              THEN '男' 
+              ELSE '女' 
+            END AS sex,
+		c.sleep_diarytime AS sleepDiarytime,c.diary_desc AS diaryDesc,c.sleep_time AS sleepTime,c.wake_time AS wakeTime   FROM yh_user_reginfo AS a
+	INNER JOIN yh_user_make_card AS b
+	ON a.user_code=b.user_code
+	INNER JOIN yh_sleep_user_diary AS c
+	ON a.user_code=c.user_code
+	WHERE b.doctor=(SELECT id FROM yh_user_admin_info WHERE user_code=#{userCode,jdbcType=VARCHAR})
+	<if test="name != null">
+	AND a.name LIKE CONCAT('%',#{name},'%')
+	</if>
+	<if test="username != null">
+	AND a.user_name LIKE CONCAT('%',#{username},'%')
+	</if>
+	<if test="result != null">
+	AND c.diary_desc LIKE CONCAT('%',#{result},'%')
+	</if>
+	<if test="sleepDiarytime!=null and sleepDiarytime !=''">
+  		and c.sleep_diarytime between #{sleepDiarytime} and #{sleepDiarytime1}
+  	</if>
+  ORDER BY c.sleep_diarytime DESC LIMIT  #{page},#{limit}
+  </select>
+  
+   <!-- 查询医生下用户的睡眠日记总行数 -->
+  <select id="showSleepDiaryPorConut" resultType="int" parameterType="map">
+ SELECT count(*)   FROM yh_user_reginfo AS a
+	INNER JOIN yh_user_make_card AS b
+	ON a.user_code=b.user_code
+	INNER JOIN yh_sleep_user_diary AS c
+	ON a.user_code=c.user_code
+	WHERE b.doctor=(SELECT id FROM yh_user_admin_info WHERE user_code=#{userCode,jdbcType=VARCHAR}) 
+	<if test="name != null">
+	AND a.name LIKE CONCAT('%',#{name},'%')
+	</if>
+	<if test="username != null">
+	AND a.user_name LIKE CONCAT('%',#{username},'%')
+	</if>
+	<if test="result != null">
+	AND c.diary_desc LIKE CONCAT('%',#{result},'%')
+	</if>
+	<if test="sleepDiarytime!=null and sleepDiarytime !=''">
+  		and c.sleep_diarytime between #{sleepDiarytime} and #{sleepDiarytime1}
+  	</if>
+	ORDER BY c.sleep_diarytime DESC
+  </select>
+  
+   <!-- 查询所有睡眠记录模糊查询统计图 -->
+    <select id="selectSleepDiaryCtime" resultMap="BaseResultMap" parameterType="map">
+  		select * from yh_sleep_user_diary
+  		<where>
+  		user_code=#{userCode,jdbcType=VARCHAR}
+  			<if test="sleepDiarytime!=null and sleepDiarytime !=''">
+  			and sleep_diarytime between #{sleepDiarytime} and #{sleepDiarytime1} order by sleep_diarytime  asc
+  			</if>
+  			<if test="sleepDiarytime==null or sleepDiarytime ==''">
+  				order by sleep_diarytime  desc LIMIT  0,15
+  			</if>
+  		</where>
+  </select>
+  
+  
+  
+  
+   <!-- 查询所有睡眠记录模糊查询 -->
+    <select id="selectSleepDiary" resultMap="BaseResultMap" parameterType="map">
+  		select * from yh_sleep_user_diary
+  		<where>
+  		user_code=#{userCode,jdbcType=VARCHAR}
+  			<if test="sleepDiarytime!=null and sleepDiarytime !=''">
+  			and sleep_diarytime between #{sleepDiarytime} and #{sleepDiarytime1}
+  			</if>
+  		</where>
+  		order by sleep_diarytime desc LIMIT  #{page},#{limit}
+  </select>
+  
+  
+  <!-- 查询所有睡眠记录模糊查询总行数 -->
+    <select id="selectSleepDiaryConut" resultType="int" parameterType="map">
+  		select count(*) from yh_sleep_user_diary
+  		<where>
+  		user_code=#{userCode,jdbcType=VARCHAR}
+  			<if test="sleepDiarytime!=null and sleepDiarytime !=''">
+  			and sleep_diarytime between #{sleepDiarytime} and #{sleepDiarytime1}
+  			</if>
+  		</where>
+  		order by sleep_diarytime desc
+  </select>
+  
+  <!-- 睡眠周连续 -->
+   <select id="findsleepDiaryByUserCodeForWeekDay" resultType="com.yihe.system.domain.InformationSummary">
+      SELECT DAY, MAX(num) AS daynum
+FROM (
+    SELECT 
+       WEEKDAY(osr.sleep_diarytime)+1 AS DAY, 
+       IF (COUNT(1) IS NULL, 0, COUNT(1)) AS num 
+    FROM yh_sleep_user_diary AS osr
+    
+    WHERE 
+        osr.user_code=#{usercode} AND
+        YEARWEEK(DATE_FORMAT(osr.sleep_diarytime,'%Y-%m-%d')- INTERVAL 1 DAY) = YEARWEEK(NOW())
+    GROUP BY WEEKDAY(osr.sleep_diarytime)
+    UNION
+    SELECT * FROM (
+        SELECT 1 DAY, 0 num
+        UNION
+        SELECT 2, 0  
+        UNION
+        SELECT 3, 0  
+        UNION
+        SELECT 4, 0  
+        UNION
+        SELECT 5, 0  
+        UNION
+        SELECT 6, 0
+        UNION
+        SELECT 7, 0  
+    ) b
+) c 
+GROUP BY DAY
+    </select>
+    
+    
+<select id="findSleepUserDuaryLastWeek" resultType="com.yihe.system.domain.InformationSummary">
+
+SELECT DAY, MAX(num) AS daynum
+FROM (
+    SELECT 
+       WEEKDAY(osr.sleep_diarytime)+1 AS DAY, 
+       IF (COUNT(1) IS NULL, 0, COUNT(1)) AS num 
+    FROM `yh_sleep_user_diary` AS osr
+    
+    WHERE 
+        osr.user_code=#{usercode} AND
+        YEARWEEK(DATE_FORMAT(osr.`sleep_diarytime`,'%Y-%m-%d'), 1) = YEARWEEK(NOW(), 1)-1
+    GROUP BY WEEKDAY(osr.sleep_diarytime)
+    UNION
+    SELECT * FROM (
+        SELECT 1 DAY, 0 num
+        UNION
+        SELECT 2, 0  
+        UNION
+        SELECT 3, 0  
+        UNION
+        SELECT 4, 0  
+        UNION
+        SELECT 5, 0  
+        UNION
+        SELECT 6, 0
+        UNION
+        SELECT 7, 0  
+    ) b
+) c 
+GROUP BY DAY
+</select>
+    
+    
+        <select id="findsleepDiaryByUserCodeForMonth" resultType="map">
+    
+SELECT 
+SUM(CASE DAY(sleep_diarytime) WHEN '1' THEN 1 ELSE 0 END) AS '1',
+SUM(CASE DAY(sleep_diarytime) WHEN '2' THEN 1 ELSE 0 END) AS '2',
+SUM(CASE DAY(sleep_diarytime) WHEN '3' THEN 1 ELSE 0 END) AS '3',
+SUM(CASE DAY(sleep_diarytime) WHEN '4' THEN 1 ELSE 0 END) AS '4',
+SUM(CASE DAY(sleep_diarytime) WHEN '5' THEN 1 ELSE 0 END) AS '5',
+SUM(CASE DAY(sleep_diarytime) WHEN '6' THEN 1 ELSE 0 END) AS '6',
+SUM(CASE DAY(sleep_diarytime) WHEN '7' THEN 1 ELSE 0 END) AS '7',
+SUM(CASE DAY(sleep_diarytime) WHEN '8' THEN 1 ELSE 0 END) AS '8',
+SUM(CASE DAY(sleep_diarytime) WHEN '9' THEN 1 ELSE 0 END) AS '9',
+SUM(CASE DAY(sleep_diarytime) WHEN '10' THEN 1 ELSE 0 END) AS '10',
+SUM(CASE DAY(sleep_diarytime) WHEN '11' THEN 1 ELSE 0 END) AS '11',
+SUM(CASE DAY(sleep_diarytime) WHEN '12' THEN 1 ELSE 0 END) AS '12',
+SUM(CASE DAY(sleep_diarytime) WHEN '13' THEN 1 ELSE 0 END) AS '13',
+SUM(CASE DAY(sleep_diarytime) WHEN '14' THEN 1 ELSE 0 END) AS '14',
+SUM(CASE DAY(sleep_diarytime) WHEN '15' THEN 1 ELSE 0 END) AS '15',
+SUM(CASE DAY(sleep_diarytime) WHEN '16' THEN 1 ELSE 0 END) AS '16',
+SUM(CASE DAY(sleep_diarytime) WHEN '17' THEN 1 ELSE 0 END) AS '17',
+SUM(CASE DAY(sleep_diarytime) WHEN '18' THEN 1 ELSE 0 END) AS '18',
+SUM(CASE DAY(sleep_diarytime) WHEN '19' THEN 1 ELSE 0 END) AS '19',
+SUM(CASE DAY(sleep_diarytime) WHEN '20' THEN 1 ELSE 0 END) AS '20',
+SUM(CASE DAY(sleep_diarytime) WHEN '21' THEN 1 ELSE 0 END) AS '21',
+SUM(CASE DAY(sleep_diarytime) WHEN '22' THEN 1 ELSE 0 END) AS '22',
+SUM(CASE DAY(sleep_diarytime) WHEN '23' THEN 1 ELSE 0 END) AS '23',
+SUM(CASE DAY(sleep_diarytime) WHEN '24' THEN 1 ELSE 0 END) AS '24',
+SUM(CASE DAY(sleep_diarytime) WHEN '25' THEN 1 ELSE 0 END) AS '25',
+SUM(CASE DAY(sleep_diarytime) WHEN '26' THEN 1 ELSE 0 END) AS '26',
+SUM(CASE DAY(sleep_diarytime) WHEN '27' THEN 1 ELSE 0 END) AS '27',
+SUM(CASE DAY(sleep_diarytime) WHEN '28' THEN 1 ELSE 0 END) AS '28',
+SUM(CASE DAY(sleep_diarytime) WHEN '29' THEN 1 ELSE 0 END) AS '29',
+SUM(CASE DAY(sleep_diarytime) WHEN '30' THEN 1 ELSE 0 END) AS '30',
+SUM(CASE DAY(sleep_diarytime) WHEN '31' THEN 1 ELSE 0 END) AS '31',
+MONTH(sleep_diarytime) AS MONTH,
+YEAR(sleep_diarytime) AS YEAR
+FROM yh_sleep_user_diary
+WHERE MONTH(`sleep_diarytime`) IN(#{month}) AND YEAR(sleep_diarytime) IN(#{year}) AND user_code=#{usercode}    GROUP BY  MONTH
+ 
+    
+    </select>
+    
+    
+    
+    <select id="findsleepDiaryByuserCodeForyear" resultType="map">
+SELECT 
+SUM(CASE MONTH(sleep_diarytime) WHEN '1' THEN 1 ELSE 0 END) AS '1',
+SUM(CASE MONTH(sleep_diarytime) WHEN '2' THEN 1 ELSE 0 END) AS '2',
+SUM(CASE MONTH(sleep_diarytime) WHEN '3' THEN 1 ELSE 0 END) AS '3',
+SUM(CASE MONTH(sleep_diarytime) WHEN '4' THEN 1 ELSE 0 END) AS '4',
+SUM(CASE MONTH(sleep_diarytime) WHEN '5' THEN 1 ELSE 0 END) AS '5',
+SUM(CASE MONTH(sleep_diarytime) WHEN '6' THEN 1 ELSE 0 END) AS '6',
+SUM(CASE MONTH(sleep_diarytime) WHEN '7' THEN 1 ELSE 0 END) AS '7',
+SUM(CASE MONTH(sleep_diarytime) WHEN '8' THEN 1 ELSE 0 END) AS '8',
+SUM(CASE MONTH(sleep_diarytime) WHEN '9' THEN 1 ELSE 0 END) AS '9',
+SUM(CASE MONTH(sleep_diarytime) WHEN '10' THEN 1 ELSE 0 END) AS '10',
+SUM(CASE MONTH(sleep_diarytime) WHEN '11' THEN 1 ELSE 0 END) AS '11',
+SUM(CASE MONTH(sleep_diarytime) WHEN '12' THEN 1 ELSE 0 END) AS '12',
+YEAR(sleep_diarytime) AS YEAR
+FROM yh_sleep_user_diary elr
+WHERE user_code=#{usercode} AND  YEAR(sleep_diarytime) IN(#{year})  GROUP BY  YEAR
+ 
+    </select>
+  
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from yh_sleep_user_diary
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from yh_sleep_user_diary
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.yihe.system.domain.YhSleepUserDiary" >
+    insert into yh_sleep_user_diary (id, user_code, sleep_time, 
+      wake_time, diary_desc, sleep_diarytime
+      )
+    values (#{id,jdbcType=INTEGER}, #{userCode,jdbcType=VARCHAR}, #{sleepTime,jdbcType=TIMESTAMP}, 
+      #{wakeTime,jdbcType=TIMESTAMP}, #{diaryDesc,jdbcType=VARCHAR}, #{sleepDiarytime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.yihe.system.domain.YhSleepUserDiary" >
+    insert into yh_sleep_user_diary
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="userCode != null" >
+        user_code,
+      </if>
+      <if test="sleepTime != null" >
+        sleep_time,
+      </if>
+      <if test="wakeTime != null" >
+        wake_time,
+      </if>
+      <if test="diaryDesc != null" >
+        diary_desc,
+      </if>
+      <if test="sleepDiarytime != null" >
+        sleep_diarytime,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="userCode != null" >
+        #{userCode,jdbcType=VARCHAR},
+      </if>
+      <if test="sleepTime != null" >
+        #{sleepTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="wakeTime != null" >
+        #{wakeTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="diaryDesc != null" >
+        #{diaryDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="sleepDiarytime != null" >
+        #{sleepDiarytime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.yihe.system.domain.YhSleepUserDiary" >
+    update yh_sleep_user_diary
+    <set >
+      <if test="userCode != null" >
+        user_code = #{userCode,jdbcType=VARCHAR},
+      </if>
+      <if test="sleepTime != null" >
+        sleep_time = #{sleepTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="wakeTime != null" >
+        wake_time = #{wakeTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="diaryDesc != null" >
+        diary_desc = #{diaryDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="sleepDiarytime != null" >
+        sleep_diarytime = #{sleepDiarytime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.yihe.system.domain.YhSleepUserDiary" >
+    update yh_sleep_user_diary
+    set user_code = #{userCode,jdbcType=VARCHAR},
+      sleep_time = #{sleepTime,jdbcType=TIMESTAMP},
+      wake_time = #{wakeTime,jdbcType=TIMESTAMP},
+      diary_desc = #{diaryDesc,jdbcType=VARCHAR},
+      sleep_diarytime = #{sleepDiarytime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

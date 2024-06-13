@@ -1,0 +1,244 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yihe.applet.api.mapper.YhDiseaseRiskResultAppMapper">
+    <resultMap type="com.yihe.applet.api.domain.YhDiseaseRiskResultApp" id="YhDiseaseRiskResultResult">
+        <result property="id" column="id"/>
+        <result property="diseaseid" column="diseaseId"/>
+        <result property="userCode" column="user_code"/>
+        <result property="requestSerialize" column="request_serialize"/>
+        <result property="age" column="age"/>
+        <result property="hdlc" column="hdlc"/>
+        <result property="ldlc" column="ldlc"/>
+        <result property="food" column="food"/>
+        <result property="sport" column="sport"/>
+        <result property="b4" column="b4"/>
+        <result property="smoke" column="smoke"/>
+        <result property="drink" column="drink"/>
+        <result property="hwCheck" column="hw_check"/>
+        <result property="bmi" column="BMI"/>
+        <result property="waist" column="waist"/>
+        <result property="diabHis" column="diab_his"/>
+        <result property="hbpHis" column="hbp_his"/>
+        <result property="fbg" column="FBG"/>
+        <result property="sbp" column="sbp"/>
+        <result property="cholesterol" column="cholesterol"/>
+        <result property="tg" column="TG"/>
+        <result property="bf" column="BF"/>
+        <result property="dbp" column="dbp"/>
+        <result property="hbps" column="HBPS"/>
+        <result property="hfs" column="HFS"/>
+        <result property="hfHis" column="hf_his"/>
+        <result property="c1" column="C1"/>
+        <result property="milk" column="milk"/>
+        <result property="tfa" column="tfa"/>
+        <result property="chds" column="chds"/>
+        <result property="dms" column="dms"/>
+        <result property="smokeSencod" column="smoke_sencod"/>
+        <result property="lungs" column="lungs"/>
+        <result property="emphyHis" column="emphy_his"/>
+        <result property="asbestosContactHis" column="asbestos_contact_his"/>
+        <result property="decorateHouse" column="decorate_house"/>
+        <result property="psyNervous" column="psy_nervous"/>
+        <result property="bronchHis" column="bronch_his"/>
+        <result property="lampblackContact" column="lampblack_contact"/>
+        <result property="gouts" column="gouts"/>
+        <result property="tea" column="tea"/>
+        <result property="foodPurine" column="food_purine"/>
+        <result property="chdHis" column="chd_his"/>
+        <result property="bua" column="bua"/>
+        <result property="medUsePill" column="med_use_pill"/>
+        <result property="breastPlasticSurgery" column="breast_plastic_surgery"/>
+        <result property="bcs" column="BCS"/>
+        <result property="begindBreastHis" column="begind_breast_his"/>
+        <result property="femaleMenstruation" column="female_menstruation"/>
+        <result property="femaleTire" column="female_tire"/>
+        <result property="femaleBreastTime" column="female_breast_time"/>
+        <result property="femaleMenopauseAge" column="female_menopause_age"/>
+        <result property="hasMedErt" column="has_med_ert"/>
+        <result property="css" column="CSS"/>
+        <result property="cardHis" column="card_his"/>
+        <result property="lvdHis" column="lvd_his"/>
+        <result property="afHis" column="af_his"/>
+        <result property="pcs" column="PCS"/>
+        <result property="prostateDisease" column="prostate_disease"/>
+        <result property="urinaryTractInfection" column="urinary_tract_infection"/>
+        <result property="urineSymptom" column="urine_symptom"/>
+        <result property="tScore" column="t_score"/>
+        <result property="raHis" column="ra_his"/>
+        <result property="livingEnvir" column="living_envir"/>
+        <result property="foodDrinkBeer" column="food_drink_beer"/>
+        <result property="femaleMenstruationRegular" column="female_menstruation_regular"/>
+        <result property="chemicalOccupation" column="chemical_occupation"/>
+        <result property="foodVegetables" column="food_vegetables"/>
+        <result property="remark" column="remark"/>
+        <result property="qtime" column="qtime"/>
+    </resultMap>
+    <sql id="allColumn">
+        id, diseaseId, user_code, request_serialize, age, hdlc, ldlc, food, sport, b4, smoke, drink, hw_check, BMI, waist, diab_his, hbp_his, FBG, sbp, cholesterol, TG, BF, dbp, HBPS, HFS, hf_his, C1, milk, tfa, chds, dms, smoke_sencod, lungs, emphy_his, asbestos_contact_his, decorate_house, psy_nervous, bronch_his, lampblack_contact, gouts, tea, food_purine, chd_his, bua, med_use_pill, breast_plastic_surgery, BCS, begind_breast_his, female_menstruation, female_tire, female_breast_time, female_menopause_age, has_med_ert, CSS, card_his, lvd_his, af_his, PCS, prostate_disease, urinary_tract_infection, urine_symptom, t_score, ra_his, living_envir,food_drink_beer,female_menstruation_regular,chemical_occupation,food_vegetables,remark, qtime
+    </sql>
+    <insert id="insertYhDiseaseRiskResult" parameterType="com.yihe.applet.api.domain.YhDiseaseRiskResultApp" useGeneratedKeys="true"
+            keyProperty="id">
+        insert into yh_disease_risk_result2
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="diseaseid != null  and diseaseid != ''">diseaseId,</if>
+            <if test="userCode != null  and userCode != ''">user_code,</if>
+            <if test="requestSerialize != null  and requestSerialize != ''">request_serialize,</if>
+            <if test="age != null  and age != ''">age,</if>
+            <if test="hdlc != null  and hdlc != ''">hdlc,</if>
+            <if test="ldlc != null  and ldlc != ''">ldlc,</if>
+            <if test="food != null  and food != ''">food,</if>
+            <if test="sport != null  and sport != ''">sport,</if>
+            <if test="b4 != null  and b4 != ''">b4,</if>
+            <if test="smoke != null  and smoke != ''">smoke,</if>
+            <if test="drink != null  and drink != ''">drink,</if>
+            <if test="hwCheck != null  and hwCheck != ''">hw_check,</if>
+            <if test="bmi != null  and bmi != ''">BMI,</if>
+            <if test="waist != null  and waist != ''">waist,</if>
+            <if test="diabHis != null  and diabHis != ''">diab_his,</if>
+            <if test="hbpHis != null  and hbpHis != ''">hbp_his,</if>
+            <if test="fbg != null  and fbg != ''">FBG,</if>
+            <if test="sbp != null  and sbp != ''">sbp,</if>
+            <if test="cholesterol != null  and cholesterol != ''">cholesterol,</if>
+            <if test="tg != null  and tg != ''">TG,</if>
+            <if test="bf != null  and bf != ''">BF,</if>
+            <if test="dbp != null  and dbp != ''">dbp,</if>
+            <if test="hbps != null  and hbps != ''">HBPS,</if>
+            <if test="hfs != null  and hfs != ''">HFS,</if>
+            <if test="hfHis != null  and hfHis != ''">hf_his,</if>
+            <if test="c1 != null  and c1 != ''">C1,</if>
+            <if test="milk != null  and milk != ''">milk,</if>
+            <if test="tfa != null  and tfa != ''">tfa,</if>
+            <if test="chds != null  and chds != ''">chds,</if>
+            <if test="dms != null  and dms != ''">dms,</if>
+            <if test="smokeSencod != null  and smokeSencod != ''">smoke_sencod,</if>
+            <if test="lungs != null  and lungs != ''">lungs,</if>
+            <if test="emphyHis != null  and emphyHis != ''">emphy_his,</if>
+            <if test="asbestosContactHis != null  and asbestosContactHis != ''">asbestos_contact_his,</if>
+            <if test="decorateHouse != null  and decorateHouse != ''">decorate_house,</if>
+            <if test="psyNervous != null  and psyNervous != ''">psy_nervous,</if>
+            <if test="bronchHis != null  and bronchHis != ''">bronch_his,</if>
+            <if test="lampblackContact != null  and lampblackContact != ''">lampblack_contact,</if>
+            <if test="gouts != null  and gouts != ''">gouts,</if>
+            <if test="tea != null  and tea != ''">tea,</if>
+            <if test="foodPurine != null  and foodPurine != ''">food_purine,</if>
+            <if test="chdHis != null  and chdHis != ''">chd_his,</if>
+            <if test="bua != null  and bua != ''">bua,</if>
+            <if test="medUsePill != null  and medUsePill != ''">med_use_pill,</if>
+            <if test="breastPlasticSurgery != null  and breastPlasticSurgery != ''">breast_plastic_surgery,</if>
+            <if test="bcs != null  and bcs != ''">BCS,</if>
+            <if test="begindBreastHis != null  and begindBreastHis != ''">begind_breast_his,</if>
+            <if test="femaleMenstruation != null  and femaleMenstruation != ''">female_menstruation,</if>
+            <if test="femaleTire != null  and femaleTire != ''">female_tire,</if>
+            <if test="femaleBreastTime != null  and femaleBreastTime != ''">female_breast_time,</if>
+            <if test="femaleMenopauseAge != null  and femaleMenopauseAge != ''">female_menopause_age,</if>
+            <if test="hasMedErt != null  and hasMedErt != ''">has_med_ert,</if>
+            <if test="css != null  and css != ''">CSS,</if>
+            <if test="cardHis != null  and cardHis != ''">card_his,</if>
+            <if test="lvdHis != null  and lvdHis != ''">lvd_his,</if>
+            <if test="afHis != null  and afHis != ''">af_his,</if>
+            <if test="pcs != null  and pcs != ''">PCS,</if>
+            <if test="prostateDisease != null  and prostateDisease != ''">prostate_disease,</if>
+            <if test="urinaryTractInfection != null  and urinaryTractInfection != ''">urinary_tract_infection,</if>
+            <if test="urineSymptom != null  and urineSymptom != ''">urine_symptom,</if>
+            <if test="tScore != null  and tScore != ''">t_score,</if>
+            <if test="raHis != null  and raHis != ''">ra_his,</if>
+            <if test="livingEnvir != null  and livingEnvir != ''">living_envir,</if>
+            <if test="foodDrinkBeer != null  and foodDrinkBeer != ''">food_drink_beer,</if>
+            <if test="femaleMenstruationRegular != null  and femaleMenstruationRegular != ''">female_menstruation_regular,</if>
+            <if test="chemicalOccupation != null  and chemicalOccupation != ''">chemical_occupation,</if>
+            <if test="foodVegetables != null  and foodVegetables != ''">food_vegetables,</if>
+            <if test="remark != null  and remark != ''">remark,</if>
+            <if test="qtime != null ">qtime,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="diseaseid != null  and diseaseid != ''">#{diseaseid},</if>
+            <if test="userCode != null  and userCode != ''">#{userCode},</if>
+            <if test="requestSerialize != null  and requestSerialize != ''">#{requestSerialize},</if>
+            <if test="age != null  and age != ''">#{age},</if>
+            <if test="hdlc != null  and hdlc != ''">#{hdlc},</if>
+            <if test="ldlc != null  and ldlc != ''">#{ldlc},</if>
+            <if test="food != null  and food != ''">#{food},</if>
+            <if test="sport != null  and sport != ''">#{sport},</if>
+            <if test="b4 != null  and b4 != ''">#{b4},</if>
+            <if test="smoke != null  and smoke != ''">#{smoke},</if>
+            <if test="drink != null  and drink != ''">#{drink},</if>
+            <if test="hwCheck != null  and hwCheck != ''">#{hwCheck},</if>
+            <if test="bmi != null  and bmi != ''">#{bmi},</if>
+            <if test="waist != null  and waist != ''">#{waist},</if>
+            <if test="diabHis != null  and diabHis != ''">#{diabHis},</if>
+            <if test="hbpHis != null  and hbpHis != ''">#{hbpHis},</if>
+            <if test="fbg != null  and fbg != ''">#{fbg},</if>
+            <if test="sbp != null  and sbp != ''">#{sbp},</if>
+            <if test="cholesterol != null  and cholesterol != ''">#{cholesterol},</if>
+            <if test="tg != null  and tg != ''">#{tg},</if>
+            <if test="bf != null  and bf != ''">#{bf},</if>
+            <if test="dbp != null  and dbp != ''">#{dbp},</if>
+            <if test="hbps != null  and hbps != ''">#{hbps},</if>
+            <if test="hfs != null  and hfs != ''">#{hfs},</if>
+            <if test="hfHis != null  and hfHis != ''">#{hfHis},</if>
+            <if test="c1 != null  and c1 != ''">#{c1},</if>
+            <if test="milk != null  and milk != ''">#{milk},</if>
+            <if test="tfa != null  and tfa != ''">#{tfa},</if>
+            <if test="chds != null  and chds != ''">#{chds},</if>
+            <if test="dms != null  and dms != ''">#{dms},</if>
+            <if test="smokeSencod != null  and smokeSencod != ''">#{smokeSencod},</if>
+            <if test="lungs != null  and lungs != ''">#{lungs},</if>
+            <if test="emphyHis != null  and emphyHis != ''">#{emphyHis},</if>
+            <if test="asbestosContactHis != null  and asbestosContactHis != ''">#{asbestosContactHis},</if>
+            <if test="decorateHouse != null  and decorateHouse != ''">#{decorateHouse},</if>
+            <if test="psyNervous != null  and psyNervous != ''">#{psyNervous},</if>
+            <if test="bronchHis != null  and bronchHis != ''">#{bronchHis},</if>
+            <if test="lampblackContact != null  and lampblackContact != ''">#{lampblackContact},</if>
+            <if test="gouts != null  and gouts != ''">#{gouts},</if>
+            <if test="tea != null  and tea != ''">#{tea},</if>
+            <if test="foodPurine != null  and foodPurine != ''">#{foodPurine},</if>
+            <if test="chdHis != null  and chdHis != ''">#{chdHis},</if>
+            <if test="bua != null  and bua != ''">#{bua},</if>
+            <if test="medUsePill != null  and medUsePill != ''">#{medUsePill},</if>
+            <if test="breastPlasticSurgery != null  and breastPlasticSurgery != ''">#{breastPlasticSurgery},</if>
+            <if test="bcs != null  and bcs != ''">#{bcs},</if>
+            <if test="begindBreastHis != null  and begindBreastHis != ''">#{begindBreastHis},</if>
+            <if test="femaleMenstruation != null  and femaleMenstruation != ''">#{femaleMenstruation},</if>
+            <if test="femaleTire != null  and femaleTire != ''">#{femaleTire},</if>
+            <if test="femaleBreastTime != null  and femaleBreastTime != ''">#{femaleBreastTime},</if>
+            <if test="femaleMenopauseAge != null  and femaleMenopauseAge != ''">#{femaleMenopauseAge},</if>
+            <if test="hasMedErt != null  and hasMedErt != ''">#{hasMedErt},</if>
+            <if test="css != null  and css != ''">#{css},</if>
+            <if test="cardHis != null  and cardHis != ''">#{cardHis},</if>
+            <if test="lvdHis != null  and lvdHis != ''">#{lvdHis},</if>
+            <if test="afHis != null  and afHis != ''">#{afHis},</if>
+            <if test="pcs != null  and pcs != ''">#{pcs},</if>
+            <if test="prostateDisease != null  and prostateDisease != ''">#{prostateDisease},</if>
+            <if test="urinaryTractInfection != null  and urinaryTractInfection != ''">#{urinaryTractInfection},</if>
+            <if test="urineSymptom != null  and urineSymptom != ''">#{urineSymptom},</if>
+            <if test="tScore != null  and tScore != ''">#{tScore},</if>
+            <if test="raHis != null  and raHis != ''">#{raHis},</if>
+            <if test="livingEnvir != null  and livingEnvir != ''">#{livingEnvir},</if>
+            <if test="foodDrinkBeer != null  and foodDrinkBeer != ''">#{foodDrinkBeer},</if>
+            <if test="femaleMenstruationRegular != null  and femaleMenstruationRegular != ''">#{femaleMenstruationRegular},</if>
+            <if test="chemicalOccupation != null  and chemicalOccupation != ''">#{chemicalOccupation},</if>
+            <if test="foodVegetables != null  and foodVegetables != ''">#{foodVegetables},</if>
+            <if test="remark != null  and remark != ''">#{remark},</if>
+            <if test="qtime != null ">#{qtime},</if>
+        </trim>
+    </insert>
+    
+    <select id="selectRiskResulByRequestNum" parameterType="String" resultMap="YhDiseaseRiskResultResult">
+        select 
+            <include refid="allColumn" />
+		    from yh_disease_risk_result2
+            where request_serialize = #{RequestNum}
+    </select>
+
+    <select id="selectCount" parameterType="yhDiseaseRiskResultNewApp" resultType="int">
+        select count(1) from yh_disease_risk_result
+        where request_serialNum = #{requestSerialNum} and user_code = #{userCode} and result_name = #{resultName}
+    </select>
+
+    <insert id="insertYhDiseaseRiskResultNew" parameterType="yhDiseaseRiskResultNewApp">
+        insert into yh_disease_risk_result(request_serialNum, user_code, result_name, result_json)
+        values (#{requestSerialNum}, #{userCode}, #{resultName}, #{resultJson})
+    </insert>
+</mapper>

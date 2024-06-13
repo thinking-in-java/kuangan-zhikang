@@ -1,0 +1,243 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yihe.system.mapper.YhUserPersonageLiveMapper" >
+  <resultMap id="BaseResultMap" type="com.yihe.system.domain.YhUserPersonageLive" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="usercode" property="usercode" jdbcType="VARCHAR" />
+    <result column="exercise" property="exercise" jdbcType="VARCHAR" />
+    <result column="days" property="days" jdbcType="VARCHAR" />
+    <result column="sinsist" property="sinsist" jdbcType="VARCHAR" />
+    <result column="have" property="have" jdbcType="VARCHAR" />
+    <result column="dietsup" property="dietsup" jdbcType="VARCHAR" />
+    <result column="smoke" property="smoke" jdbcType="VARCHAR" />
+    <result column="quitsmokingtopic" property="quitsmokingtopic" jdbcType="VARCHAR" />
+    <result column="average" property="average" jdbcType="VARCHAR" />
+    <result column="age" property="age" jdbcType="VARCHAR" />
+    <result column="harm" property="harm" jdbcType="VARCHAR" />
+    <result column="specificsj" property="specificsj" jdbcType="VARCHAR" />
+    <result column="obtain" property="obtain" jdbcType="VARCHAR" />
+    <result column="harmelement" property="harmelement" jdbcType="VARCHAR" />
+    <result column="defend" property="defend" jdbcType="VARCHAR" />
+     <result column="addtime" property="addtime" jdbcType="VARCHAR" />
+    <result column="updatetime" property="updatetime" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, usercode, exercise, days, sinsist, have, dietsup, smoke, quitsmokingtopic, average, 
+    age, harm, specificsj, obtain, harmelement, defend, addtime, updatetime
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from yh_user_personage_live
+    where usercode = #{userCode,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from yh_user_personage_live
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.yihe.system.domain.YhUserPersonageLive" >
+    insert into yh_user_personage_live (id, usercode, exercise, 
+      days, sinsist, have, 
+      dietsup, smoke, quitsmokingtopic, 
+      average, age, harm, 
+      specificsj, obtain, harmelement, 
+      defend)
+    values (#{id,jdbcType=INTEGER}, #{usercode,jdbcType=VARCHAR}, #{exercise,jdbcType=VARCHAR}, 
+      #{days,jdbcType=VARCHAR}, #{sinsist,jdbcType=VARCHAR}, #{have,jdbcType=VARCHAR}, 
+      #{dietsup,jdbcType=VARCHAR}, #{smoke,jdbcType=VARCHAR}, #{quitsmokingtopic,jdbcType=VARCHAR}, 
+      #{average,jdbcType=VARCHAR}, #{age,jdbcType=VARCHAR}, #{harm,jdbcType=VARCHAR}, 
+      #{specificsj,jdbcType=VARCHAR}, #{obtain,jdbcType=VARCHAR}, #{harmelement,jdbcType=VARCHAR}, 
+      #{defend,jdbcType=VARCHAR})
+  </insert>
+   <insert id="insertSelective" parameterType="com.yihe.system.domain.YhUserPersonageLive" >
+    insert into yh_user_personage_live
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="usercode != null" >
+        usercode,
+      </if>
+      <if test="exercise != null" >
+        exercise,
+      </if>
+      <if test="days != null" >
+        days,
+      </if>
+      <if test="sinsist != null" >
+        sinsist,
+      </if>
+      <if test="have != null" >
+        have,
+      </if>
+      <if test="dietsup != null" >
+        dietsup,
+      </if>
+      <if test="smoke != null" >
+        smoke,
+      </if>
+      <if test="quitsmokingtopic != null" >
+        quitsmokingtopic,
+      </if>
+      <if test="average != null" >
+        average,
+      </if>
+      <if test="age != null" >
+        age,
+      </if>
+      <if test="harm != null" >
+        harm,
+      </if>
+      <if test="specificsj != null" >
+        specificsj,
+      </if>
+      <if test="obtain != null" >
+        obtain,
+      </if>
+      <if test="harmelement != null" >
+        harmelement,
+      </if>
+      <if test="defend != null" >
+        defend,
+      </if>
+      <if test="addtime != null" >
+        addtime,
+      </if>
+      <if test="updatetime != null" >
+        updatetime,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="usercode != null" >
+        #{usercode,jdbcType=VARCHAR},
+      </if>
+      <if test="exercise != null" >
+        #{exercise,jdbcType=VARCHAR},
+      </if>
+      <if test="days != null" >
+        #{days,jdbcType=VARCHAR},
+      </if>
+      <if test="sinsist != null" >
+        #{sinsist,jdbcType=VARCHAR},
+      </if>
+      <if test="have != null" >
+        #{have,jdbcType=VARCHAR},
+      </if>
+      <if test="dietsup != null" >
+        #{dietsup,jdbcType=VARCHAR},
+      </if>
+      <if test="smoke != null" >
+        #{smoke,jdbcType=VARCHAR},
+      </if>
+      <if test="quitsmokingtopic != null" >
+        #{quitsmokingtopic,jdbcType=VARCHAR},
+      </if>
+      <if test="average != null" >
+        #{average,jdbcType=VARCHAR},
+      </if>
+      <if test="age != null" >
+        #{age,jdbcType=VARCHAR},
+      </if>
+      <if test="harm != null" >
+        #{harm,jdbcType=VARCHAR},
+      </if>
+      <if test="specificsj != null" >
+        #{specificsj,jdbcType=VARCHAR},
+      </if>
+      <if test="obtain != null" >
+        #{obtain,jdbcType=VARCHAR},
+      </if>
+      <if test="harmelement != null" >
+        #{harmelement,jdbcType=VARCHAR},
+      </if>
+      <if test="defend != null" >
+        #{defend,jdbcType=VARCHAR},
+      </if>
+      <if test="addtime != null" >
+        #{addtime,jdbcType=VARCHAR},
+      </if>
+      <if test="updatetime != null" >
+        #{updatetime,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+<update id="updateByPrimaryKeySelective" parameterType="com.yihe.system.domain.YhUserPersonageLive" >
+    update yh_user_personage_live
+    <set >
+      <if test="usercode != null" >
+        usercode = #{usercode,jdbcType=VARCHAR},
+      </if>
+      <if test="exercise != null" >
+        exercise = #{exercise,jdbcType=VARCHAR},
+      </if>
+      <if test="days != null" >
+        days = #{days,jdbcType=VARCHAR},
+      </if>
+      <if test="sinsist != null" >
+        sinsist = #{sinsist,jdbcType=VARCHAR},
+      </if>
+      <if test="have != null" >
+        have = #{have,jdbcType=VARCHAR},
+      </if>
+      <if test="dietsup != null" >
+        dietsup = #{dietsup,jdbcType=VARCHAR},
+      </if>
+      <if test="smoke != null" >
+        smoke = #{smoke,jdbcType=VARCHAR},
+      </if>
+      <if test="quitsmokingtopic != null" >
+        quitsmokingtopic = #{quitsmokingtopic,jdbcType=VARCHAR},
+      </if>
+      <if test="average != null" >
+        average = #{average,jdbcType=VARCHAR},
+      </if>
+      <if test="age != null" >
+        age = #{age,jdbcType=VARCHAR},
+      </if>
+      <if test="harm != null" >
+        harm = #{harm,jdbcType=VARCHAR},
+      </if>
+      <if test="specificsj != null" >
+        specificsj = #{specificsj,jdbcType=VARCHAR},
+      </if>
+      <if test="obtain != null" >
+        obtain = #{obtain,jdbcType=VARCHAR},
+      </if>
+      <if test="harmelement != null" >
+        harmelement = #{harmelement,jdbcType=VARCHAR},
+      </if>
+      <if test="defend != null" >
+        defend = #{defend,jdbcType=VARCHAR},
+      </if>
+      <if test="addtime != null" >
+        addtime = #{addtime,jdbcType=VARCHAR},
+      </if>
+      <if test="updatetime != null" >
+        updatetime = #{updatetime,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where usercode = #{usercode,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.yihe.system.domain.YhUserPersonageLive" >
+    update yh_user_personage_live
+    set id= #{id,jdbcType=INTEGER},
+      exercise = #{exercise,jdbcType=VARCHAR},
+      days = #{days,jdbcType=VARCHAR},
+      sinsist = #{sinsist,jdbcType=VARCHAR},
+      have = #{have,jdbcType=VARCHAR},
+      dietsup = #{dietsup,jdbcType=VARCHAR},
+      smoke = #{smoke,jdbcType=VARCHAR},
+      quitsmokingtopic = #{quitsmokingtopic,jdbcType=VARCHAR},
+      average = #{average,jdbcType=VARCHAR},
+      age = #{age,jdbcType=VARCHAR},
+      harm = #{harm,jdbcType=VARCHAR},
+      specificsj = #{specificsj,jdbcType=VARCHAR},
+      obtain = #{obtain,jdbcType=VARCHAR},
+      harmelement = #{harmelement,jdbcType=VARCHAR},
+      defend = #{defend,jdbcType=VARCHAR}
+    where usercode = #{usercode,jdbcType=VARCHAR}
+  </update>
+</mapper>

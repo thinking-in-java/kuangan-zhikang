@@ -1,0 +1,615 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yihe.system.mapper.YHUserBodyFatMapper" >
+  <resultMap id="BaseResultMap" type="com.yihe.system.domain.YHUserBodyFat" >
+    <id column="wubf_id" property="wubfId" jdbcType="INTEGER" />
+    <result column="weightScale" property="weightscale" jdbcType="REAL" />
+    <result column="idealWeight" property="idealweight" jdbcType="REAL" />
+    <result column="withoutFatForWeightScale" property="withoutfatforweightscale" jdbcType="REAL" />
+    <result column="weightmessages" property="weightmessages" jdbcType="VARCHAR" />
+    <result column="weightState" property="weightstate" jdbcType="VARCHAR" />
+    <result column="fat_rate" property="fatRate" jdbcType="REAL" />
+    <result column="idealBodyFat" property="idealbodyfat" jdbcType="REAL" />
+    <result column="bodyFatScale" property="bodyfatscale" jdbcType="REAL" />
+    <result column="fatmessages" property="fatmessages" jdbcType="VARCHAR" />
+    <result column="fatState" property="fatstate" jdbcType="VARCHAR" />
+    <result column="muscle" property="muscle" jdbcType="REAL" />
+    <result column="muscleScale" property="musclescale" jdbcType="REAL" />
+    <result column="muscleControlScale" property="musclecontrolscale" jdbcType="REAL" />
+    <result column="musclemessages" property="musclemessages" jdbcType="VARCHAR" />
+    <result column="muscleState" property="musclestate" jdbcType="VARCHAR" />
+    <result column="bones" property="bones" jdbcType="REAL" />
+    <result column="bomesmessages" property="bomesmessages" jdbcType="VARCHAR" />
+    <result column="bonesState" property="bonesstate" jdbcType="VARCHAR" />
+    <result column="visceral_level" property="visceralLevel" jdbcType="REAL" />
+    <result column="levelmessages" property="levelmessages" jdbcType="VARCHAR" />
+    <result column="levelState" property="levelstate" jdbcType="VARCHAR" />
+    <result column="water" property="water" jdbcType="REAL" />
+    <result column="watermessages" property="watermessages" jdbcType="VARCHAR" />
+    <result column="waterState" property="waterstate" jdbcType="VARCHAR" />
+    <result column="heat" property="heat" jdbcType="REAL" />
+    <result column="protein" property="protein" jdbcType="REAL" />
+    <result column="porteinmessages" property="porteinmessages" jdbcType="VARCHAR" />
+    <result column="proteinState" property="proteinstate" jdbcType="VARCHAR" />
+    <result column="basal_met" property="basalMet" jdbcType="REAL" />
+    <result column="standardBasicMetabolism" property="standardbasicmetabolism" jdbcType="REAL" />
+    <result column="budgetBasicMetabolism" property="budgetbasicmetabolism" jdbcType="REAL" />
+    <result column="basalmessages" property="basalmessages" jdbcType="VARCHAR" />
+    <result column="basalState" property="basalstate" jdbcType="VARCHAR" />
+    <result column="storageMuscleLevel" property="storagemusclelevel" jdbcType="REAL" />
+    <result column="storagemessages" property="storagemessages" jdbcType="VARCHAR" />
+    <result column="storageState" property="storagestate" jdbcType="VARCHAR" />
+    <result column="bodyAge" property="bodyage" jdbcType="VARCHAR" />
+    <result column="bodyscore" property="bodyscore" jdbcType="VARCHAR" />
+    <result column="bodyType" property="bodytype" jdbcType="VARCHAR" />
+    <result column="Entry_Time" property="entryTime" jdbcType="VARCHAR" />
+    <result column="Is_Del" property="isDel" jdbcType="INTEGER" />
+    <result column="E_User_Id" property="eUserId" jdbcType="INTEGER" />
+    <result column="type" property="type" jdbcType="VARCHAR" />
+    <result column="source" property="source" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    wubf_id, weightScale, idealWeight, withoutFatForWeightScale, weightmessages, weightState, 
+    fat_rate, idealBodyFat, bodyFatScale, fatmessages, fatState, muscle, muscleScale, 
+    muscleControlScale, musclemessages, muscleState, bones, bomesmessages, bonesState, 
+    visceral_level, levelmessages, levelState, water, watermessages, waterState, heat, 
+    protein, porteinmessages, proteinState, basal_met, standardBasicMetabolism, budgetBasicMetabolism, 
+    basalmessages, basalState, storageMuscleLevel, storagemessages, storageState, bodyAge, 
+    bodyscore, bodyType, Entry_Time, Is_Del, E_User_Id, type, source
+  </sql>
+  <!-- 体脂总数 -->
+   <select id="selectByBodyFatCount" resultType="int" >
+  	select count(*) from yh_user_body_fat
+  </select>
+  
+  <select id="selectByPrimaryKeyByUsercodeLimit" resultMap="BaseResultMap" parameterType="java.lang.String" >
+   SELECT  <include refid="Base_Column_List" /> FROM yh_user_body_fat WHERE E_user_id=#{usercode} and is_Del=2  ORDER BY Entry_Time DESC LIMIT 1
+  </select>
+  
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from yh_user_body_fat
+    where wubf_id = #{wubfId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from yh_user_body_fat
+    where wubf_id = #{wubfId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.yihe.system.domain.YHUserBodyFat" >
+    insert into yh_user_body_fat (wubf_id, weightScale, idealWeight, 
+      withoutFatForWeightScale, weightmessages, 
+      weightState, fat_rate, idealBodyFat, 
+      bodyFatScale, fatmessages, fatState, 
+      muscle, muscleScale, muscleControlScale, 
+      musclemessages, muscleState, bones, 
+      bomesmessages, bonesState, visceral_level, 
+      levelmessages, levelState, water, 
+      watermessages, waterState, heat, 
+      protein, porteinmessages, proteinState, 
+      basal_met, standardBasicMetabolism, budgetBasicMetabolism, 
+      basalmessages, basalState, storageMuscleLevel, 
+      storagemessages, storageState, bodyAge, 
+      bodyscore, bodyType, Entry_Time, 
+      Is_Del, E_User_Id, type, 
+      source)
+    values (#{wubfId,jdbcType=INTEGER}, #{weightscale,jdbcType=REAL}, #{idealweight,jdbcType=REAL}, 
+      #{withoutfatforweightscale,jdbcType=REAL}, #{weightmessages,jdbcType=VARCHAR}, 
+      #{weightstate,jdbcType=VARCHAR}, #{fatRate,jdbcType=REAL}, #{idealbodyfat,jdbcType=REAL}, 
+      #{bodyfatscale,jdbcType=REAL}, #{fatmessages,jdbcType=VARCHAR}, #{fatstate,jdbcType=VARCHAR}, 
+      #{muscle,jdbcType=REAL}, #{musclescale,jdbcType=REAL}, #{musclecontrolscale,jdbcType=REAL}, 
+      #{musclemessages,jdbcType=VARCHAR}, #{musclestate,jdbcType=VARCHAR}, #{bones,jdbcType=REAL}, 
+      #{bomesmessages,jdbcType=VARCHAR}, #{bonesstate,jdbcType=VARCHAR}, #{visceralLevel,jdbcType=REAL}, 
+      #{levelmessages,jdbcType=VARCHAR}, #{levelstate,jdbcType=VARCHAR}, #{water,jdbcType=REAL}, 
+      #{watermessages,jdbcType=VARCHAR}, #{waterstate,jdbcType=VARCHAR}, #{heat,jdbcType=REAL}, 
+      #{protein,jdbcType=REAL}, #{porteinmessages,jdbcType=VARCHAR}, #{proteinstate,jdbcType=VARCHAR}, 
+      #{basalMet,jdbcType=REAL}, #{standardbasicmetabolism,jdbcType=REAL}, #{budgetbasicmetabolism,jdbcType=REAL}, 
+      #{basalmessages,jdbcType=VARCHAR}, #{basalstate,jdbcType=VARCHAR}, #{storagemusclelevel,jdbcType=REAL}, 
+      #{storagemessages,jdbcType=VARCHAR}, #{storagestate,jdbcType=VARCHAR}, #{bodyage,jdbcType=VARCHAR}, 
+      #{bodyscore,jdbcType=VARCHAR}, #{bodytype,jdbcType=VARCHAR}, #{entryTime,jdbcType=VARCHAR}, 
+      #{isDel,jdbcType=INTEGER}, #{eUserId,jdbcType=INTEGER}, #{type,jdbcType=VARCHAR}, 
+      #{source,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.yihe.system.domain.YHUserBodyFat" >
+    insert into yh_user_body_fat
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="wubfId != null" >
+        wubf_id,
+      </if>
+      <if test="weightscale != null" >
+        weightScale,
+      </if>
+      <if test="idealweight != null" >
+        idealWeight,
+      </if>
+      <if test="withoutfatforweightscale != null" >
+        withoutFatForWeightScale,
+      </if>
+      <if test="weightmessages != null" >
+        weightmessages,
+      </if>
+      <if test="weightstate != null" >
+        weightState,
+      </if>
+      <if test="fatRate != null" >
+        fat_rate,
+      </if>
+      <if test="idealbodyfat != null" >
+        idealBodyFat,
+      </if>
+      <if test="bodyfatscale != null" >
+        bodyFatScale,
+      </if>
+      <if test="fatmessages != null" >
+        fatmessages,
+      </if>
+      <if test="fatstate != null" >
+        fatState,
+      </if>
+      <if test="muscle != null" >
+        muscle,
+      </if>
+      <if test="musclescale != null" >
+        muscleScale,
+      </if>
+      <if test="musclecontrolscale != null" >
+        muscleControlScale,
+      </if>
+      <if test="musclemessages != null" >
+        musclemessages,
+      </if>
+      <if test="musclestate != null" >
+        muscleState,
+      </if>
+      <if test="bones != null" >
+        bones,
+      </if>
+      <if test="bomesmessages != null" >
+        bomesmessages,
+      </if>
+      <if test="bonesstate != null" >
+        bonesState,
+      </if>
+      <if test="visceralLevel != null" >
+        visceral_level,
+      </if>
+      <if test="levelmessages != null" >
+        levelmessages,
+      </if>
+      <if test="levelstate != null" >
+        levelState,
+      </if>
+      <if test="water != null" >
+        water,
+      </if>
+      <if test="watermessages != null" >
+        watermessages,
+      </if>
+      <if test="waterstate != null" >
+        waterState,
+      </if>
+      <if test="heat != null" >
+        heat,
+      </if>
+      <if test="protein != null" >
+        protein,
+      </if>
+      <if test="porteinmessages != null" >
+        porteinmessages,
+      </if>
+      <if test="proteinstate != null" >
+        proteinState,
+      </if>
+      <if test="basalMet != null" >
+        basal_met,
+      </if>
+      <if test="standardbasicmetabolism != null" >
+        standardBasicMetabolism,
+      </if>
+      <if test="budgetbasicmetabolism != null" >
+        budgetBasicMetabolism,
+      </if>
+      <if test="basalmessages != null" >
+        basalmessages,
+      </if>
+      <if test="basalstate != null" >
+        basalState,
+      </if>
+      <if test="storagemusclelevel != null" >
+        storageMuscleLevel,
+      </if>
+      <if test="storagemessages != null" >
+        storagemessages,
+      </if>
+      <if test="storagestate != null" >
+        storageState,
+      </if>
+      <if test="bodyage != null" >
+        bodyAge,
+      </if>
+      <if test="bodyscore != null" >
+        bodyscore,
+      </if>
+      <if test="bodytype != null" >
+        bodyType,
+      </if>
+      <if test="entryTime != null" >
+        Entry_Time,
+      </if>
+      <if test="isDel != null" >
+        Is_Del,
+      </if>
+      <if test="eUserId != null" >
+        E_User_Id,
+      </if>
+      <if test="type != null" >
+        type,
+      </if>
+      <if test="source != null" >
+        source,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="wubfId != null" >
+        #{wubfId,jdbcType=INTEGER},
+      </if>
+      <if test="weightscale != null" >
+        #{weightscale,jdbcType=REAL},
+      </if>
+      <if test="idealweight != null" >
+        #{idealweight,jdbcType=REAL},
+      </if>
+      <if test="withoutfatforweightscale != null" >
+        #{withoutfatforweightscale,jdbcType=REAL},
+      </if>
+      <if test="weightmessages != null" >
+        #{weightmessages,jdbcType=VARCHAR},
+      </if>
+      <if test="weightstate != null" >
+        #{weightstate,jdbcType=VARCHAR},
+      </if>
+      <if test="fatRate != null" >
+        #{fatRate,jdbcType=REAL},
+      </if>
+      <if test="idealbodyfat != null" >
+        #{idealbodyfat,jdbcType=REAL},
+      </if>
+      <if test="bodyfatscale != null" >
+        #{bodyfatscale,jdbcType=REAL},
+      </if>
+      <if test="fatmessages != null" >
+        #{fatmessages,jdbcType=VARCHAR},
+      </if>
+      <if test="fatstate != null" >
+        #{fatstate,jdbcType=VARCHAR},
+      </if>
+      <if test="muscle != null" >
+        #{muscle,jdbcType=REAL},
+      </if>
+      <if test="musclescale != null" >
+        #{musclescale,jdbcType=REAL},
+      </if>
+      <if test="musclecontrolscale != null" >
+        #{musclecontrolscale,jdbcType=REAL},
+      </if>
+      <if test="musclemessages != null" >
+        #{musclemessages,jdbcType=VARCHAR},
+      </if>
+      <if test="musclestate != null" >
+        #{musclestate,jdbcType=VARCHAR},
+      </if>
+      <if test="bones != null" >
+        #{bones,jdbcType=REAL},
+      </if>
+      <if test="bomesmessages != null" >
+        #{bomesmessages,jdbcType=VARCHAR},
+      </if>
+      <if test="bonesstate != null" >
+        #{bonesstate,jdbcType=VARCHAR},
+      </if>
+      <if test="visceralLevel != null" >
+        #{visceralLevel,jdbcType=REAL},
+      </if>
+      <if test="levelmessages != null" >
+        #{levelmessages,jdbcType=VARCHAR},
+      </if>
+      <if test="levelstate != null" >
+        #{levelstate,jdbcType=VARCHAR},
+      </if>
+      <if test="water != null" >
+        #{water,jdbcType=REAL},
+      </if>
+      <if test="watermessages != null" >
+        #{watermessages,jdbcType=VARCHAR},
+      </if>
+      <if test="waterstate != null" >
+        #{waterstate,jdbcType=VARCHAR},
+      </if>
+      <if test="heat != null" >
+        #{heat,jdbcType=REAL},
+      </if>
+      <if test="protein != null" >
+        #{protein,jdbcType=REAL},
+      </if>
+      <if test="porteinmessages != null" >
+        #{porteinmessages,jdbcType=VARCHAR},
+      </if>
+      <if test="proteinstate != null" >
+        #{proteinstate,jdbcType=VARCHAR},
+      </if>
+      <if test="basalMet != null" >
+        #{basalMet,jdbcType=REAL},
+      </if>
+      <if test="standardbasicmetabolism != null" >
+        #{standardbasicmetabolism,jdbcType=REAL},
+      </if>
+      <if test="budgetbasicmetabolism != null" >
+        #{budgetbasicmetabolism,jdbcType=REAL},
+      </if>
+      <if test="basalmessages != null" >
+        #{basalmessages,jdbcType=VARCHAR},
+      </if>
+      <if test="basalstate != null" >
+        #{basalstate,jdbcType=VARCHAR},
+      </if>
+      <if test="storagemusclelevel != null" >
+        #{storagemusclelevel,jdbcType=REAL},
+      </if>
+      <if test="storagemessages != null" >
+        #{storagemessages,jdbcType=VARCHAR},
+      </if>
+      <if test="storagestate != null" >
+        #{storagestate,jdbcType=VARCHAR},
+      </if>
+      <if test="bodyage != null" >
+        #{bodyage,jdbcType=VARCHAR},
+      </if>
+      <if test="bodyscore != null" >
+        #{bodyscore,jdbcType=VARCHAR},
+      </if>
+      <if test="bodytype != null" >
+        #{bodytype,jdbcType=VARCHAR},
+      </if>
+      <if test="entryTime != null" >
+        #{entryTime,jdbcType=VARCHAR},
+      </if>
+      <if test="isDel != null" >
+        #{isDel,jdbcType=INTEGER},
+      </if>
+      <if test="eUserId != null" >
+        #{eUserId,jdbcType=INTEGER},
+      </if>
+      <if test="type != null" >
+        #{type,jdbcType=VARCHAR},
+      </if>
+      <if test="source != null" >
+        #{source,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.yihe.system.domain.YHUserBodyFat" >
+    update yh_user_body_fat
+    <set >
+      <if test="weightscale != null" >
+        weightScale = #{weightscale,jdbcType=REAL},
+      </if>
+      <if test="idealweight != null" >
+        idealWeight = #{idealweight,jdbcType=REAL},
+      </if>
+      <if test="withoutfatforweightscale != null" >
+        withoutFatForWeightScale = #{withoutfatforweightscale,jdbcType=REAL},
+      </if>
+      <if test="weightmessages != null" >
+        weightmessages = #{weightmessages,jdbcType=VARCHAR},
+      </if>
+      <if test="weightstate != null" >
+        weightState = #{weightstate,jdbcType=VARCHAR},
+      </if>
+      <if test="fatRate != null" >
+        fat_rate = #{fatRate,jdbcType=REAL},
+      </if>
+      <if test="idealbodyfat != null" >
+        idealBodyFat = #{idealbodyfat,jdbcType=REAL},
+      </if>
+      <if test="bodyfatscale != null" >
+        bodyFatScale = #{bodyfatscale,jdbcType=REAL},
+      </if>
+      <if test="fatmessages != null" >
+        fatmessages = #{fatmessages,jdbcType=VARCHAR},
+      </if>
+      <if test="fatstate != null" >
+        fatState = #{fatstate,jdbcType=VARCHAR},
+      </if>
+      <if test="muscle != null" >
+        muscle = #{muscle,jdbcType=REAL},
+      </if>
+      <if test="musclescale != null" >
+        muscleScale = #{musclescale,jdbcType=REAL},
+      </if>
+      <if test="musclecontrolscale != null" >
+        muscleControlScale = #{musclecontrolscale,jdbcType=REAL},
+      </if>
+      <if test="musclemessages != null" >
+        musclemessages = #{musclemessages,jdbcType=VARCHAR},
+      </if>
+      <if test="musclestate != null" >
+        muscleState = #{musclestate,jdbcType=VARCHAR},
+      </if>
+      <if test="bones != null" >
+        bones = #{bones,jdbcType=REAL},
+      </if>
+      <if test="bomesmessages != null" >
+        bomesmessages = #{bomesmessages,jdbcType=VARCHAR},
+      </if>
+      <if test="bonesstate != null" >
+        bonesState = #{bonesstate,jdbcType=VARCHAR},
+      </if>
+      <if test="visceralLevel != null" >
+        visceral_level = #{visceralLevel,jdbcType=REAL},
+      </if>
+      <if test="levelmessages != null" >
+        levelmessages = #{levelmessages,jdbcType=VARCHAR},
+      </if>
+      <if test="levelstate != null" >
+        levelState = #{levelstate,jdbcType=VARCHAR},
+      </if>
+      <if test="water != null" >
+        water = #{water,jdbcType=REAL},
+      </if>
+      <if test="watermessages != null" >
+        watermessages = #{watermessages,jdbcType=VARCHAR},
+      </if>
+      <if test="waterstate != null" >
+        waterState = #{waterstate,jdbcType=VARCHAR},
+      </if>
+      <if test="heat != null" >
+        heat = #{heat,jdbcType=REAL},
+      </if>
+      <if test="protein != null" >
+        protein = #{protein,jdbcType=REAL},
+      </if>
+      <if test="porteinmessages != null" >
+        porteinmessages = #{porteinmessages,jdbcType=VARCHAR},
+      </if>
+      <if test="proteinstate != null" >
+        proteinState = #{proteinstate,jdbcType=VARCHAR},
+      </if>
+      <if test="basalMet != null" >
+        basal_met = #{basalMet,jdbcType=REAL},
+      </if>
+      <if test="standardbasicmetabolism != null" >
+        standardBasicMetabolism = #{standardbasicmetabolism,jdbcType=REAL},
+      </if>
+      <if test="budgetbasicmetabolism != null" >
+        budgetBasicMetabolism = #{budgetbasicmetabolism,jdbcType=REAL},
+      </if>
+      <if test="basalmessages != null" >
+        basalmessages = #{basalmessages,jdbcType=VARCHAR},
+      </if>
+      <if test="basalstate != null" >
+        basalState = #{basalstate,jdbcType=VARCHAR},
+      </if>
+      <if test="storagemusclelevel != null" >
+        storageMuscleLevel = #{storagemusclelevel,jdbcType=REAL},
+      </if>
+      <if test="storagemessages != null" >
+        storagemessages = #{storagemessages,jdbcType=VARCHAR},
+      </if>
+      <if test="storagestate != null" >
+        storageState = #{storagestate,jdbcType=VARCHAR},
+      </if>
+      <if test="bodyage != null" >
+        bodyAge = #{bodyage,jdbcType=VARCHAR},
+      </if>
+      <if test="bodyscore != null" >
+        bodyscore = #{bodyscore,jdbcType=VARCHAR},
+      </if>
+      <if test="bodytype != null" >
+        bodyType = #{bodytype,jdbcType=VARCHAR},
+      </if>
+      <if test="entryTime != null" >
+        Entry_Time = #{entryTime,jdbcType=VARCHAR},
+      </if>
+      <if test="isDel != null" >
+        Is_Del = #{isDel,jdbcType=INTEGER},
+      </if>
+      <if test="eUserId != null" >
+        E_User_Id = #{eUserId,jdbcType=INTEGER},
+      </if>
+      <if test="type != null" >
+        type = #{type,jdbcType=VARCHAR},
+      </if>
+      <if test="source != null" >
+        source = #{source,jdbcType=INTEGER},
+      </if>
+    </set>
+    where wubf_id = #{wubfId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.yihe.system.domain.YHUserBodyFat" >
+    update yh_user_body_fat
+    set weightScale = #{weightscale,jdbcType=REAL},
+      idealWeight = #{idealweight,jdbcType=REAL},
+      withoutFatForWeightScale = #{withoutfatforweightscale,jdbcType=REAL},
+      weightmessages = #{weightmessages,jdbcType=VARCHAR},
+      weightState = #{weightstate,jdbcType=VARCHAR},
+      fat_rate = #{fatRate,jdbcType=REAL},
+      idealBodyFat = #{idealbodyfat,jdbcType=REAL},
+      bodyFatScale = #{bodyfatscale,jdbcType=REAL},
+      fatmessages = #{fatmessages,jdbcType=VARCHAR},
+      fatState = #{fatstate,jdbcType=VARCHAR},
+      muscle = #{muscle,jdbcType=REAL},
+      muscleScale = #{musclescale,jdbcType=REAL},
+      muscleControlScale = #{musclecontrolscale,jdbcType=REAL},
+      musclemessages = #{musclemessages,jdbcType=VARCHAR},
+      muscleState = #{musclestate,jdbcType=VARCHAR},
+      bones = #{bones,jdbcType=REAL},
+      bomesmessages = #{bomesmessages,jdbcType=VARCHAR},
+      bonesState = #{bonesstate,jdbcType=VARCHAR},
+      visceral_level = #{visceralLevel,jdbcType=REAL},
+      levelmessages = #{levelmessages,jdbcType=VARCHAR},
+      levelState = #{levelstate,jdbcType=VARCHAR},
+      water = #{water,jdbcType=REAL},
+      watermessages = #{watermessages,jdbcType=VARCHAR},
+      waterState = #{waterstate,jdbcType=VARCHAR},
+      heat = #{heat,jdbcType=REAL},
+      protein = #{protein,jdbcType=REAL},
+      porteinmessages = #{porteinmessages,jdbcType=VARCHAR},
+      proteinState = #{proteinstate,jdbcType=VARCHAR},
+      basal_met = #{basalMet,jdbcType=REAL},
+      standardBasicMetabolism = #{standardbasicmetabolism,jdbcType=REAL},
+      budgetBasicMetabolism = #{budgetbasicmetabolism,jdbcType=REAL},
+      basalmessages = #{basalmessages,jdbcType=VARCHAR},
+      basalState = #{basalstate,jdbcType=VARCHAR},
+      storageMuscleLevel = #{storagemusclelevel,jdbcType=REAL},
+      storagemessages = #{storagemessages,jdbcType=VARCHAR},
+      storageState = #{storagestate,jdbcType=VARCHAR},
+      bodyAge = #{bodyage,jdbcType=VARCHAR},
+      bodyscore = #{bodyscore,jdbcType=VARCHAR},
+      bodyType = #{bodytype,jdbcType=VARCHAR},
+      Entry_Time = #{entryTime,jdbcType=VARCHAR},
+      Is_Del = #{isDel,jdbcType=INTEGER},
+      E_User_Id = #{eUserId,jdbcType=INTEGER},
+      type = #{type,jdbcType=VARCHAR},
+      source = #{source,jdbcType=INTEGER}
+    where wubf_id = #{wubfId,jdbcType=INTEGER}
+  </update>
+  
+  
+   <!--  查询用户体脂 -->
+ <select id="selectYHUserBodyFat" resultType="map" parameterType="java.lang.String" >
+   select yubf.fat_rate,yubf.muscle,yubf.bones,
+	(select count(1) from yh_user_body_fat where E_User_Id=#{ eUserId,jdbcType=INTEGER} and Is_Del = 2) as num,
+	yubf.`type`,yubf.Entry_Time
+	from yh_user_reginfo as reg 
+	left join yh_user_body_fat yubf
+	on reg.user_code = yubf.E_User_Id
+	where yubf.wubf_id = (select wubf_id from yh_user_body_fat where E_User_Id=#{ eUserId,jdbcType=INTEGER} and Is_Del = 2 order by Entry_Time desc limit 1)
+  </select>
+  
+  <select id="selectPageByParam1" resultMap="BaseResultMap" parameterType="java.lang.String"  >
+ select  yubf.*
+	from yh_user_reginfo as reg 
+	inner join yh_user_body_fat yubf
+	on reg.user_code = yubf.E_User_Id
+	 where reg.user_code=#{ eUserId,jdbcType=INTEGER}  and Is_Del = 2  order by Entry_Time desc 
+  </select>
+
+
+ <select id="selectPageByParam" resultMap="BaseResultMap" parameterType="java.lang.String"  >
+  select  yubf.fat_rate,yubf.muscle,yubf.bones,yubf.Entry_Time
+	from yh_user_reginfo as reg 
+	inner join yh_user_body_fat yubf
+	on reg.user_code = yubf.E_User_Id
+	 where reg.user_code=#{ eUserId,jdbcType=INTEGER} and Is_Del = 2  order by Entry_Time desc 
+  </select>
+  
+  <select id="selectBodyFat" resultMap="BaseResultMap" parameterType="java.lang.String"  >
+    select  yubf.fat_rate,yubf.muscle,yubf.bones,yubf.Entry_Time
+	from yh_user_reginfo as reg 
+	inner join yh_user_body_fat yubf
+	on reg.user_code = yubf.E_User_Id
+	 where reg.user_code=#{ eUserId,jdbcType=INTEGER} and Is_Del = 2 order by Entry_Time asc 
+  </select>
+  
+  
+</mapper>

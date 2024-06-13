@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yihe.system.mapper.YhDiseaseCategoryMapper">
+  <resultMap id="BaseResultMap" type="com.yihe.system.domain.YhDiseaseCategory">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="disease_code" jdbcType="INTEGER" property="diseaseCode" />
+    <result column="disease_name" jdbcType="VARCHAR" property="diseaseName" />
+    <result column="risk_group" jdbcType="VARCHAR" property="riskGroup" />
+     <result column="isAssessment" jdbcType="INTEGER" property="isAssessment" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, disease_code, disease_name, risk_group,isAssessment
+  </sql>
+  <select id="selectByExample" parameterType="com.yihe.system.domain.YhDiseaseCategoryExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from yh_disease_category
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+   <select id="selectByPrimaryKeyByIsAssessment"   resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from yh_disease_category
+    where  isAssessment=0
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from yh_disease_category
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from yh_disease_category
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.yihe.system.domain.YhDiseaseCategoryExample">
+    delete from yh_disease_category
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.yihe.system.domain.YhDiseaseCategory">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into yh_disease_category (disease_code, disease_name, risk_group
+      )
+    values (#{diseaseCode,jdbcType=INTEGER}, #{diseaseName,jdbcType=VARCHAR}, #{riskGroup,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.yihe.system.domain.YhDiseaseCategory">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into yh_disease_category
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="diseaseCode != null">
+        disease_code,
+      </if>
+      <if test="diseaseName != null">
+        disease_name,
+      </if>
+      <if test="riskGroup != null">
+        risk_group,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="diseaseCode != null">
+        #{diseaseCode,jdbcType=INTEGER},
+      </if>
+      <if test="diseaseName != null">
+        #{diseaseName,jdbcType=VARCHAR},
+      </if>
+      <if test="riskGroup != null">
+        #{riskGroup,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.yihe.system.domain.YhDiseaseCategoryExample" resultType="java.lang.Long">
+    select count(*) from yh_disease_category
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update yh_disease_category
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=INTEGER},
+      </if>
+      <if test="record.diseaseCode != null">
+        disease_code = #{record.diseaseCode,jdbcType=INTEGER},
+      </if>
+      <if test="record.diseaseName != null">
+        disease_name = #{record.diseaseName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.riskGroup != null">
+        risk_group = #{record.riskGroup,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update yh_disease_category
+    set id = #{record.id,jdbcType=INTEGER},
+      disease_code = #{record.diseaseCode,jdbcType=INTEGER},
+      disease_name = #{record.diseaseName,jdbcType=VARCHAR},
+      risk_group = #{record.riskGroup,jdbcType=VARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.yihe.system.domain.YhDiseaseCategory">
+    update yh_disease_category
+    <set>
+      <if test="diseaseCode != null">
+        disease_code = #{diseaseCode,jdbcType=INTEGER},
+      </if>
+      <if test="diseaseName != null">
+        disease_name = #{diseaseName,jdbcType=VARCHAR},
+      </if>
+      <if test="riskGroup != null">
+        risk_group = #{riskGroup,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.yihe.system.domain.YhDiseaseCategory">
+    update yh_disease_category
+    set disease_code = #{diseaseCode,jdbcType=INTEGER},
+      disease_name = #{diseaseName,jdbcType=VARCHAR},
+      risk_group = #{riskGroup,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

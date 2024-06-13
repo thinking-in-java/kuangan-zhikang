@@ -1,0 +1,741 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" th:href="@{/assets/libs/layui/css/layui.css}" />
+<title>查看饮食分析报告</title>
+<style type="text/css">
+body {
+	padding: 20px;
+	background-color: white;
+}
+
+#back {
+	line-height: 20px;
+	text-align: right;
+}
+
+#back a {
+	color: black;
+	text-decoration: none;
+}
+
+.content {
+	font-size: 14px;
+}
+
+.tableDemo {
+	text-align: center;
+	border: #D2D2D2 1px solid;
+	margin: 0 30px;
+}
+
+.tableDemo table {
+	width: 100%;
+}
+
+.tableDemo table tr td {
+	padding: 10px;
+}
+
+.tableDemo table tr:not (:first-child ) td:first-child {
+	color: #9F9F9F;
+}
+
+#intake {
+	width: 100%;
+	height: 400px;
+}
+
+.pContent {
+	font-size: 14px;
+	color: rgba(128, 128, 128, 1);
+	line-height: 200%;
+}
+
+#threeMeals {
+	width: 100%;
+	height: 380px;
+}
+
+#nutrition {
+	width: 100%;
+	height: 380px;
+}
+
+#baotaInfo {
+	width: 100%;
+	height: 350px;
+}
+</style>
+</head>
+<body class="layui-view-body">
+	<div class="layui-content">
+		<div class="layui-col-xs6">
+			<div class="grid-demo grid-demo-bg1">
+				<h2>饮食分析报告</h2>
+			</div>
+		</div>
+		<div class="layui-col-xs6" id="back">
+			<div>
+				<a href="#">返回上一页</a>
+			</div>
+		</div>
+	</div>
+	<div class="layui-row layui-col-space20">
+		<div class="layui-col-xs6">
+			<div class="grid-demo grid-demo-bg1">
+				<table class="layui-table" lay-size="lg">
+					<thead>
+						<tr>
+							<th>姓名</th>
+							<th>性别</th>
+							<th>年龄</th>
+							<th>编码</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td id="userName"></td>
+							<td id="gender"></td>
+							<td id="age"></td>
+							<td id="userCode"></td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+		<div class="layui-col-xs6">
+			<div>
+				<img height="100px"
+					th:src="${getrepotimg}" />
+			</div>
+		</div>
+		<div style="margin-top: 160px;">
+			<p class="content">
+				报告是基于您记录的一周(
+				<samp id="startTime"></samp>
+				至
+				<samp id="endTime"></samp>)
+				饮食日记生成的，你记录的天数越多，报告结果更精确。有任何问题可咨询健康管理师。
+			</p>
+		</div>
+		<hr style="padding: 0px;">
+		<!-- <div class="layui-row">
+				<div class="layui-col-md4">
+					<div class="tableDemo">
+						<table border="0">
+							<tr>
+								<td><i class="layui-icon layui-icon-fire" style="padding-right: 10px;color: #D43030;"></i>平均摄入</td>
+								<td id="averageintake"></td>
+							</tr>
+							<tr>
+								<td>推荐</td>
+								<td id="energyLevel"></td>
+							</tr>
+							<tr>
+								<td>实际</td>
+								<td id="energyKcal"></td>
+							</tr>
+						</table>
+					</div>
+				</div>
+				<div class="layui-col-md4">
+					<div class="tableDemo">
+						<table border="0">
+							<tr>
+								<td><i class="layui-icon" style="padding-right: 10px;color: #D43030;">&#xe62c;</i>记录频率</td>
+								<td id="thefrequency"></td>
+							</tr>
+							<tr>
+								<td>推荐</td>
+								<td>4天&nbsp;/&nbsp;周</td>
+							</tr>
+							<tr>
+								<td>实际</td>
+								<td id="frequency"></td>
+							</tr>
+						</table>
+					</div>
+				</div>
+				<div class="layui-col-md4">
+					<div class="tableDemo">
+						<table border="0">
+							<tr>
+								<td><i class="layui-icon" style="padding-right: 10px;color: #D43030;">&#xe637;</i>超标天数</td>
+								<td id="overproof"></td>
+							</tr>
+							<tr>
+								<td>推荐</td>
+								<td>0&nbsp;天</td>
+							</tr>
+							<tr>
+								<td>实际</td>
+								<td id="number"></td>
+							</tr>
+						</table>
+					</div>
+				</div>
+			</div> -->
+		<div class="layui-row">
+			<div class="layui-col-xs6">
+				<div id="intake"></div>
+			</div>
+			<div class="layui-col-xs6" style="margin-top: 73px;">
+				<div class="layui-row" style="padding-bottom: 30px;">
+					<div class="layui-col-md4">
+						记录天数
+						<div class="pContent">4天</div>
+					</div>
+					<div class="layui-col-md4" id="ecordDays"></div>
+					<div class="layui-col-md4" id="ecordDaysFlag"></div>
+				</div>
+				<div class="layui-row" style="padding-bottom: 30px;">
+					<div class="layui-col-md4">
+						超标天数
+						<div class="pContent">0天</div>
+					</div>
+					<div class="layui-col-md4" id="exceedingDays"></div>
+					<div class="layui-col-md4" id="exceedingDaysFlag"></div>
+				</div>
+				<div class="layui-row" style="padding-bottom: 30px;">
+					<div class="layui-col-md4">
+						不重复食物数
+						<div class="pContent">25种以上</div>
+					</div>
+					<div class="layui-col-md4" id="noRepetition"></div>
+					<div class="layui-col-md4" id="noRepetitionFlag"></div>
+				</div>
+				<div class="layui-row" style="padding-bottom: 30px;">
+					<div class="layui-col-md4">
+						平均摄入热量
+						<div class="pContent" id="averageIntake7"></div>
+					</div>
+					<div class="layui-col-md4" id="averageIntake"></div>
+					<div class="layui-col-md4" id="averageIntakeFlag"></div>
+				</div>
+			</div>
+		</div>
+		<hr style="padding: 0;" />
+		<div class="layui-row">
+			<div class="layui-col-xs3" style="">
+				<div id="threeMeals"></div>
+			</div>
+			<div class="layui-col-xs3">
+				<div class="layui-col-xs8" style="margin-top: 73px;">
+					<div class="layui-row" style="padding-bottom: 30px;">
+						<div class="layui-col-md4">早餐</div>
+						<div class="layui-col-md4" id="zaocan"></div>
+						<div class="layui-col-md4" id="zaocanFlag"></div>
+					</div>
+					<div class="layui-row" style="padding-bottom: 30px;">
+						<div class="layui-col-md4">午餐</div>
+						<div class="layui-col-md4" id="wucan"></div>
+						<div class="layui-col-md4" id="wucanFlag"></div>
+					</div>
+					<div class="layui-row" style="padding-bottom: 30px;">
+						<div class="layui-col-md4">晚餐</div>
+						<div class="layui-col-md4" id="wancan"></div>
+						<div class="layui-col-md4" id="wancanFlag"></div>
+					</div>
+					<div class="layui-row" style="padding-bottom: 30px;">
+						<div class="layui-col-md4">加餐</div>
+						<div class="layui-col-md4" id="jiacan"></div>
+						<div class="layui-col-md4" id="jiacanFlag"></div>
+					</div>
+				</div>
+			</div>
+
+			<div class="layui-col-xs3" style="">
+				<div id="nutrition"></div>
+			</div>
+			<div class="layui-col-xs3">
+				<div class="layui-col-xs8" style="margin-top: 73px;">
+					<div class="layui-row" style="padding-bottom: 30px;">
+						<div class="layui-col-md4">蛋白质</div>
+						<div class="layui-col-md4" id="danbaizhi"></div>
+						<div class="layui-col-md4" id="danbaizhiFlag"></div>
+					</div>
+					<div class="layui-row" style="padding-bottom: 30px;">
+						<div class="layui-col-md4">脂肪</div>
+						<div class="layui-col-md4" id="zhifang"></div>
+						<div class="layui-col-md4" id="zhifangFlag"></div>
+					</div>
+					<div class="layui-row" style="padding-bottom: 30px;">
+						<div class="layui-col-md4">碳水化合物</div>
+						<div class="layui-col-md4" id="tanshui"></div>
+						<div class="layui-col-md4" id="tanshuiFlag"></div>
+					</div>
+
+				</div>
+			</div>
+
+		</div>
+
+
+
+		<hr style="padding: 0;" />
+		<h3 style="margin-bottom: 15px; font-size: bolder;">平衡膳食宝塔分析</h3>
+		<div class="layui-row">
+			<div class="layui-col-xs6">
+				<div id="baotaInfo"></div>
+			</div>
+			<div class="layui-col-xs6">
+			<table id="demo" lay-filter="test"></table>
+				<!-- <table class="layui-table">
+					<colgroup>
+						<col width="150">
+						<col width="200">
+						<col>
+					</colgroup>
+					<thead>
+						<tr>
+							<th>食物类别</th>
+							<th>实际摄入(克)</th>
+							<th>推荐目标(克)</th>
+							<th>评价</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td>贤心</td>
+							<td>2016-11-29</td>
+							<td>人生就像是一场修行</td>
+							<td>人生就像是一场修行</td>
+						</tr>
+						<tr>
+							<td>许闲心</td>
+							<td>2016-11-28</td>
+							<td>人生就像是一场修行</td>
+							<td>人生就像是一场修行</td>
+						</tr>
+					</tbody>
+				</table> -->
+			</div>
+		</div>
+
+	</div>
+
+	<script th:src="@{/assets/libs/echarts/echarts.min.js}"></script>
+	<script type="text/javascript" th:src="@{/assets/libs/layui/layui.js}"></script>
+	<script type="text/javascript" th:src="@{/assets/js/common.js}"></script>
+	<script type="text/javascript" th:src="@{/assets/js/jquery-1.11.1.js}"></script>
+	<script type="text/javascript">
+		
+		$('#back').click(function(){
+			window.location.href="/manage/usertosee/food?usercode="+$("#userCode").html()+"&type=3";
+		})
+		
+
+		layui.use(['layer', 'form', 'admin', 'table','laydate', 'util'], function () {
+			var table = layui.table;
+			var anaid=[[${id}]] 
+			console.log("anaid",anaid)
+			
+			//第一个实例
+			function table1(dayNum){
+				var insTb2 =   table.render({
+				    elem: '#demo',
+				    method:'post',
+				    url: '/system/diary/pagodaAnalysis?id='+anaid,
+				    cols: [ [ 
+				      {field: 'foodCategoryName', title: '食物类别'}
+				      ,{title: '实际摄入(克)',
+				    	  templet:function(d){
+				    		   if(d.value>0){
+				    			   var num=d.value/dayNum;
+				    			   num = num.toFixed(2);
+				    			   return num;
+				    		   }else{
+				    			   return 0;
+				    		   }
+				    		 
+				    	  }  
+				      }
+				      ,{
+				    	  title: '推荐摄入(克)',
+				    	  templet:function(d){
+				    		  if(null!=d.everydaymax){
+				    			  return d.everydaymin+"~"+d.everydaymax
+				    		  }else{
+				    			  return ">"+d.everydaymin;
+				    		  }
+				    		 
+				    	  }
+				    	  
+				      }
+				      ,{field: 'status', title: '评价'} 
+				    ] ],
+				    response : {
+
+						statusCode : 0
+					//规定成功的状态码，默认：0
+
+					},
+
+					parseData : function(res) { //将原始数据解析成 table 组件所规定的数据
+						console.log("table",res)
+						baotaInfo(res.data);
+						return {
+							"code" : res.code, //解析接口状态
+							"msg" : res.msg, //解析提示文本
+							"count" : res.count, //解析数据长度
+							"data" : res.data
+						//解析数据列表
+						}
+
+					} 
+				  });
+			}
+			
+			threeMeals();
+		nutrition();
+		$(function(){
+			var id = [[${id}]];
+			 $.ajax({
+		   		 type:'post',
+		   		 url:'/system/diary/showRecordAnalyze',
+		   		 data:{id:id},
+		   		success : function(data){
+		   			console.log("data",data)
+							
+		   			$("#age").html(data.yhUserReginfo.birthtime);
+					$("#userCode").html(data.yhUserReginfo.userCode);
+					$("#userName").html(data.yhUserReginfo.userName);
+					$("#startTime").html(data.selectByPrimaryKey.starttime);
+					$("#endTime").html(data.selectByPrimaryKey.endtime);
+					if(data.yhUserReginfo.gender=="1"){
+						$("#gender").html("男");
+					}else{
+						$("#gender").html("女");
+					}
+				
+					 
+					
+					
+					var mycars = new Array()
+					mycars[0]=['product', '推荐摄入', '摄入未超标', '摄入超标'];
+					 for(var j=0;j<data.array.length;j++){
+							mycars[j+1]=[''+data.array[j].time+'', data.array[j].recommend, data.array[j].notoverweight,data.array[j].beenoverweight];
+					}
+					intake(mycars);
+					//记录天数
+					$("#ecordDays").html(data.selectByPrimaryKey.ecorddays);
+					table1(data.selectByPrimaryKey.ecorddays)
+					var good='<img src="http://qiniuyun.yhy.ren/wxicon/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20200917172242.png" class="layui-nav-img">赞';
+					var nogood='<img src="http://qiniuyun.yhy.ren/wxicon/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20200917172250.png" class="layui-nav-img">踩';
+					if(data.selectByPrimaryKey.ecorddays>=4){
+						$("#ecordDaysFlag").html('<img src="http://qiniuyun.yhy.ren/wxicon/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20200917172242.png" class="layui-nav-img">优秀')
+					}else if(data.selectByPrimaryKey.ecorddays>=2){
+						$("#ecordDaysFlag").html('<img src="http://qiniuyun.yhy.ren/wxicon/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20200917172250.png" class="layui-nav-img">一般')
+					}else{
+						$("#ecordDaysFlag").html('<img src="http://qiniuyun.yhy.ren/wxicon/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20200917172250.png" class="layui-nav-img">差')
+					}
+					
+					
+					
+					$("#exceedingDays").html(data.selectByPrimaryKey.exceedingdays);
+					if(data.selectByPrimaryKey.exceedingdays==0){
+						$("#exceedingDaysFlag").html('<img src="http://qiniuyun.yhy.ren/wxicon/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20200917172242.png" class="layui-nav-img">未超标')
+					}else{
+						$("#exceedingDaysFlag").html('<img src="http://qiniuyun.yhy.ren/wxicon/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20200917172250.png" class="layui-nav-img">超标')
+					}
+					$("#noRepetition").html(data.selectByPrimaryKey.norepetition)
+					if(data.selectByPrimaryKey.norepetition>=25){
+						$("#noRepetitionFlag").html('<img src="http://qiniuyun.yhy.ren/wxicon/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20200917172242.png" class="layui-nav-img">优秀')
+					}else if(data.selectByPrimaryKey.norepetition>=20&&data.selectByPrimaryKey.norepetition<25){
+						$("#noRepetitionFlag").html('<img src="http://qiniuyun.yhy.ren/wxicon/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20200917172242.png" class="layui-nav-img">良好')
+					}else{
+						$("#noRepetitionFlag").html('<img src="http://qiniuyun.yhy.ren/wxicon/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20200917172250.png" class="layui-nav-img">一般')
+					}
+					
+					$("#averageIntake7").html(parseFloat(data.selectByPrimaryKey.averageintake7).toFixed(2))
+					$("#averageIntake").html(parseFloat(data.selectByPrimaryKey.averageintake).toFixed(2))
+					
+					if(data.selectByPrimaryKey.averageintake<=data.selectByPrimaryKey.averageintake7){
+						$("#averageIntakeFlag").html('<img src="http://qiniuyun.yhy.ren/wxicon/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20200917172242.png" class="layui-nav-img">未超标')
+					}else{
+						$("#averageIntakeFlag").html('<img src="http://qiniuyun.yhy.ren/wxicon/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20200917172250.png" class="layui-nav-img">超标')
+					}
+					var eatbfb=parseFloat(data.selectByPrimaryKey.zao)+parseFloat(data.selectByPrimaryKey.wu)+parseFloat(data.selectByPrimaryKey.wan)+parseFloat(data.selectByPrimaryKey.jia);
+					var zaoeat=data.selectByPrimaryKey.zao/eatbfb*100;					
+					var wueat=data.selectByPrimaryKey.wu/eatbfb*100;					
+					var waneat=data.selectByPrimaryKey.wan/eatbfb*100;					
+					var jiaeat=data.selectByPrimaryKey.jia/eatbfb*100;					
+					
+					$("#zaocan").html(zaoeat.toFixed(2)+"%")
+					$("#wucan").html(wueat.toFixed(2)+"%")
+					$("#wancan").html(waneat.toFixed(2)+"%")
+					$("#jiacan").html(jiaeat.toFixed(2)+"%")
+					var heshi='<img src="http://qiniuyun.yhy.ren/wxicon/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20200917172242.png" class="layui-nav-img">合适';
+					var piangao='<img src="http://qiniuyun.yhy.ren/wxicon/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20200917172250.png" class="layui-nav-img">偏高';
+					var piandi='<img src="http://qiniuyun.yhy.ren/wxicon/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20200917172250.png" class="layui-nav-img">偏低';
+					if(zaoeat<25){
+						$("#zaocanFlag").html(piandi)
+					}else if(zaoeat>30){
+						$("#zaocanFlag").html(piangao)
+					}else{
+						$("#zaocanFlag").html(heshi)
+					}
+					
+					if(wueat<30){
+						$("#wucanFlag").html(piandi)
+					}else if(wueat>40){
+						$("#wucanFlag").html(piangao)
+					}else{
+						$("#wucanFlag").html(heshi)
+					}
+					
+					if(waneat<20){
+						$("#wancanFlag").html(piandi)
+					}else if(wueat>30){
+						$("#wancanFlag").html(piangao)
+					}else{
+						$("#wancanFlag").html(heshi)
+					}
+					
+					if(jiaeat<5){
+						$("#jiacanFlag").html(piandi)
+					}else if(jiaeat>15){
+						$("#jiacanFlag").html(piangao)
+					}else{
+						$("#jiacanFlag").html(heshi)
+					}
+					
+					
+					
+					
+					
+					var food=[{value:data.selectByPrimaryKey.zao, name: '早餐(实际)'}, {value: data.selectByPrimaryKey.wu, name: '中餐(实际)'}, {value: data.selectByPrimaryKey.wan, name: '晚餐(实际)'},{value: data.selectByPrimaryKey.jia, name: '加餐(实际)'}]
+					
+					threeMeals(food);
+					var nutrition1=[{value: data.selectByPrimaryKey.carbohydrate, name: '碳水化合物'},{value: data.selectByPrimaryKey.protein, name: '蛋白质'},{value: data.selectByPrimaryKey.fat, name: '脂肪'}]
+					nutrition(nutrition1);
+					var ss=data.selectByPrimaryKey.carbohydrate+data.selectByPrimaryKey.protein+data.selectByPrimaryKey.fat;//总数
+					var cho=data.selectByPrimaryKey.carbohydrate/ss*100;//碳水化合物百分比
+					$("#tanshui").html(cho.toFixed(2)+"%")
+					var protein=data.selectByPrimaryKey.protein/ss*100;//蛋白质百分比
+					$("#danbaizhi").html(protein.toFixed(2)+"%")
+					var fat=data.selectByPrimaryKey.fat/ss*100;//脂肪百分比
+					$("#zhifang").html(fat.toFixed(2)+"%")
+					$("#tanshui").html(data.selectByPrimaryKey.carbohydrate+"%")
+					$("#danbaizhi").html(data.selectByPrimaryKey.protein+"%")
+					$("#zhifang").html(data.selectByPrimaryKey.fat+"%")
+
+					if(data.tnb){
+						if(cho<45){
+							$("#tanshuiFlag").html(piandi)
+						}else if(cho>60){
+							$("#tanshuiFlag").html(piangao)
+						}else{
+							$("#tanshuiFlag").html(heshi)
+						}
+
+						if(protein<15){
+							$("#danbaizhiFlag").html(piandi)
+						}else if(protein>20){
+							$("#danbaizhiFlag").html(piangao)
+						}else{
+							$("#danbaizhiFlag").html(heshi)
+						}
+						if(fat<20){
+							$("#zhifangFlag").html(piandi)
+						}else if(fat>30){
+							$("#zhifangFlag").html(piangao)
+						}else{
+							$("#zhifangFlag").html(heshi)
+						}
+					}else{
+						if(cho<50){
+							$("#tanshuiFlag").html(piandi)
+						}else if(cho>65){
+							$("#tanshuiFlag").html(piangao)
+						}else{
+							$("#tanshuiFlag").html(heshi)
+						}
+
+						if(protein<10){
+							$("#danbaizhiFlag").html(piandi)
+						}else if(protein>15){
+							$("#danbaizhiFlag").html(piangao)
+						}else{
+							$("#danbaizhiFlag").html(heshi)
+						}
+						if(fat<20){
+							$("#zhifangFlag").html(piandi)
+						}else if(fat>30){
+							$("#zhifangFlag").html(piangao)
+						}else{
+							$("#zhifangFlag").html(heshi)
+						}
+					}
+					 
+
+					 
+					 
+				 
+					
+		   		}
+		   	 })
+		})
+		
+		
+		});
+		
+		function baotaInfo(data){
+			var myChart = echarts.init(document.getElementById('baotaInfo'));
+			var allNum=0;
+			 var dataInfo=[]
+			 $.each(data,function(i,j){       
+				 console.log(j.value);   
+				 allNum=allNum+parseFloat(j.value);
+				 dataInfo.push({value:j.value,name:j.foodCategoryName})
+				 })
+				 allNum=allNum/7;
+				allNum = allNum.toFixed(2);
+			option = {
+				 tooltip: {
+				        trigger: 'item',
+				        formatter: '{b}: {c} ({d}%)'
+				    },
+				    legend: {
+				        orient: 'vertical',
+				        left: 10
+				        
+				    },
+				     graphic:{       //图形中间文字
+				            type:"text",
+				            left:"center",
+				            top:"center",
+				            style:{
+				                text:"平均摄入（克/天)\n "+allNum,
+				                textAlign:"center",
+				                fill:"#888",
+				                fontSize:20
+				            }
+				        },
+				    series: [
+				        {
+				            name: '宝塔分析',
+				            type: 'pie',
+				            radius: ['50%', '70%'],
+				            avoidLabelOverlap: false,
+				            label: {
+				                show: false,
+				                position: 'center'
+				            },
+				          
+				            labelLine: {
+				                show: false
+				            },
+				            data: dataInfo
+				        }
+				    ]
+				};
+
+
+			myChart.setOption(option);
+			window.addEventListener("resize", function() {
+				myChart.resize();
+			});
+		}
+		
+		function intake(mycars) {
+			var myChart = echarts.init(document.getElementById('intake'), 'light');
+			option = {
+				legend: {},
+				tooltip: {},
+				dataset: {
+					source: mycars
+					
+				},
+				xAxis: {
+					type: 'category'
+				},
+				yAxis: {
+					name: '摄入(千卡)',
+					nameTextStyle: {
+						fontWeight: 'bolder',
+						fontSize: 16
+					}
+				},
+				// Declare several bar series, each will be mapped
+				// to a column of dataset.source by default.
+				series: [{
+						type: 'bar'
+					},
+					{
+						type: 'bar'
+					},
+					{
+						type: 'bar'
+					}
+				]
+			};
+			// 使用刚指定的配置项和数据显示图表。
+			myChart.setOption(option);
+			window.addEventListener("resize", function() {
+				myChart.resize();
+			});
+		}
+
+		function threeMeals(food) {
+			console.log("food",food)
+			var myChart = echarts.init(document.getElementById('threeMeals'));
+			option = {
+					 tooltip: {
+					        trigger: 'item',
+					        formatter: '{b}: {c} ({d}%)'
+					    },
+					    legend: {
+					        orient: 'vertical',
+					        left: 10
+					        
+					    },
+					 
+				    series: [
+				        {
+				            name: '摄入比例',
+				            type: 'pie',
+				            radius: '50%',
+				            center: ['50%', '60%'],
+				            data: food
+				        }
+				    ]
+			};
+			myChart.setOption(option);
+			window.addEventListener("resize", function() {
+				myChart.resize();
+			});
+		}
+		function nutrition(nutrition1){
+			var myChart = echarts.init(document.getElementById('nutrition'),'light');
+			option = {
+					 tooltip: {
+					        trigger: 'item',
+					        formatter: '{b}: {c} ({d}%)'
+					    },
+					    legend: {
+					        orient: 'vertical',
+					        left: 10
+					        
+					    },
+				    series: [
+				        {
+				            name: '功能比例',
+				            type: 'pie',
+				            radius: '50%',
+				            center: ['50%', '60%'],
+				            data: nutrition1
+				        }
+				    ]
+			};
+			myChart.setOption(option);
+			window.addEventListener("resize", function() {
+				myChart.resize();
+			});
+		}
+
+		</script>
+</body>
+</html>

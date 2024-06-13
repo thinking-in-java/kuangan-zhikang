@@ -1,0 +1,1757 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yihe.system.mapper.TheBasicUseMapper">
+        <select id="allprople" parameterType="com.yihe.system.domain.TheBasicUse" resultType="java.lang.Integer">
+            select count(1) from yh_user_reginfo AS b
+		    INNER JOIN `yh_user_make_card` AS c ON c.user_code=b.`user_code`
+		    <where>
+                <if test="userCode !=null and userCode!=''">
+                    and c.doctor=(SELECT id FROM `yh_user_admin_info`  WHERE user_code=#{userCode})
+                </if>
+                <if test="noworg !=null and noworg!=''">
+                    and b.Org_Code like CONCAT('%',#{noworg},'%')
+                </if>
+            </where>
+        </select>
+        <select id="selectjiankang" parameterType="com.yihe.system.domain.TheBasicUse" resultType="java.lang.Integer">
+            SELECT
+	        count( a.id )
+            FROM
+                (
+                SELECT
+                    rest.*
+                FROM
+                    yh_disease_risk_result2 rest
+                    INNER JOIN yh_user_reginfo reg ON rest.user_code = reg.user_code
+                    INNER JOIN `yh_user_make_card` AS card ON card.user_code = rest.user_code
+                <where>
+                    <if test="userCode !=null and userCode!=''">
+                        and card.doctor =(
+                            SELECT
+                            id
+                            FROM
+                            `yh_user_admin_info`
+                            WHERE
+                            user_code = #{userCode}
+                            )
+                    </if>
+                    <if test="noworg !=null and noworg!=''">
+                        and reg.Org_Code like CONCAT('%',#{noworg},'%')
+                    </if>
+                    AND rest.qtime BETWEEN #{bigantime}
+                    AND #{endtime}
+                </where>
+                GROUP BY
+                rest.user_code
+                ) a
+        </select>
+        <select id="selectjiangkangtimes" parameterType="com.yihe.system.domain.TheBasicUse" resultType="java.lang.Integer">
+            SELECT
+                count( rest.id )
+            FROM
+                yh_disease_risk_result2 rest
+                INNER JOIN yh_user_reginfo reg ON rest.user_code = reg.user_code
+                INNER JOIN `yh_user_make_card` AS card ON card.user_code = rest.user_code
+            <where>
+                <if test="userCode !=null and userCode!=''">
+                    and card.doctor =(
+                        SELECT
+                        id
+                        FROM
+                        `yh_user_admin_info`
+                        WHERE
+                        user_code = #{userCode}
+                        )
+                </if>
+                <if test="noworg !=null and noworg!=''">
+                    and reg.Org_Code like CONCAT('%',#{noworg},'%')
+                </if>
+                AND rest.qtime BETWEEN #{bigantime}
+                AND #{endtime}
+            </where>
+        </select>
+
+    <select id="selectchangjian" parameterType="com.yihe.system.domain.TheBasicUse" resultType="java.lang.Integer">
+        SELECT
+            count( a.report_id )
+        FROM
+            (
+            SELECT
+                rest.*
+            FROM
+                yh_pain_total_report rest
+                INNER JOIN yh_user_reginfo reg ON rest.user_code = reg.user_code
+                INNER JOIN `yh_user_make_card` AS card ON card.user_code = rest.user_code
+            <where>
+                <if test="userCode !=null and userCode!=''">
+                    and card.doctor =(
+                    SELECT
+                    id
+                    FROM
+                    `yh_user_admin_info`
+                    WHERE
+                    user_code = #{userCode}
+                    )
+                </if>
+                <if test="noworg !=null and noworg!=''">
+                    and reg.Org_Code like CONCAT('%',#{noworg},'%')
+                </if>
+                AND rest.qtime BETWEEN #{bigantime}
+                AND #{endtime}
+            </where>
+            GROUP BY
+            rest.user_code
+            ) a
+    </select>
+
+    <select id="selectchangjiantimes" parameterType="com.yihe.system.domain.TheBasicUse" resultType="java.lang.Integer">
+        SELECT
+            count(rest.report_id)
+        FROM
+            yh_pain_total_report rest
+            INNER JOIN yh_user_reginfo reg ON rest.user_code = reg.user_code
+            INNER JOIN `yh_user_make_card` AS card ON card.user_code = rest.user_code
+        <where>
+            <if test="userCode !=null and userCode!=''">
+                and card.doctor =(
+                SELECT
+                id
+                FROM
+                `yh_user_admin_info`
+                WHERE
+                user_code = #{userCode}
+                )
+            </if>
+            <if test="noworg !=null and noworg!=''">
+                and reg.Org_Code like CONCAT('%',#{noworg},'%')
+            </if>
+            AND rest.qtime BETWEEN #{bigantime}
+            AND #{endtime}
+        </where>
+    </select>
+
+    <select id="selectAxing" parameterType="com.yihe.system.domain.TheBasicUse" resultType="java.lang.Integer">
+        SELECT
+            count(a.Id)
+        FROM
+            (
+            SELECT
+                rest.*
+            FROM
+                yh_pressure_evaluate rest
+                INNER JOIN yh_user_reginfo reg ON rest.User_Code = reg.user_code
+                INNER JOIN `yh_user_make_card` AS card ON card.user_code = rest.User_Code
+            <where>
+                Evaluate_Type=1
+                <if test="userCode !=null and userCode!=''">
+                    and card.doctor =(
+                    SELECT
+                    id
+                    FROM
+                    `yh_user_admin_info`
+                    WHERE
+                    user_code = #{userCode}
+                    )
+                </if>
+                <if test="noworg !=null and noworg!=''">
+                    and reg.Org_Code like CONCAT('%',#{noworg},'%')
+                </if>
+                AND DATE(rest.Evaluate_Date) BETWEEN #{bigantime}
+                AND #{endtime}
+            </where>
+            GROUP BY
+            rest.User_Code
+            ) a
+    </select>
+
+    <select id="selectAxingtimes" parameterType="com.yihe.system.domain.TheBasicUse" resultType="java.lang.Integer">
+        SELECT
+            count(rest.Id)
+        FROM
+            yh_pressure_evaluate rest
+            INNER JOIN yh_user_reginfo reg ON rest.User_Code = reg.user_code
+            INNER JOIN `yh_user_make_card` AS card ON card.user_code = rest.User_Code
+        <where>
+            Evaluate_Type=1
+            <if test="userCode !=null and userCode!=''">
+                and card.doctor =(
+                SELECT
+                id
+                FROM
+                `yh_user_admin_info`
+                WHERE
+                user_code = #{userCode}
+                )
+            </if>
+            <if test="noworg !=null and noworg!=''">
+                and reg.Org_Code like CONCAT('%',#{noworg},'%')
+            </if>
+            AND DATE(rest.Evaluate_Date) BETWEEN #{bigantime}
+            AND #{endtime}
+        </where>
+    </select>
+
+    <select id="selectPSTRI" parameterType="com.yihe.system.domain.TheBasicUse" resultType="java.lang.Integer">
+        SELECT
+            count(a.Id)
+        FROM
+            (
+            SELECT
+                rest.*
+            FROM
+                yh_pressure_evaluate rest
+                INNER JOIN yh_user_reginfo reg ON rest.User_Code = reg.user_code
+                INNER JOIN `yh_user_make_card` AS card ON card.user_code = rest.User_Code
+            <where>
+                Evaluate_Type=2
+                <if test="userCode !=null and userCode!=''">
+                    and card.doctor =(
+                    SELECT
+                    id
+                    FROM
+                    `yh_user_admin_info`
+                    WHERE
+                    user_code = #{userCode}
+                    )
+                </if>
+                <if test="noworg !=null and noworg!=''">
+                    and reg.Org_Code like CONCAT('%',#{noworg},'%')
+                </if>
+                AND DATE(rest.Evaluate_Date) BETWEEN #{bigantime}
+                AND #{endtime}
+            </where>
+            GROUP BY
+            rest.User_Code
+            ) a
+    </select>
+
+    <select id="selectPSTRItimes" parameterType="com.yihe.system.domain.TheBasicUse" resultType="java.lang.Integer">
+        SELECT
+           count(rest.Id)
+        FROM
+            yh_pressure_evaluate rest
+            INNER JOIN yh_user_reginfo reg ON rest.User_Code = reg.user_code
+            INNER JOIN `yh_user_make_card` AS card ON card.user_code = rest.User_Code
+        <where>
+            Evaluate_Type=2
+            <if test="userCode !=null and userCode!=''">
+                and card.doctor =(
+                SELECT
+                id
+                FROM
+                `yh_user_admin_info`
+                WHERE
+                user_code = #{userCode}
+                )
+            </if>
+            <if test="noworg !=null and noworg!=''">
+                and reg.Org_Code like CONCAT('%',#{noworg},'%')
+            </if>
+            AND DATE(rest.Evaluate_Date) BETWEEN #{bigantime}
+            AND #{endtime}
+        </where>
+    </select>
+
+    <select id="selectxinlijiankang" parameterType="com.yihe.system.domain.TheBasicUse" resultType="java.lang.Integer">
+        SELECT
+            count(a.Id)
+        FROM
+            (
+            SELECT
+                rest.*
+            FROM
+                yh_pressure_evaluate rest
+                INNER JOIN yh_user_reginfo reg ON rest.User_Code = reg.user_code
+                INNER JOIN `yh_user_make_card` AS card ON card.user_code = rest.User_Code
+            <where>
+                Evaluate_Type=3
+                <if test="userCode !=null and userCode!=''">
+                    and card.doctor =(
+                    SELECT
+                    id
+                    FROM
+                    `yh_user_admin_info`
+                    WHERE
+                    user_code = #{userCode}
+                    )
+                </if>
+                <if test="noworg !=null and noworg!=''">
+                    and reg.Org_Code like CONCAT('%',#{noworg},'%')
+                </if>
+                AND DATE(rest.Evaluate_Date) BETWEEN #{bigantime}
+                AND #{endtime}
+            </where>
+            GROUP BY
+            rest.User_Code
+            ) a
+    </select>
+
+    <select id="selectxinlijiankangtimes" parameterType="com.yihe.system.domain.TheBasicUse" resultType="java.lang.Integer">
+        SELECT
+           count(rest.Id)
+        FROM
+            yh_pressure_evaluate rest
+            INNER JOIN yh_user_reginfo reg ON rest.User_Code = reg.user_code
+            INNER JOIN `yh_user_make_card` AS card ON card.user_code = rest.User_Code
+        <where>
+            Evaluate_Type=3
+            <if test="userCode !=null and userCode!=''">
+                and card.doctor =(
+                SELECT
+                id
+                FROM
+                `yh_user_admin_info`
+                WHERE
+                user_code = #{userCode}
+                )
+            </if>
+            <if test="noworg !=null and noworg!=''">
+                and reg.Org_Code like CONCAT('%',#{noworg},'%')
+            </if>
+            AND DATE(rest.Evaluate_Date) BETWEEN #{bigantime}
+            AND #{endtime}
+        </where>
+    </select>
+
+    <select id="selectsleeprepout" parameterType="com.yihe.system.domain.TheBasicUse" resultType="java.lang.Integer">
+        SELECT
+            count(a.report_id)
+        FROM
+            (
+            SELECT
+                rest.*
+            FROM
+                yh_sleep_report rest
+                INNER JOIN yh_user_reginfo reg ON rest.user_code = reg.user_code
+                INNER JOIN `yh_user_make_card` AS card ON card.user_code = rest.user_code
+            <where>
+                <if test="userCode !=null and userCode!=''">
+                    and card.doctor =(
+                    SELECT
+                    id
+                    FROM
+                    `yh_user_admin_info`
+                    WHERE
+                    user_code = #{userCode}
+                    )
+                </if>
+                <if test="noworg !=null and noworg!=''">
+                    and reg.Org_Code like CONCAT('%',#{noworg},'%')
+                </if>
+                AND rest.qtime BETWEEN #{bigantime}
+                AND #{endtime}
+            </where>
+            GROUP BY
+            rest.user_code
+            ) a
+    </select>
+
+    <select id="selectsleeprepouttimes" parameterType="com.yihe.system.domain.TheBasicUse" resultType="java.lang.Integer">
+        SELECT
+           count(rest.report_id)
+        FROM
+            yh_sleep_report rest
+            INNER JOIN yh_user_reginfo reg ON rest.user_code = reg.user_code
+            INNER JOIN `yh_user_make_card` AS card ON card.user_code = rest.user_code
+        <where>
+            <if test="userCode !=null and userCode!=''">
+                and card.doctor =(
+                SELECT
+                id
+                FROM
+                `yh_user_admin_info`
+                WHERE
+                user_code = #{userCode}
+                )
+            </if>
+            <if test="noworg !=null and noworg!=''">
+                and reg.Org_Code like CONCAT('%',#{noworg},'%')
+            </if>
+            AND rest.qtime BETWEEN #{bigantime}
+            AND #{endtime}
+        </where>
+    </select>
+
+    <select id="selectxiguanpinggu" parameterType="com.yihe.system.domain.TheBasicUse" resultType="java.lang.Integer">
+        SELECT
+            count(a.id)
+        FROM
+            (
+            SELECT
+                rest.*
+            FROM
+                yh_life_habit_improvement_dict rest
+                INNER JOIN yh_user_reginfo reg ON rest.user_code = reg.user_code
+                INNER JOIN `yh_user_make_card` AS card ON card.user_code = rest.user_code
+            <where>
+                <if test="userCode !=null and userCode!=''">
+                    and card.doctor =(
+                    SELECT
+                    id
+                    FROM
+                    `yh_user_admin_info`
+                    WHERE
+                    user_code = #{userCode}
+                    )
+                </if>
+                <if test="noworg !=null and noworg!=''">
+                    and reg.Org_Code like CONCAT('%',#{noworg},'%')
+                </if>
+                AND rest.Dict_time BETWEEN #{bigantime}
+                AND #{endtime}
+            </where>
+            GROUP BY
+            rest.user_code
+            ) a
+    </select>
+
+    <select id="selectxiguanpinggutimes" parameterType="com.yihe.system.domain.TheBasicUse" resultType="java.lang.Integer">
+        SELECT
+           count(rest.id)
+        FROM
+            yh_life_habit_improvement_dict rest
+            INNER JOIN yh_user_reginfo reg ON rest.user_code = reg.user_code
+            INNER JOIN `yh_user_make_card` AS card ON card.user_code = rest.user_code
+        <where>
+            <if test="userCode !=null and userCode!=''">
+                and card.doctor =(
+                SELECT
+                id
+                FROM
+                `yh_user_admin_info`
+                WHERE
+                user_code = #{userCode}
+                )
+            </if>
+            <if test="noworg !=null and noworg!=''">
+                and reg.Org_Code like CONCAT('%',#{noworg},'%')
+            </if>
+            AND rest.Dict_time BETWEEN #{bigantime}
+            AND #{endtime}
+        </where>
+    </select>
+
+    <select id="selecttiwen" parameterType="com.yihe.system.domain.TheBasicUse" resultType="integer">
+        SELECT
+            count(a.tid)
+        FROM
+            (
+            SELECT
+                rest.*
+            FROM
+                yh_user_temperature rest
+                INNER JOIN yh_user_reginfo reg ON rest.E_User_Id = reg.user_code
+                INNER JOIN `yh_user_make_card` AS card ON card.user_code = rest.E_User_Id
+            <where>
+                <if test="userCode !=null and userCode!=''">
+                    and card.doctor =(
+                    SELECT
+                    id
+                    FROM
+                    `yh_user_admin_info`
+                    WHERE
+                    user_code = #{userCode}
+                    )
+                </if>
+                <if test="noworg !=null and noworg!=''">
+                    and reg.Org_Code like CONCAT('%',#{noworg},'%')
+                </if>
+                AND DATE(rest.Entry_Time) BETWEEN #{bigantime}
+                AND #{endtime}
+            </where>
+            GROUP BY
+            rest.E_User_Id
+            ) a
+    </select>
+
+    <select id="selecttiwentimes"  parameterType="com.yihe.system.domain.TheBasicUse" resultType="integer">
+        SELECT
+           count(rest.tid)
+        FROM
+            yh_user_temperature rest
+            INNER JOIN yh_user_reginfo reg ON rest.E_User_Id = reg.user_code
+            INNER JOIN `yh_user_make_card` AS card ON card.user_code = rest.E_User_Id
+        <where>
+            <if test="userCode !=null and userCode!=''">
+                and card.doctor =(
+                SELECT
+                id
+                FROM
+                `yh_user_admin_info`
+                WHERE
+                user_code = #{userCode}
+                )
+            </if>
+            <if test="noworg !=null and noworg!=''">
+                and reg.Org_Code like CONCAT('%',#{noworg},'%')
+            </if>
+            AND DATE(rest.Entry_Time) BETWEEN #{bigantime}
+            AND #{endtime}
+        </where>
+    </select>
+
+    <select id="selectizhong"  parameterType="com.yihe.system.domain.TheBasicUse" resultType="integer">
+        SELECT
+            count(a.U_Bmi_Id)
+        FROM
+            (
+            SELECT
+                rest.*
+            FROM
+                yh_user_bmi rest
+                INNER JOIN yh_user_reginfo reg ON rest.E_User_Id = reg.user_code
+                INNER JOIN `yh_user_make_card` AS card ON card.user_code = rest.E_User_Id
+            <where>
+                <if test="userCode !=null and userCode!=''">
+                    and card.doctor =(
+                    SELECT
+                    id
+                    FROM
+                    `yh_user_admin_info`
+                    WHERE
+                    user_code = #{userCode}
+                    )
+                </if>
+                <if test="noworg !=null and noworg!=''">
+                    and reg.Org_Code like CONCAT('%',#{noworg},'%')
+                </if>
+                AND DATE(rest.Entry_Time) BETWEEN #{bigantime}
+                AND #{endtime}
+            </where>
+            GROUP BY
+            rest.E_User_Id
+            ) a
+    </select>
+
+    <select id="selecttizhongtimes" parameterType="com.yihe.system.domain.TheBasicUse" resultType="integer">
+        SELECT
+           count(rest.U_Bmi_Id)
+        FROM
+            yh_user_bmi rest
+            INNER JOIN yh_user_reginfo reg ON rest.E_User_Id = reg.user_code
+            INNER JOIN `yh_user_make_card` AS card ON card.user_code = rest.E_User_Id
+        <where>
+            <if test="userCode !=null and userCode!=''">
+                and card.doctor =(
+                SELECT
+                id
+                FROM
+                `yh_user_admin_info`
+                WHERE
+                user_code = #{userCode}
+                )
+            </if>
+            <if test="noworg !=null and noworg!=''">
+                and reg.Org_Code like CONCAT('%',#{noworg},'%')
+            </if>
+            AND DATE(rest.Entry_Time) BETWEEN #{bigantime}
+            AND #{endtime}
+        </where>
+    </select>
+
+    <select id="selecxueya"  parameterType="com.yihe.system.domain.TheBasicUse" resultType="integer">
+        SELECT
+            count(a.U_Bloodpressure_Id)
+        FROM
+            (
+            SELECT
+                rest.*
+            FROM
+                yh_user_bloodpressure rest
+                INNER JOIN yh_user_reginfo reg ON rest.E_User_Id = reg.user_code
+                INNER JOIN `yh_user_make_card` AS card ON card.user_code = rest.E_User_Id
+            <where>
+                <if test="userCode !=null and userCode!=''">
+                    and card.doctor =(
+                    SELECT
+                    id
+                    FROM
+                    `yh_user_admin_info`
+                    WHERE
+                    user_code = #{userCode}
+                    )
+                </if>
+                <if test="noworg !=null and noworg!=''">
+                    and reg.Org_Code like CONCAT('%',#{noworg},'%')
+                </if>
+                AND DATE(rest.Entry_Time) BETWEEN #{bigantime}
+                AND #{endtime}
+            </where>
+            GROUP BY
+            rest.E_User_Id
+            ) a
+    </select>
+
+    <select id="selectxueyatimes"  parameterType="com.yihe.system.domain.TheBasicUse" resultType="integer">
+        SELECT
+           count(rest.U_Bloodpressure_Id)
+        FROM
+            yh_user_bloodpressure rest
+            INNER JOIN yh_user_reginfo reg ON rest.E_User_Id = reg.user_code
+            INNER JOIN `yh_user_make_card` AS card ON card.user_code = rest.E_User_Id
+        <where>
+            <if test="userCode !=null and userCode!=''">
+                and card.doctor =(
+                SELECT
+                id
+                FROM
+                `yh_user_admin_info`
+                WHERE
+                user_code = #{userCode}
+                )
+            </if>
+            <if test="noworg !=null and noworg!=''">
+                and reg.Org_Code like CONCAT('%',#{noworg},'%')
+            </if>
+            AND DATE(rest.Entry_Time) BETWEEN #{bigantime}
+            AND #{endtime}
+        </where>
+    </select>
+
+    <select id="selecxuetang" parameterType="com.yihe.system.domain.TheBasicUse" resultType="integer">
+        SELECT
+            count(a.U_Bloodsuger_Id)
+        FROM
+            (
+            SELECT
+                rest.*
+            FROM
+                yh_user_bloodsuger rest
+                INNER JOIN yh_user_reginfo reg ON rest.E_User_Id = reg.user_code
+                INNER JOIN `yh_user_make_card` AS card ON card.user_code = rest.E_User_Id
+            <where>
+                <if test="userCode !=null and userCode!=''">
+                    and card.doctor =(
+                    SELECT
+                    id
+                    FROM
+                    `yh_user_admin_info`
+                    WHERE
+                    user_code = #{userCode}
+                    )
+                </if>
+                <if test="noworg !=null and noworg!=''">
+                    and reg.Org_Code like CONCAT('%',#{noworg},'%')
+                </if>
+                AND DATE(rest.Entry_Time) BETWEEN #{bigantime}
+                AND #{endtime}
+            </where>
+            GROUP BY
+            rest.E_User_Id
+            ) a
+    </select>
+
+
+
+    <select id="selectxuetangtimes" parameterType="com.yihe.system.domain.TheBasicUse" resultType="integer">
+        SELECT
+           count(rest.U_Bloodsuger_Id)
+        FROM
+            yh_user_bloodsuger rest
+            INNER JOIN yh_user_reginfo reg ON rest.E_User_Id = reg.user_code
+            INNER JOIN `yh_user_make_card` AS card ON card.user_code = rest.E_User_Id
+        <where>
+            <if test="userCode !=null and userCode!=''">
+                and card.doctor =(
+                SELECT
+                id
+                FROM
+                `yh_user_admin_info`
+                WHERE
+                user_code = #{userCode}
+                )
+            </if>
+            <if test="noworg !=null and noworg!=''">
+                and reg.Org_Code like CONCAT('%',#{noworg},'%')
+            </if>
+            AND DATE(rest.Entry_Time) BETWEEN #{bigantime}
+            AND #{endtime}
+        </where>
+    </select>
+
+    <select id="selecxueyang" parameterType="com.yihe.system.domain.TheBasicUse" resultType="integer">
+        SELECT
+            count(a.U_oxygen_Id)
+        FROM
+            (
+            SELECT
+                rest.*
+            FROM
+                yh_user_oxygen rest
+                INNER JOIN yh_user_reginfo reg ON rest.E_User_Id = reg.user_code
+                INNER JOIN `yh_user_make_card` AS card ON card.user_code = rest.E_User_Id
+            <where>
+                <if test="userCode !=null and userCode!=''">
+                    and card.doctor =(
+                    SELECT
+                    id
+                    FROM
+                    `yh_user_admin_info`
+                    WHERE
+                    user_code = #{userCode}
+                    )
+                </if>
+                <if test="noworg !=null and noworg!=''">
+                    and reg.Org_Code like CONCAT('%',#{noworg},'%')
+                </if>
+                AND DATE(rest.Entry_Time) BETWEEN #{bigantime}
+                AND #{endtime}
+            </where>
+            GROUP BY
+            rest.E_User_Id
+            ) a
+    </select>
+
+    <select id="selectxueyangtimes" parameterType="com.yihe.system.domain.TheBasicUse" resultType="integer">
+        SELECT
+           count(rest.U_oxygen_Id)
+        FROM
+            yh_user_oxygen rest
+            INNER JOIN yh_user_reginfo reg ON rest.E_User_Id = reg.user_code
+            INNER JOIN `yh_user_make_card` AS card ON card.user_code = rest.E_User_Id
+        <where>
+            <if test="userCode !=null and userCode!=''">
+                and card.doctor =(
+                SELECT
+                id
+                FROM
+                `yh_user_admin_info`
+                WHERE
+                user_code = #{userCode}
+                )
+            </if>
+            <if test="noworg !=null and noworg!=''">
+                and reg.Org_Code like CONCAT('%',#{noworg},'%')
+            </if>
+            AND DATE(rest.Entry_Time) BETWEEN #{bigantime}
+            AND #{endtime}
+        </where>
+    </select>
+
+
+    <select id="selecxinlv" parameterType="com.yihe.system.domain.TheBasicUse" resultType="integer">
+        SELECT
+            count(a.rid)
+        FROM
+            (
+            SELECT
+                rest.*
+            FROM
+                yh_user_heart_rate rest
+                INNER JOIN yh_user_reginfo reg ON rest.E_User_Id = reg.user_code
+                INNER JOIN `yh_user_make_card` AS card ON card.user_code = rest.E_User_Id
+            <where>
+                <if test="userCode !=null and userCode!=''">
+                    and card.doctor =(
+                    SELECT
+                    id
+                    FROM
+                    `yh_user_admin_info`
+                    WHERE
+                    user_code = #{userCode}
+                    )
+                </if>
+                <if test="noworg !=null and noworg!=''">
+                    and reg.Org_Code like CONCAT('%',#{noworg},'%')
+                </if>
+                AND DATE(rest.Entry_Time) BETWEEN #{bigantime}
+                AND #{endtime}
+            </where>
+            GROUP BY
+            rest.E_User_Id
+            ) a
+    </select>
+
+    <select id="selectxinlvtimes" parameterType="com.yihe.system.domain.TheBasicUse" resultType="integer">
+        SELECT
+           count(rest.rid)
+        FROM
+            yh_user_heart_rate rest
+            INNER JOIN yh_user_reginfo reg ON rest.E_User_Id = reg.user_code
+            INNER JOIN `yh_user_make_card` AS card ON card.user_code = rest.E_User_Id
+        <where>
+            <if test="userCode !=null and userCode!=''">
+                and card.doctor =(
+                SELECT
+                id
+                FROM
+                `yh_user_admin_info`
+                WHERE
+                user_code = #{userCode}
+                )
+            </if>
+            <if test="noworg !=null and noworg!=''">
+                and reg.Org_Code like CONCAT('%',#{noworg},'%')
+            </if>
+            AND DATE(rest.Entry_Time) BETWEEN #{bigantime}
+            AND #{endtime}
+        </where>
+    </select>
+
+    <select id="selectizhi" parameterType="com.yihe.system.domain.TheBasicUse" resultType="integer">
+        SELECT
+            count(a.wubf_id)
+        FROM
+            (
+            SELECT
+                rest.*
+            FROM
+                yh_user_body_fat rest
+                INNER JOIN yh_user_reginfo reg ON rest.E_User_Id = reg.user_code
+                INNER JOIN `yh_user_make_card` AS card ON card.user_code = rest.E_User_Id
+            <where>
+                <if test="userCode !=null and userCode!=''">
+                    and card.doctor =(
+                    SELECT
+                    id
+                    FROM
+                    `yh_user_admin_info`
+                    WHERE
+                    user_code = #{userCode}
+                    )
+                </if>
+                <if test="noworg !=null and noworg!=''">
+                    and reg.Org_Code like CONCAT('%',#{noworg},'%')
+                </if>
+                AND DATE(rest.Entry_Time) BETWEEN #{bigantime}
+                AND #{endtime}
+            </where>
+            GROUP BY
+            rest.E_User_Id
+            ) a
+    </select>
+
+    <select id="selecttizhitimes" parameterType="com.yihe.system.domain.TheBasicUse" resultType="integer">
+        SELECT
+           count(rest.wubf_id)
+        FROM
+            yh_user_body_fat rest
+            INNER JOIN yh_user_reginfo reg ON rest.E_User_Id = reg.user_code
+            INNER JOIN `yh_user_make_card` AS card ON card.user_code = rest.E_User_Id
+        <where>
+            <if test="userCode !=null and userCode!=''">
+                and card.doctor =(
+                SELECT
+                id
+                FROM
+                `yh_user_admin_info`
+                WHERE
+                user_code = #{userCode}
+                )
+            </if>
+            <if test="noworg !=null and noworg!=''">
+                and reg.Org_Code like CONCAT('%',#{noworg},'%')
+            </if>
+            AND DATE(rest.Entry_Time) BETWEEN #{bigantime}
+            AND #{endtime}
+        </where>
+    </select>
+
+    <select id="selecxuezhi" parameterType="com.yihe.system.domain.TheBasicUse" resultType="integer">
+        SELECT
+            count(a.U_Bloodfat_Id)
+        FROM
+            (
+            SELECT
+                rest.*
+            FROM
+                yh_user_bloodfat rest
+                INNER JOIN yh_user_reginfo reg ON rest.E_User_Id = reg.user_code
+                INNER JOIN `yh_user_make_card` AS card ON card.user_code = rest.E_User_Id
+            <where>
+                <if test="userCode !=null and userCode!=''">
+                    and card.doctor =(
+                    SELECT
+                    id
+                    FROM
+                    `yh_user_admin_info`
+                    WHERE
+                    user_code = #{userCode}
+                    )
+                </if>
+                <if test="noworg !=null and noworg!=''">
+                    and reg.Org_Code like CONCAT('%',#{noworg},'%')
+                </if>
+                AND DATE(rest.Entry_Time) BETWEEN #{bigantime}
+                AND #{endtime}
+            </where>
+            GROUP BY
+            rest.E_User_Id
+            ) a
+    </select>
+
+    <select id="selectxuezhitimes" parameterType="com.yihe.system.domain.TheBasicUse" resultType="integer">
+        SELECT
+           count(rest.U_Bloodfat_Id)
+        FROM
+            yh_user_bloodfat rest
+            INNER JOIN yh_user_reginfo reg ON rest.E_User_Id = reg.user_code
+            INNER JOIN `yh_user_make_card` AS card ON card.user_code = rest.E_User_Id
+        <where>
+            <if test="userCode !=null and userCode!=''">
+                and card.doctor =(
+                SELECT
+                id
+                FROM
+                `yh_user_admin_info`
+                WHERE
+                user_code = #{userCode}
+                )
+            </if>
+            <if test="noworg !=null and noworg!=''">
+                and reg.Org_Code like CONCAT('%',#{noworg},'%')
+            </if>
+            AND DATE(rest.Entry_Time) BETWEEN #{bigantime}
+            AND #{endtime}
+        </where>
+    </select>
+
+    <select id="selecshengongneg" parameterType="com.yihe.system.domain.TheBasicUse" resultType="integer">
+        SELECT
+            count(a.renalid)
+        FROM
+            (
+            SELECT
+                rest.*
+            FROM
+                yh_user_renalfunction rest
+                INNER JOIN yh_user_reginfo reg ON rest.user_id = reg.user_code
+                INNER JOIN `yh_user_make_card` AS card ON card.user_code = rest.user_id
+            <where>
+                <if test="userCode !=null and userCode!=''">
+                    and card.doctor =(
+                    SELECT
+                    id
+                    FROM
+                    `yh_user_admin_info`
+                    WHERE
+                    user_code = #{userCode}
+                    )
+                </if>
+                <if test="noworg !=null and noworg!=''">
+                    and reg.Org_Code like CONCAT('%',#{noworg},'%')
+                </if>
+                AND DATE(rest.inertTime) BETWEEN #{bigantime}
+                AND #{endtime}
+            </where>
+            GROUP BY
+            rest.user_id
+            ) a
+    </select>
+
+    <select id="selectshengongnegtimes" parameterType="com.yihe.system.domain.TheBasicUse" resultType="integer">
+        SELECT
+           count(rest.renalid)
+        FROM
+            yh_user_renalfunction rest
+            INNER JOIN yh_user_reginfo reg ON rest.user_id = reg.user_code
+            INNER JOIN `yh_user_make_card` AS card ON card.user_code = rest.user_id
+        <where>
+            <if test="userCode !=null and userCode!=''">
+                and card.doctor =(
+                SELECT
+                id
+                FROM
+                `yh_user_admin_info`
+                WHERE
+                user_code = #{userCode}
+                )
+            </if>
+            <if test="noworg !=null and noworg!=''">
+                and reg.Org_Code like CONCAT('%',#{noworg},'%')
+            </if>
+            AND DATE(rest.inertTime) BETWEEN #{bigantime}
+            AND #{endtime}
+        </where>
+    </select>
+
+    <select id="selecgangongneng" parameterType="com.yihe.system.domain.TheBasicUse" resultType="integer">
+        SELECT
+            count(a.liverid)
+        FROM
+            (
+            SELECT
+                rest.*
+            FROM
+                yh_user_liverfunction rest
+                INNER JOIN yh_user_reginfo reg ON rest.user_id = reg.user_code
+                INNER JOIN `yh_user_make_card` AS card ON card.user_code = rest.user_id
+            <where>
+                <if test="userCode !=null and userCode!=''">
+                    and card.doctor =(
+                    SELECT
+                    id
+                    FROM
+                    `yh_user_admin_info`
+                    WHERE
+                    user_code = #{userCode}
+                    )
+                </if>
+                <if test="noworg !=null and noworg!=''">
+                    and reg.Org_Code like CONCAT('%',#{noworg},'%')
+                </if>
+                AND DATE(rest.insertTime) BETWEEN #{bigantime}
+                AND #{endtime}
+            </where>
+            GROUP BY
+            rest.user_id
+            ) a
+    </select>
+
+    <select id="selectgangongtimes" parameterType="com.yihe.system.domain.TheBasicUse" resultType="integer">
+        SELECT
+           count(rest.liverid)
+        FROM
+            yh_user_liverfunction rest
+            INNER JOIN yh_user_reginfo reg ON rest.user_id = reg.user_code
+            INNER JOIN `yh_user_make_card` AS card ON card.user_code = rest.user_id
+        <where>
+            <if test="userCode !=null and userCode!=''">
+                and card.doctor =(
+                SELECT
+                id
+                FROM
+                `yh_user_admin_info`
+                WHERE
+                user_code = #{userCode}
+                )
+            </if>
+            <if test="noworg !=null and noworg!=''">
+                and reg.Org_Code like CONCAT('%',#{noworg},'%')
+            </if>
+            AND DATE(rest.insertTime) BETWEEN #{bigantime}
+            AND #{endtime}
+        </where>
+    </select>
+
+    <select id="selecxindaintu" parameterType="com.yihe.system.domain.TheBasicUse" resultType="integer">
+        SELECT
+            count(a.U_ECG_Id)
+        FROM
+            (
+            SELECT
+                rest.*
+            FROM
+                yh_user_ecg rest
+                INNER JOIN yh_user_reginfo reg ON rest.E_User_Id = reg.user_code
+                INNER JOIN `yh_user_make_card` AS card ON card.user_code = rest.E_User_Id
+            <where>
+                <if test="userCode !=null and userCode!=''">
+                    and card.doctor =(
+                    SELECT
+                    id
+                    FROM
+                    `yh_user_admin_info`
+                    WHERE
+                    user_code = #{userCode}
+                    )
+                </if>
+                <if test="noworg !=null and noworg!=''">
+                    and reg.Org_Code like CONCAT('%',#{noworg},'%')
+                </if>
+                AND DATE(rest.Entry_Time) BETWEEN #{bigantime}
+                AND #{endtime}
+            </where>
+            GROUP BY
+            rest.E_User_Id
+            ) a
+    </select>
+
+    <select id="selectxindaintutimes" parameterType="com.yihe.system.domain.TheBasicUse" resultType="integer">
+        SELECT
+           count(rest.U_ECG_Id)
+        FROM
+            yh_user_ecg rest
+            INNER JOIN yh_user_reginfo reg ON rest.E_User_Id = reg.user_code
+            INNER JOIN `yh_user_make_card` AS card ON card.user_code = rest.E_User_Id
+        <where>
+            <if test="userCode !=null and userCode!=''">
+                and card.doctor =(
+                SELECT
+                id
+                FROM
+                `yh_user_admin_info`
+                WHERE
+                user_code = #{userCode}
+                )
+            </if>
+            <if test="noworg !=null and noworg!=''">
+                and reg.Org_Code like CONCAT('%',#{noworg},'%')
+            </if>
+            AND DATE(rest.Entry_Time) BETWEEN #{bigantime}
+            AND #{endtime}
+        </where>
+    </select>
+
+    <select id="selecnianjian" parameterType="com.yihe.system.domain.TheBasicUse" resultType="integer">
+        SELECT
+            count(a.Uba_Id)
+        FROM
+            (
+            SELECT
+                rest.*
+            FROM
+                yh_user_uba rest
+                INNER JOIN yh_user_reginfo reg ON rest.E_User_Id = reg.user_code
+                INNER JOIN `yh_user_make_card` AS card ON card.user_code = rest.E_User_Id
+            <where>
+                <if test="userCode !=null and userCode!=''">
+                    and card.doctor =(
+                    SELECT
+                    id
+                    FROM
+                    `yh_user_admin_info`
+                    WHERE
+                    user_code = #{userCode}
+                    )
+                </if>
+                <if test="noworg !=null and noworg!=''">
+                    and reg.Org_Code like CONCAT('%',#{noworg},'%')
+                </if>
+                AND DATE(rest.addDate) BETWEEN #{bigantime}
+                AND #{endtime}
+            </where>
+            GROUP BY
+            rest.E_User_Id
+            ) a
+    </select>
+
+    <select id="selectnianjiantimes" parameterType="com.yihe.system.domain.TheBasicUse" resultType="integer">
+        SELECT
+           count(rest.Uba_Id)
+        FROM
+            yh_user_uba rest
+            INNER JOIN yh_user_reginfo reg ON rest.E_User_Id = reg.user_code
+            INNER JOIN `yh_user_make_card` AS card ON card.user_code = rest.E_User_Id
+        <where>
+            <if test="userCode !=null and userCode!=''">
+                and card.doctor =(
+                SELECT
+                id
+                FROM
+                `yh_user_admin_info`
+                WHERE
+                user_code = #{userCode}
+                )
+            </if>
+            <if test="noworg !=null and noworg!=''">
+                and reg.Org_Code like CONCAT('%',#{noworg},'%')
+            </if>
+            AND DATE(rest.addDate) BETWEEN #{bigantime}
+            AND #{endtime}
+        </where>
+    </select>
+
+    <select id="selecqitazhibiao" parameterType="com.yihe.system.domain.TheBasicUse" resultType="integer">
+        SELECT
+            count(a.otherid)
+        FROM
+            (
+            SELECT
+                rest.*
+            FROM
+                yh_user_otherfunction rest
+                INNER JOIN yh_user_reginfo reg ON rest.user_id = reg.user_code
+                INNER JOIN `yh_user_make_card` AS card ON card.user_code = rest.user_id
+            <where>
+                <if test="userCode !=null and userCode!=''">
+                    and card.doctor =(
+                    SELECT
+                    id
+                    FROM
+                    `yh_user_admin_info`
+                    WHERE
+                    user_code = #{userCode}
+                    )
+                </if>
+                <if test="noworg !=null and noworg!=''">
+                    and reg.Org_Code like CONCAT('%',#{noworg},'%')
+                </if>
+                AND DATE(rest.insertTime) BETWEEN #{bigantime}
+                AND #{endtime}
+            </where>
+            GROUP BY
+            rest.user_id
+            ) a
+    </select>
+
+    <select id="selectqitazhibiaotimes" parameterType="com.yihe.system.domain.TheBasicUse" resultType="integer">
+        SELECT
+           count(rest.otherid)
+        FROM
+            yh_user_otherfunction rest
+            INNER JOIN yh_user_reginfo reg ON rest.user_id = reg.user_code
+            INNER JOIN `yh_user_make_card` AS card ON card.user_code = rest.user_id
+        <where>
+            <if test="userCode !=null and userCode!=''">
+                and card.doctor =(
+                SELECT
+                id
+                FROM
+                `yh_user_admin_info`
+                WHERE
+                user_code = #{userCode}
+                )
+            </if>
+            <if test="noworg !=null and noworg!=''">
+                and reg.Org_Code like CONCAT('%',#{noworg},'%')
+            </if>
+            AND DATE(rest.insertTime) BETWEEN #{bigantime}
+            AND #{endtime}
+        </where>
+    </select>
+
+    <select id="selecyinshiriji" parameterType="com.yihe.system.domain.TheBasicUse" resultType="integer">
+        SELECT
+            count(a.U_Fd_Id)
+        FROM
+            (
+            SELECT
+                rest.*
+            FROM
+                yh_food_user_diary rest
+                INNER JOIN yh_user_reginfo reg ON rest.user_code = reg.user_code
+                INNER JOIN `yh_user_make_card` AS card ON card.user_code = rest.user_code
+            <where>
+                <if test="userCode !=null and userCode!=''">
+                    and card.doctor =(
+                    SELECT
+                    id
+                    FROM
+                    `yh_user_admin_info`
+                    WHERE
+                    user_code = #{userCode}
+                    )
+                </if>
+                <if test="noworg !=null and noworg!=''">
+                    and reg.Org_Code like CONCAT('%',#{noworg},'%')
+                </if>
+                AND DATE(rest.C_Time) BETWEEN #{bigantime}
+                AND #{endtime}
+            </where>
+            GROUP BY
+            rest.user_code
+            ) a
+    </select>
+
+    <select id="selectyinshirijitimes" parameterType="com.yihe.system.domain.TheBasicUse" resultType="integer">
+        SELECT
+           count(rest.U_Fd_Id)
+        FROM
+            yh_food_user_diary rest
+            INNER JOIN yh_user_reginfo reg ON rest.user_code = reg.user_code
+            INNER JOIN `yh_user_make_card` AS card ON card.user_code = rest.user_code
+        <where>
+            <if test="userCode !=null and userCode!=''">
+                and card.doctor =(
+                SELECT
+                id
+                FROM
+                `yh_user_admin_info`
+                WHERE
+                user_code = #{userCode}
+                )
+            </if>
+            <if test="noworg !=null and noworg!=''">
+                and reg.Org_Code like CONCAT('%',#{noworg},'%')
+            </if>
+            AND DATE(rest.C_Time) BETWEEN #{bigantime}
+            AND #{endtime}
+        </where>
+    </select>
+
+    <select id="selecyundongriji" parameterType="com.yihe.system.domain.TheBasicUse" resultType="integer">
+        SELECT
+            count(a.u_sport_id)
+        FROM
+            (
+            SELECT
+                rest.*
+            FROM
+                yh_sport_diary rest
+                INNER JOIN yh_user_reginfo reg ON rest.user_code = reg.user_code
+                INNER JOIN `yh_user_make_card` AS card ON card.user_code = rest.user_code
+            <where>
+                <if test="userCode !=null and userCode!=''">
+                    and card.doctor =(
+                    SELECT
+                    id
+                    FROM
+                    `yh_user_admin_info`
+                    WHERE
+                    user_code = #{userCode}
+                    )
+                </if>
+                <if test="noworg !=null and noworg!=''">
+                    and reg.Org_Code like CONCAT('%',#{noworg},'%')
+                </if>
+                AND DATE(rest.Entry_Time) BETWEEN #{bigantime}
+                AND #{endtime}
+            </where>
+            GROUP BY
+            rest.user_code
+            ) a
+    </select>
+
+    <select id="selectyundongrijitimes" parameterType="com.yihe.system.domain.TheBasicUse" resultType="integer">
+        SELECT
+           count(rest.u_sport_id)
+        FROM
+            yh_sport_diary rest
+            INNER JOIN yh_user_reginfo reg ON rest.user_code = reg.user_code
+            INNER JOIN `yh_user_make_card` AS card ON card.user_code = rest.user_code
+        <where>
+            <if test="userCode !=null and userCode!=''">
+                and card.doctor =(
+                SELECT
+                id
+                FROM
+                `yh_user_admin_info`
+                WHERE
+                user_code = #{userCode}
+                )
+            </if>
+            <if test="noworg !=null and noworg!=''">
+                and reg.Org_Code like CONCAT('%',#{noworg},'%')
+            </if>
+            AND DATE(rest.Entry_Time) BETWEEN #{bigantime}
+            AND #{endtime}
+        </where>
+    </select>
+
+    <select id="selecshuimianriji" parameterType="com.yihe.system.domain.TheBasicUse" resultType="java.lang.Integer">
+        SELECT
+            count(a.id)
+        FROM
+            (
+            SELECT
+                rest.*
+            FROM
+                yh_sleep_user_diary rest
+                INNER JOIN yh_user_reginfo reg ON rest.user_code = reg.user_code
+                INNER JOIN `yh_user_make_card` AS card ON card.user_code = rest.user_code
+            <where>
+                <if test="userCode !=null and userCode!=''">
+                    and card.doctor =(
+                    SELECT
+                    id
+                    FROM
+                    `yh_user_admin_info`
+                    WHERE
+                    user_code = #{userCode}
+                    )
+                </if>
+                <if test="noworg !=null and noworg!=''">
+                    and reg.Org_Code like CONCAT('%',#{noworg},'%')
+                </if>
+                AND rest.sleep_diarytime BETWEEN #{bigantime}
+                AND #{endtime}
+            </where>
+            GROUP BY
+            rest.user_code
+            ) a
+    </select>
+
+    <select id="selectshuimianrijitimes" parameterType="com.yihe.system.domain.TheBasicUse" resultType="java.lang.Integer">
+        SELECT
+           count(rest.id)
+        FROM
+            yh_sleep_user_diary rest
+            INNER JOIN yh_user_reginfo reg ON rest.user_code = reg.user_code
+            INNER JOIN `yh_user_make_card` AS card ON card.user_code = rest.user_code
+        <where>
+            <if test="userCode !=null and userCode!=''">
+                and card.doctor =(
+                SELECT
+                id
+                FROM
+                `yh_user_admin_info`
+                WHERE
+                user_code = #{userCode}
+                )
+            </if>
+            <if test="noworg !=null and noworg!=''">
+                and reg.Org_Code like CONCAT('%',#{noworg},'%')
+            </if>
+            AND rest.sleep_diarytime BETWEEN #{bigantime}
+            AND #{endtime}
+        </where>
+    </select>
+
+    <select id="selecgaoxueya" parameterType="com.yihe.system.domain.TheBasicUse" resultType="java.lang.Integer">
+        SELECT
+            count(a.id)
+        FROM
+            (
+            SELECT
+                rest.*
+            FROM
+                yh_user_healthy_plan rest
+                INNER JOIN yh_user_reginfo reg ON rest.user_code = reg.user_code
+                INNER JOIN `yh_user_make_card` AS card ON card.user_code = rest.user_code
+            <where>
+                <if test="userCode !=null and userCode!=''">
+                    and card.doctor =(
+                    SELECT
+                    id
+                    FROM
+                    `yh_user_admin_info`
+                    WHERE
+                    user_code = #{userCode}
+                    )
+                </if>
+                <if test="noworg !=null and noworg!=''">
+                    and reg.Org_Code like CONCAT('%',#{noworg},'%')
+                </if>
+                AND (plan_id=1 OR plan_id=5)
+                AND plandetail_id is not  null
+                AND rest.plan_startdate BETWEEN #{bigantime}
+                AND #{endtime}
+            </where>
+            GROUP BY
+            rest.user_code
+            ) a
+    </select>
+
+    <select id="selectgaoxueyatimes" parameterType="com.yihe.system.domain.TheBasicUse" resultType="java.lang.Integer">
+        SELECT
+           count(1)
+        FROM
+            yh_user_healthy_plan rest
+            INNER JOIN yh_user_reginfo reg ON rest.user_code = reg.user_code
+            INNER JOIN `yh_user_make_card` AS card ON card.user_code = rest.user_code
+        <where>
+            <if test="userCode !=null and userCode!=''">
+                and card.doctor =(
+                SELECT
+                id
+                FROM
+                `yh_user_admin_info`
+                WHERE
+                user_code = #{userCode}
+                )
+            </if>
+            <if test="noworg !=null and noworg!=''">
+                and reg.Org_Code like CONCAT('%',#{noworg},'%')
+            </if>
+            AND (plan_id=1 OR plan_id=5)
+            AND plandetail_id is not  null
+            AND rest.plan_startdate BETWEEN #{bigantime}
+            AND #{endtime}
+        </where>
+    </select>
+
+    <select id="selectgaoxuetang" parameterType="com.yihe.system.domain.TheBasicUse" resultType="java.lang.Integer">
+        SELECT
+            count(a.id)
+        FROM
+            (
+            SELECT
+                rest.*
+            FROM
+                yh_user_healthy_plan rest
+                INNER JOIN yh_user_reginfo reg ON rest.user_code = reg.user_code
+                INNER JOIN `yh_user_make_card` AS card ON card.user_code = rest.user_code
+            <where>
+                <if test="userCode !=null and userCode!=''">
+                    and card.doctor =(
+                    SELECT
+                    id
+                    FROM
+                    `yh_user_admin_info`
+                    WHERE
+                    user_code = #{userCode}
+                    )
+                </if>
+                <if test="noworg !=null and noworg!=''">
+                    and reg.Org_Code like CONCAT('%',#{noworg},'%')
+                </if>
+                AND (plan_id=2 OR plan_id=6)
+                AND plandetail_id is not  null
+                AND rest.plan_startdate BETWEEN #{bigantime}
+                AND #{endtime}
+            </where>
+            GROUP BY
+            rest.user_code
+            ) a
+    </select>
+
+    <select id="selectgaoxuetangtimes" parameterType="com.yihe.system.domain.TheBasicUse" resultType="java.lang.Integer">
+        SELECT
+           count(1)
+        FROM
+            yh_user_healthy_plan rest
+            INNER JOIN yh_user_reginfo reg ON rest.user_code = reg.user_code
+            INNER JOIN `yh_user_make_card` AS card ON card.user_code = rest.user_code
+        <where>
+            <if test="userCode !=null and userCode!=''">
+                and card.doctor =(
+                SELECT
+                id
+                FROM
+                `yh_user_admin_info`
+                WHERE
+                user_code = #{userCode}
+                )
+            </if>
+            <if test="noworg !=null and noworg!=''">
+                and reg.Org_Code like CONCAT('%',#{noworg},'%')
+            </if>
+            AND (plan_id=2 OR plan_id=6)
+            AND plandetail_id is not  null
+            AND rest.plan_startdate BETWEEN #{bigantime}
+            AND #{endtime}
+        </where>
+    </select>
+
+    <select id="selectgaoxuezhi" parameterType="com.yihe.system.domain.TheBasicUse" resultType="java.lang.Integer">
+        SELECT
+            count(a.id)
+        FROM
+            (
+            SELECT
+                rest.*
+            FROM
+                yh_user_healthy_plan rest
+                INNER JOIN yh_user_reginfo reg ON rest.user_code = reg.user_code
+                INNER JOIN `yh_user_make_card` AS card ON card.user_code = rest.user_code
+            <where>
+                <if test="userCode !=null and userCode!=''">
+                    and card.doctor =(
+                    SELECT
+                    id
+                    FROM
+                    `yh_user_admin_info`
+                    WHERE
+                    user_code = #{userCode}
+                    )
+                </if>
+                <if test="noworg !=null and noworg!=''">
+                    and reg.Org_Code like CONCAT('%',#{noworg},'%')
+                </if>
+                AND (plan_id=4 OR plan_id=7)
+                AND plandetail_id is not  null
+                AND rest.plan_startdate BETWEEN #{bigantime}
+                AND #{endtime}
+            </where>
+            GROUP BY
+            rest.user_code
+            ) a
+    </select>
+
+    <select id="selectgaoxuezhitimes" parameterType="com.yihe.system.domain.TheBasicUse" resultType="java.lang.Integer">
+        SELECT
+           count(1)
+        FROM
+            yh_user_healthy_plan rest
+            INNER JOIN yh_user_reginfo reg ON rest.user_code = reg.user_code
+            INNER JOIN `yh_user_make_card` AS card ON card.user_code = rest.user_code
+        <where>
+            <if test="userCode !=null and userCode!=''">
+                and card.doctor =(
+                SELECT
+                id
+                FROM
+                `yh_user_admin_info`
+                WHERE
+                user_code = #{userCode}
+                )
+            </if>
+            <if test="noworg !=null and noworg!=''">
+                and reg.Org_Code like CONCAT('%',#{noworg},'%')
+            </if>
+            AND (plan_id=4 OR plan_id=7)
+            AND plandetail_id is not  null
+            AND rest.plan_startdate BETWEEN #{bigantime}
+            AND #{endtime}
+        </where>
+    </select>
+
+    <select id="selectgaoniansuan" parameterType="com.yihe.system.domain.TheBasicUse" resultType="java.lang.Integer">
+        SELECT
+            count(a.id)
+        FROM
+            (
+            SELECT
+                rest.*
+            FROM
+                yh_user_healthy_plan rest
+                INNER JOIN yh_user_reginfo reg ON rest.user_code = reg.user_code
+                INNER JOIN `yh_user_make_card` AS card ON card.user_code = rest.user_code
+            <where>
+                <if test="userCode !=null and userCode!=''">
+                    and card.doctor =(
+                    SELECT
+                    id
+                    FROM
+                    `yh_user_admin_info`
+                    WHERE
+                    user_code = #{userCode}
+                    )
+                </if>
+                <if test="noworg !=null and noworg!=''">
+                    and reg.Org_Code like CONCAT('%',#{noworg},'%')
+                </if>
+                AND plan_id=9
+                AND plandetail_id is not  null
+                AND rest.plan_startdate BETWEEN #{bigantime}
+                AND #{endtime}
+            </where>
+            GROUP BY
+            rest.user_code
+            ) a
+    </select>
+
+    <select id="selectgaoniansuantimes" parameterType="com.yihe.system.domain.TheBasicUse" resultType="java.lang.Integer">
+        SELECT
+           count(1)
+        FROM
+            yh_user_healthy_plan rest
+            INNER JOIN yh_user_reginfo reg ON rest.user_code = reg.user_code
+            INNER JOIN `yh_user_make_card` AS card ON card.user_code = rest.user_code
+        <where>
+            <if test="userCode !=null and userCode!=''">
+                and card.doctor =(
+                SELECT
+                id
+                FROM
+                `yh_user_admin_info`
+                WHERE
+                user_code = #{userCode}
+                )
+            </if>
+            <if test="noworg !=null and noworg!=''">
+                and reg.Org_Code like CONCAT('%',#{noworg},'%')
+            </if>
+            AND plan_id=9
+            AND plandetail_id is not  null
+            AND rest.plan_startdate BETWEEN #{bigantime}
+            AND #{endtime}
+        </where>
+    </select>
+
+    <select id="selectjianzhi" parameterType="com.yihe.system.domain.TheBasicUse" resultType="java.lang.Integer">
+        SELECT
+            count(a.id)
+        FROM
+            (
+            SELECT
+                rest.*
+            FROM
+                yh_user_healthy_plan rest
+                INNER JOIN yh_user_reginfo reg ON rest.user_code = reg.user_code
+                INNER JOIN `yh_user_make_card` AS card ON card.user_code = rest.user_code
+            <where>
+                <if test="userCode !=null and userCode!=''">
+                    and card.doctor =(
+                    SELECT
+                    id
+                    FROM
+                    `yh_user_admin_info`
+                    WHERE
+                    user_code = #{userCode}
+                    )
+                </if>
+                <if test="noworg !=null and noworg!=''">
+                    and reg.Org_Code like CONCAT('%',#{noworg},'%')
+                </if>
+                AND (plan_id=3 OR plan_id=8)
+                AND plandetail_id is not  null
+                AND rest.plan_startdate BETWEEN #{bigantime}
+                AND #{endtime}
+            </where>
+            GROUP BY
+            rest.user_code
+            ) a
+    </select>
+
+    <select id="selectjianzhitimes" parameterType="com.yihe.system.domain.TheBasicUse" resultType="java.lang.Integer">
+        SELECT
+           count(1)
+        FROM
+            yh_user_healthy_plan rest
+            INNER JOIN yh_user_reginfo reg ON rest.user_code = reg.user_code
+            INNER JOIN `yh_user_make_card` AS card ON card.user_code = rest.user_code
+        <where>
+            <if test="userCode !=null and userCode!=''">
+                and card.doctor =(
+                SELECT
+                id
+                FROM
+                `yh_user_admin_info`
+                WHERE
+                user_code = #{userCode}
+                )
+            </if>
+            <if test="noworg !=null and noworg!=''">
+                and reg.Org_Code like CONCAT('%',#{noworg},'%')
+            </if>
+            AND (plan_id=3 OR plan_id=8)
+            AND plandetail_id is not  null
+            AND rest.plan_startdate BETWEEN #{bigantime}
+            AND #{endtime}
+        </where>
+    </select>
+
+
+    <select id="selectxiguanriji" parameterType="com.yihe.system.domain.TheBasicUse" resultType="java.lang.Integer">
+        SELECT
+            count(a.id)
+        FROM
+            (
+            SELECT
+                rest.*
+            FROM
+                yh_life_habit_sign rest
+                INNER JOIN yh_user_reginfo reg ON rest.user_code = reg.user_code
+                INNER JOIN `yh_user_make_card` AS card ON card.user_code = rest.user_code
+            <where>
+                <if test="userCode !=null and userCode!=''">
+                    and card.doctor =(
+                    SELECT
+                    id
+                    FROM
+                    `yh_user_admin_info`
+                    WHERE
+                    user_code = #{userCode}
+                    )
+                </if>
+                <if test="noworg !=null and noworg!=''">
+                    and reg.Org_Code like CONCAT('%',#{noworg},'%')
+                </if>
+                AND rest.signId_date BETWEEN #{bigantime}
+                AND #{endtime}
+            </where>
+            GROUP BY
+            rest.user_code
+            ) a
+    </select>
+
+    <select id="selectxiguanrijitimes" parameterType="com.yihe.system.domain.TheBasicUse" resultType="java.lang.Integer">
+        SELECT
+           count(rest.id)
+        FROM
+            yh_life_habit_sign rest
+            INNER JOIN yh_user_reginfo reg ON rest.user_code = reg.user_code
+            INNER JOIN `yh_user_make_card` AS card ON card.user_code = rest.user_code
+        <where>
+            <if test="userCode !=null and userCode!=''">
+                and card.doctor =(
+                SELECT
+                id
+                FROM
+                `yh_user_admin_info`
+                WHERE
+                user_code = #{userCode}
+                )
+            </if>
+            <if test="noworg !=null and noworg!=''">
+                and reg.Org_Code like CONCAT('%',#{noworg},'%')
+            </if>
+            AND rest.signId_date BETWEEN #{bigantime}
+            AND #{endtime}
+        </where>
+    </select>
+</mapper>

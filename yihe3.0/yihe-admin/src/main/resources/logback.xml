@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <!--这个是logback包中自带的base.xml文件-->
+    <include resource="org/springframework/boot/logging/logback/base.xml" />
+    <!--对应的映射的配置名-->
+    <appender name="deliver_log_appender"
+              class="net.logstash.logback.appender.LogstashTcpSocketAppender">
+        <!--配置logStash 服务地址，9250。9250是logstash-6.3.0\bin\logstash.conf文件中配置的输出端口号 -->
+        <destination>127.0.0.1:9250</destination>
+        <!-- 日志输出编码 -->
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <charset>utf8</charset>
+            <!--Pattern为日志匹配的规则，也是索引的字段名，此处我们不指定，是因为在日志的打印的时候是直接打印的实体，
+            实体与的字段与值是规则的json格式，所以此处不做额外处理-->
+            <Pattern>%msg%n</Pattern>
+        </encoder>
+    </appender>
+
+    <!--deliver_log是日志输出的名字-->
+    <logger name="deliver_log" additivity="false" level="INFO">
+        <!--appender-ref为映射的配置名-->
+        <appender-ref ref="deliver_log_appender"/>
+    </logger>
+</configuration>

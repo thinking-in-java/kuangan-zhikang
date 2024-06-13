@@ -1,0 +1,576 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yihe.applet.api.mapper.YhstopSmokingMapper" >
+    <resultMap id="BaseResultMap" type="com.yihe.applet.api.domain.YhSysConfigApp" >
+        <id column="id" property="id" jdbcType="BIGINT" />
+        <result column="key" property="key" jdbcType="VARCHAR" />
+        <result column="value" property="value" jdbcType="VARCHAR" />
+        <result column="status" property="status" jdbcType="TINYINT" />
+        <result column="remark" property="remark" jdbcType="VARCHAR" />
+    </resultMap>
+    <resultMap id="BaseResultdetail" type="com.yihe.system.domain.YhTemplateDetail" >
+        <id column="details_id" property="detailsId" jdbcType="INTEGER" />
+        <result column="execute_date" property="executeDate" jdbcType="TIMESTAMP" />
+        <result column="service_way" property="serviceWay" jdbcType="INTEGER" />
+        <result column="plan_count" property="planCount" jdbcType="VARCHAR" />
+        <result column="count_prompt" property="countPrompt" jdbcType="VARCHAR" />
+        <result column="user_code" property="userCode" jdbcType="VARCHAR" />
+        <result column="gender" property="gender" jdbcType="VARCHAR" />
+        <result column="mobile" property="phone" jdbcType="VARCHAR" />
+    </resultMap>
+    <resultMap id="BaseResultMapcomm" type="com.yihe.applet.api.domain.YhHealthLectureCommentApp" >
+        <id column="comment_id" property="commentid" jdbcType="INTEGER" />
+        <result column="pid" property="pid" jdbcType="INTEGER" />
+        <result column="smoking_diary_id" property="lectureinfoid" jdbcType="INTEGER" />
+        <result column="usercode" property="usercode" jdbcType="VARCHAR" />
+        <result column="status" property="status" jdbcType="TINYINT" />
+        <result column="comment_time" property="commenttime" jdbcType="VARCHAR" />
+        <result column="comment_img" property="comimg" jdbcType="VARCHAR" />
+        <result column="comment_Info" property="commentinfo" jdbcType="VARCHAR" />
+    </resultMap>
+
+    <resultMap id="BaseResultgiveupsmoking" type="com.yihe.applet.api.domain.YhGiveupSmokingInfo" >
+        <id column="infoId" property="infoid" jdbcType="INTEGER" />
+        <result column="tips" property="tips" jdbcType="VARCHAR" />
+        <result column="category_id" property="categoryId" jdbcType="INTEGER" />
+        <result column="typeid" property="typeid" jdbcType="INTEGER" />
+        <result column="thumbnail_url" property="thumbnailUrl" jdbcType="VARCHAR" />
+        <result column="listbox_url" property="listboxUrl" jdbcType="VARCHAR" />
+        <result column="detail_content_url" property="detailContentUrl" jdbcType="VARCHAR" />
+        <result column="video_url" property="videoUrl" jdbcType="VARCHAR" />
+        <result column="audio_url" property="audioUrl" jdbcType="VARCHAR" />
+        <result column="update_date" property="updateDate" jdbcType="TIMESTAMP" />
+        <result column="title" property="title" jdbcType="VARCHAR" />
+        <result column="author" property="author" jdbcType="VARCHAR" />
+        <result column="instruction" property="instruction" jdbcType="VARCHAR" />
+        <result column="read_count" property="readCount" jdbcType="INTEGER" />
+        <result column="addInfoTime" property="addinfotime" jdbcType="VARCHAR" />
+        <result column="usercode" property="usercode" jdbcType="VARCHAR" />
+        <result column="state" property="state" jdbcType="INTEGER" />
+        <result column="speaker" property="speaker" jdbcType="VARCHAR" />
+    </resultMap>
+
+    <resultMap type="com.yihe.system.domain.YhUserHealthyPlan" id="YhUserHealthyPlanResult">
+        <result property="id" column="id" />
+        <result property="userCode" column="user_code" />
+        <result property="courseseq" column="courseseq" />
+        <result property="planDay" column="plan_day" />
+        <result property="plandetailId" column="plandetail_id" />
+        <result property="planId" column="plan_id" />
+        <result property="planStartdate" column="plan_startdate" />
+        <result property="planEnddate" column="plan_enddate" />
+        <result property="planState" column="plan_state" />
+        <result property="planChoose" column="plan_choose" />
+        <result property="planUnique" column="plan_unique" />
+    </resultMap>
+    <resultMap id="reslutsmoke" type="com.yihe.applet.api.domain.YhGiveupSmokingDirectory">
+        <id property="secret_Id" column="secret_Id" />
+        <result property="name" column="name" />
+        <result property="parent_id" column="parent_id" />
+        <result property="sort_id" column="sort_id" />
+        <result property="tip_one" column="tip_one" />
+        <result property="watch" column="watch" />
+        <collection property="yhGiveupSmokingDirectory"  column="secret_Id" ofType="com.yihe.applet.api.domain.YhGiveupSmokingDirectory" javaType="java.util.ArrayList">
+            <id property="secret_Id" column="secret_Id1" />
+            <result property="name" column="name1" />
+            <result property="parent_id" column="parent_id1" />
+            <result property="sort_id" column="sort_id1" />
+            <result property="tip_one" column="tip_one1" />
+            <result property="watch" column="watch1" />
+        </collection>
+    </resultMap>
+    
+<select id="selectallquetion" resultType="com.yihe.applet.api.domain.YhQuestionSmoking">
+    select * from yh_question_smoking;
+</select>
+
+    <insert id="insertqustionansers" parameterType="com.yihe.applet.api.domain.SmokeAnswers">
+        insert into yh_smoking_report
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="user_code != null" >
+                user_code,
+            </if>
+            <if test="smoking_report_desc != null" >
+                smoking_report_desc,
+            </if>
+            <if test="smoking_report_score != null" >
+                smoking_report_score,
+            </if>
+            <if test="smoking_report_level != null" >
+                smoking_report_level,
+            </if>
+            <if test="smoking_report_queselect != null" >
+                smoking_report_queselect,
+            </if>
+            <if test="qtime != null" >
+                qtime,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="user_code != null" >
+                #{user_code},
+            </if>
+            <if test="smoking_report_desc != null" >
+                #{smoking_report_desc},
+            </if>
+            <if test="smoking_report_score != null" >
+                #{smoking_report_score},
+            </if>
+            <if test="smoking_report_level != null" >
+                #{smoking_report_level},
+            </if>
+            <if test="smoking_report_queselect != null" >
+                #{smoking_report_queselect},
+            </if>
+            <if test="qtime != null" >
+                #{qtime},
+            </if>
+        </trim>
+    </insert>
+
+    <select id="selectanswers" parameterType="com.yihe.applet.api.domain.SmokeAnswers" resultType="com.yihe.applet.api.domain.SmokeAnswers">
+         select * from yh_smoking_report WHERE user_code=#{user_code} ORDER BY qtime DESC LIMIT 1
+    </select>
+
+    <select id="selectanwser" parameterType="com.yihe.applet.api.domain.SmokeAnswers" resultType="com.yihe.applet.api.domain.SmokeAnswers">
+        select * from yh_smoking_report WHERE smoking_report_id=#{answers1}
+    </select>
+
+    <select id="selecttoonce" parameterType="String" resultType="String">
+        select Lifestyle_Uptime from yh_user_enrolinfo where user_code=#{usercode} limit 1
+    </select>
+
+    <update id="updateonce" parameterType="String">
+        update yh_user_enrolinfo set Lifestyle_Uptime=(select NOW()) where  user_code=#{usercode}
+    </update>
+
+    <insert id="insertaddsmoking" parameterType="com.yihe.applet.api.domain.YhUserSmoking">
+        insert into yh_user_smoking
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="smoking_id != null" >
+                smoking_id,
+            </if>
+            <if test="user_code != null" >
+                user_code,
+            </if>
+            <if test="smoking_age != null" >
+                smoking_age,
+            </if>
+            <if test="smoking_amount != null" >
+                smoking_amount,
+            </if>
+            <if test="smoking_prices != null" >
+                smoking_prices,
+            </if>
+            <if test="smoking_tar_content != null" >
+                smoking_tar_content,
+            </if>
+            <if test="smoking_amount_time != null" >
+                smoking_amount_time,
+            </if>
+            <if test="smoking_quit_times != null" >
+                smoking_quit_times,
+            </if>
+            <if test="smoking_date != null" >
+                smoking_date,
+            </if>
+            <if test="smoking_days != null" >
+                smoking_days,
+            </if>
+            <if test="smoking_remark != null" >
+                smoking_remark,
+            </if>
+            <if test="log_state != null" >
+                log_state,
+            </if>
+
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="smoking_id != null" >
+                #{smoking_id},
+            </if>
+            <if test="user_code != null" >
+                #{user_code},
+            </if>
+            <if test="smoking_age != null" >
+                #{smoking_age},
+            </if>
+            <if test="smoking_amount != null" >
+                #{smoking_amount},
+            </if>
+            <if test="smoking_prices != null" >
+                #{smoking_prices},
+            </if>
+            <if test="smoking_tar_content != null" >
+                #{smoking_tar_content},
+            </if>
+            <if test="smoking_amount_time != null" >
+                #{smoking_amount_time},
+            </if>
+            <if test="smoking_quit_times != null" >
+                #{smoking_quit_times},
+            </if>
+            <if test="smoking_date != null" >
+                #{smoking_date},
+            </if>
+            <if test="smoking_days != null" >
+                #{smoking_days},
+            </if>
+            <if test="smoking_remark != null" >
+                #{smoking_remark},
+            </if>
+            <if test="log_state != null" >
+                #{log_state},
+            </if>
+        </trim>
+    </insert>
+
+
+    <select id="detail" resultMap="BaseResultdetail">
+         SELECT de.service_way,de.count_prompt,de.user_code,dic.plan_count,reg.gender,reg.mobile,de.execute_date FROM yh_template_detail de
+        LEFT JOIN yh_programs_dictionary dic
+        ON de.plan_count=dic.plancount_id
+        LEFT JOIN yh_user_reginfo reg
+        ON de.user_code=reg.user_code
+    </select>
+
+    <insert id="insertserviceperson"   parameterType="com.yihe.system.domain.YhTemplateDetail">
+        INSERT INTO yh_jz_service_person(user_code,gender,phone,insert_time,service_state,service_waiting_time,service_content,service_type,service_record,returnvisit,service_subtitle)
+        VALUE(#{userCode},#{gender},#{phone},#{insert_time},#{service_state},#{watting_time},#{countPrompt},#{service_type},#{countPrompt},#{serviceWay},
+        <if test="planCount!=null">
+            #{planCount}
+        </if>
+        <if test="var_count!=null">
+            #{var_count}
+        </if>
+        );
+    </insert>
+    <select id="selectiscount" parameterType="com.yihe.system.domain.YhTemplateDetail" resultType="int">
+        SELECT COUNT(*) FROM yh_jz_service_total_person WHERE user_code=#{userCode}
+    </select>
+    <insert id="inserttotalperson" parameterType="com.yihe.system.domain.YhTemplateDetail">
+        INSERT INTO yh_jz_service_total_person(user_code,doctor_code) VALUE (#{userCode},(SELECT user_code from yh_user_admin_info WHERE id=(SELECT doctor from yh_user_make_card WHERE User_Code=#{userCode})))
+    </insert>
+
+    <select id="selectnewplan" resultMap="YhUserHealthyPlanResult">
+        SELECT a.* from (SELECT * from yh_user_healthy_plan ORDER BY plan_startdate DESC) a GROUP BY a.user_code
+    </select>
+
+    <select id="getplanmun" resultType="String" parameterType="String">
+        select plandetail_id from yh_healthy_plandays where planday=#{day} and plan_id=#{planid}
+    </select>
+
+    <insert id="insertplansbyuser" parameterType="com.yihe.system.domain.YhUserHealthyPlan">
+        insert into yh_user_healthy_plan
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="userCode != null">
+                user_code,
+            </if>
+            <if test="courseseq != null">
+                courseSeq,
+            </if>
+            <if test="planDay != null">
+                plan_day,
+            </if>
+            <if test="plandetailId != null">
+                plandetail_id,
+            </if>
+            <if test="planId != null">
+                plan_id,
+            </if>
+            <if test="planStartdate != null">
+                plan_startdate,
+            </if>
+            <if test="planEnddate != null">
+                plan_enddate,
+            </if>
+            <if test="planState != null">
+                plan_state,
+            </if>
+            <if test="planUnique!=null">
+                plan_unique,
+            </if>
+            <if test="planChoose!=null">
+                plan_choose,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="userCode != null">
+                #{userCode,jdbcType=VARCHAR},
+            </if>
+            <if test="courseseq != null">
+                #{courseseq,jdbcType=INTEGER},
+            </if>
+            <if test="planDay != null">
+                #{planDay,jdbcType=INTEGER},
+            </if>
+            <if test="plandetailId != null">
+                #{plandetailId,jdbcType=VARCHAR},
+            </if>
+            <if test="planId != null">
+                #{planId,jdbcType=VARCHAR},
+            </if>
+            <if test="planStartdate != null">
+                #{planStartdate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="planEnddate != null">
+                #{planEnddate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="planState != null">
+                #{planState,jdbcType=INTEGER},
+            </if>
+            <if test="planUnique!=null">
+                #{planUnique,jdbcType=INTEGER},
+            </if>
+            <if test="planChoose!=null">
+                #{planChoose,jdbcType=INTEGER},
+            </if>
+        </trim>
+    </insert>
+
+    <select id="selecthavesmoke" parameterType="String" resultType="com.yihe.applet.api.domain.YhUserSmoking">
+            select smokeing.*,reg.birth_date,reg.`name`,reg.post_code AS head_img from yh_user_smoking smokeing left join yh_user_reginfo reg  on smokeing.user_code=reg.user_code
+             LEFT JOIN yh_wx_user wxuser
+             ON reg.user_code=wxuser.user_id
+             WHERE log_state=1 AND smokeing.user_code=#{usercode} ORDER BY smoking_date  DESC LIMIT 1
+    </select>
+
+    <update id="updatewatch" parameterType="int">
+        update  yh_giveup_smoking_directory set watch=(watch+1)  where secret_Id=#{alterid}
+    </update>
+
+    <insert id="insertjilu">
+        insert into yh_smoking_secret (smokinginfo_id,user_code,secret_Time,smokinginfochi_id)
+        VALUES  (#{parentid},#{usercode},(select NOW()),#{alterid})
+    </insert>
+
+    <select id="selectcount" resultType="int">
+        select count(*) from yh_smoking_secret where smokinginfochi_id=#{alterid} and user_code=#{usercode}
+    </select>
+
+    <select id="selectdirector" resultMap="reslutsmoke">
+        Select b.secret_Id,b.tip_one,b.watch,b.parent_id,b.name,a.secret_Id as secret_Id1,a.parent_id as parent_id1,a.name  as name1,a.tip_one  as tip_one1,a.watch  as watch1
+From yh_giveup_smoking_directory a,yh_giveup_smoking_directory b
+Where a.parent_id=b.secret_Id
+    </select>
+
+    <select id="selectsmokingcount" parameterType="string" resultType="com.yihe.applet.api.domain.YhGiveupSmokingDirectory">
+        select * from yh_giveup_smoking_directory where parent_id=#{id}
+    </select>
+
+    <select id="selectjindu"  resultType="integer">
+        select count(*) from yh_smoking_secret where smokinginfo_id=#{id}  and user_code=#{usercode}
+    </select>
+
+    <select id="selectarticle" parameterType="String" resultMap="BaseResultgiveupsmoking">
+        select * from yh_giveup_smoking_info where category_id=#{id}
+    </select>
+
+    <select id="findCommentBylId" resultType="com.yihe.applet.api.domain.YhHealthLectureCommentApp">
+          SELECT a.comment_id as commentId, a.pid, a.smoking_diary_id as lectureInfoId, a.usercode, a.status, a.comment_time as commentTime, a.comment_img as comImg , a.comment_Info as  commentInfo ,b.`name`,c.`head_img` AS headImg
+
+        FROM yh_smoking_comment AS a
+         INNER JOIN `yh_user_reginfo` AS b
+         ON a.`usercode`=b.`user_code`
+         LEFT JOIN `yh_wx_user` AS c
+         ON a.`usercode`=c.`user_id`
+
+        WHERE ( a.smoking_diary_id = #{lid} AND a.pid = 0 )
+        order by a.comment_time  desc
+    </select>
+
+
+    <select id="findcommmbypage" resultType="com.yihe.applet.api.domain.YhHealthLectureCommentApp">
+          SELECT a.comment_id as commentId, a.pid, a.smoking_diary_id as lectureInfoId, a.usercode, a.status, a.comment_time as commentTime, a.comment_img as comImg , a.stop_smoking_day ,a.like_num, a.comment_Info as  commentInfo ,b.`name`,c.`head_img` AS headImg,d.is_like
+
+FROM yh_smoking_comment AS a
+ INNER JOIN `yh_user_reginfo` AS b
+ ON a.`usercode`=b.`user_code`
+ LEFT JOIN `yh_wx_user` AS c
+ ON a.`usercode`=c.`user_id`
+        LEFT JOIN yh_smoking_diarylike AS d
+        ON a.comment_id=d.likediary_id
+WHERE ( a.smoking_diary_id = #{lid} AND a.pid = 0 )
+    <if test="usercode != null and usercode!=''" >
+        and a.usercode=#{usercode}
+    </if>
+order by a.comment_time  desc
+limit #{page},10
+    </select>
+
+    <select id="findcommmbypage2" resultType="com.yihe.applet.api.domain.YhHealthLectureCommentApp">
+        SELECT a.comment_id as commentId, a.pid, a.smoking_diary_id as lectureInfoId, a.usercode, a.status, a.comment_time as commentTime, a.comment_img as comImg , a.stop_smoking_day ,a.like_num, a.comment_Info as  commentInfo ,b.`name`,c.`head_img` AS headImg,d.is_like
+
+        FROM yh_smoking_comment AS a
+        INNER JOIN `yh_user_reginfo` AS b
+        ON a.`usercode`=b.`user_code`
+        LEFT JOIN `yh_wx_user` AS c
+        ON a.`usercode`=c.`user_id`
+        LEFT JOIN yh_smoking_diarylike AS d
+        ON a.comment_id=d.likediary_id
+        WHERE ( a.smoking_diary_id = #{lid} AND a.pid = 0 and d.usercode=#{usercode})
+        <if test="usercode != null and usercode!=''" >
+            and a.usercode=#{usercode}
+        </if>
+        order by a.comment_time  desc
+        limit #{page},10
+    </select>
+
+    <!-- 查询楼中楼评论 -->
+    <select id="findCommentByPid"  resultType="com.yihe.applet.api.domain.YhHealthLectureCommentApp">
+  SELECT a.comment_id as commentId, a.pid, a.smoking_diary_id as lectureInfoId, a.usercode, a.status,a.comment_time as commentTime, a.comment_img as comImg, a.comment_Info as  commentInfo,b.user_name as `name`,c.`head_img` AS headImg
+	FROM yh_smoking_comment AS a
+	 INNER JOIN yh_user_reginfo AS b
+	 ON a.`usercode`=b.`user_code`
+	 LEFT JOIN `yh_wx_user` AS c
+	 ON a.`usercode`=c.`user_id`
+	WHERE (  a.pid = #{pid} )
+	order by a.comment_time  desc
+
+  </select>
+
+    <select id="findCommentPuserCodeByParam" resultMap="BaseResultMapcomm" parameterType="java.lang.Integer">
+         select * from yh_smoking_comment where  comment_id = #{pid} and pid=0
+    </select>
+    <insert id="insertSelective" parameterType="com.yihe.applet.api.domain.YhHealthLectureCommentApp"  useGeneratedKeys="true" keyProperty="commentid">
+        insert into yh_smoking_comment
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="commentid != null" >
+                comment_id,
+            </if>
+            <if test="pid != null" >
+                pid,
+            </if>
+            <if test="lectureinfoid != null" >
+                smoking_diary_id,
+            </if>
+            <if test="usercode != null" >
+                usercode,
+            </if>
+            <if test="status != null" >
+                status,
+            </if>
+            <if test="commenttime != null" >
+                comment_time,
+            </if>
+            <if test="comimg != null" >
+                comment_img,
+            </if>
+            <if test="commentinfo != null" >
+                comment_Info,
+            </if>
+            <if test="stop_smoking_day != null" >
+                stop_smoking_day,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="commentid != null" >
+                #{commentid,jdbcType=INTEGER},
+            </if>
+            <if test="pid != null" >
+                #{pid,jdbcType=INTEGER},
+            </if>
+            <if test="lectureinfoid != null" >
+                #{lectureinfoid,jdbcType=INTEGER},
+            </if>
+            <if test="usercode != null" >
+                #{usercode,jdbcType=INTEGER},
+            </if>
+            <if test="status != null" >
+                #{status,jdbcType=TINYINT},
+            </if>
+            <if test="commenttime != null" >
+                #{commenttime,jdbcType=VARCHAR},
+            </if>
+            <if test="comimg != null" >
+                #{comimg,jdbcType=VARCHAR},
+            </if>
+            <if test="commentinfo != null" >
+                #{commentinfo,jdbcType=LONGVARCHAR},
+            </if>
+            <if test="stop_smoking_day != null" >
+                 #{stop_smoking_day,jdbcType=INTEGER},
+            </if>
+        </trim>
+    </insert>
+    
+    <insert id="adddianzan">
+        insert into yh_smoking_diarylike (usercode,likediary_id,is_like)
+        VALUES  (#{usercode},#{commentid},1)
+    </insert>
+    <update id="addall">
+        update yh_smoking_comment set like_num=like_num+1 where comment_id=#{commentid}
+    </update>
+    <update id="quxiaodianzanall">
+        update yh_smoking_comment set like_num=like_num-1 where  comment_id=#{commentid}
+    </update>
+    <delete id="quxiaodianzan">
+        delete from yh_smoking_diarylike where usercode=#{usercode} and likediary_id=#{commentid}
+    </delete>
+
+    <select id="selectbeginday" parameterType="String" resultType="String">
+        select smoking_date from yh_user_smoking where user_code=#{usercode} and log_state=1
+    </select>
+
+    <update id="stopsmokings" parameterType="String">
+        update yh_user_smoking set log_state=2,smoking_days=(select Now()) where user_code=#{usercode} and log_state=1
+    </update>
+
+    <select id="selectyilai" parameterType="String" resultType="com.yihe.applet.api.domain.YhSmokingReport">
+        select * from yh_smoking_report where user_code=#{usercode}  ORDER BY qtime DESC LIMIT 1
+    </select>
+
+    <select id="selectyanying" parameterType="String" resultType="com.yihe.applet.api.domain.YhSmokeCraving">
+       SELECT (SELECT count(*) from yh_smoke_craving WHERE usercode=#{usercode}) AS allyanying,(SELECT count(*) from yh_smoke_craving WHERE usercode=#{usercode} AND to_days(craving_Time) = to_days(now())) AS dayyanying
+    </select>
+
+    <insert id="addyanying" parameterType="String">
+        insert into yh_smoke_craving(craving_Time,usercode)
+         VALUES  ((SELECT NOW()),#{usercode})
+    </insert>
+
+    <select id="selectsevenyanying" parameterType="string" resultType="java.lang.Integer">
+        SELECT count(*) from yh_smoke_craving WHERE craving_Time&lt;(SELECT NOW()) AND craving_Time&gt;(select CONCAT(DATE_FORMAT(DATE_SUB(NOW(), INTERVAL 7 DAY),'%Y-%m-%d'),' 00:00:00'))
+        AND usercode=#{usercode}
+        GROUP BY DATE_FORMAT(craving_Time,'%Y-%m-%d')
+    </select>
+
+    <select id="selectSmokeRecord7" parameterType="string" resultType="com.yihe.applet.api.domain.SmokeRecord">
+SELECT  (SELECT count(*) as one FROM yh_smoke_craving WHERE craving_Time&lt;(SELECT NOW()) AND craving_Time&gt;(select CONCAT(DATE_FORMAT(DATE_SUB(NOW(), INTERVAL 7 DAY),'%Y-%m-%d'),' 00:00:00')) AND craving_Time REGEXP '^[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9] 0[0-2]:[0-9][0-9]:[0-9][0-9]$' AND usercode=#{usercode}) zerototwo ,
+(SELECT count(*) as one FROM yh_smoke_craving WHERE craving_Time&lt;(SELECT NOW()) AND craving_Time&gt;(select CONCAT(DATE_FORMAT(DATE_SUB(NOW(), INTERVAL 7 DAY),'%Y-%m-%d'),' 00:00:00')) AND craving_Time REGEXP '^[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9] 0[3-5]:[0-9][0-9]:[0-9][0-9]$' AND usercode=#{usercode}) threetofive,
+(SELECT count(*) as one FROM yh_smoke_craving WHERE craving_Time&lt;(SELECT NOW()) AND craving_Time&gt;(select CONCAT(DATE_FORMAT(DATE_SUB(NOW(), INTERVAL 7 DAY),'%Y-%m-%d'),' 00:00:00')) AND craving_Time REGEXP '^[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9] 0[6-8]:[0-9][0-9]:[0-9][0-9]$' AND usercode=#{usercode}) sixtoeight,
+(SELECT count(*) as one FROM yh_smoke_craving WHERE craving_Time&lt;(SELECT NOW()) AND craving_Time&gt;(select CONCAT(DATE_FORMAT(DATE_SUB(NOW(), INTERVAL 7 DAY),'%Y-%m-%d'),' 00:00:00')) AND craving_Time REGEXP '^[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9] ([1][01]|[0][9]):[0-9][0-9]:[0-9][0-9]$' AND usercode=#{usercode}) ninetoeleven,
+(SELECT count(*) as one FROM yh_smoke_craving WHERE craving_Time&lt;(SELECT NOW()) AND craving_Time&gt;(select CONCAT(DATE_FORMAT(DATE_SUB(NOW(), INTERVAL 7 DAY),'%Y-%m-%d'),' 00:00:00')) AND craving_Time REGEXP '^[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9] 1[2-4]:[0-9][0-9]:[0-9][0-9]$' AND usercode=#{usercode}) twelvetofourteen,
+(SELECT count(*) as one FROM yh_smoke_craving WHERE craving_Time&lt;(SELECT NOW()) AND craving_Time&gt;(select CONCAT(DATE_FORMAT(DATE_SUB(NOW(), INTERVAL 7 DAY),'%Y-%m-%d'),' 00:00:00')) AND craving_Time REGEXP '^[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9] 1[5-7]:[0-9][0-9]:[0-9][0-9]$' AND usercode=#{usercode}) fifteentoseventeen,
+(SELECT count(*) as one FROM yh_smoke_craving WHERE craving_Time&lt;(SELECT NOW()) AND craving_Time&gt;(select CONCAT(DATE_FORMAT(DATE_SUB(NOW(), INTERVAL 7 DAY),'%Y-%m-%d'),' 00:00:00')) AND craving_Time REGEXP '^[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9] ([1][89]|[2][0]):[0-9][0-9]:[0-9][0-9]$' AND usercode=#{usercode}) eighteentotwenty,
+(SELECT count(*) as one FROM yh_smoke_craving WHERE craving_Time&lt;(SELECT NOW()) AND craving_Time&gt;(select CONCAT(DATE_FORMAT(DATE_SUB(NOW(), INTERVAL 7 DAY),'%Y-%m-%d'),' 00:00:00')) AND craving_Time REGEXP '^[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9] 2[1-3]:[0-9][0-9]:[0-9][0-9]$' AND usercode=#{usercode}) twentyone
+    </select>
+
+    <select id="selectyanyingDuarybymothh" parameterType="string" resultType="java.lang.Integer">
+         SELECT count(*) from yh_smoke_craving WHERE craving_Time&lt;(SELECT NOW()) AND craving_Time&gt;(select CONCAT(DATE_FORMAT(DATE_SUB(NOW(), INTERVAL 1 YEAR),'%Y-%m-%d'),' 00:00:00'))
+        AND usercode=#{usercode}
+        GROUP BY DATE_FORMAT(craving_Time,'%Y-%m')
+    </select>
+
+    <select id="selecytstopsmokinglog" parameterType="string" resultType="com.yihe.applet.api.domain.YhUserSmoking">
+        select * from yh_user_smoking where user_code=#{usercode} and log_state=2 ORDER BY smoking_date DESC
+    </select>
+
+    <select id="selectsmokingreport" parameterType="string" resultType="com.yihe.applet.api.domain.YhSmokingReport">
+         select * from yh_smoking_report where user_code=#{usercode} ORDER BY qtime DESC
+    </select>
+
+    <select id="selectSmokeRecord12" parameterType="string" resultType="com.yihe.applet.api.domain.SmokeRecord">
+SELECT  (SELECT count(*) as one FROM yh_smoke_craving WHERE craving_Time&lt;(SELECT NOW()) AND craving_Time&gt;(select CONCAT(DATE_FORMAT(DATE_SUB(NOW(), INTERVAL 1 YEAR),'%Y-%m-%d'),' 00:00:00')) AND craving_Time REGEXP '^[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9] 0[0-2]:[0-9][0-9]:[0-9][0-9]$' AND usercode=#{usercode}) zerototwo ,
+(SELECT count(*) as one FROM yh_smoke_craving WHERE craving_Time&lt;(SELECT NOW()) AND craving_Time&gt;(select CONCAT(DATE_FORMAT(DATE_SUB(NOW(), INTERVAL 1 YEAR),'%Y-%m-%d'),' 00:00:00')) AND craving_Time REGEXP '^[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9] 0[3-5]:[0-9][0-9]:[0-9][0-9]$' AND usercode=#{usercode}) threetofive,
+(SELECT count(*) as one FROM yh_smoke_craving WHERE craving_Time&lt;(SELECT NOW()) AND craving_Time&gt;(select CONCAT(DATE_FORMAT(DATE_SUB(NOW(), INTERVAL 1 YEAR),'%Y-%m-%d'),' 00:00:00')) AND craving_Time REGEXP '^[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9] 0[6-8]:[0-9][0-9]:[0-9][0-9]$' AND usercode=#{usercode}) sixtoeight,
+(SELECT count(*) as one FROM yh_smoke_craving WHERE craving_Time&lt;(SELECT NOW()) AND craving_Time&gt;(select CONCAT(DATE_FORMAT(DATE_SUB(NOW(), INTERVAL 1 YEAR),'%Y-%m-%d'),' 00:00:00')) AND craving_Time REGEXP '^[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9] ([1][01]|[0][9]):[0-9][0-9]:[0-9][0-9]$' AND usercode=#{usercode}) ninetoeleven,
+(SELECT count(*) as one FROM yh_smoke_craving WHERE craving_Time&lt;(SELECT NOW()) AND craving_Time&gt;(select CONCAT(DATE_FORMAT(DATE_SUB(NOW(), INTERVAL 1 YEAR),'%Y-%m-%d'),' 00:00:00')) AND craving_Time REGEXP '^[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9] 1[2-4]:[0-9][0-9]:[0-9][0-9]$' AND usercode=#{usercode}) twelvetofourteen,
+(SELECT count(*) as one FROM yh_smoke_craving WHERE craving_Time&lt;(SELECT NOW()) AND craving_Time&gt;(select CONCAT(DATE_FORMAT(DATE_SUB(NOW(), INTERVAL 1 YEAR),'%Y-%m-%d'),' 00:00:00')) AND craving_Time REGEXP '^[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9] 1[5-7]:[0-9][0-9]:[0-9][0-9]$' AND usercode=#{usercode}) fifteentoseventeen,
+(SELECT count(*) as one FROM yh_smoke_craving WHERE craving_Time&lt;(SELECT NOW()) AND craving_Time&gt;(select CONCAT(DATE_FORMAT(DATE_SUB(NOW(), INTERVAL 1 YEAR),'%Y-%m-%d'),' 00:00:00')) AND craving_Time REGEXP '^[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9] ([1][89]|[2][0]):[0-9][0-9]:[0-9][0-9]$' AND usercode=#{usercode}) eighteentotwenty,
+(SELECT count(*) as one FROM yh_smoke_craving WHERE craving_Time&lt;(SELECT NOW()) AND craving_Time&gt;(select CONCAT(DATE_FORMAT(DATE_SUB(NOW(), INTERVAL 1 YEAR),'%Y-%m-%d'),' 00:00:00')) AND craving_Time REGEXP '^[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9] 2[1-3]:[0-9][0-9]:[0-9][0-9]$' AND usercode=#{usercode}) twentyone
+    </select>
+    <select id="findSmokingCount" resultType="int">
+        select count(1) from yh_smoking_report
+    </select>
+</mapper>

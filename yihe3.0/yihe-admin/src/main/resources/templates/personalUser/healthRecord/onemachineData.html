@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>体检详情</title>
+    <link rel="stylesheet" th:href="@{/assets/libs/layui/css/layui.css}" />
+    <link rel="stylesheet" th:href="@{/assets/module/admin.css}" />
+</head>
+<body>
+    <div class="layui-row layui-col-space15" style="padding: 20px;">
+        <div class="layui-col-xs3">身高：[[${data.height}]]</div>
+        <div class="layui-col-xs3">体重：[[${data.weight}]]</div>
+        <div class="layui-col-xs3">体重指数：[[${data.bmi}]]</div>
+        <div class="layui-col-xs3">体温：[[${data.temperature}]]</div>
+        <div class="layui-col-xs3">腰围：[[${data.waist}]]</div>
+        <div class="layui-col-xs3">臀围：[[${data.buttock}]]</div>
+        <div class="layui-col-xs6">腰臀比：[[${data.whr}]]</div>
+        <div class="layui-col-xs3">舒张压：[[${data.diastolicPressure}]]</div>
+        <div class="layui-col-xs3">收缩压：[[${data.systolicPressure}]]</div>
+        <div class="layui-col-xs3">脉率：[[${data.pulse}]]</div>
+        <div class="layui-col-xs3">血糖：[[${data.bloodSugar}]]</div>
+        <div class="layui-col-xs3">尿酸：[[${data.uricAcid}]]</div>
+        <div class="layui-col-xs3">胆固醇：[[${data.cholesterin}]]</div>
+        <div class="layui-col-xs3">血氧饱和度：[[${data.oxygenSaturation}]]</div>
+        <div class="layui-col-xs3">心率：[[${data.electrocardiogramValue}]]</div>
+        <div class="layui-col-xs12">心电图结论：[[${data.electrocardiogramResult}]]</div>
+        <div class="layui-col-xs3">脂肪率：[[${data.ffatp}]]</div>
+        <div class="layui-col-xs3">基础代谢：[[${data.fbmr}]]</div>
+        <div class="layui-col-xs3">体内水率：[[${data.ftbwp}]]</div>
+        <div class="layui-col-xs3">脂肪重量：[[${data.ffat}]]</div>
+        <div class="layui-col-xs3">肌肉量：[[${data.fmuscle}]]</div>
+        <div class="layui-col-xs3">骨盐重量：[[${data.fbone}]]</div>
+        <div class="layui-col-xs3">蛋白质率：[[${data.fproteinp}]]</div>
+        <div class="layui-col-xs3">内脏脂肪等级：[[${data.fatgrade}]]</div>
+        <div class="layui-col-xs3">身体年龄：[[${data.bodyage}]]</div>
+        <div class="layui-col-xs3">肌肉率：[[${data.fmusclep}]]</div>
+        <div class="layui-col-xs3">体内水重量：[[${data.ftbw}]]</div>
+        <div class="layui-col-xs3">去脂体重重量：[[${data.fffm}]]</div>
+        <div class="layui-col-xs3">细胞内液重：[[${data.ficw}]]</div>
+        <div class="layui-col-xs3">细胞外液重：[[${data.fecw}]]</div>
+        <div class="layui-col-xs6">蛋白质重：[[${data.fprotein}]]</div>
+        <div class="layui-col-xs3">总胆固醇：[[${data.fcholz}]]</div>
+        <div class="layui-col-xs3">甘油三脂：[[${data.ftrig}]]</div>
+        <div class="layui-col-xs3">低密度脂蛋白胆固醇：[[${data.fldl}]]</div>
+        <div class="layui-col-xs3">高密度脂蛋白胆固醇：[[${data.fhdl}]]</div>
+        <div class="layui-col-xs3">左眼视力：[[${data.leye}]]</div>
+        <div class="layui-col-xs3">右眼视力：[[${data.reye}]]</div>
+        <div class="layui-col-xs6">视力结果：[[${data.eyeResult}]]</div>
+        <div class="layui-col-xs3">左眼是否散光：[[${data.lastigmatism}]]</div>
+        <div class="layui-col-xs3">右眼是否散光：[[${data.rastigmatism}]]</div>
+        <div class="layui-col-xs3">是否色盲：[[${data.colourblind}]]</div>
+        <div class="layui-col-xs3">是否色弱：[[${data.anomalous}]]</div>
+    </div>
+    <div class="layui-row layui-col-space15" style="padding: 20px;">
+        <div class="layui-col-xs12">小肺功能</div>
+        <div class="layui-col-xs3">肺功：[[${data.fvc}]]</div>
+        <div class="layui-col-xs3">百分比值：[[${data.fvcp}]]</div>
+        <div class="layui-col-xs3">肺功：[[${data.fev1}]]</div>
+        <div class="layui-col-xs3">百分比值：[[${data.fev1p}]]</div>
+        <div class="layui-col-xs3">肺功：[[${data.pef}]]</div>
+        <div class="layui-col-xs3">百分比值：[[${data.pefp}]]</div>
+        <div class="layui-col-xs6">肺功：[[${data.fev1Fvc}]]</div>
+        <div class="layui-col-xs3">肺功：[[${data.fef25}]]</div>
+        <div class="layui-col-xs3">百分比值：[[${data.fef25p}]]</div>
+        <div class="layui-col-xs3">肺功：[[${data.fef50}]]</div>
+        <div class="layui-col-xs3">百分比值：[[${data.fef50p}]]</div>
+        <div class="layui-col-xs3">肺功：[[${data.fef75}]]</div>
+        <div class="layui-col-xs3">百分比值：[[${data.fef75p}]]</div>
+        <div class="layui-col-xs3">肺功：[[${data.fef2575}]]</div>
+        <div class="layui-col-xs3">百分比值：[[${data.fef2575p}]]</div>
+        <div class="layui-col-xs3">吹气次数：[[${data.counts}]]</div>
+        <div class="layui-col-xs3">肺功能结论：[[${data.fvcResult}]]</div>
+        <div class="layui-col-xs3">酒精含量：[[${data.alcohol}]]</div>
+        <div class="layui-col-xs3">酒精测量结果：[[${data.alcoholResult}]]</div>
+    </div>
+    <div class="layui-row layui-col-space15" style="padding: 20px;">
+        <div class="layui-col-xs12">骨密度</div>
+        <div class="layui-col-xs3">T值：[[${data.tscore}]]</div>
+        <div class="layui-col-xs3">Z值：[[${data.zscore}]]</div>
+        <div class="layui-col-xs3">sos：[[${data.sos}]]</div>
+        <div class="layui-col-xs3">成人比：[[${data.youngAdult}]]</div>
+        <div class="layui-col-xs3">bqi：[[${data.bqi}]]</div>
+        <div class="layui-col-xs3">同龄比：[[${data.ageMatched}]]</div>
+        <div class="layui-col-xs3">rrf：[[${data.rrf}]]</div>
+        <div class="layui-col-xs3">骨龄(岁)：[[${data.boneage}]]</div>
+        <div class="layui-col-xs3">骨龄(月)：[[${data.bonemonth}]]</div>
+        <div class="layui-col-xs3">eoa：[[${data.eoa}]]</div>
+        <div class="layui-col-xs3">骨密度结果：[[${data.gmdResult}]]</div>
+    </div>
+    <div class="layui-row layui-col-space15" style="padding: 20px;">
+        <div class="layui-col-xs12">大肺功能台车</div>
+        <div class="layui-col-xs3">用力肺活量：[[${data.fvc}]]</div>
+        <div class="layui-col-xs3">1秒钟用力肺活量：[[${data.fev1}]]</div>
+        <div class="layui-col-xs3">2秒钟用力肺活量：[[${data.fev2}]]</div>
+        <div class="layui-col-xs3">3秒钟用力肺活量：[[${data.fev3}]]</div>
+        <div class="layui-col-xs3">最大通气量/1秒量：[[${data.mvv1}]]</div>
+        <div class="layui-col-xs3">bsa1：[[${data.bsa1}]]</div>
+        <div class="layui-col-xs3">体表面率：[[${data.mvvBsa}]]</div>
+        <div class="layui-col-xs3">呼吸至75%肺活量时对应流速值：[[${data.v75}]]</div>
+        <div class="layui-col-xs3">呼吸至50%肺活量时对应流速值：[[${data.v50}]]</div>
+        <div class="layui-col-xs3">呼吸至25%肺活量时对应流速值：[[${data.v25}]]</div>
+        <div class="layui-col-xs3">V25与身高之比：[[${data.v25H}]]</div>
+        <div class="layui-col-xs3">最大通气量：[[${data.mvv}]]</div>
+        <div class="layui-col-xs3">体表面积：[[${data.bsa}]]</div>
+        <div class="layui-col-xs3">实测肺活量：[[${data.vc}]]</div>
+        <div class="layui-col-xs3">潮气量：[[${data.tv}]]</div>
+        <div class="layui-col-xs3">补呼气量：[[${data.erv}]]</div>
+        <div class="layui-col-xs3">深吸气量：[[${data.ic}]]</div>
+        <div class="layui-col-xs3">呼吸频率：[[${data.rr}]]</div>
+        <div class="layui-col-xs3">1秒率：[[${data.fev1p}]]</div>
+        <div class="layui-col-xs3">2秒率：[[${data.fev2p}]]</div>
+        <div class="layui-col-xs3">3秒率：[[${data.fev3p}]]</div>
+        <div class="layui-col-xs3">最大呼气中段流速：[[${data.mmf}]]</div>
+        <div class="layui-col-xs3">MVV1与体表面积之比：[[${data.mvv1Bsa}]]</div>
+        <div class="layui-col-xs3">峰值流量：[[${data.pef}]]</div>
+        <div class="layui-col-xs3">呼气至50%肺活量时对应流速值：[[${data.v50V25}]]</div>
+        <div class="layui-col-xs3">补吸气量：[[${data.irv}]]</div>
+        <div class="layui-col-xs3">静息通气量：[[${data.mv}]]</div>
+        <div class="layui-col-xs3">肺功能结论：[[${data.fvcResult}]]</div>
+    </div>
+    <div class="layui-row layui-col-space15" style="padding: 20px;">
+        <div class="layui-col-xs12">心血管台车</div>
+        <div class="layui-col-xs3">脉率：[[${data.pr}]]</div>
+        <div class="layui-col-xs3">每搏心搏量：[[${data.sv}]]</div>
+        <div class="layui-col-xs3">每分钟心输出量：[[${data.co}]]</div>
+        <div class="layui-col-xs3">心搏指数：[[${data.si}]]</div>
+        <div class="layui-col-xs3">心脏指数：[[${data.ci}]]</div>
+        <div class="layui-col-xs3">左心室有效泵力：[[${data.vpe}]]</div>
+        <div class="layui-col-xs3">左心能量有效利用率：[[${data.ewk}]]</div>
+        <div class="layui-col-xs3">心肌耗氧指数：[[${data.hoi}]]</div>
+        <div class="layui-col-xs3">左心搏功指数：[[${data.lvwi}]]</div>
+        <div class="layui-col-xs3">心肌血液供耗率：[[${data.cmbr}]]</div>
+        <div class="layui-col-xs3">心肌血液灌注量：[[${data.cmbv}]]</div>
+        <div class="layui-col-xs3">心肌血液需要量：[[${data.cmbn}]]</div>
+        <div class="layui-col-xs3">体外反搏增搏量：[[${data.svr}]]</div>
+        <div class="layui-col-xs3">体外反搏增搏率：[[${data.rsvr}]]</div>
+        <div class="layui-col-xs3">有效血容量：[[${data.bv}]]</div>
+        <div class="layui-col-xs3">全血粘度：[[${data.n}]]</div>
+        <div class="layui-col-xs3">还原全血粘度：[[${data.nr}]]</div>
+        <div class="layui-col-xs3">最大摄氧量：[[${data.vo2max}]]</div>
+        <div class="layui-col-xs3">梅脱值：[[${data.mets}]]</div>
+        <div class="layui-col-xs3">心力储备：[[${data.hrb}]]</div>
+        <div class="layui-col-xs3">心输出量储备：[[${data.cob}]]</div>
+        <div class="layui-col-xs3">动脉压差：[[${data.pp}]]</div>
+        <div class="layui-col-xs3">平均收缩压：[[${data.msp}]]</div>
+        <div class="layui-col-xs3">平均舒张压：[[${data.mdp}]]</div>
+        <div class="layui-col-xs3">平均动脉压：[[${data.map}]]</div>
+        <div class="layui-col-xs3">血管顺应度：[[${data.ac}]]</div>
+        <div class="layui-col-xs3">冠状动脉灌注压：[[${data.ccp}]]</div>
+        <div class="layui-col-xs3">主动脉排空系数：[[${data.blk}]]</div>
+        <div class="layui-col-xs3">血管弹性扩张系数：[[${data.fek}]]</div>
+        <div class="layui-col-xs3">总周阻：[[${data.tpr}]]</div>
+        <div class="layui-col-xs3">标准周阻：[[${data.spr}]]</div>
+        <div class="layui-col-xs3">左室喷血阻抗：[[${data.ver}]]</div>
+        <div class="layui-col-xs3">肺动脉楔压：[[${data.pawp}]]</div>
+        <div class="layui-col-xs3">肺血管阻力：[[${data.par}]]</div>
+        <div class="layui-col-xs3">肺动脉压：[[${data.pap}]]</div>
+        <div class="layui-col-xs3">微循环半更新率：[[${data.mhr}]]</div>
+        <div class="layui-col-xs3">微循环半更新时间：[[${data.mrt}]]</div>
+        <div class="layui-col-xs3">微循环平均滞留时间：[[${data.mst}]]</div>
+        <div class="layui-col-xs3">心血管结果：[[${data.xxgResult}]]</div>
+    </div>
+    <div class="layui-row layui-col-space15" style="padding: 20px;">
+        <div class="layui-col-xs12">血红蛋白</div>
+        <div class="layui-col-xs3">血红蛋白：[[${data.hb}]]</div>
+        <div class="layui-col-xs3">百分比：[[${data.htc}]]</div>
+    </div>
+</body>
+<script type="text/javascript" th:src="@{/assets/js/jquery-1.11.1.js}"></script>
+<script type="text/javascript" th:src="@{/assets/libs/layui/layui.js}"></script>
+<script type="text/javascript" th:src="@{/assets/js/common.js}"></script>
+</html>

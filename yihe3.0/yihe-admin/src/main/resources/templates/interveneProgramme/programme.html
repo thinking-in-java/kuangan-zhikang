@@ -1,0 +1,2438 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, maximum-scale=1">
+<title>干预方案管理</title>
+<link rel="stylesheet" th:href="@{/assets/libs/layui/css/layui.css}" />
+<link rel="stylesheet" th:href="@{/assets/module/admin.css}" />
+    <style type="text/css">
+.layui-elem-quote {
+    margin-bottom: 10px;
+    padding: 9px;
+    line-height: 3px;
+    border-left: 5px solid #009688;
+    border-radius: 0 2px 2px 0;
+    background-color: white;
+    margin-top: 20px;
+    float: left;
+    margin-left: 20px;
+}
+.layui-form-switch{
+	margin: 0px 10px 0px 10px;
+}
+.layui-card {
+    margin-bottom: 15px;
+    border-radius: 2px;
+    background-color: #fff;
+    box-shadow: 0 0px 0px 0 rgba(0,0,0,.05);
+}
+.yishiname {
+    display: inline-block;
+    margin-left: 20px;
+}	
+
+</style>
+</head>
+<body>
+	<!-- 加载动画 -->
+	<div class="page-loading">
+		<div class="ball-loader">
+			<span></span><span></span><span></span><span></span>
+		</div>
+	</div>
+
+
+	<div class="layui-row layui-col-space15"
+		style="padding: 20px; min-height: 500px">
+		<div class="layui-card">
+			<!--头部的tab切换栏-->
+			<div class="layui-tab layui-tab-brief" lay-filter="docDemoTabBrief">
+				<ul class="layui-tab-title">
+					<li class="layui-this" id="foodClick">饮食干预</li>
+					<li id="isclicks">运动干预</li>
+				</ul>
+				<div class="layui-tab-content" style="min-height: 500px">
+					<div class="layui-tab-item layui-show">
+						<div class="layui-tab " lay-filter="docDemoTabBrief2">
+							<ul class="layui-tab-title">
+								<li class="thisclicks layui-this">干预调整</li>
+								<li class="thisclicks" lay-id="thisclicks1">每日食谱管理</li>
+								<li class="thisclicks" lay-id="thisclicks2">干预套餐管理</li>
+							</ul>
+							<div class="layui-tab-content"
+								style="padding: 10px 0px 10px 0px; min-height: 500px">
+								<!--计划模板管理-->
+								<div class="layui-tab-item layui-show">
+									<div class="layui-form toolbar">
+										<div class="layui-form-item">
+
+
+											<div class="layui-inline">
+												<label class="layui-form-label"
+													style="padding: 9px 0px; text-align: left;">归&emsp;&emsp;属：</label>
+												<div class="layui-input-inline" style="width: 270px;">
+													<input type="text" name="tree" id="tree" lay-filter="tree"
+														class="layui-input">
+												</div>
+											</div>
+
+											<div class="layui-inline">
+												<label class="layui-form-label">干预分组：</label>
+												<div class="layui-input-inline">
+													<select name="groupid" id="groupid">
+														<option value="">全部</option>
+														<option th:each="glist:${selectAllInfo}"
+															th:value="${glist.uDocgroupId}">[[${glist.gname}]]</option>
+													</select>
+												</div>
+											</div>
+
+
+											<div class="layui-inline">
+												<label style="padding: 9px 15px 9px 0; text-align: left;"
+													class="layui-form-label">推荐方式：</label>
+												<div class="layui-input-inline">
+													<select name="mode" id="mode">
+														<option value="">全部</option>
+														<option value="系统自动">系统自动</option>
+														<option value="健康计划">健康计划</option>
+														<option value="医师手动">医师手动</option>
+													</select>
+												</div>
+											</div>
+
+											<div class="layui-inline">
+												<label style="padding: 9px 15px 9px 0; text-align: left;"
+													class="layui-form-label">性别：</label>
+												<div class="layui-input-inline">
+													<select name="sex" id="sex">
+														<option value="">全部</option>
+														<option value="1">男</option>
+														<option value="2">女</option>
+													</select>
+												</div>
+											</div>
+
+											<div class="layui-inline">
+												<label style="padding: 9px 15px 9px 0; text-align: left;"
+													class="layui-form-label">劳动强度：</label>
+												<div class="layui-input-inline">
+													<select name="strength" id="strength">
+														<option value="">全部</option>
+														<option value="1">极轻</option>
+														<option value="2">轻</option>
+														<option value="3">中</option>
+														<option value="4">重</option>
+													</select>
+												</div>
+											</div>
+
+											<div class="layui-inline">
+												<label class="layui-form-label">年龄：</label>
+												<div class="layui-input-inline" style="width: 100px;">
+													<input type="text" name="ageStr" id="ageStr"
+														autocomplete="off" class="layui-input">
+												</div>
+												<div class="layui-form-mid">~</div>
+												<div class="layui-input-inline" style="width: 100px;">
+													<input type="text" name="ageEnd" id="ageEnd"
+														autocomplete="off" class="layui-input">
+												</div>
+											</div>
+
+											<div class="layui-inline">
+												<label class="layui-form-label">身高：</label>
+												<div class="layui-input-inline" style="width: 100px;">
+													<input type="text" name="heightStr" id="heightStr"
+														autocomplete="off" class="layui-input">
+												</div>
+												<div class="layui-form-mid">~</div>
+												<div class="layui-input-inline" style="width: 100px;">
+													<input type="text" name="heightEnd" id="heightEnd"
+														autocomplete="off" class="layui-input">
+												</div>
+											</div>
+
+											<div class="layui-inline">
+												<label class="layui-form-label">体重：</label>
+												<div class="layui-input-inline" style="width: 100px;">
+													<input type="text" name="weightStr" id="weightStr"
+														autocomplete="off" class="layui-input">
+												</div>
+												<div class="layui-form-mid">~</div>
+												<div class="layui-input-inline" style="width: 100px;">
+													<input type="text" name="weightEnd" id="weightEnd"
+														autocomplete="off" class="layui-input">
+												</div>
+											</div>
+
+											<div class="layui-inline">
+												<label class="layui-form-label">日需能量：</label>
+												<div class="layui-input-inline" style="width: 100px;">
+													<input type="text" name="kayStr" id="kayStr"
+														autocomplete="off" class="layui-input">
+												</div>
+												<div class="layui-form-mid">~</div>
+												<div class="layui-input-inline" style="width: 100px;">
+													<input type="text" name="kayEnd" id="kayEnd"
+														autocomplete="off" class="layui-input">
+												</div>
+											</div>
+
+											<div class="layui-inline">
+												<label class="layui-form-label" style="width: 110px;">推荐套餐描述：</label>
+												<div class="layui-input-inline">
+													<input name="recordname" id="recordname"
+														class="layui-input" type="text" placeholder="请输入" />
+												</div>
+											</div>
+
+											<div class="layui-inline">
+												<label class="layui-form-label">姓&emsp;&emsp;名：</label>
+												<div class="layui-input-inline">
+													<input name="username" id="username" class="layui-input"
+														type="text" placeholder="输入姓名" />
+												</div>
+											</div>
+
+											<div class="layui-inline" style="padding-left: 20px;">
+												<button class="layui-btn icon-btn sousuoDN"
+													id="selectbyconditions1" data-type="selectby">
+													<i class="layui-icon"></i>搜索
+												</button>
+												<button class="layui-btn layui-btn-primary" id="btnempty1"
+													lay-submit="" lay-filter="reset">清除</button>
+
+											</div>
+
+
+										</div>
+									</div>
+									<!-- 批量操作 -->
+									<div id="piliang" class="layui-form toolbar"
+										style="background-color: #e6f7ff; height: 40px; margin-top: 10px; margin-bottom: 10px; display: none">
+										<span
+											style="font-size: 14px; color: #505050; line-height: 40px; margin-left: 9px;">批量操作</span>
+										<img alt="" src=""> <span id="xuanze">已选择**项</span>
+										<span id="huoqu" style="padding-left:15px ">跨页全选:</span>
+										<input type="checkbox"  lay-filter="checkall"  style="margin: 0px 10px 0px 0px;" title="跨页全选"  name="checkall"   lay-skin="switch" lay-text="跨页全选|取消">
+
+										<span
+											id="clickxuan" style="color: #1890ff; margin-left: 15px;">清空</span>
+
+										<span id="tishi"></span>
+										<button id="frontpage"
+											style="line-height: 32px; width: 92px; height: 32px; float: right; margin-right: 16px; text-align: center; margin-top: 5px; background-color: #2d8cf0; color: #fff;"
+											class="layui-btn layui-btn-primary">更换套餐</button>
+
+									</div>
+									<table class="layui-hide" id="duixiang" lay-filter="duixiang"></table>
+
+								</div>
+								<!--计划模板管理-->
+								<div class="layui-tab-item">
+									<div class="layui-form toolbar">
+										<div class="layui-form-item">
+											<div class="layui-inline">
+												<label style="padding: 9px 15px 9px 0; text-align: left;"
+													class="layui-form-label">模板来源：</label>
+												<div class="layui-input-inline">
+													<select name="oneself" id="oneself">
+														<option value="">全部</option>
+														<option value="1">系统提供</option>
+														<option value="2">我的创建</option>
+														<option value="3">其他人创建的</option>
+													</select>
+												</div>
+											</div>
+
+											<div class="layui-inline">
+												<label style="padding: 9px 15px 9px 0; text-align: left;"
+													class="layui-form-label">能量等级：</label>
+												<div class="layui-inline">
+													<select name="eLevel" id="eLevel" lay-search="">
+														<option value="">全部</option>
+														<option th:each="list:${todayFoodGroup}"
+															th:value="${list}">[[${list}]]</option>
+													</select>
+												</div>
+											</div>
+
+											<div class="layui-inline">
+												<label style="padding: 9px 15px 9px 0; text-align: left;"
+													class="layui-form-label">适用人群：</label>
+												<div class="layui-inline">
+													<select name="diseaseid" id="diseaseid" lay-search="">
+														<option value="">全部</option>
+														<option th:each="list:${dCategory}" th:value="${list.id}">[[${list.diseaseName}]]</option>
+													</select>
+												</div>
+											</div>
+
+											<div class="layui-inline" style="padding-left: 20px;">
+												<button class="layui-btn icon-btn sousuoDN"
+													id="selectbyconditions2" data-type="selectby">
+													<i class="layui-icon"></i>搜索
+												</button>
+												<button class="layui-btn layui-btn-primary" id="btnempty2"
+													lay-submit="" lay-filter="reset">清除</button>
+
+											</div>
+											<div id="addplan" class="layui-inline" style="float: right">
+												<button class="layui-btn icon-btn " data-type="reloadd">
+													<i class="layui-icon layui-icon-addition"></i>添加食谱
+												</button>
+											</div>
+
+										</div>
+									</div>
+
+									<table class="layui-hide" id="pinggu" lay-filter="pinggu"></table>
+
+								</div>
+
+
+								<!--计划模板管理-->
+								<div class="layui-tab-item">
+									<div class="layui-form toolbar">
+										<div class="layui-form-item">
+											<div class="layui-inline">
+												<label style="padding: 9px 15px 9px 0; text-align: left;"
+													class="layui-form-label">模板来源：</label>
+												<div class="layui-input-inline">
+													<select name="oneself2" id="oneself2">
+														<option value="">全部</option>
+														<option value="1">系统提供</option>
+														<option value="2">我的创建</option>
+														<option value="3">其他人创建的</option>
+													</select>
+												</div>
+											</div>
+
+											<div class="layui-inline">
+												<label style="padding: 9px 15px 9px 0; text-align: left;"
+													class="layui-form-label">类型：</label>
+												<div class="layui-input-inline">
+													<select name="ftype2" id="ftype2">
+														<option value="">全部</option>
+														<option value="1">风险评估推荐</option>
+														<option value="2">健康计划推荐</option>
+														<option value="3">医师手动推荐</option>
+													</select>
+												</div>
+											</div>
+
+											<div class="layui-inline">
+												<label style="padding: 9px 15px 9px 0; text-align: left;"
+													class="layui-form-label">能量等级：</label>
+												<div class="layui-inline">
+													<select name="eLevelTc" id="eLevelTc" lay-search="">
+														<option value="">全部</option>
+														<option th:each="list:${todayFoodGroup}"
+															th:value="${list}">[[${list}]]</option>
+													</select>
+												</div>
+											</div>
+
+
+											<div class="layui-inline">
+												<label style="padding: 9px 15px 9px 0; text-align: left;"
+													class="layui-form-label">适用人群：</label>
+												<div class="layui-inline">
+													<select name="diseaseid2" id="diseaseid2" lay-search="">
+														<option value="">全部</option>
+														<option th:each="list:${dCategory}" th:value="${list.id}">[[${list.diseaseName}]]</option>
+													</select>
+												</div>
+											</div>
+											
+											
+											<div class="layui-inline">
+												<label class="layui-form-label">描&emsp;&emsp;述：</label>
+												<div class="layui-input-inline">
+													<input name="fsDescribe" id="fsDescribe" class="layui-input"
+														type="text" placeholder="请输入" />
+												</div>
+											</div>
+											
+											
+
+
+											<div class="layui-inline" style="padding-left: 20px;">
+												<button class="layui-btn icon-btn sousuoDN"
+													id="selectbyconditions3" data-type="selectby">
+													<i class="layui-icon"></i>搜索
+												</button>
+												<button class="layui-btn layui-btn-primary" id="btnempty3"
+													lay-submit="" lay-filter="reset">清除</button>
+
+											</div>
+											<div id="addplan2" class="layui-inline" style="float: right">
+												<button class="layui-btn icon-btn " data-type="reloadd">
+													<i class="layui-icon layui-icon-addition"></i>添加套餐
+												</button>
+											</div>
+
+										</div>
+									</div>
+
+									<table class="layui-hide" id="pinggu2" lay-filter="pinggu2"></table>
+
+								</div>
+
+
+							</div>
+						</div>
+					</div>
+					
+					
+					
+					
+					
+					<!-- 运动干预 -->
+					<div class="layui-tab-item">
+						<div class="layui-tab-item layui-show">
+									<div class="layui-form toolbar">
+										<div class="layui-form-item">
+
+
+											<div class="layui-inline">
+												<label class="layui-form-label"
+													style="padding: 9px 0px; text-align: left;">归&emsp;&emsp;属：</label>
+												<div class="layui-input-inline" style="width: 270px;">
+													<input type="text" name="tree1" id="tree1" lay-filter="tree1"
+														class="layui-input">
+												</div>
+											</div>
+
+											<div class="layui-inline">
+												<label class="layui-form-label">干预分组：</label>
+												<div class="layui-input-inline">
+													<select name="groupid" id="groupid1">
+														<option value="">全部</option>
+														<option th:each="glist:${selectAllInfo}"
+															th:value="${glist.uDocgroupId}">[[${glist.gname}]]</option>
+													</select>
+												</div>
+											</div>
+
+
+											<div class="layui-inline">
+												<label style="padding: 9px 15px 9px 0; text-align: left;"
+													class="layui-form-label">推荐方式：</label>
+												<div class="layui-input-inline">
+													<select name="mode1" id="mode1">
+														<option value="">全部</option>
+														<option value="系统自动">系统自动</option>
+														<option value="健康计划">健康计划</option>
+														<option value="医生手动">医师手动</option>
+													</select>
+												</div>
+											</div>
+
+											 <div class="layui-inline">
+												<label style="padding: 9px 15px 9px 0; text-align: left;"
+													class="layui-form-label">BMI：</label>
+												<div class="layui-input-inline">
+													<select name="Bimweight" id="Bimweight">
+														<option value="">全部</option>
+														<option value="消瘦">消瘦</option>
+														<option value="正常">正常</option>
+														<option value="超重">超重</option>
+														<option value="肥胖<">肥胖</option>
+													</select>
+												</div>
+											</div>
+
+											<div class="layui-inline">
+												<label class="layui-form-label">年龄：</label>
+												<div class="layui-input-inline" style="width: 100px;">
+													<input type="text" name="ageStr1" id="ageStr1"
+														autocomplete="off" class="layui-input">
+												</div>
+												<div class="layui-form-mid">~</div>
+												<div class="layui-input-inline" style="width: 100px;">
+													<input type="text" name="ageEnd1" id="ageEnd1"
+														autocomplete="off" class="layui-input">
+												</div>
+											</div>
+
+											
+
+											<div class="layui-inline">
+												<label class="layui-form-label" style="width: 100px;">推荐计划名称：</label>
+												<div class="layui-input-inline">
+													<input name="recordname1" id="recordname1"
+														class="layui-input" type="text" placeholder="请输入" />
+												</div>
+											</div>
+
+											<div class="layui-inline">
+												<label class="layui-form-label">姓&emsp;&emsp;名：</label>
+												<div class="layui-input-inline">
+													<input name="username1" id="username1" class="layui-input"
+														type="text" placeholder="输入姓名" />
+												</div>
+											</div>
+
+											<div class="layui-inline" style="padding-left: 20px;">
+												<button class="layui-btn icon-btn sousuoDN"
+													id="sportSelectbyconditions1" data-type="selectby">
+													<i class="layui-icon"></i>搜索
+												</button>
+												<button class="layui-btn layui-btn-primary" id="btnempty4"
+													lay-submit="" lay-filter="reset">清除</button>
+
+											</div>
+
+
+										</div>
+									</div>
+									<!-- 批量操作 -->
+									<div id="sporTpiliang" class="layui-form toolbar"
+										style="background-color: #e6f7ff; height: 40px; margin-top: 10px; margin-bottom: 10px; display: none">
+										<span
+											style="font-size: 14px; color: #505050; line-height: 40px; margin-left: 9px;">批量操作</span>
+										<img alt="" src=""> <span id="sportxuanze">已选择**项</span> <span
+											id="sportclickxuan" style="color: #1890ff; margin-left: 15px;">清空</span>
+
+										<span id="sporttishi"></span>
+										
+											
+										<button id="sportfrontpage"
+											style="line-height: 32px; width: 92px; height: 32px; float: right; margin-right: 16px; text-align: center; margin-top: 5px; background-color: #2d8cf0; color: #fff;"
+											class="layui-btn layui-btn-primary">更换套餐</button>
+											<button id="frequency"
+											style="line-height: 32px; width: 92px; height: 32px; float: right; margin-right: 16px; text-align: center; margin-top: 5px; background-color: #fff; color: #2d8cf0;"
+											class="layui-btn layui-btn-primary">更换频率</button>
+
+									</div>
+									<table class="layui-hide" id="Sportduixiang" lay-filter="Sportduixiang"></table>
+
+								</div>
+					</div>
+					<!-- 运动干预 -->
+					
+					
+					
+					
+					
+					
+					
+					
+					
+				</div>
+			</div>
+			<div class="layui-tab layui-tab-brief" lay-filter="demo" >
+
+				<div class="layui-tab-content">
+					<div class="layui-tab-item layui-show">
+						<div class="layui-fluid">
+							<div class="layui-card"></div>
+						</div>
+
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+	<script type="text/javascript" th:src="@{/assets/libs/layui/layui.js}"></script>
+	<script type="text/javascript" th:src="@{/assets/js/common.js}"></script>
+	<!-- 表格操作列 -->
+	<script type="text/html" id="tableBar1">
+    <a class="layui-btn layui-btn-xs" lay-event="edit1">查看</a>
+</script>
+
+	<script type="text/html" id="tableBar">
+    <a class="layui-btn layui-btn-xs" lay-event="edit">查看</a>
+</script>
+	<script type="text/html" id="tableBar2">
+    {{#if (d.userCode != d.doctor ) { }}
+    <span>- -</span>
+    {{# }else{ }}
+    <a style="background-color:#fff;color: #0C0C0C;border: 1px solid ;border-color:#9F9F9F !important; " class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+<a style="background-color:#fff;color: #2a9ce4;border: 1px solid ;border-color:#9F9F9F !important; " class="layui-btn layui-btn-xs" lay-event="edit">修改</a>
+    {{# } }}
+</script>
+	<script type="text/html" id="tableBar3">
+    {{#if (d.usercode != d.doctor ) { }}
+    <span>- -</span>
+    {{# }else{ }}
+    <a style="background-color:#fff;color: #0C0C0C;border: 1px solid ;border-color:#9F9F9F !important; " class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+<a style="background-color:#fff;color: #2a9ce4;border: 1px solid ;border-color:#9F9F9F !important; " class="layui-btn layui-btn-xs" lay-event="edit">修改</a>
+    {{# } }}
+</script>
+
+	<!-- 表单弹窗 <a style="background-color:#fff;color: #2a9ce4;border: 1px solid ;border-color:#9F9F9F !important; " class="layui-btn layui-btn-xs" lay-event="edit">修改</a> -->
+	<script type="text/html" id="toutiao">
+<form id="RoleForm" lay-filter="RoleForm"   class="layui-form model-form">
+   <div class='layui-inline' style='margin-top:14px;float:left;padding-left: 15px;'>
+<div class="layui-inline" >
+					   <select name="ftype" id="ftype" 	 lay-search="">
+				          <option value="1">健康风险评估推荐</option>
+				          <option value="2">28天计划推荐</option>
+				          <option value="3">健管师自制添加</option>
+				        </select>
+					  </div>
+<div class="layui-inline">
+					   <select name="eLevel" id="eLevel" 	 lay-search="">
+				          <option value="">全部</option>
+				          <option th:each="list:${findElevelInfoGroupBy}"
+															th:value="${list}">[[${list}]]</option>
+				        </select>
+					  </div>
+<div class="layui-inline">
+  <select name="diseaseid" id="diseaseid" 	 lay-search="">
+				          <option value="">全部</option>
+				          <option th:each="list:${dCategory}"
+															th:value="${list.id}">[[${list.diseaseName}]]</option>
+				        </select>
+    </div>
+
+</div>
+<input id='guishujishu' type='hidden' value=''>
+
+  <button type="button" lay-submit lay-filter="tkSousuo"  id='selectyishi' style='margin-top:14px;margin-left:10px;background-color: #5a9ae2' class="layui-btn layui-btn-normal">查询</button>
+<div style='width: 680px;height:260px;margin-top:20px;margin-left:15px;border-radius:4px;overflow:auto'>
+
+<ul id='changedoctor'>
+
+</ul>
+</div>
+<span id='tishi' style='color:red;margin-top:10px;margin-left:33px;display:none'>请选择1个医生</span>
+     
+ 
+   
+
+		<input id="usercode1" name="usercode" type="hidden" value="">
+
+        <input id="pitch" name="pitch" type="hidden" value="">
+    
+
+        <div class="layui-form-item text-right" style="    text-align: center;    padding-top: 10px;">
+            <button class="layui-btn layui-btn-primary" type="button" ew-event="closePageDialog">取消</button>
+            <button class="layui-btn" lay-filter="SubmitRole" lay-submit>保存</button>
+        </div>
+    </form>
+ 
+    
+</script>
+
+
+
+<!-- 表单弹窗运动 -->
+<script type="text/html" id="sporttoutiao">
+
+
+
+<div class='layui-inline' style='margin-top:14px;float:left '><label class='layui-form-label w-auto'>课程名称：</label><div class='layui-input-inline mr0'><input id='setmealMame' style='width: 160px;' class='layui-input' placeholder='请输入课程名称'/></div></div>
+<input id='guishujishu' type='hidden' value=''>
+      <button id='sportselectyishi' style='margin-top:14px;margin-left:10px;background-color: #5a9ae2'  class='layui-btn icon-btn'>查询</button>
+<div style='background-color:#e6f7ff;width: 550px;height:193px;margin-top:20px;margin-left:15px;border-radius:4px;overflow:auto'>
+<form id="RoleForm" lay-filter="RoleForm" class="layui-form">
+<ul id='sportchangedoctor'>
+
+</ul>
+</div>
+
+		<input id="userCode1" name="userCode" type="hidden" value="">
+
+        <input id="pitch" name="pitch" type="hidden" value="">
+    
+
+        <div class="layui-form-item text-right" style="    text-align: center;    padding-top: 10px;">
+            <button class="layui-btn layui-btn-primary" type="button" ew-event="closePageDialog">取消</button>
+            <button class="layui-btn" lay-filter="intervention" lay-submit>保存</button>
+        </div>
+    </form>
+    
+</script>
+
+
+<!-- 表单弹窗运动频率 -->
+<script type="text/html" id="sportfrequency">
+<form class="layui-form" id="express" >
+
+<input id="period" name="period" type="hidden" value="一,二,三,四,五,六,日">
+
+<label class="layui-form-label" style='width: 90px;'><span  onclick='checkAll()'>全选</span> &nbsp; | &nbsp; <span onclick='SelectionAll()'>反选</span></label>
+
+
+				<div class="layui-form-item">
+			    <div class="layui-inline">
+				   <div class="layui-input-block">
+				   <div class="layui-row" style="margin-left: -89px;">
+				      <input type="checkbox" name="like1" id="week1" value="一"  lay-filter="week" title="周一"  lay-skin='primary' checked >
+				      <input type="checkbox" name="like1"  id="week2" value="二" lay-filter="week" title="周二"  lay-skin='primary' checked >
+				       <input type="checkbox" name="like1" id="week3" value="三" lay-filter="week" title="周三"  lay-skin='primary' checked >
+				      <input type="checkbox" name="like1" id="week4" value="四" lay-filter="week" title="周四"  lay-skin='primary' checked >
+				       <input type="checkbox" name="like1" id="week5" value="五"   lay-filter="week" title="周五"  lay-skin='primary' checked >
+				      <input type="checkbox" name="like1" id="week6" value="六" lay-filter="week" title="周六"  lay-skin='primary' checked >
+				       <input type="checkbox" name="like1" id="week7" value="日" lay-filter="week" title="周日"  lay-skin='primary' checked >
+				   	</div>
+				   </div>
+			    </div>
+			  </div>	
+
+
+ <div class="layui-form-item text-right" style="    text-align: center;    padding-top: 10px;">
+            <button class="layui-btn layui-btn-primary" type="button" ew-event="closePageDialog">取消</button>
+            <button class="layui-btn" lay-filter="changeFrequency" lay-submit>保存</button>
+        </div>
+ </form>
+    
+</script>
+
+	<script>
+		layui.use([ 'layer', 'form', 'step', 'element', 'table', 'laydate',
+				'treeSelect', 'notice', 'admin', 'layedit' ], function() {
+			var $ = layui.jquery, element = layui.element; //Tab的切换功能，切换事件监听等，需要依赖element模块
+			var layer = layui.layer;
+			var form = layui.form;
+			var step = layui.step;
+			var table = layui.table;
+			var laydate = layui.laydate;
+			var laypage = layui.laypage;
+			var notice = layui.notice;
+			var layedit = layui.layedit;
+			var treeSelect = layui.treeSelect;
+			var admin = layui.admin;
+			//翻页多选数据
+			var pageDataIdMap;
+			var idMap = new Map();
+			var SportidMap = new Map();
+			var resDate;
+			var resUserList;
+			var pageDataModeMap=new Map();
+			var ModeMap = new Map();
+
+			//全部全选
+			form.on('switch(checkall)', function (data) {
+				var checked = data.elem.checked;
+				console.log("checked",data)
+				if(this.checked){
+					idMap = new Map();
+
+					for(var i = 0;i < resUserList.length;i++){
+						idMap[resUserList[i]]=resUserList[i]
+					}
+
+					for(var i = 0;i < resDate.length;i++){   //勾选行回显
+						for(var key in idMap){
+							if(resDate[i].usercode == key){
+								resDate[i]["LAY_CHECKED"]='true';
+								//找到对应数据改变勾选样式，呈现出选中效果
+								var index= resDate[i]['LAY_TABLE_INDEX'];
+								$('tr[data-index=' + index + '] input[type="checkbox"]').prop('checked', true);
+								$('tr[data-index=' + index + '] input[type="checkbox"]').next().addClass('layui-form-checked');
+
+							}
+						}
+					}
+					$('input[lay-filter="layTableAllChoose"]').prop('checked',true);
+					$('input[lay-filter="layTableAllChoose"]').next().addClass('layui-form-checked');
+
+					$("#xuanze").html("已选择"+resUserList.length+"项")
+					$("#piliang").css("display","block")
+
+
+
+				}else{
+
+					for(var i = 0;i < resDate.length;i++){   //勾选行回显
+						resDate[i]["LAY_CHECKED"]='';
+						//找到对应数据改变勾选样式，呈现出选中效果
+						var index= resDate[i]['LAY_TABLE_INDEX'];
+						$('tr[data-index=' + index + '] input[type="checkbox"]').prop('checked', false);
+						$('tr[data-index=' + index + '] input[type="checkbox"]').next().removeClass('layui-form-checked');
+
+					}
+
+
+					$('input[lay-filter="layTableAllChoose"]').prop('checked',false);
+					$('input[lay-filter="layTableAllChoose"]').next().removeClass('layui-form-checked');
+
+					form.render("checkbox");
+					$("#xuanze").html("已选择"+0+"项")
+					$("#piliang").css("display","none")
+					$("input[name='checkall']").prop('checked',false);
+					form.render("checkbox");
+					idMap = new Map();
+				}
+				var checkStatus = table.checkStatus('usercode'); //idTest 即为基础参数 id 对应的值
+
+				console.log(checkStatus.data) //获取选中行的数据
+				console.log(checkStatus.data.length) //获取选中行数量，可作为是否有选中行的条件
+				console.log(checkStatus.isAll ) //表格是否全选
+				form.render('checkbox');
+			});
+
+
+			$(".thisclicks").click(function () {
+				layer.closeAll();
+			})
+			
+			
+			var fanhui=[[${fanhui}]]
+			console.log("fanhui",fanhui)
+			if(fanhui=='1'){
+				//切换到指定Tab项
+	            element.tabChange('docDemoTabBrief2', 'thisclicks1'); //根据传入的id传入到指定的tab项
+			}
+			if(fanhui=='2'){
+				//切换到指定Tab项
+	            element.tabChange('docDemoTabBrief2', 'thisclicks2'); //根据传入的id传入到指定的tab项
+			}
+			//全选
+			checkAll=function(){
+				$("input[name='like1']").prop("checked", true);
+				 $("#period").val("一,二,三,四,五,六,日");
+                form.render('checkbox');
+			}
+			
+			//反选
+			SelectionAll=function(){
+				$("input[name='like1']").prop("checked", false);
+				 $("#period").val("");
+                form.render('checkbox');
+			}
+			
+			
+			
+			form.on('checkbox(week)', function(data){
+		    	  console.log(data.elem); //得到checkbox原始DOM对象
+		    	  console.log(data.elem.checked); //是否被选中，true或者false
+		    	  console.log(data.value); //复选框value值，也可以通过data.elem.value得到
+		    	  console.log(data.othis); //得到美化后的DOM对象
+		    	  
+		    	  var idnum = data.elem.id; //得到dom的id 
+
+		    	  var chk_value =[]; 
+		    	  
+		    	/*   var pitc=$("#pitch").val();
+		    	  if(pitc!=null){
+		    		  chk_value=pitc;
+		    	  } */
+
+		    	  $('input[name="like1"]:checked').each(function(){ 
+		    	  chk_value.push($(this).val()); 
+		    	  }); 
+		    	//  layer.msg(chk_value.toString());
+		    	  $("#period").val(chk_value.toString());
+		    	  form.render('checkbox');
+		    	  
+		    	}); 
+		  
+			
+	        $('#foodClick').click(function () {
+	        	$("#sporTpiliang").css("display","none");
+	        	
+		         
+	        	var myCheckbox = $("input[name='layTableCheckbox']");
+	        	myCheckbox.prop('checked', false); //切换下拉选项时，清空所有选中状态
+	        	form.render('checkbox');//记得每次操作后要渲染该元素
+	        	 pageDataIdMap;
+				 idMap = new Map();
+				 pageDataModeMap=new Map();
+				   
+				 
+				 let sportarray = []
+				    for(let key in idMap) {
+				      let obj = idMap[key]
+				      obj.id = key
+				      sportarray.push(obj)
+				    }
+				console.log(JSON
+						.stringify({
+							"Sport" : sportarray
+							 
+						}))
+	        });
+	        
+	        $('#isclicks').click(function () {
+	        	$("#piliang").css("display","none");
+	        	
+		         
+	        	var myCheckbox = $("input[name='layTableCheckbox']");
+	        	myCheckbox.prop('checked', false); //切换下拉选项时，清空所有选中状态
+	        	form.render('checkbox');//记得每次操作后要渲染该元素
+	        	 pageDataIdMap;
+	        	 SportidMapidMap = new Map();
+				 pageDataModeMap=new Map();
+				   
+	        	let array = []
+			    for(let key in SportidMapidMap) {
+			      let obj = SportidMapidMap[key]
+			      obj.id = key
+			      array.push(obj)
+			    }
+	        	console.log(JSON
+						.stringify({
+							"userList" : array
+							 
+						}))
+	        });
+	        
+	        
+	        sportempty =function(){
+	        	$("#sporTpiliang").css("display","none");
+	        	
+		         
+	        	var myCheckbox = $("input[name='layTableCheckbox']");
+	        	myCheckbox.prop('checked', false); //切换下拉选项时，清空所有选中状态
+	        	form.render('checkbox');//记得每次操作后要渲染该元素
+	        	 pageDataIdMap;
+				 SportidMap = new Map();
+				 pageDataModeMap=new Map();
+				   
+				 
+				 let sportarray = []
+				    for(let key in SportidMap) {
+				      let obj = SportidMap[key]
+				      obj.id = key
+				      sportarray.push(obj)
+				    }
+				console.log(JSON
+						.stringify({
+							"Sport" : sportarray
+							 
+						}))
+	        }
+			
+	        
+	        
+	        $(document).on('click', '#sportselectyishi', function() {
+	        	$("#sportchangedoctor").empty().append("");
+	        	var setmealMame=$("#setmealMame").val();
+	        	var d ={"setmealMame":setmealMame};
+	       	 $.ajax({
+	        	 type: "post",
+	             url: "/YhSportRecommendRecordController/showmeddle",
+	             dataType:"json",
+	             data:d,
+	             success: function(data){
+	      	       	var item=data.data;
+	      	     	var htmld="";
+	      	        for (var i = 0; i < item.length; i++) {
+	      	        	var setmealMame = item[i].setmealMame.substring(0,item[i].setmealMame.length-5);
+		      	      	var strs= new Array(); //定义一数组 
+	      	        	strs=item[i].subjectId.split(","); //字符分割 
+	   	        		htmld+="<li style='margin-left: 20px;margin-top: 10px;'><input type='checkbox'  lay-filter='filter' value="+item[i].id+" name='like1' lay-skin='primary'><label  class='yishiname' style='width: 30%;'>"+item[i].setmealMame+"</label><label class='yishiname' style='width: 40%;'>"+setmealMame+"</label><label class='yishiname' style='width: 10%;'>"+(strs.length-1)+"天</label></li>";
+	      	        }
+	      	     $("#sportchangedoctor").empty().append(htmld);
+	      	        form.render();
+	             }   	
+	        });
+	        });
+	        
+	        
+				//所属机构下拉框
+			var treeSelect = layui.treeSelect;
+			randtreesone();
+	       	function randtreesone(){
+			treeSelect.render({
+				// 选择器
+				elem : '#tree',
+				// 数据 
+				data : '/YhUserMakeCard/showPullDownTree',
+				// 异步加载方式：get/post，默认get
+				type : 'get',
+				// 占位符
+				placeholder : '全部',
+				// 是否开启搜索功能：true/false，默认false
+				search : true,
+				// 点击回调
+				click : function(d) {
+
+					console.log($('#tree').val(d.current.id));
+				},
+				// 加载完成后的回调函数
+				success : function(d) {
+					console.log(d);
+					randtreesone1();
+				}
+			});
+	       	}
+	       	
+	       	
+	       	
+
+	       	function randtreesone1(){
+			treeSelect.render({
+				// 选择器
+				elem : '#tree1',
+				// 数据 
+				data : '/YhUserMakeCard/showPullDownTree',
+				// 异步加载方式：get/post，默认get
+				type : 'get',
+				// 占位符
+				placeholder : '全部',
+				// 是否开启搜索功能：true/false，默认false
+				search : true,
+				// 点击回调
+				click : function(d) {
+
+					console.log($('#tree1').val(d.current.id));
+				},
+				// 加载完成后的回调函数
+				success : function(d) {
+					console.log(d);
+				}
+			});
+	       	}
+	       	
+	       	
+	      
+	      //更换运动课程
+	        $('#sportfrontpage').click(function () {
+	        	Sportshowhealth();
+	            Soirtshowheadline();
+	        });
+
+			//记录选中用户的运动频率
+			let pinglv = [];
+
+			//改变运动频率的选中状态
+			function gaibian(){
+				let youxiao = [];
+				if(pinglv.length>0){
+					for(let a in pinglv){
+						if(pinglv[a].isjilu){
+							youxiao.push(pinglv[a])
+						}
+					}
+					if(youxiao.length==1){
+						let pl = ['一','二','三','四','五','六','日']
+						var strs = youxiao[0].pv.split(","); //字符分割
+						let diff = pl.filter(function (val) { return strs.indexOf(val) === -1 })
+						$('input[name="like1"]').each(function(index,item){
+							for(let i=0;i<diff.length;i++){
+								if($(item).attr("value")===diff[i]){
+									$(item).attr("checked", false);
+								}
+							}
+						});
+					}
+					pinglv = youxiao;
+				}
+			}
+	      
+
+		      //更换运动频率
+		        $('#frequency').click(function () {
+		        	frequencyshowheadline();
+		        	form.render();
+		        });
+		      
+	        
+		      
+		      //显示编辑弹窗运动课程
+		        function frequencyshowheadline(mRole) {
+		            admin.open({
+		                type: 1,
+		                title: '更换频率',
+		                content: $('#sportfrequency').html(),
+		                area: ['590px', '250px'],
+		                success: function (layero, dIndex) {
+							gaibian();
+		                    var url = '/yhSportFrequencyWebController/batchinsertSelectiveplu';
+		                    // 表单提交事件
+		                    form.on('submit(changeFrequency)', function (data) {
+			                   
+		                      	let sportarray = []
+							    for(let key in SportidMap) {
+							      let obj = SportidMap[key]
+							      obj.id = key
+							      sportarray.push(obj)
+							    }
+		                      	
+		                        var period= $("#period").val();
+		                        if(period==null || period==""){
+		                        	 layer.msg("请选择至少一天");
+		                        }else{
+		                        	layer.load(2);
+		                        	   $.ajax({
+											type : "post",
+											url : url,
+											contentType : 'application/json;charset=UTF-8', //发送信息至服务器时内容编码类型
+											traditional : true, //传统的方式来序列化数据
+											data :JSON
+											.stringify({'period' :period,"sportarrayList":sportarray}),
+
+											success : function(
+													data) {
+												Sporttable1(Sportdata1);
+					        					layer.msg("成功");
+					        					 layer.closeAll();
+					        					 sportempty();
+					        					 //将用户运动频率记录置空
+					        					 pinglv=[];
+											}
+										})
+
+		                               return false;
+		                        }
+		                        
+		                     
+		                    });
+		                }
+		            });
+		        }
+		      
+		      
+	      
+	      //显示编辑弹窗运动课程
+	        function Soirtshowheadline(mRole) {
+	        	
+	            admin.open({
+	                type: 1,
+	                title: '更换课程',
+	                content: $('#sporttoutiao').html(),
+	                area: ['650px', '400px'],
+	                success: function (layero, dIndex) {
+	                    var url = '/YhSportRecommendRecordController/batchinsertSelective';
+	                    // 表单提交事件
+	                    form.on('submit(intervention)', function (data) {
+		                   	let sportarray = []
+						    for(let key in SportidMap) {
+						      let obj = SportidMap[key]
+						      obj.id = key
+						      sportarray.push(obj)
+						    }
+		                   	 
+	                        var pitch=$("#pitch").val();
+	                        var d ={"pitch":pitch,'sportarray' :sportarray};
+	                        if(pitch==null || pitch==""){
+	                        	 layer.msg("请选择1个课程");
+	                        	 return false;
+	                        }else{
+	                        	layer.load(2);
+	                        	   $.ajax({
+										type : "post",
+										url : url,
+										contentType : 'application/json;charset=UTF-8', //发送信息至服务器时内容编码类型
+										traditional : true, //传统的方式来序列化数据
+										data :JSON
+										.stringify({'pitch' :pitch,"sportarrayList":sportarray}),
+
+										success : function(
+												data) {
+											Sporttable1(Sportdata1);
+				        					layer.msg("成功");
+				        					 layer.closeAll();
+				        					 sportempty();
+										}
+									})
+
+	                               return false;
+	                        }
+	                        
+	                     
+	                    });
+	                }
+	            });
+	        }
+
+	      
+	        //查询所有课程
+	        function Sportshowhealth(){
+	          	 var d ="";
+	           	 $.ajax({
+	            	 type: "post",
+	                 url: "/YhSportRecommendRecordController/showmeddle",
+	                 dataType:"json",
+	                 data:d,
+	                 success: function(data){
+	               	  var item=data.data;
+	          	     	var htmld="";
+	          	        for (var i = 0; i < item.length; i++) {
+	          	        	var setmealMame = item[i].setmealMame.substring(0,item[i].setmealMame.length-5);
+			      	      	var strs= new Array(); //定义一数组 
+		      	        	strs=item[i].subjectId.split(","); //字符分割 
+		   	        		htmld+="<li style='margin-left: 20px;margin-top: 10px;'><input type='checkbox'  lay-filter='filter' value="+item[i].id+" name='like1' lay-skin='primary'><label  class='yishiname' style='width: 30%;'>"+item[i].setmealMame+"</label><label class='yishiname' style='width: 40%;'>"+setmealMame+"</label><label class='yishiname' style='width: 10%;'>"+(strs.length-1)+"天</label></li>";
+	            	        	
+	          	       }
+	          	     $("#sportchangedoctor").empty().append(htmld);
+	          	        form.render();
+	               	  
+	                 }
+	            });
+	          }
+	        
+	        
+	      //运动课程多选
+	        form.on('checkbox(filter)', function(data){
+	      	  console.log(data.elem); //得到checkbox原始DOM对象
+	      	  console.log(data.elem.checked); //是否被选中，true或者false
+	      	  console.log(data.value); //复选框value值，也可以通过data.elem.value得到
+	      	  console.log(data.othis); //得到美化后的DOM对象
+	      	  
+	      	  var idnum = data.elem.id; //得到dom的id 
+
+	      	  var chk_value =[]; 
+	      	  
+	      	/*   var pitc=$("#pitch").val();
+	      	  if(pitc!=null){
+	      		  chk_value=pitc;
+	      	  } */
+
+	      	  $('input[name="like1"]:checked').each(function(){ 
+	      	  chk_value.push($(this).val()); 
+	      	  }); 
+	      	//  layer.msg(chk_value.toString());
+	      	  $("#pitch").val(chk_value.toString());
+	      	  form.render('checkbox');
+	      	  
+	      	  
+	      	}); 
+	        
+	        
+	       	
+	        var modeNum=0;
+	        //运动干预调整多选按钮事件
+	        table.on('checkbox(Sportduixiang)', function(obj){
+	        	console.log("obj",obj)
+	        	var mode=obj.data.record_mode;
+				 var checkStatus = table.checkStatus('Sportduixiang');
+				 
+				 var data = checkStatus.data;
+				 if(obj.type == 'one'){    //单选操作
+		                if(obj.checked){     //选中
+		                	if(pinglv.length>0){
+								let bool = false;
+		                		for(let a in pinglv){
+									if(pinglv[a].uid == obj.data.usercode){
+										pinglv[a].isjilu = true;
+										bool = true;
+										break;
+									}
+								}
+		                		if(!bool){
+		                			if(obj.data.frequency==null){
+										pinglv.push({uid:obj.data.usercode,pv:'一,二,三,四,五,六,日',isjilu:true});
+									}else{
+										pinglv.push({uid:obj.data.usercode,pv:obj.data.frequency.replace(/每周/,''),isjilu:true});
+									}
+								}
+							}else if(pinglv.length<=0){
+								if(obj.data.frequency==null){
+									pinglv.push({uid:obj.data.usercode,pv:'一,二,三,四,五,六,日',isjilu:true});
+								}else{
+									pinglv.push({uid:obj.data.usercode,pv:obj.data.frequency.replace(/每周/,''),isjilu:true});
+								}
+							}
+							SportidMap[obj.data.usercode] = obj.data.usercode;
+		                }else{      //取消选中
+							for(let a in pinglv){
+								if(pinglv[a].uid == obj.data.usercode){
+									pinglv[a].isjilu = false;
+									break;
+								}
+							}
+
+
+		                    for(var key in SportidMap){
+		                        if(key == obj.data.usercode){   //移除取消选中的id
+		                            delete SportidMap[obj.data.usercode];
+		                        }
+		                    }
+		                   
+		                }
+		            }else{      //全选操作
+					    //清空用户运动频率
+					    pinglv = [];
+		                if(obj.checked){
+		                	//选中
+		                    for(var pageKey in pageDataIdMap){
+		                    	SportidMap[pageKey] = pageKey;
+		                    }
+		                }else{     //取消选中
+		                    for(var pageKey in pageDataIdMap){
+		                        for(var key in SportidMap){
+		                            if(key == pageKey){
+		                                delete SportidMap[pageKey];
+		                            }
+		                        }
+		                    }
+		                }
+		            }
+				 let sportarray = []
+				    for(let key in SportidMap) {
+				      let obj = SportidMap[key]
+				      obj.id = key
+				      sportarray.push(obj)
+				    }
+				console.log(JSON
+						.stringify({
+							"Sport" : sportarray
+							 
+						}))
+						
+						 let sportarray2 = []
+				    for(let key in pageDataModeMap) {
+				      let obj = pageDataModeMap[key]
+				      obj.id = key
+				      sportarray2.push(obj)
+				    }
+				console.log(JSON
+						.stringify({
+							"sportList" : sportarray2
+							 
+						}))
+				
+				 if(Object.keys(SportidMap).length!=0){
+					  var ModeNum=0;
+					 for(let key in SportidMap) {
+					      let obj = SportidMap[key]
+					      for(let key2 in pageDataModeMap) {
+						      let obj2 = pageDataModeMap[key2]
+						   		if(obj==obj2){
+						   			ModeNum++;
+						   		}
+						      
+						    }
+					      
+					    }
+		        		$("#sportxuanze").html("已选择"+Object.keys(SportidMap).length+"项")
+		        		if(ModeNum>0){
+		        			changeTaocan();
+		        			
+		        		}else{
+		        			$("#sporttishi").html('')
+		        			$("#sportfrontpage").removeClass("layui-btn-disabled");
+		        		}
+		        		$("#sporTpiliang").css("display","block")
+		        		
+		        	}else{
+		        		console.log(SportidMap)
+		        		$("#sporTpiliang").css("display","none")
+		        	}
+		        });
+	       	
+	        
+	        
+	      //运动干预调整搜索按钮事件
+			$("#sportSelectbyconditions1").click(function() {
+				var tree = $('#tree1').val();
+				console.log("#tree1", tree)
+				Sportdata1 = {
+					orgid : $("#tree1").val(),
+					groupid : $("#groupid1").val(),
+					mode : $("#mode1").val(),
+					ageStr : $("#ageStr1").val(),
+					ageEnd : $("#ageEnd1").val(),
+					recordname : $("#recordname1").val(),
+					username : $("#username1").val(),
+					Bimweight:$("#Bimweight").val()
+				};
+				Sporttable1(Sportdata1);
+			});
+	      
+	      
+			//干预调整清空按钮事件
+			  $("#btnempty4").click(function(){
+				  $("#sporTpiliang").css("display","none");
+		        	
+			         
+		        	var myCheckbox = $("input[name='layTableCheckbox']");
+		        	myCheckbox.prop('checked', false); //切换下拉选项时，清空所有选中状态
+		        	form.render('checkbox');//记得每次操作后要渲染该元素
+				  pageDataIdMap;
+				  SportidMap = new Map();
+					 pageDataModeMap=new Map();
+		        	let array = []
+				    for(let key in SportidMap) {
+				      let obj = SportidMap[key]
+				      obj.id = key
+				      array.push(obj)
+				    }
+		        	
+		        	$("#tree1").val('');
+		        	$("#groupid1").val('');
+		        	$("#mode1").val('');
+		        	$("#ageStr1").val('');
+		        	$("#ageEnd1").val('');
+		        	$("#recordname1").val('');
+		        	$("#username1").val('');
+		        	$("#Bimweight").val('');
+					$('#tree1').siblings().remove();
+		        	 form.render("select");
+		        	 randtreesone1();
+		            form.render();
+		            Sportdata1 = {};
+		            Sporttable1(Sportdata1);
+		        })
+	      
+		        
+		        
+		         table.on('tool(Sportduixiang)', function(obj) { //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
+						            var data = obj.data;
+						            var layEvent = obj.event;
+						            if (layEvent === 'edit1') { // 查看
+						            	window.open("/manage/register/userIndex?page=sportDiary1&userCode="+data.usercode+""); 
+						            }
+						        });
+			
+			
+	      //干预调整table数据
+			var Sportdata1 = {};
+			function Sporttable1(data) {
+				var insTb1 = table.render({
+					id : 'Sporttable1id',
+					elem : '#Sportduixiang',
+					url : '/YhSportMeddleController/SportInterveneInfo',
+					cellMinWidth : 80, //全局定义常规单元格的最小宽度，layui 2.2.1 新增
+					page : true,
+					limit: 10, //每页默认显示的数量
+
+					where : data,
+					cols : [ [ {
+						type : 'checkbox'
+					}, {
+
+						title : '姓名(编号)',
+						templet : function(d) {
+							return d.name + "(" + d.usercode + ")"
+						}
+					}, {
+						field : 'age',
+						title : '评估时年龄',
+					}, {
+						title : '评估时BMI',
+						templet : function(d) {
+							var bmi="";
+							if(d.bmi==null){
+								bmi="--";
+							}else{
+								bmi=d.bmi;
+							}
+							return bmi
+						}
+					}, {
+						title : '运动频率',
+						templet : function(d) {
+							var frequency="";
+							if(d.frequency==null){
+								frequency="每天";
+							}else{
+								frequency=d.frequency;
+							}
+							return frequency
+						}
+					}, {
+						field : 'planName',
+						title : '推荐计划',
+					}, {
+						field : 'flag_Dgroup',
+						title : '分组',
+
+					}, {
+						align : 'center',
+						toolbar : '#tableBar1',
+						title : '操作',
+
+					} ] ],
+					response : {
+
+						statusCode : 0
+					//规定成功的状态码，默认：0
+
+					},
+
+					parseData : function(res) { //将原始数据解析成 table 组件所规定的数据
+						console.log("table1",res.data)
+						return {
+							"code" : res.data.code, //解析接口状态
+							"msg" : res.data.msg, //解析提示文本
+							"count" : res.data.count, //解析数据长度
+							"data" : res.data.data
+						//解析数据列表
+						}
+
+					},
+					 done: function (res, curr, count) {
+						 if(count > 10) {
+					        	$("#tiwen2 .layui-table-page").show();
+					        }else {
+					        	$("#tiwen2 .layui-table-page").hide();
+					        }
+			                var len = res.data.length;
+			                pageDataIdMap = new Map();
+			                for(var i = 0;i < len;i++){   //填充当前页的数据
+			                    pageDataIdMap[res.data[i].usercode] = res.data[i].usercode;
+			                }
+			                /* for(var i = 0;i < len;i++){   //填充当前页的数据
+			                	if(res.data[i].record_mode=='健康计划'){
+			                		pageDataModeMap[res.data[i].usercode] = res.data[i].usercode;
+			                	}
+			                } */
+			                var chooseNum = 0;   //记录当前页选中的数据行数
+			                for(var i = 0;i < len;i++){   //勾选行回显
+			                    for(var key in idMap){
+			                        if(res.data[i].usercode == key){
+			                            res.data[i]["LAY_CHECKED"]='true';
+			                            //找到对应数据改变勾选样式，呈现出选中效果
+			                            var index= res.data[i]['LAY_TABLE_INDEX'];
+			                            $('tr[data-index=' + index + '] input[type="checkbox"]').prop('checked', true);
+			                            $('tr[data-index=' + index + '] input[type="checkbox"]').next().addClass('layui-form-checked');
+			                            chooseNum++;
+			                        }
+			                    }
+			                }
+			                let pageDataIdMaparray = []
+						    for(let key in pageDataIdMap) {
+						      let obj = pageDataIdMap[key]
+						      obj.id = key
+						      pageDataIdMaparray.push(obj)
+						    }
+						console.log(JSON
+								.stringify({
+									"pageDataIdMaparray" : pageDataIdMaparray
+									 
+								}))
+			                if(len != 0 && chooseNum == len){   //表示该页全选  --  全选按钮样式回显
+			                $('input[lay-filter="layTableAllChoose"]').prop('checked',true);
+			                $('input[lay-filter="layTableAllChoose"]').next().addClass('layui-form-checked');
+			                }
+			            } 
+				});
+			}
+
+			Sporttable1(Sportdata1);
+	       	
+	       	
+	       	//干预调整table数据
+			var data1 = {};
+			function table1(data) {
+				var insTb1 = table.render({
+					id : 'table1id',
+					elem : '#duixiang',
+					url : '/YhFoodSrecipeRecordContriller/adjustment',
+					cellMinWidth : 80, //全局定义常规单元格的最小宽度，layui 2.2.1 新增
+					page : true,
+					limit: 10, //每页默认显示的数量
+
+					where : data,
+					cols : [ [ {
+						type : 'checkbox'
+					}, {
+
+						title : '姓名(编号)',
+						templet : function(d) {
+							return d.user_name + "(" + d.usercode + ")"
+						}
+					}, {
+						field : 'age',
+						title : '年龄',
+					}, {
+						field : 'height',
+						title : '身高',
+					}, {
+						field : 'weight',
+						title : '体重',
+
+					}, {
+						 
+						title : '劳动等级',
+						templet : function(d) {
+							if(d.strength==1){
+								return "极轻"
+							}
+							if(d.strength==2){
+								return "轻"
+							}
+							if(d.strength==3){
+								return "中"
+							}
+							if(d.strength==4){
+								return "重"
+							}
+							return ""
+						}
+					}, {
+						field : 'record_kay',
+						title : '日需能量',
+					}, {
+						field : 'record_data',
+						title : '套餐推荐日期',
+					}, {
+						field : 'record_name',
+						title : '推荐套餐描述',
+					}, {
+						field : 'flag_Dgroup',
+						title : '分组',
+
+					}, {
+						align : 'center',
+						toolbar : '#tableBar',
+						title : '操作',
+
+					} ] ],
+					response : {
+
+						statusCode : 0
+					//规定成功的状态码，默认：0
+
+					},
+
+					parseData : function(res) { //将原始数据解析成 table 组件所规定的数据
+						console.log("table1",res.data)
+						return {
+							"code" : res.data.code, //解析接口状态
+							"msg" : res.data.msg, //解析提示文本
+							"count" : res.data.count, //解析数据长度
+							"data" : res.data.data,
+							"userlist" : res.data.usercodeList
+						//解析数据列表
+						}
+
+					},
+					 done: function (res, curr, count) {
+						console.log("res.data",res.data)
+						 if(count > 10) {
+					        	$("#tiwen2 .layui-table-page").show();
+					        }else {
+					        	$("#tiwen2 .layui-table-page").hide();
+					        }
+			                var len = res.data.length;
+			                pageDataIdMap = new Map();
+						 resDate= res.data;
+						 resUserList= res.userlist;
+			                for(var i = 0;i < len;i++){   //填充当前页的数据
+			                    pageDataIdMap[res.data[i].usercode] = res.data[i].usercode;
+			                }
+			                for(var i = 0;i < len;i++){   //填充当前页的数据
+			                	if(res.data[i].record_mode=='健康计划'){
+			                		pageDataModeMap[res.data[i].usercode] = res.data[i].usercode;
+			                	}
+			                }
+			                var chooseNum = 0;   //记录当前页选中的数据行数
+			                for(var i = 0;i < len;i++){   //勾选行回显
+			                    for(var key in idMap){
+			                        if(res.data[i].usercode == key){
+			                            res.data[i]["LAY_CHECKED"]='true';
+			                            //找到对应数据改变勾选样式，呈现出选中效果
+			                            var index= res.data[i]['LAY_TABLE_INDEX'];
+			                            $('tr[data-index=' + index + '] input[type="checkbox"]').prop('checked', true);
+			                            $('tr[data-index=' + index + '] input[type="checkbox"]').next().addClass('layui-form-checked');
+			                            chooseNum++;
+			                        }
+			                    }
+			                }
+			                let pageDataIdMaparray = []
+						    for(let key in pageDataIdMap) {
+						      let obj = pageDataIdMap[key]
+						      obj.id = key
+						      pageDataIdMaparray.push(obj)
+						    }
+						console.log(JSON
+								.stringify({
+									"pageDataIdMaparray" : pageDataIdMaparray
+									 
+								}))
+			                if(len != 0 && chooseNum == len){   //表示该页全选  --  全选按钮样式回显
+			                $('input[lay-filter="layTableAllChoose"]').prop('checked',true);
+			                $('input[lay-filter="layTableAllChoose"]').next().addClass('layui-form-checked');
+			                }
+			            } 
+				});
+			}
+			$("#huoqu").click(function (){
+				let array = []
+				for(let key in idMap) {
+					let obj = idMap[key]
+					obj.id = key
+					array.push(obj)
+				}
+				console.log(JSON
+						.stringify({
+							"userList" : array
+
+						}))
+
+
+			})
+			table1(data1);
+			
+			//干预调整搜索按钮事件
+			$("#selectbyconditions1").click(function() {
+				layer.closeAll();
+				var tree = $('#tree').val();
+				console.log("#tree", tree)
+				data1 = {
+					orgid : $("#tree").val(),
+					groupid : $("#groupid").val(),
+					mode : $("#mode").val(),
+					sex : $("#sex").val(),
+					strength : $("#strength").val(),
+					ageStr : $("#ageStr").val(),
+					ageEnd : $("#ageEnd").val(),
+					heightStr : $("#heightStr").val(),
+					heightEnd : $("#heightEnd").val(),
+					weightStr : $("#weightStr").val(),
+					weightEnd : $("#weightEnd").val(),
+					kayStr : $("#kayStr").val(),
+					kayEnd : $("#kayEnd").val(),
+					recordname : $("#recordname").val(),
+					username : $("#username").val()
+
+				};
+				console.log(data1)
+				for(var i = 0;i < resDate.length;i++){   //勾选行回显
+					for(var key in idMap){
+						if(resDate[i].usercode == key){
+							resDate[i]["LAY_CHECKED"]='';
+							//找到对应数据改变勾选样式，呈现出选中效果
+							var index= resDate[i]['LAY_TABLE_INDEX'];
+							$('tr[data-index=' + index + '] input[type="checkbox"]').prop('checked', false);
+							$('tr[data-index=' + index + '] input[type="checkbox"]').next().removeClass('layui-form-checked');
+
+						}
+					}
+				}
+				$('input[lay-filter="layTableAllChoose"]').prop('checked',false);
+				$('input[lay-filter="layTableAllChoose"]').next().removeClass('layui-form-checked');
+
+				$("#xuanze").html("已选择"+0+"项")
+				$("#piliang").css("display","none")
+
+				$("input[name='checkall']").prop('checked',false);
+				form.render("checkbox");
+
+				idMap = new Map();
+
+				table.reload('usercode',{})
+				table1(data1);
+			});
+			//干预调整清空按钮事件
+			  $("#btnempty1").click(function(){
+				  $("#piliang").css("display","none");
+		        	
+			         
+		        	var myCheckbox = $("input[name='layTableCheckbox']");
+		        	myCheckbox.prop('checked', false); //切换下拉选项时，清空所有选中状态
+		        	form.render('checkbox');//记得每次操作后要渲染该元素
+				  pageDataIdMap;
+					 idMap = new Map();
+					 pageDataModeMap=new Map();
+		        	let array = []
+				    for(let key in idMap) {
+				      let obj = idMap[key]
+				      obj.id = key
+				      array.push(obj)
+				    }
+		        	console.log(JSON
+							.stringify({
+								"userList" : array
+								 
+							}))
+		            data1={};
+		           $("#tree").val('');
+					 $("#groupid").val('');
+					 $("#mode").val('');
+					$("#sex").val('');
+					 $("#strength").val('');
+					$("#ageStr").val('');
+					$("#ageEnd").val('');
+					 $("#heightStr").val('');
+					$("#heightEnd").val('');
+			$("#weightStr").val('');
+				$("#weightEnd").val('');
+					$("#kayStr").val('');
+				$("#kayEnd").val('');
+					$("#recordname").val('');
+					$("#username").val('');
+					$('#tree').siblings().remove();
+		        	 form.render("select");
+		        	 randtreesone();
+		            form.render();
+		            table1(data1);
+		        })
+		        
+		      
+		        
+		         var modeNum=0;
+		        //干预调整多选按钮事件
+		        table.on('checkbox(duixiang)', function(obj){
+		        	console.log("obj",obj)
+		        	var mode=obj.data.record_mode;
+					 var checkStatus = table.checkStatus('table1id');
+					 
+					 var data = checkStatus.data;
+					// layer.msg('选中了：'+ data.length + ' 个');
+			        	 //var checkStatus = table.checkStatus('tableAuth');
+					 if(obj.type == 'one'){    //单选操作
+			                if(obj.checked){     //选中
+			                    idMap[obj.data.usercode] = obj.data.usercode;
+			                	
+			                }else{      //取消选中
+			                    for(var key in idMap){
+			                        if(key == obj.data.usercode){   //移除取消选中的id
+			                            delete idMap[obj.data.usercode];
+			                        }
+			                    }
+			                   
+			                }
+			            }else{      //全选操作
+			                if(obj.checked){
+			                	//选中
+			                    for(var pageKey in pageDataIdMap){
+			                        idMap[pageKey] = pageKey;
+			                    }
+			                }else{     //取消选中
+			                    for(var pageKey in pageDataIdMap){
+			                        for(var key in idMap){
+			                            if(key == pageKey){
+			                                delete idMap[pageKey];
+			                            }
+			                        }
+			                    }
+			                }
+			            }
+					 let array = []
+					    for(let key in idMap) {
+					      let obj = idMap[key]
+					      obj.id = key
+					      array.push(obj)
+					    }
+					console.log(JSON
+							.stringify({
+								"userList" : array
+								 
+							}))
+							
+							 let array2 = []
+					    for(let key in pageDataModeMap) {
+					      let obj = pageDataModeMap[key]
+					      obj.id = key
+					      array2.push(obj)
+					    }
+					console.log(JSON
+							.stringify({
+								"modeList" : array2
+								 
+							}))
+					
+					 if(Object.keys(idMap).length!=0){
+						  var ModeNum=0;
+						 for(let key in idMap) {
+						      let obj = idMap[key]
+						      for(let key2 in pageDataModeMap) {
+							      let obj2 = pageDataModeMap[key2]
+							   		if(obj==obj2){
+							   			console.log("ModeNum++",obj)
+							   			console.log("ModeNum++",obj2)
+							   			ModeNum++;
+							   		}
+							      
+							    }
+						      
+						    }
+			        		$("#xuanze").html("已选择"+Object.keys(idMap).length+"项")
+			        		if(ModeNum>0){
+			        			changeTaocan();
+			        			
+			        		}else{
+			        			$("#tishi").html('')
+			        			$("#frontpage").removeClass("layui-btn-disabled");
+			        		}
+			        		$("#piliang").css("display","block")
+			        		
+			        	}else{
+			        		 
+			        		console.log(idMap)
+			        		$("#piliang").css("display","none")
+			        	}
+			        });
+			
+			  //清空干预调整多选按钮
+		        $("#clickxuan").click(function (){
+					for(var i = 0;i < resDate.length;i++){   //勾选行回显
+						for(var key in idMap){
+							if(resDate[i].usercode == key){
+								resDate[i]["LAY_CHECKED"]='';
+								//找到对应数据改变勾选样式，呈现出选中效果
+								var index= resDate[i]['LAY_TABLE_INDEX'];
+								$('tr[data-index=' + index + '] input[type="checkbox"]').prop('checked', false);
+								$('tr[data-index=' + index + '] input[type="checkbox"]').next().removeClass('layui-form-checked');
+
+							}
+						}
+					}
+					$('input[lay-filter="layTableAllChoose"]').prop('checked',false);
+					$('input[lay-filter="layTableAllChoose"]').next().removeClass('layui-form-checked');
+
+					$("#xuanze").html("已选择"+0+"项")
+					$("#piliang").css("display","none")
+
+					$("input[name='checkall']").prop('checked',false);
+					form.render("checkbox");
+
+					idMap = new Map();
+
+					table.reload('usercode',{})
+		        })
+		        
+		        
+		        $("#sportclickxuan").click(function (){
+		        	$("#sporTpiliang").css("display","none");
+		        	
+		         
+		        	var myCheckbox = $("input[name='layTableCheckbox']");
+		        	myCheckbox.prop('checked', false); //切换下拉选项时，清空所有选中状态
+		        	form.render('checkbox');//记得每次操作后要渲染该元素
+		        	 pageDataIdMap;
+					 idMap = new Map();
+					 pageDataModeMap=new Map();
+					   
+					 
+					 let sportarray = []
+					    for(let key in idMap) {
+					      let obj = idMap[key]
+					      obj.id = key
+					      sportarray.push(obj)
+					    }
+					console.log(JSON
+							.stringify({
+								"Sport" : sportarray
+								 
+							}))
+		        })
+		        
+		        table.on('tool(duixiang)', function (obj) { //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
+		            var data = obj.data;
+		            var layEvent = obj.event;
+		            usercode = data.usercode;
+		            //站内信
+		             
+		            if (layEvent === 'edit') { // 查看
+		               // window.open("../register/userIndex?page=detailplan&userCode="+data.usercode+"");
+		            	 console.log(data)
+		            	window.open("/manage/register/userIndex?page=food&type=1&userCode="+data.usercode+""); 
+		               
+		            }
+		        });
+			  
+			  
+		      //更换套餐
+		        $('#frontpage').click(function () {
+					 if(!$(this).hasClass("layui-btn-disabled")){
+						 showhealth();
+						 showheadline();
+					 }
+
+		        });
+		      
+		      function changeTaocan(){
+		    	  let array = []
+				    for(let key in idMap) {
+				      let obj = idMap[key]
+				      obj.id = key
+				      array.push(obj)
+				    }
+		    	   var d ={'usercodeList' :array};
+                   console.log(JSON
+							.stringify({'usercodeList' :array}))
+					 
+
+					$
+							.ajax({
+								type : "post",
+								url : "/YhFoodSrecipeRecordContriller/changeSetmealCheck",
+								contentType : 'application/json;charset=UTF-8', //发送信息至服务器时内容编码类型
+								traditional : true, //传统的方式来序列化数据
+								data :JSON
+								.stringify({'usercodeList' :array}),
+
+								success : function(
+										data) {
+		        				 console.log("弹框check",data);
+		        				 if(data.flag&&data.data){
+		        					 $("#tishi").html('')
+					        			$("#frontpage").removeClass("layui-btn-disabled");
+		        				 }else{
+		        					 $("#tishi").html(data.message)
+					        		 $("#frontpage").addClass("layui-btn-disabled");
+		        				 }
+									
+								}
+							})
+								
+		    	  
+		      }
+		        function showhealth(){
+		        	 let array = []
+					    for(let key in idMap) {
+					      let obj = idMap[key]
+					      obj.id = key
+					      array.push(obj)
+					    }
+			    	   var d ={'usercodeList' :array};
+	                   console.log(JSON
+								.stringify({'usercodeList' :array}))
+		        	 $.ajax({
+		         	 type: "post",
+		              url: "/YhFoodSrecipeRecordContriller/foodSetMeal",
+		              contentType : 'application/json;charset=UTF-8', //发送信息至服务器时内容编码类型
+						traditional : true, //传统的方式来序列化数据
+						data :JSON
+						.stringify({'usercodeList' :array}),
+		              success: function(data){
+		            	  console.log("弹框",data)
+		            	  var htmld="<table class=\"layui-table\">" +
+								  "  <colgroup>" +
+								  "  <col width='50'>" +
+						  " 	  <col width='300'>" +
+						  " 		  <col width='100'>" +
+						  " 		  <col width='100'>" +
+								  "  </colgroup>" +
+								  "  <thead>" +
+								  "    <tr>" +
+								  	"<th>选择</th>" +
+								  "      <th>套餐描述</th>" +
+								  "      <th>能量等级(千卡)</th>" +
+								  "      <th>适用病种</th>" +
+								  "    </tr> " +
+								  "  </thead>" +
+								  "  <tbody>"
+
+
+
+		       	       	var item=data.data;
+		       	        for (var i = 0; i < item.length; i++) {
+							htmld+="    <tr>" +
+									"      <td><input type='radio' value='"+item[i].id+"' name='order' ></td>" +
+									"      <td>"+item[i].fsDescribe+"</td>" +
+									"      <td>"+item[i].eLevel+"</td>" +
+									"      <td>"+item[i].diseaseName+"</td>" +
+									"    </tr>"
+		       	        	//htmld+="<li style='margin-left: 20px;'> <input type='radio' value='"+item[i].id+"' name='order' ><label  class='yishiname' style='padding-right: 90px;'>"+item[i].fsDescribe+"</label><label class='killOrder1' style='padding-right: 90px;'>"+item[i].eLevel+"</label><label class='diseaseName'>"+item[i].diseaseName+"</label></li>";
+		       			}
+						  htmld+=  "  </tbody>" +
+						  "</table>";
+		       	       	$('#changedoctor').append(htmld);
+		       	   		if(data.message!='0'){
+		       	   $("#RoleForm select[name=diseaseid]").attr("disabled", "disabled");
+			       	     $('#ftype').attr('disabled', 'disabled');
+			       	  $('#ftype').val('2')
+			       	   $("#RoleForm select[name=diseaseid]").val(data.message)
+			 	       	form.render('select');
+			       	 
+		       	   		}else{
+		       	   		$("#RoleForm select[name=diseaseid]").removeAttr("disabled");
+		       	   	 $('#ftype').attr('disabled', false);
+		       	 		form.render('select');
+		       	   		}
+
+		       	        form.render(); 
+		              }   	
+		         });
+		       }
+			  
+		      //显示编辑弹窗更换套餐
+		        function showheadline(mRole) {
+		        	
+		            admin.open({
+		                type: 1,
+		                title: '更换套餐',
+		                content: $('#toutiao').html(),
+		                area: ['750px', '500px'],
+		                success: function (layero, dIndex) {
+		                    var url = '/YhFoodSrecipeRecordContriller/changeSetmeal';
+		                    // 表单提交事件
+		                    form.on('submit(SubmitRole)', function (data) {
+		                    	var order=$('input:radio[name="order"]:checked').val();
+		                        //layer.load(2);
+		                   	 let array = []
+							    for(let key in idMap) {
+							      let obj = idMap[key]
+							      obj.id = key
+							      array.push(obj)
+							    }
+									
+		                        var d ={'usercodeList' :array,"srecipeId":order};
+		                        console.log(JSON
+										.stringify({'usercodeList' :array,"srecipeId":order}))
+								 
+
+								$
+										.ajax({
+											type : "post",
+											url : url,
+											contentType : 'application/json;charset=UTF-8', //发送信息至服务器时内容编码类型
+											traditional : true, //传统的方式来序列化数据
+											data :JSON
+											.stringify({'usercodeList' :array,"srecipeId":order}),
+
+											success : function(
+													data) {
+												table1(data1);
+					        					layer.msg("成功");
+					        					 layer.closeAll();
+												
+											}
+										})
+											
+		                   /*    $.post(url, JSON.stringify({"info":d}), function (res) {
+		                      	  table.reload('duixiang');
+		        					layer.msg("成功");
+		        					 layer.closeAll();
+		                        }, 'json');  */
+		                        return false;
+		                    });
+		                }
+		            });
+		        }
+		      
+		        //监听提交
+	              form.on('submit(tkSousuo)', function(data){
+	                console.log(data.field);
+	                $("#changedoctor").empty().append("");
+	                $.ajax({
+		                  type: "post",
+			              url: "/YhFoodSrecipeRecordContriller/foodSetMeal2",
+							data :data.field,
+		                  success: function(data){
+		                	  console.log("mealdata",data)
+		                	  var htmld="";
+		           	       	var item=data.data;
+							  var htmld="<table class=\"layui-table\">" +
+									  "  <colgroup>" +
+									  "  <col width='50'>" +
+									  " 	  <col width='300'>" +
+									  " 		  <col width='100'>" +
+									  " 		  <col width='100'>" +
+									  "  </colgroup>" +
+									  "  <thead>" +
+									  "    <tr>" +
+									  "<th>选择</th>" +
+									  "      <th>套餐描述</th>" +
+									  "      <th>能量等级(千卡)</th>" +
+									  "      <th>适用病种</th>" +
+									  "    </tr> " +
+									  "  </thead>" +
+									  "  <tbody>"
+
+
+
+							  var item=data.data;
+							  for (var i = 0; i < item.length; i++) {
+								  htmld+="    <tr>" +
+										  "      <td><input type='radio' value='"+item[i].id+"' name='order' ></td>" +
+										  "      <td>"+item[i].fsDescribe+"</td>" +
+										  "      <td>"+item[i].eLevel+"</td>" +
+										  "      <td>"+item[i].diseaseName+"</td>" +
+										  "    </tr>"
+								  //htmld+="<li style='margin-left: 20px;'> <input type='radio' value='"+item[i].id+"' name='order' ><label  class='yishiname' style='padding-right: 90px;'>"+item[i].fsDescribe+"</label><label class='killOrder1' style='padding-right: 90px;'>"+item[i].eLevel+"</label><label class='diseaseName'>"+item[i].diseaseName+"</label></li>";
+							  }
+							  htmld+=  "  </tbody>" +
+									  "</table>";
+		           	       	$('#changedoctor').append(htmld);
+		           	        form.render();
+		                  }   	
+		             });
+	                return false;
+	              });
+		      
+		     /*    $(document).on('click', '#selectyishi', function() {
+		        	$("#changedoctor").empty().append("");
+		        	var ftype=$("#ftype").val();
+		        	var eLevel=$("#eLevel").val();
+		        	var diseaseid=$("#diseaseid").val();
+		        	 let array = []
+					    for(let key in idMap) {
+					      let obj = idMap[key]
+					      obj.id = key
+					      array.push(obj)
+					    }
+	                   
+		        	 console.log({"ftype":ftype,"eLevel":eLevel,"diseaseid":diseaseid,"usercodeList" :array})
+		        	 $.ajax({
+		                  type: "post",
+			              url: "/YhFoodSrecipeRecordContriller/foodSetMeal2",
+							data :{"ftype":ftype,"eLevel":eLevel,"diseaseid":diseaseid,"usercodeList" :array},
+		                  success: function(data){
+		                	  console.log("mealdata",data)
+		                	  var htmld="";
+		           	       	var item=data.data;
+		           	        for (var i = 0; i < item.length; i++) {
+		           	        	htmld+="<li style='margin-left: 20px;'> <input type='radio' value='"+item[i].id+"' name='order' ><label  class='yishiname' style='padding-right: 90px;'>"+item[i].fsDescribe+"</label><label class='killOrder1' style='padding-right: 90px;'>"+item[i].eLevel+"</label><label class='diseaseName'>"+item[i].diseaseName+"</label></li>";
+				       			}
+		           	       	$('#changedoctor').append(htmld);
+		           	        form.render();
+		                  }   	
+		             });
+		        }); */
+		        
+		        
+		        
+		        
+		    	//每日食谱管理table数据
+				var data2 = {};
+				function table2(data) {
+					var insTb2 = table.render({
+						id : 'table2id',
+						elem : '#pinggu',
+						url : '/YhFoodSrecipeRecordContriller/dailyRecipes',
+						cellMinWidth : 80, //全局定义常规单元格的最小宽度，layui 2.2.1 新增
+						page : true,
+						limit: 10, //每页默认显示的数量
+
+						where : data,
+						cols : [ [ {
+
+							title : '创建日期',
+							field :'cTime',
+						}, {
+							field : 'eLevel',
+							title : '能量等级',
+						}, {
+							field : 'diseaseidStr',
+							title : '适用人群',
+						}, {
+							field : 'fElementsStr',
+							title : '餐次构成',
+
+						}, {
+							field : 'oneselfStr',
+							title : '来源',
+						}, {
+							align : 'center',
+							toolbar : '#tableBar2',
+							title : '操作',
+
+						} ] ],
+						response : {
+
+							statusCode : 0
+						//规定成功的状态码，默认：0
+
+						},
+
+						parseData : function(res) { //将原始数据解析成 table 组件所规定的数据
+							console.log("table2",res.data)
+							return {
+								"code" : res.data.code, //解析接口状态
+								"msg" : res.data.msg, //解析提示文本
+								"count" : res.data.count, //解析数据长度
+								"data" : res.data.data
+							//解析数据列表
+							}
+
+						} 
+					});
+				}
+
+				table2(data2);
+				
+				//干预调整搜索按钮事件
+				$("#selectbyconditions2").click(function() {
+					layer.closeAll();
+					data2 = {
+							oneself : $("#oneself").val(),
+							eLevel : $("#eLevel").val(),
+							diseaseid : $("#diseaseid").val()
+						 
+
+					};
+					console.log(data2)
+					table2(data2);
+				});
+
+				$("#addplan").click(function(){
+		            window.location.href="/manage/intervene/addDailyRecipes?uFoodErecipeId=0";
+		        })
+				$("#addplan2").click(function(){
+		            window.location.href="/manage/intervene/addSetMeal?id=0";
+		        })
+		        
+		        table.on('tool(pinggu)', function (obj) { //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
+		            var data = obj.data;
+		            var layEvent = obj.event;
+		            userCode = data.usercode;
+		            if (layEvent === 'edit') { // 查看
+		                window.location.href="/manage/intervene/addDailyRecipes?uFoodErecipeId="+data.uFoodErecipeId;
+		            }
+		            if (layEvent === 'modification') { //编辑
+
+		            }
+		            if(layEvent === 'del'){//删除
+
+		                layer.confirm('你确定要删除吗?', {icon: 3, title:'提示'}, function(index){
+		                    $.ajax({
+		                        type:"POST",
+		                        url:'/YhFoodSrecipeRecordContriller/renderingDelRecipes?uFoodErecipeId='+data.uFoodErecipeId,
+		                        dataType:"json",
+		                        success:function(res){
+		                        	table2({});
+		                            form.render();
+		                        }
+		                    });  
+		                    layer.close(index);
+		                });
+		            }
+		        });
+				
+				   table.on('tool(pinggu2)', function (obj) { //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
+			            var data = obj.data;
+			            var layEvent = obj.event;
+			            userCode = data.usercode;
+			            if (layEvent === 'edit') { // 查看
+			            	window.location.href="/manage/intervene/addSetMeal2?id="+data.id;
+			            }
+			            if (layEvent === 'modification') { //编辑
+
+			            }
+			            if(layEvent === 'del'){//删除
+
+			                layer.confirm('你确定要删除吗?', {icon: 3, title:'提示'}, function(index){
+			                    $.ajax({
+			                        type:"POST",
+			                        url:'/YhFoodSrecipeRecordContriller/delSetMeal?id='+data.id,
+			                        dataType:"json",
+			                        success:function(res){
+			                        	table3({});
+			                            form.render();
+			                        }
+			                    });  
+			                    layer.close(index);
+			                });
+			            }
+			        });
+				
+				
+				//每日食谱管理table数据
+				var data3 = {};
+				function table3(data) {
+					var insTb3 = table.render({
+						id : 'table3id',
+						elem : '#pinggu2',
+						url : '/YhFoodSrecipeRecordContriller/findFoodPackageManagement',
+						cellMinWidth : 80, //全局定义常规单元格的最小宽度，layui 2.2.1 新增
+						page : true,
+						limit: 10, //每页默认显示的数量
+
+						where : data,
+						cols : [ [ {
+
+							title : '创建日期',
+							field :'creationTime',
+						}, {
+							field : 'fsDescribe',
+							title : '套餐描述',
+						}, {
+							field : 'eLevel',
+							title : '能量等级',
+						},{
+							field : 'yhFoodSrecipeNum',
+							title : '套餐天数',
+						}, {
+							field : 'diseaseName',
+							title : '适用人群',
+
+						},{
+							title:"套餐类型",
+							templet : function(d) {
+								if(d.ftype==1){
+									return "风险评估推荐";
+								}
+								if(d.ftype==2){
+									return "健康计划推荐";
+								}
+								if(d.ftype==3){
+									return "医师手动推荐";
+								}
+								
+							}
+						}, {
+							field : 'oneselfStr',
+							title : '来源',
+						}, {
+							align : 'center',
+							toolbar : '#tableBar3',
+							title : '操作',
+
+						} ] ],
+						response : {
+
+							statusCode : 0
+						//规定成功的状态码，默认：0
+
+						},
+
+						parseData : function(res) { //将原始数据解析成 table 组件所规定的数据
+							console.log("table3",res.data)
+							return {
+								"code" : res.data.code, //解析接口状态
+								"msg" : res.data.msg, //解析提示文本
+								"count" : res.data.count, //解析数据长度
+								"data" : res.data.data
+							//解析数据列表
+							}
+
+						} 
+					});
+				}
+
+				table3(data3);
+				
+				//干预调整搜索按钮事件
+				$("#selectbyconditions3").click(function() {
+					layer.closeAll();
+					data3 = {
+							oneself : $("#oneself2").val(),
+							ftype : $("#ftype2").val(),
+							elevel : $("#eLevelTc").val(),
+							diseaseid : $("#diseaseid2").val(),
+							fsDescribe : $("#fsDescribe").val()
+						 
+
+					};
+					console.log(data3)
+					table3(data3);
+				});
+				
+				//干预调整清空按钮事件
+				  $("#btnempty2").click(function(){
+			        	
+				 
+			            data2={};
+			          
+					$("#oneself").val('');
+						$("#eLevel").val('');
+					$("#diseaseid").val('');
+			        	 form.render("select");
+			        	 randtreesone();
+			            form.render();
+			            table2(data2);
+			        })
+			        
+			        //干预调整清空按钮事件
+				  $("#btnempty3").click(function(){
+			        	
+				 
+			            data3={};
+			            
+					$("#fsDescribe").val('');
+						$("#diseaseid2").val('');
+					$("#eLevelTc").val('');
+					$("#oneself2").val('');
+					$("#ftype2").val('');
+			        	 form.render("select");
+			        	 randtreesone();
+			            form.render();
+			            table3(data3);
+			        })
+			        
+			       
+			        
+
+		});
+	</script>
+</body>
+</html>

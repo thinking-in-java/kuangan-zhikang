@@ -1,0 +1,1707 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yihe.system.mapper.YhDicAssessmentScreenMapper">
+  <resultMap id="BaseResultMap" type="com.yihe.system.domain.YhDicAssessmentScreen">
+    <id column="sid" jdbcType="INTEGER" property="sid" />
+    <result column="title" jdbcType="VARCHAR" property="title" />
+    <result column="explain" jdbcType="VARCHAR" property="explain" />
+    <result column="sex" jdbcType="INTEGER" property="sex" />
+    <result column="ageStart" jdbcType="INTEGER" property="agestart" />
+    <result column="ageEnd" jdbcType="INTEGER" property="ageend" />
+    <result column="weight1" jdbcType="VARCHAR" property="weight1" />
+    <result column="weight2" jdbcType="VARCHAR" property="weight2" />
+    <result column="weight3" jdbcType="VARCHAR" property="weight3" />
+    <result column="weight4" jdbcType="VARCHAR" property="weight4" />
+    <result column="hypertension" jdbcType="VARCHAR" property="hypertension" />
+    <result column="chronicBronchitis" jdbcType="VARCHAR" property="chronicbronchitis" />
+    <result column="dyslipidemia" jdbcType="VARCHAR" property="dyslipidemia" />
+    <result column="osteoporosis" jdbcType="VARCHAR" property="osteoporosis" />
+    <result column="lungCancer" jdbcType="VARCHAR" property="lungcancer" />
+    <result column="emphysema" jdbcType="VARCHAR" property="emphysema" />
+    <result column="coronaryDisease" jdbcType="VARCHAR" property="coronarydisease" />
+    <result column="hyperuricemia" jdbcType="VARCHAR" property="hyperuricemia" />
+    <result column="phthisis" jdbcType="VARCHAR" property="phthisis" />
+    <result column="fattyLiver" jdbcType="VARCHAR" property="fattyliver" />
+    <result column="type2Diabetes" jdbcType="VARCHAR" property="type2diabetes" />
+    <result column="apoplexy" jdbcType="VARCHAR" property="apoplexy" />
+    <result column="breastCancer" jdbcType="VARCHAR" property="breastcancer" />
+    <result column="prostate" jdbcType="VARCHAR" property="prostate" />
+    <result column="acuteGout" jdbcType="VARCHAR" property="acutegout" />
+    <result column="goutIsNotAcute" jdbcType="VARCHAR" property="goutisnotacute" />
+    <result column="familialHypertension" jdbcType="VARCHAR" property="familialhypertension" />
+    <result column="familialLungCancer" jdbcType="VARCHAR" property="familiallungcancer" />
+    <result column="familialCoronaryDisease" jdbcType="VARCHAR" property="familialcoronarydisease" />
+    <result column="familialApoplexy" jdbcType="VARCHAR" property="familialapoplexy" />
+    <result column="familialBreastCancer" jdbcType="VARCHAR" property="familialbreastcancer" />
+    <result column="familialProstate" jdbcType="VARCHAR" property="familialprostate" />
+    <result column="familialDiabetes" jdbcType="VARCHAR" property="familialdiabetes" />
+    <result column="familialhipFracture" jdbcType="VARCHAR" property="familialhipfracture" />
+    <result column="smoke1" jdbcType="VARCHAR" property="smoke1" />
+    <result column="smoke2" jdbcType="VARCHAR" property="smoke2" />
+    <result column="smoke3" jdbcType="VARCHAR" property="smoke3" />
+    <result column="drink1" jdbcType="VARCHAR" property="drink1" />
+    <result column="drink2" jdbcType="VARCHAR" property="drink2" />
+    <result column="sport1" jdbcType="VARCHAR" property="sport1" />
+    <result column="sport2" jdbcType="VARCHAR" property="sport2" />
+    <result column="sport3" jdbcType="VARCHAR" property="sport3" />
+    <result column="food1" jdbcType="VARCHAR" property="food1" />
+    <result column="food2" jdbcType="VARCHAR" property="food2" />
+    <result column="food3" jdbcType="VARCHAR" property="food3" />
+    <result column="food4" jdbcType="VARCHAR" property="food4" />
+    <result column="psychology1" jdbcType="VARCHAR" property="psychology1" />
+    <result column="psychology2" jdbcType="VARCHAR" property="psychology2" />
+    <result column="psychology3" jdbcType="VARCHAR" property="psychology3" />
+    <result column="sleep1" jdbcType="VARCHAR" property="sleep1" />
+    <result column="sleep2" jdbcType="VARCHAR" property="sleep2" />
+    <result column="sleep3" jdbcType="VARCHAR" property="sleep3" />
+    <result column="coronaryDiseaseRisk1" jdbcType="VARCHAR" property="coronarydiseaserisk1" />
+    <result column="coronaryDiseaseRisk2" jdbcType="VARCHAR" property="coronarydiseaserisk2" />
+    <result column="coronaryDiseaseRisk3" jdbcType="VARCHAR" property="coronarydiseaserisk3" />
+    <result column="coronaryDiseaseRisk4" jdbcType="VARCHAR" property="coronarydiseaserisk4" />
+    <result column="hypertensionRisk1" jdbcType="VARCHAR" property="hypertensionrisk1" />
+    <result column="hypertensionRisk2" jdbcType="VARCHAR" property="hypertensionrisk2" />
+    <result column="hypertensionRisk3" jdbcType="VARCHAR" property="hypertensionrisk3" />
+    <result column="hypertensionRisk4" jdbcType="VARCHAR" property="hypertensionrisk4" />
+    <result column="apoplexyRisk1" jdbcType="VARCHAR" property="apoplexyrisk1" />
+    <result column="apoplexyRisk2" jdbcType="VARCHAR" property="apoplexyrisk2" />
+    <result column="apoplexyRisk3" jdbcType="VARCHAR" property="apoplexyrisk3" />
+    <result column="apoplexyRisk4" jdbcType="VARCHAR" property="apoplexyrisk4" />
+    <result column="diabetesRisk1" jdbcType="VARCHAR" property="diabetesrisk1" />
+    <result column="diabetesRisk2" jdbcType="VARCHAR" property="diabetesrisk2" />
+    <result column="diabetesRisk3" jdbcType="VARCHAR" property="diabetesrisk3" />
+    <result column="diabetesRisk4" jdbcType="VARCHAR" property="diabetesrisk4" />
+    <result column="lungCancerRisk1" jdbcType="VARCHAR" property="lungcancerrisk1" />
+    <result column="lungCancerRisk2" jdbcType="VARCHAR" property="lungcancerrisk2" />
+    <result column="lungCancerRisk3" jdbcType="VARCHAR" property="lungcancerrisk3" />
+    <result column="lungCancerRisk4" jdbcType="VARCHAR" property="lungcancerrisk4" />
+    <result column="prostateRisk1" jdbcType="VARCHAR" property="prostaterisk1" />
+    <result column="prostateRisk2" jdbcType="VARCHAR" property="prostaterisk2" />
+    <result column="prostateRisk3" jdbcType="VARCHAR" property="prostaterisk3" />
+    <result column="prostateRisk4" jdbcType="VARCHAR" property="prostaterisk4" />
+    <result column="breastCancerRisk1" jdbcType="VARCHAR" property="breastcancerrisk1" />
+    <result column="breastCancerRisk2" jdbcType="VARCHAR" property="breastcancerrisk2" />
+    <result column="breastCancerRisk3" jdbcType="VARCHAR" property="breastcancerrisk3" />
+    <result column="breastCancerRisk4" jdbcType="VARCHAR" property="breastcancerrisk4" />
+    <result column="dyslipidemiaRisk1" jdbcType="VARCHAR" property="dyslipidemiarisk1" />
+    <result column="dyslipidemiaRisk2" jdbcType="VARCHAR" property="dyslipidemiarisk2" />
+    <result column="dyslipidemiaRisk3" jdbcType="VARCHAR" property="dyslipidemiarisk3" />
+    <result column="dyslipidemiaRisk4" jdbcType="VARCHAR" property="dyslipidemiarisk4" />
+    <result column="osteoporosisRisk1" jdbcType="VARCHAR" property="osteoporosisrisk1" />
+    <result column="osteoporosisRisk2" jdbcType="VARCHAR" property="osteoporosisrisk2" />
+    <result column="osteoporosisRisk3" jdbcType="VARCHAR" property="osteoporosisrisk3" />
+    <result column="osteoporosisRisk4" jdbcType="VARCHAR" property="osteoporosisrisk4" />
+    <result column="riskofgout1" jdbcType="VARCHAR" property="riskofgout1" />
+    <result column="riskofgout2" jdbcType="VARCHAR" property="riskofgout2" />
+    <result column="riskofgout3" jdbcType="VARCHAR" property="riskofgout3" />
+    <result column="riskofgout4" jdbcType="VARCHAR" property="riskofgout4" />
+    <result column="prostatitis" jdbcType="VARCHAR" property="prostatitis" />
+    <result column="previousFracture" jdbcType="VARCHAR" property="previousFracture" />
+    <result column="foodVegetables1" jdbcType="VARCHAR" property="foodVegetables1" />
+    <result column="foodVegetables2" jdbcType="VARCHAR" property="foodVegetables2" />
+    <result column="foodFruits1" jdbcType="VARCHAR" property="foodFruits1" />
+    <result column="foodFruits2" jdbcType="VARCHAR" property="foodFruits2" />
+    <result column="foodairy1" jdbcType="VARCHAR" property="foodairy1" />
+    <result column="foodairy2" jdbcType="VARCHAR" property="foodairy2" />
+    <result column="foodPurine1" jdbcType="VARCHAR" property="foodPurine1" />
+    <result column="foodPurine2" jdbcType="VARCHAR" property="foodPurine2" />
+    
+    <result column="creationTime" jdbcType="VARCHAR" property="creationtime" />
+    <result column="screeningTime" jdbcType="VARCHAR" property="screeningtime" />
+    <result column="usercode" jdbcType="VARCHAR" property="usercode" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    sid, title, `explain`, sex, ageStart, ageEnd, weight1, weight2, weight3, weight4, hypertension, 
+    chronicBronchitis, dyslipidemia, osteoporosis, lungCancer, emphysema, coronaryDisease, 
+    hyperuricemia, phthisis, fattyLiver, type2Diabetes, apoplexy, breastCancer, prostate, 
+    acuteGout, goutIsNotAcute, familialHypertension, familialLungCancer, familialCoronaryDisease, 
+    familialApoplexy, familialBreastCancer, familialProstate, familialDiabetes, familialhipFracture, 
+    smoke1, smoke2, smoke3, drink1, drink2, sport1, sport2, sport3, food1, food2, food3, 
+    food4, psychology1, psychology2, psychology3, sleep1, sleep2, sleep3, coronaryDiseaseRisk1, 
+    coronaryDiseaseRisk2, coronaryDiseaseRisk3, coronaryDiseaseRisk4, hypertensionRisk1, 
+    hypertensionRisk2, hypertensionRisk3, hypertensionRisk4, apoplexyRisk1, apoplexyRisk2, 
+    apoplexyRisk3, apoplexyRisk4, diabetesRisk1, diabetesRisk2, diabetesRisk3, diabetesRisk4, 
+    lungCancerRisk1, lungCancerRisk2, lungCancerRisk3, lungCancerRisk4, prostateRisk1, 
+    prostateRisk2, prostateRisk3, prostateRisk4, breastCancerRisk1, breastCancerRisk2, 
+    breastCancerRisk3, breastCancerRisk4, dyslipidemiaRisk1, dyslipidemiaRisk2, dyslipidemiaRisk3, 
+    dyslipidemiaRisk4, osteoporosisRisk1, osteoporosisRisk2, osteoporosisRisk3, osteoporosisRisk4, 
+    creationTime, screeningTime, usercode,riskofgout1,riskofgout2,riskofgout3,riskofgout4,previousFracture,prostatitis,foodVegetables1,
+    foodVegetables2,foodFruits1,foodFruits2,foodairy1,foodairy2,foodPurine1,foodPurine2
+  </sql>
+  <select id="selectByExample" parameterType="com.yihe.system.domain.YhDicAssessmentScreenExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from yh_dic_assessment_screen
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from yh_dic_assessment_screen
+    where sid = #{sid,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from yh_dic_assessment_screen
+    where sid = #{sid,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.yihe.system.domain.YhDicAssessmentScreenExample">
+    delete from yh_dic_assessment_screen
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.yihe.system.domain.YhDicAssessmentScreen">
+    <selectKey keyProperty="sid" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into yh_dic_assessment_screen (title, `explain`, sex, 
+      ageStart, ageEnd, weight1, 
+      weight2, weight3, weight4, 
+      hypertension, chronicBronchitis, dyslipidemia, 
+      osteoporosis, lungCancer, emphysema, 
+      coronaryDisease, hyperuricemia, phthisis, 
+      fattyLiver, type2Diabetes, apoplexy, 
+      breastCancer, prostate, acuteGout, 
+      goutIsNotAcute, familialHypertension, familialLungCancer, 
+      familialCoronaryDisease, familialApoplexy, 
+      familialBreastCancer, familialProstate, 
+      familialDiabetes, familialhipFracture, 
+      smoke1, smoke2, smoke3, 
+      drink1, drink2, sport1, 
+      sport2, sport3, food1, 
+      food2, food3, food4, 
+      psychology1, psychology2, psychology3, 
+      sleep1, sleep2, sleep3, 
+      coronaryDiseaseRisk1, coronaryDiseaseRisk2, 
+      coronaryDiseaseRisk3, coronaryDiseaseRisk4, 
+      hypertensionRisk1, hypertensionRisk2, hypertensionRisk3, 
+      hypertensionRisk4, apoplexyRisk1, apoplexyRisk2, 
+      apoplexyRisk3, apoplexyRisk4, diabetesRisk1, 
+      diabetesRisk2, diabetesRisk3, diabetesRisk4, 
+      lungCancerRisk1, lungCancerRisk2, lungCancerRisk3, 
+      lungCancerRisk4, prostateRisk1, prostateRisk2, 
+      prostateRisk3, prostateRisk4, breastCancerRisk1, 
+      breastCancerRisk2, breastCancerRisk3, breastCancerRisk4, 
+      dyslipidemiaRisk1, dyslipidemiaRisk2, dyslipidemiaRisk3, 
+      dyslipidemiaRisk4, osteoporosisRisk1, osteoporosisRisk2, 
+      osteoporosisRisk3, osteoporosisRisk4, creationTime, 
+      screeningTime, usercode)
+    values (#{title,jdbcType=VARCHAR}, #{explain,jdbcType=VARCHAR}, #{sex,jdbcType=INTEGER}, 
+      #{agestart,jdbcType=INTEGER}, #{ageend,jdbcType=INTEGER}, #{weight1,jdbcType=VARCHAR}, 
+      #{weight2,jdbcType=VARCHAR}, #{weight3,jdbcType=VARCHAR}, #{weight4,jdbcType=VARCHAR}, 
+      #{hypertension,jdbcType=VARCHAR}, #{chronicbronchitis,jdbcType=VARCHAR}, #{dyslipidemia,jdbcType=VARCHAR}, 
+      #{osteoporosis,jdbcType=VARCHAR}, #{lungcancer,jdbcType=VARCHAR}, #{emphysema,jdbcType=VARCHAR}, 
+      #{coronarydisease,jdbcType=VARCHAR}, #{hyperuricemia,jdbcType=VARCHAR}, #{phthisis,jdbcType=VARCHAR}, 
+      #{fattyliver,jdbcType=VARCHAR}, #{type2diabetes,jdbcType=VARCHAR}, #{apoplexy,jdbcType=VARCHAR}, 
+      #{breastcancer,jdbcType=VARCHAR}, #{prostate,jdbcType=VARCHAR}, #{acutegout,jdbcType=VARCHAR}, 
+      #{goutisnotacute,jdbcType=VARCHAR}, #{familialhypertension,jdbcType=VARCHAR}, #{familiallungcancer,jdbcType=VARCHAR}, 
+      #{familialcoronarydisease,jdbcType=VARCHAR}, #{familialapoplexy,jdbcType=VARCHAR}, 
+      #{familialbreastcancer,jdbcType=VARCHAR}, #{familialprostate,jdbcType=VARCHAR}, 
+      #{familialdiabetes,jdbcType=VARCHAR}, #{familialhipfracture,jdbcType=VARCHAR}, 
+      #{smoke1,jdbcType=VARCHAR}, #{smoke2,jdbcType=VARCHAR}, #{smoke3,jdbcType=VARCHAR}, 
+      #{drink1,jdbcType=VARCHAR}, #{drink2,jdbcType=VARCHAR}, #{sport1,jdbcType=VARCHAR}, 
+      #{sport2,jdbcType=VARCHAR}, #{sport3,jdbcType=VARCHAR}, #{food1,jdbcType=VARCHAR}, 
+      #{food2,jdbcType=VARCHAR}, #{food3,jdbcType=VARCHAR}, #{food4,jdbcType=VARCHAR}, 
+      #{psychology1,jdbcType=VARCHAR}, #{psychology2,jdbcType=VARCHAR}, #{psychology3,jdbcType=VARCHAR}, 
+      #{sleep1,jdbcType=VARCHAR}, #{sleep2,jdbcType=VARCHAR}, #{sleep3,jdbcType=VARCHAR}, 
+      #{coronarydiseaserisk1,jdbcType=VARCHAR}, #{coronarydiseaserisk2,jdbcType=VARCHAR}, 
+      #{coronarydiseaserisk3,jdbcType=VARCHAR}, #{coronarydiseaserisk4,jdbcType=VARCHAR}, 
+      #{hypertensionrisk1,jdbcType=VARCHAR}, #{hypertensionrisk2,jdbcType=VARCHAR}, #{hypertensionrisk3,jdbcType=VARCHAR}, 
+      #{hypertensionrisk4,jdbcType=VARCHAR}, #{apoplexyrisk1,jdbcType=VARCHAR}, #{apoplexyrisk2,jdbcType=VARCHAR}, 
+      #{apoplexyrisk3,jdbcType=VARCHAR}, #{apoplexyrisk4,jdbcType=VARCHAR}, #{diabetesrisk1,jdbcType=VARCHAR}, 
+      #{diabetesrisk2,jdbcType=VARCHAR}, #{diabetesrisk3,jdbcType=VARCHAR}, #{diabetesrisk4,jdbcType=VARCHAR}, 
+      #{lungcancerrisk1,jdbcType=VARCHAR}, #{lungcancerrisk2,jdbcType=VARCHAR}, #{lungcancerrisk3,jdbcType=VARCHAR}, 
+      #{lungcancerrisk4,jdbcType=VARCHAR}, #{prostaterisk1,jdbcType=VARCHAR}, #{prostaterisk2,jdbcType=VARCHAR}, 
+      #{prostaterisk3,jdbcType=VARCHAR}, #{prostaterisk4,jdbcType=VARCHAR}, #{breastcancerrisk1,jdbcType=VARCHAR}, 
+      #{breastcancerrisk2,jdbcType=VARCHAR}, #{breastcancerrisk3,jdbcType=VARCHAR}, #{breastcancerrisk4,jdbcType=VARCHAR}, 
+      #{dyslipidemiarisk1,jdbcType=VARCHAR}, #{dyslipidemiarisk2,jdbcType=VARCHAR}, #{dyslipidemiarisk3,jdbcType=VARCHAR}, 
+      #{dyslipidemiarisk4,jdbcType=VARCHAR}, #{osteoporosisrisk1,jdbcType=VARCHAR}, #{osteoporosisrisk2,jdbcType=VARCHAR}, 
+      #{osteoporosisrisk3,jdbcType=VARCHAR}, #{osteoporosisrisk4,jdbcType=VARCHAR}, #{creationtime,jdbcType=VARCHAR}, 
+      #{screeningtime,jdbcType=VARCHAR}, #{usercode,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.yihe.system.domain.YhDicAssessmentScreen">
+    <selectKey keyProperty="sid" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into yh_dic_assessment_screen
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="title != null">
+        title,
+      </if>
+      <if test="explain != null">
+        `explain`,
+      </if>
+      <if test="sex != null">
+        sex,
+      </if>
+      <if test="agestart != null">
+        ageStart,
+      </if>
+      <if test="ageend != null">
+        ageEnd,
+      </if>
+      <if test="weight1 != null">
+        weight1,
+      </if>
+      <if test="weight2 != null">
+        weight2,
+      </if>
+      <if test="weight3 != null">
+        weight3,
+      </if>
+      <if test="weight4 != null">
+        weight4,
+      </if>
+      <if test="hypertension != null">
+        hypertension,
+      </if>
+      <if test="chronicbronchitis != null">
+        chronicBronchitis,
+      </if>
+      <if test="dyslipidemia != null">
+        dyslipidemia,
+      </if>
+      <if test="osteoporosis != null">
+        osteoporosis,
+      </if>
+      <if test="lungcancer != null">
+        lungCancer,
+      </if>
+      <if test="emphysema != null">
+        emphysema,
+      </if>
+      <if test="coronarydisease != null">
+        coronaryDisease,
+      </if>
+      <if test="hyperuricemia != null">
+        hyperuricemia,
+      </if>
+      <if test="phthisis != null">
+        phthisis,
+      </if>
+      <if test="fattyliver != null">
+        fattyLiver,
+      </if>
+      <if test="type2diabetes != null">
+        type2Diabetes,
+      </if>
+      <if test="apoplexy != null">
+        apoplexy,
+      </if>
+      <if test="breastcancer != null">
+        breastCancer,
+      </if>
+      <if test="prostate != null">
+        prostate,
+      </if>
+      <if test="acutegout != null">
+        acuteGout,
+      </if>
+      <if test="goutisnotacute != null">
+        goutIsNotAcute,
+      </if>
+      <if test="familialhypertension != null">
+        familialHypertension,
+      </if>
+      <if test="familiallungcancer != null">
+        familialLungCancer,
+      </if>
+      <if test="familialcoronarydisease != null">
+        familialCoronaryDisease,
+      </if>
+      <if test="familialapoplexy != null">
+        familialApoplexy,
+      </if>
+      <if test="familialbreastcancer != null">
+        familialBreastCancer,
+      </if>
+      <if test="familialprostate != null">
+        familialProstate,
+      </if>
+      <if test="familialdiabetes != null">
+        familialDiabetes,
+      </if>
+      <if test="familialhipfracture != null">
+        familialhipFracture,
+      </if>
+      <if test="smoke1 != null">
+        smoke1,
+      </if>
+      <if test="smoke2 != null">
+        smoke2,
+      </if>
+      <if test="smoke3 != null">
+        smoke3,
+      </if>
+      <if test="drink1 != null">
+        drink1,
+      </if>
+      <if test="drink2 != null">
+        drink2,
+      </if>
+      <if test="sport1 != null">
+        sport1,
+      </if>
+      <if test="sport2 != null">
+        sport2,
+      </if>
+      <if test="sport3 != null">
+        sport3,
+      </if>
+      <if test="food1 != null">
+        food1,
+      </if>
+      <if test="food2 != null">
+        food2,
+      </if>
+      <if test="food3 != null">
+        food3,
+      </if>
+      <if test="food4 != null">
+        food4,
+      </if>
+      <if test="psychology1 != null">
+        psychology1,
+      </if>
+      <if test="psychology2 != null">
+        psychology2,
+      </if>
+      <if test="psychology3 != null">
+        psychology3,
+      </if>
+      <if test="sleep1 != null">
+        sleep1,
+      </if>
+      <if test="sleep2 != null">
+        sleep2,
+      </if>
+      <if test="sleep3 != null">
+        sleep3,
+      </if>
+      <if test="coronarydiseaserisk1 != null">
+        coronaryDiseaseRisk1,
+      </if>
+      <if test="coronarydiseaserisk2 != null">
+        coronaryDiseaseRisk2,
+      </if>
+      <if test="coronarydiseaserisk3 != null">
+        coronaryDiseaseRisk3,
+      </if>
+      <if test="coronarydiseaserisk4 != null">
+        coronaryDiseaseRisk4,
+      </if>
+      <if test="hypertensionrisk1 != null">
+        hypertensionRisk1,
+      </if>
+      <if test="hypertensionrisk2 != null">
+        hypertensionRisk2,
+      </if>
+      <if test="hypertensionrisk3 != null">
+        hypertensionRisk3,
+      </if>
+      <if test="hypertensionrisk4 != null">
+        hypertensionRisk4,
+      </if>
+      <if test="apoplexyrisk1 != null">
+        apoplexyRisk1,
+      </if>
+      <if test="apoplexyrisk2 != null">
+        apoplexyRisk2,
+      </if>
+      <if test="apoplexyrisk3 != null">
+        apoplexyRisk3,
+      </if>
+      <if test="apoplexyrisk4 != null">
+        apoplexyRisk4,
+      </if>
+      <if test="diabetesrisk1 != null">
+        diabetesRisk1,
+      </if>
+      <if test="diabetesrisk2 != null">
+        diabetesRisk2,
+      </if>
+      <if test="diabetesrisk3 != null">
+        diabetesRisk3,
+      </if>
+      <if test="diabetesrisk4 != null">
+        diabetesRisk4,
+      </if>
+      <if test="lungcancerrisk1 != null">
+        lungCancerRisk1,
+      </if>
+      <if test="lungcancerrisk2 != null">
+        lungCancerRisk2,
+      </if>
+      <if test="lungcancerrisk3 != null">
+        lungCancerRisk3,
+      </if>
+      <if test="lungcancerrisk4 != null">
+        lungCancerRisk4,
+      </if>
+      <if test="prostaterisk1 != null">
+        prostateRisk1,
+      </if>
+      <if test="prostaterisk2 != null">
+        prostateRisk2,
+      </if>
+      <if test="prostaterisk3 != null">
+        prostateRisk3,
+      </if>
+      <if test="prostaterisk4 != null">
+        prostateRisk4,
+      </if>
+      <if test="breastcancerrisk1 != null">
+        breastCancerRisk1,
+      </if>
+      <if test="breastcancerrisk2 != null">
+        breastCancerRisk2,
+      </if>
+      <if test="breastcancerrisk3 != null">
+        breastCancerRisk3,
+      </if>
+      <if test="breastcancerrisk4 != null">
+        breastCancerRisk4,
+      </if>
+      <if test="dyslipidemiarisk1 != null">
+        dyslipidemiaRisk1,
+      </if>
+      <if test="dyslipidemiarisk2 != null">
+        dyslipidemiaRisk2,
+      </if>
+      <if test="dyslipidemiarisk3 != null">
+        dyslipidemiaRisk3,
+      </if>
+      <if test="dyslipidemiarisk4 != null">
+        dyslipidemiaRisk4,
+      </if>
+      <if test="osteoporosisrisk1 != null">
+        osteoporosisRisk1,
+      </if>
+      <if test="osteoporosisrisk2 != null">
+        osteoporosisRisk2,
+      </if>
+      <if test="osteoporosisrisk3 != null">
+        osteoporosisRisk3,
+      </if>
+      <if test="osteoporosisrisk4 != null">
+        osteoporosisRisk4,
+      </if>
+      <if test="creationtime != null">
+        creationTime,
+      </if>
+      <if test="screeningtime != null">
+        screeningTime,
+      </if>
+      <if test="usercode != null">
+        usercode,
+      </if>
+      <if test="previousFracture != null">
+        previousFracture,
+      </if>
+      <if test="prostatitis != null">
+        prostatitis,
+      </if>
+      <if test="riskofgout1 != null">
+        riskofgout1,
+      </if>
+      <if test="riskofgout2 != null">
+        riskofgout2,
+      </if>
+      <if test="riskofgout3 != null">
+        riskofgout3,
+      </if>
+      <if test="riskofgout4 != null">
+        riskofgout4,
+      </if>
+      <if test="foodVegetables1 != null">
+        foodVegetables1,
+      </if>
+      <if test="foodVegetables2 != null">
+        foodVegetables2,
+      </if>
+      <if test="foodFruits1 != null">
+        foodFruits1,
+      </if>
+      <if test="foodFruits2 != null">
+        foodFruits2,
+      </if>
+      <if test="foodairy1 != null">
+        foodairy1,
+      </if>
+      <if test="foodairy2 != null">
+        foodairy2,
+      </if>
+      <if test="foodPurine1 != null">
+        foodPurine1,
+      </if>
+      <if test="foodPurine2 != null">
+        foodPurine2,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="title != null">
+        #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="explain != null">
+        #{explain,jdbcType=VARCHAR},
+      </if>
+      <if test="sex != null">
+        #{sex,jdbcType=INTEGER},
+      </if>
+      <if test="agestart != null">
+        #{agestart,jdbcType=INTEGER},
+      </if>
+      <if test="ageend != null">
+        #{ageend,jdbcType=INTEGER},
+      </if>
+      <if test="weight1 != null">
+        #{weight1,jdbcType=VARCHAR},
+      </if>
+      <if test="weight2 != null">
+        #{weight2,jdbcType=VARCHAR},
+      </if>
+      <if test="weight3 != null">
+        #{weight3,jdbcType=VARCHAR},
+      </if>
+      <if test="weight4 != null">
+        #{weight4,jdbcType=VARCHAR},
+      </if>
+      <if test="hypertension != null">
+        #{hypertension,jdbcType=VARCHAR},
+      </if>
+      <if test="chronicbronchitis != null">
+        #{chronicbronchitis,jdbcType=VARCHAR},
+      </if>
+      <if test="dyslipidemia != null">
+        #{dyslipidemia,jdbcType=VARCHAR},
+      </if>
+      <if test="osteoporosis != null">
+        #{osteoporosis,jdbcType=VARCHAR},
+      </if>
+      <if test="lungcancer != null">
+        #{lungcancer,jdbcType=VARCHAR},
+      </if>
+      <if test="emphysema != null">
+        #{emphysema,jdbcType=VARCHAR},
+      </if>
+      <if test="coronarydisease != null">
+        #{coronarydisease,jdbcType=VARCHAR},
+      </if>
+      <if test="hyperuricemia != null">
+        #{hyperuricemia,jdbcType=VARCHAR},
+      </if>
+      <if test="phthisis != null">
+        #{phthisis,jdbcType=VARCHAR},
+      </if>
+      <if test="fattyliver != null">
+        #{fattyliver,jdbcType=VARCHAR},
+      </if>
+      <if test="type2diabetes != null">
+        #{type2diabetes,jdbcType=VARCHAR},
+      </if>
+      <if test="apoplexy != null">
+        #{apoplexy,jdbcType=VARCHAR},
+      </if>
+      <if test="breastcancer != null">
+        #{breastcancer,jdbcType=VARCHAR},
+      </if>
+      <if test="prostate != null">
+        #{prostate,jdbcType=VARCHAR},
+      </if>
+      <if test="acutegout != null">
+        #{acutegout,jdbcType=VARCHAR},
+      </if>
+      <if test="goutisnotacute != null">
+        #{goutisnotacute,jdbcType=VARCHAR},
+      </if>
+      <if test="familialhypertension != null">
+        #{familialhypertension,jdbcType=VARCHAR},
+      </if>
+      <if test="familiallungcancer != null">
+        #{familiallungcancer,jdbcType=VARCHAR},
+      </if>
+      <if test="familialcoronarydisease != null">
+        #{familialcoronarydisease,jdbcType=VARCHAR},
+      </if>
+      <if test="familialapoplexy != null">
+        #{familialapoplexy,jdbcType=VARCHAR},
+      </if>
+      <if test="familialbreastcancer != null">
+        #{familialbreastcancer,jdbcType=VARCHAR},
+      </if>
+      <if test="familialprostate != null">
+        #{familialprostate,jdbcType=VARCHAR},
+      </if>
+      <if test="familialdiabetes != null">
+        #{familialdiabetes,jdbcType=VARCHAR},
+      </if>
+      <if test="familialhipfracture != null">
+        #{familialhipfracture,jdbcType=VARCHAR},
+      </if>
+      <if test="smoke1 != null">
+        #{smoke1,jdbcType=VARCHAR},
+      </if>
+      <if test="smoke2 != null">
+        #{smoke2,jdbcType=VARCHAR},
+      </if>
+      <if test="smoke3 != null">
+        #{smoke3,jdbcType=VARCHAR},
+      </if>
+      <if test="drink1 != null">
+        #{drink1,jdbcType=VARCHAR},
+      </if>
+      <if test="drink2 != null">
+        #{drink2,jdbcType=VARCHAR},
+      </if>
+      <if test="sport1 != null">
+        #{sport1,jdbcType=VARCHAR},
+      </if>
+      <if test="sport2 != null">
+        #{sport2,jdbcType=VARCHAR},
+      </if>
+      <if test="sport3 != null">
+        #{sport3,jdbcType=VARCHAR},
+      </if>
+      <if test="food1 != null">
+        #{food1,jdbcType=VARCHAR},
+      </if>
+      <if test="food2 != null">
+        #{food2,jdbcType=VARCHAR},
+      </if>
+      <if test="food3 != null">
+        #{food3,jdbcType=VARCHAR},
+      </if>
+      <if test="food4 != null">
+        #{food4,jdbcType=VARCHAR},
+      </if>
+      <if test="psychology1 != null">
+        #{psychology1,jdbcType=VARCHAR},
+      </if>
+      <if test="psychology2 != null">
+        #{psychology2,jdbcType=VARCHAR},
+      </if>
+      <if test="psychology3 != null">
+        #{psychology3,jdbcType=VARCHAR},
+      </if>
+      <if test="sleep1 != null">
+        #{sleep1,jdbcType=VARCHAR},
+      </if>
+      <if test="sleep2 != null">
+        #{sleep2,jdbcType=VARCHAR},
+      </if>
+      <if test="sleep3 != null">
+        #{sleep3,jdbcType=VARCHAR},
+      </if>
+      <if test="coronarydiseaserisk1 != null">
+        #{coronarydiseaserisk1,jdbcType=VARCHAR},
+      </if>
+      <if test="coronarydiseaserisk2 != null">
+        #{coronarydiseaserisk2,jdbcType=VARCHAR},
+      </if>
+      <if test="coronarydiseaserisk3 != null">
+        #{coronarydiseaserisk3,jdbcType=VARCHAR},
+      </if>
+      <if test="coronarydiseaserisk4 != null">
+        #{coronarydiseaserisk4,jdbcType=VARCHAR},
+      </if>
+      <if test="hypertensionrisk1 != null">
+        #{hypertensionrisk1,jdbcType=VARCHAR},
+      </if>
+      <if test="hypertensionrisk2 != null">
+        #{hypertensionrisk2,jdbcType=VARCHAR},
+      </if>
+      <if test="hypertensionrisk3 != null">
+        #{hypertensionrisk3,jdbcType=VARCHAR},
+      </if>
+      <if test="hypertensionrisk4 != null">
+        #{hypertensionrisk4,jdbcType=VARCHAR},
+      </if>
+      <if test="apoplexyrisk1 != null">
+        #{apoplexyrisk1,jdbcType=VARCHAR},
+      </if>
+      <if test="apoplexyrisk2 != null">
+        #{apoplexyrisk2,jdbcType=VARCHAR},
+      </if>
+      <if test="apoplexyrisk3 != null">
+        #{apoplexyrisk3,jdbcType=VARCHAR},
+      </if>
+      <if test="apoplexyrisk4 != null">
+        #{apoplexyrisk4,jdbcType=VARCHAR},
+      </if>
+      <if test="diabetesrisk1 != null">
+        #{diabetesrisk1,jdbcType=VARCHAR},
+      </if>
+      <if test="diabetesrisk2 != null">
+        #{diabetesrisk2,jdbcType=VARCHAR},
+      </if>
+      <if test="diabetesrisk3 != null">
+        #{diabetesrisk3,jdbcType=VARCHAR},
+      </if>
+      <if test="diabetesrisk4 != null">
+        #{diabetesrisk4,jdbcType=VARCHAR},
+      </if>
+      <if test="lungcancerrisk1 != null">
+        #{lungcancerrisk1,jdbcType=VARCHAR},
+      </if>
+      <if test="lungcancerrisk2 != null">
+        #{lungcancerrisk2,jdbcType=VARCHAR},
+      </if>
+      <if test="lungcancerrisk3 != null">
+        #{lungcancerrisk3,jdbcType=VARCHAR},
+      </if>
+      <if test="lungcancerrisk4 != null">
+        #{lungcancerrisk4,jdbcType=VARCHAR},
+      </if>
+      <if test="prostaterisk1 != null">
+        #{prostaterisk1,jdbcType=VARCHAR},
+      </if>
+      <if test="prostaterisk2 != null">
+        #{prostaterisk2,jdbcType=VARCHAR},
+      </if>
+      <if test="prostaterisk3 != null">
+        #{prostaterisk3,jdbcType=VARCHAR},
+      </if>
+      <if test="prostaterisk4 != null">
+        #{prostaterisk4,jdbcType=VARCHAR},
+      </if>
+      <if test="breastcancerrisk1 != null">
+        #{breastcancerrisk1,jdbcType=VARCHAR},
+      </if>
+      <if test="breastcancerrisk2 != null">
+        #{breastcancerrisk2,jdbcType=VARCHAR},
+      </if>
+      <if test="breastcancerrisk3 != null">
+        #{breastcancerrisk3,jdbcType=VARCHAR},
+      </if>
+      <if test="breastcancerrisk4 != null">
+        #{breastcancerrisk4,jdbcType=VARCHAR},
+      </if>
+      <if test="dyslipidemiarisk1 != null">
+        #{dyslipidemiarisk1,jdbcType=VARCHAR},
+      </if>
+      <if test="dyslipidemiarisk2 != null">
+        #{dyslipidemiarisk2,jdbcType=VARCHAR},
+      </if>
+      <if test="dyslipidemiarisk3 != null">
+        #{dyslipidemiarisk3,jdbcType=VARCHAR},
+      </if>
+      <if test="dyslipidemiarisk4 != null">
+        #{dyslipidemiarisk4,jdbcType=VARCHAR},
+      </if>
+      <if test="osteoporosisrisk1 != null">
+        #{osteoporosisrisk1,jdbcType=VARCHAR},
+      </if>
+      <if test="osteoporosisrisk2 != null">
+        #{osteoporosisrisk2,jdbcType=VARCHAR},
+      </if>
+      <if test="osteoporosisrisk3 != null">
+        #{osteoporosisrisk3,jdbcType=VARCHAR},
+      </if>
+      <if test="osteoporosisrisk4 != null">
+        #{osteoporosisrisk4,jdbcType=VARCHAR},
+      </if>
+      <if test="creationtime != null">
+        #{creationtime,jdbcType=VARCHAR},
+      </if>
+      <if test="screeningtime != null">
+        #{screeningtime,jdbcType=VARCHAR},
+      </if>
+      <if test="usercode != null">
+        #{usercode,jdbcType=VARCHAR},
+      </if>
+      <if test="previousFracture != null">
+        #{previousFracture,jdbcType=VARCHAR},
+      </if>
+      <if test="prostatitis != null">
+        #{prostatitis,jdbcType=VARCHAR},
+      </if>
+      <if test="riskofgout1 != null">
+        #{riskofgout1,jdbcType=VARCHAR},
+      </if>
+      <if test="riskofgout2 != null">
+        #{riskofgout2,jdbcType=VARCHAR},
+      </if>
+      <if test="riskofgout3 != null">
+        #{riskofgout3,jdbcType=VARCHAR},
+      </if>
+      <if test="riskofgout4 != null">
+        #{riskofgout4,jdbcType=VARCHAR},
+      </if>
+      <if test="foodVegetables1 != null">
+        #{foodVegetables1,jdbcType=VARCHAR},
+      </if>
+      <if test="foodVegetables2 != null">
+        #{foodVegetables2,jdbcType=VARCHAR},
+      </if>
+      <if test="foodFruits1 != null">
+        #{foodFruits1,jdbcType=VARCHAR},
+      </if>
+      <if test="foodFruits2 != null">
+        #{foodFruits2,jdbcType=VARCHAR},
+      </if>
+      <if test="foodairy1 != null">
+        #{foodairy1,jdbcType=VARCHAR},
+      </if>
+      <if test="foodairy2 != null">
+        #{foodairy2,jdbcType=VARCHAR},
+      </if>
+      <if test="foodPurine1 != null">
+        #{foodPurine1,jdbcType=VARCHAR},
+      </if>
+      <if test="foodPurine2 != null">
+        #{foodPurine2,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.yihe.system.domain.YhDicAssessmentScreenExample" resultType="java.lang.Long">
+    select count(*) from yh_dic_assessment_screen
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update yh_dic_assessment_screen
+    <set>
+      <if test="record.sid != null">
+        sid = #{record.sid,jdbcType=INTEGER},
+      </if>
+      <if test="record.title != null">
+        title = #{record.title,jdbcType=VARCHAR},
+      </if>
+      <if test="record.explain != null">
+        `explain` = #{record.explain,jdbcType=VARCHAR},
+      </if>
+      <if test="record.sex != null">
+        sex = #{record.sex,jdbcType=INTEGER},
+      </if>
+      <if test="record.agestart != null">
+        ageStart = #{record.agestart,jdbcType=INTEGER},
+      </if>
+      <if test="record.ageend != null">
+        ageEnd = #{record.ageend,jdbcType=INTEGER},
+      </if>
+      <if test="record.weight1 != null">
+        weight1 = #{record.weight1,jdbcType=VARCHAR},
+      </if>
+      <if test="record.weight2 != null">
+        weight2 = #{record.weight2,jdbcType=VARCHAR},
+      </if>
+      <if test="record.weight3 != null">
+        weight3 = #{record.weight3,jdbcType=VARCHAR},
+      </if>
+      <if test="record.weight4 != null">
+        weight4 = #{record.weight4,jdbcType=VARCHAR},
+      </if>
+      <if test="record.hypertension != null">
+        hypertension = #{record.hypertension,jdbcType=VARCHAR},
+      </if>
+      <if test="record.chronicbronchitis != null">
+        chronicBronchitis = #{record.chronicbronchitis,jdbcType=VARCHAR},
+      </if>
+      <if test="record.dyslipidemia != null">
+        dyslipidemia = #{record.dyslipidemia,jdbcType=VARCHAR},
+      </if>
+      <if test="record.osteoporosis != null">
+        osteoporosis = #{record.osteoporosis,jdbcType=VARCHAR},
+      </if>
+      <if test="record.lungcancer != null">
+        lungCancer = #{record.lungcancer,jdbcType=VARCHAR},
+      </if>
+      <if test="record.emphysema != null">
+        emphysema = #{record.emphysema,jdbcType=VARCHAR},
+      </if>
+      <if test="record.coronarydisease != null">
+        coronaryDisease = #{record.coronarydisease,jdbcType=VARCHAR},
+      </if>
+      <if test="record.hyperuricemia != null">
+        hyperuricemia = #{record.hyperuricemia,jdbcType=VARCHAR},
+      </if>
+      <if test="record.phthisis != null">
+        phthisis = #{record.phthisis,jdbcType=VARCHAR},
+      </if>
+      <if test="record.fattyliver != null">
+        fattyLiver = #{record.fattyliver,jdbcType=VARCHAR},
+      </if>
+      <if test="record.type2diabetes != null">
+        type2Diabetes = #{record.type2diabetes,jdbcType=VARCHAR},
+      </if>
+      <if test="record.apoplexy != null">
+        apoplexy = #{record.apoplexy,jdbcType=VARCHAR},
+      </if>
+      <if test="record.breastcancer != null">
+        breastCancer = #{record.breastcancer,jdbcType=VARCHAR},
+      </if>
+      <if test="record.prostate != null">
+        prostate = #{record.prostate,jdbcType=VARCHAR},
+      </if>
+      <if test="record.acutegout != null">
+        acuteGout = #{record.acutegout,jdbcType=VARCHAR},
+      </if>
+      <if test="record.goutisnotacute != null">
+        goutIsNotAcute = #{record.goutisnotacute,jdbcType=VARCHAR},
+      </if>
+      <if test="record.familialhypertension != null">
+        familialHypertension = #{record.familialhypertension,jdbcType=VARCHAR},
+      </if>
+      <if test="record.familiallungcancer != null">
+        familialLungCancer = #{record.familiallungcancer,jdbcType=VARCHAR},
+      </if>
+      <if test="record.familialcoronarydisease != null">
+        familialCoronaryDisease = #{record.familialcoronarydisease,jdbcType=VARCHAR},
+      </if>
+      <if test="record.familialapoplexy != null">
+        familialApoplexy = #{record.familialapoplexy,jdbcType=VARCHAR},
+      </if>
+      <if test="record.familialbreastcancer != null">
+        familialBreastCancer = #{record.familialbreastcancer,jdbcType=VARCHAR},
+      </if>
+      <if test="record.familialprostate != null">
+        familialProstate = #{record.familialprostate,jdbcType=VARCHAR},
+      </if>
+      <if test="record.familialdiabetes != null">
+        familialDiabetes = #{record.familialdiabetes,jdbcType=VARCHAR},
+      </if>
+      <if test="record.familialhipfracture != null">
+        familialhipFracture = #{record.familialhipfracture,jdbcType=VARCHAR},
+      </if>
+      <if test="record.smoke1 != null">
+        smoke1 = #{record.smoke1,jdbcType=VARCHAR},
+      </if>
+      <if test="record.smoke2 != null">
+        smoke2 = #{record.smoke2,jdbcType=VARCHAR},
+      </if>
+      <if test="record.smoke3 != null">
+        smoke3 = #{record.smoke3,jdbcType=VARCHAR},
+      </if>
+      <if test="record.drink1 != null">
+        drink1 = #{record.drink1,jdbcType=VARCHAR},
+      </if>
+      <if test="record.drink2 != null">
+        drink2 = #{record.drink2,jdbcType=VARCHAR},
+      </if>
+      <if test="record.sport1 != null">
+        sport1 = #{record.sport1,jdbcType=VARCHAR},
+      </if>
+      <if test="record.sport2 != null">
+        sport2 = #{record.sport2,jdbcType=VARCHAR},
+      </if>
+      <if test="record.sport3 != null">
+        sport3 = #{record.sport3,jdbcType=VARCHAR},
+      </if>
+      <if test="record.food1 != null">
+        food1 = #{record.food1,jdbcType=VARCHAR},
+      </if>
+      <if test="record.food2 != null">
+        food2 = #{record.food2,jdbcType=VARCHAR},
+      </if>
+      <if test="record.food3 != null">
+        food3 = #{record.food3,jdbcType=VARCHAR},
+      </if>
+      <if test="record.food4 != null">
+        food4 = #{record.food4,jdbcType=VARCHAR},
+      </if>
+      <if test="record.psychology1 != null">
+        psychology1 = #{record.psychology1,jdbcType=VARCHAR},
+      </if>
+      <if test="record.psychology2 != null">
+        psychology2 = #{record.psychology2,jdbcType=VARCHAR},
+      </if>
+      <if test="record.psychology3 != null">
+        psychology3 = #{record.psychology3,jdbcType=VARCHAR},
+      </if>
+      <if test="record.sleep1 != null">
+        sleep1 = #{record.sleep1,jdbcType=VARCHAR},
+      </if>
+      <if test="record.sleep2 != null">
+        sleep2 = #{record.sleep2,jdbcType=VARCHAR},
+      </if>
+      <if test="record.sleep3 != null">
+        sleep3 = #{record.sleep3,jdbcType=VARCHAR},
+      </if>
+      <if test="record.coronarydiseaserisk1 != null">
+        coronaryDiseaseRisk1 = #{record.coronarydiseaserisk1,jdbcType=VARCHAR},
+      </if>
+      <if test="record.coronarydiseaserisk2 != null">
+        coronaryDiseaseRisk2 = #{record.coronarydiseaserisk2,jdbcType=VARCHAR},
+      </if>
+      <if test="record.coronarydiseaserisk3 != null">
+        coronaryDiseaseRisk3 = #{record.coronarydiseaserisk3,jdbcType=VARCHAR},
+      </if>
+      <if test="record.coronarydiseaserisk4 != null">
+        coronaryDiseaseRisk4 = #{record.coronarydiseaserisk4,jdbcType=VARCHAR},
+      </if>
+      <if test="record.hypertensionrisk1 != null">
+        hypertensionRisk1 = #{record.hypertensionrisk1,jdbcType=VARCHAR},
+      </if>
+      <if test="record.hypertensionrisk2 != null">
+        hypertensionRisk2 = #{record.hypertensionrisk2,jdbcType=VARCHAR},
+      </if>
+      <if test="record.hypertensionrisk3 != null">
+        hypertensionRisk3 = #{record.hypertensionrisk3,jdbcType=VARCHAR},
+      </if>
+      <if test="record.hypertensionrisk4 != null">
+        hypertensionRisk4 = #{record.hypertensionrisk4,jdbcType=VARCHAR},
+      </if>
+      <if test="record.apoplexyrisk1 != null">
+        apoplexyRisk1 = #{record.apoplexyrisk1,jdbcType=VARCHAR},
+      </if>
+      <if test="record.apoplexyrisk2 != null">
+        apoplexyRisk2 = #{record.apoplexyrisk2,jdbcType=VARCHAR},
+      </if>
+      <if test="record.apoplexyrisk3 != null">
+        apoplexyRisk3 = #{record.apoplexyrisk3,jdbcType=VARCHAR},
+      </if>
+      <if test="record.apoplexyrisk4 != null">
+        apoplexyRisk4 = #{record.apoplexyrisk4,jdbcType=VARCHAR},
+      </if>
+      <if test="record.diabetesrisk1 != null">
+        diabetesRisk1 = #{record.diabetesrisk1,jdbcType=VARCHAR},
+      </if>
+      <if test="record.diabetesrisk2 != null">
+        diabetesRisk2 = #{record.diabetesrisk2,jdbcType=VARCHAR},
+      </if>
+      <if test="record.diabetesrisk3 != null">
+        diabetesRisk3 = #{record.diabetesrisk3,jdbcType=VARCHAR},
+      </if>
+      <if test="record.diabetesrisk4 != null">
+        diabetesRisk4 = #{record.diabetesrisk4,jdbcType=VARCHAR},
+      </if>
+      <if test="record.lungcancerrisk1 != null">
+        lungCancerRisk1 = #{record.lungcancerrisk1,jdbcType=VARCHAR},
+      </if>
+      <if test="record.lungcancerrisk2 != null">
+        lungCancerRisk2 = #{record.lungcancerrisk2,jdbcType=VARCHAR},
+      </if>
+      <if test="record.lungcancerrisk3 != null">
+        lungCancerRisk3 = #{record.lungcancerrisk3,jdbcType=VARCHAR},
+      </if>
+      <if test="record.lungcancerrisk4 != null">
+        lungCancerRisk4 = #{record.lungcancerrisk4,jdbcType=VARCHAR},
+      </if>
+      <if test="record.prostaterisk1 != null">
+        prostateRisk1 = #{record.prostaterisk1,jdbcType=VARCHAR},
+      </if>
+      <if test="record.prostaterisk2 != null">
+        prostateRisk2 = #{record.prostaterisk2,jdbcType=VARCHAR},
+      </if>
+      <if test="record.prostaterisk3 != null">
+        prostateRisk3 = #{record.prostaterisk3,jdbcType=VARCHAR},
+      </if>
+      <if test="record.prostaterisk4 != null">
+        prostateRisk4 = #{record.prostaterisk4,jdbcType=VARCHAR},
+      </if>
+      <if test="record.breastcancerrisk1 != null">
+        breastCancerRisk1 = #{record.breastcancerrisk1,jdbcType=VARCHAR},
+      </if>
+      <if test="record.breastcancerrisk2 != null">
+        breastCancerRisk2 = #{record.breastcancerrisk2,jdbcType=VARCHAR},
+      </if>
+      <if test="record.breastcancerrisk3 != null">
+        breastCancerRisk3 = #{record.breastcancerrisk3,jdbcType=VARCHAR},
+      </if>
+      <if test="record.breastcancerrisk4 != null">
+        breastCancerRisk4 = #{record.breastcancerrisk4,jdbcType=VARCHAR},
+      </if>
+      <if test="record.dyslipidemiarisk1 != null">
+        dyslipidemiaRisk1 = #{record.dyslipidemiarisk1,jdbcType=VARCHAR},
+      </if>
+      <if test="record.dyslipidemiarisk2 != null">
+        dyslipidemiaRisk2 = #{record.dyslipidemiarisk2,jdbcType=VARCHAR},
+      </if>
+      <if test="record.dyslipidemiarisk3 != null">
+        dyslipidemiaRisk3 = #{record.dyslipidemiarisk3,jdbcType=VARCHAR},
+      </if>
+      <if test="record.dyslipidemiarisk4 != null">
+        dyslipidemiaRisk4 = #{record.dyslipidemiarisk4,jdbcType=VARCHAR},
+      </if>
+      <if test="record.osteoporosisrisk1 != null">
+        osteoporosisRisk1 = #{record.osteoporosisrisk1,jdbcType=VARCHAR},
+      </if>
+      <if test="record.osteoporosisrisk2 != null">
+        osteoporosisRisk2 = #{record.osteoporosisrisk2,jdbcType=VARCHAR},
+      </if>
+      <if test="record.osteoporosisrisk3 != null">
+        osteoporosisRisk3 = #{record.osteoporosisrisk3,jdbcType=VARCHAR},
+      </if>
+      <if test="record.osteoporosisrisk4 != null">
+        osteoporosisRisk4 = #{record.osteoporosisrisk4,jdbcType=VARCHAR},
+      </if>
+      <if test="record.creationtime != null">
+        creationTime = #{record.creationtime,jdbcType=VARCHAR},
+      </if>
+      <if test="record.screeningtime != null">
+        screeningTime = #{record.screeningtime,jdbcType=VARCHAR},
+      </if>
+      <if test="record.usercode != null">
+        usercode = #{record.usercode,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update yh_dic_assessment_screen
+    set sid = #{record.sid,jdbcType=INTEGER},
+      title = #{record.title,jdbcType=VARCHAR},
+      `explain` = #{record.explain,jdbcType=VARCHAR},
+      sex = #{record.sex,jdbcType=INTEGER},
+      ageStart = #{record.agestart,jdbcType=INTEGER},
+      ageEnd = #{record.ageend,jdbcType=INTEGER},
+      weight1 = #{record.weight1,jdbcType=VARCHAR},
+      weight2 = #{record.weight2,jdbcType=VARCHAR},
+      weight3 = #{record.weight3,jdbcType=VARCHAR},
+      weight4 = #{record.weight4,jdbcType=VARCHAR},
+      hypertension = #{record.hypertension,jdbcType=VARCHAR},
+      chronicBronchitis = #{record.chronicbronchitis,jdbcType=VARCHAR},
+      dyslipidemia = #{record.dyslipidemia,jdbcType=VARCHAR},
+      osteoporosis = #{record.osteoporosis,jdbcType=VARCHAR},
+      lungCancer = #{record.lungcancer,jdbcType=VARCHAR},
+      emphysema = #{record.emphysema,jdbcType=VARCHAR},
+      coronaryDisease = #{record.coronarydisease,jdbcType=VARCHAR},
+      hyperuricemia = #{record.hyperuricemia,jdbcType=VARCHAR},
+      phthisis = #{record.phthisis,jdbcType=VARCHAR},
+      fattyLiver = #{record.fattyliver,jdbcType=VARCHAR},
+      type2Diabetes = #{record.type2diabetes,jdbcType=VARCHAR},
+      apoplexy = #{record.apoplexy,jdbcType=VARCHAR},
+      breastCancer = #{record.breastcancer,jdbcType=VARCHAR},
+      prostate = #{record.prostate,jdbcType=VARCHAR},
+      acuteGout = #{record.acutegout,jdbcType=VARCHAR},
+      goutIsNotAcute = #{record.goutisnotacute,jdbcType=VARCHAR},
+      familialHypertension = #{record.familialhypertension,jdbcType=VARCHAR},
+      familialLungCancer = #{record.familiallungcancer,jdbcType=VARCHAR},
+      familialCoronaryDisease = #{record.familialcoronarydisease,jdbcType=VARCHAR},
+      familialApoplexy = #{record.familialapoplexy,jdbcType=VARCHAR},
+      familialBreastCancer = #{record.familialbreastcancer,jdbcType=VARCHAR},
+      familialProstate = #{record.familialprostate,jdbcType=VARCHAR},
+      familialDiabetes = #{record.familialdiabetes,jdbcType=VARCHAR},
+      familialhipFracture = #{record.familialhipfracture,jdbcType=VARCHAR},
+      smoke1 = #{record.smoke1,jdbcType=VARCHAR},
+      smoke2 = #{record.smoke2,jdbcType=VARCHAR},
+      smoke3 = #{record.smoke3,jdbcType=VARCHAR},
+      drink1 = #{record.drink1,jdbcType=VARCHAR},
+      drink2 = #{record.drink2,jdbcType=VARCHAR},
+      sport1 = #{record.sport1,jdbcType=VARCHAR},
+      sport2 = #{record.sport2,jdbcType=VARCHAR},
+      sport3 = #{record.sport3,jdbcType=VARCHAR},
+      food1 = #{record.food1,jdbcType=VARCHAR},
+      food2 = #{record.food2,jdbcType=VARCHAR},
+      food3 = #{record.food3,jdbcType=VARCHAR},
+      food4 = #{record.food4,jdbcType=VARCHAR},
+      psychology1 = #{record.psychology1,jdbcType=VARCHAR},
+      psychology2 = #{record.psychology2,jdbcType=VARCHAR},
+      psychology3 = #{record.psychology3,jdbcType=VARCHAR},
+      sleep1 = #{record.sleep1,jdbcType=VARCHAR},
+      sleep2 = #{record.sleep2,jdbcType=VARCHAR},
+      sleep3 = #{record.sleep3,jdbcType=VARCHAR},
+      coronaryDiseaseRisk1 = #{record.coronarydiseaserisk1,jdbcType=VARCHAR},
+      coronaryDiseaseRisk2 = #{record.coronarydiseaserisk2,jdbcType=VARCHAR},
+      coronaryDiseaseRisk3 = #{record.coronarydiseaserisk3,jdbcType=VARCHAR},
+      coronaryDiseaseRisk4 = #{record.coronarydiseaserisk4,jdbcType=VARCHAR},
+      hypertensionRisk1 = #{record.hypertensionrisk1,jdbcType=VARCHAR},
+      hypertensionRisk2 = #{record.hypertensionrisk2,jdbcType=VARCHAR},
+      hypertensionRisk3 = #{record.hypertensionrisk3,jdbcType=VARCHAR},
+      hypertensionRisk4 = #{record.hypertensionrisk4,jdbcType=VARCHAR},
+      apoplexyRisk1 = #{record.apoplexyrisk1,jdbcType=VARCHAR},
+      apoplexyRisk2 = #{record.apoplexyrisk2,jdbcType=VARCHAR},
+      apoplexyRisk3 = #{record.apoplexyrisk3,jdbcType=VARCHAR},
+      apoplexyRisk4 = #{record.apoplexyrisk4,jdbcType=VARCHAR},
+      diabetesRisk1 = #{record.diabetesrisk1,jdbcType=VARCHAR},
+      diabetesRisk2 = #{record.diabetesrisk2,jdbcType=VARCHAR},
+      diabetesRisk3 = #{record.diabetesrisk3,jdbcType=VARCHAR},
+      diabetesRisk4 = #{record.diabetesrisk4,jdbcType=VARCHAR},
+      lungCancerRisk1 = #{record.lungcancerrisk1,jdbcType=VARCHAR},
+      lungCancerRisk2 = #{record.lungcancerrisk2,jdbcType=VARCHAR},
+      lungCancerRisk3 = #{record.lungcancerrisk3,jdbcType=VARCHAR},
+      lungCancerRisk4 = #{record.lungcancerrisk4,jdbcType=VARCHAR},
+      prostateRisk1 = #{record.prostaterisk1,jdbcType=VARCHAR},
+      prostateRisk2 = #{record.prostaterisk2,jdbcType=VARCHAR},
+      prostateRisk3 = #{record.prostaterisk3,jdbcType=VARCHAR},
+      prostateRisk4 = #{record.prostaterisk4,jdbcType=VARCHAR},
+      breastCancerRisk1 = #{record.breastcancerrisk1,jdbcType=VARCHAR},
+      breastCancerRisk2 = #{record.breastcancerrisk2,jdbcType=VARCHAR},
+      breastCancerRisk3 = #{record.breastcancerrisk3,jdbcType=VARCHAR},
+      breastCancerRisk4 = #{record.breastcancerrisk4,jdbcType=VARCHAR},
+      dyslipidemiaRisk1 = #{record.dyslipidemiarisk1,jdbcType=VARCHAR},
+      dyslipidemiaRisk2 = #{record.dyslipidemiarisk2,jdbcType=VARCHAR},
+      dyslipidemiaRisk3 = #{record.dyslipidemiarisk3,jdbcType=VARCHAR},
+      dyslipidemiaRisk4 = #{record.dyslipidemiarisk4,jdbcType=VARCHAR},
+      osteoporosisRisk1 = #{record.osteoporosisrisk1,jdbcType=VARCHAR},
+      osteoporosisRisk2 = #{record.osteoporosisrisk2,jdbcType=VARCHAR},
+      osteoporosisRisk3 = #{record.osteoporosisrisk3,jdbcType=VARCHAR},
+      osteoporosisRisk4 = #{record.osteoporosisrisk4,jdbcType=VARCHAR},
+      creationTime = #{record.creationtime,jdbcType=VARCHAR},
+      screeningTime = #{record.screeningtime,jdbcType=VARCHAR},
+      usercode = #{record.usercode,jdbcType=VARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.yihe.system.domain.YhDicAssessmentScreen">
+    update yh_dic_assessment_screen
+    <set>
+      <if test="title != null">
+        title = #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="explain != null">
+        `explain` = #{explain,jdbcType=VARCHAR},
+      </if>
+      <if test="sex != null">
+        sex = #{sex,jdbcType=INTEGER},
+      </if>
+      <if test="agestart != null">
+        ageStart = #{agestart,jdbcType=INTEGER},
+      </if>
+      <if test="ageend != null">
+        ageEnd = #{ageend,jdbcType=INTEGER},
+      </if>
+      <if test="weight1 != null">
+        weight1 = #{weight1,jdbcType=VARCHAR},
+      </if>
+      <if test="weight2 != null">
+        weight2 = #{weight2,jdbcType=VARCHAR},
+      </if>
+      <if test="weight3 != null">
+        weight3 = #{weight3,jdbcType=VARCHAR},
+      </if>
+      <if test="weight4 != null">
+        weight4 = #{weight4,jdbcType=VARCHAR},
+      </if>
+      <if test="hypertension != null">
+        hypertension = #{hypertension,jdbcType=VARCHAR},
+      </if>
+      <if test="chronicbronchitis != null">
+        chronicBronchitis = #{chronicbronchitis,jdbcType=VARCHAR},
+      </if>
+      <if test="dyslipidemia != null">
+        dyslipidemia = #{dyslipidemia,jdbcType=VARCHAR},
+      </if>
+      <if test="osteoporosis != null">
+        osteoporosis = #{osteoporosis,jdbcType=VARCHAR},
+      </if>
+      <if test="lungcancer != null">
+        lungCancer = #{lungcancer,jdbcType=VARCHAR},
+      </if>
+      <if test="emphysema != null">
+        emphysema = #{emphysema,jdbcType=VARCHAR},
+      </if>
+      <if test="coronarydisease != null">
+        coronaryDisease = #{coronarydisease,jdbcType=VARCHAR},
+      </if>
+      <if test="hyperuricemia != null">
+        hyperuricemia = #{hyperuricemia,jdbcType=VARCHAR},
+      </if>
+      <if test="phthisis != null">
+        phthisis = #{phthisis,jdbcType=VARCHAR},
+      </if>
+      <if test="fattyliver != null">
+        fattyLiver = #{fattyliver,jdbcType=VARCHAR},
+      </if>
+      <if test="type2diabetes != null">
+        type2Diabetes = #{type2diabetes,jdbcType=VARCHAR},
+      </if>
+      <if test="apoplexy != null">
+        apoplexy = #{apoplexy,jdbcType=VARCHAR},
+      </if>
+      <if test="breastcancer != null">
+        breastCancer = #{breastcancer,jdbcType=VARCHAR},
+      </if>
+      <if test="prostate != null">
+        prostate = #{prostate,jdbcType=VARCHAR},
+      </if>
+      <if test="acutegout != null">
+        acuteGout = #{acutegout,jdbcType=VARCHAR},
+      </if>
+      <if test="goutisnotacute != null">
+        goutIsNotAcute = #{goutisnotacute,jdbcType=VARCHAR},
+      </if>
+      <if test="familialhypertension != null">
+        familialHypertension = #{familialhypertension,jdbcType=VARCHAR},
+      </if>
+      <if test="familiallungcancer != null">
+        familialLungCancer = #{familiallungcancer,jdbcType=VARCHAR},
+      </if>
+      <if test="familialcoronarydisease != null">
+        familialCoronaryDisease = #{familialcoronarydisease,jdbcType=VARCHAR},
+      </if>
+      <if test="familialapoplexy != null">
+        familialApoplexy = #{familialapoplexy,jdbcType=VARCHAR},
+      </if>
+      <if test="familialbreastcancer != null">
+        familialBreastCancer = #{familialbreastcancer,jdbcType=VARCHAR},
+      </if>
+      <if test="familialprostate != null">
+        familialProstate = #{familialprostate,jdbcType=VARCHAR},
+      </if>
+      <if test="familialdiabetes != null">
+        familialDiabetes = #{familialdiabetes,jdbcType=VARCHAR},
+      </if>
+      <if test="familialhipfracture != null">
+        familialhipFracture = #{familialhipfracture,jdbcType=VARCHAR},
+      </if>
+      <if test="smoke1 != null">
+        smoke1 = #{smoke1,jdbcType=VARCHAR},
+      </if>
+      <if test="smoke2 != null">
+        smoke2 = #{smoke2,jdbcType=VARCHAR},
+      </if>
+      <if test="smoke3 != null">
+        smoke3 = #{smoke3,jdbcType=VARCHAR},
+      </if>
+      <if test="drink1 != null">
+        drink1 = #{drink1,jdbcType=VARCHAR},
+      </if>
+      <if test="drink2 != null">
+        drink2 = #{drink2,jdbcType=VARCHAR},
+      </if>
+      <if test="sport1 != null">
+        sport1 = #{sport1,jdbcType=VARCHAR},
+      </if>
+      <if test="sport2 != null">
+        sport2 = #{sport2,jdbcType=VARCHAR},
+      </if>
+      <if test="sport3 != null">
+        sport3 = #{sport3,jdbcType=VARCHAR},
+      </if>
+      <if test="food1 != null">
+        food1 = #{food1,jdbcType=VARCHAR},
+      </if>
+      <if test="food2 != null">
+        food2 = #{food2,jdbcType=VARCHAR},
+      </if>
+      <if test="food3 != null">
+        food3 = #{food3,jdbcType=VARCHAR},
+      </if>
+      <if test="food4 != null">
+        food4 = #{food4,jdbcType=VARCHAR},
+      </if>
+      <if test="psychology1 != null">
+        psychology1 = #{psychology1,jdbcType=VARCHAR},
+      </if>
+      <if test="psychology2 != null">
+        psychology2 = #{psychology2,jdbcType=VARCHAR},
+      </if>
+      <if test="psychology3 != null">
+        psychology3 = #{psychology3,jdbcType=VARCHAR},
+      </if>
+      <if test="sleep1 != null">
+        sleep1 = #{sleep1,jdbcType=VARCHAR},
+      </if>
+      <if test="sleep2 != null">
+        sleep2 = #{sleep2,jdbcType=VARCHAR},
+      </if>
+      <if test="sleep3 != null">
+        sleep3 = #{sleep3,jdbcType=VARCHAR},
+      </if>
+      <if test="coronarydiseaserisk1 != null">
+        coronaryDiseaseRisk1 = #{coronarydiseaserisk1,jdbcType=VARCHAR},
+      </if>
+      <if test="coronarydiseaserisk2 != null">
+        coronaryDiseaseRisk2 = #{coronarydiseaserisk2,jdbcType=VARCHAR},
+      </if>
+      <if test="coronarydiseaserisk3 != null">
+        coronaryDiseaseRisk3 = #{coronarydiseaserisk3,jdbcType=VARCHAR},
+      </if>
+      <if test="coronarydiseaserisk4 != null">
+        coronaryDiseaseRisk4 = #{coronarydiseaserisk4,jdbcType=VARCHAR},
+      </if>
+      <if test="hypertensionrisk1 != null">
+        hypertensionRisk1 = #{hypertensionrisk1,jdbcType=VARCHAR},
+      </if>
+      <if test="hypertensionrisk2 != null">
+        hypertensionRisk2 = #{hypertensionrisk2,jdbcType=VARCHAR},
+      </if>
+      <if test="hypertensionrisk3 != null">
+        hypertensionRisk3 = #{hypertensionrisk3,jdbcType=VARCHAR},
+      </if>
+      <if test="hypertensionrisk4 != null">
+        hypertensionRisk4 = #{hypertensionrisk4,jdbcType=VARCHAR},
+      </if>
+      <if test="apoplexyrisk1 != null">
+        apoplexyRisk1 = #{apoplexyrisk1,jdbcType=VARCHAR},
+      </if>
+      <if test="apoplexyrisk2 != null">
+        apoplexyRisk2 = #{apoplexyrisk2,jdbcType=VARCHAR},
+      </if>
+      <if test="apoplexyrisk3 != null">
+        apoplexyRisk3 = #{apoplexyrisk3,jdbcType=VARCHAR},
+      </if>
+      <if test="apoplexyrisk4 != null">
+        apoplexyRisk4 = #{apoplexyrisk4,jdbcType=VARCHAR},
+      </if>
+      <if test="diabetesrisk1 != null">
+        diabetesRisk1 = #{diabetesrisk1,jdbcType=VARCHAR},
+      </if>
+      <if test="diabetesrisk2 != null">
+        diabetesRisk2 = #{diabetesrisk2,jdbcType=VARCHAR},
+      </if>
+      <if test="diabetesrisk3 != null">
+        diabetesRisk3 = #{diabetesrisk3,jdbcType=VARCHAR},
+      </if>
+      <if test="diabetesrisk4 != null">
+        diabetesRisk4 = #{diabetesrisk4,jdbcType=VARCHAR},
+      </if>
+      <if test="lungcancerrisk1 != null">
+        lungCancerRisk1 = #{lungcancerrisk1,jdbcType=VARCHAR},
+      </if>
+      <if test="lungcancerrisk2 != null">
+        lungCancerRisk2 = #{lungcancerrisk2,jdbcType=VARCHAR},
+      </if>
+      <if test="lungcancerrisk3 != null">
+        lungCancerRisk3 = #{lungcancerrisk3,jdbcType=VARCHAR},
+      </if>
+      <if test="lungcancerrisk4 != null">
+        lungCancerRisk4 = #{lungcancerrisk4,jdbcType=VARCHAR},
+      </if>
+      <if test="prostaterisk1 != null">
+        prostateRisk1 = #{prostaterisk1,jdbcType=VARCHAR},
+      </if>
+      <if test="prostaterisk2 != null">
+        prostateRisk2 = #{prostaterisk2,jdbcType=VARCHAR},
+      </if>
+      <if test="prostaterisk3 != null">
+        prostateRisk3 = #{prostaterisk3,jdbcType=VARCHAR},
+      </if>
+      <if test="prostaterisk4 != null">
+        prostateRisk4 = #{prostaterisk4,jdbcType=VARCHAR},
+      </if>
+      <if test="breastcancerrisk1 != null">
+        breastCancerRisk1 = #{breastcancerrisk1,jdbcType=VARCHAR},
+      </if>
+      <if test="breastcancerrisk2 != null">
+        breastCancerRisk2 = #{breastcancerrisk2,jdbcType=VARCHAR},
+      </if>
+      <if test="breastcancerrisk3 != null">
+        breastCancerRisk3 = #{breastcancerrisk3,jdbcType=VARCHAR},
+      </if>
+      <if test="breastcancerrisk4 != null">
+        breastCancerRisk4 = #{breastcancerrisk4,jdbcType=VARCHAR},
+      </if>
+      <if test="dyslipidemiarisk1 != null">
+        dyslipidemiaRisk1 = #{dyslipidemiarisk1,jdbcType=VARCHAR},
+      </if>
+      <if test="dyslipidemiarisk2 != null">
+        dyslipidemiaRisk2 = #{dyslipidemiarisk2,jdbcType=VARCHAR},
+      </if>
+      <if test="dyslipidemiarisk3 != null">
+        dyslipidemiaRisk3 = #{dyslipidemiarisk3,jdbcType=VARCHAR},
+      </if>
+      <if test="dyslipidemiarisk4 != null">
+        dyslipidemiaRisk4 = #{dyslipidemiarisk4,jdbcType=VARCHAR},
+      </if>
+      <if test="osteoporosisrisk1 != null">
+        osteoporosisRisk1 = #{osteoporosisrisk1,jdbcType=VARCHAR},
+      </if>
+      <if test="osteoporosisrisk2 != null">
+        osteoporosisRisk2 = #{osteoporosisrisk2,jdbcType=VARCHAR},
+      </if>
+      <if test="osteoporosisrisk3 != null">
+        osteoporosisRisk3 = #{osteoporosisrisk3,jdbcType=VARCHAR},
+      </if>
+      <if test="osteoporosisrisk4 != null">
+        osteoporosisRisk4 = #{osteoporosisrisk4,jdbcType=VARCHAR},
+      </if>
+      <if test="creationtime != null">
+        creationTime = #{creationtime,jdbcType=VARCHAR},
+      </if>
+      <if test="screeningtime != null">
+        screeningTime = #{screeningtime,jdbcType=VARCHAR},
+      </if>
+      <if test="usercode != null">
+        usercode = #{usercode,jdbcType=VARCHAR},
+      </if>
+       <if test="previousFracture != null">
+        previousFracture = #{previousFracture,jdbcType=VARCHAR},
+      </if>
+       <if test="prostatitis != null">
+        prostatitis = #{prostatitis,jdbcType=VARCHAR},
+      </if>
+       <if test="riskofgout1 != null">
+        riskofgout1 = #{riskofgout1,jdbcType=VARCHAR},
+      </if>
+       <if test="riskofgout2 != null">
+        riskofgout2 = #{riskofgout2,jdbcType=VARCHAR},
+      </if>
+       <if test="riskofgout3 != null">
+        riskofgout3 = #{riskofgout3,jdbcType=VARCHAR},
+      </if>
+       <if test="riskofgout4 != null">
+        riskofgout4 = #{riskofgout4,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where sid = #{sid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.yihe.system.domain.YhDicAssessmentScreen">
+    update yh_dic_assessment_screen
+    set  title = #{title,jdbcType=VARCHAR},
+        `explain` = #{explain,jdbcType=VARCHAR},
+        sex = #{sex,jdbcType=INTEGER},
+        ageStart = #{agestart,jdbcType=INTEGER},
+        ageEnd = #{ageend,jdbcType=INTEGER},
+        weight1 = #{weight1,jdbcType=VARCHAR},
+        weight2 = #{weight2,jdbcType=VARCHAR},
+        weight3 = #{weight3,jdbcType=VARCHAR},
+        weight4 = #{weight4,jdbcType=VARCHAR},
+        hypertension = #{hypertension,jdbcType=VARCHAR},
+        chronicBronchitis = #{chronicbronchitis,jdbcType=VARCHAR},
+        dyslipidemia = #{dyslipidemia,jdbcType=VARCHAR},
+        osteoporosis = #{osteoporosis,jdbcType=VARCHAR},
+        lungCancer = #{lungcancer,jdbcType=VARCHAR},
+        emphysema = #{emphysema,jdbcType=VARCHAR},
+        coronaryDisease = #{coronarydisease,jdbcType=VARCHAR},
+        hyperuricemia = #{hyperuricemia,jdbcType=VARCHAR},
+        phthisis = #{phthisis,jdbcType=VARCHAR},
+        fattyLiver = #{fattyliver,jdbcType=VARCHAR},
+        type2Diabetes = #{type2diabetes,jdbcType=VARCHAR},
+        apoplexy = #{apoplexy,jdbcType=VARCHAR},
+        breastCancer = #{breastcancer,jdbcType=VARCHAR},
+        prostate = #{prostate,jdbcType=VARCHAR},
+        acuteGout = #{acutegout,jdbcType=VARCHAR},
+        goutIsNotAcute = #{goutisnotacute,jdbcType=VARCHAR},
+        familialHypertension = #{familialhypertension,jdbcType=VARCHAR},
+        familialLungCancer = #{familiallungcancer,jdbcType=VARCHAR},
+        familialCoronaryDisease = #{familialcoronarydisease,jdbcType=VARCHAR},
+        familialApoplexy = #{familialapoplexy,jdbcType=VARCHAR},
+        familialBreastCancer = #{familialbreastcancer,jdbcType=VARCHAR},
+        familialProstate = #{familialprostate,jdbcType=VARCHAR},
+        familialDiabetes = #{familialdiabetes,jdbcType=VARCHAR},
+        familialhipFracture = #{familialhipfracture,jdbcType=VARCHAR},
+        smoke1 = #{smoke1,jdbcType=VARCHAR},
+        smoke2 = #{smoke2,jdbcType=VARCHAR},
+        smoke3 = #{smoke3,jdbcType=VARCHAR},
+        drink1 = #{drink1,jdbcType=VARCHAR},
+        drink2 = #{drink2,jdbcType=VARCHAR},
+        sport1 = #{sport1,jdbcType=VARCHAR},
+        sport2 = #{sport2,jdbcType=VARCHAR},
+        sport3 = #{sport3,jdbcType=VARCHAR},
+        food1 = #{food1,jdbcType=VARCHAR},
+        food2 = #{food2,jdbcType=VARCHAR},
+        food3 = #{food3,jdbcType=VARCHAR},
+        food4 = #{food4,jdbcType=VARCHAR},
+        psychology1 = #{psychology1,jdbcType=VARCHAR},
+        psychology2 = #{psychology2,jdbcType=VARCHAR},
+        psychology3 = #{psychology3,jdbcType=VARCHAR},
+        sleep1 = #{sleep1,jdbcType=VARCHAR},
+        sleep2 = #{sleep2,jdbcType=VARCHAR},
+        sleep3 = #{sleep3,jdbcType=VARCHAR},
+        coronaryDiseaseRisk1 = #{coronarydiseaserisk1,jdbcType=VARCHAR},
+        coronaryDiseaseRisk2 = #{coronarydiseaserisk2,jdbcType=VARCHAR},
+        coronaryDiseaseRisk3 = #{coronarydiseaserisk3,jdbcType=VARCHAR},
+        coronaryDiseaseRisk4 = #{coronarydiseaserisk4,jdbcType=VARCHAR},
+        hypertensionRisk1 = #{hypertensionrisk1,jdbcType=VARCHAR},
+        hypertensionRisk2 = #{hypertensionrisk2,jdbcType=VARCHAR},
+        hypertensionRisk3 = #{hypertensionrisk3,jdbcType=VARCHAR},
+        hypertensionRisk4 = #{hypertensionrisk4,jdbcType=VARCHAR},
+        apoplexyRisk1 = #{apoplexyrisk1,jdbcType=VARCHAR},
+        apoplexyRisk2 = #{apoplexyrisk2,jdbcType=VARCHAR},
+        apoplexyRisk3 = #{apoplexyrisk3,jdbcType=VARCHAR},
+        apoplexyRisk4 = #{apoplexyrisk4,jdbcType=VARCHAR},
+        diabetesRisk1 = #{diabetesrisk1,jdbcType=VARCHAR},
+        diabetesRisk2 = #{diabetesrisk2,jdbcType=VARCHAR},
+        diabetesRisk3 = #{diabetesrisk3,jdbcType=VARCHAR},
+        diabetesRisk4 = #{diabetesrisk4,jdbcType=VARCHAR},
+        lungCancerRisk1 = #{lungcancerrisk1,jdbcType=VARCHAR},
+        lungCancerRisk2 = #{lungcancerrisk2,jdbcType=VARCHAR},
+        lungCancerRisk3 = #{lungcancerrisk3,jdbcType=VARCHAR},
+        lungCancerRisk4 = #{lungcancerrisk4,jdbcType=VARCHAR},
+        prostateRisk1 = #{prostaterisk1,jdbcType=VARCHAR},
+        prostateRisk2 = #{prostaterisk2,jdbcType=VARCHAR},
+        prostateRisk3 = #{prostaterisk3,jdbcType=VARCHAR},
+        prostateRisk4 = #{prostaterisk4,jdbcType=VARCHAR},
+        breastCancerRisk1 = #{breastcancerrisk1,jdbcType=VARCHAR},
+        breastCancerRisk2 = #{breastcancerrisk2,jdbcType=VARCHAR},
+        breastCancerRisk3 = #{breastcancerrisk3,jdbcType=VARCHAR},
+        breastCancerRisk4 = #{breastcancerrisk4,jdbcType=VARCHAR},
+        dyslipidemiaRisk1 = #{dyslipidemiarisk1,jdbcType=VARCHAR},
+        dyslipidemiaRisk2 = #{dyslipidemiarisk2,jdbcType=VARCHAR},
+        dyslipidemiaRisk3 = #{dyslipidemiarisk3,jdbcType=VARCHAR},
+        dyslipidemiaRisk4 = #{dyslipidemiarisk4,jdbcType=VARCHAR},
+        osteoporosisRisk1 = #{osteoporosisrisk1,jdbcType=VARCHAR},
+        osteoporosisRisk2 = #{osteoporosisrisk2,jdbcType=VARCHAR},
+        osteoporosisRisk3 = #{osteoporosisrisk3,jdbcType=VARCHAR},
+        osteoporosisRisk4 = #{osteoporosisrisk4,jdbcType=VARCHAR},
+        creationTime = #{creationtime,jdbcType=VARCHAR},
+        screeningTime = #{screeningtime,jdbcType=VARCHAR},
+        usercode = #{usercode,jdbcType=VARCHAR},
+        previousFracture = #{previousFracture,jdbcType=VARCHAR},
+        prostatitis = #{prostatitis,jdbcType=VARCHAR},
+        riskofgout1 = #{riskofgout1,jdbcType=VARCHAR},
+        riskofgout2 = #{riskofgout2,jdbcType=VARCHAR},
+        riskofgout3 = #{riskofgout3,jdbcType=VARCHAR},
+        riskofgout4 = #{riskofgout4,jdbcType=VARCHAR},
+        foodVegetables1 = #{foodVegetables1,jdbcType=VARCHAR},
+        foodVegetables2 = #{foodVegetables2,jdbcType=VARCHAR},
+        foodFruits1 = #{foodFruits1,jdbcType=VARCHAR},
+        foodFruits2 = #{foodFruits2,jdbcType=VARCHAR},
+        foodairy1 = #{foodairy1,jdbcType=VARCHAR},
+        foodairy2 = #{foodairy2,jdbcType=VARCHAR},
+        foodPurine1 = #{foodPurine1,jdbcType=VARCHAR},
+        foodPurine2 = #{foodPurine2,jdbcType=VARCHAR}
+    where sid = #{sid,jdbcType=INTEGER}
+  </update>
+</mapper>

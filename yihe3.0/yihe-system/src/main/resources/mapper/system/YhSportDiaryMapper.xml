@@ -1,0 +1,576 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yihe.system.mapper.YhSportDiaryMapper">
+    
+    <resultMap type="YhSportDiary" id="YhSportDiaryResult">
+        <result property="uSportId"    column="u_sport_id"    />
+        <result property="entryTime"    column="Entry_Time"    />
+        <result property="uweight"    column="Uweight"    />
+        <result property="tenergy"    column="Tenergy"    />
+        <result property="diaryDetails"    column="Diary_Details"    />
+        <result column="Diary_Boutique" property="diaryBoutique" jdbcType="VARCHAR" />
+    <result column="Diary_Recommend" property="diaryRecommend" jdbcType="VARCHAR" />
+        <result property="userCode"    column="user_code"    />
+        <result property="remark"    column="remark"    />
+        <result property="number"    column="number"    />
+    </resultMap>
+    
+     <!-- 本月记录 -->
+    <select id="showSportMonthUser" resultMap="YhSportDiaryResult">
+    	SELECT * 
+		FROM yh_sport_diary
+		WHERE 
+		 user_code=#{usercode} and
+		DATE_FORMAT( Entry_Time, '%Y%m' ) = DATE_FORMAT( CURDATE( ) , '%Y%m' )
+    </select>
+    
+    <!-- 季度记录 -->
+    <select id="showSportQuarter" resultMap="YhSportDiaryResult">
+    	select * from yh_sport_diary where  user_code=#{usercode} and QUARTER(Entry_Time)=QUARTER(now());
+    </select>
+    
+    <!-- 年度记录 -->
+    <select id="showSportYear" resultMap="YhSportDiaryResult">
+    	select * from yh_sport_diary where user_code=#{usercode} and  YEAR(Entry_Time)=YEAR(NOW());
+    </select>
+    
+    
+      <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from yh_sport_diary
+    where u_sport_id = #{uSportId,jdbcType=INTEGER}
+  </delete>
+  
+     <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="YhSportDiaryResult">
+    select * from yh_sport_diary
+    where u_sport_id = #{uSportId,jdbcType=INTEGER}
+  </select>
+  
+  
+  
+  <update id="updateByPrimaryKeySelective" parameterType="com.yihe.system.domain.YhSportDiary">
+    update yh_sport_diary
+    <set>
+      <if test="entryTime != null">
+        Entry_Time = #{entryTime,jdbcType=VARCHAR},
+      </if>
+      <if test="uweight != null">
+        Uweight = #{uweight,jdbcType=VARCHAR},
+      </if>
+      <if test="tenergy != null">
+        Tenergy = #{tenergy,jdbcType=VARCHAR},
+      </if>
+      <if test="diaryDetails != null">
+        Diary_Details = #{diaryDetails,jdbcType=VARCHAR},
+      </if>
+       <if test="diaryBoutique != null" >
+        Diary_Boutique = #{diaryBoutique,jdbcType=VARCHAR},
+      </if>
+      <if test="diaryRecommend != null" >
+        Diary_Recommend = #{diaryRecommend,jdbcType=VARCHAR},
+      </if>
+      <if test="userCode != null">
+        user_code = #{userCode,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null">
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+       <if test="number != null" >
+        number = #{number,jdbcType=VARCHAR},
+      </if>
+        <if test="Data_Source != null" >
+            Data_Source = #{Data_Source,jdbcType=VARCHAR},
+        </if>
+    </set>
+    where u_sport_id = #{uSportId,jdbcType=INTEGER}
+  </update>
+  
+  
+  
+  <update id="updateByPrimaryKeySelective2" parameterType="com.yihe.system.domain.YhSportDiary">
+    update yh_sport_diary
+    <set>
+      <if test="entryTime != null">
+        Entry_Time = #{entryTime,jdbcType=VARCHAR},
+      </if>
+      <if test="uweight != null">
+        Uweight = #{uweight,jdbcType=VARCHAR},
+      </if>
+      <if test="tenergy != null">
+        Tenergy = #{tenergy,jdbcType=VARCHAR},
+      </if>
+        Diary_Details = #{diaryDetails,jdbcType=VARCHAR},
+        Diary_Boutique = #{diaryBoutique,jdbcType=VARCHAR},
+        Diary_Recommend = #{diaryRecommend,jdbcType=VARCHAR},
+      <if test="userCode != null">
+        user_code = #{userCode,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null">
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+       <if test="number != null" >
+        number = #{number,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where u_sport_id = #{uSportId,jdbcType=INTEGER}
+  </update>
+  
+  
+   <insert id="insertSelective" parameterType="com.yihe.system.domain.YhSportDiary">
+    insert into yh_sport_diary
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="entryTime != null">
+        Entry_Time,
+      </if>
+      <if test="uweight != null">
+        Uweight,
+      </if>
+      <if test="tenergy != null">
+        Tenergy,
+      </if>
+      <if test="diaryDetails != null">
+        Diary_Details,
+      </if>
+      <if test="diaryBoutique != null" >
+        Diary_Boutique,
+      </if>
+      <if test="diaryRecommend != null" >
+        Diary_Recommend,
+      </if>
+      <if test="userCode != null">
+        user_code,
+      </if>
+      <if test="remark != null">
+        remark,
+      </if>
+      <if test="number != null" >
+        number,
+      </if>
+        <if test="Data_Source != null" >
+            Data_Source,
+        </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="entryTime != null">
+        #{entryTime,jdbcType=VARCHAR},
+      </if>
+      <if test="uweight != null">
+        #{uweight,jdbcType=VARCHAR},
+      </if>
+      <if test="tenergy != null">
+        #{tenergy,jdbcType=VARCHAR},
+      </if>
+      <if test="diaryDetails != null">
+        #{diaryDetails,jdbcType=VARCHAR},
+      </if>
+       <if test="diaryBoutique != null" >
+        #{diaryBoutique,jdbcType=VARCHAR},
+      </if>
+      <if test="diaryRecommend != null" >
+        #{diaryRecommend,jdbcType=VARCHAR},
+      </if>
+      <if test="userCode != null">
+        #{userCode,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null">
+        #{remark,jdbcType=VARCHAR},
+      </if>
+       <if test="number != null" >
+        #{number,jdbcType=VARCHAR},
+      </if>
+        <if test="Data_Source != null" >
+            #{Data_Source,jdbcType=VARCHAR},
+        </if>
+    </trim>
+  </insert>
+    
+
+    <sql id="selectYhSportDiaryVo">
+        select u_sport_id, Entry_Time, Uweight, Tenergy, Diary_Details, user_code, remark, number from yh_sport_diary
+    </sql>
+    
+    <select id="ShowpnumberDiary" parameterType="java.lang.String" resultType="java.lang.Integer">
+    	select count(*) from yh_sport_diary where user_code=#{userCode,jdbcType=VARCHAR}
+    </select>
+    
+    <select id="ShowpresentDiary" parameterType="java.lang.String" resultMap="YhSportDiaryResult">
+    	select * from yh_sport_diary where to_days(Entry_Time) = to_days(now()) and user_code=#{userCode,jdbcType=VARCHAR}
+    </select>
+    
+    <!-- 根据当前时间获取近七天的运动数据，去重usercode -->
+    <select id="HebdomadRecordSport" resultMap="YhSportDiaryResult">
+    	SELECT * FROM(select * from yh_sport_diary  where DATE_SUB(CURDATE(), INTERVAL 7 DAY) &lt;= date(Entry_Time)) AS b GROUP BY b.user_code;
+    </select>
+
+ <!-- 查询步数统计 -->
+	<select id="showSportStepStatistics" parameterType="java.lang.String" resultMap="YhSportDiaryResult">
+		 SELECT * FROM yh_sport_diary where user_code=#{userCode,jdbcType=VARCHAR} order by Entry_Time DESC limit 7;
+	</select>
+	
+ 
+  
+	<!-- 查询是否有步数 -->
+	<select id="showSportWhetherThere" parameterType="map" resultMap="YhSportDiaryResult">
+		select * from yh_sport_diary where user_code=#{userCode,jdbcType=VARCHAR} and Entry_Time=#{entryTime,jdbcType=VARCHAR};
+	</select>
+  		
+  <!-- 根据code查询用户上年的记录-->
+  <select id="selectBySportlastYear" parameterType="java.lang.String" resultMap="YhSportDiaryResult">
+  	select * from yh_sport_diary where YEAR(Entry_Time)=YEAR(NOW())-1 and user_code=#{userCode,jdbcType=VARCHAR} order by Entry_Time desc; 
+  </select>
+  	
+  	 <!-- 根据code查询用户本年的记录-->
+  <select id="selectBySportthisYear" parameterType="java.lang.String" resultMap="YhSportDiaryResult">
+  	SELECT * FROM yh_sport_diary WHERE YEAR(  Entry_Time ) = YEAR( NOW( ) )  and user_code=#{userCode,jdbcType=VARCHAR} order by Entry_Time desc; 
+  </select>
+  
+  <!-- 根据code查询用户上周的记录-->
+  <select id="selectBySportlastWeek" parameterType="java.lang.String" resultMap="YhSportDiaryResult">
+  	SELECT * FROM yh_sport_diary WHERE YEARWEEK(date_format(Entry_Time,'%Y-%m-%d')) = YEARWEEK(now())-1 and user_code=#{userCode,jdbcType=VARCHAR} order by Entry_Time desc; 
+  </select>
+  
+  <!-- 根据code查询用户本周的记录-->
+  <select id="selectBySportthisWeek" parameterType="java.lang.String" resultMap="YhSportDiaryResult">
+  	SELECT * FROM  yh_sport_diary WHERE YEARWEEK( date_format(  Entry_Time,'%Y-%m-%d' ) ) = YEARWEEK( now() ) and user_code=#{userCode,jdbcType=VARCHAR} order by Entry_Time desc; 
+  </select>
+  
+    <!-- 根据code查询用户上月的记录-->
+  <select id="selectBySportlastMonth" parameterType="java.lang.String" resultMap="YhSportDiaryResult">
+  		SELECT * FROM yh_sport_diary WHERE PERIOD_DIFF( date_format( now( ) , '%Y%m' ) , date_format( Entry_Time, '%Y%m' ) ) =1 and user_code=#{userCode,jdbcType=VARCHAR} order by Entry_Time desc; 
+  </select>
+  
+   <!-- 根据code查询用户本月的记录-->
+  <select id="selectBySportMonth" parameterType="java.lang.String" resultMap="YhSportDiaryResult">
+  	SELECT * FROM  yh_sport_diary WHERE DATE_FORMAT( Entry_Time, '%Y%m' ) = DATE_FORMAT( CURDATE( ) ,'%Y%m' ) and user_code=#{userCode,jdbcType=VARCHAR} order by Entry_Time desc; 
+  </select>
+  
+  
+  <!-- 根据code和时间查询当前是否存在数据 -->
+  <select id="showsky" parameterType="map" resultMap="YhSportDiaryResult">
+  	select * from yh_sport_diary where user_code=#{userCode,jdbcType=VARCHAR} and Entry_Time=#{entryTime,jdbcType=VARCHAR}
+  </select>
+  
+  <!-- 根据code查询用户运动日期 -->
+  <select id="selectBySportTime" parameterType="java.lang.String" resultMap="YhSportDiaryResult">
+  	select Entry_Time from yh_sport_diary where user_code=#{userCode,jdbcType=VARCHAR}
+  </select>
+  
+
+ <!-- 根据时间查询记录分析报告 -->
+  <select id="showSportRecordAnalyze" resultMap="YhSportDiaryResult" parameterType="map">
+  	select di.*,info.user_name,info.gender,info.birth_date from yh_sport_diary di,yh_user_reginfo info where di.user_code=info.user_code and di.user_code=#{userCode} and Entry_Time between #{cTime} and #{cTime1};
+  </select>
+
+
+	<!-- 查询运动总记录数 -->
+    <select id="showSportSum" resultType="int">
+    	select count(*) from yh_sport_diary
+    </select>
+    
+    <!-- 查询运动每天总记录数 -->
+    <select id="showSportTian" resultType="int">
+    select count(*) from yh_sport_diary where  DATE_FORMAT(Entry_Time, '%Y%m' ) = DATE_FORMAT( CURDATE( ) , '%Y%m' )
+    </select>
+    
+
+  <!-- 查询所有运动记录模糊查询统计图 -->
+    <select id="selectSportDiaryCtime" resultMap="YhSportDiaryResult" parameterType="map">
+  		select * from yh_sport_diary
+  		<where>
+  		user_code=#{userCode,jdbcType=VARCHAR}
+  			<if test="entryTime!=null and entryTime !=''">
+  			and Entry_Time between #{entryTime} and #{entryTime1}
+  			</if>
+  			<if test="right!=null and right !=''">
+  			and (Uweight+0)&gt;=(Tenergy+0)
+  			</if>
+  			<if test="deny!=null and deny !=''">
+  			and (Uweight+0)&lt;(Tenergy+0)
+  			</if>
+  			<if test="entryTime==null or entryTime ==''">
+  				order by Entry_Time  desc LIMIT  0,15
+  			</if>
+  		</where>
+  </select>
+  
+  
+     <!-- 查询所有运动记录模糊查询 -->
+    <select id="selectSportDiary" resultMap="YhSportDiaryResult" parameterType="map">
+  		select * from yh_sport_diary
+  		<where>
+  		user_code=#{userCode,jdbcType=VARCHAR}
+  			<if test="entryTime!=null and entryTime !=''">
+  			and Entry_Time between #{entryTime} and #{entryTime1}
+  			</if>
+  			<if test="right!=null and right !=''">
+  			and (Uweight+0)&gt;=(Tenergy+0)
+  			</if>
+  			<if test="deny!=null and deny !=''">
+  			and (Uweight+0)&lt;(Tenergy+0)
+  			</if>
+  			
+  		</where>
+  		order by Entry_Time desc LIMIT  #{page},#{limit}
+  </select>
+  
+  
+  <!-- 查询所有运动记录模糊查询总行数 -->
+    <select id="selectSportDiaryConut" resultType="int" parameterType="map">
+  		select count(*) from yh_sport_diary
+  		<where>
+  		user_code=#{userCode,jdbcType=VARCHAR}
+  			<if test="entryTime!=null and entryTime !=''">
+  			and Entry_Time between #{entryTime} and #{entryTime1}
+  			</if>
+  			<if test="right!=null and right !=''">
+  			and (Uweight+0)&gt;=(Tenergy+0)
+  			</if>
+  			<if test="deny!=null and deny !=''">
+  			and (Uweight+0)&lt;(Tenergy+0)
+  			</if>
+  		</where>
+  		order by Entry_Time desc
+  </select>
+  
+  
+  
+    <select id="selectYhSportDiaryList" parameterType="YhSportDiary" resultMap="YhSportDiaryResult">
+        <include refid="selectYhSportDiaryVo"/>
+        <where>  
+            <if test="entryTime != null  and entryTime != ''"> and Entry_Time = #{entryTime}</if>
+            <if test="uweight != null  and uweight != ''"> and Uweight = #{uweight}</if>
+            <if test="tenergy != null  and tenergy != ''"> and Tenergy = #{tenergy}</if>
+            <if test="diaryDetails != null  and diaryDetails != ''"> and Diary_Details = #{diaryDetails}</if>
+            <if test="userCode != null  and userCode != ''"> and user_code = #{userCode}</if>
+            <if test="number != null  and number != ''"> and number = #{number}</if>
+        </where>
+    </select>
+    
+    
+    <select id="findSportDiaryByUserCodeForWeekDay" resultType="com.yihe.system.domain.InformationSummary">
+    SELECT DAY, MAX(num) AS daynum
+FROM (
+    SELECT 
+       WEEKDAY(osr.Entry_Time)+1 AS DAY, 
+       IF (COUNT(1) IS NULL, 0, COUNT(1)) AS num 
+    FROM yh_sport_diary AS osr
+    
+    WHERE 
+        osr.user_code=#{usercode} AND
+                YEARWEEK(DATE_FORMAT(osr.Entry_Time,'%Y-%m-%d'), 1) = YEARWEEK(NOW(), 1)
+    GROUP BY WEEKDAY(osr.Entry_Time)
+    UNION
+    SELECT * FROM (
+        SELECT 1 DAY, 0 num
+        UNION
+        SELECT 2, 0  
+        UNION
+        SELECT 3, 0  
+        UNION
+        SELECT 4, 0  
+        UNION
+        SELECT 5, 0  
+        UNION
+        SELECT 6, 0
+        UNION
+        SELECT 7, 0  
+    ) b
+) c 
+GROUP BY DAY
+    </select>
+    
+    
+    <select id="findSportUserDuaryLastWeek" resultType="com.yihe.system.domain.InformationSummary">
+    
+SELECT DAY, MAX(num) AS daynum
+FROM (
+    SELECT 
+       WEEKDAY(osr.Entry_Time)+1 AS DAY, 
+       IF (COUNT(1) IS NULL, 0, COUNT(1)) AS num 
+    FROM `yh_sport_diary` AS osr
+    
+    WHERE 
+        osr.user_code=#{usercode} AND
+        YEARWEEK(DATE_FORMAT(osr.`Entry_Time`,'%Y-%m-%d'), 1) = YEARWEEK(NOW(), 1)-1
+    GROUP BY WEEKDAY(osr.Entry_Time)
+    UNION
+    SELECT * FROM (
+        SELECT 1 DAY, 0 num
+        UNION
+        SELECT 2, 0  
+        UNION
+        SELECT 3, 0  
+        UNION
+        SELECT 4, 0  
+        UNION
+        SELECT 5, 0  
+        UNION
+        SELECT 6, 0
+        UNION
+        SELECT 7, 0  
+    ) b
+) c 
+GROUP BY DAY
+    </select>
+    
+    <select id="findSportDiaryByUserCodeForMonth" resultType="map">
+    
+SELECT 
+SUM(CASE DAY(Entry_Time) WHEN '1' THEN 1 ELSE 0 END) AS '1',
+SUM(CASE DAY(Entry_Time) WHEN '2' THEN 1 ELSE 0 END) AS '2',
+SUM(CASE DAY(Entry_Time) WHEN '3' THEN 1 ELSE 0 END) AS '3',
+SUM(CASE DAY(Entry_Time) WHEN '4' THEN 1 ELSE 0 END) AS '4',
+SUM(CASE DAY(Entry_Time) WHEN '5' THEN 1 ELSE 0 END) AS '5',
+SUM(CASE DAY(Entry_Time) WHEN '6' THEN 1 ELSE 0 END) AS '6',
+SUM(CASE DAY(Entry_Time) WHEN '7' THEN 1 ELSE 0 END) AS '7',
+SUM(CASE DAY(Entry_Time) WHEN '8' THEN 1 ELSE 0 END) AS '8',
+SUM(CASE DAY(Entry_Time) WHEN '9' THEN 1 ELSE 0 END) AS '9',
+SUM(CASE DAY(Entry_Time) WHEN '10' THEN 1 ELSE 0 END) AS '10',
+SUM(CASE DAY(Entry_Time) WHEN '11' THEN 1 ELSE 0 END) AS '11',
+SUM(CASE DAY(Entry_Time) WHEN '12' THEN 1 ELSE 0 END) AS '12',
+SUM(CASE DAY(Entry_Time) WHEN '13' THEN 1 ELSE 0 END) AS '13',
+SUM(CASE DAY(Entry_Time) WHEN '14' THEN 1 ELSE 0 END) AS '14',
+SUM(CASE DAY(Entry_Time) WHEN '15' THEN 1 ELSE 0 END) AS '15',
+SUM(CASE DAY(Entry_Time) WHEN '16' THEN 1 ELSE 0 END) AS '16',
+SUM(CASE DAY(Entry_Time) WHEN '17' THEN 1 ELSE 0 END) AS '17',
+SUM(CASE DAY(Entry_Time) WHEN '18' THEN 1 ELSE 0 END) AS '18',
+SUM(CASE DAY(Entry_Time) WHEN '19' THEN 1 ELSE 0 END) AS '19',
+SUM(CASE DAY(Entry_Time) WHEN '20' THEN 1 ELSE 0 END) AS '20',
+SUM(CASE DAY(Entry_Time) WHEN '21' THEN 1 ELSE 0 END) AS '21',
+SUM(CASE DAY(Entry_Time) WHEN '22' THEN 1 ELSE 0 END) AS '22',
+SUM(CASE DAY(Entry_Time) WHEN '23' THEN 1 ELSE 0 END) AS '23',
+SUM(CASE DAY(Entry_Time) WHEN '24' THEN 1 ELSE 0 END) AS '24',
+SUM(CASE DAY(Entry_Time) WHEN '25' THEN 1 ELSE 0 END) AS '25',
+SUM(CASE DAY(Entry_Time) WHEN '26' THEN 1 ELSE 0 END) AS '26',
+SUM(CASE DAY(Entry_Time) WHEN '27' THEN 1 ELSE 0 END) AS '27',
+SUM(CASE DAY(Entry_Time) WHEN '28' THEN 1 ELSE 0 END) AS '28',
+SUM(CASE DAY(Entry_Time) WHEN '29' THEN 1 ELSE 0 END) AS '29',
+SUM(CASE DAY(Entry_Time) WHEN '30' THEN 1 ELSE 0 END) AS '30',
+SUM(CASE DAY(Entry_Time) WHEN '31' THEN 1 ELSE 0 END) AS '31',
+MONTH(Entry_Time) AS MONTH,
+YEAR(Entry_Time) AS YEAR
+FROM yh_sport_diary
+WHERE MONTH(`Entry_Time`) IN(#{month}) AND YEAR(Entry_Time) IN(#{year}) AND user_code=#{usercode}  GROUP BY  MONTH
+
+    
+    </select>
+    
+    
+    <select id="findSportDiaryByuserCodeForyear" resultType="map">
+    SELECT 
+SUM(CASE MONTH(Entry_Time) WHEN '1' THEN 1 ELSE 0 END) AS '1',
+SUM(CASE MONTH(Entry_Time) WHEN '2' THEN 1 ELSE 0 END) AS '2',
+SUM(CASE MONTH(Entry_Time) WHEN '3' THEN 1 ELSE 0 END) AS '3',
+SUM(CASE MONTH(Entry_Time) WHEN '4' THEN 1 ELSE 0 END) AS '4',
+SUM(CASE MONTH(Entry_Time) WHEN '5' THEN 1 ELSE 0 END) AS '5',
+SUM(CASE MONTH(Entry_Time) WHEN '6' THEN 1 ELSE 0 END) AS '6',
+SUM(CASE MONTH(Entry_Time) WHEN '7' THEN 1 ELSE 0 END) AS '7',
+SUM(CASE MONTH(Entry_Time) WHEN '8' THEN 1 ELSE 0 END) AS '8',
+SUM(CASE MONTH(Entry_Time) WHEN '9' THEN 1 ELSE 0 END) AS '9',
+SUM(CASE MONTH(Entry_Time) WHEN '10' THEN 1 ELSE 0 END) AS '10',
+SUM(CASE MONTH(Entry_Time) WHEN '11' THEN 1 ELSE 0 END) AS '11',
+SUM(CASE MONTH(Entry_Time) WHEN '12' THEN 1 ELSE 0 END) AS '12',
+YEAR(Entry_Time) AS YEAR
+FROM yh_sport_diary elr
+WHERE user_code=#{usercode} AND  YEAR(Entry_Time) IN(#{year})  GROUP BY  YEAR
+ 
+    </select>
+    
+    <select id="selectYhSportDiaryById" parameterType="Long" resultMap="YhSportDiaryResult">
+        <include refid="selectYhSportDiaryVo"/>
+        where u_sport_id = #{uSportId}
+    </select>
+    
+    <select id="findSportDiaryByusercodeForDetails" resultType="java.lang.String">
+    SELECT Diary_Details FROM yh_sport_diary WHERE user_code=#{usercode}
+    </select>
+    <select id="findSportDiaryByUsercodeForCount" resultType="java.lang.Integer">
+    SELECT COUNT(1)FROM yh_sport_diary WHERE user_code=#{usercode}
+    </select>
+      <select id="selectYhSportDiaryByusercodeForWeb"  resultType="com.yihe.system.domain.YHUserSportDiaryVOJO">
+        SELECT a.birth_date AS birthDate,a.user_code AS usercode,a.user_name AS username,a.name,
+	CASE
+	 WHEN a.gender = 1 
+              THEN '男' 
+              ELSE '女' 
+            END AS sex,
+		c.Entry_Time AS diaryTime,c.Diary_Details AS diaryDetails,c.Diary_Boutique AS diaryBoutique,c.Diary_Recommend AS diaryRecommend,c.number,c.Tenergy,c.Uweight   FROM yh_user_reginfo AS a
+	INNER JOIN yh_user_make_card AS b
+	ON a.user_code=b.user_code
+	INNER JOIN `yh_sport_diary` AS c
+	ON a.user_code=c.user_code
+	WHERE b.doctor=(SELECT id FROM `yh_user_admin_info` WHERE user_code=#{usercode})
+	<if test="nameLike != null">
+	AND a.name LIKE CONCAT('%',#{nameLike},'%')
+	</if>
+	<if test="usernameLike != null">
+	AND a.user_name LIKE CONCAT('%',#{usernameLike},'%')
+	</if>
+	<if test="strTime != null and endTime != null and strTime != '' and endTime != ''">
+	AND c.Entry_Time BETWEEN DATE_FORMAT(#{strTime},'%Y-%m-%d') AND DATE_FORMAT(#{endTime},'%Y-%m-%d')
+	</if>
+	 
+		 <if test='standard =="1".toString()'>
+		 AND ((c.Tenergy&gt;=(66 + (13.7*54) + (5.0*168) - (5.0*(YEAR(NOW())-YEAR(a.birth_date)-1) + ( DATE_FORMAT(a.birth_date, '%m%d') &lt;= DATE_FORMAT(NOW(), '%m%d') ))) AND a.gender=1)
+	OR (c.Tenergy&gt;=(655 + (9.6*54) + (1.7*168) - (4.7*(YEAR(NOW())-YEAR(a.birth_date)-1) + ( DATE_FORMAT(a.birth_date, '%m%d') &lt;= DATE_FORMAT(NOW(), '%m%d') ))) AND a.gender=2))
+		</if>
+		 <if test='standard  =="2".toString()'>
+		 AND ((c.Tenergy&lt;(66 + (13.7*54) + (5.0*168) - (5.0*(YEAR(NOW())-YEAR(a.birth_date)-1) + ( DATE_FORMAT(a.birth_date, '%m%d') &lt;= DATE_FORMAT(NOW(), '%m%d') ))) AND a.gender=1)
+	OR (c.Tenergy&lt;(655 + (9.6*54) + (1.7*168) - (4.7*(YEAR(NOW())-YEAR(a.birth_date)-1) + ( DATE_FORMAT(a.birth_date, '%m%d') &lt;= DATE_FORMAT(NOW(), '%m%d') ))) AND a.gender=2))
+	
+		</if>
+	
+	 
+	
+	ORDER BY c.Entry_Time DESC
+    </select>
+       
+    <insert id="insertYhSportDiary" parameterType="YhSportDiary" useGeneratedKeys="true" keyProperty="uSportId">
+        insert into yh_sport_diary
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="entryTime != null  and entryTime != ''">Entry_Time,</if>
+            <if test="uweight != null  and uweight != ''">Uweight,</if>
+            <if test="tenergy != null  and tenergy != ''">Tenergy,</if>
+            <if test="diaryDetails != null  and diaryDetails != ''">Diary_Details,</if>
+            <if test="userCode != null  and userCode != ''">user_code,</if>
+            <if test="remark != null  and remark != ''">remark,</if>
+            <if test="number != null  and number != ''">number,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="entryTime != null  and entryTime != ''">#{entryTime},</if>
+            <if test="uweight != null  and uweight != ''">#{uweight},</if>
+            <if test="tenergy != null  and tenergy != ''">#{tenergy},</if>
+            <if test="diaryDetails != null  and diaryDetails != ''">#{diaryDetails},</if>
+            <if test="userCode != null  and userCode != ''">#{userCode},</if>
+            <if test="remark != null  and remark != ''">#{remark},</if>
+            <if test="number != null  and number != ''">#{number},</if>
+         </trim>
+    </insert>
+
+    <update id="updateYhSportDiary" parameterType="YhSportDiary">
+        update yh_sport_diary
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="entryTime != null  and entryTime != ''">Entry_Time = #{entryTime},</if>
+            <if test="uweight != null  and uweight != ''">Uweight = #{uweight},</if>
+            <if test="tenergy != null  and tenergy != ''">Tenergy = #{tenergy},</if>
+            <if test="diaryDetails != null  and diaryDetails != ''">Diary_Details = #{diaryDetails},</if>
+            <if test="userCode != null  and userCode != ''">user_code = #{userCode},</if>
+            <if test="remark != null  and remark != ''">remark = #{remark},</if>
+            <if test="number != null  and number != ''">number = #{number},</if>
+        </trim>
+        where u_sport_id = #{uSportId}
+    </update>
+
+    <delete id="deleteYhSportDiaryById" parameterType="Long">
+        delete from yh_sport_diary where u_sport_id = #{uSportId}
+    </delete>
+
+    <delete id="deleteYhSportDiaryByIds" parameterType="String">
+        delete from yh_sport_diary where u_sport_id in 
+        <foreach item="uSportId" collection="array" open="(" separator="," close=")">
+            #{uSportId}
+        </foreach>
+    </delete>
+    
+</mapper>

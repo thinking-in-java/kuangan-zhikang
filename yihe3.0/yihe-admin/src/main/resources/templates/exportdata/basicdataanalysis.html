@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<meta name="viewport"
+		  content="width=device-width, initial-scale=1, maximum-scale=1">
+	<title>分步表单</title>
+	<link rel="stylesheet" th:href="@{/assets/libs/layui/css/layui.css}" />
+	<link rel="stylesheet" th:href="@{/assets/module/admin.css}" />
+	<style>
+		.layui-form-item {
+			margin-bottom: 25px;
+		}
+		.layui-form-item .layui-form-checkbox[lay-skin=primary] {
+
+			width: 30%;
+		}
+		.layui-form-item .layui-form-checkbox[lay-skin=primary] {
+			margin-top: 18px;
+		}
+		.layui-input-block{
+			margin-left: 0px;
+			min-height: 36px;
+		}
+
+
+		.step-item-main-title{
+			margin-top: 0%  !important;
+		}
+		.step-item-main{
+			margin-left: -42%  !important;
+		}
+		.layui-input-blocks{
+			margin-left:20%; !important;
+		}
+
+	</style>
+	<style type="text/css">
+		.step-item-head-active{
+			height:52px	!important;
+			width:52px	!important;
+			line-height: 52px	!important;
+			position: relative;
+			top: -10px;
+		}
+		.step-item-head {
+			line-height: 26px;
+		}
+		.step-item{
+			line-height: 52px	!important;
+		}
+		.step-item-main-title{
+			margin-top: 20px;
+		}
+	</style>
+</head>
+<body>
+<!-- 加载动画 -->
+<div class="page-loading">
+	<div class="ball-loader">
+		<span></span><span></span><span></span><span></span>
+	</div>
+</div>
+
+<!-- 正文开始 -->
+<div class="layui-fluid">
+	<div class="layui-card">
+		<div class="layui-card-body" style="padding-top: 40px;">
+
+			<div class="layui-carousel" id="stepForm" lay-filter="stepForm"
+				 style="margin: 0 auto;">
+				<div carousel-item>
+					<div>
+
+						<form class="layui-form layui-forms"
+							  style="margin: 0 auto; max-width: 500px; padding-top: 60px;">
+
+							<div class="layui-form-item">
+								<label class="layui-input-block layui-form-required">客户:</label>
+								<img id="customer" style="width: 16px;height: 16px;margin-left: 5px;"  src="/assets/images/unpo.jpg">
+								<div class="layui-input-block">
+									<div id="demoXmSelect" style="max-width: 500px;"></div>
+								</div>
+							</div>
+
+							<div class="layui-input-block"></div>
+
+							<div class="layui-form-item">
+								<label class="layui-input-block layui-form-required">数据时间段:</label>
+								<img id="times" style="width: 16px;height: 16px;margin-left: 5px;"  src="/assets/images/unpo.jpg">
+								<div class="layui-input-block">
+									<div>
+										<input name="times" type="text"
+											   class="layui-input" id="test6" placeholder=" - ">
+									</div>
+								</div>
+							</div>
+							<div class="layui-form-item" style="position: fixed;bottom: 0px;width: 98%;left: 0px;margin: 0;background-color: #FFF;">
+								<div class="layui-input-block">
+									<button class="layui-btn" lay-submit lay-filter="formDemo" style="margin-left: 45%">&emsp;下一步&emsp;
+									</button>
+								</div>
+							</div>
+						</form>
+
+					</div>
+					<div>
+
+						<form class="layui-form"
+							  style="margin: 0 auto; max-width: 960px; padding-top: 60px">
+							<div class="layui-form-item" style="margin-bottom:55px;" >
+
+								<div class="layui-input-blocks">
+									<input type="checkbox" name="guanli" lay-skin="primary"title="管理干预建议" >
+									<input type="checkbox" name="people" lay-skin="primary" title="人群基本情况">
+									<input type="checkbox" name="dis" lay-skin="primary" title="疾病风险统计" >
+									<input type="checkbox" name="bmi" lay-skin="primary" title="体重指数(BMI)" >
+									<input type="checkbox" name="yaowei" lay-skin="primary" title="腰围情况" >
+									<input type="checkbox" name="xueya" lay-skin="primary"title="血压情况" >
+									<input type="checkbox" name="xuetang" lay-skin="primary" title="血糖情况">
+									<input type="checkbox" name="xuezhi" lay-skin="primary" title="血脂异常" >
+									<input type="checkbox" name="yinshi" lay-skin="primary"title="饮食习惯" >
+									<input type="checkbox" name="xiyan" lay-skin="primary"title="吸烟情况" >
+									<input type="checkbox" name="yinjiu" lay-skin="primary"title="饮酒情况" >
+									<input type="checkbox" name="tili" lay-skin="primary"title="体力活动水平" >
+									<input type="checkbox" name="weixian" lay-skin="primary"title="危险因素聚焦情况" >
+								</div>
+							</div>
+							<div class="layui-form-item"  style="position: fixed;bottom: 0px;width: 98%;left: 0px;margin: 0;background-color: #FFF;">
+								<div class="layui-input-block">
+									<button type="button" class="layui-btn layui-btn-primary pre" style="margin-left: 45%"> 上一步</button>
+									<button class="layui-btn" lay-submit lay-filter="formDemo1">&emsp;提交&emsp;
+									</button>
+								</div>
+							</div>
+						</form>
+
+					</div>
+					<div>
+
+						<div style="text-align: center; margin-top: 90px;">
+							<i class="layui-icon layui-circle"
+							   style="color: white; font-size: 30px; font-weight: bold; background: #52C41A; padding: 20px; line-height: 80px;">&#xe605;</i>
+							<div
+									style="font-size: 24px; color: #333; font-weight: 500; margin-top: 30px;">已完成
+							</div>
+							<div style="font-size: 14px; color: #666; margin-top: 20px;"></div>
+						</div>
+
+						<div style="text-align: center; margin-top: 50px;position: fixed;bottom: 0px;width: 98%;left: 0px;margin: 0;background-color: #FFF;">
+							<button class="layui-btn next" style="margin-left: 5%">继续导出</button>
+						</div>
+
+					</div>
+				</div>
+			</div>
+
+
+		</div>
+	</div>
+</div>
+
+<!-- js部分 -->
+<script type="text/javascript" th:src="@{/assets/libs/layui/layui.js}"></script>
+<script type="text/javascript" th:src="@{/assets/js/common.js}"></script>
+
+<script>
+	layui.use([ 'layer', 'form', 'step', 'xmSelect', 'laydate', 'notice' ],
+			function() {
+				var $ = layui.jquery;
+				var layer = layui.layer;
+				var form = layui.form;
+				var step = layui.step;
+				var laydate = layui.laydate;
+				var notice = layui.notice;
+				var date1=null;
+				var date2=null;
+				$.ajax({
+					type: "GET",
+					url: "/Exprot/selectorg",
+					dataType: "json",
+					success: function(data){
+						console.log(data);
+						// 渲染多选下拉
+						xmSelect.render({
+							el : '#demoXmSelect',
+							data :data.data,
+							filterable:true
+						});
+					}
+
+				});
+
+				//定义接收本月的第一天和最后一天
+				var startDate1=new Date(new Date().setDate(1));
+				var endDate1=new Date(new Date(new Date().setMonth(new Date().getMonth()+1)).setDate(0));
+				//定义接收上个月的第一天和最后一天
+				var startDate2=new Date(new Date(new Date().setMonth(new Date().getMonth()-1)).setDate(1));
+				var endDate2=new Date(new Date().setDate(0));
+				laydate.render({
+					elem : '#test6',
+					max:"date",
+					range : true,
+						trigger: 'click',
+					extrabtns: [
+						{id:'today', text:'今天', range:[new Date(), new Date()]},
+						{id:'lastday-7', text:'过去7天', range:[new Date(new Date().setDate(new Date().getDate()-7)),
+								new Date(new Date().setDate(new Date().getDate()-1))]},
+						{id:'lastday-30', text:'过去30天', range:[new Date(new Date().setDate(new Date().getDate()-30)),
+								new Date(new Date().setDate(new Date().getDate()-1))]},
+						{id:'yesterday', text:'昨天', range:[new Date(new Date().setDate(new Date().getDate()-1)),
+								new Date(new Date().setDate(new Date().getDate()-1))]},
+						{id:'thismonth', text:'本月', range:[startDate1,endDate1]},
+						{id:'lastmonth', text:'上个月', range:[startDate2,endDate2]}],
+					done: function(val, stdate, ovdate){
+						//当确认选择时间后调用这里
+					}
+				});
+				step.render({
+					elem : '#stepForm',
+					filter : 'stepForm',
+					width : '100%', //设置容器宽度
+					stepWidth : '750px',
+					height : '500px',
+					stepItems : [ {
+						title : '选择数据源'
+					}, {
+						title : '选择数据'
+					}, {
+						title : '导出数据'
+					} ]
+				});
+
+				form.on('submit(formDemo)', function(data) {
+					if(data.field.select==""|| data.field.select == null || data.field.select == undefined){
+						notice.msg('请选择客户', {icon: 3});
+					}else if(data.field.times==""|| data.field.times == null || data.field.times == undefined){
+						notice.msg('请选择时间段', {icon: 3});
+					}else{
+						step.next('#stepForm');
+					}
+					console.log(data.field.times=data.field.times+ " 23:59:59");
+					console.log(data)
+					date1=data.field;
+					return false;
+				});
+
+				form.on('submit(formDemo1)', function(data) {
+
+					if($.isEmptyObject(data.field)){
+						notice.msg('请选择数据', {icon: 3});
+					}else if(!$.isEmptyObject(data.field)){
+						date2=$.extend(date1,data.field);
+						var hrefs='/ExprotPDF/exportnow?'
+						for(var item in date2){
+							hrefs+=item+'='+date2[item]+"&"
+						}
+						layer.msg("正在导出,请稍后...",{
+							icon:16,
+							shade: [0.5, '#f5f5f5'],
+							time:-1
+						});
+						fetch(hrefs, {
+							method: 'GET',
+							headers: {'Content-Type': 'application/json'},
+							//body: '<请求参数：json字符串>',
+						}).then(res => res.blob()).then(data => {
+							var blobUrl = window.URL.createObjectURL(data);
+							step.next('#stepForm');
+							downloads(blobUrl);
+
+						});
+						//window.open(hrefs);
+						//step.next('#stepForm');
+
+					}
+					return false;
+				});
+				var tips;
+				$('#customer').on({
+
+					mouseenter:function(){
+						tips=layer.tips("包含客户及其下所有子节点的全部用户","#customer",{time:0});
+					},
+					mouseleave:function(){
+						layer.close(tips);
+					}
+				});
+				$('#times').on({
+
+					mouseenter:function(){
+						tips=layer.tips("用户在指定时间范围内有多条数据，取最新数据","#times",{time:0});
+					},
+					mouseleave:function(){
+						layer.close(tips);
+					}
+				});
+				function downloads(blobUrl) {
+					//关闭提示框
+					layer.closeAll();
+					const a = document.createElement('a');
+					a.style.display = 'none';
+					a.download ='基本数据分析-'+ getFormatDate()+'.pdf';
+					a.href = blobUrl;
+					a.click();
+					document.body.removeChild(a);
+
+				}
+				function getFormatDate() {
+					var date = new Date();
+					var month = date.getMonth() + 1;
+					var strDate = date.getDate();
+					if (month >= 1 && month <= 9) {
+						month = "0" + month;
+					}
+					if (strDate >= 0 && strDate <= 9) {
+						strDate = "0" + strDate;
+					}
+					var currentDate = date.getFullYear() + "" + month + "" + strDate
+							+ "" + date.getHours() + "" + date.getMinutes() + "" + date.getSeconds();
+					return currentDate;
+				}
+				$('.pre').click(function() {
+					step.pre('#stepForm');
+				});
+
+				$('.next').click(function() {
+					step.next('#stepForm');
+				});
+				sum=function(data1,data2){
+					var data={};
+
+				}
+			});
+</script>
+</body>
+
+</html>

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yihe.applet.api.mapper.YhDiseaseCategoryAppMapper">
+    <sql id="allColumn">id,disease_code,disease_name,risk_group</sql>
+    <resultMap type="com.yihe.applet.api.domain.YhDiseaseCategoryApp" id="YhDiseaseCategoryResult">
+        <result property="id" column="id"/>
+        <result property="diseaseCode" column="disease_code"/>
+        <result property="diseaseName" column="disease_name"/>
+        <result property="riskGroup" column="risk_group"/>
+    </resultMap>
+    <select id="selTopTenData" resultMap="YhDiseaseCategoryResult">
+        SELECT <include refid="allColumn"></include> FROM yh_disease_category
+        WHERE disease_code!=#{diseaseCode}
+        LIMIT 0,10
+    </select>
+    <!--根据疾病id查询name-->
+    <select id="selCategoryByCode" resultMap="YhDiseaseCategoryResult">
+        SELECT <include refid="allColumn"></include> FROM yh_disease_category
+        WHERE disease_code=#{diseaseCode}
+    </select>
+
+    <select id="newFindDis" resultMap="YhDiseaseCategoryResult">
+        SELECT <include refid="allColumn"></include> FROM yh_disease_category
+        WHERE isAssessment = 0 or isAssessment = #{sex}
+    </select>
+</mapper>

@@ -1,0 +1,328 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yihe.system.mapper.YhAssessResultMapper">
+    <resultMap id="BaseResultMap" type="yhAssessResult">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="user_code" property="userCode" jdbcType="VARCHAR"/>
+        <result column="score" property="score" jdbcType="INTEGER"/>
+        <result column="scoreL" property="scoreL" jdbcType="INTEGER"/>
+        <result column="state" property="state" jdbcType="VARCHAR"/>
+        <result column="age" property="age" jdbcType="INTEGER"/>
+        <result column="sex" property="sex" jdbcType="VARCHAR"/>
+        <result column="qtime" property="qtime" jdbcType="TIMESTAMP"/>
+        <result column="answer" property="answer" jdbcType="VARCHAR"/>
+        <result column="is_falg" property="isfalg" jdbcType="INTEGER"/>
+        <result column="assess" property="assess" jdbcType="INTEGER"/>
+        <result column="user_name" property="userName" jdbcType="VARCHAR"/>
+        <result column="mobile" property="mobile" jdbcType="VARCHAR"/>
+        <result column="name" property="name" jdbcType="VARCHAR"/>
+        <result column="Org_Name" property="orgName" jdbcType="VARCHAR"/>
+    </resultMap>
+    <resultMap id="ResultVojoMap" type="yhAssessResultVojo">
+        <result column="user_code" property="userCode" jdbcType="VARCHAR"/>
+        <result column="name" property="name" jdbcType="VARCHAR"/>
+        <result column="mobile" property="mobile" jdbcType="VARCHAR"/>
+        <result column="count" property="count" jdbcType="INTEGER"/>
+        <result column="qtime" property="qtime" jdbcType="VARCHAR"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        id, user_code, score, state, scoreL, age, if(sex=1,'女','男')as sex, qtime, answer, is_falg, assess
+    </sql>
+
+    <select id="findByTs" resultType="string">
+        select answer
+        from yh_assess_result
+        where user_code = #{userCode}
+          and assess = #{assess,jdbcType=INTEGER}
+          and is_falg = 1
+        order by qtime desc
+        limit 1
+    </select>
+
+    <insert id="insertSelective" parameterType="yhAssessResult">
+        insert into yh_assess_result
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="userCode != null">
+                user_code,
+            </if>
+            <if test="score != null">
+                score,
+            </if>
+            <if test="scoreL != null">
+                scoreL,
+            </if>
+            <if test="state != null">
+                state,
+            </if>
+            <if test="age != null">
+                age,
+            </if>
+            <if test="sex != null">
+                sex,
+            </if>
+            <if test="qtime != null">
+                qtime,
+            </if>
+            <if test="answer != null">
+                answer,
+            </if>
+            <if test="isfalg != null">
+                is_falg,
+            </if>
+            <if test="assess != null">
+                assess,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="userCode != null">
+                #{userCode,jdbcType=VARCHAR},
+            </if>
+            <if test="score != null">
+                #{score,jdbcType=INTEGER},
+            </if>
+            <if test="scoreL != null">
+                #{scoreL,jdbcType=INTEGER},
+            </if>
+            <if test="state != null">
+                #{state,jdbcType=VARCHAR},
+            </if>
+            <if test="age != null">
+                #{age,jdbcType=INTEGER},
+            </if>
+            <if test="sex != null">
+                #{sex,jdbcType=INTEGER},
+            </if>
+            <if test="qtime != null">
+                #{qtime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="answer != null">
+                #{answer,jdbcType=VARCHAR},
+            </if>
+            <if test="isfalg != null">
+                #{isfalg,jdbcType=INTEGER},
+            </if>
+            <if test="assess != null">
+                #{assess,jdbcType=INTEGER},
+            </if>
+        </trim>
+    </insert>
+
+    <update id="updByTs" parameterType="string">
+        update yh_assess_result
+        set is_falg = 3
+        where user_code = #{userCode}
+          and is_falg = 1
+    </update>
+
+    <select id="findByUser" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from yh_assess_result
+        where user_code = #{userCode}
+        and assess = #{assess,jdbcType=INTEGER}
+        and is_falg = 2 order by qtime desc limit 1
+    </select>
+
+    <select id="findConcent" resultType="map">
+        select id, `name`, nameText, img
+        from yh_assess_concent
+        where id &lt; 1000
+    </select>
+
+    <select id="assessCount" parameterType="integer" resultType="int">
+        select count(1)
+        from yh_assess_result
+        where assess = #{assess,jdbcType=INTEGER}
+          <if test="userCode != null and userCode != ''">
+              and user_code = #{userCode}
+          </if>
+          and is_falg = 2
+    </select>
+
+    <select id="findByAssess" resultMap="BaseResultMap">
+        select ar.id,
+               user_code,
+               score,
+               scoreL,
+               state,
+               age,
+               if(sex = 1, '女', '男') as sex,
+               qtime,
+               answer,
+               is_falg,
+               assess
+        from yh_assess_result ar
+                 left join yh_assess_concent ac on ar.assess = ac.id
+        where user_code = #{userCode}
+          and ac.name = #{assess,jdbcType=VARCHAR}
+          and is_falg = 2
+        order by qtime desc
+        limit 1
+    </select>
+
+
+    <select id="findNames" resultType="string">
+        select `name`
+        from yh_assess_concent
+        where falg = 1
+    </select>
+
+    <select id="findName" parameterType="integer" resultType="string">
+        select `name`
+        from yh_assess_concent
+        where id = #{id}
+    </select>
+
+    <select id="findById" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from yh_assess_result
+        where id = #{id} and is_falg = 2 order by qtime desc limit 1
+    </select>
+
+    <select id="findByList" parameterType="yhAssessResultVojo" resultMap="ResultVojoMap">
+        select reg.user_code, reg.name, reg.mobile, `count`, qtime
+        from yh_user_reginfo as reg
+        inner join yh_user_make_card as mc on reg.user_code = mc.user_code
+        <if test="integrals != null">
+            inner join (
+            select auqa.user_code from yh_assess_result as auqa
+            inner join (
+            select user_code, max(qtime) as qtime, assess from yh_assess_result group by user_code, assess
+            ) as aid on aid.user_code = auqa.user_code and aid.qtime = auqa.qtime and aid.assess = auqa.assess
+            <where>
+                <foreach collection="integrals" item="item" separator="or">
+                    (auqa.state = #{item.assstate} and auqa.assess = #{item.assid})
+                </foreach>
+            </where>
+            group by auqa.user_code
+            ) as ast on ast.user_code = reg.user_code
+        </if>
+        left join (
+        select user_code,DATE_FORMAT(max(qtime),'%Y-%m-%d %H:%i') as qtime,count(1) as `count`
+        from yh_assess_result group by user_code
+        ) as asr on asr.user_code = reg.user_code
+        where reg.User_Type = 5 and doctor = (select id from yh_user_admin_info where user_code = #{doctor})
+        <if test="userCode != null">
+            and (
+            reg.user_code like CONCAT('%',#{userCode},'%') or
+            reg.name like CONCAT('%',#{userCode},'%') or
+            reg.mobile like CONCAT('%',#{userCode},'%')
+            )
+        </if>
+        <if test="treeOrg != null">
+            and reg.Org_Code like CONCAT('%',#{treeOrg},'%')
+        </if>
+        <if test="timeMin != null and timeMax != null">
+            and DATE_FORMAT(qtime, '%Y-%m-%d') BETWEEN DATE_FORMAT(#{timeMin}, '%Y-%m-%d') and DATE_FORMAT(#{timeMax},
+            '%Y-%m-%d')
+        </if>
+        <if test="sort == 'desc' or sort == null">
+            order by qtime desc
+        </if>
+        <if test="sort == 'asc'">
+            order by qtime asc
+        </if>
+    </select>
+
+    <select id="findAssess" resultType="map">
+        select id, `name`
+        from yh_assess_concent
+    </select>
+
+    <select id="findAssessAll" resultType="map">
+        select id, `name`
+        from yh_assess_concent
+        where falg = 1
+    </select>
+
+    <select id="findAssessInfo" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from yh_assess_result
+        where user_code = #{userCode} and assess = #{assess}
+        and is_falg = 2 order by qtime desc limit 1
+    </select>
+
+    <select id="findUserAssList" resultMap="BaseResultMap">
+        select asr.id, state, qtime, assess, `name` as user_code
+        from yh_assess_result as asr
+        left join yh_assess_concent as asco on asr.assess = asco.id
+        where user_code = #{userCode} and is_falg = 2
+        <if test="sort == 'desc' or sort == null">
+            order by qtime desc
+        </if>
+        <if test="sort == 'asc'">
+            order by qtime asc
+        </if>
+    </select>
+
+    <select id="selPsychologyAssess" parameterType="dataExportVojo" resultMap="BaseResultMap">
+        select yur.user_code, yur.user_name, yur.mobile, yur.`name`, yar.age, if(yar.sex=1,'女','男')as sex, yot.Org_Name,
+        yar.qtime, yar.answer, yar.score, yar.scoreL, yar.state
+        from
+        <if test="state == 1">
+            (
+            select yar1.user_code, yar1.age, yar1.sex, yar1.score, yar1.scoreL, yar1.state, yar1.qtime, yar1.answer from
+            yh_assess_result yar1
+            inner join (select user_code, max(qtime)as qtime from yh_assess_result where assess = #{assId} and is_falg =
+            2 group by user_code) yar2
+            on yar1.user_code = yar2.user_code and yar1.qtime = yar2.qtime
+            ) yar
+        </if>
+        <if test="state == 2">
+            (select user_code, age, sex, score, scoreL, qtime, state, answer from yh_assess_result where assess =
+            #{assId} and is_falg = 2) yar
+        </if>
+        left join yh_user_reginfo yur on yar.user_code = yur.user_code
+        left join yh_user_make_card yumc on yumc.User_Code = yur.user_code
+        left join yh_user_admin_info yuai on yuai.id = yumc.doctor
+        left join yh_org_tree yot on yot.Org_Code = yur.Org_Code
+        <if test="groupList != null">
+            inner join (
+            select user_code from yh_user_group_info
+            where
+            <foreach collection="groupList" item="item" separator="or">
+                (group_id = #{item.group} and group_level = #{item.grouplevel})
+            </foreach>
+            group by user_code
+            )yugi on yugi.user_code = yur.user_code
+        </if>
+        where yur.User_Type = 5
+        <if test="orgCode != null">
+            <foreach collection="orgCode" item="item" open="and yur.Org_Code in (" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
+        <if test="doctor != null and doctor != ''">
+            and yuai.user_code = #{doctor}
+        </if>
+        <if test="lockFlag != null">
+            and lock_flag = #{lockFlag}
+        </if>
+        <if test="gender != null">
+            and yar.sex = #{gender}
+        </if>
+        <if test="minage != null">
+            and DATE_FORMAT(yur.birth_date,'%Y-%m-%d') &lt;= DATE_SUB(CURDATE(),INTERVAL #{minage} YEAR)
+        </if>
+        <if test="maxage != null">
+            and DATE_FORMAT(yur.birth_date,'%Y-%m-%d') &gt; DATE_SUB(CURDATE(),INTERVAL #{maxage} YEAR)
+        </if>
+        <if test="minregTime != null and minregTime != ''">
+            and yur.reg_time &gt;= #{minregTime}
+        </if>
+        <if test="maxregTime != null and maxregTime != ''">
+            and yur.reg_time &lt;= #{maxregTime}
+        </if>
+        <if test="minExportDate != null and minExportDate != ''">
+            and yar.qtime &gt;= #{minExportDate}
+        </if>
+        <if test="maxExportDate != null and maxExportDate != ''">
+            and yar.qtime &lt;= #{maxExportDate}
+        </if>
+        order by yar.qtime desc
+    </select>
+</mapper>

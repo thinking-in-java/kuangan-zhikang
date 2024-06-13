@@ -1,0 +1,1080 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, maximum-scale=1">
+<link th:href="${topimg}"  rel="icon">
+<title th:text="${userReginfo.name}"></title>
+<link rel="stylesheet" th:href="@{/assets/libs/layui/css/layui.css}" />
+<link rel="stylesheet" th:href="@{/assets/module/admin.css}" />
+
+	<!--引入所需依赖-->
+	<link rel="stylesheet" th:href="@{/editormd/css/style.css}"/>
+	<link rel="stylesheet" th:href="@{/editormd/css/editormd.css}"/>
+<style type="text/css">
+.layui-nav * {
+	font-size: 16px;
+	color: black;
+}
+/* .basicInfo-left {
+	width: 60px;
+	height: 60px;
+} */
+.block::after {
+	content: '';
+	width: 115%;
+	height: 1px;
+	display: block;
+	margin: 0 auto;
+	border-bottom: 1px solid rgba(151, 151, 151, 0.1);
+	margin-top: 15px;
+}
+
+.layui-breadcrumb pull-right {
+	display: none;
+}
+
+a {
+	display: none;
+}
+
+/** 必须先给固定高度，否则无法计算分割的高度 */
+.split-group {
+	height: 400px;
+}
+
+.split-group-vertical {
+	height: 458px;
+}
+
+/** //end */
+.layui-card-body {
+	padding: 0;
+}
+
+.split-item {
+	padding: 15px;
+}
+
+.layui-card-header {
+	border-color: #dcdee2;
+}
+
+.layui-form-select dl {
+	max-width: 160px;
+}
+
+.layui-form-label {
+	float: left;
+	display: block;
+	padding: 0px 0px;
+	width: 65px;
+	font-weight: 400;
+	line-height: 20px;
+	text-align: right;
+}
+</style>
+
+
+
+
+</head>
+<body class="layui-layout-body">
+	<div class="layui-layout layui-layout-admin" style="margin-top: -40px;">
+		<!-- 头部 -->
+		<!-- <!-- <div class="layui-header" style="">
+			<div class="layui-logo"
+				style="background-color: white; color: black;">
+				<img src="assets/images/logo.png" /> <cite>&nbsp;谷宜健康&nbsp;医生工作平台</cite>
+			</div>	
+		</div> 
+		
+		<!-- 侧边栏 -->
+		<!-- 头部 -->
+
+
+
+		<div class="layui-side" style="background-color: white;">
+			<div class="layui-side-scroll">
+				<ul class="layui-nav layui-nav-tree arrow2"
+					lay-filter="admin-side-nav" lay-shrink="all">
+
+
+					<!-- <li class="layui-nav-item">&emsp;<cite> -->
+					<div class="console-app-group"
+						style="margin-top: 11px; height: 182px;">
+						<table>
+							<!-- <tr><th>Header</th></tr> -->
+							<tr>
+								<td rowspan="2" style="padding-right: 15px;">
+									<div class='basicInfo-left'>
+										<img style="width: 67px; height: 64px; margin-left: 12px;border-radius: 100px;"
+											th:src="${userReginfo.postCode}==null?
+											(${userReginfo.gender}==1?'http://xcxqny.yhy.ren/xiaochengxu/toxiangnan.png':'http://xcxqny.yhy.ren/xiaochengxu/toxiangnv.png'):${userReginfo.postCode}">
+									</div>
+								</td>
+								<td><span style="margin-left: -11px;"
+									th:text="${userReginfo.userCode}"></span></td>
+							</tr>
+							<tr>
+								<td><span style="margin-left: -8px;"
+									th:text="${userReginfo.name}"></span></td>
+								<td><span style="margin-left: 32px;">[[${age}]]岁</span></td>
+
+								<td><span style="margin-left: 6px;"
+									th:text="${userReginfo.gender}==1? '男':'女'"></span></td>
+							</tr>
+							<tr>
+								<td colspan="5">
+									<div class="block" style="margin-top: 19px;">
+										<span><img
+											style="width: 39px; height: 36px; margin-left: 12px;"
+											src='../../assets/images/dh.png'></span> <span id="phone"
+											th:text="${userReginfo.mobile}"></span>
+										<!-- <span><img id="zixun" style="width: 39px;height: 36px;margin-left: 12px;" src='../../assets/images/xinxi.png'></span> -->
+									</div>
+								</td>
+							</tr>
+							<!-- <tr>
+									<td colspan="3">
+									 
+									</td>
+								</tr> -->
+						</table>
+						<div class="block" style="margin-top: 12px;">
+						<span style="margin-left: 12px;">联系：</span>
+						<!-- <span><img style="width: 27px; height: 27px; margin-left: -9px;" src='../../assets/images/dh.png'></span>  -->
+						
+							<span><img id="sjdx"
+								style="width: 27px; height: 27px; margin-left: 1px;"
+								src='http://xcxqny.yhy.ren/grxx/%E6%89%8B%E6%9C%BA%E7%9F%AD%E4%BF%A1.png'></span>
+							<span><img id="zhangneix"
+								style="width: 27px; height: 27px; margin-left: 4px;"
+								src='http://xcxqny.yhy.ren/grxx/%E7%AB%99%E5%86%85%E4%BF%A1.png'></span>
+							<span><img id="zixun"
+								style="width: 27px; height: 27px; margin-left: 3px;"
+								src='http://xcxqny.yhy.ren/grxx/%E8%81%8A%E5%A4%A9%20%281%29.png'></span>
+						</div>
+
+					</div>
+
+
+					<!-- </cite></li> -->
+					<li class="layui-nav-item"><a id="health"
+						th:lay-href="@{'/manage/register/healthRecord?userCode='+${userCode}+'&orgId='+${orgId}}"><i
+							class="layui-icon layui-icon-set"></i>&emsp;<cite>健康档案</cite></a></li>
+
+					<!-- <li class="layui-nav-item"><a id="summary"
+						th:lay-href="@{'/manage/user/summary?usercode='+${userCode}}"><i
+							class="layui-icon layui-icon-home"></i>&emsp;<cite>信息概要</cite></a></li> -->
+
+					<!-- <li class="layui-nav-item">
+						<a id="health" lay-href="/manage/register/healthRecord"><i class="layui-icon layui-icon-set"></i>&emsp;<cite>健康档案</cite></a> 
+						</li>  -->
+
+
+					<li class="layui-nav-item"><a id="servicelog"
+						th:lay-href="@{'/manage/service/serrviceaccept?usercode='+${userCode}}"><i
+							class="layui-icon layui-icon-set"></i>&emsp;<cite>服务记录</cite></a></li>
+
+					<!-- <li class="layui-nav-item"><a
+						th:lay-href="@{'/manage/Interventionprograms/selectdetailplan?userCode='+${userCode}}"><i
+							class="layui-icon layui-icon-unlink"></i>&emsp;<cite>干预计划</cite></a>
+					</li> -->
+
+
+
+
+
+					<!-- <li class="layui-nav-item"><a th:lay-href="@{'/manage/usertosee/food?usercode='+${userCode}}"><i
+							class="layui-icon layui-icon-release"></i>&emsp;<cite>饮食管理</cite></a>
+						</li> -->
+
+
+					<li class="layui-nav-item"><a
+						th:lay-href="@{'/manage/user/healthAssessment?usercode='+${userCode}}"><i
+							class="layui-icon layui-icon-template"></i>&emsp;<cite>健康评估</cite></a>
+
+					</li>
+				<!-- 	<li class="layui-nav-item"><a
+						th:lay-href="@{'/manage/health/detection?userCode='+${userCode}}">
+							<i class="layui-icon layui-icon-component"></i>&emsp;<cite>健康检测</cite>
+					</a></li> -->
+					<!-- <li class="layui-nav-item"><a
+						th:lay-href="@{'/manage/user/stressAssessment?usercode='+${userCode}}"><i
+							class="layui-icon layui-icon-template"></i>&emsp;<cite>压力评估</cite></a>
+					</li> -->
+					<li class="layui-nav-item"><a
+						th:lay-href="@{'/manage/usertosee/food?type=1&usercode='+${userCode}}"><i
+							class="layui-icon layui-icon-release"></i>&emsp;<cite>饮食管理</cite></a>
+					</li>
+					<li class="layui-nav-item"><a
+						th:lay-href="@{'/manage/usertosee/sport?type=1&usercode='+${userCode}}"><i
+							class="layui-icon layui-icon-unlink"></i>&emsp;<cite>运动管理</cite></a>
+					</li>
+					<!-- <li class="layui-nav-item"><a lay-href="https://www.layui.com/doc/element/button.html#use"><i
+							class="layui-icon layui-icon-unlink"></i>&emsp;<cite>习惯管理</cite></a>
+					</li> -->
+					<li class="layui-nav-item"><a
+						th:lay-href="@{'/manage/usertosee/sleep?type=1&usercode='+${userCode}}"><i
+							class="layui-icon layui-icon-unlink"></i>&emsp;<cite>睡眠管理</cite></a>
+					</li>
+					<li class="layui-nav-item"><a
+						th:lay-href="@{'/manage/usertosee/habit?type=1&usercode='+${userCode}}"><i
+							class="layui-icon layui-icon-unlink"></i>&emsp;<cite>习惯管理</cite></a>
+					</li>
+					<li class="layui-nav-item"><a
+						th:lay-href="@{'/manage/health/userPlan?usercode='+${userCode}}"><i
+							class="layui-icon layui-icon-unlink"></i>&emsp;<cite>健康计划</cite></a>
+					</li>
+					<li class="layui-nav-item"><a
+						th:lay-href="@{'/manage/user/IntegralRecord?userCode='+${userCode}}"><i
+							class="layui-icon layui-icon-unlink"></i>&emsp;<cite>积分记录</cite></a>
+					</li>
+<!--					<li class="layui-nav-item"><a-->
+<!--							th:lay-href="@{'/manage/Interventionprograms/selectdetailplan?usercode='+${userCode}}"><i-->
+<!--							class="layui-icon layui-icon-unlink"></i>&emsp;<cite>干预计划</cite></a>-->
+<!--					</li>-->
+
+					<!-- <li class="layui-nav-item"><a
+						th:lay-href="@{'/manage/accessory/upload?userCode='+${userCode}}"><i
+							class="layui-icon layui-icon-unlink"></i>&emsp;<cite>附件管理</cite></a>
+					</li> -->
+					<!--<li class="layui-nav-item"><a  th:lay-href="@{'/manage/Interventionprograms/selectdetailplan?userCode='+${userCode}}"><i
+							class="layui-icon layui-icon-unlink"></i>&emsp;<cite>干预计划</cite></a>
+					</li>-->
+				</ul>
+			</div>
+		</div>
+
+		<!-- 主体部分 -->
+		<div class="layui-body"></div>
+
+
+	</div>
+
+	<!-- 加载动画 -->
+	<div class="page-loading">
+		<div class="ball-loader">
+			<span></span><span></span><span></span><span></span>
+		</div>
+	</div>
+
+
+	<form class="layui-form" action="" id="xcx" style="display: none;">
+		<div class="layui-card">
+			<!-- <div class="layui-card-header">小程序消息通知</div> -->
+			<div class="layui-card-body">
+				<div class="split-group" style="height: 250px;">
+					<div class="split-item" id="demoSplit3">
+
+						<div class="layui-inline"></div>
+
+						<div class="layui-inline"
+							style='background-color: #e6f7ff; width: 100%; height: 160px; margin-top: 20px; border-radius: 4px; overflow: auto'>
+							<div>将以小程序消息，即在个人中心的小信封图表中的“互动”中呈现。
+								注意：不会有微信提醒，需要用户自行进入小程序的消息通知中查看。</div>
+						</div>
+
+
+
+
+					</div>
+					<div class="split-item" id="demoSplit4">
+
+						<!--    <div class="layui-inline" style="width: 98%;">
+												  	 <label  style="float: left;">接收人共计<span id="ren1" style="color: red;"></span>人</label>
+												  	 
+												  
+												  	 
+												  	</div> -->
+
+
+		<!-- 				<div class="layui-form-item layui-form-text"
+							style="margin-top: 18px;">
+							<textarea style="min-height: 160px;" lay-verify="required"
+								maxlength="200" id="appletText" placeholder="请输入内容,限制200个字"
+								class="layui-textarea"></textarea>
+						</div> -->
+						<div class="layui-form-item layui-form-text" style="margin-top:18px;width: 100%">
+<!--													      <textarea style="min-height: 160px;" lay-verify="required" maxlength="200" id="appletText" placeholder="请输入内容,限制200个字" class="layui-textarea"></textarea>-->
+															<div id="editormd_id">
+																<!-- 第一个textarea是文本输入区域-->
+																<textarea id="appletText" class="editorMd-html-textarea"  name="editorMd-html-textarea" placeholder="请输入内容...">
+    </textarea>
+
+															</div>
+													  </div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="layui-card-header"
+			style="height: 0px; margin-top: -10px; margin-bottom: 15px;"></div>
+
+		<div style="text-align: center;">
+			<button type="reset" class="layui-btn layui-btn-primary"
+				onclick="quxiao()">取消</button>
+			<button type="submit" class="layui-btn" lay-submit=""
+				lay-filter="applet">提交</button>
+		</div>
+	</form>
+
+
+	<form class="layui-form" action="" id="dxtz" style="display: none;">
+		<div class="layui-card">
+			<div class="layui-card-header">短信通知</div>
+			<div class="layui-card-body">
+				<div class="split-group" style="height: 250px;">
+					<div class="split-item" id="demoSplit1">
+
+						<div class="layui-inline">
+							<label class="layui-form-label">选择模板:</label>
+							<div class="layui-input-inline" style="width: 140px;">
+								<select lay-filter="aihao" id="smsname">
+
+								</select>
+							</div>
+
+						</div>
+
+						<div class="layui-inline"
+							style='background-color: #e6f7ff; width: 100%; height: 160px; margin-top: 20px; border-radius: 4px; overflow: auto'>
+							<div>模板内容:</div>
+							<div id="templateText"></div>
+
+							<div style="margin-top: 28px; font-weight: bold;">
+								请在右侧填写填写${type}代表的信息内容</div>
+						</div>
+
+
+
+
+					</div>
+					<div class="split-item" id="demoSplit2">
+
+						<div class="layui-inline" style="width: 98%;">
+							<label style="float: left;">接收人:<span id="ren"
+								style="color: red;">[[${userReginfo.name}]]</span></label>
+
+							<div class="layui-inline"
+								style="float: right; text-align: right;">
+								信息模版库:
+								<div class="layui-input-inline">
+									<select lay-filter="tSmsid" id="tSmsid">
+
+									</select>
+								</div>
+
+							</div>
+
+
+						</div>
+
+
+						<div class="layui-form-item layui-form-text"
+							style="margin-top: 18px;">
+							<textarea style="min-height: 160px;" lay-verify="required"
+								maxlength="20" id="tText" placeholder="请输入内容,限制20个字"
+								class="layui-textarea"></textarea>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="layui-card-header"
+			style="height: 0px; margin-top: -10px; margin-bottom: 15px;"></div>
+
+		<div style="text-align: center;">
+			<button type="reset" class="layui-btn layui-btn-primary"
+				onclick="quxiao()">取消</button>
+			<button type="submit" class="layui-btn" lay-submit=""
+				lay-filter="demo1">提交</button>
+		</div>
+	</form>
+
+
+
+
+</body>
+<!-- js部分 -->
+<script type="text/javascript" th:src="@{/assets/libs/layui/layui.js}"></script>
+<script type="text/javascript" th:src="@{/assets/js/common.js}"></script>
+<script type="text/javascript" th:src="@{/assets/js/jquery-1.11.1.js}"></script>
+<script th:src="@{/editormd/editormd.js}"></script>
+<script type="text/javascript" th:inline="javascript">
+var HEADER;
+
+
+var entryTime ='';
+layui.use(['index','layer','form','laydate','Split', 'dropdown', 'notice'], function () {
+    var $ = layui.jquery;
+    var index = layui.index;
+    var layer = layui.layer;
+    var form = layui.form;
+    var laydate = layui.laydate;
+    var Split = layui.Split;
+	var dropdown = layui.dropdown;
+	var notice = layui.notice;
+	
+	var dropdown = layui.dropdown;
+	var notice = layui.notice;
+	 $(function(){
+			layui.$("#appletText").val("");
+			 form.render();
+	}) 
+	
+	 // 水平分割
+	 
+	 
+    Split(['#demoSplit3', '#demoSplit4'], {sizes: [40, 60], minSize: 100});
+    
+    // 水平分割
+    Split(['#demoSplit1', '#demoSplit2'], {sizes: [40, 60], minSize: 100});
+    
+    index.clearTabCache();
+    // 默认加载主页
+    index.loadHome({
+        menuPath: '/manage/register/healthRecord?userCode='+ [[${userCode}]],
+        menuName: '<i class="layui-icon layui-icon-home"  id="tiaoz"></i>'
+    });
+    
+    
+	
+    
+    var tip_index;
+	$("#sjdx").hover(function(){
+	    tip_index =  layer.tips('手机短信', this,{
+	        tips: [1, 'rgba(0, 0, 0, 1)'],
+	        time:0
+	    });
+	},function(){
+	    layer.close(tip_index);
+	});
+	   var tip_index;
+		$("#zhangneix").hover(function(){
+		    tip_index =  layer.tips('站内信', this,{
+		        tips: [1, 'rgba(0, 0, 0, 1)'],
+		        time:0
+		    });
+		},function(){
+		    layer.close(tip_index);
+		});
+		   var tip_index;
+			$("#zixun").hover(function(){
+			    tip_index =  layer.tips('聊天', this,{
+			        tips: [1, 'rgba(0, 0, 0, 1)'],
+			        time:0
+			    });
+			},function(){
+			    layer.close(tip_index);
+			});
+			
+			 quxiao=function(){
+	        	 // 这里就是处理的事件
+				 layer.closeAll();
+	        }
+			  //监听提交小程序消息发送
+		  	  form.on('submit(applet)', function(data){
+		  		  var user_id = [[${userCode}]];
+		  		//var appletText = $("#appletText").val();
+		  		var appletText = HEADER.getHTML();
+		  		if(appletText.length>=200){
+		  			layer.msg('只能发送200个字符哦!');
+		  			return false;
+		  		 }else{
+		  			 $.ajax({
+		        		 type:'post',
+		        		 url:'/TemplateSendController/grzxmessage',
+		        		 data:{userCode:userCode,appletText:appletText},
+		        		success : function(data){
+		        			console.log("战略性成功",data)
+		        			if(data.code == 20000){
+		        				notice.success({
+					 				title: '消息通知',
+					 				message: '操作成功!'
+					 			});
+		        				$("#appletText").val('');
+		        				layer.closeAll();
+		        			}else {
+					 			notice.error({
+					 				title: '消息通知',
+					 				message: '操作失败!'
+					 			});
+					 		}
+				 		
+				 		 
+		     			}
+		        	 })
+		  		
+		  		// 阻止表单跳转。如果需要表单跳转，去掉这段即可。
+		  		return false;
+		  		 }
+		     	 
+		  	  });
+			  
+		      //监听提交短信发送
+	    	  form.on('submit(demo1)', function(data){
+	    	   var smsname = $("#smsname").val();
+	    		var tText = $("#tText").val();
+	    	    var phone = document.getElementById("phone").innerHTML;
+	    	    $.ajax({
+	        		 type:'post',
+	        		 url:'/TemplateSendController/doctorcompleteNote',
+	        		 data:{smsname:smsname,tText:tText,phone:phone},
+	        		success : function(data){
+	        			console.log("短信成功",data)
+	        			if(data.code == 20000){
+	        				notice.success({
+				 				title: '消息通知',
+				 				message: '操作成功!'
+				 			});
+	        				//$("#tText").val('');
+	        				layer.closeAll();
+	        			}else {
+				 			notice.error({
+				 				title: '消息通知',
+				 				message: '操作失败!'
+				 			});
+				 		}
+			 		
+			 		 
+	     			}
+	        	 })
+	    		// 阻止表单跳转。如果需要表单跳转，去掉这段即可。
+	    		return false;
+	    	  });
+   
+    $("#tiaoz").click(function(){
+    	window.location.href='../../register';
+    }) 
+    var userCode = [[${userCode}]];
+    var orgId = [[${orgId}]];
+    console.log("------------"+orgId)
+    
+    $("#zhangneix").click(function(){
+    	layer.open({
+			  title:'站内信',
+			  type: 1,
+			  skin: 'layui-layer-rim', //加上边框
+			  area: ['950px', '600px'], //宽高
+			  content: $("#xcx"),
+			});
+    	$(function () {
+    		HEADER = editormd("editormd_id", {
+    			width: "90%",
+    			height: 180,
+    			toc: true,
+    			emoji: true,//表情功能开启
+    			taskList: true,
+    			syncScrolling: "single",
+    			imageUpload: true,
+    			watch:false,
+    			imageFormats: ["jpg", "jpeg", "gif", "png", "bmp", "webp"],
+    			imageUploadURL: "/Uploading/upload",       //图片上传URL 即后台的图片上传接口URL
+    			path: '/editormd/lib/',          //项目启动路径
+    			toolbarIcons : function() {
+    				// Or return editormd.toolbarModes[name]; // full, simple, mini
+    				// Using "||" set icons align right.
+    				return [ "undo", "redo", "|",
+    					"bold", "italic", "quote", "|",
+    					"list-ul", "list-ol", "hr", "|",
+    					"link",  "image"]
+    			},
+    			//path: '../static/editormd/lib/',    //本地路径
+    			saveHTMLToTextarea: true
+    		});
+    	});
+    })
+    	
+     $("#sjdx").click(function(){
+    	 
+    	    $.ajax({
+   	   		 type:'get',
+   	   		 url:'/YhUserReginfo/showSysSmsAll',
+   	   		success : function(data){
+   	   			console.log("模板",data)
+   	   		 if(data.data.length>0){
+   	   		  layer.open({
+   			  title:'短信通知',
+   			  type: 1,
+   			  skin: 'layui-layer-rim', //加上边框
+   			  area: ['950px', '600px'], //宽高
+   			  content: $("#dxtz"),
+   			}); 
+   	   		 }else{
+   	   		layer.alert('消息模板还未配置')
+   	   		 }
+   			}
+   	   	 })
+    	 
+    	 
+    	 
+
+    })
+    $(function(){
+  			var url = "/TemplateSendController/showSysSmsAll";
+  			var data2 = {
+  				
+  			};
+  			$.post(url, data2, function(data) {
+  				var htmld;
+  		       	var item=data.data;
+  		        for (var i = 0; i < item.length; i++) {
+  		        	if(i==0){
+  		        		showtSmsid(item[i].smsId);
+  		        		$("#templateText").html(item[i].templateText);
+  		        	}
+  		        	htmld+="<option value="+item[i].smsId+">"+item[i].smsname+"</option>";
+  				}
+  		       	$('#smsname').append(htmld);
+  		        form.render();
+  			})
+  			
+  			var url = "/TemplateSendController/selectByMessage";
+  			var data2 = {
+  				
+  			};
+  			$.post(url, data2, function(data) {
+  				var htmld;
+  		       	var item=data.data;
+  		        for (var i = 0; i < item.length; i++) {
+  		        	if(i==0){
+  		        		showtWx(item[i].tMId);
+  		        		showtWx1(item[i].tMId);
+  		        	}
+  		        	htmld+="<option value="+item[i].tMId+">"+item[i].tMContent+"</option>";
+  				}
+  		       	$('#WeChatType').append(htmld);
+  		      $('#WeChatType1').append(htmld);
+  		        form.render();
+  			})
+  			
+  			var url = "/TemplateSendController/showtemplate";
+  			var data2 = {
+  				
+  			};
+  			$.post(url, data2, function(data) {
+  				console.log(data);
+  				var htmld;
+  		       	var item=data.data;
+  		     	if(data.data.gzh==1){
+  		     		$("#gzh").hide();
+  		     	}
+  		     	if(data.data.xxc==1){
+  		     		$("#xcx").hide();
+  		     	}
+  		     	if(data.data.dx==1){
+  		     		$("#dx").hide();
+  		     	}
+  			})
+  		})
+  		showtWx=function(tMId){
+    	$('#WxtypeId').html("");
+    	var url = "/TemplateSendController/selecttType";
+		var data2 = {
+				'tType' : tMId
+		};
+		$.post(url, data2, function(data) {
+			var htmld;
+	       	var item=data.data;
+	        for (var i = 0; i < item.length; i++) {
+	        	if(i==0){
+	        		$("#WxText").html(item[i].tTemcontent);
+	        	}
+	        	htmld+="<option value="+item[i].tId+">"+item[i].tTemcontent+"</option>";
+			}
+	       	$('#WxtypeId').append(htmld);
+	        form.render();
+		})
+    }
+  
+  showtWx1=function(tMId){
+  	$('#WxtypeId1').html("");
+  	var url = "/TemplateSendController/selecttType";
+		var data2 = {
+				'tType' : tMId
+		};
+		$.post(url, data2, function(data) {
+			var htmld;
+	       	var item=data.data;
+	        for (var i = 0; i < item.length; i++) {
+	        	if(i==0){
+	        		$("#WxText1").html(item[i].tTemcontent);
+	        	}
+	        	htmld+="<option value="+item[i].tId+">"+item[i].tTemcontent+"</option>";
+			}
+	       	$('#WxtypeId1').append(htmld);
+	        form.render();
+		})
+  }
+  
+  
+  
+	
+	showtSmsid=function(smsId){
+  	$('#tSmsid').html("");
+  	var url = "/TemplateSendController/SysTextSelectByPrimaryKey";
+		var data2 = {
+				'smsId' : smsId
+		};
+		$.post(url, data2, function(data) {
+			var htmld;
+	       	var item=data.data;
+	        for (var i = 0; i < item.length; i++) {
+	        	if(i==0){
+	        		$("#tText").html(item[i].tText);
+	        	}
+	        	htmld+="<option value="+item[i].tId+">"+item[i].tText+"</option>";
+			}
+	       	$('#tSmsid').append(htmld);
+	        form.render();
+		})
+  }
+
+      	 
+       	 		
+  		 form.on('select(aihao)', function(data){
+  	        //layui.layer.msg(data.value);//得到被选中的值
+  	       // layui.layer.msg(data.elem); //得到select原始DOM对象
+  	       showtSmsid(data.value);
+  	       $("#templateText").html("");
+  	         var url = "/TemplateSendController/SysSmsSelectByPrimaryKey";
+  				var data2 = {
+      					'smsId' : data.value
+      				};
+  				$.post(url, data2, function(data) {
+  			        $("#templateText").html(data.data.templateText);
+  			        form.render();
+  				})
+      	 })
+      	 
+      	 
+      	 
+      	 
+      	 form.on('select(tSmsid)', function(data){
+  	        //layui.layer.msg(data.value);//得到被选中的值
+  	       // layui.layer.msg(data.elem); //得到select原始DOM对象
+  	       $("#tText").html("");
+  	         var url = "/TemplateSendController/selectSmsId";
+  				var data2 = {
+      					'tId' : data.value
+      				};
+  				$.post(url, data2, function(data) {
+  					$("#tText").html(data.data.tText);
+  			        form.render();
+  				})
+      	 })
+	
+    
+  //打开新页签 
+    if([[${page}]] === 'habit1'){
+        index.openTab({
+            title: '习惯管理', 
+            url: '/manage/usertosee/habit?usercode='+ [[${userCode}]]+'&type=1',
+            end: function() {
+                // table.reload('userTable'); 
+            }
+        });
+    }
+    
+    //打开新页签 
+    if([[${page}]] === 'sleep'){
+        index.openTab({
+            title: '睡眠管理', 
+            url: '/manage/usertosee/sleep?usercode='+ [[${userCode}]],
+            end: function() {
+                // table.reload('userTable'); 
+            }
+        });
+    }
+    
+    //打开新页签 
+    if([[${page}]] === 'IntegralRecord'){
+        index.openTab({
+            title: '积分记录', 
+            url: '/manage/user/IntegralRecord?userCode='+ [[${userCode}]],
+            end: function() {
+                // table.reload('userTable'); 
+            }
+        });
+    }
+
+
+    //打开新页签
+    if([[${page}]] === 'serrvicedetails'){
+        index.openTab({
+            title: '服务任务管理',
+            url: '/manage/service/serrvicedetails?serviceid='+ [[${serviceid}]],
+            end: function() {
+                // table.reload('userTable');
+            }
+        });
+    }
+    
+    //打开新页签
+    if([[${page}]] === 'sleepDiary'){
+        index.openTab({
+            title: '睡眠管理', 
+            url: '/manage/usertosee/sleep?usercode='+ [[${userCode}]]+'&type=2',
+            end: function() {
+                // table.reload('userTable'); 
+            }
+        });
+    }
+    
+    //打开新页签
+    if([[${page}]] === 'SleepPipe'){
+        index.openTab({
+            title: '睡眠管理', 
+            url: '/manage/usertosee/sleep?usercode='+ [[${userCode}]]+'&type=1',
+            end: function() {
+                // table.reload('userTable'); 
+            }
+        });
+    }
+    
+    //打开新页签
+    if([[${page}]] === 'sport'){
+        index.openTab({
+            title: '运动管理', 
+            url: '/manage/usertosee/sport?usercode='+ [[${userCode}]],
+            end: function() {
+                // table.reload('userTable'); 
+            }
+        });
+    }
+    
+    //打开新页签
+    if([[${page}]] === 'habit'){
+        index.openTab({
+            title: '习惯管理', 
+            url: '/manage/usertosee/habit?type=3&usercode='+[[${userCode}]],
+            end: function() {
+                // table.reload('userTable'); 
+            }
+        });
+    }
+
+    //打开新页签
+    if([[${page}]] === 'servicelog'){
+        index.openTab({
+            title: '服务记录',
+            url: '/manage/service/serrviceaccept?usercode='+[[${userCode}]]+'&servicestate=0',
+            end: function() {
+                // table.reload('userTable');
+            }
+        });
+    }
+    
+    //打开新页签
+    if([[${page}]] === 'sportDiary1'){
+        index.openTab({
+            title: '运动管理', 
+            url: '/manage/usertosee/sport?usercode='+ [[${userCode}]]+'&type=1',
+            end: function() {
+                // table.reload('userTable'); 
+            }
+        });
+    }
+    
+    //打开新页签
+    if([[${page}]] === 'sportDiary'){
+        index.openTab({
+            title: '运动管理', 
+            url: '/manage/usertosee/sport?usercode='+ [[${userCode}]]+'&type=2',
+            end: function() {
+                // table.reload('userTable'); 
+            }
+        });
+    }
+    
+    
+  //打开新页签
+    if([[${page}]] === 'food'){
+        index.openTab({
+            title: '膳食管理', 
+            url: '/manage/usertosee/food?usercode='+ [[${userCode}]]+'&type=1',
+            end: function() {
+                // table.reload('userTable'); 
+            }
+        });
+    }
+  
+    if([[${page}]] === 'foodDiary'){
+        index.openTab({
+            title: '膳食管理', 
+            url: '/manage/usertosee/food?usercode='+ [[${userCode}]]+'&type=2',
+            end: function() {
+                // table.reload('userTable'); 
+            }
+        });
+    }
+  
+    if([[${page}]] === 'healthPlanDiary'){
+    	 index.openTab({
+             title: '健康计划', 
+             url: '/manage/health/userPlan?usercode='+userCode+'&type='+[[${type2}]],
+             end: function() {
+                 // table.reload('userTable'); 
+             }
+         });
+    }
+  
+    
+    //打开新页签
+    if([[${page}]] === 'health'){
+        index.openTab({
+            title: '健康档案', 
+            url: '/manage/register/healthRecord/?userCode='+ [[${userCode}]]+'&orgId='+[[${orgId}]]+'&type2='+[[${type2}]],
+            end: function() {
+                // table.reload('userTable'); 
+            }
+        });
+    }
+    //打开新页签
+    if([[${page}]] === 'summary'){
+        index.openTab({
+            title: '信息概要', 
+            url: '/manage/user/summary?usercode='+userCode,
+            end: function() {
+                // table.reload('userTable'); 
+            }
+        });
+    }
+    //打开新页签
+    if([[${page}]] === 'service'){
+        index.openTab({
+            title: '服务记录',
+            url: '/manage/service/serrviceaccept?usercode='+userCode,
+            end: function() {
+                // table.reload('userTable');
+            }
+        });
+    }
+
+    if([[${page}]] === 'detailplan'){
+        index.openTab({
+            title: '干预计划',
+            url: '/manage/service/serrviceaccept?usercode='+userCode+"&type="+[[${type2}]],
+            end: function() {
+                // table.reload('userTable');
+            }
+        });
+    }
+    //打开新页签
+    if([[${page}]] === 'testing'){
+        index.openTab({
+            title: '健康检测', 
+            url: '/manage/health/detection?userCode='+userCode,
+            end: function() {
+                // table.reload('userTable'); 
+            }
+        });
+    }
+    //打开新页签
+    if([[${page}]] === 'healthPlan'){
+        index.openTab({
+            title: '健康计划', 
+            url: '/manage/health/userPlan?usercode='+userCode,
+            end: function() {
+                // table.reload('userTable'); 
+            }
+        });
+    }
+    //打开新页签
+    if([[${page}]] === 'healthAssessment'){
+        index.openTab({
+            title: '健康评估', 
+            url: '/manage/user/healthAssessment?usercode='+userCode+'&type2='+[[${type2}]],
+            end: function() {
+                // table.reload('userTable'); 
+            }
+        });
+    }
+    //打开新页签
+    if([[${page}]] === 'stressAssessment'){
+        index.openTab({
+            title: '健康评估', 
+            url: '/manage/user/stressAssessment?usercode='+userCode,
+            end: function() {
+                // table.reload('userTable'); 
+            }
+        });
+    }
+   //打开信息概要lay-href="/manage/user/summary?usercode=${usercode}"
+    $('#xxgy')
+	.click(
+			function() {
+				window.location.href = "/manage/YhDiseaseAssessReport/screeningAdd"
+			});
+   
+    $(function(){
+   	 var userCode = [[${userCode}]];
+		//个人
+		
+		$("#zixun").click(function(){
+			window.open("/manage/goeasy/test1?usercode="+userCode); 
+
+			});
+		
+   	 $.ajax({
+   		 type:'get',
+   		 url:'/YhUserReginfo/yhUserReginfo',
+   		 data:{userCode:userCode},
+   		success : function(data){
+   			sessionStorage.setItem("user",JSON.stringify(data));
+		}
+   	 })
+   
+   	    $.ajax({
+   		 type:'get',
+   		 url:'/YhUserPersonageHospitalized/selectHospitalized',
+   		 data:{userCode:userCode},
+   		success : function(data){
+   			sessionStorage.setItem("hospitalized",JSON.stringify(data));
+		}
+   	 })   
+   	 
+   	  $.ajax({
+   		 type:'get',
+   		 url:'/YhUserPersonagePharmacy/selectPharmacy',
+   		 data:{userCode:userCode},
+   		success : function(data){
+   			sessionStorage.setItem("pharmacy",JSON.stringify(data));
+		}
+   	 })
+   	 
+   	 $.ajax({
+   		 type:'get',
+   		 url:'/YhUserPersonageNonimmune/selectNonimmune',
+   		 data:{userCode:userCode},
+   		success : function(data){
+   			sessionStorage.setItem("ponimmune",JSON.stringify(data));
+		}
+   	 })
+   	 
+   		
+   	
+    }) 
+   
+});
+	/*  //获取Location对象的search属性值
+	  var searchStr = location.search;
+	//由于searchStr属性值包括“?”，所以除去该字符
+ 	  searchStr = searchStr.substr(1);
+ 	//将searchStr字符串分割成数组，数组中的每一个元素为一个参数和参数值
+ 	 var searchs = searchStr.split("&");
+ 	 //获得第一个参数和值
+ 	 var health = searchs[0].split("=");
+ 	 
+ console.log(searchStr) */
+
+</script>
+
+</html>
+

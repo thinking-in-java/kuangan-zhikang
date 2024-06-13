@@ -1,0 +1,1743 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yihe.system.mapper.TOnemachineDataMapper" >
+  <resultMap id="BaseResultMap" type="com.yihe.system.domain.TOnemachineData" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="user_code" property="userCode" jdbcType="VARCHAR" />
+    <result column="checkno" property="checkno" jdbcType="VARCHAR" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="sex" property="sex" jdbcType="VARCHAR" />
+    <result column="age" property="age" jdbcType="VARCHAR" />
+    <result column="card_num" property="cardNum" jdbcType="VARCHAR" />
+    <result column="city_id" property="cityId" jdbcType="VARCHAR" />
+    <result column="mac" property="mac" jdbcType="VARCHAR" />
+    <result column="gmt_create" property="gmtCreate" jdbcType="VARCHAR" />
+    <result column="height" property="height" jdbcType="VARCHAR" />
+    <result column="weight" property="weight" jdbcType="VARCHAR" />
+    <result column="bmi" property="bmi" jdbcType="VARCHAR" />
+    <result column="temperature" property="temperature" jdbcType="VARCHAR" />
+    <result column="diastolic_pressure" property="diastolicPressure" jdbcType="VARCHAR" />
+    <result column="systolic_pressure" property="systolicPressure" jdbcType="VARCHAR" />
+    <result column="pulse" property="pulse" jdbcType="VARCHAR" />
+    <result column="blood_sugar" property="bloodSugar" jdbcType="VARCHAR" />
+    <result column="uric_acid" property="uricAcid" jdbcType="VARCHAR" />
+    <result column="cholesterin" property="cholesterin" jdbcType="VARCHAR" />
+    <result column="oxygen_saturation" property="oxygenSaturation" jdbcType="VARCHAR" />
+    <result column="electrocardiogram_value" property="electrocardiogramValue" jdbcType="VARCHAR" />
+    <result column="electrocardiogram_result" property="electrocardiogramResult" jdbcType="VARCHAR" />
+    <result column="ffatp" property="ffatp" jdbcType="VARCHAR" />
+    <result column="fbmr" property="fbmr" jdbcType="VARCHAR" />
+    <result column="ftbwp" property="ftbwp" jdbcType="VARCHAR" />
+    <result column="ffat" property="ffat" jdbcType="VARCHAR" />
+    <result column="fmuscle" property="fmuscle" jdbcType="VARCHAR" />
+    <result column="fbone" property="fbone" jdbcType="VARCHAR" />
+    <result column="fproteinp" property="fproteinp" jdbcType="VARCHAR" />
+    <result column="fatgrade" property="fatgrade" jdbcType="VARCHAR" />
+    <result column="bodyage" property="bodyage" jdbcType="VARCHAR" />
+    <result column="fmusclep" property="fmusclep" jdbcType="VARCHAR" />
+    <result column="ftbw" property="ftbw" jdbcType="VARCHAR" />
+    <result column="fffm" property="fffm" jdbcType="VARCHAR" />
+    <result column="ficw" property="ficw" jdbcType="VARCHAR" />
+    <result column="fecw" property="fecw" jdbcType="VARCHAR" />
+    <result column="fprotein" property="fprotein" jdbcType="VARCHAR" />
+    <result column="fcholz" property="fcholz" jdbcType="VARCHAR" />
+    <result column="ftrig" property="ftrig" jdbcType="VARCHAR" />
+    <result column="fldl" property="fldl" jdbcType="VARCHAR" />
+    <result column="fhdl" property="fhdl" jdbcType="VARCHAR" />
+    <result column="leye" property="leye" jdbcType="VARCHAR" />
+    <result column="reye" property="reye" jdbcType="VARCHAR" />
+    <result column="eye_result" property="eyeResult" jdbcType="VARCHAR" />
+    <result column="lastigmatism" property="lastigmatism" jdbcType="VARCHAR" />
+    <result column="rastigmatism" property="rastigmatism" jdbcType="VARCHAR" />
+    <result column="colourblind" property="colourblind" jdbcType="VARCHAR" />
+    <result column="anomalous" property="anomalous" jdbcType="VARCHAR" />
+    <result column="fvc" property="fvc" jdbcType="VARCHAR" />
+    <result column="fev1" property="fev1" jdbcType="VARCHAR" />
+    <result column="pef" property="pef" jdbcType="VARCHAR" />
+    <result column="fev1_fvc" property="fev1Fvc" jdbcType="VARCHAR" />
+    <result column="fef25" property="fef25" jdbcType="VARCHAR" />
+    <result column="fef50" property="fef50" jdbcType="VARCHAR" />
+    <result column="fef75" property="fef75" jdbcType="VARCHAR" />
+    <result column="fef2575" property="fef2575" jdbcType="VARCHAR" />
+    <result column="fvcp" property="fvcp" jdbcType="VARCHAR" />
+    <result column="fev1p" property="fev1p" jdbcType="VARCHAR" />
+    <result column="pefp" property="pefp" jdbcType="VARCHAR" />
+    <result column="fef25p" property="fef25p" jdbcType="VARCHAR" />
+    <result column="fef50p" property="fef50p" jdbcType="VARCHAR" />
+    <result column="fef75p" property="fef75p" jdbcType="VARCHAR" />
+    <result column="fef2575p" property="fef2575p" jdbcType="VARCHAR" />
+    <result column="counts" property="counts" jdbcType="VARCHAR" />
+    <result column="fvc_result" property="fvcResult" jdbcType="VARCHAR" />
+    <result column="alcohol" property="alcohol" jdbcType="VARCHAR" />
+    <result column="alcohol_result" property="alcoholResult" jdbcType="VARCHAR" />
+    <result column="tscore" property="tscore" jdbcType="VARCHAR" />
+    <result column="zscore" property="zscore" jdbcType="VARCHAR" />
+    <result column="sos" property="sos" jdbcType="VARCHAR" />
+    <result column="young_adult" property="youngAdult" jdbcType="VARCHAR" />
+    <result column="bqi" property="bqi" jdbcType="VARCHAR" />
+    <result column="age_matched" property="ageMatched" jdbcType="VARCHAR" />
+    <result column="rrf" property="rrf" jdbcType="VARCHAR" />
+    <result column="boneage" property="boneage" jdbcType="VARCHAR" />
+    <result column="bonemonth" property="bonemonth" jdbcType="VARCHAR" />
+    <result column="eoa" property="eoa" jdbcType="VARCHAR" />
+    <result column="gmd_result" property="gmdResult" jdbcType="VARCHAR" />
+    <result column="fev2" property="fev2" jdbcType="VARCHAR" />
+    <result column="fev3" property="fev3" jdbcType="VARCHAR" />
+    <result column="mvv1" property="mvv1" jdbcType="VARCHAR" />
+    <result column="bsa1" property="bsa1" jdbcType="VARCHAR" />
+    <result column="mvv_bsa" property="mvvBsa" jdbcType="VARCHAR" />
+    <result column="v75" property="v75" jdbcType="VARCHAR" />
+    <result column="v50" property="v50" jdbcType="VARCHAR" />
+    <result column="v25" property="v25" jdbcType="VARCHAR" />
+    <result column="v25_h" property="v25H" jdbcType="VARCHAR" />
+    <result column="mvv" property="mvv" jdbcType="VARCHAR" />
+    <result column="bsa" property="bsa" jdbcType="VARCHAR" />
+    <result column="vc" property="vc" jdbcType="VARCHAR" />
+    <result column="tv" property="tv" jdbcType="VARCHAR" />
+    <result column="erv" property="erv" jdbcType="VARCHAR" />
+    <result column="ic" property="ic" jdbcType="VARCHAR" />
+    <result column="rr" property="rr" jdbcType="VARCHAR" />
+    <result column="fev2p" property="fev2p" jdbcType="VARCHAR" />
+    <result column="fev3p" property="fev3p" jdbcType="VARCHAR" />
+    <result column="mmf" property="mmf" jdbcType="VARCHAR" />
+    <result column="mvv1_bsa" property="mvv1Bsa" jdbcType="VARCHAR" />
+    <result column="v50_v25" property="v50V25" jdbcType="VARCHAR" />
+    <result column="irv" property="irv" jdbcType="VARCHAR" />
+    <result column="mv" property="mv" jdbcType="VARCHAR" />
+    <result column="pr" property="pr" jdbcType="VARCHAR" />
+    <result column="sv" property="sv" jdbcType="VARCHAR" />
+    <result column="co" property="co" jdbcType="VARCHAR" />
+    <result column="si" property="si" jdbcType="VARCHAR" />
+    <result column="ci" property="ci" jdbcType="VARCHAR" />
+    <result column="vpe" property="vpe" jdbcType="VARCHAR" />
+    <result column="ewk" property="ewk" jdbcType="VARCHAR" />
+    <result column="hoi" property="hoi" jdbcType="VARCHAR" />
+    <result column="lvwi" property="lvwi" jdbcType="VARCHAR" />
+    <result column="cmbr" property="cmbr" jdbcType="VARCHAR" />
+    <result column="cmbv" property="cmbv" jdbcType="VARCHAR" />
+    <result column="cmbn" property="cmbn" jdbcType="VARCHAR" />
+    <result column="svr" property="svr" jdbcType="VARCHAR" />
+    <result column="rsvr" property="rsvr" jdbcType="VARCHAR" />
+    <result column="bv" property="bv" jdbcType="VARCHAR" />
+    <result column="n" property="n" jdbcType="VARCHAR" />
+    <result column="nr" property="nr" jdbcType="VARCHAR" />
+    <result column="vo2max" property="vo2max" jdbcType="VARCHAR" />
+    <result column="mets" property="mets" jdbcType="VARCHAR" />
+    <result column="hrb" property="hrb" jdbcType="VARCHAR" />
+    <result column="cob" property="cob" jdbcType="VARCHAR" />
+    <result column="pp" property="pp" jdbcType="VARCHAR" />
+    <result column="msp" property="msp" jdbcType="VARCHAR" />
+    <result column="mdp" property="mdp" jdbcType="VARCHAR" />
+    <result column="map" property="map" jdbcType="VARCHAR" />
+    <result column="ac" property="ac" jdbcType="VARCHAR" />
+    <result column="ccp" property="ccp" jdbcType="VARCHAR" />
+    <result column="blk" property="blk" jdbcType="VARCHAR" />
+    <result column="fek" property="fek" jdbcType="VARCHAR" />
+    <result column="tpr" property="tpr" jdbcType="VARCHAR" />
+    <result column="spr" property="spr" jdbcType="VARCHAR" />
+    <result column="ver" property="ver" jdbcType="VARCHAR" />
+    <result column="pawp" property="pawp" jdbcType="VARCHAR" />
+    <result column="par" property="par" jdbcType="VARCHAR" />
+    <result column="pap" property="pap" jdbcType="VARCHAR" />
+    <result column="mhr" property="mhr" jdbcType="VARCHAR" />
+    <result column="mrt" property="mrt" jdbcType="VARCHAR" />
+    <result column="mst" property="mst" jdbcType="VARCHAR" />
+    <result column="xxg_result" property="xxgResult" jdbcType="VARCHAR" />
+    <result column="hb" property="hb" jdbcType="VARCHAR" />
+    <result column="htc" property="htc" jdbcType="VARCHAR" />
+    <result column="waist" property="waist" jdbcType="VARCHAR" />
+    <result column="buttock" property="buttock" jdbcType="VARCHAR" />
+    <result column="whr" property="whr" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, user_code, checkno, name, sex, age, card_num, city_id, mac, gmt_create, height, 
+    weight, bmi, temperature, diastolic_pressure, systolic_pressure, pulse, blood_sugar, 
+    uric_acid, cholesterin, oxygen_saturation, electrocardiogram_value, electrocardiogram_result, 
+    ffatp, fbmr, ftbwp, ffat, fmuscle, fbone, fproteinp, fatgrade, bodyage, fmusclep, 
+    ftbw, fffm, ficw, fecw, fprotein, fcholz, ftrig, fldl, fhdl, leye, reye, eye_result, 
+    lastigmatism, rastigmatism, colourblind, anomalous, fvc, fev1, pef, fev1_fvc, fef25, 
+    fef50, fef75, fef2575, fvcp, fev1p, pefp, fef25p, fef50p, fef75p, fef2575p, counts, 
+    fvc_result, alcohol, alcohol_result, tscore, zscore, sos, young_adult, bqi, age_matched, 
+    rrf, boneage, bonemonth, eoa, gmd_result, fev2, fev3, mvv1, bsa1, mvv_bsa, v75, v50, 
+    v25, v25_h, mvv, bsa, vc, tv, erv, ic, rr, fev2p, fev3p, mmf, mvv1_bsa, v50_v25, 
+    irv, mv, pr, sv, co, si, ci, vpe, ewk, hoi, lvwi, cmbr, cmbv, cmbn, svr, rsvr, bv, 
+    n, nr, vo2max, mets, hrb, cob, pp, msp, mdp, map, ac, ccp, blk, fek, tpr, spr, ver, 
+    pawp, par, pap, mhr, mrt, mst, xxg_result, hb, htc, waist, buttock, whr
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_onemachine_data
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from t_onemachine_data
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.yihe.system.domain.TOnemachineData" >
+    insert into t_onemachine_data (id, user_code, checkno, 
+      name, sex, age, card_num, 
+      city_id, mac, gmt_create, 
+      height, weight, bmi, 
+      temperature, diastolic_pressure, systolic_pressure, 
+      pulse, blood_sugar, uric_acid, 
+      cholesterin, oxygen_saturation, electrocardiogram_value, 
+      electrocardiogram_result, ffatp, fbmr, 
+      ftbwp, ffat, fmuscle, 
+      fbone, fproteinp, fatgrade, 
+      bodyage, fmusclep, ftbw, 
+      fffm, ficw, fecw, fprotein, 
+      fcholz, ftrig, fldl, 
+      fhdl, leye, reye, eye_result, 
+      lastigmatism, rastigmatism, colourblind, 
+      anomalous, fvc, fev1, 
+      pef, fev1_fvc, fef25, 
+      fef50, fef75, fef2575, 
+      fvcp, fev1p, pefp, 
+      fef25p, fef50p, fef75p, 
+      fef2575p, counts, fvc_result, 
+      alcohol, alcohol_result, tscore, 
+      zscore, sos, young_adult, 
+      bqi, age_matched, rrf, 
+      boneage, bonemonth, eoa, 
+      gmd_result, fev2, fev3, 
+      mvv1, bsa1, mvv_bsa, 
+      v75, v50, v25, v25_h, 
+      mvv, bsa, vc, tv, 
+      erv, ic, rr, fev2p, 
+      fev3p, mmf, mvv1_bsa, 
+      v50_v25, irv, mv, pr, 
+      sv, co, si, ci, 
+      vpe, ewk, hoi, lvwi, 
+      cmbr, cmbv, cmbn, svr, 
+      rsvr, bv, n, nr, 
+      vo2max, mets, hrb, 
+      cob, pp, msp, mdp, 
+      map, ac, ccp, blk, 
+      fek, tpr, spr, ver, 
+      pawp, par, pap, mhr, 
+      mrt, mst, xxg_result, 
+      hb, htc, waist, buttock, 
+      whr)
+    values (#{id,jdbcType=BIGINT}, #{userCode,jdbcType=VARCHAR}, #{checkno,jdbcType=VARCHAR}, 
+      #{name,jdbcType=VARCHAR}, #{sex,jdbcType=VARCHAR}, #{age,jdbcType=VARCHAR}, #{cardNum,jdbcType=VARCHAR}, 
+      #{cityId,jdbcType=VARCHAR}, #{mac,jdbcType=VARCHAR}, #{gmtCreate,jdbcType=VARCHAR}, 
+      #{height,jdbcType=VARCHAR}, #{weight,jdbcType=VARCHAR}, #{bmi,jdbcType=VARCHAR}, 
+      #{temperature,jdbcType=VARCHAR}, #{diastolicPressure,jdbcType=VARCHAR}, #{systolicPressure,jdbcType=VARCHAR}, 
+      #{pulse,jdbcType=VARCHAR}, #{bloodSugar,jdbcType=VARCHAR}, #{uricAcid,jdbcType=VARCHAR}, 
+      #{cholesterin,jdbcType=VARCHAR}, #{oxygenSaturation,jdbcType=VARCHAR}, #{electrocardiogramValue,jdbcType=VARCHAR}, 
+      #{electrocardiogramResult,jdbcType=VARCHAR}, #{ffatp,jdbcType=VARCHAR}, #{fbmr,jdbcType=VARCHAR}, 
+      #{ftbwp,jdbcType=VARCHAR}, #{ffat,jdbcType=VARCHAR}, #{fmuscle,jdbcType=VARCHAR}, 
+      #{fbone,jdbcType=VARCHAR}, #{fproteinp,jdbcType=VARCHAR}, #{fatgrade,jdbcType=VARCHAR}, 
+      #{bodyage,jdbcType=VARCHAR}, #{fmusclep,jdbcType=VARCHAR}, #{ftbw,jdbcType=VARCHAR}, 
+      #{fffm,jdbcType=VARCHAR}, #{ficw,jdbcType=VARCHAR}, #{fecw,jdbcType=VARCHAR}, #{fprotein,jdbcType=VARCHAR}, 
+      #{fcholz,jdbcType=VARCHAR}, #{ftrig,jdbcType=VARCHAR}, #{fldl,jdbcType=VARCHAR}, 
+      #{fhdl,jdbcType=VARCHAR}, #{leye,jdbcType=VARCHAR}, #{reye,jdbcType=VARCHAR}, #{eyeResult,jdbcType=VARCHAR}, 
+      #{lastigmatism,jdbcType=VARCHAR}, #{rastigmatism,jdbcType=VARCHAR}, #{colourblind,jdbcType=VARCHAR}, 
+      #{anomalous,jdbcType=VARCHAR}, #{fvc,jdbcType=VARCHAR}, #{fev1,jdbcType=VARCHAR}, 
+      #{pef,jdbcType=VARCHAR}, #{fev1Fvc,jdbcType=VARCHAR}, #{fef25,jdbcType=VARCHAR}, 
+      #{fef50,jdbcType=VARCHAR}, #{fef75,jdbcType=VARCHAR}, #{fef2575,jdbcType=VARCHAR}, 
+      #{fvcp,jdbcType=VARCHAR}, #{fev1p,jdbcType=VARCHAR}, #{pefp,jdbcType=VARCHAR}, 
+      #{fef25p,jdbcType=VARCHAR}, #{fef50p,jdbcType=VARCHAR}, #{fef75p,jdbcType=VARCHAR}, 
+      #{fef2575p,jdbcType=VARCHAR}, #{counts,jdbcType=VARCHAR}, #{fvcResult,jdbcType=VARCHAR}, 
+      #{alcohol,jdbcType=VARCHAR}, #{alcoholResult,jdbcType=VARCHAR}, #{tscore,jdbcType=VARCHAR}, 
+      #{zscore,jdbcType=VARCHAR}, #{sos,jdbcType=VARCHAR}, #{youngAdult,jdbcType=VARCHAR}, 
+      #{bqi,jdbcType=VARCHAR}, #{ageMatched,jdbcType=VARCHAR}, #{rrf,jdbcType=VARCHAR}, 
+      #{boneage,jdbcType=VARCHAR}, #{bonemonth,jdbcType=VARCHAR}, #{eoa,jdbcType=VARCHAR}, 
+      #{gmdResult,jdbcType=VARCHAR}, #{fev2,jdbcType=VARCHAR}, #{fev3,jdbcType=VARCHAR}, 
+      #{mvv1,jdbcType=VARCHAR}, #{bsa1,jdbcType=VARCHAR}, #{mvvBsa,jdbcType=VARCHAR}, 
+      #{v75,jdbcType=VARCHAR}, #{v50,jdbcType=VARCHAR}, #{v25,jdbcType=VARCHAR}, #{v25H,jdbcType=VARCHAR}, 
+      #{mvv,jdbcType=VARCHAR}, #{bsa,jdbcType=VARCHAR}, #{vc,jdbcType=VARCHAR}, #{tv,jdbcType=VARCHAR}, 
+      #{erv,jdbcType=VARCHAR}, #{ic,jdbcType=VARCHAR}, #{rr,jdbcType=VARCHAR}, #{fev2p,jdbcType=VARCHAR}, 
+      #{fev3p,jdbcType=VARCHAR}, #{mmf,jdbcType=VARCHAR}, #{mvv1Bsa,jdbcType=VARCHAR}, 
+      #{v50V25,jdbcType=VARCHAR}, #{irv,jdbcType=VARCHAR}, #{mv,jdbcType=VARCHAR}, #{pr,jdbcType=VARCHAR}, 
+      #{sv,jdbcType=VARCHAR}, #{co,jdbcType=VARCHAR}, #{si,jdbcType=VARCHAR}, #{ci,jdbcType=VARCHAR}, 
+      #{vpe,jdbcType=VARCHAR}, #{ewk,jdbcType=VARCHAR}, #{hoi,jdbcType=VARCHAR}, #{lvwi,jdbcType=VARCHAR}, 
+      #{cmbr,jdbcType=VARCHAR}, #{cmbv,jdbcType=VARCHAR}, #{cmbn,jdbcType=VARCHAR}, #{svr,jdbcType=VARCHAR}, 
+      #{rsvr,jdbcType=VARCHAR}, #{bv,jdbcType=VARCHAR}, #{n,jdbcType=VARCHAR}, #{nr,jdbcType=VARCHAR}, 
+      #{vo2max,jdbcType=VARCHAR}, #{mets,jdbcType=VARCHAR}, #{hrb,jdbcType=VARCHAR}, 
+      #{cob,jdbcType=VARCHAR}, #{pp,jdbcType=VARCHAR}, #{msp,jdbcType=VARCHAR}, #{mdp,jdbcType=VARCHAR}, 
+      #{map,jdbcType=VARCHAR}, #{ac,jdbcType=VARCHAR}, #{ccp,jdbcType=VARCHAR}, #{blk,jdbcType=VARCHAR}, 
+      #{fek,jdbcType=VARCHAR}, #{tpr,jdbcType=VARCHAR}, #{spr,jdbcType=VARCHAR}, #{ver,jdbcType=VARCHAR}, 
+      #{pawp,jdbcType=VARCHAR}, #{par,jdbcType=VARCHAR}, #{pap,jdbcType=VARCHAR}, #{mhr,jdbcType=VARCHAR}, 
+      #{mrt,jdbcType=VARCHAR}, #{mst,jdbcType=VARCHAR}, #{xxgResult,jdbcType=VARCHAR}, 
+      #{hb,jdbcType=VARCHAR}, #{htc,jdbcType=VARCHAR}, #{waist,jdbcType=VARCHAR}, #{buttock,jdbcType=VARCHAR}, 
+      #{whr,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.yihe.system.domain.TOnemachineData" >
+    insert into t_onemachine_data
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="userCode != null" >
+        user_code,
+      </if>
+      <if test="checkno != null" >
+        checkno,
+      </if>
+      <if test="name != null" >
+        name,
+      </if>
+      <if test="sex != null" >
+        sex,
+      </if>
+      <if test="age != null" >
+        age,
+      </if>
+      <if test="cardNum != null" >
+        card_num,
+      </if>
+      <if test="cityId != null" >
+        city_id,
+      </if>
+      <if test="mac != null" >
+        mac,
+      </if>
+      <if test="gmtCreate != null" >
+        gmt_create,
+      </if>
+      <if test="height != null" >
+        height,
+      </if>
+      <if test="weight != null" >
+        weight,
+      </if>
+      <if test="bmi != null" >
+        bmi,
+      </if>
+      <if test="temperature != null" >
+        temperature,
+      </if>
+      <if test="diastolicPressure != null" >
+        diastolic_pressure,
+      </if>
+      <if test="systolicPressure != null" >
+        systolic_pressure,
+      </if>
+      <if test="pulse != null" >
+        pulse,
+      </if>
+      <if test="bloodSugar != null" >
+        blood_sugar,
+      </if>
+      <if test="uricAcid != null" >
+        uric_acid,
+      </if>
+      <if test="cholesterin != null" >
+        cholesterin,
+      </if>
+      <if test="oxygenSaturation != null" >
+        oxygen_saturation,
+      </if>
+      <if test="electrocardiogramValue != null" >
+        electrocardiogram_value,
+      </if>
+      <if test="electrocardiogramResult != null" >
+        electrocardiogram_result,
+      </if>
+      <if test="ffatp != null" >
+        ffatp,
+      </if>
+      <if test="fbmr != null" >
+        fbmr,
+      </if>
+      <if test="ftbwp != null" >
+        ftbwp,
+      </if>
+      <if test="ffat != null" >
+        ffat,
+      </if>
+      <if test="fmuscle != null" >
+        fmuscle,
+      </if>
+      <if test="fbone != null" >
+        fbone,
+      </if>
+      <if test="fproteinp != null" >
+        fproteinp,
+      </if>
+      <if test="fatgrade != null" >
+        fatgrade,
+      </if>
+      <if test="bodyage != null" >
+        bodyage,
+      </if>
+      <if test="fmusclep != null" >
+        fmusclep,
+      </if>
+      <if test="ftbw != null" >
+        ftbw,
+      </if>
+      <if test="fffm != null" >
+        fffm,
+      </if>
+      <if test="ficw != null" >
+        ficw,
+      </if>
+      <if test="fecw != null" >
+        fecw,
+      </if>
+      <if test="fprotein != null" >
+        fprotein,
+      </if>
+      <if test="fcholz != null" >
+        fcholz,
+      </if>
+      <if test="ftrig != null" >
+        ftrig,
+      </if>
+      <if test="fldl != null" >
+        fldl,
+      </if>
+      <if test="fhdl != null" >
+        fhdl,
+      </if>
+      <if test="leye != null" >
+        leye,
+      </if>
+      <if test="reye != null" >
+        reye,
+      </if>
+      <if test="eyeResult != null" >
+        eye_result,
+      </if>
+      <if test="lastigmatism != null" >
+        lastigmatism,
+      </if>
+      <if test="rastigmatism != null" >
+        rastigmatism,
+      </if>
+      <if test="colourblind != null" >
+        colourblind,
+      </if>
+      <if test="anomalous != null" >
+        anomalous,
+      </if>
+      <if test="fvc != null" >
+        fvc,
+      </if>
+      <if test="fev1 != null" >
+        fev1,
+      </if>
+      <if test="pef != null" >
+        pef,
+      </if>
+      <if test="fev1Fvc != null" >
+        fev1_fvc,
+      </if>
+      <if test="fef25 != null" >
+        fef25,
+      </if>
+      <if test="fef50 != null" >
+        fef50,
+      </if>
+      <if test="fef75 != null" >
+        fef75,
+      </if>
+      <if test="fef2575 != null" >
+        fef2575,
+      </if>
+      <if test="fvcp != null" >
+        fvcp,
+      </if>
+      <if test="fev1p != null" >
+        fev1p,
+      </if>
+      <if test="pefp != null" >
+        pefp,
+      </if>
+      <if test="fef25p != null" >
+        fef25p,
+      </if>
+      <if test="fef50p != null" >
+        fef50p,
+      </if>
+      <if test="fef75p != null" >
+        fef75p,
+      </if>
+      <if test="fef2575p != null" >
+        fef2575p,
+      </if>
+      <if test="counts != null" >
+        counts,
+      </if>
+      <if test="fvcResult != null" >
+        fvc_result,
+      </if>
+      <if test="alcohol != null" >
+        alcohol,
+      </if>
+      <if test="alcoholResult != null" >
+        alcohol_result,
+      </if>
+      <if test="tscore != null" >
+        tscore,
+      </if>
+      <if test="zscore != null" >
+        zscore,
+      </if>
+      <if test="sos != null" >
+        sos,
+      </if>
+      <if test="youngAdult != null" >
+        young_adult,
+      </if>
+      <if test="bqi != null" >
+        bqi,
+      </if>
+      <if test="ageMatched != null" >
+        age_matched,
+      </if>
+      <if test="rrf != null" >
+        rrf,
+      </if>
+      <if test="boneage != null" >
+        boneage,
+      </if>
+      <if test="bonemonth != null" >
+        bonemonth,
+      </if>
+      <if test="eoa != null" >
+        eoa,
+      </if>
+      <if test="gmdResult != null" >
+        gmd_result,
+      </if>
+      <if test="fev2 != null" >
+        fev2,
+      </if>
+      <if test="fev3 != null" >
+        fev3,
+      </if>
+      <if test="mvv1 != null" >
+        mvv1,
+      </if>
+      <if test="bsa1 != null" >
+        bsa1,
+      </if>
+      <if test="mvvBsa != null" >
+        mvv_bsa,
+      </if>
+      <if test="v75 != null" >
+        v75,
+      </if>
+      <if test="v50 != null" >
+        v50,
+      </if>
+      <if test="v25 != null" >
+        v25,
+      </if>
+      <if test="v25H != null" >
+        v25_h,
+      </if>
+      <if test="mvv != null" >
+        mvv,
+      </if>
+      <if test="bsa != null" >
+        bsa,
+      </if>
+      <if test="vc != null" >
+        vc,
+      </if>
+      <if test="tv != null" >
+        tv,
+      </if>
+      <if test="erv != null" >
+        erv,
+      </if>
+      <if test="ic != null" >
+        ic,
+      </if>
+      <if test="rr != null" >
+        rr,
+      </if>
+      <if test="fev2p != null" >
+        fev2p,
+      </if>
+      <if test="fev3p != null" >
+        fev3p,
+      </if>
+      <if test="mmf != null" >
+        mmf,
+      </if>
+      <if test="mvv1Bsa != null" >
+        mvv1_bsa,
+      </if>
+      <if test="v50V25 != null" >
+        v50_v25,
+      </if>
+      <if test="irv != null" >
+        irv,
+      </if>
+      <if test="mv != null" >
+        mv,
+      </if>
+      <if test="pr != null" >
+        pr,
+      </if>
+      <if test="sv != null" >
+        sv,
+      </if>
+      <if test="co != null" >
+        co,
+      </if>
+      <if test="si != null" >
+        si,
+      </if>
+      <if test="ci != null" >
+        ci,
+      </if>
+      <if test="vpe != null" >
+        vpe,
+      </if>
+      <if test="ewk != null" >
+        ewk,
+      </if>
+      <if test="hoi != null" >
+        hoi,
+      </if>
+      <if test="lvwi != null" >
+        lvwi,
+      </if>
+      <if test="cmbr != null" >
+        cmbr,
+      </if>
+      <if test="cmbv != null" >
+        cmbv,
+      </if>
+      <if test="cmbn != null" >
+        cmbn,
+      </if>
+      <if test="svr != null" >
+        svr,
+      </if>
+      <if test="rsvr != null" >
+        rsvr,
+      </if>
+      <if test="bv != null" >
+        bv,
+      </if>
+      <if test="n != null" >
+        n,
+      </if>
+      <if test="nr != null" >
+        nr,
+      </if>
+      <if test="vo2max != null" >
+        vo2max,
+      </if>
+      <if test="mets != null" >
+        mets,
+      </if>
+      <if test="hrb != null" >
+        hrb,
+      </if>
+      <if test="cob != null" >
+        cob,
+      </if>
+      <if test="pp != null" >
+        pp,
+      </if>
+      <if test="msp != null" >
+        msp,
+      </if>
+      <if test="mdp != null" >
+        mdp,
+      </if>
+      <if test="map != null" >
+        map,
+      </if>
+      <if test="ac != null" >
+        ac,
+      </if>
+      <if test="ccp != null" >
+        ccp,
+      </if>
+      <if test="blk != null" >
+        blk,
+      </if>
+      <if test="fek != null" >
+        fek,
+      </if>
+      <if test="tpr != null" >
+        tpr,
+      </if>
+      <if test="spr != null" >
+        spr,
+      </if>
+      <if test="ver != null" >
+        ver,
+      </if>
+      <if test="pawp != null" >
+        pawp,
+      </if>
+      <if test="par != null" >
+        par,
+      </if>
+      <if test="pap != null" >
+        pap,
+      </if>
+      <if test="mhr != null" >
+        mhr,
+      </if>
+      <if test="mrt != null" >
+        mrt,
+      </if>
+      <if test="mst != null" >
+        mst,
+      </if>
+      <if test="xxgResult != null" >
+        xxg_result,
+      </if>
+      <if test="hb != null" >
+        hb,
+      </if>
+      <if test="htc != null" >
+        htc,
+      </if>
+      <if test="waist != null" >
+        waist,
+      </if>
+      <if test="buttock != null" >
+        buttock,
+      </if>
+      <if test="whr != null" >
+        whr,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="userCode != null" >
+        #{userCode,jdbcType=VARCHAR},
+      </if>
+      <if test="checkno != null" >
+        #{checkno,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="sex != null" >
+        #{sex,jdbcType=VARCHAR},
+      </if>
+      <if test="age != null" >
+        #{age,jdbcType=VARCHAR},
+      </if>
+      <if test="cardNum != null" >
+        #{cardNum,jdbcType=VARCHAR},
+      </if>
+      <if test="cityId != null" >
+        #{cityId,jdbcType=VARCHAR},
+      </if>
+      <if test="mac != null" >
+        #{mac,jdbcType=VARCHAR},
+      </if>
+      <if test="gmtCreate != null" >
+        #{gmtCreate,jdbcType=VARCHAR},
+      </if>
+      <if test="height != null" >
+        #{height,jdbcType=VARCHAR},
+      </if>
+      <if test="weight != null" >
+        #{weight,jdbcType=VARCHAR},
+      </if>
+      <if test="bmi != null" >
+        #{bmi,jdbcType=VARCHAR},
+      </if>
+      <if test="temperature != null" >
+        #{temperature,jdbcType=VARCHAR},
+      </if>
+      <if test="diastolicPressure != null" >
+        #{diastolicPressure,jdbcType=VARCHAR},
+      </if>
+      <if test="systolicPressure != null" >
+        #{systolicPressure,jdbcType=VARCHAR},
+      </if>
+      <if test="pulse != null" >
+        #{pulse,jdbcType=VARCHAR},
+      </if>
+      <if test="bloodSugar != null" >
+        #{bloodSugar,jdbcType=VARCHAR},
+      </if>
+      <if test="uricAcid != null" >
+        #{uricAcid,jdbcType=VARCHAR},
+      </if>
+      <if test="cholesterin != null" >
+        #{cholesterin,jdbcType=VARCHAR},
+      </if>
+      <if test="oxygenSaturation != null" >
+        #{oxygenSaturation,jdbcType=VARCHAR},
+      </if>
+      <if test="electrocardiogramValue != null" >
+        #{electrocardiogramValue,jdbcType=VARCHAR},
+      </if>
+      <if test="electrocardiogramResult != null" >
+        #{electrocardiogramResult,jdbcType=VARCHAR},
+      </if>
+      <if test="ffatp != null" >
+        #{ffatp,jdbcType=VARCHAR},
+      </if>
+      <if test="fbmr != null" >
+        #{fbmr,jdbcType=VARCHAR},
+      </if>
+      <if test="ftbwp != null" >
+        #{ftbwp,jdbcType=VARCHAR},
+      </if>
+      <if test="ffat != null" >
+        #{ffat,jdbcType=VARCHAR},
+      </if>
+      <if test="fmuscle != null" >
+        #{fmuscle,jdbcType=VARCHAR},
+      </if>
+      <if test="fbone != null" >
+        #{fbone,jdbcType=VARCHAR},
+      </if>
+      <if test="fproteinp != null" >
+        #{fproteinp,jdbcType=VARCHAR},
+      </if>
+      <if test="fatgrade != null" >
+        #{fatgrade,jdbcType=VARCHAR},
+      </if>
+      <if test="bodyage != null" >
+        #{bodyage,jdbcType=VARCHAR},
+      </if>
+      <if test="fmusclep != null" >
+        #{fmusclep,jdbcType=VARCHAR},
+      </if>
+      <if test="ftbw != null" >
+        #{ftbw,jdbcType=VARCHAR},
+      </if>
+      <if test="fffm != null" >
+        #{fffm,jdbcType=VARCHAR},
+      </if>
+      <if test="ficw != null" >
+        #{ficw,jdbcType=VARCHAR},
+      </if>
+      <if test="fecw != null" >
+        #{fecw,jdbcType=VARCHAR},
+      </if>
+      <if test="fprotein != null" >
+        #{fprotein,jdbcType=VARCHAR},
+      </if>
+      <if test="fcholz != null" >
+        #{fcholz,jdbcType=VARCHAR},
+      </if>
+      <if test="ftrig != null" >
+        #{ftrig,jdbcType=VARCHAR},
+      </if>
+      <if test="fldl != null" >
+        #{fldl,jdbcType=VARCHAR},
+      </if>
+      <if test="fhdl != null" >
+        #{fhdl,jdbcType=VARCHAR},
+      </if>
+      <if test="leye != null" >
+        #{leye,jdbcType=VARCHAR},
+      </if>
+      <if test="reye != null" >
+        #{reye,jdbcType=VARCHAR},
+      </if>
+      <if test="eyeResult != null" >
+        #{eyeResult,jdbcType=VARCHAR},
+      </if>
+      <if test="lastigmatism != null" >
+        #{lastigmatism,jdbcType=VARCHAR},
+      </if>
+      <if test="rastigmatism != null" >
+        #{rastigmatism,jdbcType=VARCHAR},
+      </if>
+      <if test="colourblind != null" >
+        #{colourblind,jdbcType=VARCHAR},
+      </if>
+      <if test="anomalous != null" >
+        #{anomalous,jdbcType=VARCHAR},
+      </if>
+      <if test="fvc != null" >
+        #{fvc,jdbcType=VARCHAR},
+      </if>
+      <if test="fev1 != null" >
+        #{fev1,jdbcType=VARCHAR},
+      </if>
+      <if test="pef != null" >
+        #{pef,jdbcType=VARCHAR},
+      </if>
+      <if test="fev1Fvc != null" >
+        #{fev1Fvc,jdbcType=VARCHAR},
+      </if>
+      <if test="fef25 != null" >
+        #{fef25,jdbcType=VARCHAR},
+      </if>
+      <if test="fef50 != null" >
+        #{fef50,jdbcType=VARCHAR},
+      </if>
+      <if test="fef75 != null" >
+        #{fef75,jdbcType=VARCHAR},
+      </if>
+      <if test="fef2575 != null" >
+        #{fef2575,jdbcType=VARCHAR},
+      </if>
+      <if test="fvcp != null" >
+        #{fvcp,jdbcType=VARCHAR},
+      </if>
+      <if test="fev1p != null" >
+        #{fev1p,jdbcType=VARCHAR},
+      </if>
+      <if test="pefp != null" >
+        #{pefp,jdbcType=VARCHAR},
+      </if>
+      <if test="fef25p != null" >
+        #{fef25p,jdbcType=VARCHAR},
+      </if>
+      <if test="fef50p != null" >
+        #{fef50p,jdbcType=VARCHAR},
+      </if>
+      <if test="fef75p != null" >
+        #{fef75p,jdbcType=VARCHAR},
+      </if>
+      <if test="fef2575p != null" >
+        #{fef2575p,jdbcType=VARCHAR},
+      </if>
+      <if test="counts != null" >
+        #{counts,jdbcType=VARCHAR},
+      </if>
+      <if test="fvcResult != null" >
+        #{fvcResult,jdbcType=VARCHAR},
+      </if>
+      <if test="alcohol != null" >
+        #{alcohol,jdbcType=VARCHAR},
+      </if>
+      <if test="alcoholResult != null" >
+        #{alcoholResult,jdbcType=VARCHAR},
+      </if>
+      <if test="tscore != null" >
+        #{tscore,jdbcType=VARCHAR},
+      </if>
+      <if test="zscore != null" >
+        #{zscore,jdbcType=VARCHAR},
+      </if>
+      <if test="sos != null" >
+        #{sos,jdbcType=VARCHAR},
+      </if>
+      <if test="youngAdult != null" >
+        #{youngAdult,jdbcType=VARCHAR},
+      </if>
+      <if test="bqi != null" >
+        #{bqi,jdbcType=VARCHAR},
+      </if>
+      <if test="ageMatched != null" >
+        #{ageMatched,jdbcType=VARCHAR},
+      </if>
+      <if test="rrf != null" >
+        #{rrf,jdbcType=VARCHAR},
+      </if>
+      <if test="boneage != null" >
+        #{boneage,jdbcType=VARCHAR},
+      </if>
+      <if test="bonemonth != null" >
+        #{bonemonth,jdbcType=VARCHAR},
+      </if>
+      <if test="eoa != null" >
+        #{eoa,jdbcType=VARCHAR},
+      </if>
+      <if test="gmdResult != null" >
+        #{gmdResult,jdbcType=VARCHAR},
+      </if>
+      <if test="fev2 != null" >
+        #{fev2,jdbcType=VARCHAR},
+      </if>
+      <if test="fev3 != null" >
+        #{fev3,jdbcType=VARCHAR},
+      </if>
+      <if test="mvv1 != null" >
+        #{mvv1,jdbcType=VARCHAR},
+      </if>
+      <if test="bsa1 != null" >
+        #{bsa1,jdbcType=VARCHAR},
+      </if>
+      <if test="mvvBsa != null" >
+        #{mvvBsa,jdbcType=VARCHAR},
+      </if>
+      <if test="v75 != null" >
+        #{v75,jdbcType=VARCHAR},
+      </if>
+      <if test="v50 != null" >
+        #{v50,jdbcType=VARCHAR},
+      </if>
+      <if test="v25 != null" >
+        #{v25,jdbcType=VARCHAR},
+      </if>
+      <if test="v25H != null" >
+        #{v25H,jdbcType=VARCHAR},
+      </if>
+      <if test="mvv != null" >
+        #{mvv,jdbcType=VARCHAR},
+      </if>
+      <if test="bsa != null" >
+        #{bsa,jdbcType=VARCHAR},
+      </if>
+      <if test="vc != null" >
+        #{vc,jdbcType=VARCHAR},
+      </if>
+      <if test="tv != null" >
+        #{tv,jdbcType=VARCHAR},
+      </if>
+      <if test="erv != null" >
+        #{erv,jdbcType=VARCHAR},
+      </if>
+      <if test="ic != null" >
+        #{ic,jdbcType=VARCHAR},
+      </if>
+      <if test="rr != null" >
+        #{rr,jdbcType=VARCHAR},
+      </if>
+      <if test="fev2p != null" >
+        #{fev2p,jdbcType=VARCHAR},
+      </if>
+      <if test="fev3p != null" >
+        #{fev3p,jdbcType=VARCHAR},
+      </if>
+      <if test="mmf != null" >
+        #{mmf,jdbcType=VARCHAR},
+      </if>
+      <if test="mvv1Bsa != null" >
+        #{mvv1Bsa,jdbcType=VARCHAR},
+      </if>
+      <if test="v50V25 != null" >
+        #{v50V25,jdbcType=VARCHAR},
+      </if>
+      <if test="irv != null" >
+        #{irv,jdbcType=VARCHAR},
+      </if>
+      <if test="mv != null" >
+        #{mv,jdbcType=VARCHAR},
+      </if>
+      <if test="pr != null" >
+        #{pr,jdbcType=VARCHAR},
+      </if>
+      <if test="sv != null" >
+        #{sv,jdbcType=VARCHAR},
+      </if>
+      <if test="co != null" >
+        #{co,jdbcType=VARCHAR},
+      </if>
+      <if test="si != null" >
+        #{si,jdbcType=VARCHAR},
+      </if>
+      <if test="ci != null" >
+        #{ci,jdbcType=VARCHAR},
+      </if>
+      <if test="vpe != null" >
+        #{vpe,jdbcType=VARCHAR},
+      </if>
+      <if test="ewk != null" >
+        #{ewk,jdbcType=VARCHAR},
+      </if>
+      <if test="hoi != null" >
+        #{hoi,jdbcType=VARCHAR},
+      </if>
+      <if test="lvwi != null" >
+        #{lvwi,jdbcType=VARCHAR},
+      </if>
+      <if test="cmbr != null" >
+        #{cmbr,jdbcType=VARCHAR},
+      </if>
+      <if test="cmbv != null" >
+        #{cmbv,jdbcType=VARCHAR},
+      </if>
+      <if test="cmbn != null" >
+        #{cmbn,jdbcType=VARCHAR},
+      </if>
+      <if test="svr != null" >
+        #{svr,jdbcType=VARCHAR},
+      </if>
+      <if test="rsvr != null" >
+        #{rsvr,jdbcType=VARCHAR},
+      </if>
+      <if test="bv != null" >
+        #{bv,jdbcType=VARCHAR},
+      </if>
+      <if test="n != null" >
+        #{n,jdbcType=VARCHAR},
+      </if>
+      <if test="nr != null" >
+        #{nr,jdbcType=VARCHAR},
+      </if>
+      <if test="vo2max != null" >
+        #{vo2max,jdbcType=VARCHAR},
+      </if>
+      <if test="mets != null" >
+        #{mets,jdbcType=VARCHAR},
+      </if>
+      <if test="hrb != null" >
+        #{hrb,jdbcType=VARCHAR},
+      </if>
+      <if test="cob != null" >
+        #{cob,jdbcType=VARCHAR},
+      </if>
+      <if test="pp != null" >
+        #{pp,jdbcType=VARCHAR},
+      </if>
+      <if test="msp != null" >
+        #{msp,jdbcType=VARCHAR},
+      </if>
+      <if test="mdp != null" >
+        #{mdp,jdbcType=VARCHAR},
+      </if>
+      <if test="map != null" >
+        #{map,jdbcType=VARCHAR},
+      </if>
+      <if test="ac != null" >
+        #{ac,jdbcType=VARCHAR},
+      </if>
+      <if test="ccp != null" >
+        #{ccp,jdbcType=VARCHAR},
+      </if>
+      <if test="blk != null" >
+        #{blk,jdbcType=VARCHAR},
+      </if>
+      <if test="fek != null" >
+        #{fek,jdbcType=VARCHAR},
+      </if>
+      <if test="tpr != null" >
+        #{tpr,jdbcType=VARCHAR},
+      </if>
+      <if test="spr != null" >
+        #{spr,jdbcType=VARCHAR},
+      </if>
+      <if test="ver != null" >
+        #{ver,jdbcType=VARCHAR},
+      </if>
+      <if test="pawp != null" >
+        #{pawp,jdbcType=VARCHAR},
+      </if>
+      <if test="par != null" >
+        #{par,jdbcType=VARCHAR},
+      </if>
+      <if test="pap != null" >
+        #{pap,jdbcType=VARCHAR},
+      </if>
+      <if test="mhr != null" >
+        #{mhr,jdbcType=VARCHAR},
+      </if>
+      <if test="mrt != null" >
+        #{mrt,jdbcType=VARCHAR},
+      </if>
+      <if test="mst != null" >
+        #{mst,jdbcType=VARCHAR},
+      </if>
+      <if test="xxgResult != null" >
+        #{xxgResult,jdbcType=VARCHAR},
+      </if>
+      <if test="hb != null" >
+        #{hb,jdbcType=VARCHAR},
+      </if>
+      <if test="htc != null" >
+        #{htc,jdbcType=VARCHAR},
+      </if>
+      <if test="waist != null" >
+        #{waist,jdbcType=VARCHAR},
+      </if>
+      <if test="buttock != null" >
+        #{buttock,jdbcType=VARCHAR},
+      </if>
+      <if test="whr != null" >
+        #{whr,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.yihe.system.domain.TOnemachineData" >
+    update t_onemachine_data
+    <set >
+      <if test="userCode != null" >
+        user_code = #{userCode,jdbcType=VARCHAR},
+      </if>
+      <if test="checkno != null" >
+        checkno = #{checkno,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null" >
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="sex != null" >
+        sex = #{sex,jdbcType=VARCHAR},
+      </if>
+      <if test="age != null" >
+        age = #{age,jdbcType=VARCHAR},
+      </if>
+      <if test="cardNum != null" >
+        card_num = #{cardNum,jdbcType=VARCHAR},
+      </if>
+      <if test="cityId != null" >
+        city_id = #{cityId,jdbcType=VARCHAR},
+      </if>
+      <if test="mac != null" >
+        mac = #{mac,jdbcType=VARCHAR},
+      </if>
+      <if test="gmtCreate != null" >
+        gmt_create = #{gmtCreate,jdbcType=VARCHAR},
+      </if>
+      <if test="height != null" >
+        height = #{height,jdbcType=VARCHAR},
+      </if>
+      <if test="weight != null" >
+        weight = #{weight,jdbcType=VARCHAR},
+      </if>
+      <if test="bmi != null" >
+        bmi = #{bmi,jdbcType=VARCHAR},
+      </if>
+      <if test="temperature != null" >
+        temperature = #{temperature,jdbcType=VARCHAR},
+      </if>
+      <if test="diastolicPressure != null" >
+        diastolic_pressure = #{diastolicPressure,jdbcType=VARCHAR},
+      </if>
+      <if test="systolicPressure != null" >
+        systolic_pressure = #{systolicPressure,jdbcType=VARCHAR},
+      </if>
+      <if test="pulse != null" >
+        pulse = #{pulse,jdbcType=VARCHAR},
+      </if>
+      <if test="bloodSugar != null" >
+        blood_sugar = #{bloodSugar,jdbcType=VARCHAR},
+      </if>
+      <if test="uricAcid != null" >
+        uric_acid = #{uricAcid,jdbcType=VARCHAR},
+      </if>
+      <if test="cholesterin != null" >
+        cholesterin = #{cholesterin,jdbcType=VARCHAR},
+      </if>
+      <if test="oxygenSaturation != null" >
+        oxygen_saturation = #{oxygenSaturation,jdbcType=VARCHAR},
+      </if>
+      <if test="electrocardiogramValue != null" >
+        electrocardiogram_value = #{electrocardiogramValue,jdbcType=VARCHAR},
+      </if>
+      <if test="electrocardiogramResult != null" >
+        electrocardiogram_result = #{electrocardiogramResult,jdbcType=VARCHAR},
+      </if>
+      <if test="ffatp != null" >
+        ffatp = #{ffatp,jdbcType=VARCHAR},
+      </if>
+      <if test="fbmr != null" >
+        fbmr = #{fbmr,jdbcType=VARCHAR},
+      </if>
+      <if test="ftbwp != null" >
+        ftbwp = #{ftbwp,jdbcType=VARCHAR},
+      </if>
+      <if test="ffat != null" >
+        ffat = #{ffat,jdbcType=VARCHAR},
+      </if>
+      <if test="fmuscle != null" >
+        fmuscle = #{fmuscle,jdbcType=VARCHAR},
+      </if>
+      <if test="fbone != null" >
+        fbone = #{fbone,jdbcType=VARCHAR},
+      </if>
+      <if test="fproteinp != null" >
+        fproteinp = #{fproteinp,jdbcType=VARCHAR},
+      </if>
+      <if test="fatgrade != null" >
+        fatgrade = #{fatgrade,jdbcType=VARCHAR},
+      </if>
+      <if test="bodyage != null" >
+        bodyage = #{bodyage,jdbcType=VARCHAR},
+      </if>
+      <if test="fmusclep != null" >
+        fmusclep = #{fmusclep,jdbcType=VARCHAR},
+      </if>
+      <if test="ftbw != null" >
+        ftbw = #{ftbw,jdbcType=VARCHAR},
+      </if>
+      <if test="fffm != null" >
+        fffm = #{fffm,jdbcType=VARCHAR},
+      </if>
+      <if test="ficw != null" >
+        ficw = #{ficw,jdbcType=VARCHAR},
+      </if>
+      <if test="fecw != null" >
+        fecw = #{fecw,jdbcType=VARCHAR},
+      </if>
+      <if test="fprotein != null" >
+        fprotein = #{fprotein,jdbcType=VARCHAR},
+      </if>
+      <if test="fcholz != null" >
+        fcholz = #{fcholz,jdbcType=VARCHAR},
+      </if>
+      <if test="ftrig != null" >
+        ftrig = #{ftrig,jdbcType=VARCHAR},
+      </if>
+      <if test="fldl != null" >
+        fldl = #{fldl,jdbcType=VARCHAR},
+      </if>
+      <if test="fhdl != null" >
+        fhdl = #{fhdl,jdbcType=VARCHAR},
+      </if>
+      <if test="leye != null" >
+        leye = #{leye,jdbcType=VARCHAR},
+      </if>
+      <if test="reye != null" >
+        reye = #{reye,jdbcType=VARCHAR},
+      </if>
+      <if test="eyeResult != null" >
+        eye_result = #{eyeResult,jdbcType=VARCHAR},
+      </if>
+      <if test="lastigmatism != null" >
+        lastigmatism = #{lastigmatism,jdbcType=VARCHAR},
+      </if>
+      <if test="rastigmatism != null" >
+        rastigmatism = #{rastigmatism,jdbcType=VARCHAR},
+      </if>
+      <if test="colourblind != null" >
+        colourblind = #{colourblind,jdbcType=VARCHAR},
+      </if>
+      <if test="anomalous != null" >
+        anomalous = #{anomalous,jdbcType=VARCHAR},
+      </if>
+      <if test="fvc != null" >
+        fvc = #{fvc,jdbcType=VARCHAR},
+      </if>
+      <if test="fev1 != null" >
+        fev1 = #{fev1,jdbcType=VARCHAR},
+      </if>
+      <if test="pef != null" >
+        pef = #{pef,jdbcType=VARCHAR},
+      </if>
+      <if test="fev1Fvc != null" >
+        fev1_fvc = #{fev1Fvc,jdbcType=VARCHAR},
+      </if>
+      <if test="fef25 != null" >
+        fef25 = #{fef25,jdbcType=VARCHAR},
+      </if>
+      <if test="fef50 != null" >
+        fef50 = #{fef50,jdbcType=VARCHAR},
+      </if>
+      <if test="fef75 != null" >
+        fef75 = #{fef75,jdbcType=VARCHAR},
+      </if>
+      <if test="fef2575 != null" >
+        fef2575 = #{fef2575,jdbcType=VARCHAR},
+      </if>
+      <if test="fvcp != null" >
+        fvcp = #{fvcp,jdbcType=VARCHAR},
+      </if>
+      <if test="fev1p != null" >
+        fev1p = #{fev1p,jdbcType=VARCHAR},
+      </if>
+      <if test="pefp != null" >
+        pefp = #{pefp,jdbcType=VARCHAR},
+      </if>
+      <if test="fef25p != null" >
+        fef25p = #{fef25p,jdbcType=VARCHAR},
+      </if>
+      <if test="fef50p != null" >
+        fef50p = #{fef50p,jdbcType=VARCHAR},
+      </if>
+      <if test="fef75p != null" >
+        fef75p = #{fef75p,jdbcType=VARCHAR},
+      </if>
+      <if test="fef2575p != null" >
+        fef2575p = #{fef2575p,jdbcType=VARCHAR},
+      </if>
+      <if test="counts != null" >
+        counts = #{counts,jdbcType=VARCHAR},
+      </if>
+      <if test="fvcResult != null" >
+        fvc_result = #{fvcResult,jdbcType=VARCHAR},
+      </if>
+      <if test="alcohol != null" >
+        alcohol = #{alcohol,jdbcType=VARCHAR},
+      </if>
+      <if test="alcoholResult != null" >
+        alcohol_result = #{alcoholResult,jdbcType=VARCHAR},
+      </if>
+      <if test="tscore != null" >
+        tscore = #{tscore,jdbcType=VARCHAR},
+      </if>
+      <if test="zscore != null" >
+        zscore = #{zscore,jdbcType=VARCHAR},
+      </if>
+      <if test="sos != null" >
+        sos = #{sos,jdbcType=VARCHAR},
+      </if>
+      <if test="youngAdult != null" >
+        young_adult = #{youngAdult,jdbcType=VARCHAR},
+      </if>
+      <if test="bqi != null" >
+        bqi = #{bqi,jdbcType=VARCHAR},
+      </if>
+      <if test="ageMatched != null" >
+        age_matched = #{ageMatched,jdbcType=VARCHAR},
+      </if>
+      <if test="rrf != null" >
+        rrf = #{rrf,jdbcType=VARCHAR},
+      </if>
+      <if test="boneage != null" >
+        boneage = #{boneage,jdbcType=VARCHAR},
+      </if>
+      <if test="bonemonth != null" >
+        bonemonth = #{bonemonth,jdbcType=VARCHAR},
+      </if>
+      <if test="eoa != null" >
+        eoa = #{eoa,jdbcType=VARCHAR},
+      </if>
+      <if test="gmdResult != null" >
+        gmd_result = #{gmdResult,jdbcType=VARCHAR},
+      </if>
+      <if test="fev2 != null" >
+        fev2 = #{fev2,jdbcType=VARCHAR},
+      </if>
+      <if test="fev3 != null" >
+        fev3 = #{fev3,jdbcType=VARCHAR},
+      </if>
+      <if test="mvv1 != null" >
+        mvv1 = #{mvv1,jdbcType=VARCHAR},
+      </if>
+      <if test="bsa1 != null" >
+        bsa1 = #{bsa1,jdbcType=VARCHAR},
+      </if>
+      <if test="mvvBsa != null" >
+        mvv_bsa = #{mvvBsa,jdbcType=VARCHAR},
+      </if>
+      <if test="v75 != null" >
+        v75 = #{v75,jdbcType=VARCHAR},
+      </if>
+      <if test="v50 != null" >
+        v50 = #{v50,jdbcType=VARCHAR},
+      </if>
+      <if test="v25 != null" >
+        v25 = #{v25,jdbcType=VARCHAR},
+      </if>
+      <if test="v25H != null" >
+        v25_h = #{v25H,jdbcType=VARCHAR},
+      </if>
+      <if test="mvv != null" >
+        mvv = #{mvv,jdbcType=VARCHAR},
+      </if>
+      <if test="bsa != null" >
+        bsa = #{bsa,jdbcType=VARCHAR},
+      </if>
+      <if test="vc != null" >
+        vc = #{vc,jdbcType=VARCHAR},
+      </if>
+      <if test="tv != null" >
+        tv = #{tv,jdbcType=VARCHAR},
+      </if>
+      <if test="erv != null" >
+        erv = #{erv,jdbcType=VARCHAR},
+      </if>
+      <if test="ic != null" >
+        ic = #{ic,jdbcType=VARCHAR},
+      </if>
+      <if test="rr != null" >
+        rr = #{rr,jdbcType=VARCHAR},
+      </if>
+      <if test="fev2p != null" >
+        fev2p = #{fev2p,jdbcType=VARCHAR},
+      </if>
+      <if test="fev3p != null" >
+        fev3p = #{fev3p,jdbcType=VARCHAR},
+      </if>
+      <if test="mmf != null" >
+        mmf = #{mmf,jdbcType=VARCHAR},
+      </if>
+      <if test="mvv1Bsa != null" >
+        mvv1_bsa = #{mvv1Bsa,jdbcType=VARCHAR},
+      </if>
+      <if test="v50V25 != null" >
+        v50_v25 = #{v50V25,jdbcType=VARCHAR},
+      </if>
+      <if test="irv != null" >
+        irv = #{irv,jdbcType=VARCHAR},
+      </if>
+      <if test="mv != null" >
+        mv = #{mv,jdbcType=VARCHAR},
+      </if>
+      <if test="pr != null" >
+        pr = #{pr,jdbcType=VARCHAR},
+      </if>
+      <if test="sv != null" >
+        sv = #{sv,jdbcType=VARCHAR},
+      </if>
+      <if test="co != null" >
+        co = #{co,jdbcType=VARCHAR},
+      </if>
+      <if test="si != null" >
+        si = #{si,jdbcType=VARCHAR},
+      </if>
+      <if test="ci != null" >
+        ci = #{ci,jdbcType=VARCHAR},
+      </if>
+      <if test="vpe != null" >
+        vpe = #{vpe,jdbcType=VARCHAR},
+      </if>
+      <if test="ewk != null" >
+        ewk = #{ewk,jdbcType=VARCHAR},
+      </if>
+      <if test="hoi != null" >
+        hoi = #{hoi,jdbcType=VARCHAR},
+      </if>
+      <if test="lvwi != null" >
+        lvwi = #{lvwi,jdbcType=VARCHAR},
+      </if>
+      <if test="cmbr != null" >
+        cmbr = #{cmbr,jdbcType=VARCHAR},
+      </if>
+      <if test="cmbv != null" >
+        cmbv = #{cmbv,jdbcType=VARCHAR},
+      </if>
+      <if test="cmbn != null" >
+        cmbn = #{cmbn,jdbcType=VARCHAR},
+      </if>
+      <if test="svr != null" >
+        svr = #{svr,jdbcType=VARCHAR},
+      </if>
+      <if test="rsvr != null" >
+        rsvr = #{rsvr,jdbcType=VARCHAR},
+      </if>
+      <if test="bv != null" >
+        bv = #{bv,jdbcType=VARCHAR},
+      </if>
+      <if test="n != null" >
+        n = #{n,jdbcType=VARCHAR},
+      </if>
+      <if test="nr != null" >
+        nr = #{nr,jdbcType=VARCHAR},
+      </if>
+      <if test="vo2max != null" >
+        vo2max = #{vo2max,jdbcType=VARCHAR},
+      </if>
+      <if test="mets != null" >
+        mets = #{mets,jdbcType=VARCHAR},
+      </if>
+      <if test="hrb != null" >
+        hrb = #{hrb,jdbcType=VARCHAR},
+      </if>
+      <if test="cob != null" >
+        cob = #{cob,jdbcType=VARCHAR},
+      </if>
+      <if test="pp != null" >
+        pp = #{pp,jdbcType=VARCHAR},
+      </if>
+      <if test="msp != null" >
+        msp = #{msp,jdbcType=VARCHAR},
+      </if>
+      <if test="mdp != null" >
+        mdp = #{mdp,jdbcType=VARCHAR},
+      </if>
+      <if test="map != null" >
+        map = #{map,jdbcType=VARCHAR},
+      </if>
+      <if test="ac != null" >
+        ac = #{ac,jdbcType=VARCHAR},
+      </if>
+      <if test="ccp != null" >
+        ccp = #{ccp,jdbcType=VARCHAR},
+      </if>
+      <if test="blk != null" >
+        blk = #{blk,jdbcType=VARCHAR},
+      </if>
+      <if test="fek != null" >
+        fek = #{fek,jdbcType=VARCHAR},
+      </if>
+      <if test="tpr != null" >
+        tpr = #{tpr,jdbcType=VARCHAR},
+      </if>
+      <if test="spr != null" >
+        spr = #{spr,jdbcType=VARCHAR},
+      </if>
+      <if test="ver != null" >
+        ver = #{ver,jdbcType=VARCHAR},
+      </if>
+      <if test="pawp != null" >
+        pawp = #{pawp,jdbcType=VARCHAR},
+      </if>
+      <if test="par != null" >
+        par = #{par,jdbcType=VARCHAR},
+      </if>
+      <if test="pap != null" >
+        pap = #{pap,jdbcType=VARCHAR},
+      </if>
+      <if test="mhr != null" >
+        mhr = #{mhr,jdbcType=VARCHAR},
+      </if>
+      <if test="mrt != null" >
+        mrt = #{mrt,jdbcType=VARCHAR},
+      </if>
+      <if test="mst != null" >
+        mst = #{mst,jdbcType=VARCHAR},
+      </if>
+      <if test="xxgResult != null" >
+        xxg_result = #{xxgResult,jdbcType=VARCHAR},
+      </if>
+      <if test="hb != null" >
+        hb = #{hb,jdbcType=VARCHAR},
+      </if>
+      <if test="htc != null" >
+        htc = #{htc,jdbcType=VARCHAR},
+      </if>
+      <if test="waist != null" >
+        waist = #{waist,jdbcType=VARCHAR},
+      </if>
+      <if test="buttock != null" >
+        buttock = #{buttock,jdbcType=VARCHAR},
+      </if>
+      <if test="whr != null" >
+        whr = #{whr,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.yihe.system.domain.TOnemachineData" >
+    update t_onemachine_data
+    set user_code = #{userCode,jdbcType=VARCHAR},
+      checkno = #{checkno,jdbcType=VARCHAR},
+      name = #{name,jdbcType=VARCHAR},
+      sex = #{sex,jdbcType=VARCHAR},
+      age = #{age,jdbcType=VARCHAR},
+      card_num = #{cardNum,jdbcType=VARCHAR},
+      city_id = #{cityId,jdbcType=VARCHAR},
+      mac = #{mac,jdbcType=VARCHAR},
+      gmt_create = #{gmtCreate,jdbcType=VARCHAR},
+      height = #{height,jdbcType=VARCHAR},
+      weight = #{weight,jdbcType=VARCHAR},
+      bmi = #{bmi,jdbcType=VARCHAR},
+      temperature = #{temperature,jdbcType=VARCHAR},
+      diastolic_pressure = #{diastolicPressure,jdbcType=VARCHAR},
+      systolic_pressure = #{systolicPressure,jdbcType=VARCHAR},
+      pulse = #{pulse,jdbcType=VARCHAR},
+      blood_sugar = #{bloodSugar,jdbcType=VARCHAR},
+      uric_acid = #{uricAcid,jdbcType=VARCHAR},
+      cholesterin = #{cholesterin,jdbcType=VARCHAR},
+      oxygen_saturation = #{oxygenSaturation,jdbcType=VARCHAR},
+      electrocardiogram_value = #{electrocardiogramValue,jdbcType=VARCHAR},
+      electrocardiogram_result = #{electrocardiogramResult,jdbcType=VARCHAR},
+      ffatp = #{ffatp,jdbcType=VARCHAR},
+      fbmr = #{fbmr,jdbcType=VARCHAR},
+      ftbwp = #{ftbwp,jdbcType=VARCHAR},
+      ffat = #{ffat,jdbcType=VARCHAR},
+      fmuscle = #{fmuscle,jdbcType=VARCHAR},
+      fbone = #{fbone,jdbcType=VARCHAR},
+      fproteinp = #{fproteinp,jdbcType=VARCHAR},
+      fatgrade = #{fatgrade,jdbcType=VARCHAR},
+      bodyage = #{bodyage,jdbcType=VARCHAR},
+      fmusclep = #{fmusclep,jdbcType=VARCHAR},
+      ftbw = #{ftbw,jdbcType=VARCHAR},
+      fffm = #{fffm,jdbcType=VARCHAR},
+      ficw = #{ficw,jdbcType=VARCHAR},
+      fecw = #{fecw,jdbcType=VARCHAR},
+      fprotein = #{fprotein,jdbcType=VARCHAR},
+      fcholz = #{fcholz,jdbcType=VARCHAR},
+      ftrig = #{ftrig,jdbcType=VARCHAR},
+      fldl = #{fldl,jdbcType=VARCHAR},
+      fhdl = #{fhdl,jdbcType=VARCHAR},
+      leye = #{leye,jdbcType=VARCHAR},
+      reye = #{reye,jdbcType=VARCHAR},
+      eye_result = #{eyeResult,jdbcType=VARCHAR},
+      lastigmatism = #{lastigmatism,jdbcType=VARCHAR},
+      rastigmatism = #{rastigmatism,jdbcType=VARCHAR},
+      colourblind = #{colourblind,jdbcType=VARCHAR},
+      anomalous = #{anomalous,jdbcType=VARCHAR},
+      fvc = #{fvc,jdbcType=VARCHAR},
+      fev1 = #{fev1,jdbcType=VARCHAR},
+      pef = #{pef,jdbcType=VARCHAR},
+      fev1_fvc = #{fev1Fvc,jdbcType=VARCHAR},
+      fef25 = #{fef25,jdbcType=VARCHAR},
+      fef50 = #{fef50,jdbcType=VARCHAR},
+      fef75 = #{fef75,jdbcType=VARCHAR},
+      fef2575 = #{fef2575,jdbcType=VARCHAR},
+      fvcp = #{fvcp,jdbcType=VARCHAR},
+      fev1p = #{fev1p,jdbcType=VARCHAR},
+      pefp = #{pefp,jdbcType=VARCHAR},
+      fef25p = #{fef25p,jdbcType=VARCHAR},
+      fef50p = #{fef50p,jdbcType=VARCHAR},
+      fef75p = #{fef75p,jdbcType=VARCHAR},
+      fef2575p = #{fef2575p,jdbcType=VARCHAR},
+      counts = #{counts,jdbcType=VARCHAR},
+      fvc_result = #{fvcResult,jdbcType=VARCHAR},
+      alcohol = #{alcohol,jdbcType=VARCHAR},
+      alcohol_result = #{alcoholResult,jdbcType=VARCHAR},
+      tscore = #{tscore,jdbcType=VARCHAR},
+      zscore = #{zscore,jdbcType=VARCHAR},
+      sos = #{sos,jdbcType=VARCHAR},
+      young_adult = #{youngAdult,jdbcType=VARCHAR},
+      bqi = #{bqi,jdbcType=VARCHAR},
+      age_matched = #{ageMatched,jdbcType=VARCHAR},
+      rrf = #{rrf,jdbcType=VARCHAR},
+      boneage = #{boneage,jdbcType=VARCHAR},
+      bonemonth = #{bonemonth,jdbcType=VARCHAR},
+      eoa = #{eoa,jdbcType=VARCHAR},
+      gmd_result = #{gmdResult,jdbcType=VARCHAR},
+      fev2 = #{fev2,jdbcType=VARCHAR},
+      fev3 = #{fev3,jdbcType=VARCHAR},
+      mvv1 = #{mvv1,jdbcType=VARCHAR},
+      bsa1 = #{bsa1,jdbcType=VARCHAR},
+      mvv_bsa = #{mvvBsa,jdbcType=VARCHAR},
+      v75 = #{v75,jdbcType=VARCHAR},
+      v50 = #{v50,jdbcType=VARCHAR},
+      v25 = #{v25,jdbcType=VARCHAR},
+      v25_h = #{v25H,jdbcType=VARCHAR},
+      mvv = #{mvv,jdbcType=VARCHAR},
+      bsa = #{bsa,jdbcType=VARCHAR},
+      vc = #{vc,jdbcType=VARCHAR},
+      tv = #{tv,jdbcType=VARCHAR},
+      erv = #{erv,jdbcType=VARCHAR},
+      ic = #{ic,jdbcType=VARCHAR},
+      rr = #{rr,jdbcType=VARCHAR},
+      fev2p = #{fev2p,jdbcType=VARCHAR},
+      fev3p = #{fev3p,jdbcType=VARCHAR},
+      mmf = #{mmf,jdbcType=VARCHAR},
+      mvv1_bsa = #{mvv1Bsa,jdbcType=VARCHAR},
+      v50_v25 = #{v50V25,jdbcType=VARCHAR},
+      irv = #{irv,jdbcType=VARCHAR},
+      mv = #{mv,jdbcType=VARCHAR},
+      pr = #{pr,jdbcType=VARCHAR},
+      sv = #{sv,jdbcType=VARCHAR},
+      co = #{co,jdbcType=VARCHAR},
+      si = #{si,jdbcType=VARCHAR},
+      ci = #{ci,jdbcType=VARCHAR},
+      vpe = #{vpe,jdbcType=VARCHAR},
+      ewk = #{ewk,jdbcType=VARCHAR},
+      hoi = #{hoi,jdbcType=VARCHAR},
+      lvwi = #{lvwi,jdbcType=VARCHAR},
+      cmbr = #{cmbr,jdbcType=VARCHAR},
+      cmbv = #{cmbv,jdbcType=VARCHAR},
+      cmbn = #{cmbn,jdbcType=VARCHAR},
+      svr = #{svr,jdbcType=VARCHAR},
+      rsvr = #{rsvr,jdbcType=VARCHAR},
+      bv = #{bv,jdbcType=VARCHAR},
+      n = #{n,jdbcType=VARCHAR},
+      nr = #{nr,jdbcType=VARCHAR},
+      vo2max = #{vo2max,jdbcType=VARCHAR},
+      mets = #{mets,jdbcType=VARCHAR},
+      hrb = #{hrb,jdbcType=VARCHAR},
+      cob = #{cob,jdbcType=VARCHAR},
+      pp = #{pp,jdbcType=VARCHAR},
+      msp = #{msp,jdbcType=VARCHAR},
+      mdp = #{mdp,jdbcType=VARCHAR},
+      map = #{map,jdbcType=VARCHAR},
+      ac = #{ac,jdbcType=VARCHAR},
+      ccp = #{ccp,jdbcType=VARCHAR},
+      blk = #{blk,jdbcType=VARCHAR},
+      fek = #{fek,jdbcType=VARCHAR},
+      tpr = #{tpr,jdbcType=VARCHAR},
+      spr = #{spr,jdbcType=VARCHAR},
+      ver = #{ver,jdbcType=VARCHAR},
+      pawp = #{pawp,jdbcType=VARCHAR},
+      par = #{par,jdbcType=VARCHAR},
+      pap = #{pap,jdbcType=VARCHAR},
+      mhr = #{mhr,jdbcType=VARCHAR},
+      mrt = #{mrt,jdbcType=VARCHAR},
+      mst = #{mst,jdbcType=VARCHAR},
+      xxg_result = #{xxgResult,jdbcType=VARCHAR},
+      hb = #{hb,jdbcType=VARCHAR},
+      htc = #{htc,jdbcType=VARCHAR},
+      waist = #{waist,jdbcType=VARCHAR},
+      buttock = #{buttock,jdbcType=VARCHAR},
+      whr = #{whr,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <select id="queryOnemachine" parameterType="string" resultMap="BaseResultMap">
+    select id, gmt_create from t_onemachine_data where user_code = #{userCode} order by id desc
+  </select>
+</mapper>

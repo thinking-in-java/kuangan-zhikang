@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yihe.system.mapper.YhAssessConclusionMapper">
+    <resultMap id="BaseResultMap" type="com.yihe.system.domain.YhAssessConclusion">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="score_min" property="scoreMin" jdbcType="INTEGER"/>
+        <result column="score_max" property="scoreMax" jdbcType="INTEGER"/>
+        <result column="state" property="state" jdbcType="VARCHAR"/>
+        <result column="conclusion" property="conclusion" jdbcType="VARCHAR"/>
+        <result column="suggest" property="suggest" jdbcType="VARCHAR"/>
+        <result column="guidance" property="guidance" jdbcType="VARCHAR"/>
+        <result column="link" property="link" jdbcType="VARCHAR"/>
+        <result column="assess" property="assess" jdbcType="VARCHAR"/>
+        <result column="leftwidth" property="leftwidth" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <select id="findByState" resultType="string">
+        select state from yh_assess_conclusion where score_min &lt;= #{score} and score_max &gt;= #{score} and assess = #{assess}
+    </select>
+
+    <select id="findByConcent" resultMap="BaseResultMap">
+        select conclusion, suggest, guidance, link, leftwidth
+        from yh_assess_conclusion
+        where state = #{state} and assess = #{assess}
+    </select>
+
+    <select id="findScoreL" parameterType="integer" resultType="string">
+        select conclusion from yh_assess_conclusion where score_min &lt;= #{scoreL} and score_max &gt;= #{scoreL} and assess = 'A型性格评估L'
+    </select>
+
+    <select id="findMaxScore" parameterType="string" resultType="int">
+        select max(score_max) from yh_assess_conclusion where assess = #{assess}
+    </select>
+
+    <select id="findBydivisor" resultMap="BaseResultMap">
+        select score_min, score_max, state, conclusion, suggest, guidance, link, leftwidth
+        from yh_assess_conclusion
+        where assess = #{assess}
+    </select>
+</mapper>

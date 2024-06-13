@@ -1,0 +1,436 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper
+	namespace="com.yihe.applet.api.mapper.YhSleepUserDiaryAppMapper">
+	<sql id="allColumn">id,user_code,sleep_time,wake_time,diary_desc,sleep_diarytime
+	</sql>
+	<sql id="insColumn">user_code,sleep_time,wake_time,diary_desc,sleep_diarytime
+	</sql>
+	<resultMap type="com.yihe.applet.api.domain.YhSleepUserDiaryApp"
+		id="sleepUserDiary">
+		<id column="id" jdbcType="INTEGER" property="id" />
+		<result column="user_code" jdbcType="VARCHAR"
+			property="userCode" />
+		<result column="sleep_time" jdbcType="TIMESTAMP"
+			property="sleepTime" />
+		<result column="wake_time" jdbcType="TIMESTAMP"
+			property="wakeTime" />
+		<result column="diary_desc" jdbcType="VARCHAR"
+			property="diaryDesc" />
+		<result column="sleep_diarytime" jdbcType="TIMESTAMP"
+			property="sleepDiarytime" />
+	</resultMap>
+	<!-- 添加睡眠记录 -->
+	<insert id="addUserDiaryReport"
+		parameterType="com.yihe.applet.api.domain.YhSleepUserDiaryApp">
+		INSERT INTO yh_sleep_user_diary(
+		<include refid="insColumn" />
+		) VALUES
+		(#{userCode},#{sleepTime},#{wakeTime},#{diaryDesc},#{sleepDiarytime})
+	</insert>
+	<!-- 根据用户code修改睡眠日记录 -->
+	<update id="uptSleepDiaryByCode" parameterType="com.yihe.applet.api.domain.YhSleepUserDiaryApp">
+		UPDATE yh_sleep_user_diary    
+		SET sleep_time=#{sleepTime},wake_time=#{wakeTime},diary_desc=#{diaryDesc} 
+		WHERE
+		DATEDIFF(#{sleepDiarytime},sleep_diarytime)=0
+		AND user_code=#{userCode}
+	</update>
+	<!-- 根据时间区间查询用户记录 -->
+	<select id="selSleepDiaryByTimeAndCode" resultMap="sleepUserDiary">
+		SELECT * FROM yh_sleep_user_diary 
+		WHERE sleep_diarytime BETWEEN #{startDiaryT} AND #{endDiaryT}
+		AND user_code=#{userCode}
+		ORDER BY sleep_diarytime DESC
+	</select>
+	<select id="selectUserIntradayData" resultMap="sleepUserDiary">
+		select * from yh_sleep_user_diary where TO_DAYS(sleep_diarytime) = TO_DAYS(NOW()) and user_code=#{userCode}
+	</select>
+	<select id="selectsleepByParam" resultMap="sleepUserDiary">
+		select * from yh_sleep_user_diary where sleep_diarytime=#{sleepDiarytime} and user_code=#{userCode}
+	</select>
+	
+	<!-- 根据日期查询 -->
+	<select id="selUserDiaryByDate" resultMap="sleepUserDiary"
+		parameterType="com.yihe.applet.api.domain.YhSleepUserDiaryApp">
+		SELECT
+		<include refid="allColumn" />
+		FROM yh_sleep_user_diary
+		WHERE
+		DATEDIFF(#{sleepDiarytime},sleep_diarytime)=0
+		AND user_code=#{userCode}
+	</select>
+	<!-- 根据用户code查询所有记录 -->
+	<select id="selAllDiaryByUser" resultMap="sleepUserDiary">
+		SELECT
+		<include refid="allColumn" />
+		FROM yh_sleep_user_diary
+		WHERE user_code=#{userCode}
+		ORDER BY
+		sleep_diarytime
+	</select>
+	
+	<!-- 查询用户本月数据 -->
+	<select id="selectThisMonthData" resultMap="sleepUserDiary" parameterType="java.lang.String">
+	SELECT * from yh_sleep_user_diary 
+	WHERE DATE_FORMAT( sleep_diarytime, '%Y%m') = DATE_FORMAT( CURDATE( ) ,'%Y%m') 
+	and user_code=#{usercode}
+	</select>
+	
+	
+<select id="findSleepUserDuaryYue" resultType="map">
+	SELECT 
+	SUM(CASE DAY(sleep_diarytime) WHEN '1' THEN 1 ELSE 0 END) AS '1',
+	SUM(CASE DAY(sleep_diarytime) WHEN '2' THEN 1 ELSE 0 END) AS '2',
+	SUM(CASE DAY(sleep_diarytime) WHEN '3' THEN 1 ELSE 0 END) AS '3',
+	SUM(CASE DAY(sleep_diarytime) WHEN '4' THEN 1 ELSE 0 END) AS '4',
+	SUM(CASE DAY(sleep_diarytime) WHEN '5' THEN 1 ELSE 0 END) AS '5',
+	SUM(CASE DAY(sleep_diarytime) WHEN '6' THEN 1 ELSE 0 END) AS '6',
+	SUM(CASE DAY(sleep_diarytime) WHEN '7' THEN 1 ELSE 0 END) AS '7',
+	SUM(CASE DAY(sleep_diarytime) WHEN '8' THEN 1 ELSE 0 END) AS '8',
+	SUM(CASE DAY(sleep_diarytime) WHEN '9' THEN 1 ELSE 0 END) AS '9',
+	SUM(CASE DAY(sleep_diarytime) WHEN '10' THEN 1 ELSE 0 END) AS '10',
+	SUM(CASE DAY(sleep_diarytime) WHEN '11' THEN 1 ELSE 0 END) AS '11',
+	SUM(CASE DAY(sleep_diarytime) WHEN '12' THEN 1 ELSE 0 END) AS '12',
+	SUM(CASE DAY(sleep_diarytime) WHEN '13' THEN 1 ELSE 0 END) AS '13',
+	SUM(CASE DAY(sleep_diarytime) WHEN '14' THEN 1 ELSE 0 END) AS '14',
+	SUM(CASE DAY(sleep_diarytime) WHEN '15' THEN 1 ELSE 0 END) AS '15',
+	SUM(CASE DAY(sleep_diarytime) WHEN '16' THEN 1 ELSE 0 END) AS '16',
+	SUM(CASE DAY(sleep_diarytime) WHEN '17' THEN 1 ELSE 0 END) AS '17',
+	SUM(CASE DAY(sleep_diarytime) WHEN '18' THEN 1 ELSE 0 END) AS '18',
+	SUM(CASE DAY(sleep_diarytime) WHEN '19' THEN 1 ELSE 0 END) AS '19',
+	SUM(CASE DAY(sleep_diarytime) WHEN '20' THEN 1 ELSE 0 END) AS '20',
+	SUM(CASE DAY(sleep_diarytime) WHEN '21' THEN 1 ELSE 0 END) AS '21',
+	SUM(CASE DAY(sleep_diarytime) WHEN '22' THEN 1 ELSE 0 END) AS '22',
+	SUM(CASE DAY(sleep_diarytime) WHEN '23' THEN 1 ELSE 0 END) AS '23',
+	SUM(CASE DAY(sleep_diarytime) WHEN '24' THEN 1 ELSE 0 END) AS '24',
+	SUM(CASE DAY(sleep_diarytime) WHEN '25' THEN 1 ELSE 0 END) AS '25',
+	SUM(CASE DAY(sleep_diarytime) WHEN '26' THEN 1 ELSE 0 END) AS '26',
+	SUM(CASE DAY(sleep_diarytime) WHEN '27' THEN 1 ELSE 0 END) AS '27',
+	SUM(CASE DAY(sleep_diarytime) WHEN '28' THEN 1 ELSE 0 END) AS '28',
+	SUM(CASE DAY(sleep_diarytime) WHEN '29' THEN 1 ELSE 0 END) AS '29',
+	SUM(CASE DAY(sleep_diarytime) WHEN '30' THEN 1 ELSE 0 END) AS '30',
+	SUM(CASE DAY(sleep_diarytime) WHEN '31' THEN 1 ELSE 0 END) AS '31',
+	MONTH(sleep_diarytime) AS MONTH,
+	YEAR(sleep_diarytime) AS YEAR
+	FROM yh_sleep_user_diary
+	WHERE MONTH(`sleep_diarytime`) IN(#{month}) AND YEAR(sleep_diarytime) IN(#{year})AND user_code=#{userCode} GROUP BY  MONTH 
+	</select>
+	
+	<select id="findSleepUserDiaryByYear" resultType="map">
+	SELECT 
+SUM(CASE DAY(sleep_diarytime) WHEN '1' THEN 1 ELSE 0 END) AS '1',
+SUM(CASE DAY(sleep_diarytime) WHEN '2' THEN 1 ELSE 0 END) AS '2',
+SUM(CASE DAY(sleep_diarytime) WHEN '3' THEN 1 ELSE 0 END) AS '3',
+SUM(CASE DAY(sleep_diarytime) WHEN '4' THEN 1 ELSE 0 END) AS '4',
+SUM(CASE DAY(sleep_diarytime) WHEN '5' THEN 1 ELSE 0 END) AS '5',
+SUM(CASE DAY(sleep_diarytime) WHEN '6' THEN 1 ELSE 0 END) AS '6',
+SUM(CASE DAY(sleep_diarytime) WHEN '7' THEN 1 ELSE 0 END) AS '7',
+SUM(CASE DAY(sleep_diarytime) WHEN '8' THEN 1 ELSE 0 END) AS '8',
+SUM(CASE DAY(sleep_diarytime) WHEN '9' THEN 1 ELSE 0 END) AS '9',
+SUM(CASE DAY(sleep_diarytime) WHEN '10' THEN 1 ELSE 0 END) AS '10',
+SUM(CASE DAY(sleep_diarytime) WHEN '11' THEN 1 ELSE 0 END) AS '11',
+SUM(CASE DAY(sleep_diarytime) WHEN '12' THEN 1 ELSE 0 END) AS '12',
+SUM(CASE DAY(sleep_diarytime) WHEN '13' THEN 1 ELSE 0 END) AS '13',
+SUM(CASE DAY(sleep_diarytime) WHEN '14' THEN 1 ELSE 0 END) AS '14',
+SUM(CASE DAY(sleep_diarytime) WHEN '15' THEN 1 ELSE 0 END) AS '15',
+SUM(CASE DAY(sleep_diarytime) WHEN '16' THEN 1 ELSE 0 END) AS '16',
+SUM(CASE DAY(sleep_diarytime) WHEN '17' THEN 1 ELSE 0 END) AS '17',
+SUM(CASE DAY(sleep_diarytime) WHEN '18' THEN 1 ELSE 0 END) AS '18',
+SUM(CASE DAY(sleep_diarytime) WHEN '19' THEN 1 ELSE 0 END) AS '19',
+SUM(CASE DAY(sleep_diarytime) WHEN '20' THEN 1 ELSE 0 END) AS '20',
+SUM(CASE DAY(sleep_diarytime) WHEN '21' THEN 1 ELSE 0 END) AS '21',
+SUM(CASE DAY(sleep_diarytime) WHEN '22' THEN 1 ELSE 0 END) AS '22',
+SUM(CASE DAY(sleep_diarytime) WHEN '23' THEN 1 ELSE 0 END) AS '23',
+SUM(CASE DAY(sleep_diarytime) WHEN '24' THEN 1 ELSE 0 END) AS '24',
+SUM(CASE DAY(sleep_diarytime) WHEN '25' THEN 1 ELSE 0 END) AS '25',
+SUM(CASE DAY(sleep_diarytime) WHEN '26' THEN 1 ELSE 0 END) AS '26',
+SUM(CASE DAY(sleep_diarytime) WHEN '27' THEN 1 ELSE 0 END) AS '27',
+SUM(CASE DAY(sleep_diarytime) WHEN '28' THEN 1 ELSE 0 END) AS '28',
+SUM(CASE DAY(sleep_diarytime) WHEN '29' THEN 1 ELSE 0 END) AS '29',
+SUM(CASE DAY(sleep_diarytime) WHEN '30' THEN 1 ELSE 0 END) AS '30',
+SUM(CASE DAY(sleep_diarytime) WHEN '31' THEN 1 ELSE 0 END) AS '31',
+MONTH(sleep_diarytime) AS MONTH,
+YEAR(sleep_diarytime) AS YEAR
+FROM yh_sleep_user_diary
+WHERE MONTH(`sleep_diarytime`) IN(#{month}) AND YEAR(sleep_diarytime) IN(#{year})AND user_code=#{userCode} GROUP BY  MONTH 
+ 
+</select>
+	
+	
+	<!-- 查询用户上周数据 -->
+	<select id="selectlastweekData" resultMap="sleepUserDiary" parameterType="java.lang.String">
+	SELECT * FROM yh_sleep_user_diary WHERE YEARWEEK(date_format(sleep_diarytime,'%Y-%m-%d')) = YEARWEEK(now())-1 and user_code=#{userCode};  
+	</select>
+	
+	<select id="findSleepastWeekUserData" resultMap="sleepUserDiary">
+			SELECT DAY, MAX(num) AS daynum
+			FROM (
+			    SELECT 
+			       WEEKDAY(osr.sleep_diarytime)+1 AS DAY, 
+			       IF (COUNT(1) IS NULL, 0, COUNT(1)) AS num 
+			    FROM yh_sleep_user_diary AS osr
+			    
+			   where osr.user_code=#{userCode} and YEARWEEK(DATE_FORMAT(osr.sleep_diarytime,'%Y-%m-%d'),1) = YEARWEEK(NOW(), 1)-1
+			    GROUP BY WEEKDAY(osr.sleep_diarytime)
+			    UNION
+			    SELECT * FROM (
+			        SELECT 1 DAY, 0 num
+			        UNION
+			        SELECT 2, 0  
+			        UNION
+			        SELECT 3, 0  
+			        UNION
+			        SELECT 4, 0  
+			        UNION
+			        SELECT 5, 0  
+			        UNION
+			        SELECT 6, 0
+			        UNION
+			        SELECT 7, 0  
+			    ) b
+			) c 
+			GROUP BY DAY
+
+	</select>
+	
+	<!-- 查询用户本周数据 -->
+	<select id="selectthisweekData" resultMap="sleepUserDiary" parameterType="java.lang.String">
+	SELECT * FROM yh_sleep_user_diary WHERE YEARWEEK(date_format(sleep_diarytime,'%Y-%m-%d')) = YEARWEEK(now()) and user_code=#{userCode};  
+	</select>
+	
+	
+	<select id="findSleepUserDuary" resultMap="sleepUserDiary">
+SELECT DAY, MAX(num) AS daynum
+FROM (
+    SELECT 
+       WEEKDAY(osr.sleep_diarytime)+1 AS DAY, 
+       IF (COUNT(1) IS NULL, 0, COUNT(1)) AS num 
+    FROM yh_sleep_user_diary AS osr
+    
+    WHERE 
+        osr.user_code=#{userCode} AND
+        YEARWEEK(DATE_FORMAT(osr.sleep_diarytime,'%Y-%m-%d'), 1) = YEARWEEK(NOW(), 1)
+    GROUP BY WEEKDAY(osr.sleep_diarytime)
+    UNION
+    SELECT * FROM (
+        SELECT 1 DAY, 0 num
+        UNION
+        SELECT 2, 0  
+        UNION
+        SELECT 3, 0  
+        UNION
+        SELECT 4, 0  
+        UNION
+        SELECT 5, 0  
+        UNION
+        SELECT 6, 0
+        UNION
+        SELECT 7, 0  
+    ) b
+) c 
+GROUP BY DAY
+		
+	</select>
+	
+	<!-- 查询用户本年数据 -->
+	<select id="selectthisyearData" resultMap="sleepUserDiary" parameterType="java.lang.String">
+	select * from `yh_sleep_user_diary` where YEAR(sleep_diarytime)=YEAR(NOW()) and user_code=#{userCode};
+	</select>
+	
+	<!-- 查询用户去年数据 -->
+	<select id="selectlastyearData" resultMap="sleepUserDiary" parameterType="java.lang.String">
+	select * from `yh_sleep_user_diary` where year(sleep_diarytime)=year(date_sub(now(),interval 1 year)) and user_code=#{userCode}; 
+	</select>
+	
+	
+	
+	<!-- 查询上月数据 -->
+	<select id="selectlastmonthData" resultMap="sleepUserDiary" parameterType="java.lang.String">
+	select * from
+	(SELECT  count(1) FROM yh_sleep_user_diary 
+	WHERE PERIOD_DIFF( date_format( now( ) , '%Y%m' ) , date_format( sleep_diarytime, '%Y%m' ) ) =1 
+	and user_code=#{userCode}) as num,
+	 yh_sleep_user_diary 
+	WHERE PERIOD_DIFF( date_format( now( ) , '%Y%m' ) , date_format( sleep_diarytime, '%Y%m' ) ) =1 
+	and user_code = #{userCode}
+	</select>
+	
+	<!-- 查询记录天数 -->
+	<select id="findSleepByuserCodeCount" resultType="java.lang.Integer">
+	SELECT count(1)
+		 FROM `yh_sleep_user_diary`  WHERE user_code=#{usercode}
+	</select>
+	
+	<!-- 查询今天睡眠日记 -->
+	<select id="findTodaySleepInfo" resultMap="sleepUserDiary">
+	
+		SELECT <include refid="allColumn" />
+		 FROM `yh_sleep_user_diary`  WHERE user_code=#{usercode}  AND TO_DAYS(sleep_diarytime) = TO_DAYS(NOW()) limit 1
+		 
+	</select>
+	
+	<!-- 查询今天睡眠日记 -->
+	<select id="findTodaySleepInfo2" resultMap="sleepUserDiary">
+	
+		SELECT * FROM `yh_sleep_user_diary`  WHERE user_code=#{usercode} 
+		 <if test="sleeptime == null or sleeptime == ''">
+			 AND TO_DAYS(sleep_diarytime) = TO_DAYS(NOW()) limit 1
+		   </if>
+		<if test="sleeptime != null and sleeptime != ''">
+            and sleep_diarytime like concat('%',#{sleeptime},'%')
+        </if>
+		
+	</select>
+	<!-- 查询用户全部连续天数 -->
+	<select id="findUserSleepLXNum" resultType="java.lang.Integer">
+	<![CDATA[
+		
+		
+SELECT lianxu_days 
+		FROM (SELECT *
+		FROM (
+		SELECT
+		user_code,
+		MAX(days) lianxu_days,
+		MIN(login_day) start_date,
+		MAX(login_day) end_date
+		FROM (SELECT
+		user_code,
+		@cont_day :=
+		(CASE
+		WHEN (@last_uid = user_code AND DATEDIFF(sleep_diarytime, @last_dt) = 1)
+		THEN
+		(@cont_day + 1)
+		WHEN (@last_uid = user_code AND DATEDIFF(sleep_diarytime, @last_dt) < 1)
+		THEN
+		(@cont_day + 0)
+		ELSE
+		1
+		END) AS days,
+		(@cont_ix := (@cont_ix + IF(@cont_day = 1, 1, 0))) AS cont_ix,
+		@last_uid := user_code,
+		@last_dt := sleep_diarytime login_day
+		FROM (SELECT
+		user_code,
+		DATE(sleep_diarytime) sleep_diarytime
+		FROM yh_sleep_user_diary
+		WHERE user_code = #{usercode}
+		
+		ORDER BY user_code, sleep_diarytime) AS t,
+		(SELECT
+		@last_uid := '',
+		@last_dt := '',
+		@cont_ix := 0,
+		@cont_day := 0) AS t1
+		) AS t2
+		GROUP BY user_code, cont_ix
+
+		) tmp
+		ORDER BY lianxu_days DESC) ntmp
+		GROUP BY user_code;
+		
+	]]>
+	</select>
+	
+	<!-- 查询用户本月数据连续天数 -->
+	<select id="findUserSleepLXNum2" resultType="java.lang.Integer">
+	<![CDATA[
+		
+		
+SELECT lianxu_days 
+		FROM (SELECT *
+		FROM (
+		SELECT
+		user_code,
+		MAX(days) lianxu_days,
+		MIN(login_day) start_date,
+		MAX(login_day) end_date
+		FROM (SELECT
+		user_code,
+		@cont_day :=
+		(CASE
+		WHEN (@last_uid = user_code AND DATEDIFF(sleep_diarytime, @last_dt) = 1)
+		THEN
+		(@cont_day + 1)
+		WHEN (@last_uid = user_code AND DATEDIFF(sleep_diarytime, @last_dt) < 1)
+		THEN
+		(@cont_day + 0)
+		ELSE
+		1
+		END) AS days,
+		(@cont_ix := (@cont_ix + IF(@cont_day = 1, 1, 0))) AS cont_ix,
+		@last_uid := user_code,
+		@last_dt := sleep_diarytime login_day
+		FROM (SELECT
+		user_code,
+		DATE(sleep_diarytime) sleep_diarytime
+		FROM yh_sleep_user_diary
+		WHERE DATE_FORMAT( sleep_diarytime, '%Y%m' ) = DATE_FORMAT( CURDATE( ) , '%Y%m' )
+		and user_code = #{usercode}
+		
+		ORDER BY user_code, sleep_diarytime) AS t,
+		(SELECT
+		@last_uid := '',
+		@last_dt := '',
+		@cont_ix := 0,
+		@cont_day := 0) AS t1
+		) AS t2
+		GROUP BY user_code, cont_ix
+
+		) tmp
+		ORDER BY lianxu_days DESC) ntmp
+		GROUP BY user_code;
+		
+	]]>
+	</select>
+	
+	<!-- 查询连续天数 -->
+	<select id="selContinueDays" resultType="java.util.Map">
+		<![CDATA[
+		SELECT *
+		FROM (SELECT *
+		FROM (
+		SELECT
+		user_code,
+		MAX(days) lianxu_days,
+		MIN(login_day) start_date,
+		MAX(login_day) end_date
+		FROM (SELECT
+		user_code,
+		@cont_day :=
+		(CASE
+		WHEN (@last_uid = user_code AND DATEDIFF(sleep_diarytime, @last_dt) = 1)
+		THEN
+		(@cont_day + 1)
+		WHEN (@last_uid = user_code AND DATEDIFF(sleep_diarytime, @last_dt) < 1)
+		THEN
+		(@cont_day + 0)
+		ELSE
+		1
+		END) AS days,
+		(@cont_ix := (@cont_ix + IF(@cont_day = 1, 1, 0))) AS cont_ix,
+		@last_uid := user_code,
+		@last_dt := sleep_diarytime login_day
+		FROM (SELECT
+		user_code,
+		DATE(sleep_diarytime) sleep_diarytime
+		FROM yh_sleep_user_diary
+		WHERE user_code = #{userCode}
+		AND sleep_diarytime>(select date_add(curdate(), interval - day(curdate()) + 1 DAY))
+		ORDER BY user_code, sleep_diarytime) AS t,
+		(SELECT
+		@last_uid := '',
+		@last_dt := '',
+		@cont_ix := 0,
+		@cont_day := 0) AS t1
+		) AS t2
+		GROUP BY user_code, cont_ix
+
+		) tmp
+		ORDER BY lianxu_days DESC) ntmp
+		GROUP BY user_code;
+		]]>
+	</select>
+	
+</mapper>

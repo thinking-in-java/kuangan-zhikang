@@ -1,0 +1,245 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yihe.system.mapper.YhUserRoleMapper">
+  <resultMap id="BaseResultMap" type="com.yihe.system.domain.YhUserRole">
+    <id column="role_id" jdbcType="INTEGER" property="roleId" />
+    <result column="role_name" jdbcType="VARCHAR" property="roleName" />
+    <result column="role_description" jdbcType="VARCHAR" property="roleDescription" />
+    <result column="role_ctime" jdbcType="TIMESTAMP" property="roleCtime" />
+    <result column="orders" jdbcType="BIGINT" property="orders" />
+  </resultMap>
+  <resultMap id="BaseResultMap1" type="com.yihe.system.domain.YhUserMakeCard">
+    <id column="Enrol_Card_Id" jdbcType="VARCHAR" property="enrolCardId" />
+    <result column="Enrol_Card_Code" jdbcType="VARCHAR" property="enrolCardCode" />
+    <result column="Enrol_Time" jdbcType="TIMESTAMP" property="enrolTime" />
+    <result column="Enrol_User_Id" jdbcType="VARCHAR" property="enrolUserId" />
+    <result column="Card_Type" jdbcType="INTEGER" property="cardType" />
+    <result column="Begin_Time" jdbcType="TIMESTAMP" property="beginTime" />
+    <result column="End_Time" jdbcType="TIMESTAMP" property="endTime" />
+    <result column="Org_Id" jdbcType="VARCHAR" property="orgId" />
+    <result column="Is_Del" jdbcType="INTEGER" property="isDel" />
+    <result column="User_Code" jdbcType="VARCHAR" property="userCode" />
+    <result column="User_Type" jdbcType="INTEGER" property="userType" />
+    <result column="doctor" jdbcType="INTEGER" property="doctor" />
+    <result column="ev_amount" jdbcType="INTEGER" property="evAmount" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    role_id, role_name, role_description, role_ctime, orders
+  </sql>
+  <select id="selectByExample" parameterType="com.yihe.system.domain.YhUserRoleExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from yh_user_role
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from yh_user_role
+    where role_id = #{roleId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from yh_user_role
+    where role_id = #{roleId,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.yihe.system.domain.YhUserRoleExample">
+    delete from yh_user_role
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.yihe.system.domain.YhUserRole">
+    <selectKey keyProperty="roleId" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into yh_user_role (role_name, role_description, role_ctime, 
+      orders)
+    values (#{roleName,jdbcType=VARCHAR}, #{roleDescription,jdbcType=VARCHAR}, #{roleCtime,jdbcType=TIMESTAMP}, 
+      #{orders,jdbcType=BIGINT})
+  </insert>
+  <insert id="insertSelective" parameterType="com.yihe.system.domain.YhUserRole">
+    <selectKey keyProperty="roleId" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into yh_user_role
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="roleName != null">
+        role_name,
+      </if>
+      <if test="roleDescription != null">
+        role_description,
+      </if>
+      <if test="roleCtime != null">
+        role_ctime,
+      </if>
+      <if test="orders != null">
+        orders,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="roleName != null">
+        #{roleName,jdbcType=VARCHAR},
+      </if>
+      <if test="roleDescription != null">
+        #{roleDescription,jdbcType=VARCHAR},
+      </if>
+      <if test="roleCtime != null">
+        #{roleCtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="orders != null">
+        #{orders,jdbcType=BIGINT},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.yihe.system.domain.YhUserRoleExample" resultType="java.lang.Long">
+    select count(*) from yh_user_role
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update yh_user_role
+    <set>
+      <if test="record.roleId != null">
+        role_id = #{record.roleId,jdbcType=INTEGER},
+      </if>
+      <if test="record.roleName != null">
+        role_name = #{record.roleName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.roleDescription != null">
+        role_description = #{record.roleDescription,jdbcType=VARCHAR},
+      </if>
+      <if test="record.roleCtime != null">
+        role_ctime = #{record.roleCtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.orders != null">
+        orders = #{record.orders,jdbcType=BIGINT},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update yh_user_role
+    set role_id = #{record.roleId,jdbcType=INTEGER},
+      role_name = #{record.roleName,jdbcType=VARCHAR},
+      role_description = #{record.roleDescription,jdbcType=VARCHAR},
+      role_ctime = #{record.roleCtime,jdbcType=TIMESTAMP},
+      orders = #{record.orders,jdbcType=BIGINT}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.yihe.system.domain.YhUserRole">
+    update yh_user_role
+    <set>
+      <if test="roleName != null">
+        role_name = #{roleName,jdbcType=VARCHAR},
+      </if>
+      <if test="roleDescription != null">
+        role_description = #{roleDescription,jdbcType=VARCHAR},
+      </if>
+      <if test="roleCtime != null">
+        role_ctime = #{roleCtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="orders != null">
+        orders = #{orders,jdbcType=BIGINT},
+      </if>
+    </set>
+    where role_id = #{roleId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.yihe.system.domain.YhUserRole">
+    update yh_user_role
+    set role_name = #{roleName,jdbcType=VARCHAR},
+      role_description = #{roleDescription,jdbcType=VARCHAR},
+      role_ctime = #{roleCtime,jdbcType=TIMESTAMP},
+      orders = #{orders,jdbcType=BIGINT}
+    where role_id = #{roleId,jdbcType=INTEGER}
+  </update>
+  <select id="selectRoleId" parameterType="java.lang.String" resultType="java.lang.Integer">
+     select role_id from yh_user_role where role_name=#{roleName}
+  </select>
+  
+  <select id="selectcountbyname" parameterType="string" resultType="integer">
+      SELECT COUNT(*) FROM yh_user_reginfo WHERE user_name=#{name}
+  </select>
+
+  <select id="selectmakecard" parameterType="integer" resultMap="BaseResultMap1">
+        select * from yh_user_make_card where number=#{num}
+  </select>
+
+  <update id="updatemakecard" parameterType="com.yihe.system.domain.YhUserMakeCard">
+    update yh_user_make_card set End_Time=(select Add_Date from yh_org_tree where  Org_Code=#{orgId}) where Enrol_Card_Id=#{enrolCardId}
+  </update>
+
+  <select id="listimg" resultType="string">
+    select  F_C_IMG from yh_food_cookbook2 WHERE F_C_ID>90000 and F_C_IMG is not NULL AND F_C_IMG!=""  ORDER BY RAND() LIMIT 10;
+  </select>
+</mapper>

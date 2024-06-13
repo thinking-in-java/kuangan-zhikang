@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yihe.system.mapper.YHUserOtherfunctionMapper" >
+  <resultMap id="BaseResultMap" type="com.yihe.system.domain.YHUserOtherfunction" >
+    <id column="otherid" property="otherid" jdbcType="INTEGER" />
+    <result column="urine_microprotein" property="urineMicroprotein" jdbcType="VARCHAR" />
+    <result column="glycosylated_hemoglobin" property="glycosylatedHemoglobin" jdbcType="VARCHAR" />
+    <result column="hcy" property="hcy" jdbcType="VARCHAR" />
+    <result column="user_id" property="userId" jdbcType="VARCHAR" />
+    <result column="insertTime" property="inserttime" jdbcType="VARCHAR" />
+    <result column="Is_Del" property="isDel" jdbcType="INTEGER" />
+    <result column="Data_Source" property="dataSource" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    otherid, urine_microprotein, glycosylated_hemoglobin, hcy, user_id, insertTime, Is_Del, 
+    Data_Source
+  </sql>
+  
+  <!-- 其他指标总数 -->
+   <select id="selectByOtherfunctionCount" resultType="int" >
+  	select count(*) from yh_user_otherfunction
+  </select>
+  
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from yh_user_otherfunction
+    where otherid = #{otherid,jdbcType=INTEGER}
+  </select>
+  <select id="selectByPrimaryKeyByUsercodeLimit" resultMap="BaseResultMap" parameterType="java.lang.String" >
+     SELECT  <include refid="Base_Column_List" /> FROM yh_user_otherfunction WHERE user_id=#{usercode} and is_Del=2  ORDER BY insertTime DESC LIMIT 1
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from yh_user_otherfunction
+    where otherid = #{otherid,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.yihe.system.domain.YHUserOtherfunction" >
+    insert into yh_user_otherfunction (otherid, urine_microprotein, glycosylated_hemoglobin, 
+      hcy, user_id, insertTime, 
+      Is_Del, Data_Source)
+    values (#{otherid,jdbcType=INTEGER}, #{urineMicroprotein,jdbcType=VARCHAR}, #{glycosylatedHemoglobin,jdbcType=VARCHAR}, 
+      #{hcy,jdbcType=VARCHAR}, #{userId,jdbcType=VARCHAR}, #{inserttime,jdbcType=VARCHAR}, 
+      #{isDel,jdbcType=INTEGER}, #{dataSource,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.yihe.system.domain.YHUserOtherfunction" >
+    insert into yh_user_otherfunction
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="otherid != null" >
+        otherid,
+      </if>
+      <if test="urineMicroprotein != null" >
+        urine_microprotein,
+      </if>
+      <if test="glycosylatedHemoglobin != null" >
+        glycosylated_hemoglobin,
+      </if>
+      <if test="hcy != null" >
+        hcy,
+      </if>
+      <if test="userId != null" >
+        user_id,
+      </if>
+      <if test="inserttime != null" >
+        insertTime,
+      </if>
+      <if test="isDel != null" >
+        Is_Del,
+      </if>
+      <if test="dataSource != null" >
+        Data_Source,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="otherid != null" >
+        #{otherid,jdbcType=INTEGER},
+      </if>
+      <if test="urineMicroprotein != null" >
+        #{urineMicroprotein,jdbcType=VARCHAR},
+      </if>
+      <if test="glycosylatedHemoglobin != null" >
+        #{glycosylatedHemoglobin,jdbcType=VARCHAR},
+      </if>
+      <if test="hcy != null" >
+        #{hcy,jdbcType=VARCHAR},
+      </if>
+      <if test="userId != null" >
+        #{userId,jdbcType=VARCHAR},
+      </if>
+      <if test="inserttime != null" >
+        #{inserttime,jdbcType=VARCHAR},
+      </if>
+      <if test="isDel != null" >
+        #{isDel,jdbcType=INTEGER},
+      </if>
+      <if test="dataSource != null" >
+        #{dataSource,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.yihe.system.domain.YHUserOtherfunction" >
+    update yh_user_otherfunction
+    <set >
+      <if test="urineMicroprotein != null" >
+        urine_microprotein = #{urineMicroprotein,jdbcType=VARCHAR},
+      </if>
+      <if test="glycosylatedHemoglobin != null" >
+        glycosylated_hemoglobin = #{glycosylatedHemoglobin,jdbcType=VARCHAR},
+      </if>
+      <if test="hcy != null" >
+        hcy = #{hcy,jdbcType=VARCHAR},
+      </if>
+      <if test="userId != null" >
+        user_id = #{userId,jdbcType=VARCHAR},
+      </if>
+      <if test="inserttime != null" >
+        insertTime = #{inserttime,jdbcType=VARCHAR},
+      </if>
+      <if test="isDel != null" >
+        Is_Del = #{isDel,jdbcType=INTEGER},
+      </if>
+      <if test="dataSource != null" >
+        Data_Source = #{dataSource,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where otherid = #{otherid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.yihe.system.domain.YHUserOtherfunction" >
+    update yh_user_otherfunction
+    set urine_microprotein = #{urineMicroprotein,jdbcType=VARCHAR},
+      glycosylated_hemoglobin = #{glycosylatedHemoglobin,jdbcType=VARCHAR},
+      hcy = #{hcy,jdbcType=VARCHAR},
+      user_id = #{userId,jdbcType=VARCHAR},
+      insertTime = #{inserttime,jdbcType=VARCHAR},
+      Is_Del = #{isDel,jdbcType=INTEGER},
+      Data_Source = #{dataSource,jdbcType=VARCHAR}
+    where otherid = #{otherid,jdbcType=INTEGER}
+  </update>
+  <!--  查询用户其他 -->
+  <select id="selectYHUserOtherfunction" resultType="map" parameterType="java.lang.String" >
+   select yuo.urine_microprotein,yuo.glycosylated_hemoglobin,yuo.hcy,
+	(select count(1) from yh_user_otherfunction where user_id=#{userId,jdbcType=VARCHAR} and Is_Del = 2) as num,
+	yuo.Data_Source,yuo.insertTime
+	from yh_user_reginfo as reg 
+	left join yh_user_otherfunction yuo
+	on reg.user_code = yuo.user_id
+	where yuo.otherid = (select otherid from yh_user_otherfunction where user_id=#{userId,jdbcType=VARCHAR} and Is_Del = 2 order by insertTime desc limit 1)
+  </select>
+  <select id="selectPageByParam" resultMap="BaseResultMap" parameterType="java.lang.String"  >
+	   select  yuo.urine_microprotein,yuo.glycosylated_hemoglobin,yuo.hcy,yuo.insertTime
+		from yh_user_reginfo as reg 
+		inner join yh_user_otherfunction yuo
+		on reg.user_code = yuo.user_id
+		 where reg.user_code=#{userId,jdbcType=VARCHAR} and Is_Del = 2 order by insertTime desc 
+  </select>
+</mapper>

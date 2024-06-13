@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yihe.applet.api.mapper.YhSleepReportAppMapper">
+	<sql id="allColumn">report_id,user_code,report_desc,report_level,report_score,report_queselect,qtime</sql>
+	<sql id="insertColumn">user_code,report_desc,report_level,report_score,report_queselect,qtime</sql>	
+	<resultMap type="com.yihe.applet.api.domain.YhSleepReportApp" id="sleepReportMap">
+		<id column="report_id" jdbcType="INTEGER" property="reportId" />
+		<result column="user_code" jdbcType="VARCHAR" property="userCode" />
+		<result column="report_desc" jdbcType="VARCHAR" property="reportDesc" />
+		<result column="report_score" jdbcType="INTEGER" property="reportScore" />
+		<result column="report_level" jdbcType="VARCHAR" property="reportLevel" />
+		<result column="report_queselect" jdbcType="VARCHAR" property="reportQueselect" />
+		<result column="qtime" jdbcType="TIMESTAMP" property="qtime" />
+	</resultMap>
+	<!-- 添加某用户评估记录 -->
+	<insert id="addAssessmentResult" parameterType="com.yihe.applet.api.domain.YhSleepReportApp">
+		INSERT INTO yh_sleep_report(<include refid="insertColumn"/>) 
+		VALUES(#{userCode},#{reportDesc},#{reportLevel},#{reportScore},#{reportQueselect},#{qtime})
+	</insert>
+	<!-- 查询某用户所有评估记录 -->
+	<select id="selAllReportByUser" resultMap="sleepReportMap" parameterType="com.yihe.applet.api.domain.YhSleepReportApp">
+		SELECT report_id,report_score,qtime FROM yh_sleep_report 
+		WHERE user_code=#{userCode}
+		ORDER BY qtime DESC
+	</select>
+	<!-- 查询某用户某条评估记录 -->
+	<select id="selOneReportByUser" resultMap="sleepReportMap" parameterType="com.yihe.applet.api.domain.YhSleepReportApp">
+		SELECT <include refid="allColumn"/> FROM yh_sleep_report
+		WHERE user_code=#{userCode} AND report_id=#{reportId}
+	</select>
+	<!-- 查询评估次数 -->
+	<select id="selReportCount" resultType="int">
+		SELECT COUNT(1) FROM yh_sleep_report
+	</select>
+</mapper>

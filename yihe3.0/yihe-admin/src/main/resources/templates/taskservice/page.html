@@ -1,0 +1,1033 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, maximum-scale=1">
+<title>完成服务任务</title>
+<link rel="stylesheet" th:href="@{/assets/libs/layui/css/layui.css}" />
+<link rel="stylesheet" th:href="@{/assets/module/admin.css}" />
+
+	<!--引入所需依赖-->
+	<link rel="stylesheet" th:href="@{/editormd/css/style.css}"/>
+	<link rel="stylesheet" th:href="@{/editormd/css/editormd.css}"/>
+
+
+<style type="text/css">
+.layui-breadcrumb pull-right{
+	display: none;
+}
+a{
+           display: none;
+        }
+        
+        
+           /** 必须先给固定高度，否则无法计算分割的高度 */
+        .split-group {
+            height: 400px;
+        }
+
+        .split-group-vertical {
+            height: 458px;
+        }
+
+        /** //end */
+
+        .layui-card-body {
+            padding: 0;
+        }
+
+        .split-item {
+            padding: 15px;
+        }
+
+
+        .layui-card-header {
+            border-color: #dcdee2;
+        }
+        .layui-form-select dl { max-width:160px; }
+        
+        .layui-form-label {
+    float: left;
+    display: block;
+     padding: 0px 0px;
+    width: 65px;
+    font-weight: 400;
+    line-height: 20px;
+    text-align: right;
+}
+        
+</style>
+
+</head>
+<body style="background-color: white;">
+	<!-- <div style="width: 100%;height: 50px;line-height: 51px;">
+		<span style="margin-left: 18px;">用户编码：</span>
+		<span id="code"></span>
+		<span style="margin-left: 18px;">姓名：</span>
+		<span id="userName"></span>
+		<span style="margin-left: 18px;">手机号：</span>
+		<span id="mobile"></span>
+		<div class="layui-inline" style="z-index: 6666;float: right;margin-top: 8px;right: 11px;">
+			<input type="text" class="layui-input icon-date" id="choiceDate" placeholder="请选择日期">
+		</div>
+	</div> -->
+	<!-- <div class="layui-layout layui-layout-admin" style="margin-top: -50px;">
+		<div class="layui-side" style="background-color: white;">
+			<div class="layui-side-scroll">
+				<ul class="layui-nav layui-nav-tree arrow2" lay-filter="admin-side-nav" lay-shrink="all">
+
+
+
+					<li class="layui-nav-item"><a th:lay-href="@{/manage/acceptse/splitnote}">短信通知</a></li>
+
+
+
+
+
+
+				</ul>
+			</div>
+		</div>
+
+		主体部分
+		<div class="layui-body"></div>
+
+
+	</div> -->
+	
+
+                    <div class="layui-tab layui-tab-vertical">
+                        <ul class="layui-tab-title" style="height: 530px;    width: 140px;">
+                        <li class="layui-this">小程序站内信</li>
+                            <li style="margin-top: 10px;" id="xcx">小程序订阅通知</li>
+                            <li style="margin-top: 10px;" id="gzh">公众号消息通知</li>
+                            <li style="margin-top: 10px;" id="dx">短信通知</li>
+                            <li style="margin-top: 10px;" id="dh">电话回访</li>
+                            <li style="margin-top: 10px;" id="sm">上门回访</li>
+                        </ul>
+                        <div class="layui-tab-content">
+                        
+                        
+                        
+                         <!-- 内容4开始 -->
+                            <div class="layui-tab-item layui-show">
+                            	<form class="layui-form" action="">
+						            <div class="layui-card">
+						            <div class="layui-card-header">小程序消息通知</div>
+						                <div class="layui-card-body">
+						                    <div class="split-group" style="height: 250px;">
+						                        <div class="split-item" id="demoSplit3" >
+						                            
+						                           <div class="layui-inline">
+												    
+												  </div>
+												    
+												    <div class="layui-inline" style='background-color:#e6f7ff;width: 100%;height:160px;margin-top:20px;border-radius:4px;overflow:auto'>
+															 <div>
+															 	将以小程序消息，即在个人中心的小信封图表中的“互动”中呈现。
+																注意：不会有微信提醒，需要用户自行进入小程序的消息通知中查看。
+															 	
+															</div>                                                    
+														</div>
+														
+														
+												    
+						                           
+						                        </div>
+						                        <div class="split-item" id="demoSplit4">
+						                        		
+						                         <div class="layui-inline" style="width: 98%;">
+												  	 <label  style="float: left;">接收人共计<span id="ren1" style="color: red;"></span>人</label>
+												  	 
+												  
+												  	 
+												  	</div>
+												  
+												  
+						                         		<div class="layui-form-item layui-form-text" style="margin-top:18px;width: 100%">
+<!--													      <textarea style="min-height: 160px;" lay-verify="required" maxlength="200" id="appletText" placeholder="请输入内容,限制200个字" class="layui-textarea"></textarea>-->
+															<div id="editormd_id">
+																<!-- 第一个textarea是文本输入区域-->
+																<textarea id="appletText" class="editorMd-html-textarea"  name="editorMd-html-textarea" placeholder="请输入内容...">
+    </textarea>
+
+															</div>
+													  </div>
+						                        </div>
+						                    </div>
+						                </div>
+						            </div>
+						            
+						              <div class="layui-card-header" style="    height: 0px;    margin-top: -10px;    margin-bottom: 15px;"></div>
+						            
+						             <div style="text-align: center;">
+						              <button  type="reset" class="layui-btn layui-btn-primary" onclick="quxiao()">取消</button>
+									      <button type="submit" class="layui-btn" lay-submit="" lay-filter="applet">提交</button>
+									  </div>
+						     </form>
+                            </div>
+                            <!-- 内容4结束 -->
+                            
+                            
+                            
+                        
+                             
+                             
+                             <!-- 内容2 -->
+                            <div class="layui-tab-item">
+                            	<form class="layui-form" action="">
+						            <div class="layui-card">
+						            <div class="layui-card-header">小程序订阅模板</div>
+						                <div class="layui-card-body">
+						                    <div class="split-group" style="height: 250px;">
+						                        <div class="split-item" id="demoSplit5" >
+						                            
+						                           <div class="layui-inline">
+												      <label class="layui-form-label">选择模板:</label>
+												      <div class="layui-input-inline" style="width: 140px;">
+													       <select lay-filter="message" id="WeChatType">
+															
+													   	   </select>
+												      </div>
+												    
+												  </div>
+												    
+												    <div class="layui-inline" style='background-color:#e6f7ff;width: 100%;height:160px;margin-top:20px;border-radius:4px;overflow:auto'>
+															 <div>
+															 模板内容:
+															 </div>
+															 <div class="layui-inline" style='background-color:#e6f7ff;width: 100%;margin-top:20px;border-radius:4px;overflow:auto'>
+															 <div>
+																事件类型：站内信
+																</div> 
+																<div>
+																备注：给您发送了一条健康管理服务信息，请及时查阅，祝您健康！
+															 	
+															</div> 
+															<div style="margin-top: 28px;font-weight: bold;">
+																右侧填写的内容将以站内信的形式发送给用户。
+															</div>                                                    
+														</div>                                                  
+														</div>
+														
+														
+												    
+						                           
+						                        </div>
+						                        <div class="split-item" id="demoSplit6">
+						                        		
+						                         <div class="layui-inline" style="width: 98%;">
+												  	 <label  style="float: left;">接收人共计<span id="ren2" style="color: red;"></span>人</label>
+												  	 
+						                           <div class="layui-inline" style="float: right;text-align: right;">
+						                         		  消息模版库:
+												      <div class="layui-input-inline" style="width: 445px;">
+												        <select  lay-filter="WxtypeId" id="WxtypeId">
+															
+													   	   </select>
+												      </div>
+												    
+												  </div>
+												  
+												  	 
+												  	</div>
+												  
+												  
+						                         		<div class="layui-form-item layui-form-text" style="margin-top:18px;">
+													      <textarea style="min-height: 160px;" lay-verify="required" maxlength="200" id="WxText" placeholder="请输入内容,限制20个字" class="layui-textarea"></textarea>
+													  </div>
+						                        </div>
+						                    </div>
+						                </div>
+						            </div>
+						            
+						              <div class="layui-card-header" style="    height: 0px;    margin-top: -10px;    margin-bottom: 15px;"></div>
+						            
+						             <div style="text-align: center;">
+						              <button  type="reset" class="layui-btn layui-btn-primary" onclick="quxiao()">取消</button>
+									      <button type="submit" class="layui-btn" lay-submit="" lay-filter="demo5">提交</button>
+									  </div>
+						     </form>
+                            </div>
+                             <!-- 内容2结束 -->
+                             
+                             
+                              <!-- 内容3 -->
+                            <div class="layui-tab-item">
+                            	<form class="layui-form" action="">
+						            <div class="layui-card">
+						            <div class="layui-card-header">微信公众消息模板</div>
+						                <div class="layui-card-body">
+						                    <div class="split-group" style="height: 250px;">
+						                        <div class="split-item" id="demoSplit7" >
+						                            
+						                           <div class="layui-inline">
+												      <label class="layui-form-label">选择模板:</label>
+												      <div class="layui-input-inline" style="width: 140px;">
+													       <select lay-filter="message1" id="WeChatType1">
+															
+													   	   </select>
+												      </div>
+												    
+												  </div>
+												    
+												    <div class="layui-inline" style='background-color:#e6f7ff;width: 100%;height:160px;margin-top:20px;border-radius:4px;overflow:auto'>
+															 <div>
+															 模板内容:
+															 </div>
+															 <div class="layui-inline" style='background-color:#e6f7ff;width: 100%;margin-top:10px;border-radius:4px;overflow:auto'>
+															 <div>
+																您好，您有新的健管师信息提醒。
+																</div> 
+																 <div>
+																关爱医生：{{keyword1.DATA}}
+																</div> 
+																 <div>
+																关爱日期：{{keyword2.DATA}}
+																</div>
+																<div>
+																备注：站内信已送达，请及时查阅，祝您健康！
+															</div> 
+															<div style="margin-top: 5px;font-weight: bold;">
+																右侧填写的内容将以站内信的形式发送给用户。
+															</div>                                                    
+														</div>                                                  
+														</div>
+														
+														
+												    
+						                           
+						                        </div>
+						                        <div class="split-item" id="demoSplit8">
+						                        		
+						                         <div class="layui-inline" style="width: 98%;">
+												  	 <label  style="float: left;">接收人共计<span id="ren3" style="color: red;"></span>人</label>
+												  	 
+						                           <div class="layui-inline" style="float: right;text-align: right;">
+						                         		  消息模版库:
+												      <div class="layui-input-inline" style="width: 445px;" >
+												        <select lay-filter="WxtypeId1" id="WxtypeId1">
+															
+													   	   </select>
+												      </div>
+												    
+												  </div>
+												  
+												  	 
+												  	</div>
+												  
+												  
+						                         		<div class="layui-form-item layui-form-text" style="margin-top:18px;">
+													      <textarea style="min-height: 160px;" lay-verify="required" maxlength="200" id="WxText1" placeholder="请输入内容,限制20个字" class="layui-textarea"></textarea>
+													  </div>
+						                        </div>
+						                    </div>
+						                </div>
+						            </div>
+						            
+						              <div class="layui-card-header" style="    height: 0px;    margin-top: -10px;    margin-bottom: 15px;"></div>
+						            
+						             <div style="text-align: center;">
+						              <button  type="reset" class="layui-btn layui-btn-primary" onclick="quxiao()">取消</button>
+									      <button type="submit" class="layui-btn" lay-submit="" lay-filter="demo6">提交</button>
+									  </div>
+						     </form>
+                            </div>
+                             <!-- 内容3结束 -->
+                             
+                            
+                           <!-- 内容1 -->
+                            <div class="layui-tab-item ">
+                            	<form class="layui-form" action="">
+						            <div class="layui-card">
+						            <div class="layui-card-header">短信通知</div>
+						                <div class="layui-card-body">
+						                    <div class="split-group" style="height: 250px;">
+						                        <div class="split-item" id="demoSplit1" >
+						                            
+						                           <div class="layui-inline">
+												      <label class="layui-form-label">选择模板:</label>
+												      <div class="layui-input-inline" style="width: 140px;">
+													       <select lay-filter="aihao" id="smsname">
+															
+													   	   </select>
+												      </div>
+												    
+												  </div>
+												    
+												    <div class="layui-inline" style='background-color:#e6f7ff;width: 100%;height:160px;margin-top:20px;border-radius:4px;overflow:auto'>
+															 <div>
+															 模板内容:
+															 </div>
+															 <div id="templateText">
+															</div>   
+															
+															<div style="margin-top: 28px;font-weight: bold;">
+															请在右侧填写填写${type}代表的信息内容    
+															</div>                                             
+														</div>
+														
+														
+												    
+						                           
+						                        </div>
+						                        <div class="split-item" id="demoSplit2">
+						                        		
+						                         <div class="layui-inline" style="width: 98%;">
+												  	 <label  style="float: left;">接收人共计<span id="ren" style="color: red;"></span>人</label>
+												  	 
+						                           <div class="layui-inline" style="float: right;text-align: right;">
+						                         		  信息模版库:
+												      <div class="layui-input-inline" style="width: 445px;">
+												        <select lay-filter="tSmsid" id="tSmsid">
+															
+													   	   </select>
+												      </div>
+												    
+												  </div>
+												  
+												  	 
+												  	</div>
+												  
+												  
+						                         		<div class="layui-form-item layui-form-text" style="margin-top:18px;">
+													      <textarea style="min-height: 160px;" lay-verify="required" maxlength="20" id="tText" placeholder="请输入内容,限制20个字" class="layui-textarea"></textarea>
+													  </div>
+						                        </div>
+						                    </div>
+						                </div>
+						            </div>
+						            
+						              <div class="layui-card-header" style="    height: 0px;    margin-top: -10px;    margin-bottom: 15px;"></div>
+						            
+						             <div style="text-align: center;">
+						              <button  type="reset" class="layui-btn layui-btn-primary" onclick="quxiao()">取消</button>
+									      <button type="submit" class="layui-btn" lay-submit="" lay-filter="demo1">提交</button>
+									  </div>
+						     </form>
+                            </div>
+                             <!-- 内容1结束 -->
+                            
+                             <!-- 内容5开始 -->
+                            <div class="layui-tab-item">
+                            
+                            
+		                           <form class="layui-form" id="test">
+		                            <div class="layui-card">
+						            <div class="layui-card-header">电话回访</div>
+								    <div  style="margin-top: 20px;width: 30%;">
+								        <label class="layui-form-label" >配合态度:</label>
+								        <div class="layui-input-block">
+								            <select id="peihechengdu" name="peihe" lay-search>
+												<option value="2">比较配合</option>
+								                <option value="3">非常配合</option>
+
+								                <option value="1">一般配合</option>
+								                <option value="0">不配合</option>
+								            </select>
+								        </div>
+								    </div>
+										  <div class="layui-form-text" style="    margin-top: 20px;">
+										    <label class="layui-form-label" >受理情况:</label>
+											    <div class="layui-input-block" style="width: 80%">
+											      <textarea id='acceptsituation' lay-verify="required" name="desc" placeholder="请输入服务过程和结果，最大限制500个字符" class="layui-textarea"></textarea>
+											    </div>
+										  </div>
+										  </div>
+										  
+									  <div style="text-align: center;">
+						              	  <button  type="reset" class="layui-btn layui-btn-primary" onclick="quxiao()">取消</button>
+									      <button type="submit" class="layui-btn" lay-submit="" lay-filter="phone">提交</button>
+									  </div>
+								</form>
+                            
+                            </div>
+                            <!-- 内容5结束 -->
+                            
+                             <!-- 内容6开始 -->
+                            <div class="layui-tab-item">
+                            	
+                            	<form class="layui-form" id="test">
+		                            <div class="layui-card">
+						            <div class="layui-card-header">上门回访</div>
+								    <div  style="margin-top: 20px;width: 30%;">
+								        <label class="layui-form-label" >配合态度:</label>
+								        <div class="layui-input-block">
+								            <select id="peihechengduvisit" name="peihe" lay-search>
+												<option value="2">比较配合</option>
+								                <option value="3">非常配合</option>
+
+								                <option value="1">一般配合</option>
+								                <option value="0">不配合</option>
+								            </select>
+								        </div>
+								    </div>
+										  <div class="layui-form-text" style="    margin-top: 20px;">
+										    <label class="layui-form-label" >受理情况:</label>
+											    <div class="layui-input-block" style="width: 80%">
+											      <textarea id='acceptsituationvisit' lay-verify="required" name="desc" placeholder="请输入服务过程和结果，最大限制500个字符" class="layui-textarea"></textarea>
+											    </div>
+										  </div>
+										  </div>
+										  
+									<div style="text-align: center;">
+						              	  <button  type="reset" class="layui-btn layui-btn-primary" onclick="quxiao()">取消</button>
+									      <button type="submit" class="layui-btn" lay-submit="" lay-filter="visit">提交</button>
+									  </div>
+								</form>
+                            
+                            </div>
+                             <!-- 内容6结束 -->
+                           <!--  <div class="layui-tab-item">内容5</div> -->
+                        </div>
+                    </div>
+                    
+                    
+
+</body>
+<!-- js部分 -->
+<script type="text/javascript" th:src="@{/assets/libs/layui/layui.js}"></script>
+<script type="text/javascript" th:src="@{/assets/js/common.js}"></script>
+<script type="text/javascript" th:src="@{/assets/js/jquery-1.11.1.js}"></script>
+<script th:src="@{/editormd/editormd.js}"></script>
+<!-- <script type="text/javascript" th:src="@{/assets/ultrasoundTab/thyroid.js}"></script>  -->
+<script type="text/javascript" th:inline="javascript">
+
+	var HEADER;
+	$(function () {
+		HEADER = editormd("editormd_id", {
+			width: "90%",
+			height: 180,
+			toc: true,
+			emoji: true,//表情功能开启
+			taskList: true,
+			syncScrolling: "single",
+			imageUpload: true,
+			watch:false,
+			imageFormats: ["jpg", "jpeg", "gif", "png", "bmp", "webp"],
+			imageUploadURL: "/Uploading/upload",       //图片上传URL 即后台的图片上传接口URL
+			path: '/editormd/lib/',          //项目启动路径
+			toolbarIcons : function() {
+				// Or return editormd.toolbarModes[name]; // full, simple, mini
+				// Using "||" set icons align right.
+				return [ "undo", "redo", "|",
+					"bold", "italic", "quote", "|",
+					"list-ul", "list-ol", "hr", "|",
+					"link",  "image"]
+			},
+			//path: '../static/editormd/lib/',    //本地路径
+			saveHTMLToTextarea: true
+		});
+	});
+var checked = [[${checked}]];
+$("#ren").html([[${setall}]]);
+$("#ren1").html([[${setall}]]);
+$("#ren2").html([[${setall}]]);
+$("#ren3").html([[${setall}]]);
+var entryTime ='';
+layui.use(['layer', 'form', 'table','laypage', 'treeSelect', 'admin', 'element', 'laydate', 'index', 'Split', 'dropdown', 'notice'],function () {
+		var $ = layui.jquery;
+		var layer = layui.layer;
+		var form = layui.form;
+		var table = layui.table;
+		var laypage = layui.laypage;
+		var element = layui.element;
+		var admin = layui.admin;
+		var form = layui.form;
+		var treeSelect = layui.treeSelect;
+		var laydate = layui.laydate;
+		var split = layui.Split;
+		var dropdown = layui.dropdown;
+		var notice = layui.notice;
+	     
+	     $(function(){
+					layui.$("#appletText").val("");
+					 form.render();
+			})
+			
+			
+			$("#gzh").hide();
+  		     		$("#xcx").hide();
+  		     		$("#dx").hide();
+  		     		$("#dh").hide();
+  		     		$("#sm").hide();
+		 // 水平分割
+        split(['#demoSplit1', '#demoSplit2'], {sizes: [40, 60], minSize: 100});
+		 
+		 
+        split(['#demoSplit3', '#demoSplit4'], {sizes: [40, 60], minSize: 100});
+        
+        split(['#demoSplit5', '#demoSplit6'], {sizes: [40, 60], minSize: 100});
+	
+        split(['#demoSplit7', '#demoSplit8'], {sizes: [40, 60], minSize: 100});
+        quxiao=function(){
+        	 // 这里就是处理的事件
+		     var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+	  		  parent.layer.close(index);
+        }
+        
+       
+        
+      //监听提交上门回访
+  	  form.on('submit(visit)', function(data){
+  	   var peihechengdu = $("#peihechengduvisit").val();//配合程度
+  		var acceptsituation = $("#acceptsituationvisit").val();//受理情况
+  		 var url = "/TemplateSendController/visitReturn";
+  		 var data2 = {
+ 					'peihechengdu' : peihechengdu,
+ 					'acceptsituation' : acceptsituation,
+ 					'checked' : checked,
+ 			};
+			$.post(url, data2, function(data) {
+				 notice.success({
+	                  title: '消息通知',
+	                  message: '操作成功'
+	              });
+				 setTimeout(function () {
+					    // 这里就是处理的事件
+					     var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+				  		  parent.layer.close(index);
+				  		  parent.location.reload(); //刷新父页面
+					}, 2000);
+			})
+  		// 阻止表单跳转。如果需要表单跳转，去掉这段即可。
+  		return false;
+  	  });
+        
+        
+        
+      //监听提交电话回访
+    	  form.on('submit(phone)', function(data){
+    	   var peihechengdu = $("#peihechengdu").val();//配合程度
+    		var acceptsituation = $("#acceptsituation").val();//受理情况
+    		 var url = "/TemplateSendController/phoneReturn";
+    		 var data2 = {
+   					'peihechengdu' : peihechengdu,
+   					'acceptsituation' : acceptsituation,
+   					'checked' : checked,
+   			};
+  			$.post(url, data2, function(data) {
+  				 notice.success({
+  	                  title: '消息通知',
+  	                  message: '操作成功'
+  	              });
+  				 setTimeout(function () {
+  					    // 这里就是处理的事件
+  					     var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+  				  		  parent.layer.close(index);
+  				  		  parent.location.reload(); //刷新父页面
+  					}, 2000);
+  			})
+    		// 阻止表单跳转。如果需要表单跳转，去掉这段即可。
+    		return false;
+    	  });
+        
+		
+      //监听提交小程序消息发送
+  	  form.on('submit(applet)', function(data){
+  	   var smsname = $("#smsname").val();
+  		//var appletText = $("#appletText").val();
+  		 var appletText = HEADER.getHTML();
+  		 
+  		 if(appletText.length>=200){
+  			layer.msg('只能发送200个字符哦!');
+  			return false;
+  		 }else{
+  		 var url = "/TemplateSendController/xxcmessage";
+  		 var data2 = {
+ 					'appletText' : appletText,
+ 					'checked' : checked,
+ 			};
+			$.post(url, data2, function(data) {
+				 notice.success({
+	                  title: '消息通知',
+	                  message: data.data.finish+'人发送成功'+data.data.fail+'人发送失败'
+	              });
+				 setTimeout(function () {
+					    // 这里就是处理的事件
+					     var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+				  		  parent.layer.close(index);
+				  		  parent.location.reload(); //刷新父页面
+					}, 2000);
+			})
+  		// 阻止表单跳转。如果需要表单跳转，去掉这段即可。
+  			return false;
+  		 }
+  	  });
+		 
+      
+  	 //监听提交微信消息发送
+	  form.on('submit(demo6)', function(data){
+	   var WxText = $("#WxText1").val();
+		 var url = "/ProgramController/gzhmessage";
+		 var data2 = {
+					'WxText' : WxText,
+					'checked' : checked,
+			};
+			$.post(url, data2, function(data) {
+				if(data.data.fail==0){
+					 notice.success({
+		                  title: '消息通知',
+		                  message: data.data.finish+'人发送成功'+data.data.fail+'人发送失败'
+		              });
+					 setTimeout(function () {
+						    // 这里就是处理的事件
+						     var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+					  		  parent.layer.close(index);
+					  		  parent.location.reload(); //刷新父页面
+						}, 2000);
+				}else{
+					 //询问框
+		             layer.confirm(''+data.data.finish+'人发送成功'+data.data.fail+'人发送失败,未关注公众号,如下<br>'+data.data.text+'', {
+		               btn: ['确定'], //按钮
+		               title: '提示',
+		             success: function(layero){
+		                 layero.find('.layui-layer-btn').css('text-align', 'center'); //改变位置按钮居中，left左
+		             },
+		             }, function(){
+		            	 // 这里就是处理的事件
+					     var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+				  		  parent.layer.close(index);
+				  		  parent.location.reload(); //刷新父页面
+		             }, function(){
+		            	 // 这里就是处理的事件
+					     var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+				  		  parent.layer.close(index);
+				  		  parent.location.reload(); //刷新父页面
+		             });
+				}
+			 
+			})
+		// 阻止表单跳转。如果需要表单跳转，去掉这段即可。
+		return false;
+	  });
+		 
+      
+  	 //监听提交微信消息发送
+	  form.on('submit(demo5)', function(data){
+	   var WxText = $("#WxText").val();
+		 var url = "/ProgramController/xxcmessage";
+		 var data2 = {
+					'WxText' : WxText,
+					'checked' : checked,
+			};
+			$.post(url, data2, function(data) {
+				if(data.data.fail==0){
+					 notice.success({
+		                  title: '消息通知',
+		                  message: data.data.finish+'人发送成功'+data.data.fail+'人发送失败'
+		              });
+					 setTimeout(function () {
+						    // 这里就是处理的事件
+						     var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+					  		  parent.layer.close(index);
+					  		  parent.location.reload(); //刷新父页面
+						}, 2000);
+				}else{
+					 //询问框
+		             layer.confirm(''+data.data.finish+'人发送成功'+data.data.fail+'人发送失败,未开启订阅消息,如下<br>'+data.data.text+'', {
+		               btn: ['确定'], //按钮
+		               title: '提示',
+		             success: function(layero){
+		                 layero.find('.layui-layer-btn').css('text-align', 'center'); //改变位置按钮居中，left左
+		             },
+		             }, function(){
+		            	 // 这里就是处理的事件
+					     var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+				  		  parent.layer.close(index);
+				  		  parent.location.reload(); //刷新父页面
+		             }, function(){
+		            	 // 这里就是处理的事件
+					     var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+				  		  parent.layer.close(index);
+				  		  parent.location.reload(); //刷新父页面
+		             });
+				}
+			 
+			})
+		// 阻止表单跳转。如果需要表单跳转，去掉这段即可。
+		return false;
+	  });
+  	 
+  	 
+  	 
+        //监听提交短信发送
+    	  form.on('submit(demo1)', function(data){
+    	   var smsname = $("#smsname").val();
+    		var tText = $("#tText").val();
+    		 var url = "/TemplateSendController/completeNote";
+    		 var data2 = {
+   					'smsname' : smsname,
+   					'tText' : tText,
+   					'checked' : checked,
+   			};
+  			$.post(url, data2, function(data) {
+				 notice.success({
+	                  title: '消息通知',
+	                  message: data.data.finish+'人发送成功'+data.data.fail+'人发送失败'
+	              });
+				 setTimeout(function () {
+					    // 这里就是处理的事件
+					     var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+				  		  parent.layer.close(index);
+				  		  parent.location.reload(); //刷新父页面
+					}, 2000);
+  			})
+    		// 阻止表单跳转。如果需要表单跳转，去掉这段即可。
+    		return false;
+    	  });
+        
+    	  
+        
+          $(function(){
+  			var url = "/TemplateSendController/showSysSmsAll";
+  			var data2 = {
+  				
+  			};
+  			$.post(url, data2, function(data) {
+  				var htmld;
+  		       	var item=data.data;
+  		        for (var i = 0; i < item.length; i++) {
+  		        	if(i==0){
+  		        		showtSmsid(item[i].smsId);
+  		        		$("#templateText").html(item[i].templateText);
+  		        	}
+  		        	htmld+="<option value="+item[i].smsId+">"+item[i].smsname+"</option>";
+  				}
+  		       	$('#smsname').append(htmld);
+  		        form.render();
+  			})
+  			
+  			var url = "/TemplateSendController/selectByMessage";
+  			var data2 = {
+  				
+  			};
+  			$.post(url, data2, function(data) {
+  				var htmld;
+  		       	var item=data.data;
+  		        for (var i = 0; i < item.length; i++) {
+  		        	if(i==0){
+  		        		showtWx(item[i].tMId);
+  		        		showtWx1(item[i].tMId);
+  		        	}
+  		        	htmld+="<option value="+item[i].tMId+">"+item[i].tMContent+"</option>";
+  				}
+  		       	$('#WeChatType').append(htmld);
+  		      $('#WeChatType1').append(htmld);
+  		        form.render();
+  			})
+  			
+  			var url = "/TemplateSendController/showtemplate";
+  			var data2 = {
+  				
+  			};
+  			$.post(url, data2, function(data) {
+  				var htmld;
+  		       	var item=data.data;
+  		     	if(data.data.gzh==1){
+  		     		$("#gzh").hide();
+  		     	}else{
+  		     		$("#gzh").show();
+  		     	}
+  		     	if(data.data.xxc==1){
+  		     		$("#xcx").hide();
+  		     	}else{
+  		     		$("#xcx").show();
+  		     	}
+  		     	if(data.data.dx==1){
+  		     		$("#dx").hide();
+  		     	}else{
+  		     		$("#dx").show();
+  		     	}
+  		     	
+  		     	
+  		     	$("#dh").show();
+		     		$("#sm").show();
+  			})
+  		})
+  		
+  		
+  		showtWx=function(tMId){
+            	$('#WxtypeId').html("");
+            	var url = "/TemplateSendController/selecttType";
+    			var data2 = {
+    					'tType' : tMId
+    			};
+    			$.post(url, data2, function(data) {
+    				var htmld;
+    		       	var item=data.data;
+    		        for (var i = 0; i < item.length; i++) {
+    		        	if(i==0){
+    		        		$("#WxText").html(item[i].tTemcontent);
+    		        	}
+    		        	htmld+="<option value="+item[i].tId+">"+item[i].tTemcontent+"</option>";
+    				}
+    		       	$('#WxtypeId').append(htmld);
+    		        form.render();
+    			})
+            }
+          
+          showtWx1=function(tMId){
+          	$('#WxtypeId1').html("");
+          	var url = "/TemplateSendController/selecttType";
+  			var data2 = {
+  					'tType' : tMId
+  			};
+  			$.post(url, data2, function(data) {
+  				var htmld;
+  		       	var item=data.data;
+  		        for (var i = 0; i < item.length; i++) {
+  		        	if(i==0){
+  		        		$("#WxText1").html(item[i].tTemcontent);
+  		        	}
+  		        	htmld+="<option value="+item[i].tId+">"+item[i].tTemcontent+"</option>";
+  				}
+  		       	$('#WxtypeId1').append(htmld);
+  		        form.render();
+  			})
+          }
+          
+          
+          
+  		
+  		showtSmsid=function(smsId){
+          	$('#tSmsid').html("");
+          	var url = "/TemplateSendController/SysTextSelectByPrimaryKey";
+  			var data2 = {
+  					'smsId' : smsId
+  			};
+  			$.post(url, data2, function(data) {
+  				var htmld;
+  		       	var item=data.data;
+  		        for (var i = 0; i < item.length; i++) {
+  		        	if(i==0){
+  		        		$("#tText").html(item[i].tText);
+  		        	}
+  		        	htmld+="<option value="+item[i].tId+">"+item[i].tText+"</option>";
+  				}
+  		       	$('#tSmsid').append(htmld);
+  		        form.render();
+  			})
+          }
+  		
+  		
+  		form.on('select(message)', function(data){
+  	        //layui.layer.msg(data.value);//得到被选中的值
+  	       // layui.layer.msg(data.elem); //得到select原始DOM对象
+  	       showtWx(data.value);
+      	 })
+      	 
+      	 form.on('select(message1)', function(data){
+  	        //layui.layer.msg(data.value);//得到被选中的值
+  	       // layui.layer.msg(data.elem); //得到select原始DOM对象
+  	       showtWx1(data.value);
+      	 })
+      	 
+      	 form.on('select(WxtypeId)', function(data){
+   	        //layui.layer.msg(data.value);//得到被选中的值
+   	       // layui.layer.msg(data.elem); //得到select原始DOM对象
+   	       $("#WxText").html("");
+   	         var url = "/TemplateSendController/selectWxById";
+   				var data2 = {
+       					'tType' : data.value
+       				};
+   				$.post(url, data2, function(data) {
+   					$("#WxText").html(data.data.tTemcontent);
+   			        form.render();
+   				})
+       	 })
+      	 
+       	  form.on('select(WxtypeId1)', function(data){
+   	        //layui.layer.msg(data.value);//得到被选中的值
+   	       // layui.layer.msg(data.elem); //得到select原始DOM对象
+   	       $("#WxText1").html("");
+   	         var url = "/TemplateSendController/selectWxById";
+   				var data2 = {
+       					'tType' : data.value
+       				};
+   				$.post(url, data2, function(data) {
+   					$("#WxText1").html(data.data.tTemcontent);
+   			        form.render();
+   				})
+       	 })
+      	 
+      	 
+  		
+  		 form.on('select(aihao)', function(data){
+  	        //layui.layer.msg(data.value);//得到被选中的值
+  	       // layui.layer.msg(data.elem); //得到select原始DOM对象
+  	       showtSmsid(data.value);
+  	       $("#templateText").html("");
+  	         var url = "/TemplateSendController/SysSmsSelectByPrimaryKey";
+  				var data2 = {
+      					'smsId' : data.value
+      				};
+  				$.post(url, data2, function(data) {
+  			        $("#templateText").html(data.data.templateText);
+  			        form.render();
+  				})
+      	 })
+      	 
+      	 
+      	 
+      	 
+      	 form.on('select(tSmsid)', function(data){
+  	        //layui.layer.msg(data.value);//得到被选中的值
+  	       // layui.layer.msg(data.elem); //得到select原始DOM对象
+  	       $("#tText").html("");
+  	         var url = "/TemplateSendController/selectSmsId";
+  				var data2 = {
+      					'tId' : data.value
+      				};
+  				$.post(url, data2, function(data) {
+  					$("#tText").html(data.data.tText);
+  			        form.render();
+  				})
+      	 })
+      	 
+      	 
+	});
+
+/**
+ * 初始化菜单URL
+ */
+function initMenuUrl() {
+	// 取时间选择器的值
+	//var choiceDate = $("#choiceDate").val();
+	// 得到菜单栏下所有的a标签
+	var urls = $(".layui-nav-tree a");
+	// 循环a标签
+	for(var i = 0; i < urls.length; i++) {
+		// 得到当前循环a标签的url地址
+		var url = $(urls).eq(i).attr("lay-href");
+		// 如果url地址中含有“?”号
+		if (url.indexOf("?") > -1) {
+			// 截取url问号之前的字符,并重新赋值
+			// 例： /manageXht/gynecology?userCode='123' -- > /manageXht/gynecology
+			url = url.substr(0, url.indexOf("?"))
+		}
+		// 拼接url地址后面的参数
+		url = url + "?checked=" + [[${checked}]];
+		// 当前循环a标签的url地址重新赋值
+		$(urls).eq(i).attr("lay-href", url);
+	}
+	
+	// 更改了菜单栏地址之后刷新内容区域
+	$(".layui-body .layui-tab li").each(function(){
+		var url = $(this).attr("lay-id");
+		url = url.substr(0, url.indexOf("?")) + "?entryTime=" + choiceDate + "&userCode=" + [[${userCode}]];
+		$(this).attr("lay-id", url);
+	});
+	$(".layui-body iframe").each(function(){
+		var url = $(this).attr("src");
+		url = url.substr(0, url.indexOf("?")) + "?entryTime=" + choiceDate + "&userCode=" + [[${userCode}]];
+		$(this).attr("lay-id", url);
+		$(this).attr("src", url);
+	});
+}
+</script>
+
+</html>
+

@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yihe.applet.api.mapper.YhFoodSrecipeRecordAppMapper">
+    <resultMap type="com.yihe.applet.api.domain.YhFoodSrecipeRecordApp" id="YhFoodSrecipeRecordResult">
+         <id column="record_id" property="recordId" jdbcType="INTEGER" />
+    <result column="record_data" property="recordData" jdbcType="TIMESTAMP" />
+    <result column="record_name" property="recordName" jdbcType="VARCHAR" />
+    <result column="record_kay" property="recordKay" jdbcType="INTEGER" />
+    <result column="record_type" property="recordType" jdbcType="INTEGER" />
+    <result column="record_mode" property="recordMode" jdbcType="VARCHAR" />
+    <result column="user_code" property="userCode" jdbcType="VARCHAR" />
+    <result column="meal_id" property="mealId" jdbcType="VARCHAR" />
+    <result column="illness_id" property="illnessId" jdbcType="VARCHAR" />
+    <result column="standby" property="standby" jdbcType="TIMESTAMP" />
+    <result column="age" property="age" jdbcType="INTEGER" />
+    <result column="height" property="height" jdbcType="REAL" />
+    <result column="weight" property="weight" jdbcType="REAL" />
+    <result column="strength" property="strength" jdbcType="INTEGER" />
+    <result column="sex" property="sex" jdbcType="INTEGER" />
+    <result column="request_serialNum" property="requestSerialNum" jdbcType="VARCHAR" />
+    </resultMap>
+    <sql id="allColumn">
+         record_id, record_data, record_name, record_kay, record_type, record_mode, user_code, 
+    meal_id, illness_id, standby, age, height, weight, strength, sex,request_serialNum
+    </sql>
+    <!--增-->
+    <insert id="insertYhFoodSrecipeRecord" parameterType="com.yihe.applet.api.domain.YhFoodSrecipeRecordApp" useGeneratedKeys="true" keyProperty="recordId">
+        insert into yh_food_srecipe_record
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="recordId != null" >
+        record_id,
+      </if>
+      <if test="recordData != null" >
+        record_data,
+      </if>
+      <if test="recordName != null" >
+        record_name,
+      </if>
+      <if test="recordKay != null" >
+        record_kay,
+      </if>
+      <if test="recordType != null" >
+        record_type,
+      </if>
+      <if test="recordMode != null" >
+        record_mode,
+      </if>
+      <if test="userCode != null" >
+        user_code,
+      </if>
+      <if test="mealId != null" >
+        meal_id,
+      </if>
+      <if test="illnessId != null" >
+        illness_id,
+      </if>
+      <if test="standby != null" >
+        standby,
+      </if>
+      <if test="age != null" >
+        age,
+      </if>
+      <if test="height != null" >
+        height,
+      </if>
+      <if test="weight != null" >
+        weight,
+      </if>
+      <if test="strength != null" >
+        strength,
+      </if>
+      <if test="sex != null" >
+        sex,
+      </if>
+      <if test="requestSerialNum != null" >
+        request_serialNum,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="recordId != null" >
+        #{recordId,jdbcType=INTEGER},
+      </if>
+      <if test="recordData != null" >
+        #{recordData,jdbcType=TIMESTAMP},
+      </if>
+      <if test="recordName != null" >
+        #{recordName,jdbcType=VARCHAR},
+      </if>
+      <if test="recordKay != null" >
+        #{recordKay,jdbcType=INTEGER},
+      </if>
+      <if test="recordType != null" >
+        #{recordType,jdbcType=INTEGER},
+      </if>
+      <if test="recordMode != null" >
+        #{recordMode,jdbcType=VARCHAR},
+      </if>
+      <if test="userCode != null" >
+        #{userCode,jdbcType=VARCHAR},
+      </if>
+      <if test="mealId != null" >
+        #{mealId,jdbcType=VARCHAR},
+      </if>
+      <if test="illnessId != null" >
+        #{illnessId,jdbcType=VARCHAR},
+      </if>
+      <if test="standby != null" >
+        #{standby,jdbcType=TIMESTAMP},
+      </if>
+      <if test="age != null" >
+        #{age,jdbcType=INTEGER},
+      </if>
+      <if test="height != null" >
+        #{height,jdbcType=REAL},
+      </if>
+      <if test="weight != null" >
+        #{weight,jdbcType=REAL},
+      </if>
+      <if test="strength != null" >
+        #{strength,jdbcType=INTEGER},
+      </if>
+      <if test="sex != null" >
+        #{sex,jdbcType=INTEGER},
+      </if>
+      <if test="requestSerialNum != null" >
+        #{requestSerialNum,jdbcType=INTEGER},
+      </if>
+    </trim>
+    </insert>
+    <!--根据疾病id与userCode查询是否已存在推荐，存在则改为过期状态-->
+    <update id="uptYhFoodSrecipeRecord" parameterType="com.yihe.applet.api.domain.YhFoodSrecipeRecordApp">
+        UPDATE yh_food_srecipe_record SET record_type=2
+        WHERE user_code=#{userCode} and record_type=1 or record_type=3
+    </update>
+    <!-- 查询用户是否有正在执行的健康计划 -->
+    <select id="findInProgressFoodRecord"  resultMap="YhFoodSrecipeRecordResult">
+    SELECT * FROM `yh_food_srecipe_record` WHERE record_mode='健康计划' AND user_code=#{usercode} AND record_type=1 limit 1
+    </select>
+    
+    <update id="modifyType3Fortype2">
+    
+UPDATE 
+   `yh_food_srecipe_record` 
+SET
+   
+ `record_type` = '2',
+   `standby` = NOW()  
+WHERE  `record_type` = '3' AND
+   
+  `user_code` = #{usercode}
+    
+    </update>
+    
+      <update id="modifyType1Fortype2">
+    
+UPDATE 
+   `yh_food_srecipe_record` 
+SET
+   
+ `record_type` = '2',
+   `standby` = NOW() 
+WHERE  `record_type` = '1' AND
+   
+  `user_code` = #{usercode}
+    
+    </update>
+    
+    
+    <!--根据疾病id与userCode查询是否已存在推荐-->
+    <select id="selYhFoodSrecipeRecordCount" resultType="int" parameterType="com.yihe.applet.api.domain.YhFoodSrecipeRecordApp">
+        SELECT COUNT(1) FROM yh_food_srecipe_record
+        WHERE user_code=#{userCode} 
+    </select>
+    
+    <!-- 查询用户最新评估的膳食推荐热量 -->
+    <select id="findFoodSrecipeRecordByUsercodeForNow" resultMap="YhFoodSrecipeRecordResult">
+    
+		SELECT * FROM `yh_food_srecipe_record` WHERE user_code=#{usercode} and record_type=1 ORDER BY record_data DESC LIMIT 1
+    </select>
+</mapper>

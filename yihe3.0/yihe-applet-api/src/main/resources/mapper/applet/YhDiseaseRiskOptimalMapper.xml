@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yihe.applet.api.mapper.YhDiseaseRiskOptimalMapper">
+    
+    <resultMap type="YhDiseaseRiskOptimal" id="YhDiseaseRiskOptimalResult">
+        <result property="id"    column="id"    />
+        <result property="requestSerial"    column="request_serial"    />
+        <result property="depart"    column="depart"    />
+        <result property="sno"    column="sno"    />
+        <result property="qname"    column="qname"    />
+        <result property="qcode"    column="qcode"    />
+        <result property="optimal"    column="optimal"    />
+        <result property="weight"    column="weight"    />
+        <result property="remark"    column="remark"    />
+        <result property="value"    column="value"    />
+        <result property="minv"    column="minv"    />
+        <result property="maxv"    column="maxv"    />
+        <result property="qtype"    column="qtype"    />
+        <result property="sex"    column="sex"    />
+        <result property="diseaseid"    column="diseaseid"    />
+        <result property="xpath"    column="xpath"    />
+        <result property="isradar"    column="isRadar"    />
+        <result property="radarRangePoint"    column="Radar_range_point"    />
+        <result property="radarRangeName"    column="Radar_range_name"    />
+    </resultMap>
+
+    <sql id="selectYhDiseaseRiskOptimalVo">
+        select id, request_serial, depart, sno, qname, qcode, optimal, weight, remark, value, minv, maxv, qtype, sex, diseaseid, xpath, isRadar, Radar_range_point, Radar_range_name from yh_disease_risk_optimal
+    </sql>
+
+    <select id="selectYhDiseaseRiskOptimalList" parameterType="YhDiseaseRiskOptimal" resultMap="YhDiseaseRiskOptimalResult">
+        <include refid="selectYhDiseaseRiskOptimalVo"/>
+        <where>  
+            <if test="requestSerial != null  and requestSerial != ''"> and request_serial = #{requestSerial}</if>
+            <if test="depart != null  and depart != ''"> and depart = #{depart}</if>
+            <if test="sno != null "> and sno = #{sno}</if>
+            <if test="qname != null  and qname != ''"> and qname like concat('%', #{qname}, '%')</if>
+            <if test="qcode != null  and qcode != ''"> and qcode = #{qcode}</if>
+            <if test="optimal != null  and optimal != ''"> and optimal = #{optimal}</if>
+            <if test="weight != null "> and weight = #{weight}</if>
+            <if test="value != null  and value != ''"> and value = #{value}</if>
+            <if test="minv != null "> and minv = #{minv}</if>
+            <if test="maxv != null "> and maxv = #{maxv}</if>
+            <if test="qtype != null  and qtype != ''"> and qtype = #{qtype}</if>
+            <if test="sex != null  and sex != ''"> and sex = #{sex}</if>
+            <if test="diseaseid != null  and diseaseid != ''"> and diseaseid = #{diseaseid}</if>
+            <if test="xpath != null  and xpath != ''"> and xpath = #{xpath}</if>
+            <if test="isradar != null "> and isRadar = #{isradar}</if>
+            <if test="radarRangePoint != null  and radarRangePoint != ''"> and Radar_range_point = #{radarRangePoint}</if>
+            <if test="radarRangeName != null  and radarRangeName != ''"> and Radar_range_name like concat('%', #{radarRangeName}, '%')</if>
+        </where>
+    </select>
+    
+    <select id="selectYhDiseaseRiskOptimalById"  resultMap="YhDiseaseRiskOptimalResult">
+        <include refid="selectYhDiseaseRiskOptimalVo"/>
+        where sex in (#{sex},0) and isRadar= #{isRadar} and diseaseid=#{diseaseid}
+    </select>
+        
+  
+
+
+  
+    
+</mapper>

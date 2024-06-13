@@ -1,0 +1,2287 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yihe.system.mapper.YhDiseaseAssessTotalReportMapper">
+	<resultMap id="BaseResultMap"
+		type="com.yihe.system.domain.YhDiseaseAssessTotalReport">
+		<id column="id" jdbcType="INTEGER" property="id" />
+		<result column="result_serialNum" jdbcType="VARCHAR" property="resultSerialnum" />
+		<result column="request_serialNum" jdbcType="VARCHAR" property="requestSerialnum" />
+		<result column="user_code" jdbcType="VARCHAR" property="userCode" />
+		<result column="gender" jdbcType="INTEGER" property="gender" />
+		<result column="evaluateFlag" jdbcType="INTEGER" property="evaluateFlag" />
+		<result column="qtime" jdbcType="VARCHAR" property="qtime" />
+		<result column="age" jdbcType="INTEGER" property="age" />
+		<result column="user_name" jdbcType="VARCHAR" property="userName" />
+		<result column="user_occupation" jdbcType="VARCHAR" property="userOccupation" />
+		<result column="user_jzd" jdbcType="VARCHAR" property="userJzd" />
+		<result column="user_jzhj" jdbcType="VARCHAR" property="userJzhj" />
+		<result column="name" jdbcType="VARCHAR" property="name" />
+		<result column="Org_Code" jdbcType="VARCHAR" property="orgCode" />
+		<result column="classify" jdbcType="INTEGER" property="classify" />
+	</resultMap>
+	
+	<sql id="Example_Where_Clause">
+		<where>
+			<foreach collection="oredCriteria" item="criteria" separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" prefixOverrides="and" suffix=")">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value}
+									and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach close=")" collection="criterion.value" item="listItem"
+										open="(" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Update_By_Example_Where_Clause">
+		<where>
+			<foreach collection="example.oredCriteria" item="criteria"
+				separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" prefixOverrides="and" suffix=")">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value}
+									and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach close=")" collection="criterion.value" item="listItem"
+										open="(" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Base_Column_List">
+		id, result_serialNum, request_serialNum, user_code, gender,
+		age,qtime,
+		user_name, user_occupation,
+		user_jzd, user_jzhj
+	</sql>
+	
+	<!-- 根据code查询当前疾病信息 -->
+	<select id="findCategoryByCode" resultType="java.lang.String">
+	
+	 SELECT disease_name FROM `yh_disease_category` WHERE disease_name=#{code}
+ 
+	
+	</select>
+	<!-- 3.1智能分组前判断某用户的风险情况 -->
+	<select id="findAssessTotalByUsercodeNewInfo" resultType="com.yihe.system.domain.YhDiseaseAssessReportVOJO">
+	SELECT  df_names AS bfnames,sk_names AS sknames,ld_names AS ldnames,lr_names AS lrnames,bmi FROM   `yh_disease_assess_total_report2` WHERE user_code=#{usercode} ORDER BY qtime DESC LIMIT 1
+ 
+	</select>
+	<!-- 3.1最新健康评估管理 -->
+	<select id="findAssessInfoByDocTor" resultType="com.yihe.system.domain.YhDiseaseAssessReportVOJO">
+
+		SELECT
+		a.requestNum,
+		a.usercode,
+		a. NAME,
+		a.sex,
+		a.qtime,
+		a.times,
+		a.bfnames,
+		a.sknames,
+		a.ldnames,
+		a.lrnames,
+		a.flagDgroup
+		FROM
+		(
+		SELECT
+		b.request_serialNum AS requestNum,
+		a.`user_code` AS usercode,
+		a.`name`,
+		CASE
+		WHEN a.gender = 1 THEN
+		'男'
+		ELSE
+		'女'
+		END AS sex,
+		b.`times`,
+		b.qtime,
+		b.id AS reid,
+		b.df_names AS bfnames,
+		b.`sk_names` AS sknames,
+		b.`ld_names` AS ldnames,
+		b.`lr_names` AS lrnames,
+		d.`Flag_Dgroup` AS flagDgroup
+		FROM
+		yh_user_reginfo AS a
+		LEFT JOIN yh_disease_assess_total_report2 AS b ON a.`user_code` = b.`user_code`
+		LEFT JOIN `yh_user_make_card` AS c ON a.`user_code` = c.`User_Code`
+		LEFT JOIN `yh_user_enrolinfo` AS d ON a.`user_code` = d.`user_code`
+ <where>
+		 (
+		 b.id = (
+		 SELECT
+		 MAX(dt.id) AS max_chat_time
+		 FROM
+		 yh_user_reginfo AS ur
+		 LEFT JOIN yh_disease_assess_total_report2 AS dt ON ur.user_code = dt.user_code
+		 LEFT JOIN `yh_user_make_card` AS c ON ur.`user_code` = c.`User_Code`
+		 LEFT JOIN yh_user_admin_info AS ai ON c.doctor = ai.id
+		 WHERE
+		 ai.user_code = #{doctor}
+		 AND ur.user_code = a.`user_code`
+		 GROUP BY
+		 ur.user_code
+		 )
+		 OR b.id IS NULL
+		 )
+		 AND c.doctor = (
+		 SELECT
+		 id
+		 FROM
+		 `yh_user_admin_info`
+		 WHERE
+		 user_code = #{doctor}
+		 )
+
+		<!-- 是否评估 -->
+		<if test='assessment =="1".toString()'>
+		AND b.request_serialNum IS not NULL
+		</if>
+		<if test='assessment =="2".toString()'>
+		AND b.request_serialNum IS NULL
+		</if>
+		
+		<!-- 机构 -->
+		<if test="orgCode != null and orgCode!=''">
+		AND c.Org_id=#{orgCode}
+		</if>
+		
+		<!-- 分组 -->
+		<if test="evaluateFlag !=null and evaluateFlag != ''">
+		AND d.Flag_Dgroup LIKE CONCAT('%',#{evaluateFlag},'%') 
+		</if>
+		
+		<!-- 姓名 -->
+		<if test="username != null and username!=''">
+		AND a.name LIKE CONCAT('%',#{username},'%')
+		</if>
+		
+		<!-- 性别 -->
+		<if test="sex != null and sex !=0">
+		AND a.gender=#{sex}
+		</if>
+		
+		<!-- 年龄 -->
+		<if test="agestart != null and ageend != null">
+		AND b.age BETWEEN #{agestart} AND #{ageend} 
+		</if>
+		
+		<!-- BMI -->
+		<if test="weight1 != null and weight1 != ''">
+		AND b.bmi &lt; 18.5
+		</if>
+		<!-- BMI -->
+		<if test="weight2 != null and weight2 != ''">
+		AND b.bmi &gt;= 18.5 AND b.bmi &lt; 24
+		</if>
+		<!-- BMI -->
+		<if test="weight3 != null and weight3 != ''">
+		AND b.bmi &gt;= 24 AND b.bmi &lt; 28
+		</if>
+		<!-- BMI -->
+		<if test="weight4 != null and weight4 != ''">
+		AND b.bmi &gt;= 28
+		</if>
+		
+		<!-- 疾病史 -->
+		<!-- 个人 -->
+		<!-- 既往骨折 -->
+		<if test="previousFracture != null">
+		AND b.`fracture_his`=1
+		</if>
+		<!-- 前列腺炎或肥大 -->
+		<if test="prostatitis != null">
+		AND b.`prostate_disease`=1
+		</if>
+		<!-- 高血压 -->
+		<if test="hypertension != null">
+		AND b.`hbp_his`=1
+		</if>
+		<!-- 慢性支气管炎 -->
+		<if test="chronicbronchitis != null">
+		AND b.`bronch_his`=1
+		</if>
+		 
+		<!-- 血脂异常 -->
+		<if test="dyslipidemia != null">
+		AND b.`bf_his`=1
+		</if>
+		<!-- 骨质疏松 -->
+		<if test="osteoporosis != null">
+		AND b.`op_his`=1
+		</if>
+		<!-- 肺癌 -->
+		<if test="lungcancer != null">
+		AND b.`lc_his`=1
+		</if>
+		<!-- 肺气肿 -->
+		<if test="emphysema != null">
+		AND b.`emphy_his`=1
+		</if>
+		<!-- 冠心病 -->
+		<if test="coronarydisease != null">
+		AND b.`chd_his`=1
+		</if>
+		<!-- 高尿酸血症 -->
+		<if test="hyperuricemia != null">
+		AND b.`hua_his`=1
+		</if>
+		<!-- 肺结核 -->
+		<if test="phthisis != null">
+		AND b.`decline_his`=1
+		</if>
+		<!-- 脂肪肝 -->
+		<if test="fattyliver != null">
+		AND b.`fl_his`=1
+		</if>
+		<!-- 2型糖尿病 -->
+		<if test="type2diabetes != null">
+		AND b.`diab2_his`=1
+		</if>
+		<!-- 脑卒中 -->
+		<if test="apoplexy != null">
+		AND b.`stroke_his`=1
+		</if>
+		<!-- 乳腺癌 -->
+		<if test="breastcancer != null">
+		AND b.`bc_his`=1
+		</if>
+		<!-- 前列腺癌 -->
+		<if test="prostate != null">
+		AND b.`pc_his`=1
+		</if>
+		<!-- 痛风急性发作期 -->
+		<if test="acutegout != null">
+		AND b.`gae_his`=1
+		</if>
+		<!-- 痛风非急性期 -->
+		<if test="goutisnotacute != null">
+		AND b.`gna_his`=1
+		</if>
+		<!-- 家族 -->
+		<!-- 高血压 -->
+		<if test="familialhypertension != null">
+		AND b.`family_hbp`=1
+		</if>
+		<!-- 肺癌 -->
+		<if test="familiallungcancer != null">
+		AND b.`family_lung`=1
+		</if>
+		<!-- 冠心病 -->
+		<if test="familialcoronarydisease != null">
+		AND b.`family_chd`=1
+		</if>
+		<!-- 脑卒中 -->
+		<if test="familialapoplexy != null">
+		AND b.`family_stroke`=1
+		</if>
+		<!-- 乳腺癌 -->
+		<if test="familialbreastcancer != null">
+		AND b.`family_breast`=1
+		</if>
+		<!-- 前列腺癌 -->
+		<if test="familialprostate != null">
+		AND b.`family_pro`=1
+		</if>
+		<!-- 糖尿病 -->
+		<if test="familialdiabetes != null">
+		AND b.`family_diab`=1
+		</if>
+		<!-- 髋骨骨折 -->
+		<if test="familialhipfracture != null">
+		AND b.`family_hf`=1
+		</if>
+		<!-- 吸烟 -->
+		<if test="smoke1 != null">
+		AND b.`smoke_status`=1
+		</if>
+		<if test="smoke2 != null">
+		AND b.`smoke_status`=2
+		</if>
+		<if test="smoke3 != null">
+		AND b.`smoke_status`=3
+		</if>
+		<!-- 运动 -->
+		<if test="sport1 != null">
+		AND b.`sport_in`=1
+		</if>
+		<if test="sport2 != null">
+		AND b.`sport_in`=2
+		</if>
+		<if test="sport3 != null">
+		AND b.`sport_in`=3
+		</if>
+		<!-- 饮酒 -->
+		<if test="drink1 != null">
+		AND b.`food_drink`=1
+		</if>
+		<if test="drink2 != null">
+		AND b.`food_drink`=2
+		</if>
+		
+		<!-- 疾病风险 -->
+		<!-- 冠心病 -->
+		<!-- 高风险 -->
+		<if test="coronarydiseaserisk3 != null">
+		AND b.df_names REGEXP "冠心病" 
+		<if test="breastcancerrisk3 == null">
+		 AND b.df_names NOT REGEXP "乳腺癌"
+		</if>
+		</if>
+		
+		
+		<!-- 中等风险 -->
+		<if test="coronarydiseaserisk2 != null">
+		AND b.ld_names REGEXP "冠心病" 
+		<if test="breastcancerrisk2 == null">
+		 AND b.ld_names NOT REGEXP "乳腺癌"
+		</if>
+		</if>
+		
+		
+		<!-- 低风险 -->
+		<if test="coronarydiseaserisk1 != null">
+		AND b.lr_names REGEXP "冠心病" 
+		<if test="breastcancerrisk1 == null">
+		 AND b.lr_names NOT REGEXP "乳腺癌"
+		</if>
+		</if>
+		
+		
+		<!-- 脑卒中 -->
+		<!-- 高风险 -->
+		<if test="apoplexyrisk3 != null">
+		AND b.df_names REGEXP "脑卒中"
+		</if>
+		<!-- 中等风险 -->
+		<if test="apoplexyrisk2 != null">
+		AND b.ld_names REGEXP "脑卒中"
+		</if>
+		<!-- 低风险 -->
+		<if test="apoplexyrisk1 != null">
+		AND b.lr_names REGEXP "脑卒中"
+		</if>
+		
+		<!-- 高血压 -->
+		<!-- 高风险 -->
+		<if test="hypertensionrisk3 != null">
+		AND b.df_names REGEXP "高血压"
+		</if>
+		<!-- 中等风险 -->
+		<if test="hypertensionrisk2 != null">
+		AND b.ld_names REGEXP "高血压"
+		</if>
+		<!-- 低风险 -->
+		<if test="hypertensionrisk1 != null">
+		AND b.lr_names REGEXP "高血压"
+		</if>
+		
+		<!-- 糖尿病 -->
+		<!-- 高风险 -->
+		<if test="diabetesrisk3 != null">
+		AND b.df_names REGEXP "糖尿病"
+		</if>
+		<!-- 中等风险 -->
+		<if test="diabetesrisk2 != null">
+		AND b.ld_names REGEXP "糖尿病"
+		</if>
+		<!-- 低风险 -->
+		<if test="diabetesrisk1 != null">
+		AND b.lr_names REGEXP "糖尿病"
+		</if>
+		
+		<!-- 痛风 -->
+		<!-- 高风险 -->
+		<if test="riskofgout3 != null">
+		AND b.df_names REGEXP "痛风"
+		</if>
+		<!-- 中等风险 -->
+		<if test="riskofgout2 != null">
+		AND b.ld_names REGEXP "痛风"
+		</if>
+		<!-- 低风险 -->
+		<if test="riskofgout1 != null">
+		AND b.lr_names REGEXP "痛风"
+		</if>
+		
+		<!-- 肺癌 -->
+		<!-- 高风险 -->
+		<if test="lungcancerrisk3 != null">
+		AND b.df_names REGEXP "肺癌"
+		</if>
+		<!-- 中等风险 -->
+		<if test="lungcancerrisk2 != null">
+		AND b.ld_names REGEXP "肺癌"
+		</if>
+		<!-- 低风险 -->
+		<if test="lungcancerrisk1 != null">
+		AND b.lr_names REGEXP "肺癌"
+		</if>
+		
+		<!-- 前列腺癌 -->
+		<!-- 高风险 -->
+		<if test="prostaterisk3 != null">
+		AND b.df_names REGEXP "前列腺癌"
+		</if>
+		<!-- 中等风险 -->
+		<if test="prostaterisk2 != null">
+		AND b.ld_names REGEXP "前列腺癌"
+		</if>
+		<!-- 低风险 -->
+		<if test="prostaterisk1 != null">
+		AND b.lr_names REGEXP "前列腺癌"
+		</if>
+		
+		<!-- 乳腺癌 -->
+		<!-- 高风险 -->
+		<if test="breastcancerrisk3 != null">
+		AND b.df_names REGEXP "乳腺癌"
+		</if>
+		<!-- 中等风险 -->
+		<if test="breastcancerrisk2 != null">
+		AND b.ld_names REGEXP "乳腺癌"
+		</if>
+		<!-- 低风险 -->
+		<if test="breastcancerrisk1 != null">
+		AND b.lr_names REGEXP "乳腺癌"
+		</if>
+		
+		<!-- 血脂异常 -->
+		<!-- 低风险 -->
+		<if test="dyslipidemiarisk1 != null">
+		AND b.lr_names REGEXP "血脂异常"
+		</if>
+		<!-- 高风险 -->
+		<if test="dyslipidemiarisk2 != null">
+		AND b.df_names REGEXP "血脂异常"
+		</if>
+		<!-- 患或异-->
+		<if test="dyslipidemiarisk3 != null">
+		AND b.sk_names REGEXP "血脂异常"
+		</if>
+		
+		<!-- 骨质疏松 -->
+		<!-- 高风险 -->
+		<if test="osteoporosisrisk3 != null">
+		AND b.df_names REGEXP "骨质疏松症"
+		</if>
+		<!-- 中等风险 -->
+		<if test="osteoporosisrisk2 != null">
+		AND b.ld_names REGEXP "骨质疏松症"
+		</if>
+		<!-- 低风险 -->
+		<if test="osteoporosisrisk1 != null">
+		AND b.lr_names REGEXP "骨质疏松症"
+		</if>
+		
+		<!-- 高脂饮食 -->
+		<if test="food1 != null">
+		AND b.B4 =1
+		</if>
+		<if test="food2 != null">
+		AND b.B4 =2
+		</if>
+		<!-- 蔬菜摄入 -->
+		<if test="foodVegetables1 != null">
+		AND b.food_vegetables =1
+		</if>
+		<if test="foodVegetables2 != null">
+		AND b.food_vegetables =2
+		</if>
+		<!-- 水果摄入 -->
+			<if test="foodFruits1 != null">
+		AND b.food_fruits =1
+		</if>
+		<if test="foodFruits2 != null">
+		AND b.food_fruits =2
+		</if>
+		
+		<!-- 牛奶摄入 -->
+			<if test="foodairy1 != null">
+		AND b.food_dairy =1
+		</if>
+		<if test="foodairy2 != null">
+		AND b.food_dairy =2
+		</if>
+		
+		<!-- 高嘌呤饮食 -->
+			<if test="foodPurine1 != null">
+		AND b.food_purine =1
+		</if>
+		<if test="foodPurine2 != null">
+		AND b.food_purine =2
+		</if>
+		
+		
+		
+	 
+ </where>
+
+
+		GROUP BY a.user_code
+) AS a
+		 ORDER BY a.reid DESC,a.usercode
+
+
+
+
+	</select>
+
+
+	<select id="findAssessInfoByDocTor2" resultType="java.lang.String">
+
+
+
+
+		SELECT
+		a.`user_code` AS usercode
+
+		FROM
+		yh_user_reginfo AS a
+		LEFT JOIN yh_disease_assess_total_report2 AS b ON a.`user_code` = b.`user_code`
+		LEFT JOIN `yh_user_make_card` AS c ON a.`user_code` = c.`User_Code`
+		LEFT JOIN `yh_user_enrolinfo` AS d ON a.`user_code` = d.`user_code`
+		<where>
+			(
+			b.id = (
+			SELECT
+			MAX(dt.id) AS max_chat_time
+			FROM
+			yh_user_reginfo AS ur
+			LEFT JOIN yh_disease_assess_total_report2 AS dt ON ur.user_code = dt.user_code
+			LEFT JOIN `yh_user_make_card` AS c ON ur.`user_code` = c.`User_Code`
+			LEFT JOIN yh_user_admin_info AS ai ON c.doctor = ai.id
+			WHERE
+			ai.user_code = #{doctor}
+			AND ur.user_code = a.`user_code`
+			GROUP BY
+			ur.user_code
+			)
+			OR b.id IS NULL
+			)
+			AND c.doctor = (
+			SELECT
+			id
+			FROM
+			`yh_user_admin_info`
+			WHERE
+			user_code = #{doctor}
+			)
+
+			<!-- 是否评估 -->
+			<if test='assessment =="1".toString()'>
+				AND b.request_serialNum IS not NULL
+			</if>
+			<if test='assessment =="2".toString()'>
+				AND b.request_serialNum IS NULL
+			</if>
+
+			<!-- 机构 -->
+			<if test="orgCode != null and orgCode!=''">
+				AND c.Org_id=#{orgCode}
+			</if>
+
+			<!-- 分组 -->
+			<if test="evaluateFlag !=null and evaluateFlag != ''">
+				AND d.Flag_Dgroup LIKE CONCAT('%',#{evaluateFlag},'%')
+			</if>
+
+			<!-- 姓名 -->
+			<if test="username != null and username!=''">
+				AND a.name LIKE CONCAT('%',#{username},'%')
+			</if>
+
+			<!-- 性别 -->
+			<if test="sex != null and sex !=0">
+				AND a.gender=#{sex}
+			</if>
+
+			<!-- 年龄 -->
+			<if test="agestart != null and ageend != null">
+				AND b.age BETWEEN #{agestart} AND #{ageend}
+			</if>
+
+			<!-- BMI -->
+			<if test="weight1 != null and weight1 != ''">
+				AND b.bmi &lt; 18.5
+			</if>
+			<!-- BMI -->
+			<if test="weight2 != null and weight2 != ''">
+				AND b.bmi &gt;= 18.5 AND b.bmi &lt; 24
+			</if>
+			<!-- BMI -->
+			<if test="weight3 != null and weight3 != ''">
+				AND b.bmi &gt;= 24 AND b.bmi &lt; 28
+			</if>
+			<!-- BMI -->
+			<if test="weight4 != null and weight4 != ''">
+				AND b.bmi &gt;= 28
+			</if>
+
+			<!-- 疾病史 -->
+			<!-- 个人 -->
+			<!-- 既往骨折 -->
+			<if test="previousFracture != null">
+				AND b.`fracture_his`=1
+			</if>
+			<!-- 前列腺炎或肥大 -->
+			<if test="prostatitis != null">
+				AND b.`prostate_disease`=1
+			</if>
+			<!-- 高血压 -->
+			<if test="hypertension != null">
+				AND b.`hbp_his`=1
+			</if>
+			<!-- 慢性支气管炎 -->
+			<if test="chronicbronchitis != null">
+				AND b.`bronch_his`=1
+			</if>
+
+			<!-- 血脂异常 -->
+			<if test="dyslipidemia != null">
+				AND b.`bf_his`=1
+			</if>
+			<!-- 骨质疏松 -->
+			<if test="osteoporosis != null">
+				AND b.`op_his`=1
+			</if>
+			<!-- 肺癌 -->
+			<if test="lungcancer != null">
+				AND b.`lc_his`=1
+			</if>
+			<!-- 肺气肿 -->
+			<if test="emphysema != null">
+				AND b.`emphy_his`=1
+			</if>
+			<!-- 冠心病 -->
+			<if test="coronarydisease != null">
+				AND b.`chd_his`=1
+			</if>
+			<!-- 高尿酸血症 -->
+			<if test="hyperuricemia != null">
+				AND b.`hua_his`=1
+			</if>
+			<!-- 肺结核 -->
+			<if test="phthisis != null">
+				AND b.`decline_his`=1
+			</if>
+			<!-- 脂肪肝 -->
+			<if test="fattyliver != null">
+				AND b.`fl_his`=1
+			</if>
+			<!-- 2型糖尿病 -->
+			<if test="type2diabetes != null">
+				AND b.`diab2_his`=1
+			</if>
+			<!-- 脑卒中 -->
+			<if test="apoplexy != null">
+				AND b.`stroke_his`=1
+			</if>
+			<!-- 乳腺癌 -->
+			<if test="breastcancer != null">
+				AND b.`bc_his`=1
+			</if>
+			<!-- 前列腺癌 -->
+			<if test="prostate != null">
+				AND b.`pc_his`=1
+			</if>
+			<!-- 痛风急性发作期 -->
+			<if test="acutegout != null">
+				AND b.`gae_his`=1
+			</if>
+			<!-- 痛风非急性期 -->
+			<if test="goutisnotacute != null">
+				AND b.`gna_his`=1
+			</if>
+			<!-- 家族 -->
+			<!-- 高血压 -->
+			<if test="familialhypertension != null">
+				AND b.`family_hbp`=1
+			</if>
+			<!-- 肺癌 -->
+			<if test="familiallungcancer != null">
+				AND b.`family_lung`=1
+			</if>
+			<!-- 冠心病 -->
+			<if test="familialcoronarydisease != null">
+				AND b.`family_chd`=1
+			</if>
+			<!-- 脑卒中 -->
+			<if test="familialapoplexy != null">
+				AND b.`family_stroke`=1
+			</if>
+			<!-- 乳腺癌 -->
+			<if test="familialbreastcancer != null">
+				AND b.`family_breast`=1
+			</if>
+			<!-- 前列腺癌 -->
+			<if test="familialprostate != null">
+				AND b.`family_pro`=1
+			</if>
+			<!-- 糖尿病 -->
+			<if test="familialdiabetes != null">
+				AND b.`family_diab`=1
+			</if>
+			<!-- 髋骨骨折 -->
+			<if test="familialhipfracture != null">
+				AND b.`family_hf`=1
+			</if>
+			<!-- 吸烟 -->
+			<if test="smoke1 != null">
+				AND b.`smoke_status`=1
+			</if>
+			<if test="smoke2 != null">
+				AND b.`smoke_status`=2
+			</if>
+			<if test="smoke3 != null">
+				AND b.`smoke_status`=3
+			</if>
+			<!-- 运动 -->
+			<if test="sport1 != null">
+				AND b.`sport_in`=1
+			</if>
+			<if test="sport2 != null">
+				AND b.`sport_in`=2
+			</if>
+			<if test="sport3 != null">
+				AND b.`sport_in`=3
+			</if>
+			<!-- 饮酒 -->
+			<if test="drink1 != null">
+				AND b.`food_drink`=1
+			</if>
+			<if test="drink2 != null">
+				AND b.`food_drink`=2
+			</if>
+
+			<!-- 疾病风险 -->
+			<!-- 冠心病 -->
+			<!-- 高风险 -->
+			<if test="coronarydiseaserisk3 != null">
+				AND b.df_names REGEXP "冠心病"
+				<if test="breastcancerrisk3 == null">
+					AND b.df_names NOT REGEXP "乳腺癌"
+				</if>
+			</if>
+
+
+			<!-- 中等风险 -->
+			<if test="coronarydiseaserisk2 != null">
+				AND b.ld_names REGEXP "冠心病"
+				<if test="breastcancerrisk2 == null">
+					AND b.ld_names NOT REGEXP "乳腺癌"
+				</if>
+			</if>
+
+
+			<!-- 低风险 -->
+			<if test="coronarydiseaserisk1 != null">
+				AND b.lr_names REGEXP "冠心病"
+				<if test="breastcancerrisk1 == null">
+					AND b.lr_names NOT REGEXP "乳腺癌"
+				</if>
+			</if>
+
+
+			<!-- 脑卒中 -->
+			<!-- 高风险 -->
+			<if test="apoplexyrisk3 != null">
+				AND b.df_names REGEXP "脑卒中"
+			</if>
+			<!-- 中等风险 -->
+			<if test="apoplexyrisk2 != null">
+				AND b.ld_names REGEXP "脑卒中"
+			</if>
+			<!-- 低风险 -->
+			<if test="apoplexyrisk1 != null">
+				AND b.lr_names REGEXP "脑卒中"
+			</if>
+
+			<!-- 高血压 -->
+			<!-- 高风险 -->
+			<if test="hypertensionrisk3 != null">
+				AND b.df_names REGEXP "高血压"
+			</if>
+			<!-- 中等风险 -->
+			<if test="hypertensionrisk2 != null">
+				AND b.ld_names REGEXP "高血压"
+			</if>
+			<!-- 低风险 -->
+			<if test="hypertensionrisk1 != null">
+				AND b.lr_names REGEXP "高血压"
+			</if>
+
+			<!-- 糖尿病 -->
+			<!-- 高风险 -->
+			<if test="diabetesrisk3 != null">
+				AND b.df_names REGEXP "糖尿病"
+			</if>
+			<!-- 中等风险 -->
+			<if test="diabetesrisk2 != null">
+				AND b.ld_names REGEXP "糖尿病"
+			</if>
+			<!-- 低风险 -->
+			<if test="diabetesrisk1 != null">
+				AND b.lr_names REGEXP "糖尿病"
+			</if>
+
+			<!-- 痛风 -->
+			<!-- 高风险 -->
+			<if test="riskofgout3 != null">
+				AND b.df_names REGEXP "痛风"
+			</if>
+			<!-- 中等风险 -->
+			<if test="riskofgout2 != null">
+				AND b.ld_names REGEXP "痛风"
+			</if>
+			<!-- 低风险 -->
+			<if test="riskofgout1 != null">
+				AND b.lr_names REGEXP "痛风"
+			</if>
+
+			<!-- 肺癌 -->
+			<!-- 高风险 -->
+			<if test="lungcancerrisk3 != null">
+				AND b.df_names REGEXP "肺癌"
+			</if>
+			<!-- 中等风险 -->
+			<if test="lungcancerrisk2 != null">
+				AND b.ld_names REGEXP "肺癌"
+			</if>
+			<!-- 低风险 -->
+			<if test="lungcancerrisk1 != null">
+				AND b.lr_names REGEXP "肺癌"
+			</if>
+
+			<!-- 前列腺癌 -->
+			<!-- 高风险 -->
+			<if test="prostaterisk3 != null">
+				AND b.df_names REGEXP "前列腺癌"
+			</if>
+			<!-- 中等风险 -->
+			<if test="prostaterisk2 != null">
+				AND b.ld_names REGEXP "前列腺癌"
+			</if>
+			<!-- 低风险 -->
+			<if test="prostaterisk1 != null">
+				AND b.lr_names REGEXP "前列腺癌"
+			</if>
+
+			<!-- 乳腺癌 -->
+			<!-- 高风险 -->
+			<if test="breastcancerrisk3 != null">
+				AND b.df_names REGEXP "乳腺癌"
+			</if>
+			<!-- 中等风险 -->
+			<if test="breastcancerrisk2 != null">
+				AND b.ld_names REGEXP "乳腺癌"
+			</if>
+			<!-- 低风险 -->
+			<if test="breastcancerrisk1 != null">
+				AND b.lr_names REGEXP "乳腺癌"
+			</if>
+
+			<!-- 血脂异常 -->
+			<!-- 低风险 -->
+			<if test="dyslipidemiarisk1 != null">
+				AND b.lr_names REGEXP "血脂异常"
+			</if>
+			<!-- 高风险 -->
+			<if test="dyslipidemiarisk2 != null">
+				AND b.df_names REGEXP "血脂异常"
+			</if>
+			<!-- 患或异-->
+			<if test="dyslipidemiarisk3 != null">
+				AND b.sk_names REGEXP "血脂异常"
+			</if>
+
+			<!-- 骨质疏松 -->
+			<!-- 高风险 -->
+			<if test="osteoporosisrisk3 != null">
+				AND b.df_names REGEXP "骨质疏松症"
+			</if>
+			<!-- 中等风险 -->
+			<if test="osteoporosisrisk2 != null">
+				AND b.ld_names REGEXP "骨质疏松症"
+			</if>
+			<!-- 低风险 -->
+			<if test="osteoporosisrisk1 != null">
+				AND b.lr_names REGEXP "骨质疏松症"
+			</if>
+
+			<!-- 高脂饮食 -->
+			<if test="food1 != null">
+				AND b.B4 =1
+			</if>
+			<if test="food2 != null">
+				AND b.B4 =2
+			</if>
+			<!-- 蔬菜摄入 -->
+			<if test="foodVegetables1 != null">
+				AND b.food_vegetables =1
+			</if>
+			<if test="foodVegetables2 != null">
+				AND b.food_vegetables =2
+			</if>
+			<!-- 水果摄入 -->
+			<if test="foodFruits1 != null">
+				AND b.food_fruits =1
+			</if>
+			<if test="foodFruits2 != null">
+				AND b.food_fruits =2
+			</if>
+
+			<!-- 牛奶摄入 -->
+			<if test="foodairy1 != null">
+				AND b.food_dairy =1
+			</if>
+			<if test="foodairy2 != null">
+				AND b.food_dairy =2
+			</if>
+
+			<!-- 高嘌呤饮食 -->
+			<if test="foodPurine1 != null">
+				AND b.food_purine =1
+			</if>
+			<if test="foodPurine2 != null">
+				AND b.food_purine =2
+			</if>
+
+
+
+
+		</where>
+
+
+		GROUP BY a.user_code
+
+
+
+
+
+
+	</select>
+
+	<!-- 根据机构查询健康人数与高危人数 -->
+	<select id="indexshowHigh" parameterType="map" resultMap="BaseResultMap">
+		select * from (select ort.* from yh_disease_assess_total_report2 ort,yh_user_reginfo reg where ort.user_code=reg.user_code and (${orgCode})  order by qtime desc) w group by w.user_code;
+	</select>
+	
+	
+	
+	<select id="findriskLevelByrequestSerialNum" resultType="com.yihe.system.domain.HealthAssessmentVOJO">
+	SELECT risk_level AS riskLevel,b.disease_name AS diseaseName FROM `yh_disease_assess_report` AS a
+INNER JOIN `yh_disease_category` AS b
+ON a.diseasId=b.disease_code
+ WHERE a.request_serialNum=#{requestSerialNum}
+	</select>
+	<select id="findAssessTotalByUserCode" resultType="com.yihe.system.domain.HealthAssessmentVOJO">
+	SELECT request_serialNum AS requestSerialNum,qtime,gender as sex FROM yh_disease_assess_total_report2
+	WHERE `user_code`=#{usercode}
+	<if test="strTime !=null and strTime !='' and endTime !=null and endTime !=''">
+	AND qtime BETWEEN  #{strTime}  AND #{endTime} 
+	</if>
+	order by id desc
+	</select>
+	<select id="selectByExample"
+		parameterType="com.yihe.system.domain.YhDiseaseAssessTotalReportExample"
+		resultMap="BaseResultMap">
+		select
+		<if test="distinct">
+			distinct
+		</if>
+		<include refid="Base_Column_List" />
+		from yh_disease_assess_total_report
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+		<if test="orderByClause != null">
+			order by ${orderByClause}
+		</if>
+	</select>
+	<select id="selectByPrimaryKey" parameterType="java.lang.Integer"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from yh_disease_assess_total_report
+		where id = #{id,jdbcType=INTEGER}
+	</select>
+	<select id="selectByPrimaryKeyByusercodeForQtime" resultType="java.lang.String">
+		
+    SELECT qtime FROM yh_disease_assess_total_report2 WHERE user_code=#{usercode} ORDER BY qtime DESC LIMIT 1
+	</select>
+	<select id="selectByPrimaryKeyByusercodeForRequestSerialNum" resultType="java.lang.String">
+		
+    SELECT request_serialNum FROM yh_disease_assess_total_report2 WHERE user_code=#{usercode} ORDER BY qtime DESC LIMIT 1
+	</select>
+	<select id="selectByPrimaryKeyByusercodeForCtime" resultType="java.lang.String">
+		
+     SELECT C_Time FROM `yh_food_user_diary` WHERE user_code=#{usercode} ORDER BY C_Time DESC LIMIT 1
+	</select>
+ 
+	<select id="selectByPrimaryByUsercodeForCount"  resultType="java.lang.Integer">
+		
+    SELECT COUNT(1) FROM `yh_disease_assess_total_report2` WHERE user_code=#{usercode} 
+	</select>
+ 
+	<select id="selectByPrimaryKeyByusercodeForSporttime" resultType="java.lang.String">
+		
+      SELECT Entry_Time FROM `yh_sport_diary` WHERE user_code=#{usercode} ORDER BY Entry_Time DESC LIMIT 1
+	</select>
+	
+	<select id="selectByPrimaryKeyByusercodeForEnrolInfotime" resultType="java.lang.String">
+		SELECT evaluateFlag_Uptime FROM `yh_user_enrolinfo` WHERE user_code=#{usercode}  ORDER BY evaluateFlag_Uptime DESC LIMIT 1
+	</select>
+	<select id="selectByPrimaryKeyByusercode"  
+		resultType="com.yihe.system.domain.YhDiseaseAssessReportVOJO">
+		SELECT b.`user_code` AS usercode,b.`name`,b.`user_name` AS username,
+		 CASE
+        WHEN b.gender = 1 
+        THEN '男' 
+        ELSE '女' 
+      END AS sex,a.qtime
+		AS newestAssessTime,a.df_names AS bfnames,a.sk_names AS sknames   FROM yh_disease_assess_total_report2 AS a
+		INNER
+		JOIN `yh_user_reginfo` AS b
+		ON a.`user_code`= b.`user_code`
+		INNER JOIN
+		`yh_user_make_card` AS c
+		ON c.user_code=a.`user_code`
+		WHERE
+		c.doctor=(SELECT id FROM `yh_user_admin_info` WHERE
+		user_code=#{usercode})
+		<if test="name!=null">
+			AND b.`name` LIKE CONCAT('%${name}%')
+		</if>
+		<if test="null!=username">
+		 AND b.`user_name` LIKE
+			CONCAT('%${username}%')
+			
+		</if>
+		<if test="strtime!=null and endtime!=null">
+		AND a.qtime BETWEEN #{strtime} AND #{endtime}
+		</if>
+		 order by a.qtime desc
+	</select>
+	<select id="selectByPrimaryKeyByusercodeCount"  
+		resultType="int">
+		SELECT count(1) FROM `yh_disease_assess_total_report`
+		AS a
+		INNER
+		JOIN `yh_user_reginfo` AS b
+		ON a.`user_code`= b.`user_code`
+		INNER JOIN
+		`yh_user_make_card` AS c
+		ON c.user_code=a.`user_code`
+		WHERE
+		c.doctor=(SELECT id FROM `yh_user_admin_info` WHERE
+		user_code=#{usercode})
+		<if test="name!=null">
+			AND b.`name` LIKE CONCAT('%${name}%')
+		</if>
+		<if test="null!=username">
+		 AND b.`user_name` LIKE
+			CONCAT('%${username}%')
+			
+		</if>
+		<if test="strtime!=null and endtime!=null">
+		AND a.qtime BETWEEN #{strtime} AND #{endtime}
+		</if>
+	</select>
+	
+	<select id="selectByPrimaryKeyByAge" resultMap="BaseResultMap">
+	
+SELECT * FROM (
+SELECT * FROM (
+		SELECT
+		a.request_serialNum,
+		a.id, a.result_serialNum, a.user_code,
+		 
+		a.age,
+		a.user_name,
+		a.user_occupation,
+		a.user_jzd, a.user_jzhj,
+ 		a.`qtime`,
+ 		d.`name`,
+ 		 d.`gender`,
+      f.Org_Id as Org_Code,
+      e.`evaluateFlag`
+		FROM `yh_disease_assess_total_report` AS a
+		INNER JOIN
+		`yh_disease_risk_result` AS b
+		ON
+		a.`request_serialNum`=b.`request_serialize`
+		INNER JOIN
+		`yh_disease_assess_report` AS c
+		ON a.`request_serialNum`
+		=c.`request_serialNum`
+		INNER JOIN `yh_user_reginfo` AS d
+        ON d.`user_code`=a.`user_code`
+        INNER JOIN `yh_user_enrolinfo` AS e
+        ON e.`user_code`=a.`user_code`
+         INNER JOIN `yh_user_make_card` AS f
+        ON a.`user_code`=f.`User_Code`
+		<where>
+		
+			
+			<if
+				test="coronarydiseaserisk4!=null and coronarydiseaserisk1==null and coronarydiseaserisk2==null and coronarydiseaserisk3==null">
+				OR diseasId=1 AND (risk_level REGEXP "患|异") 
+			</if>
+			<if
+				test="coronarydiseaserisk4==null and coronarydiseaserisk1!=null and coronarydiseaserisk2==null and coronarydiseaserisk3==null">
+				OR diseasId=1 AND risk_level REGEXP "低"
+			</if>
+			<if
+				test="coronarydiseaserisk4==null and coronarydiseaserisk1==null and coronarydiseaserisk2!=null and coronarydiseaserisk3==null">
+				OR diseasId=1 AND risk_level REGEXP "中"
+			</if>
+			<if
+				test="coronarydiseaserisk4==null and coronarydiseaserisk1==null and coronarydiseaserisk2==null and coronarydiseaserisk3!=null">
+				OR diseasId=1 AND risk_level REGEXP "高"
+			</if>
+			<if
+				test="coronarydiseaserisk4!=null and coronarydiseaserisk1!=null and coronarydiseaserisk2==null and coronarydiseaserisk3==null">
+				OR diseasId=1 AND NOT (risk_level REGEXP "低")
+			</if>
+			<if
+				test="coronarydiseaserisk4!=null and coronarydiseaserisk1==null and coronarydiseaserisk2!=null and coronarydiseaserisk3==null">
+				OR diseasId=1 AND NOT (risk_level REGEXP "低|高")
+			</if>
+			<if
+				test="coronarydiseaserisk4!=null and coronarydiseaserisk1==null and coronarydiseaserisk2==null and coronarydiseaserisk3!=null">
+				OR diseasId=1 AND NOT (risk_level REGEXP "低|中")
+			</if>
+			<if
+				test="coronarydiseaserisk4==null and coronarydiseaserisk1!=null and coronarydiseaserisk2!=null and coronarydiseaserisk3==null">
+				OR diseasId=1 AND risk_level REGEXP "低|中"
+			</if>
+			<if
+				test="coronarydiseaserisk4==null and coronarydiseaserisk1!=null and coronarydiseaserisk2==null and coronarydiseaserisk3!=null">
+				OR diseasId=1 AND risk_level REGEXP "低|高"
+			</if>
+			<if
+				test="coronarydiseaserisk4==null and coronarydiseaserisk1==null and coronarydiseaserisk2!=null and coronarydiseaserisk3!=null">
+				OR diseasId=1 AND risk_level REGEXP "中|高"
+			</if>
+			<if
+				test="coronarydiseaserisk4!=null and coronarydiseaserisk1!=null and coronarydiseaserisk2!=null and coronarydiseaserisk3==null">
+				OR diseasId=1 AND NOT (risk_level REGEXP "高")
+			</if>
+			<if
+				test="coronarydiseaserisk4!=null and coronarydiseaserisk1!=null and coronarydiseaserisk2!=null and coronarydiseaserisk3==null">
+				OR diseasId=1 AND NOT (risk_level REGEXP "中")
+			</if>
+			<if
+				test="coronarydiseaserisk4==null and coronarydiseaserisk1!=null and coronarydiseaserisk2!=null and coronarydiseaserisk3!=null">
+				OR diseasId=1 AND risk_level REGEXP "低|中|高"
+			</if>
+			<if
+				test="coronarydiseaserisk4!=null and coronarydiseaserisk1==null and coronarydiseaserisk2!=null and coronarydiseaserisk3!=null">
+				OR diseasId=1 AND NOT (risk_level REGEXP "中|高")
+			</if>
+
+
+			<if
+				test="apoplexyrisk4!=null and apoplexyrisk1==null and apoplexyrisk2==null and apoplexyrisk3==null">
+				OR diseasId=2 AND (risk_level REGEXP "患|异") 
+			</if>
+			<if
+				test="apoplexyrisk4==null and apoplexyrisk1!=null and apoplexyrisk2==null and apoplexyrisk3==null">
+				OR diseasId=2 AND risk_level REGEXP "低"
+			</if>
+			<if
+				test="apoplexyrisk4==null and apoplexyrisk1==null and apoplexyrisk2!=null and apoplexyrisk3==null">
+				OR diseasId=2 AND risk_level REGEXP "中"
+			</if>
+			<if
+				test="apoplexyrisk4==null and apoplexyrisk1==null and apoplexyrisk2==null and apoplexyrisk3!=null">
+				OR diseasId=2 AND risk_level REGEXP "高"
+			</if>
+			<if
+				test="apoplexyrisk4!=null and apoplexyrisk1!=null and apoplexyrisk2==null and apoplexyrisk3==null">
+				OR diseasId=2 AND NOT (risk_level REGEXP "低")
+			</if>
+			<if
+				test="apoplexyrisk4!=null and apoplexyrisk1==null and apoplexyrisk2!=null and apoplexyrisk3==null">
+				OR diseasId=2 AND NOT (risk_level REGEXP "低|高")
+			</if>
+			<if
+				test="apoplexyrisk4!=null and apoplexyrisk1==null and apoplexyrisk2==null and apoplexyrisk3!=null">
+				OR diseasId=2 AND NOT (risk_level REGEXP "低|中")
+			</if>
+			<if
+				test="apoplexyrisk4==null and apoplexyrisk1!=null and apoplexyrisk2!=null and apoplexyrisk3==null">
+				OR diseasId=2 AND risk_level REGEXP "低|中"
+			</if>
+			<if
+				test="apoplexyrisk4==null and apoplexyrisk1!=null and apoplexyrisk2==null and apoplexyrisk3!=null">
+				OR diseasId=2 AND risk_level REGEXP "低|高"
+			</if>
+			<if
+				test="apoplexyrisk4==null and apoplexyrisk1==null and apoplexyrisk2!=null and apoplexyrisk3!=null">
+				OR diseasId=2 AND risk_level REGEXP "中|高"
+			</if>
+			<if
+				test="apoplexyrisk4!=null and apoplexyrisk1!=null and apoplexyrisk2!=null and apoplexyrisk3==null">
+				OR diseasId=2 AND NOT (risk_level REGEXP "高")
+			</if>
+			<if
+				test="apoplexyrisk4!=null and apoplexyrisk1!=null and apoplexyrisk2!=null and apoplexyrisk3==null">
+				OR diseasId=2 AND NOT (risk_level REGEXP "中")
+			</if>
+			<if
+				test="apoplexyrisk4==null and apoplexyrisk1!=null and apoplexyrisk2!=null and apoplexyrisk3!=null">
+				OR diseasId=2 AND risk_level REGEXP "低|中|高"
+			</if>
+			<if
+				test="apoplexyrisk4!=null and apoplexyrisk1==null and apoplexyrisk2!=null and apoplexyrisk3!=null">
+				OR diseasId=2 AND NOT (risk_level REGEXP "中|高")
+			</if>
+
+			<if
+				test="hypertensionrisk4!=null and hypertensionrisk1==null and hypertensionrisk2==null and hypertensionrisk3==null">
+				OR diseasId=3 AND (risk_level REGEXP "患|异") 
+			</if>
+			<if
+				test="hypertensionrisk4==null and hypertensionrisk1!=null and hypertensionrisk2==null and hypertensionrisk3==null">
+				OR diseasId=3 AND risk_level REGEXP "低"
+			</if>
+			<if
+				test="hypertensionrisk4==null and hypertensionrisk1==null and hypertensionrisk2!=null and hypertensionrisk3==null">
+				OR diseasId=3 AND risk_level REGEXP "中"
+			</if>
+			<if
+				test="hypertensionrisk4==null and hypertensionrisk1==null and hypertensionrisk2==null and hypertensionrisk3!=null">
+				OR diseasId=3 AND risk_level REGEXP "高"
+			</if>
+			<if
+				test="hypertensionrisk4!=null and hypertensionrisk1!=null and hypertensionrisk2==null and hypertensionrisk3==null">
+				OR diseasId=3 AND NOT (risk_level REGEXP "低")
+			</if>
+			<if
+				test="hypertensionrisk4!=null and hypertensionrisk1==null and hypertensionrisk2!=null and hypertensionrisk3==null">
+				OR diseasId=3 AND NOT (risk_level REGEXP "低|高")
+			</if>
+			<if
+				test="hypertensionrisk4!=null and hypertensionrisk1==null and hypertensionrisk2==null and hypertensionrisk3!=null">
+				OR diseasId=3 AND NOT (risk_level REGEXP "低|中")
+			</if>
+			<if
+				test="hypertensionrisk4==null and hypertensionrisk1!=null and hypertensionrisk2!=null and hypertensionrisk3==null">
+				OR diseasId=3 AND risk_level REGEXP "低|中"
+			</if>
+			<if
+				test="hypertensionrisk4==null and hypertensionrisk1!=null and hypertensionrisk2==null and hypertensionrisk3!=null">
+				OR diseasId=3 AND risk_level REGEXP "低|高"
+			</if>
+			<if
+				test="hypertensionrisk4==null and hypertensionrisk1==null and hypertensionrisk2!=null and hypertensionrisk3!=null">
+				OR diseasId=3 AND risk_level REGEXP "中|高"
+			</if>
+			<if
+				test="hypertensionrisk4!=null and hypertensionrisk1!=null and hypertensionrisk2!=null and hypertensionrisk3==null">
+				OR diseasId=3 AND NOT (risk_level REGEXP "高")
+			</if>
+			<if
+				test="hypertensionrisk4!=null and hypertensionrisk1!=null and hypertensionrisk2!=null and hypertensionrisk3==null">
+				OR diseasId=3 AND NOT (risk_level REGEXP "中")
+			</if>
+			<if
+				test="hypertensionrisk4==null and hypertensionrisk1!=null and hypertensionrisk2!=null and hypertensionrisk3!=null">
+				OR diseasId=3 AND risk_level REGEXP "低|中|高"
+			</if>
+			<if
+				test="hypertensionrisk4!=null and hypertensionrisk1==null and hypertensionrisk2!=null and hypertensionrisk3!=null">
+				OR diseasId=3 AND NOT (risk_level REGEXP "中|高")
+			</if>
+
+
+			<if
+				test="diabetesrisk4!=null and diabetesrisk1==null and diabetesrisk2==null and diabetesrisk3==null">
+				OR diseasId=4 AND NOT (risk_level REGEXP "低|中|高")
+			</if>
+			<if
+				test="diabetesrisk4==null and diabetesrisk1!=null and diabetesrisk2==null and diabetesrisk3==null">
+				OR diseasId=4 AND risk_level REGEXP "低"
+			</if>
+			<if
+				test="diabetesrisk4==null and diabetesrisk1==null and diabetesrisk2!=null and diabetesrisk3==null">
+				OR diseasId=4 AND risk_level REGEXP "中"
+			</if>
+			<if
+				test="diabetesrisk4==null and diabetesrisk1==null and diabetesrisk2==null and diabetesrisk3!=null">
+				OR diseasId=4 AND risk_level REGEXP "高"
+			</if>
+			<if
+				test="diabetesrisk4!=null and diabetesrisk1!=null and diabetesrisk2==null and diabetesrisk3==null">
+				OR diseasId=4 AND NOT (risk_level REGEXP "低")
+			</if>
+			<if
+				test="diabetesrisk4!=null and diabetesrisk1==null and diabetesrisk2!=null and diabetesrisk3==null">
+				OR diseasId=4 AND NOT (risk_level REGEXP "低|高")
+			</if>
+			<if
+				test="diabetesrisk4!=null and diabetesrisk1==null and diabetesrisk2==null and diabetesrisk3!=null">
+				OR diseasId=4 AND NOT (risk_level REGEXP "低|中") AND
+				a.user_code=#{usercode}
+			</if>
+			<if
+				test="diabetesrisk4==null and diabetesrisk1!=null and diabetesrisk2!=null and diabetesrisk3==null">
+				OR diseasId=4 AND risk_level REGEXP "低|中"
+			</if>
+			<if
+				test="diabetesrisk4==null and diabetesrisk1!=null and diabetesrisk2==null and diabetesrisk3!=null">
+				OR diseasId=4 AND risk_level REGEXP "低|高"
+			</if>
+			<if
+				test="diabetesrisk4==null and diabetesrisk1==null and diabetesrisk2!=null and diabetesrisk3!=null">
+				OR diseasId=4 AND risk_level REGEXP "中|高"
+			</if>
+			<if
+				test="diabetesrisk4!=null and diabetesrisk1!=null and diabetesrisk2!=null and diabetesrisk3==null">
+				OR diseasId=4 AND NOT (risk_level REGEXP "高")
+			</if>
+			<if
+				test="diabetesrisk4!=null and diabetesrisk1!=null and diabetesrisk2!=null and diabetesrisk3==null">
+				OR diseasId=4 AND NOT (risk_level REGEXP "中")
+			</if>
+			<if
+				test="diabetesrisk4==null and diabetesrisk1!=null and diabetesrisk2!=null and diabetesrisk3!=null">
+				OR diseasId=4 AND risk_level REGEXP "低|中|高"
+			</if>
+			<if
+				test="diabetesrisk4!=null and diabetesrisk1==null and diabetesrisk2!=null and diabetesrisk3!=null">
+				OR diseasId=4 AND NOT (risk_level REGEXP "中|高")
+			</if>
+
+
+
+			<if
+				test="dyslipidemiarisk4!=null and dyslipidemiarisk1==null and dyslipidemiarisk2==null and dyslipidemiarisk3==null">
+				OR diseasId=6 AND NOT (risk_level REGEXP "低|中|高")
+			</if>
+			<if
+				test="dyslipidemiarisk4==null and dyslipidemiarisk1!=null and dyslipidemiarisk2==null and dyslipidemiarisk3==null">
+				OR diseasId=6 AND risk_level REGEXP "低"
+			</if>
+			<if
+				test="dyslipidemiarisk4==null and dyslipidemiarisk1==null and dyslipidemiarisk2!=null and dyslipidemiarisk3==null">
+				OR diseasId=6 AND risk_level REGEXP "中"
+			</if>
+			<if
+				test="dyslipidemiarisk4==null and dyslipidemiarisk1==null and dyslipidemiarisk2==null and dyslipidemiarisk3!=null">
+				OR diseasId=6 AND risk_level REGEXP "高"
+			</if>
+			<if
+				test="dyslipidemiarisk4!=null and dyslipidemiarisk1!=null and dyslipidemiarisk2==null and dyslipidemiarisk3==null">
+				OR diseasId=6 AND NOT (risk_level REGEXP "低")
+			</if>
+			<if
+				test="dyslipidemiarisk4!=null and dyslipidemiarisk1==null and dyslipidemiarisk2!=null and dyslipidemiarisk3==null">
+				OR diseasId=6 AND NOT (risk_level REGEXP "低|高")
+			</if>
+			<if
+				test="dyslipidemiarisk4!=null and dyslipidemiarisk1==null and dyslipidemiarisk2==null and dyslipidemiarisk3!=null">
+				OR diseasId=6 AND NOT (risk_level REGEXP "低|中")
+			</if>
+			<if
+				test="dyslipidemiarisk4==null and dyslipidemiarisk1!=null and dyslipidemiarisk2!=null and dyslipidemiarisk3==null">
+				OR diseasId=6 AND risk_level REGEXP "低|中"
+			</if>
+			<if
+				test="dyslipidemiarisk4==null and dyslipidemiarisk1!=null and dyslipidemiarisk2==null and dyslipidemiarisk3!=null">
+				OR diseasId=6 AND risk_level REGEXP "低|高"
+			</if>
+			<if
+				test="dyslipidemiarisk4==null and dyslipidemiarisk1==null and dyslipidemiarisk2!=null and dyslipidemiarisk3!=null">
+				OR diseasId=6 AND risk_level REGEXP "中|高"
+			</if>
+			<if
+				test="dyslipidemiarisk4!=null and dyslipidemiarisk1!=null and dyslipidemiarisk2!=null and dyslipidemiarisk3==null">
+				OR diseasId=6 AND NOT (risk_level REGEXP "高")
+			</if>
+			<if
+				test="dyslipidemiarisk4!=null and dyslipidemiarisk1!=null and dyslipidemiarisk2!=null and dyslipidemiarisk3==null">
+				OR diseasId=6 AND NOT (risk_level REGEXP "中")
+			</if>
+			<if
+				test="dyslipidemiarisk4==null and dyslipidemiarisk1!=null and dyslipidemiarisk2!=null and dyslipidemiarisk3!=null">
+				OR diseasId=6 AND risk_level REGEXP "低|中|高"
+			</if>
+			<if
+				test="dyslipidemiarisk4!=null and dyslipidemiarisk1==null and dyslipidemiarisk2!=null and dyslipidemiarisk3!=null">
+				OR diseasId=6 AND NOT (risk_level REGEXP "中|高")
+			</if>
+
+
+
+			<if
+				test="osteoporosisrisk4!=null and osteoporosisrisk1==null and osteoporosisrisk2==null and osteoporosisrisk3==null">
+				OR diseasId=7 AND NOT (risk_level REGEXP "低|中|高")
+			</if>
+			<if
+				test="osteoporosisrisk4==null and osteoporosisrisk1!=null and osteoporosisrisk2==null and osteoporosisrisk3==null">
+				OR diseasId=7 AND risk_level REGEXP "低"
+			</if>
+			<if
+				test="osteoporosisrisk4==null and osteoporosisrisk1==null and osteoporosisrisk2!=null and osteoporosisrisk3==null">
+				OR diseasId=7 AND risk_level REGEXP "中"
+			</if>
+			<if
+				test="osteoporosisrisk4==null and osteoporosisrisk1==null and osteoporosisrisk2==null and osteoporosisrisk3!=null">
+				OR diseasId=7 AND risk_level REGEXP "高"
+			</if>
+			<if
+				test="osteoporosisrisk4!=null and osteoporosisrisk1!=null and osteoporosisrisk2==null and osteoporosisrisk3==null">
+				OR diseasId=7 AND NOT (risk_level REGEXP "低")
+			</if>
+			<if
+				test="osteoporosisrisk4!=null and osteoporosisrisk1==null and osteoporosisrisk2!=null and osteoporosisrisk3==null">
+				OR diseasId=7 AND NOT (risk_level REGEXP "低|高")
+			</if>
+			<if
+				test="osteoporosisrisk4!=null and osteoporosisrisk1==null and osteoporosisrisk2==null and osteoporosisrisk3!=null">
+				OR diseasId=7 AND NOT (risk_level REGEXP "低|中")
+			</if>
+			<if
+				test="osteoporosisrisk4==null and osteoporosisrisk1!=null and osteoporosisrisk2!=null and osteoporosisrisk3==null">
+				OR diseasId=7 AND risk_level REGEXP "低|中"
+			</if>
+			<if
+				test="osteoporosisrisk4==null and osteoporosisrisk1!=null and osteoporosisrisk2==null and osteoporosisrisk3!=null">
+				OR diseasId=7 AND risk_level REGEXP "低|高"
+			</if>
+			<if
+				test="osteoporosisrisk4==null and osteoporosisrisk1==null and osteoporosisrisk2!=null and osteoporosisrisk3!=null">
+				OR diseasId=7 AND risk_level REGEXP "中|高"
+			</if>
+			<if
+				test="osteoporosisrisk4!=null and osteoporosisrisk1!=null and osteoporosisrisk2!=null and osteoporosisrisk3==null">
+				OR diseasId=7 AND NOT (risk_level REGEXP "高")
+			</if>
+			<if
+				test="osteoporosisrisk4!=null and osteoporosisrisk1!=null and osteoporosisrisk2!=null and osteoporosisrisk3==null">
+				OR diseasId=7 AND NOT (risk_level REGEXP "中")
+			</if>
+			<if
+				test="osteoporosisrisk4==null and osteoporosisrisk1!=null and osteoporosisrisk2!=null and osteoporosisrisk3!=null">
+				OR diseasId=7 AND risk_level REGEXP "低|中|高"
+			</if>
+			<if
+				test="osteoporosisrisk4!=null and osteoporosisrisk1==null and osteoporosisrisk2!=null and osteoporosisrisk3!=null">
+				OR diseasId=7 AND NOT (risk_level REGEXP "中|高")
+			</if>
+
+
+			<if
+				test="lungcancerrisk4!=null and lungcancerrisk1==null and lungcancerrisk2==null and lungcancerrisk3==null">
+				OR diseasId=8 AND NOT (risk_level REGEXP "低|中|高")
+			</if>
+			<if
+				test="lungcancerrisk4==null and lungcancerrisk1!=null and lungcancerrisk2==null and lungcancerrisk3==null">
+				OR diseasId=8 AND risk_level REGEXP "低"
+			</if>
+			<if
+				test="lungcancerrisk4==null and lungcancerrisk1==null and lungcancerrisk2!=null and lungcancerrisk3==null">
+				OR diseasId=8 AND risk_level REGEXP "中"
+			</if>
+			<if
+				test="lungcancerrisk4==null and lungcancerrisk1==null and lungcancerrisk2==null and lungcancerrisk3!=null">
+				OR diseasId=8 AND risk_level REGEXP "高"
+			</if>
+			<if
+				test="lungcancerrisk4!=null and lungcancerrisk1!=null and lungcancerrisk2==null and lungcancerrisk3==null">
+				OR diseasId=8 AND NOT (risk_level REGEXP "低")
+			</if>
+			<if
+				test="lungcancerrisk4!=null and lungcancerrisk1==null and lungcancerrisk2!=null and lungcancerrisk3==null">
+				OR diseasId=8 AND NOT (risk_level REGEXP "低|高")
+			</if>
+			<if
+				test="lungcancerrisk4!=null and lungcancerrisk1==null and lungcancerrisk2==null and lungcancerrisk3!=null">
+				OR diseasId=8 AND NOT (risk_level REGEXP "低|中")
+			</if>
+			<if
+				test="lungcancerrisk4==null and lungcancerrisk1!=null and lungcancerrisk2!=null and lungcancerrisk3==null">
+				OR diseasId=8 AND risk_level REGEXP "低|中"
+			</if>
+			<if
+				test="lungcancerrisk4==null and lungcancerrisk1!=null and lungcancerrisk2==null and lungcancerrisk3!=null">
+				OR diseasId=8 AND risk_level REGEXP "低|高"
+			</if>
+			<if
+				test="lungcancerrisk4==null and lungcancerrisk1==null and lungcancerrisk2!=null and lungcancerrisk3!=null">
+				OR diseasId=8 AND risk_level REGEXP "中|高"
+			</if>
+			<if
+				test="lungcancerrisk4!=null and lungcancerrisk1!=null and lungcancerrisk2!=null and lungcancerrisk3==null">
+				OR diseasId=8 AND NOT (risk_level REGEXP "高")
+			</if>
+			<if
+				test="lungcancerrisk4!=null and lungcancerrisk1!=null and lungcancerrisk2!=null and lungcancerrisk3==null">
+				OR diseasId=8 AND NOT (risk_level REGEXP "中") AND
+				a.user_code=#{usercode}
+			</if>
+			<if
+				test="lungcancerrisk4==null and lungcancerrisk1!=null and lungcancerrisk2!=null and lungcancerrisk3!=null">
+				OR diseasId=8 AND risk_level REGEXP "低|中|高"
+			</if>
+			<if
+				test="lungcancerrisk4!=null and lungcancerrisk1==null and lungcancerrisk2!=null and lungcancerrisk3!=null">
+				OR diseasId=8 AND NOT (risk_level REGEXP "中|高")
+			</if>
+
+
+
+			<if
+				test="prostaterisk4!=null and prostaterisk1==null and prostaterisk2==null and prostaterisk3==null">
+				OR diseasId=9 AND NOT (risk_level REGEXP "低|中|高")
+			</if>
+			<if
+				test="prostaterisk4==null and prostaterisk1!=null and prostaterisk2==null and prostaterisk3==null">
+				OR diseasId=9 AND risk_level REGEXP "低"
+			</if>
+			<if
+				test="prostaterisk4==null and prostaterisk1==null and prostaterisk2!=null and prostaterisk3==null">
+				OR diseasId=9 AND risk_level REGEXP "中"
+			</if>
+			<if
+				test="prostaterisk4==null and prostaterisk1==null and prostaterisk2==null and prostaterisk3!=null">
+				OR diseasId=9 AND risk_level REGEXP "高"
+			</if>
+			<if
+				test="prostaterisk4!=null and prostaterisk1!=null and prostaterisk2==null and prostaterisk3==null">
+				OR diseasId=9 AND NOT (risk_level REGEXP "低")
+			</if>
+			<if
+				test="prostaterisk4!=null and prostaterisk1==null and prostaterisk2!=null and prostaterisk3==null">
+				OR diseasId=9 AND NOT (risk_level REGEXP "低|高")
+			</if>
+			<if
+				test="prostaterisk4!=null and prostaterisk1==null and prostaterisk2==null and prostaterisk3!=null">
+				OR diseasId=9 AND NOT (risk_level REGEXP "低|中")
+			</if>
+			<if
+				test="prostaterisk4==null and prostaterisk1!=null and prostaterisk2!=null and prostaterisk3==null">
+				OR diseasId=9 AND risk_level REGEXP "低|中"
+			</if>
+			<if
+				test="prostaterisk4==null and prostaterisk1!=null and prostaterisk2==null and prostaterisk3!=null">
+				OR diseasId=9 AND risk_level REGEXP "低|高"
+			</if>
+			<if
+				test="prostaterisk4==null and prostaterisk1==null and prostaterisk2!=null and prostaterisk3!=null">
+				OR diseasId=9 AND risk_level REGEXP "中|高"
+			</if>
+			<if
+				test="prostaterisk4!=null and prostaterisk1!=null and prostaterisk2!=null and prostaterisk3==null">
+				OR diseasId=9 AND NOT (risk_level REGEXP "高")
+			</if>
+			<if
+				test="prostaterisk4!=null and prostaterisk1!=null and prostaterisk2!=null and prostaterisk3==null">
+				OR diseasId=9 AND NOT (risk_level REGEXP "中")
+			</if>
+			<if
+				test="prostaterisk4==null and prostaterisk1!=null and prostaterisk2!=null and prostaterisk3!=null">
+				OR diseasId=9 AND risk_level REGEXP "低|中|高"
+			</if>
+			<if
+				test="prostaterisk4!=null and prostaterisk1==null and prostaterisk2!=null and prostaterisk3!=null">
+				OR diseasId=9 AND NOT (risk_level REGEXP "中|高")
+			</if>
+
+
+			<if
+				test="breastcancerrisk4!=null and breastcancerrisk1==null and breastcancerrisk2==null and breastcancerrisk3==null">
+				OR diseasId=10 AND NOT (risk_level REGEXP "低|中|高")
+			</if>
+			<if
+				test="breastcancerrisk4==null and breastcancerrisk1!=null and breastcancerrisk2==null and breastcancerrisk3==null">
+				OR diseasId=10 AND risk_level REGEXP "低"
+			</if>
+			<if
+				test="breastcancerrisk4==null and breastcancerrisk1==null and breastcancerrisk2!=null and breastcancerrisk3==null">
+				OR diseasId=10 AND risk_level REGEXP "中"
+			</if>
+			<if
+				test="breastcancerrisk4==null and breastcancerrisk1==null and breastcancerrisk2==null and breastcancerrisk3!=null">
+				OR diseasId=10 AND risk_level REGEXP "高"
+			</if>
+			<if
+				test="breastcancerrisk4!=null and breastcancerrisk1!=null and breastcancerrisk2==null and breastcancerrisk3==null">
+				OR diseasId=10 AND NOT (risk_level REGEXP "低")
+			</if>
+			<if
+				test="breastcancerrisk4!=null and breastcancerrisk1==null and breastcancerrisk2!=null and breastcancerrisk3==null">
+				OR diseasId=10 AND NOT (risk_level REGEXP "低|高")
+			</if>
+			<if
+				test="breastcancerrisk4!=null and breastcancerrisk1==null and breastcancerrisk2==null and breastcancerrisk3!=null">
+				OR diseasId=10 AND NOT (risk_level REGEXP "低|中")
+			</if>
+			<if
+				test="breastcancerrisk4==null and breastcancerrisk1!=null and breastcancerrisk2!=null and breastcancerrisk3==null">
+				OR diseasId=10 AND risk_level REGEXP "低|中"
+			</if>
+			<if
+				test="breastcancerrisk4==null and breastcancerrisk1!=null and breastcancerrisk2==null and breastcancerrisk3!=null">
+				OR diseasId=10 AND risk_level REGEXP "低|高" 
+			</if>
+			<if
+				test="breastcancerrisk4==null and breastcancerrisk1==null and breastcancerrisk2!=null and breastcancerrisk3!=null">
+				OR diseasId=10 AND risk_level REGEXP "中|高"
+			</if>
+			<if
+				test="breastcancerrisk4!=null and breastcancerrisk1!=null and breastcancerrisk2!=null and breastcancerrisk3==null">
+				OR diseasId=10 AND NOT (risk_level REGEXP "高")
+			</if>
+			<if
+				test="breastcancerrisk4!=null and breastcancerrisk1!=null and breastcancerrisk2!=null and breastcancerrisk3==null">
+				OR diseasId=10 AND NOT (risk_level REGEXP "中")
+			</if>
+			<if
+				test="breastcancerrisk4==null and breastcancerrisk1!=null and breastcancerrisk2!=null and breastcancerrisk3!=null">
+				OR diseasId=10 AND risk_level REGEXP "低|中|高"
+			</if>
+			<if
+				test="breastcancerrisk4!=null and breastcancerrisk1==null and breastcancerrisk2!=null and breastcancerrisk3!=null">
+				OR diseasId=10 AND NOT (risk_level REGEXP "中|高")
+			</if>
+
+
+
+
+
+
+			<if test="agestart!=null and ageend != null ">
+				AND b.qcode='age' AND b.qvalue BETWEEN #{agestart} AND
+				#{ageend}
+			</if>
+
+			<if test="weight1!=null">
+				<if test="(agestart!=null) or (ageend != null)">
+					OR
+				</if>
+				<if test="agestart==null and ageend == null ">
+					AND
+				</if>
+				(b.qcode='BMI' AND b.`qvalue` &lt;18.5)
+			</if>
+
+			<if test="weight2!=null">
+				<if test="(weight1 != null) or (agestart!=null) or (ageend != null)">
+					OR
+				</if>
+				<if test="weight1==null and agestart==null and ageend == null">
+					AND
+				</if>
+				(b.qcode='BMI' AND b.`qvalue` &gt;= 18.5 and b.`qvalue` &lt; 24)
+			</if>
+
+			<if test="weight3!=null">
+				<if
+					test="(weight2 != null) or (weight1 != null) or (agestart!=null) or (ageend != null)">
+					OR
+				</if>
+				<if
+					test="weight2==null and weight1==null and agestart==null and ageend == null">
+					AND
+				</if>
+				(b.qcode='BMI' AND b.`qvalue` &gt;= 24 and b.`qvalue` &lt; 28)
+			</if>
+
+			<if
+				test="weight4!=null and weight3!= null and weight2 != null and weight1 != null and agestart!=null and ageend != null">
+				<if
+					test="(weight3!=null) or  (weight2 != null) or (weight1 != null) or (agestart!=null) or (ageend != null)">
+					OR
+				</if>
+				<if
+					test="weight3==null and weight2==null and weight1==null and agestart==null and ageend == null">
+					AND
+				</if>
+				(b.qcode='BMI' AND b.`qvalue` &gt;= 28)
+			</if>
+
+			<!-- 个人高血压病史 -->
+			<if test="hypertension!=null">
+				<if
+					test="(weight4 != null) or (weight3!=null) or  (weight2 != null) or (weight1 != null) or (agestart!=null) or (ageend != null)">
+					OR
+				</if>
+				<if
+					test="weight4==null and weight3==null and weight2==null and weight1==null and agestart==null and ageend == null">
+					AND
+				</if>
+				(b.qcode='hbp_his' AND b.`qvalue` =1)
+			</if>
+
+			<!--个人慢性支气管炎病史 -->
+			<if test="chronicbronchitis!=null">
+				<if
+					test="(hypertension !=null) or  (weight4 != null) or (weight3!=null) or  (weight2 != null) or (weight1 != null) or (agestart!=null) or (ageend != null)">
+					OR
+				</if>
+				<if
+					test="hypertension==null and weight4==null and weight3==null and weight2==null and weight1==null and agestart==null and ageend == null">
+					AND
+				</if>
+				(b.qcode='bronch_his' AND b.`qvalue` =1)
+			</if>
+
+			<!-- 个人血脂异常 -->
+			<if test="dyslipidemia!=null">
+				<if
+					test="(chronicbronchitis!= null) or (hypertension !=null) or  (weight4 != null) or (weight3!=null) or  (weight2 != null) or (weight1 != null) or (agestart!=null) or (ageend != null)">
+					OR
+				</if>
+				<if
+					test="chronicbronchitis==null and hypertension==null and weight4==null and weight3==null and weight2==null and weight1==null and agestart==null and ageend == null">
+					AND
+				</if>
+				(b.qcode='BF' AND b.`qvalue` =1)
+			</if>
+
+
+			<!-- 个人骨质疏松 -->
+			<if test="osteoporosis!=null">
+				<if
+					test="(dyslipidemia!= null) or (chronicbronchitis!= null) or (hypertension !=null) or  (weight4 != null) or (weight3!=null) or  (weight2 != null) or (weight1 != null) or (agestart!=null) or (ageend != null)">
+					OR
+				</if>
+				<if
+					test="dyslipidemia==null and chronicbronchitis==null and hypertension==null and weight4==null and weight3==null and weight2==null and weight1==null and agestart==null and ageend == null">
+					AND
+				</if>
+				(b.qcode='hf_his' AND b.`qvalue` =1)
+			</if>
+
+
+
+			<!-- 个人肺气肿 -->
+			<if test="emphysema!=null">
+				<if
+					test="(osteoporosis!=null) or (dyslipidemia!= null) or (chronicbronchitis!= null) or (hypertension !=null) or  (weight4 != null) or (weight3!=null) or  (weight2 != null) or (weight1 != null) or (agestart!=null) or (ageend != null)">
+					OR
+				</if>
+				<if
+					test="osteoporosis==null and dyslipidemia==null and chronicbronchitis==null and hypertension==null and weight4==null and weight3==null and weight2==null and weight1==null and agestart==null and ageend == null">
+					AND
+				</if>
+
+				(b.qcode='emphy_his' AND b.`qvalue` =1)
+			</if>
+
+			<!-- 个人肺气肿 -->
+			<if test="coronarydisease!=null">
+				<if
+					test="(emphysema!=null) or (osteoporosis!=null) or (dyslipidemia!= null) or (chronicbronchitis!= null) or (hypertension !=null) or  (weight4 != null) or (weight3!=null) or  (weight2 != null) or (weight1 != null) or (agestart!=null) or (ageend != null)">
+					OR
+				</if>
+				<if
+					test="emphysema==null  and osteoporosis==null and dyslipidemia==null and chronicbronchitis==null and hypertension==null and weight4==null and weight3==null and weight2==null and weight1==null and agestart==null and ageend == null">
+					AND
+				</if>
+				(b.qcode='chd_his' AND b.`qvalue` =1)
+			</if>
+
+
+			<!-- 个人糖尿病 -->
+			<if test="type2diabetes!=null">
+				<if
+					test="(coronarydisease!=null) or (emphysema!=null) or (osteoporosis!=null) or (dyslipidemia!= null) or (chronicbronchitis!= null) or (hypertension !=null) or  (weight4 != null) or (weight3!=null) or  (weight2 != null) or (weight1 != null) or (agestart!=null) or (ageend != null)">
+					OR
+				</if>
+				<if
+					test="coronarydisease==null and emphysema==null  and osteoporosis==null and dyslipidemia==null and chronicbronchitis==null and hypertension==null and weight4==null and weight3==null and weight2==null and weight1==null and agestart==null and ageend == null">
+					AND
+				</if>
+				(b.qcode='diab_his' AND b.`qvalue` =1)
+			</if>
+
+
+			<!-- 家族高血压 -->
+			<if test="familialhypertension!=null">
+				<if
+					test="(type2diabetes!=null) or (coronarydisease!=null) or (emphysema!=null) or (osteoporosis!=null) or (dyslipidemia!= null) or (chronicbronchitis!= null) or (hypertension !=null) or  (weight4 != null) or (weight3!=null) or  (weight2 != null) or (weight1 != null) or (agestart!=null) or (ageend != null)">
+					OR
+				</if>
+				<if
+					test="type2diabetes==null and coronarydisease==null and emphysema==null  and osteoporosis==null and dyslipidemia==null and chronicbronchitis==null and hypertension==null and weight4==null and weight3==null and weight2==null and weight1==null and agestart==null and ageend == null">
+					AND
+				</if>
+
+				(b.qcode='HBPS' AND b.`qvalue` =1)
+			</if>
+
+			<!-- 家族肺癌 -->
+			<if test="familiallungcancer!=null">
+				<if
+					test="(familialhypertension!=null) or (type2diabetes!=null) or (coronarydisease!=null) or (emphysema!=null) or (osteoporosis!=null) or (dyslipidemia!= null) or (chronicbronchitis!= null) or (hypertension !=null) or  (weight4 != null) or (weight3!=null) or  (weight2 != null) or (weight1 != null) or (agestart!=null) or (ageend != null)">
+					OR
+				</if>
+				<if
+					test="familialhypertension==null and type2diabetes==null and coronarydisease==null and emphysema==null  and osteoporosis==null and dyslipidemia==null and chronicbronchitis==null and hypertension==null and weight4==null and weight3==null and weight2==null and weight1==null and agestart==null and ageend == null">
+					AND
+				</if>
+				(b.qcode='lungs' AND b.`qvalue` =1)
+			</if>
+
+
+			<!-- 家族冠心病 -->
+			<if test="familialcoronarydisease!=null">
+				<if
+					test="(familiallungcancer!=null) or (familialhypertension!=null) or (type2diabetes!=null) or (coronarydisease!=null) or (emphysema!=null) or (osteoporosis!=null) or (dyslipidemia!= null) or (chronicbronchitis!= null) or (hypertension !=null) or  (weight4 != null) or (weight3!=null) or  (weight2 != null) or (weight1 != null) or (agestart!=null) or (ageend != null)">
+					OR
+				</if>
+				<if
+					test="familiallungcancer==null and familialhypertension==null and type2diabetes==null and coronarydisease==null and emphysema==null  and osteoporosis==null and dyslipidemia==null and chronicbronchitis==null and hypertension==null and weight4==null and weight3==null and weight2==null and weight1==null and agestart==null and ageend == null">
+					AND
+				</if>
+
+				(b.qcode='chds' AND b.`qvalue` =1)
+			</if>
+
+
+			<!-- 家族脑卒中 -->
+			<if test="familialapoplexy!=null">
+				<if
+					test="(familialcoronarydisease!=null) or (familiallungcancer!=null) or (familialhypertension!=null) or (type2diabetes!=null) or (coronarydisease!=null) or (emphysema!=null) or (osteoporosis!=null) or (dyslipidemia!= null) or (chronicbronchitis!= null) or (hypertension !=null) or  (weight4 != null) or (weight3!=null) or  (weight2 != null) or (weight1 != null) or (agestart!=null) or (ageend != null)">
+					OR
+				</if>
+				<if
+					test="familialcoronarydisease==null and familiallungcancer==null and familialhypertension==null and type2diabetes==null and coronarydisease==null and emphysema==null  and osteoporosis==null and dyslipidemia==null and chronicbronchitis==null and hypertension==null and weight4==null and weight3==null and weight2==null and weight1==null and agestart==null and ageend == null">
+					AND
+				</if>
+				(b.qcode='CSS' AND b.`qvalue` =1)
+			</if>
+
+
+
+
+			<!-- 家族乳腺癌 -->
+			<if test="familialbreastcancer!=null">
+				<if
+					test="(familialapoplexy!=null) or (familialcoronarydisease!=null) or (familiallungcancer!=null) or (familialhypertension!=null) or (type2diabetes!=null) or (coronarydisease!=null) or (emphysema!=null) or (osteoporosis!=null) or (dyslipidemia!= null) or (chronicbronchitis!= null) or (hypertension !=null) or  (weight4 != null) or (weight3!=null) or  (weight2 != null) or (weight1 != null) or (agestart!=null) or (ageend != null)">
+					OR
+				</if>
+				<if
+					test="familialapoplexy==null and familialcoronarydisease==null and familiallungcancer==null and familialhypertension==null and type2diabetes==null and coronarydisease==null and emphysema==null  and osteoporosis==null and dyslipidemia==null and chronicbronchitis==null and hypertension==null and weight4==null and weight3==null and weight2==null and weight1==null and agestart==null and ageend == null">
+					AND
+				</if>
+				(b.qcode='BCS' AND b.`qvalue` =1)
+			</if>
+
+
+
+			<!-- 家族前列腺癌 -->
+			<if test="familialprostate!=null">
+				<if
+					test="(familialbreastcancer!=null) or (familialapoplexy!=null) or (familialcoronarydisease!=null) or (familiallungcancer!=null) or (familialhypertension!=null) or (type2diabetes!=null) or (coronarydisease!=null) or (emphysema!=null) or (osteoporosis!=null) or (dyslipidemia!= null) or (chronicbronchitis!= null) or (hypertension !=null) or  (weight4 != null) or (weight3!=null) or  (weight2 != null) or (weight1 != null) or (agestart!=null) or (ageend != null)">
+					OR
+				</if>
+				<if
+					test="familialbreastcancer==null and familialapoplexy==null and familialcoronarydisease==null and familiallungcancer==null and familialhypertension==null and type2diabetes==null and coronarydisease==null and emphysema==null  and osteoporosis==null and dyslipidemia==null and chronicbronchitis==null and hypertension==null and weight4==null and weight3==null and weight2==null and weight1==null and agestart==null and ageend == null">
+					AND
+				</if>
+				(b.qcode='PCS' AND b.`qvalue` =1)
+			</if>
+
+
+
+
+			<!-- 家族糖尿病 -->
+			<if test="familialdiabetes!=null">
+				<if
+					test="(familialprostate!=null) or (familialbreastcancer!=null) or (familialapoplexy!=null) or (familialcoronarydisease!=null) or (familiallungcancer!=null) or (familialhypertension!=null) or (type2diabetes!=null) or (coronarydisease!=null) or (emphysema!=null) or (osteoporosis!=null) or (dyslipidemia!= null) or (chronicbronchitis!= null) or (hypertension !=null) or  (weight4 != null) or (weight3!=null) or  (weight2 != null) or (weight1 != null) or (agestart!=null) or (ageend != null)">
+					OR
+				</if>
+				<if
+					test="familialprostate==null and familialbreastcancer==null and familialapoplexy==null and familialcoronarydisease==null and familiallungcancer==null and familialhypertension==null and type2diabetes==null and coronarydisease==null and emphysema==null  and osteoporosis==null and dyslipidemia==null and chronicbronchitis==null and hypertension==null and weight4==null and weight3==null and weight2==null and weight1==null and agestart==null and ageend == null">
+					AND
+				</if>
+				(b.qcode='dms' AND b.`qvalue` =1)
+			</if>
+
+
+
+			<!-- 家族糖尿病 -->
+			<if test="familialhipfracture!=null">
+				<if
+					test="(familialdiabetes!=null) or (familialprostate!=null) or (familialbreastcancer!=null) or (familialapoplexy!=null) or (familialcoronarydisease!=null) or (familiallungcancer!=null) or (familialhypertension!=null) or (type2diabetes!=null) or (coronarydisease!=null) or (emphysema!=null) or (osteoporosis!=null) or (dyslipidemia!= null) or (chronicbronchitis!= null) or (hypertension !=null) or  (weight4 != null) or (weight3!=null) or  (weight2 != null) or (weight1 != null) or (agestart!=null) or (ageend != null)">
+					OR
+				</if>
+				<if
+					test="familialdiabetes==null and familialprostate==null and familialbreastcancer==null and familialapoplexy==null and familialcoronarydisease==null and familiallungcancer==null and familialhypertension==null and type2diabetes==null and coronarydisease==null and emphysema==null  and osteoporosis==null and dyslipidemia==null and chronicbronchitis==null and hypertension==null and weight4==null and weight3==null and weight2==null and weight1==null and agestart==null and ageend == null">
+					AND
+				</if>
+
+				(b.qcode='HFS' AND b.`qvalue` =1)
+			</if>
+
+
+
+			<!-- 吸烟情况吸烟 -->
+			<if test="smoke1!=null">
+				<if
+					test="(familialhipfracture!=null) or (familialdiabetes!=null) or (familialprostate!=null) or (familialbreastcancer!=null) or (familialapoplexy!=null) or (familialcoronarydisease!=null) or (familiallungcancer!=null) or (familialhypertension!=null) or (type2diabetes!=null) or (coronarydisease!=null) or (emphysema!=null) or (osteoporosis!=null) or (dyslipidemia!= null) or (chronicbronchitis!= null) or (hypertension !=null) or  (weight4 != null) or (weight3!=null) or  (weight2 != null) or (weight1 != null) or (agestart!=null) or (ageend != null)">
+					OR
+				</if>
+				<if
+					test="familialhipfracture==null and familialdiabetes==null and familialprostate==null and familialbreastcancer==null and familialapoplexy==null and familialcoronarydisease==null and familiallungcancer==null and familialhypertension==null and type2diabetes==null and coronarydisease==null and emphysema==null  and osteoporosis==null and dyslipidemia==null and chronicbronchitis==null and hypertension==null and weight4==null and weight3==null and weight2==null and weight1==null and agestart==null and ageend == null">
+					AND
+				</if>
+				(b.qcode='smoke' AND b.`qvalue` &lt;&gt; 0)
+			</if>
+
+			<!-- 吸烟情况不吸烟 -->
+			<if test="smoke2!=null">
+				<if
+					test="(smoke1!=null) or (familialhipfracture!=null) or (familialdiabetes!=null) or (familialprostate!=null) or (familialbreastcancer!=null) or (familialapoplexy!=null) or (familialcoronarydisease!=null) or (familiallungcancer!=null) or (familialhypertension!=null) or (type2diabetes!=null) or (coronarydisease!=null) or (emphysema!=null) or (osteoporosis!=null) or (dyslipidemia!= null) or (chronicbronchitis!= null) or (hypertension !=null) or  (weight4 != null) or (weight3!=null) or  (weight2 != null) or (weight1 != null) or (agestart!=null) or (ageend != null)">
+					OR
+				</if>
+				<if
+					test="smoke1==null and familialhipfracture==null and familialdiabetes==null and familialprostate==null and familialbreastcancer==null and familialapoplexy==null and familialcoronarydisease==null and familiallungcancer==null and familialhypertension==null and type2diabetes==null and coronarydisease==null and emphysema==null  and osteoporosis==null and dyslipidemia==null and chronicbronchitis==null and hypertension==null and weight4==null and weight3==null and weight2==null and weight1==null and agestart==null and ageend == null">
+					AND
+				</if>
+				(b.qcode='smoke' AND b.`qvalue` =0)
+			</if>
+
+
+			<!-- 饮酒情况喝酒 -->
+			<if test="drink1!=null">
+				<if
+					test="(smoke2!=null) or (smoke1!=null) or (familialhipfracture!=null) or (familialdiabetes!=null) or (familialprostate!=null) or (familialbreastcancer!=null) or (familialapoplexy!=null) or (familialcoronarydisease!=null) or (familiallungcancer!=null) or (familialhypertension!=null) or (type2diabetes!=null) or (coronarydisease!=null) or (emphysema!=null) or (osteoporosis!=null) or (dyslipidemia!= null) or (chronicbronchitis!= null) or (hypertension !=null) or  (weight4 != null) or (weight3!=null) or  (weight2 != null) or (weight1 != null) or (agestart!=null) or (ageend != null)">
+					OR
+				</if>
+				<if
+					test="smoke2==null and smoke1==null and familialhipfracture==null and familialdiabetes==null and familialprostate==null and familialbreastcancer==null and familialapoplexy==null and familialcoronarydisease==null and familiallungcancer==null and familialhypertension==null and type2diabetes==null and coronarydisease==null and emphysema==null  and osteoporosis==null and dyslipidemia==null and chronicbronchitis==null and hypertension==null and weight4==null and weight3==null and weight2==null and weight1==null and agestart==null and ageend == null">
+					AND
+				</if>
+				(b.qcode='drink' AND b.`qvalue` &lt;&gt; 0 AND
+			</if>
+
+
+
+			<!-- 吸烟情况不喝酒 -->
+			<if test="drink2!=null">
+				<if
+					test="(drink1!=null) or (smoke2!=null) or (smoke1!=null) or (familialhipfracture!=null) or (familialdiabetes!=null) or (familialprostate!=null) or (familialbreastcancer!=null) or (familialapoplexy!=null) or (familialcoronarydisease!=null) or (familiallungcancer!=null) or (familialhypertension!=null) or (type2diabetes!=null) or (coronarydisease!=null) or (emphysema!=null) or (osteoporosis!=null) or (dyslipidemia!= null) or (chronicbronchitis!= null) or (hypertension !=null) or  (weight4 != null) or (weight3!=null) or  (weight2 != null) or (weight1 != null) or (agestart!=null) or (ageend != null)">
+					OR
+				</if>
+				<if
+					test="drink1==null and smoke2==null and smoke1==null and familialhipfracture==null and familialdiabetes==null and familialprostate==null and familialbreastcancer==null and familialapoplexy==null and familialcoronarydisease==null and familiallungcancer==null and familialhypertension==null and type2diabetes==null and coronarydisease==null and emphysema==null  and osteoporosis==null and dyslipidemia==null and chronicbronchitis==null and hypertension==null and weight4==null and weight3==null and weight2==null and weight1==null and agestart==null and ageend == null">
+					AND
+				</if>
+				(b.qcode='smoke' AND b.`qvalue` =0 AND a.user_code=#{usercode})
+			</if>
+			 
+		</where>
+			ORDER BY qtime DESC
+		
+
+		)AS a
+		 GROUP BY a.`user_code`
+		) AS a 
+		<where>
+		a.`user_code` IN (SELECT 
+        user_code 
+      FROM
+        yh_user_make_card 
+      WHERE doctor = 
+        (SELECT 
+          id 
+        FROM
+          `yh_user_admin_info` 
+        WHERE user_code = #{doctor}) 
+        AND user_code IS NOT NULL 
+        AND user_code != '') 
+		<if test="sex != null and sex != ''">
+		 and a.gender=#{sex}
+		</if>
+		<if test="username != null">
+		 and a.user_name LIKE CONCAT('%',#{username},'%')
+		</if>
+		<if test="evaluateFlag != null">
+		AND a.`evaluateFlag`=#{evaluateFlag}
+		</if>
+		<if test="orgCode != null and orgCode != ''">
+		AND a.org_Code=#{orgCode}
+		</if>
+		</where>
+		    
+
+   	 
+        
+  		ORDER BY a.qtime DESC
+		
+
+
+	</select>
+	<select id="findAssessTotalCountSize" resultType="java.lang.Integer">
+	
+SELECT COUNT(1) FROM `yh_disease_assess_total_report` WHERE user_code=#{usercode}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+		delete from
+		yh_disease_assess_total_report
+		where id = #{id,jdbcType=INTEGER}
+	</delete>
+	<delete id="deleteByExample"
+		parameterType="com.yihe.system.domain.YhDiseaseAssessTotalReportExample">
+		delete from yh_disease_assess_total_report
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</delete>
+	<insert id="insert" parameterType="com.yihe.system.domain.YhDiseaseAssessTotalReport">
+		<selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+			SELECT
+			LAST_INSERT_ID()
+		</selectKey>
+		insert into yh_disease_assess_total_report2 (result_serialNum,
+		request_serialNum,
+		user_code, gender, age,
+		user_name, user_occupation,
+		user_jzd,
+		user_jzhj)
+		values (#{resultSerialnum,jdbcType=VARCHAR},
+		#{requestSerialnum,jdbcType=VARCHAR},
+		#{userCode,jdbcType=VARCHAR},
+		#{gender,jdbcType=INTEGER}, #{age,jdbcType=INTEGER},
+		#{userName,jdbcType=VARCHAR}, #{userOccupation,jdbcType=VARCHAR},
+		#{userJzd,jdbcType=VARCHAR},
+		#{userJzhj,jdbcType=VARCHAR})
+	</insert>
+	<insert id="insertSelective" parameterType="com.yihe.system.domain.YhDiseaseAssessTotalReport">
+		<selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+			SELECT
+			LAST_INSERT_ID()
+		</selectKey>
+		insert into yh_disease_assess_total_report
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="resultSerialnum != null">
+				result_serialNum,
+			</if>
+			<if test="requestSerialnum != null">
+				request_serialNum,
+			</if>
+			<if test="userCode != null">
+				user_code,
+			</if>
+			<if test="gender != null">
+				gender,
+			</if>
+			<if test="age != null">
+				age,
+			</if>
+			<if test="userName != null">
+				user_name,
+			</if>
+			<if test="userOccupation != null">
+				user_occupation,
+			</if>
+			<if test="userJzd != null">
+				user_jzd,
+			</if>
+			<if test="userJzhj != null">
+				user_jzhj,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="resultSerialnum != null">
+				#{resultSerialnum,jdbcType=VARCHAR},
+			</if>
+			<if test="requestSerialnum != null">
+				#{requestSerialnum,jdbcType=VARCHAR},
+			</if>
+			<if test="userCode != null">
+				#{userCode,jdbcType=VARCHAR},
+			</if>
+			<if test="gender != null">
+				#{gender,jdbcType=INTEGER},
+			</if>
+			<if test="age != null">
+				#{age,jdbcType=INTEGER},
+			</if>
+			<if test="userName != null">
+				#{userName,jdbcType=VARCHAR},
+			</if>
+			<if test="userOccupation != null">
+				#{userOccupation,jdbcType=VARCHAR},
+			</if>
+			<if test="userJzd != null">
+				#{userJzd,jdbcType=VARCHAR},
+			</if>
+			<if test="userJzhj != null">
+				#{userJzhj,jdbcType=VARCHAR},
+			</if>
+		</trim>
+	</insert>
+	<select id="countByExample"
+		parameterType="com.yihe.system.domain.YhDiseaseAssessTotalReportExample"
+		resultType="java.lang.Long">
+		select count(*) from yh_disease_assess_total_report
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</select>
+	<update id="updateByExampleSelective" parameterType="map">
+		update yh_disease_assess_total_report
+		<set>
+			<if test="record.id != null">
+				id = #{record.id,jdbcType=INTEGER},
+			</if>
+			<if test="record.resultSerialnum != null">
+				result_serialNum =
+				#{record.resultSerialnum,jdbcType=VARCHAR},
+			</if>
+			<if test="record.requestSerialnum != null">
+				request_serialNum =
+				#{record.requestSerialnum,jdbcType=VARCHAR},
+			</if>
+			<if test="record.userCode != null">
+				user_code = #{record.userCode,jdbcType=VARCHAR},
+			</if>
+			<if test="record.gender != null">
+				gender = #{record.gender,jdbcType=INTEGER},
+			</if>
+			<if test="record.age != null">
+				age = #{record.age,jdbcType=INTEGER},
+			</if>
+			<if test="record.userName != null">
+				user_name = #{record.userName,jdbcType=VARCHAR},
+			</if>
+			<if test="record.userOccupation != null">
+				user_occupation =
+				#{record.userOccupation,jdbcType=VARCHAR},
+			</if>
+			<if test="record.userJzd != null">
+				user_jzd = #{record.userJzd,jdbcType=VARCHAR},
+			</if>
+			<if test="record.userJzhj != null">
+				user_jzhj = #{record.userJzhj,jdbcType=VARCHAR},
+			</if>
+		</set>
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByExample" parameterType="map">
+		update yh_disease_assess_total_report
+		set id =
+		#{record.id,jdbcType=INTEGER},
+		result_serialNum =
+		#{record.resultSerialnum,jdbcType=VARCHAR},
+		request_serialNum =
+		#{record.requestSerialnum,jdbcType=VARCHAR},
+		user_code =
+		#{record.userCode,jdbcType=VARCHAR},
+		gender =
+		#{record.gender,jdbcType=INTEGER},
+		age =
+		#{record.age,jdbcType=INTEGER},
+		user_name =
+		#{record.userName,jdbcType=VARCHAR},
+		user_occupation =
+		#{record.userOccupation,jdbcType=VARCHAR},
+		user_jzd =
+		#{record.userJzd,jdbcType=VARCHAR},
+		user_jzhj =
+		#{record.userJzhj,jdbcType=VARCHAR}
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByPrimaryKeySelective" parameterType="com.yihe.system.domain.YhDiseaseAssessTotalReport">
+		update yh_disease_assess_total_report
+		<set>
+			<if test="resultSerialnum != null">
+				result_serialNum = #{resultSerialnum,jdbcType=VARCHAR},
+			</if>
+			<if test="requestSerialnum != null">
+				request_serialNum = #{requestSerialnum,jdbcType=VARCHAR},
+			</if>
+			<if test="userCode != null">
+				user_code = #{userCode,jdbcType=VARCHAR},
+			</if>
+			<if test="gender != null">
+				gender = #{gender,jdbcType=INTEGER},
+			</if>
+			<if test="age != null">
+				age = #{age,jdbcType=INTEGER},
+			</if>
+			<if test="userName != null">
+				user_name = #{userName,jdbcType=VARCHAR},
+			</if>
+			<if test="userOccupation != null">
+				user_occupation = #{userOccupation,jdbcType=VARCHAR},
+			</if>
+			<if test="userJzd != null">
+				user_jzd = #{userJzd,jdbcType=VARCHAR},
+			</if>
+			<if test="userJzhj != null">
+				user_jzhj = #{userJzhj,jdbcType=VARCHAR},
+			</if>
+		</set>
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.yihe.system.domain.YhDiseaseAssessTotalReport">
+		update
+		yh_disease_assess_total_report
+		set result_serialNum =
+		#{resultSerialnum,jdbcType=VARCHAR},
+		request_serialNum =
+		#{requestSerialnum,jdbcType=VARCHAR},
+		user_code =
+		#{userCode,jdbcType=VARCHAR},
+		gender = #{gender,jdbcType=INTEGER},
+		age =
+		#{age,jdbcType=INTEGER},
+		user_name = #{userName,jdbcType=VARCHAR},
+		user_occupation = #{userOccupation,jdbcType=VARCHAR},
+		user_jzd =
+		#{userJzd,jdbcType=VARCHAR},
+		user_jzhj = #{userJzhj,jdbcType=VARCHAR}
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+</mapper>

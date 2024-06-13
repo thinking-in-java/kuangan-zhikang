@@ -1,0 +1,287 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yihe.applet.api.mapper.YhUserOtherfunctionAppMapper">
+  <resultMap id="BaseResultMap" type="com.yihe.applet.api.domain.YhUserOtherfunctionApp">
+    <id column="otherid" jdbcType="INTEGER" property="otherid" />
+    <result column="urine_microprotein" jdbcType="VARCHAR" property="urineMicroprotein" />
+    <result column="glycosylated_hemoglobin" jdbcType="VARCHAR" property="glycosylatedHemoglobin" />
+    <result column="hcy" jdbcType="VARCHAR" property="hcy" />
+    <result column="user_id" jdbcType="VARCHAR" property="userId" />
+    <result column="insertTime" jdbcType="VARCHAR" property="inserttime" />
+    <result column="Is_Del" jdbcType="INTEGER" property="isDel" />
+    <result column="Data_Source" jdbcType="VARCHAR" property="dataSource" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    otherid, urine_microprotein, glycosylated_hemoglobin, hcy, user_id, insertTime, Is_Del, 
+    Data_Source
+  </sql>
+  <select id="findOtherAllByUserCode" resultMap="BaseResultMap">
+    select * from yh_user_otherfunction where  Is_Del=2 AND user_id=#{usercode}
+    <if test="timetype==0">
+      AND insertTime &gt;=  #{strTime} AND insertTime &lt;= #{endTime}
+    </if>
+    <if test="timetype==1">
+      AND insertTime LIKE CONCAT('',#{strTime},'%')
+    </if>
+    <if test="timetype==2">
+      AND YEAR(insertTime) =#{strTime}
+    </if>
+  </select>
+  <select id="findOherInfoByTimeType" resultMap="BaseResultMap">
+    select * from yh_user_otherfunction where  Is_Del=2 AND user_id=#{usercode}
+    <if test="timetype==0">
+      AND insertTime &gt;=  #{strTime} AND insertTime &lt;= #{endTime}
+    </if>
+    <if test="timetype==1">
+      AND insertTime LIKE CONCAT('',#{strTime},'%')
+    </if>
+    <if test="timetype==2">
+      AND YEAR(insertTime) =#{strTime}
+    </if>
+
+  </select>
+  <select id="selectByPrimaryKeyNewest" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    FROM `yh_user_otherfunction` WHERE Is_Del=2 AND user_id=#{eid}
+		ORDER BY insertTime DESC LIMIT 1
+  </select>
+   
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from yh_user_otherfunction
+    where otherid = #{otherid,jdbcType=INTEGER}
+  </select>
+   <select id="selectByPrimaryKeyBYeid" parameterType="java.lang.String" resultMap="BaseResultMap">
+    SELECT 
+    <include refid="Base_Column_List" />
+    FROM yh_user_otherfunction
+    WHERE  user_id=#{eid} AND Is_Del=2 order by insertTime DESC limit 7
+  </select>
+  <select id="selectByPrimaryKeyFindEntryTime" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    insertTime
+    from yh_user_otherfunction
+    where user_id = #{E_User_Id} and  Is_Del=2
+    
+  </select>
+  
+   <select id="selectByPrimaryKeyFindEntryTimeAnduserid"   resultMap="BaseResultMap">
+   SELECT 
+	<include refid="Base_Column_List" />
+	FROM `yh_user_otherfunction` WHERE insertTime LIKE concat(concat('',#{time}),'%') AND user_id=#{usercode} and Is_Del=2 order by insertTime desc
+    
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from yh_user_otherfunction
+    where otherid = #{otherid,jdbcType=INTEGER}
+  </delete>
+   
+  <insert id="insert" parameterType="com.yihe.applet.api.domain.YhUserOtherfunctionApp">
+    <selectKey keyProperty="otherid" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into yh_user_otherfunction (urine_microprotein, glycosylated_hemoglobin, 
+      hcy, user_id, insertTime, 
+      Is_Del, Data_Source)
+    values (#{urineMicroprotein,jdbcType=VARCHAR}, #{glycosylatedHemoglobin,jdbcType=VARCHAR}, 
+      #{hcy,jdbcType=VARCHAR}, #{userId,jdbcType=VARCHAR}, #{inserttime,jdbcType=VARCHAR}, 
+      #{isDel,jdbcType=INTEGER}, #{dataSource,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.yihe.applet.api.domain.YhUserOtherfunctionApp">
+    <selectKey keyProperty="otherid" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into yh_user_otherfunction
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="urineMicroprotein != null">
+        urine_microprotein,
+      </if>
+      <if test="glycosylatedHemoglobin != null">
+        glycosylated_hemoglobin,
+      </if>
+      <if test="hcy != null">
+        hcy,
+      </if>
+      <if test="userId != null">
+        user_id,
+      </if>
+      <if test="inserttime != null">
+        insertTime,
+      </if>
+      <if test="isDel != null">
+        Is_Del,
+      </if>
+      <if test="dataSource != null">
+        Data_Source,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="urineMicroprotein != null">
+        #{urineMicroprotein,jdbcType=VARCHAR},
+      </if>
+      <if test="glycosylatedHemoglobin != null">
+        #{glycosylatedHemoglobin,jdbcType=VARCHAR},
+      </if>
+      <if test="hcy != null">
+        #{hcy,jdbcType=VARCHAR},
+      </if>
+      <if test="userId != null">
+        #{userId,jdbcType=VARCHAR},
+      </if>
+      <if test="inserttime != null">
+        #{inserttime,jdbcType=VARCHAR},
+      </if>
+      <if test="isDel != null">
+        #{isDel,jdbcType=INTEGER},
+      </if>
+      <if test="dataSource != null">
+        #{dataSource,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+   
+  <update id="updateByExampleSelective" parameterType="map">
+    update yh_user_otherfunction
+    <set>
+      <if test="record.otherid != null">
+        otherid = #{record.otherid,jdbcType=INTEGER},
+      </if>
+      <if test="record.urineMicroprotein != null">
+        urine_microprotein = #{record.urineMicroprotein,jdbcType=VARCHAR},
+      </if>
+      <if test="record.glycosylatedHemoglobin != null">
+        glycosylated_hemoglobin = #{record.glycosylatedHemoglobin,jdbcType=VARCHAR},
+      </if>
+      <if test="record.hcy != null">
+        hcy = #{record.hcy,jdbcType=VARCHAR},
+      </if>
+      <if test="record.userId != null">
+        user_id = #{record.userId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.inserttime != null">
+        insertTime = #{record.inserttime,jdbcType=VARCHAR},
+      </if>
+      <if test="record.isDel != null">
+        Is_Del = #{record.isDel,jdbcType=INTEGER},
+      </if>
+      <if test="record.dataSource != null">
+        Data_Source = #{record.dataSource,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update yh_user_otherfunction
+    set otherid = #{record.otherid,jdbcType=INTEGER},
+      urine_microprotein = #{record.urineMicroprotein,jdbcType=VARCHAR},
+      glycosylated_hemoglobin = #{record.glycosylatedHemoglobin,jdbcType=VARCHAR},
+      hcy = #{record.hcy,jdbcType=VARCHAR},
+      user_id = #{record.userId,jdbcType=VARCHAR},
+      insertTime = #{record.inserttime,jdbcType=VARCHAR},
+      Is_Del = #{record.isDel,jdbcType=INTEGER},
+      Data_Source = #{record.dataSource,jdbcType=VARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.yihe.applet.api.domain.YhUserOtherfunctionApp">
+    update yh_user_otherfunction
+    <set>
+      <if test="urineMicroprotein != null">
+        urine_microprotein = #{urineMicroprotein,jdbcType=VARCHAR},
+      </if>
+      <if test="glycosylatedHemoglobin != null">
+        glycosylated_hemoglobin = #{glycosylatedHemoglobin,jdbcType=VARCHAR},
+      </if>
+      <if test="hcy != null">
+        hcy = #{hcy,jdbcType=VARCHAR},
+      </if>
+      <if test="userId != null">
+        user_id = #{userId,jdbcType=VARCHAR},
+      </if>
+      <if test="inserttime != null">
+        insertTime = #{inserttime,jdbcType=VARCHAR},
+      </if>
+      <if test="isDel != null">
+        Is_Del = #{isDel,jdbcType=INTEGER},
+      </if>
+      <if test="dataSource != null">
+        Data_Source = #{dataSource,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where otherid = #{otherid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.yihe.applet.api.domain.YhUserOtherfunctionApp">
+    update yh_user_otherfunction
+    set urine_microprotein = #{urineMicroprotein,jdbcType=VARCHAR},
+      glycosylated_hemoglobin = #{glycosylatedHemoglobin,jdbcType=VARCHAR},
+      hcy = #{hcy,jdbcType=VARCHAR},
+      user_id = #{userId,jdbcType=VARCHAR},
+      insertTime = #{inserttime,jdbcType=VARCHAR},
+      Is_Del = #{isDel,jdbcType=INTEGER},
+      Data_Source = #{dataSource,jdbcType=VARCHAR}
+    where otherid = #{otherid,jdbcType=INTEGER}
+  </update>
+</mapper>

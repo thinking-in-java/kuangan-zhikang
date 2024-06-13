@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yihe.applet.api.mapper.YhUserPersonageConstitutionAppMapper" >
+  <resultMap id="BaseResultMap" type="com.yihe.applet.api.domain.YhUserPersonageConstitutionApp" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="user_code" property="userCode" jdbcType="VARCHAR" />
+    <result column="peace_quality" property="peaceQuality" jdbcType="VARCHAR" />
+    <result column="deficiency_quality" property="deficiencyQuality" jdbcType="VARCHAR" />
+    <result column="sun_quality" property="sunQuality" jdbcType="VARCHAR" />
+    <result column="cloudy_quality" property="cloudyQuality" jdbcType="VARCHAR" />
+    <result column="phlegm_quality" property="phlegmQuality" jdbcType="VARCHAR" />
+    <result column="damp_quality" property="dampQuality" jdbcType="VARCHAR" />
+    <result column="blood_quality" property="bloodQuality" jdbcType="VARCHAR" />
+    <result column="gas_quality" property="gasQuality" jdbcType="VARCHAR" />
+    <result column="special_quality" property="specialQuality" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, user_code, peace_quality, deficiency_quality, sun_quality, cloudy_quality, phlegm_quality, 
+    damp_quality, blood_quality, gas_quality, special_quality
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from yh_user_personage_constitution
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from yh_user_personage_constitution
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.yihe.applet.api.domain.YhUserPersonageConstitutionApp" >
+    insert into yh_user_personage_constitution (id, user_code, peace_quality, 
+      deficiency_quality, sun_quality, cloudy_quality, 
+      phlegm_quality, damp_quality, blood_quality, 
+      gas_quality, special_quality)
+    values (#{id,jdbcType=INTEGER}, #{userCode,jdbcType=VARCHAR}, #{peaceQuality,jdbcType=VARCHAR}, 
+      #{deficiencyQuality,jdbcType=VARCHAR}, #{sunQuality,jdbcType=VARCHAR}, #{cloudyQuality,jdbcType=VARCHAR}, 
+      #{phlegmQuality,jdbcType=VARCHAR}, #{dampQuality,jdbcType=VARCHAR}, #{bloodQuality,jdbcType=VARCHAR}, 
+      #{gasQuality,jdbcType=VARCHAR}, #{specialQuality,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.yihe.applet.api.domain.YhUserPersonageConstitutionApp" >
+    insert into yh_user_personage_constitution
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="userCode != null" >
+        user_code,
+      </if>
+      <if test="peaceQuality != null" >
+        peace_quality,
+      </if>
+      <if test="deficiencyQuality != null" >
+        deficiency_quality,
+      </if>
+      <if test="sunQuality != null" >
+        sun_quality,
+      </if>
+      <if test="cloudyQuality != null" >
+        cloudy_quality,
+      </if>
+      <if test="phlegmQuality != null" >
+        phlegm_quality,
+      </if>
+      <if test="dampQuality != null" >
+        damp_quality,
+      </if>
+      <if test="bloodQuality != null" >
+        blood_quality,
+      </if>
+      <if test="gasQuality != null" >
+        gas_quality,
+      </if>
+      <if test="specialQuality != null" >
+        special_quality,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="userCode != null" >
+        #{userCode,jdbcType=VARCHAR},
+      </if>
+      <if test="peaceQuality != null" >
+        #{peaceQuality,jdbcType=VARCHAR},
+      </if>
+      <if test="deficiencyQuality != null" >
+        #{deficiencyQuality,jdbcType=VARCHAR},
+      </if>
+      <if test="sunQuality != null" >
+        #{sunQuality,jdbcType=VARCHAR},
+      </if>
+      <if test="cloudyQuality != null" >
+        #{cloudyQuality,jdbcType=VARCHAR},
+      </if>
+      <if test="phlegmQuality != null" >
+        #{phlegmQuality,jdbcType=VARCHAR},
+      </if>
+      <if test="dampQuality != null" >
+        #{dampQuality,jdbcType=VARCHAR},
+      </if>
+      <if test="bloodQuality != null" >
+        #{bloodQuality,jdbcType=VARCHAR},
+      </if>
+      <if test="gasQuality != null" >
+        #{gasQuality,jdbcType=VARCHAR},
+      </if>
+      <if test="specialQuality != null" >
+        #{specialQuality,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.yihe.applet.api.domain.YhUserPersonageConstitutionApp" >
+    update yh_user_personage_constitution
+    <set >
+      <if test="userCode != null" >
+        user_code = #{userCode,jdbcType=VARCHAR},
+      </if>
+      <if test="peaceQuality != null" >
+        peace_quality = #{peaceQuality,jdbcType=VARCHAR},
+      </if>
+      <if test="deficiencyQuality != null" >
+        deficiency_quality = #{deficiencyQuality,jdbcType=VARCHAR},
+      </if>
+      <if test="sunQuality != null" >
+        sun_quality = #{sunQuality,jdbcType=VARCHAR},
+      </if>
+      <if test="cloudyQuality != null" >
+        cloudy_quality = #{cloudyQuality,jdbcType=VARCHAR},
+      </if>
+      <if test="phlegmQuality != null" >
+        phlegm_quality = #{phlegmQuality,jdbcType=VARCHAR},
+      </if>
+      <if test="dampQuality != null" >
+        damp_quality = #{dampQuality,jdbcType=VARCHAR},
+      </if>
+      <if test="bloodQuality != null" >
+        blood_quality = #{bloodQuality,jdbcType=VARCHAR},
+      </if>
+      <if test="gasQuality != null" >
+        gas_quality = #{gasQuality,jdbcType=VARCHAR},
+      </if>
+      <if test="specialQuality != null" >
+        special_quality = #{specialQuality,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.yihe.applet.api.domain.YhUserPersonageConstitutionApp" >
+    update yh_user_personage_constitution
+    set user_code = #{userCode,jdbcType=VARCHAR},
+      peace_quality = #{peaceQuality,jdbcType=VARCHAR},
+      deficiency_quality = #{deficiencyQuality,jdbcType=VARCHAR},
+      sun_quality = #{sunQuality,jdbcType=VARCHAR},
+      cloudy_quality = #{cloudyQuality,jdbcType=VARCHAR},
+      phlegm_quality = #{phlegmQuality,jdbcType=VARCHAR},
+      damp_quality = #{dampQuality,jdbcType=VARCHAR},
+      blood_quality = #{bloodQuality,jdbcType=VARCHAR},
+      gas_quality = #{gasQuality,jdbcType=VARCHAR},
+      special_quality = #{specialQuality,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+   <!-- 根据code查询中医体质-->
+  <select id="showconstitution" parameterType="java.lang.String" resultMap="BaseResultMap">
+  	select * from yh_user_personage_constitution where user_code=#{userCode,jdbcType=VARCHAR}
+  </select>
+</mapper>

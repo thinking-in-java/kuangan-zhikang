@@ -1,0 +1,1137 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>用户查看膳食管理</title>
+   <link rel="stylesheet"  th:href="@{/assets/libs/layui/css/layui.css}" />
+    <link rel="stylesheet"  th:href="@{/assets/module/admin.css}"  />
+    <style type="text/css" th:inline="text">
+.layui-elem-quote {
+    margin-bottom: 10px;
+    padding: 9px;
+    line-height: 3px;
+    border-left: 5px solid #009688;
+    border-radius: 0 2px 2px 0;
+    background-color: white;
+    margin-top: 20px;
+    float: left;
+    margin-left: 20px;
+}
+.theme-colorful .layui-form-radio{
+	margin-top: -3px;
+}
+
+
+.layui-card {
+    margin-bottom: 15px;
+    border-radius: 2px;
+    background-color: #fff;
+    box-shadow: 0 0px 0px 0 rgba(0,0,0,.05);
+}
+.yishiname {
+    display: inline-block;
+    margin-left: 20px;
+    width: 225px;
+}	
+li {
+    margin-top: 10px;
+}
+</style>
+</head>
+<body style="margin: 7px;">
+ <!-- 页面加载loading -->
+<div class="page-loading">
+    <div class="ball-loader">
+        <span></span><span></span><span></span><span></span>
+    </div>
+</div>
+
+
+
+
+<div class="layui-row"  style="padding: 20px;background-color: white;">
+		<div class="layui-card">
+
+			<div class="layui-tab layui-tab-brief" lay-filter="docDemoTabBrief" style="margin:0">
+			  <ul class="layui-tab-title">
+			    <li th:if="${type=='1'}"  class="layui-this">推荐套餐</li>
+			     <li th:if="${type!='1'}">推荐课程</li>
+			    <li th:if="${type=='2'}" onclick="solo()"  class="layui-this">饮食日记</li>
+			    <li th:if="${type!='2'}" onclick="solo()">饮食日记</li>
+			    <li th:if="${type=='3'}" class="layui-this">饮食分析报告</li>
+			    <li th:if="${type!='3'}" >饮食分析报告</li>
+			  </ul>
+			  <div class="layui-tab-content" >
+			  <!-- 内容1 -->
+			    <div class="layui-tab-item" th:classappend="${type=='1'} ? 'layui-show' : ''">
+			    
+			   <div class="layui-fluid" style="    margin-top: -20px;">
+		    <div class="layui-card">
+		        <div class="layui-card-body">
+		            <div class="layui-form toolbar">
+		                <div class="layui-form-item">
+		                    <div class="layui-inline" style="float: right;" id="frontpage">
+		                        <button id="btnSearchAuth" class="layui-btn icon-btn"><i class="layui-icon">&#xe608;</i>更换套餐
+		                        </button>
+		                    </div>
+		                </div>
+		            </div>
+		            
+						<table id="LAY_table_user" lay-filter="demo"></table>
+		        </div>
+		    </div>
+		</div>
+			    
+			    
+			    </div>
+			    <!-- 内容2 -->
+			    <div  class="layui-tab-item" th:classappend="${type=='2'} ? 'layui-show' : ''">
+			    
+			    
+			     <div class="layui-form toolbar">
+		                <div class="layui-form-item">
+		                      日期：
+					  <div class="layui-inline" style="    margin-top: 10px;">
+					    <input type="text" class="layui-input" id="test6" placeholder=" - ">
+					  </div>
+					  摄入过量：
+					  <div class="layui-inline" style="    margin-top: 10px;">
+					   <select name="reportLevel" id="reportLevel" 	 lay-search="">
+				          <option value="">全部</option>
+				          <option value="1">是</option>
+				          <option value="2">否</option>
+				        </select>
+					  </div>
+					  
+					  <button class="layui-btn" data-type="reload" onclick="solo()"><i class="layui-icon"></i>搜索</button>
+					    <button class="layui-btn layui-btn-primary" id="btnempty" lay-submit="" lay-filter="reset">清除</button>	
+		                </div>
+		            </div>
+		            
+					
+					<div style="width: 100%;">
+						<div style="width: 40%;float: left">
+				   		<table class="layui-hide" id="test" lay-filter="test"></table>
+				   		</div>
+			   			<div style="width: 53%;float: left;margin-left: 3%;" id="table">
+			   				
+			   				
+			   				<!--  -->
+			   			
+			   				<table class="layui-table" lay-skin="line">
+							  <thead>
+							    <tr>
+							      <th>日记情况</th>
+							    </tr> 
+							  </thead>
+							  <tbody>
+							    <tr>
+							   
+							      <td align="center"> <div id="load" style=" display: none;"></div><div style="height:280px;" id="chartmain"></div></td>
+							    </tr>
+							  </tbody>
+							</table>   
+         
+			   			
+			   			</div>
+			    	</div>
+			    	
+			    	
+			    	
+			    	<table class="layui-table" lay-skin="line" id="journal">
+				  <colgroup>
+				    <col width="150">
+				    <col width="150">
+				    <col width="200">
+				    <col>
+				  </colgroup>
+				  <thead>
+				    <tr>
+				      <th>饮食日记分析 <span id="ctime"></span></th>
+				    </tr> 
+				  </thead>
+				  <tbody>
+				    <tr>
+				      <td style="width:100%">
+				      <div style="width:100%">
+				      		<div style="width:26%;float: left" id="intakewidth">
+						      <div style="height:500px;" id="intake"></div>
+						    </div>
+					      	<div style="width:37%;float: left" id="chartmain1width">
+						      <div style="height:500px;" id="chartmain1"></div>
+						    </div>
+					      	<div style="width:37%;float: left" id="chartmain2width">
+					      		<div style="height:500px;" id="chartmain2"></div>
+					    	</div>  
+					    </div>
+				      </td>
+				    </tr>
+				    <tr>
+				      <td>
+				      		 <div id="scheme">
+		   						
+		   					</div>
+				      </td>
+				    </tr>
+				   
+				  </tbody>
+				</table>   
+				    
+    
+			    
+			    </div>
+			    <div class="layui-tab-item" th:classappend="${type=='3'} ? 'layui-show' : ''">
+			    	
+			    	<table id="analyze" lay-filter="demonalyze"></table>
+			    	
+			    </div>
+			  </div>
+			</div> 
+		</div>
+	</div>
+
+</body>
+<script type="text/javascript" th:src="@{/assets/libs/layui/layui.js}"></script>
+<script type="text/javascript" th:src="@{/assets/js/common.js}"></script>
+<script type="text/javascript" th:src="@{/assets/js/jquery-1.11.1.js}"></script>
+<script th:src="@{/assets/libs/echarts/echarts.min.js}"></script>
+
+<script type="text/html" id="barDemo">
+ {{# if(d.oneself == 1) { }}
+ --
+{{# } else { }}
+ <a href="#" lay-event="edit"><font color="#36A4FF">查看</font></a>
+{{# } }}
+</script>
+
+<script type="text/html" id="barDemo1">
+ <a href="#" lay-event="edit"><font color="#36A4FF">查看</font></a>
+</script>
+
+
+<!-- 表单弹窗 -->
+<script type="text/html" id="toutiao">
+<form id="RoleForm" lay-filter="RoleForm" class="layui-form model-form">
+   <div class='layui-inline' style='margin-top:14px;float:left '><label class='layui-form-label w-auto'>适用人群:</label>
+<div class="layui-inline" >
+					   <select name="ftype" id="ftype" 	 lay-search="">
+				          <option value="1">健康风险评估推荐</option>
+				          <option value="2">28天计划推荐</option>
+				          <option value="3">健管师自制添加</option>
+				        </select>
+					  </div>
+<div class="layui-inline">
+					   <select name="eLevel" id="eLevel" 	 lay-search="">
+				          <option value="">全部</option>
+				          <option th:each="list:${findElevelInfoGroupBy}"
+															th:value="${list}">[[${list}]]</option>
+				        </select>
+					  </div>
+<div class="layui-inline">
+  <select name="diseaseid" id="diseaseid" 	 lay-search="">
+				          <option value="">全部</option>
+				          <option th:each="list:${dCategory}"
+															th:value="${list.id}">[[${list.diseaseName}]]</option>
+				        </select>
+    </div>
+
+</div>
+<input id='guishujishu' type='hidden' value=''>
+
+  <button type="button" lay-submit lay-filter="tkSousuo"  id='selectyishi' style='margin-top:14px;margin-left:10px;background-color: #5a9ae2' class="layui-btn layui-btn-normal">查询</button>
+<div style='background-color:#e6f7ff;width: 680px;height:260px;margin-top:20px;margin-left:15px;border-radius:4px;overflow:auto'>
+
+<ul id='changedoctor'>
+
+</ul>
+</div>
+<span id='tishi' style='color:red;margin-top:10px;margin-left:33px;display:none'>请选择1个医生</span>
+     
+ 
+   
+
+		<input id="usercode1" name="usercode" type="hidden" value="">
+
+        <input id="pitch" name="pitch" type="hidden" value="">
+    
+
+        <div class="layui-form-item text-right" style="    text-align: center;    padding-top: 10px;">
+            <button class="layui-btn layui-btn-primary" type="button" ew-event="closePageDialog">取消</button>
+            <button class="layui-btn" lay-filter="SubmitRole" lay-submit>保存</button>
+        </div>
+    </form>
+ 
+    
+</script>
+
+<script>
+function intake(take) {
+	
+	option = {
+		legend: {},
+		tooltip: {},
+		dataset: {
+			source: take
+		},
+		xAxis: {
+			type: 'category'
+		},
+		 grid:{
+		        top:120,
+		        x:125,
+		        x2:85,
+		        y2:80
+		    },
+		yAxis: {
+			name: '摄入(千卡)',
+			nameTextStyle: {
+				fontWeight: 'bolder',
+				fontSize: 16
+			}
+		},
+		// Declare several bar series, each will be mapped
+		// to a column of dataset.source by default.
+		series: [{
+				type: 'bar'
+			},
+			{
+				type: 'bar'
+			},
+			{
+				type: 'bar'
+			}
+		]
+	};
+/* 	var intakewidth = $("#intakewidth").width();
+	$("#intake").css('width',$("#intakewidth").width()); //给图设置固定宽度，div chart是第一个tab页面上面的某个图，宽度布局与map一致				   
+	 */
+	var myChart = echarts.init(document.getElementById('intake'), 'light');
+	// 使用刚指定的配置项和数据显示图表。
+	myChart.setOption(option);
+	 myChart.resize();
+	
+}
+
+
+function nenghao(energyKcal,nen){
+	option = {
+		    title: {
+		        text: '三大营养素供能比',
+		        subtext: energyKcal,
+		        left: 'center'
+		    },
+		    tooltip: {
+		        trigger: 'item',
+		        formatter: '{a} <br/>{b} : {c} ({d}%)'
+		    },
+		    color:["#b0b2ff","#ffd3a6","#fd9f9a"],
+		    series: [
+		        {
+		            name: '摄入',
+		            type: 'pie',
+		            radius: '30%',
+		            center: ['45%', '50%'],
+		            label: {
+		                formatter: '{a|{a}}{abg|}\n{hr|}\n  {b|{b}：}{c}千卡  {per|{d}%}  ',
+		                backgroundColor: '#eee',
+		                borderColor: '#aaa',
+		                borderWidth: 1,
+		                borderRadius: 4,
+		                // shadowBlur:3,
+		                // shadowOffsetX: 2,
+		                // shadowOffsetY: 2,
+		                // shadowColor: '#999',
+		                // padding: [0, 7],
+		                rich: {
+		                    a: {
+		                        color: '#999',
+		                        lineHeight: 22,
+		                        align: 'center'
+		                    },
+		                    // abg: {
+		                    //     backgroundColor: '#333',
+		                    //     width: '100%',
+		                    //     align: 'right',
+		                    //     height: 22,
+		                    //     borderRadius: [4, 4, 0, 0]
+		                    // },
+		                    hr: {
+		                        borderColor: '#aaa',
+		                        width: '100%',
+		                        borderWidth: 0.5,
+		                        height: 0
+		                    },
+		                    b: {
+		                        fontSize: 13,
+		                        lineHeight: 33
+		                    },
+		                    per: {
+		                        color: '#eee',
+		                        backgroundColor: '#334455',
+		                        padding: [2, 4],
+		                        borderRadius: 2
+		                    }
+		                }
+		            },
+		            data:nen,
+		            emphasis: {
+		                itemStyle: {
+		                    shadowBlur: 10,
+		                    shadowOffsetX: 0,
+		                    shadowColor: 'rgba(0, 0, 0, 0.5)'
+		                }
+		            }
+		        }
+		    ]
+		};
+	
+	/* var chartmain2width = $("#chartmain2width").width();
+	$("#chartmain2").css('width',$("#chartmain2width").width()); //给图设置固定宽度，div chart是第一个tab页面上面的某个图，宽度布局与map一致				   
+	 */
+	
+	//获取dom容器
+	var myChart = echarts.init(document.getElementById('chartmain2'));
+	// 使用刚指定的配置项和数据显示图表。
+	myChart.setOption(option);
+	 myChart.resize();
+}
+
+function bzt(energyLevel,shiji,tjian){
+	option = {
+			title: {
+		        text: '实际摄入与推荐摄入比例分配图',
+		        subtext: energyLevel,
+		        left: 'center'
+		    },
+		    tooltip: {
+		        trigger: 'item',
+		        formatter: '{a} <br/>{b}: {c} ({d}%)'
+		    },
+		    color:["#3c90f7","#55bfc0","#5ebe67","#f4cd49"],
+		    series: [
+		        {
+		            name: '推荐摄入量(千卡)',
+		            type: 'pie',
+		            selectedMode: 'single',
+		            radius: [0, '20%'],
+
+		            label: {
+		                position: 'inner'
+		            },
+		            labelLine: {
+		                show: false
+		            },
+		            data: tjian
+		        },
+		        {
+		            name: '实际摄入量(千卡)',
+		            type: 'pie',
+		            radius: ['30%', '40%'],
+		            label: {
+		                formatter: '{a|{a}}{abg|}\n{hr|}\n  {b|{b}：}{c}  {per|{d}%}  ',
+		                backgroundColor: '#eee',
+		                borderColor: '#aaa',
+		                borderWidth: 1,
+		                borderRadius: 4,
+		                // shadowBlur:3,
+		                // shadowOffsetX: 2,
+		                // shadowOffsetY: 2,
+		                // shadowColor: '#999',
+		                // padding: [0, 7],
+		                rich: {
+		                    a: {
+		                        color: '#999',
+		                        lineHeight: 22,
+		                        align: 'center'
+		                    },
+		                    // abg: {
+		                    //     backgroundColor: '#333',
+		                    //     width: '100%',
+		                    //     align: 'right',
+		                    //     height: 22,
+		                    //     borderRadius: [4, 4, 0, 0]
+		                    // },
+		                    hr: {
+		                        borderColor: '#aaa',
+		                        width: '100%',
+		                        borderWidth: 0.5,
+		                        height: 0
+		                    },
+		                    b: {
+		                        fontSize: 13,
+		                        lineHeight: 33
+		                    },
+		                    per: {
+		                        color: '#eee',
+		                        backgroundColor: '#334455',
+		                        padding: [2, 4],
+		                        borderRadius: 2
+		                    }
+		                }
+		            },
+		            data: shiji
+		        }
+		    ]
+		};
+	
+	/* var chartmain1width = $("#chartmain1width").width();
+	$("#chartmain1").css('width',$("#chartmain1width").width()); //给图设置固定宽度，div chart是第一个tab页面上面的某个图，宽度布局与map一致				   
+	 */
+	
+	//获取dom容器
+	var myChart = echarts.init(document.getElementById('chartmain1'));
+	// 使用刚指定的配置项和数据显示图表。
+	myChart.setOption(option);
+	 myChart.resize();
+}
+
+
+
+
+
+
+//统计图
+function show(cTime,energyLevel,energyKcal){
+	//指定图表的配置项和数据
+	option = {
+title : {
+    text: '膳食日记统图',
+},
+tooltip : {
+    trigger: 'axis'
+},
+legend: {
+    data:['推荐摄入','实际摄入']
+},
+toolbox: {
+    show : true,
+    feature : {
+        dataView : {show: true, readOnly: false},
+        magicType : {show: true, type: ['line', 'bar']},
+        restore : {show: true},
+        saveAsImage : {show: true}
+    }
+},
+color:["rgba(222, 250, 250, 1)","rgba(0, 186, 173, 1)"],
+calculable : true,
+xAxis : [
+    {
+        type : 'category',
+        data : cTime,
+    }
+],
+yAxis : [
+    {
+        type : 'value'
+    }
+],
+series : [
+    {
+        name:'推荐摄入',
+        type:'bar',
+        data:energyLevel,
+    },
+    {
+        name:'实际摄入',
+        type:'bar',
+        data:energyKcal,
+    }
+],
+dataZoom : [
+    //1.横向使用滚动条
+      {
+        type: 'slider',//有单独的滑动条，用户在滑动条上进行缩放或漫游。inside是直接可以是在内部拖动显示
+        show: true,//是否显示 组件。如果设置为 false，不会显示，但是数据过滤的功能还存在。
+        start: 0,//数据窗口范围的起始百分比0-100
+        end: 50,//数据窗口范围的结束百分比0-100
+        xAxisIndex: [0],// 此处表示控制第一个xAxis，设置 dataZoom-slider 组件控制的 x轴 可是已数组[0,2]表示控制第一，三个；xAxisIndex: 2 ，表示控制第二个。yAxisIndex属性同理
+        bottom:-10 //距离底部的距离
+      },
+  //2.在内部可以横向拖动
+     {
+         type: 'inside',// 内置于坐标系中
+         start: 0,
+         end: 30,
+         xAxisIndex: [0]
+      }
+    ]
+};
+
+	 
+		//获取dom容器
+		var myChart = echarts.init(document.getElementById('chartmain'));
+		// 使用刚指定的配置项和数据显示图表。
+		myChart.setOption(option);
+		 myChart.resize();
+}
+
+
+
+
+
+
+
+//导航栏
+layui.use('element', function() {
+	var $ = layui.jquery, element = layui.element; //Tab的切换功能，切换事件监听等，需要依赖element模块
+
+	$('.site-demo-active').on('click', function() {
+		var othis = $(this), type = othis.data('type');
+		active[type] ? active[type].call(this, othis) : '';
+	});
+
+});
+
+
+layui.use(['layer', 'form', 'admin', 'table','laydate', 'util'], function () {
+    var $ = layui.jquery;
+    var layer = layui.layer;
+    var form = layui.form;
+    var admin = layui.admin;
+    var util = layui.util;
+    var laydate = layui.laydate;
+    table = layui.table;
+    
+    
+    setTimeout( function(){
+    	tjt($("#test6").val(),$("#standard").val());
+	}, 2 * 1000 );
+    
+    form.on('submit(tkSousuo)', function(data){
+        console.log(data.field);
+        $("#changedoctor").empty().append("");
+        $.ajax({
+              type: "post",
+              url: "/YhFoodSrecipeRecordContriller/foodChangePackage",
+				data :data.field,
+              success: function(data){
+            	  console.log("mealdata",data)
+            	  var htmld="";
+				  var item=data.data;
+				  var htmld="<table class=\"layui-table\">" +
+						  "  <colgroup>" +
+						  "  <col width='50'>" +
+						  " 	  <col width='300'>" +
+						  " 		  <col width='100'>" +
+						  " 		  <col width='100'>" +
+						  "  </colgroup>" +
+						  "  <thead>" +
+						  "    <tr>" +
+						  "<th>选择</th>" +
+						  "      <th>套餐描述</th>" +
+						  "      <th>能量等级(千卡)</th>" +
+						  "      <th>适用病种</th>" +
+						  "    </tr> " +
+						  "  </thead>" +
+						  "  <tbody>"
+
+
+
+				  var item=data.data;
+				  for (var i = 0; i < item.length; i++) {
+					  htmld+="    <tr>" +
+							  "      <td><input type='radio' value='"+item[i].id+"' name='order' ></td>" +
+							  "      <td>"+item[i].fsDescribe+"</td>" +
+							  "      <td>"+item[i].eLevel+"</td>" +
+							  "      <td>"+item[i].diseaseName+"</td>" +
+							  "    </tr>"
+					  //htmld+="<li style='margin-left: 20px;'> <input type='radio' value='"+item[i].id+"' name='order' ><label  class='yishiname' style='padding-right: 90px;'>"+item[i].fsDescribe+"</label><label class='killOrder1' style='padding-right: 90px;'>"+item[i].eLevel+"</label><label class='diseaseName'>"+item[i].diseaseName+"</label></li>";
+				  }
+				  htmld+=  "  </tbody>" +
+						  "</table>";
+       	       	$('#changedoctor').append(htmld);
+       	     $("#userCode1").val(usercode);
+       	        form.render();
+              }   	
+         });
+        return false;
+      });
+ 
+    
+  //清除按钮
+    $("#btnempty").click(function(){
+		$("#test6").val("");    
+		$("#reportLevel").val("");
+	    form.render("select");
+	    table.reload('energyKcal', {
+	        where: { //设定异步数据接口的额外参数，任意设
+	        'cTime':$("#test6").val(),
+	        'reportLevel':$("#reportLevel").val()
+	       }
+	      });
+	     tjt($("#test6").val());
+    })
+    
+    
+  //日期范围
+    laydate.render({
+      elem: '#test6'
+      ,range: true,
+		trigger: 'click'
+    });
+    
+    
+    var usercode = [[${usercode}]];
+    
+    $("#journal").hide();
+    function tjt(ctime){
+    	 	
+    	$("#load").show().text('加载中...')
+    	var data2;
+    	if(ctime!=null || ctime!=""){
+    		data2 = {'usercode' :[[${usercode}]],'ctime':ctime};
+    	}else{
+    		data2 = {'usercode' :[[${usercode}]]};
+    	}
+   	 $.ajax({
+    	 type: "post",
+         url: "/system/diary/selectDiaryCtime",
+         dataType:"json",
+         data:data2,
+         success: function(data){
+        		show(data.cTime,data.energyLevel,data.energyKcal);
+        		$("#load").hide();
+         }   	
+    });
+   }
+ 
+    
+    //内容2
+     table.render({
+    elem: '#test'
+    ,	url : '/system/diary/selectDiary?usercode='+usercode
+    ,method:'post'
+        ,height: 340
+        ,cellMinWidth: 500 //全局定义常规单元格的最小宽度，layui 2.2.1 新增
+    ,cols: [ [
+      {field:'uFdId', title:'ID',hide:true}
+      ,{field:'cTime', title:'日期', width:'40%'}
+      ,{field:'energyKcal', title:'摄入能量(千卡)', sort: true, width:'30%'}
+      ,{
+          title: '摄入过量', templet: function (d) {
+              var strs = [
+                  '是',
+                  '否'
+              ];
+              if(d.energyKcal>d.energyLevel){
+                  return strs[0];
+              }else{
+              	return strs[1];
+              }
+          }, align: 'energyLevel', width:'30%'
+      }
+    ] ]
+    ,id : 'energyKcal'
+    ,page: true
+  });
+    
+    
+   //搜索的方法
+	   solo=function(){
+		   
+	     table.reload('energyKcal', {
+	        where: { //设定异步数据接口的额外参数，任意设
+	        'cTime':$("#test6").val(),
+	        'reportLevel':$("#reportLevel").val()
+	       }
+	      });
+	     tjt($("#test6").val());
+	    }
+  
+  //监听行单击事件（双击事件为：rowDouble）
+  table.on('row(test)', function(obj){
+    $("#journal").show();
+    
+    //标注选中样式
+    obj.tr.addClass('layui-table-click').siblings().removeClass('layui-table-click');
+    var data = obj.data;
+    var ctime=data.cTime;
+    var cho=data.cho;//碳水化合物
+    var protein=data.protein;//蛋白质
+    var fat=data.fat;//脂肪
+	  
+    var energyKcal="";//摄入能量
+    var energyKcalnum=data.energyLevel;
+    var fElements=data.fElements;//记录
+    console.log("fElements",fElements)
+    var nen= [{value: cho, name: '碳水化合物'},{value: protein, name: '蛋白质'},{value: fat, name: '脂肪'}];
+    nenghao(energyKcal,nen);//能量来源
+    $("#ctime").html(ctime);
+    if(data.energyLevel>data.energyKcal){
+    	var take=[['product', '推荐摄入', '摄入未超标', '摄入超标'],[''+data.cTime+'', data.energyLevel, data.energyKcal],];
+    	 intake(take);
+    }else{
+    	var take=[['product', '推荐摄入', '摄入未超标', '摄入超标'],[''+data.cTime+'', data.energyLevel, 0, data.energyKcal],];
+   	 intake(take);
+    }
+   
+    var zao=0;
+    var zhong=0;
+    var wan=0;
+    var jia=0;
+    var arr=fElements.split(';');
+    for(var i=0;i<arr.length;i++){
+   	
+    	var arr2 =arr[i].split("_");
+    	if(arr2[0]=="10"){
+    		var arr3 =arr[i].split(",");
+    		var arr4=arr3[0].split("_");
+    		if(arr4[1]=="1") {//增加早餐
+        		zao=zao*1+arr4[3]*1;
+    		}else if(arr4[1]=="2") {//增加中餐
+    			zhong=zhong*1+arr4[3]*1;
+    		}else if(arr4[1]=="3") {//增加晚餐
+    			wan=wan*1+arr4[3]*1;
+    		}else if(arr4[1]=="4") {//增加加餐
+    			jia=jia*1+arr4[3]*1;
+    		}
+    	}else{
+    		if(arr2[1]=="1") {//增加早餐
+        		zao=zao*1+arr2[3]*1;
+    		}else if(arr2[1]=="2") {//增加中餐
+    			zhong=zhong*1+arr2[3]*1;
+    		}else if(arr2[1]=="3") {//增加晚餐
+    			wan=wan*1+arr2[3]*1;
+    		}else if(arr2[1]=="4") {//增加加餐
+    			jia=jia*1+arr2[3]*1;
+    		}
+    	}
+    	
+    
+    
+    }
+    
+    
+		
+
+    
+   
+    
+    var data2 = {
+			'fElements' :fElements
+		};
+	 $.ajax({
+	 type: "post",
+     url: "/YhFoodSrecipeRecordContriller/selectByPrimaryKey",
+     dataType:"json",
+     data:data2,
+     success: function(data){
+    	 
+    	 var breakfast="";
+			var lunch="";
+			var supper="";
+			var extra="";
+			var zaoKar=0;
+			var wuKar=0;
+			var wanKar=0;
+			var jiaKar=0;
+			for(var j=0;j<data.zao.length;j++){//早
+
+				 if("10"==data.zao[j].fType){
+				 	if(data.zao[j].chengfen){
+						breakfast+="<br><dt><div style='padding-left: 20px;float: left;width: 60%;margin-right: 20px;'>"+data.zao[j].fCName+"</div><div>"+data.zao[j].energyKcalRiji+"千卡</div></dt>"
+					}else{
+						breakfast+="<br><dt><div style='float: left;width: 60%;margin-right: 20px;'>"+data.zao[j].fCName+"</div><div>"+data.zao[j].energyKcalRiji+"千卡</div></dt>"
+					}
+
+				 }else{
+				 	if(data.zao[j].chengfen){
+						breakfast+="<br><dt><div style='padding-left: 20px;float: left;width: 60%;margin-right: 20px;'>"+data.zao[j].fCName+"</div><div>"+data.zao[j].energyKcalRiji+"千卡</div></dt>"
+						zaoKar=zaoKar+parseFloat(data.zao[j].energyKcalRiji);
+					}else{
+						breakfast+="<br><dt><div style='float: left;width: 60%;margin-right: 20px;'>"+data.zao[j].fCName+"</div><div>"+data.zao[j].energyKcalRiji+"千卡</div></dt>"
+						zaoKar=zaoKar+parseFloat(data.zao[j].energyKcalRiji);
+					}
+
+				 }
+				
+			}
+			for(var j=0;j<data.zhong.length;j++){//中
+				 if("10"==data.zhong[j].fType){
+				 	if(data.zhong[j].chengfen){
+						lunch+="<br><dt><div style='padding-left: 20px;float: left;width: 60%;margin-right: 20px;'>"+data.zhong[j].fCName+"</div><div>"+data.zhong[j].energyKcalRiji+"千卡</div></dt>"
+					}else{
+						lunch+="<br><dt><div style='float: left;width: 60%;margin-right: 20px;'>"+data.zhong[j].fCName+"</div><div>"+data.zhong[j].energyKcalRiji+"千卡</div></dt>"
+					}
+				 }else{
+					 if(data.zhong[j].chengfen){
+						 lunch+="<br><dt><div style='padding-left: 20px;float: left;width: 60%;margin-right: 20px;'>"+data.zhong[j].fCName+"</div><div>"+data.zhong[j].energyKcalRiji+"千卡</div></dt>"
+						 wuKar=wuKar+parseFloat(data.zhong[j].energyKcalRiji);
+					 }else{
+						 lunch+="<br><dt><div style='float: left;width: 60%;margin-right: 20px;'>"+data.zhong[j].fCName+"</div><div>"+data.zhong[j].energyKcalRiji+"千卡</div></dt>"
+						 wuKar=wuKar+parseFloat(data.zhong[j].energyKcalRiji);
+					 }
+
+				 }
+				
+			}
+			for(var j=0;j<data.wan.length;j++){//晚
+				 if("10"==data.wan[j].fType){
+				 	if(data.wan[j].chengfen){
+						supper+="<br><dt><div style='padding-left: 20px;float: left;width: 60%;margin-right: 20px;'>"+data.wan[j].fCName+"</div><div>"+data.wan[j].energyKcalRiji+"千卡</div></dt>"
+
+					}else{
+						supper+="<br><dt><div style='float: left;width: 60%;margin-right: 20px;'>"+data.wan[j].fCName+"</div><div>"+data.wan[j].energyKcalRiji+"千卡</div></dt>"
+
+					}
+
+				 }else{
+					 if(data.wan[j].chengfen){
+						 supper+="<br><dt><div style='padding-left: 20px;float: left;width: 60%;margin-right: 20px;'>"+data.wan[j].fCName+"</div><div>"+data.wan[j].energyKcalRiji+"千卡</div></dt>"
+						 wanKar=wanKar+parseFloat(data.wan[j].energyKcalRiji);
+					 }else{
+						 supper+="<br><dt><div style='float: left;width: 60%;margin-right: 20px;'>"+data.wan[j].fCName+"</div><div>"+data.wan[j].energyKcalRiji+"千卡</div></dt>"
+						 wanKar=wanKar+parseFloat(data.wan[j].energyKcalRiji);
+					 }
+
+				 }
+				
+			}
+			for(var j=0;j<data.jia.length;j++){//加
+				if("10"==data.jia[j].fType){
+					if(data.jia[j].chengfen){
+						extra+="<br><dt><div style='padding-left: 20px;float: left;width: 60%;margin-right: 20px;'>"+data.jia[j].fCName+"</div><div>"+data.jia[j].energyKcalRiji+"千卡</div></dt>"
+
+					}else{
+						extra+="<br><dt><div style='float: left;width: 60%;margin-right: 20px;'>"+data.jia[j].fCName+"</div><div>"+data.jia[j].energyKcalRiji+"千卡</div></dt>"
+
+					}
+
+				}else{
+					if(data.jia[j].chengfen){
+						extra+="<br><dt><div style='padding-left: 20px;float: left;width: 60%;margin-right: 20px;'>"+data.jia[j].fCName+"</div><div>"+data.jia[j].energyKcalRiji+"千卡</div></dt>"
+						jiaKar=jiaKar+parseFloat(data.jia[j].energyKcalRiji);
+					}else{
+						extra+="<br><dt><div style='float: left;width: 60%;margin-right: 20px;'>"+data.jia[j].fCName+"</div><div>"+data.jia[j].energyKcalRiji+"千卡</div></dt>"
+						jiaKar=jiaKar+parseFloat(data.jia[j].energyKcalRiji);
+					}
+
+				}
+				
+			}
+			
+			$("#scheme").html("<p>饮食日记内容</p><br><div class='layui-row'><div class='layui-col-xs3'><div class='grid-demo grid-demo-bg1'>早餐("+zaoKar.toFixed(2)+" 千卡)"+
+					"<dl>"+breakfast+"</dl> </div></div><div class='layui-col-xs3'><div class='grid-demo'>中餐("+wuKar.toFixed(2)+"千卡)<dl>"+lunch+"</dl> </div></div><div class='layui-col-xs3'><div class='grid-demo grid-demo-bg1'>晚餐("+wanKar.toFixed(2)+"千卡)"+
+					"<dl>"+supper+"</dl> </div></div><div class='layui-col-xs3'><div class='grid-demo grid-demo-bg1'>加餐("+jiaKar.toFixed(2)+"千卡)<dl>"+extra+"</dl></div></div></div>");
+			 var shiji=[{value: zaoKar.toFixed(2), name: '早餐'},{value: wuKar.toFixed(2), name: '中餐'},{value: wanKar.toFixed(2), name: '晚餐'},{value: jiaKar.toFixed(2), name: '加餐'}];
+			  
+			 var tjian=[{value: (energyKcalnum*0.25).toFixed(2), name: '早餐'},{value: (energyKcalnum*0.35).toFixed(2), name: '中餐'},{value: (energyKcalnum*0.25).toFixed(2), name: '晚餐'},{value: (energyKcalnum*0.15).toFixed(2), name: '加餐'}];
+			    var energyLevel="推荐:"+energyKcalnum+"千卡";//推荐
+			    bzt(energyLevel,shiji,tjian);
+     }   	
+});
+    
+    
+  });
+  //内容2结束
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+  //添加头条
+    $('#frontpage').click(function () {
+    	showhealth();
+        showheadline();
+    });
+  
+    function showhealth(){
+   	 var d ={usercode:usercode};
+    	 $.ajax({
+     	 type: "post",
+          url: "/YhFoodSrecipeRecordContriller/foodChangePackage",
+          dataType:"json",
+          data:d,
+          success: function(data){
+        	  var htmld="";
+
+			  var htmld="<table class=\"layui-table\">" +
+					  "  <colgroup>" +
+					  "  <col width='50'>" +
+					  " 	  <col width='300'>" +
+					  " 		  <col width='100'>" +
+					  " 		  <col width='100'>" +
+					  "  </colgroup>" +
+					  "  <thead>" +
+					  "    <tr>" +
+					  "<th>选择</th>" +
+					  "      <th>套餐描述</th>" +
+					  "      <th>能量等级(千卡)</th>" +
+					  "      <th>适用病种</th>" +
+					  "    </tr> " +
+					  "  </thead>" +
+					  "  <tbody>"
+
+
+
+			  var item=data.data;
+			  for (var i = 0; i < item.length; i++) {
+				  htmld+="    <tr>" +
+						  "      <td><input type='radio' value='"+item[i].id+"' name='order' ></td>" +
+						  "      <td>"+item[i].fsDescribe+"</td>" +
+						  "      <td>"+item[i].eLevel+"</td>" +
+						  "      <td>"+item[i].diseaseName+"</td>" +
+						  "    </tr>"
+				  //htmld+="<li style='margin-left: 20px;'> <input type='radio' value='"+item[i].id+"' name='order' ><label  class='yishiname' style='padding-right: 90px;'>"+item[i].fsDescribe+"</label><label class='killOrder1' style='padding-right: 90px;'>"+item[i].eLevel+"</label><label class='diseaseName'>"+item[i].diseaseName+"</label></li>";
+			  }
+			  htmld+=  "  </tbody>" +
+					  "</table>";
+   	       	$('#changedoctor').append(htmld);
+   	     $("#userCode1").val(usercode);
+   	  if(data.message!='0'){
+   		$("#RoleForm select[name=diseaseid]").attr("disabled", "disabled");
+  	     $('#ftype').attr('disabled', 'disabled');
+  	  $('#ftype').val('2')
+  	   $("#RoleForm select[name=diseaseid]").val(data.message)
+  	 form.render('select');
+   	  }else{
+   		$("#RoleForm select[name=diseaseid]").removeAttr("disabled");
+  	   	 $('#ftype').attr('disabled', false);
+  	 		form.render('select');
+   	  }
+   	        form.render();
+          }   	
+     });
+   }
+    
+  //显示编辑弹窗头条
+    function showheadline(mRole) {
+    	
+        admin.open({
+            type: 1,
+            title: '更换套餐',
+            content: $('#toutiao').html(),
+            area: ['750px', '500px'],
+            success: function (layero, dIndex) {
+                var url = '/YhFoodSrecipeRecordContriller/insertSelective';
+                // 表单提交事件
+                form.on('submit(SubmitRole)', function (data) {
+                	var order=$('input:radio[name="order"]:checked').val();
+                    layer.load(2);
+                    var data ={userCode:usercode,order:order};
+                    $.post(url, data, function (res) {
+                  	  table.reload('tableBank');
+    					layer.msg("成功");
+    					 layer.closeAll();
+                    }, 'json');
+                    return false;
+                });
+            }
+        });
+    }
+
+    
+  
+	table.on('tool(demo)', function(obj) { //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
+		var data = obj.data; //获得当前行数据
+		var layEvent = obj.event; //获得 lay-event 对应的值
+		var tr = obj.tr; //获得当前行 tr 的DOM对象
+		
+		 if (layEvent === 'edit') {
+			window.location.href="/manage/usertosee/foodshow?id="+data.recordId;
+		}
+	});
+	
+  //方法级渲染
+	table.render({
+		elem : '#LAY_table_user',
+		url : '/YhFoodSrecipeRecordContriller/selectSrecipeRecord?usercode='+usercode,
+		method:'post',
+		cols : [ [  {type:'numbers'},
+        {
+			field : 'recordDataStr'
+			, title: '推荐时间'
+        }, {
+			field : 'recordName',
+			title : '套餐名',
+		},  {
+			field : 'recordKay',
+			title : '推荐摄入能量（千卡/天）',
+		},{
+            title: '状态', templet: function (d) {
+                var strs = [
+                    '<span class="layui-badge layui-badge-green">执行中</span>',
+                    '<span class="layui-badge layui-badge-red">过期</span>',
+                    '<span class="layui-badge layui-badge-red">挂起</span>'
+                ];
+                if(d.recordType==1 || d.recordType=="1"){
+                    return strs[0];
+                }else if(d.recordType==2 || d.recordType=="2"){
+                    return strs[1];
+                }else{
+                	return strs[2];
+                }
+            }, align: 'recordType' 
+        },  {
+			field : 'recordMode',
+			title : '推荐方式',
+		},{
+			fixed : 'right',
+			title : '操作',
+			align : 'center',
+			toolbar : '#barDemo'
+			
+		} ] ],
+		id : 'tableBank',
+		page : true,
+	});
+
+
+
+  
+	//分析报告
+    table.render({
+   elem: '#analyze'
+   ,	url : '/system/diary/selectfoodanalyze?usercode='+usercode
+   ,method:'post'
+	   ,height: 430
+   ,cols: [ [
+     /* {field:'foodguideId', title:'ID',hide:true} */
+      {type:'numbers'}
+     ,{field:'endtime', title:'报告生成日期'}
+     
+     ,{title:'报告分析来源',
+    	 templet : function(d) {
+			 
+				return d.starttime+"~"+d.endtime
+			}
+     }
+     ,{
+			fixed : 'right',
+			title : '操作',
+			align : 'center',
+			toolbar : '#barDemo1'
+		}
+   ] ]
+   ,id : 'foodanalyze'
+   ,page: true
+ });
+ 
+
+    table.on('tool(demonalyze)', function(obj) { //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
+		var data = obj.data; //获得当前行数据
+		var layEvent = obj.event; //获得 lay-event 对应的值
+		var tr = obj.tr; //获得当前行 tr 的DOM对象
+		
+		 if (layEvent === 'edit') {
+			window.location.href="/manage/usertosee/foodanalyze?id="+data.wid;
+		}
+	});
+    
+
+  
+  
+});
+
+
+</script>
+</html>

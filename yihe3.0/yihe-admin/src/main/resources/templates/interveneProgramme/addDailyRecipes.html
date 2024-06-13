@@ -1,0 +1,876 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, maximum-scale=1">
+<title>每日食谱</title>
+<link rel="stylesheet" th:href="@{/assets/libs/layui/css/layui.css}" />
+<link rel="stylesheet" th:href="@{/assets/module/admin.css}" />
+<style type="text/css">
+</style>
+</head>
+<body style="padding: 15px">
+	<div th:if="${layer!='1'}" style="background-color:#fff;text-align: center; padding: 20px;">
+		<a id="fanhui">< 返回</a>
+	</div>
+	<form class="layui-form" action="" style="padding: 30px;background-color:#fff;">
+	<input id="uFoodErecipeId" name="uFoodErecipeId" type="hidden" th:value="${uFoodErecipeId}">
+		<h1 class="site-h1"
+			style="text-align: center; border-bottom: 1px solid #eee; padding-bottom: 10px;">每日食谱</h1>
+		<div class="layui-form-item">
+			<div class="layui-inline">
+				<label class="layui-form-label">能量等级：</label>
+				<div class="layui-input-block">
+					<select name="efLevel" id="eLevel" required  th:if="${uFoodErecipeId!=0}" disabled    lay-filter="eLevel" lay-verify="" lay-search>
+						<option th:each="list:${foodFenergy}"   th:value="${list}">[[${list}]]</option>
+					</select>
+					<select name="efLevel" id="eLevel" required  th:if="${uFoodErecipeId==0}"     lay-filter="eLevel" lay-verify="" lay-search>
+						<option th:each="list:${foodFenergy}"   th:value="${list}">[[${list}]]</option>
+					</select>
+				</div>
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<div class="layui-inline">
+				<label class="layui-form-label">适用范围</label>
+				<div class="layui-input-block">
+					<input required th:each="list,status:${dCategory}" type="checkbox" class="diseaseCode" id="diseaseCode"
+						th:name="diseaseCode+${list.diseaseCode}"
+						th:title="${list.diseaseName}" lay-filter="diseaseCode" th:checked="${{status.index==0&&uFoodErecipeId==0}}">
+				</div>
+			</div>
+		</div>
+
+		<div class="site-title">
+			<fieldset>
+				<legend>
+					<a name="use">早餐</a>
+				</legend>
+
+				<div class="layui-row layui-col-space10" id="zaoDivInfo">
+<div th:each="list,Stat:${bookInfo}" class="layui-col-md4">
+							<text th:id="zaoType+${Stat.index}"></text>
+						<div class="layui-inline"  style="padding: 0px 10px;">
+							<div style="width: 200px" class="xm-select-demo"
+								th:id="zao+${Stat.index}"></div>
+						</div>
+						<text th:id="zaoNum+${Stat.index}"></text>
+					</div>
+				</div>
+			</fieldset>
+		</div>
+
+
+		<div class="site-title">
+			<fieldset>
+				<legend>
+					<a name="use">午餐</a>
+				</legend>
+
+				<div class="layui-row layui-col-space10"  id="wuDivInfo">
+					<div th:each="list,Stat:${wubookInfo}" class="layui-col-md4">
+					<text th:id="wuType+${Stat.index}"></text>
+						<div class="layui-inline"  style="padding: 0px 10px;">
+							<div style="width: 200px" class="xm-select-demo"
+								th:id="wu+${Stat.index}"></div>
+						</div>
+						<text th:id="wuNum+${Stat.index}"></text>
+					</div>
+				</div>
+
+			</fieldset>
+		</div>
+
+
+
+		<div class="site-title">
+			<fieldset>
+				<legend>
+					<a name="use">晚餐</a>
+				</legend>
+
+				<div class="layui-row layui-col-space10"  id="wanDivInfo">
+					<div th:each="list,Stat:${wanbookInfo}" class="layui-col-md4">
+					<text th:id="wanType+${Stat.index}"></text>
+						<div class="layui-inline"  style="padding: 0px 10px;">
+							<div style="width: 200px" class="xm-select-demo"
+								th:id="wan+${Stat.index}"></div>
+						</div>
+						<text th:id="wanNum+${Stat.index}"></text>
+					</div>
+				</div>
+
+			</fieldset>
+		</div>
+
+
+
+		<div class="site-title" style="padding-bottom: 60px;">
+			<fieldset>
+				<legend>
+					<a name="use">加餐</a>
+				</legend>
+
+			 <div class="layui-row layui-col-space10"  id="jiaDivInfo">
+					<div th:each="list,Stat:${jiabookInfo}" class="layui-col-md4">
+					<text th:id="jiaType+${Stat.index}"></text>
+						<div class="layui-inline" style="padding: 0px 10px;">
+							<div style="width: 200px" class="xm-select-demo"
+								th:id="jia+${Stat.index}"></div>
+						</div>
+						<text th:id="jiaNum+${Stat.index}"></text>
+					</div>
+				</div>
+			</fieldset>
+		</div>
+
+
+
+		<div class="layui-form-item" style="position: fixed;bottom: -14px;width: 100%;text-align: center;padding: 15px 0px 20px 0px;background-color: #fff;margin-left: -30px;">
+			<div class="">
+				<div class="layui-btn layui-btn-primary"    id="quxiaoXJ">取消</div>
+				<button class="layui-btn" lay-submit lay-filter="formDemo">保存并退出</button>
+				<button class="layui-btn"  th:if="${uFoodErecipeId==0}" lay-submit lay-filter="formDemo2">保存并继续</button>
+			</div>
+		</div>
+	</form>
+
+</body>
+<script type="text/javascript" th:src="@{/assets/libs/layui/layui.js}"></script>
+<script type="text/javascript" th:src="@{/assets/js/common.js}"></script>
+<script type="text/javascript" th:src="@{/assets/js/xm-select.js}"></script>
+<script th:inline="javascript">
+
+
+ 
+	layui.use([ 'layer', 'form', 'table', 'laypage', 'treeSelect', 'admin',
+			'element', 'laydate', 'index', 'notice' ], function() {
+		var $ = layui.jquery;
+		var layer = layui.layer;
+		var form = layui.form;
+		var table = layui.table;
+		var laypage = layui.laypage;
+		var element = layui.element;
+		var admin = layui.admin;
+		var form = layui.form;
+		var treeSelect = layui.treeSelect;
+		var laydate = layui.laydate;
+		var notice = layui.notice;
+		
+		var layerInfo = [[${layer}]]
+		console.log("layerInfo",layerInfo)
+		var deptIds = [[${bookInfo}]]
+		var wudeptIds = [[${wubookInfo}]]
+		var wandeptIds = [[${wanbookInfo}]]
+		var jiadeptIds = [[${jiabookInfo}]]
+		console.log("deptIds",deptIds)
+		console.log("wudeptIds",wudeptIds)
+		console.log("wandeptIds",wandeptIds)
+		console.log("jiadeptIds",jiadeptIds)
+		
+		
+		
+		
+		var yhfoodcategory;
+		$.ajax({
+					type:"post",
+					url:"/YhFoodSrecipeRecordContriller/findYhFoodCategory",
+					data:{},
+					async:false, 
+					success:function(data){
+						 
+						 console.log(data)
+						yhfoodcategory= data.data;
+					} 
+				});
+		/*  $.each(deptIds,function (a,b) {
+			 var html='<div class="layui-col-md4">'+
+			' <div class="layui-inline">'+
+			'<div style="width: 200px" class="xm-select-demo" th:id="zao'+a+'"></div>'+
+			 '</div>'+
+			 '</div>';
+				$("#zaoDivInfo").append("Some appended text."); 
+		 })
+	 */
+
+		 
+	 $("#quxiaoXJ").click(function() {
+		 var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+		 if(null!=index){
+			 parent.layer.close(index);
+		 }else{
+
+			 if([[${yhType}]]==1){
+				 window.location.href="/manage/content/foodl?fanhui="+1;
+			 }else{
+				 window.location.href="/manage/intervene/programme?fanhui="+1;
+			 }
+		 }
+
+
+
+		})
+  
+			function xmselect(flevel){
+				var diseaseCodeStr=""
+				$.each( $(".diseaseCode:checked"), function(index, value) {
+					console.log(index + ':-------------------- ' + value.name);
+					var str=value.name;
+
+					var substring = str.substring(str.length - 1, str.length);
+					diseaseCodeStr=diseaseCodeStr+substring+";";
+				});
+			
+				 $.each(deptIds,function (a,b) {
+					var zaoInfo=	b.split("_");
+						
+						$.each(yhfoodcategory,function (c,d) {
+							if(d.id==zaoInfo[0]){
+								$("#zaoType"+a).html(d.foodCategoryName+" ")
+							}
+						})
+						
+						var idInfo='#zao'+a;
+						  xmSelect.render({
+							el: idInfo,
+							language: 'zn',
+							layVerify: 'required',
+							layVerType: 'msg',
+							radio: true,
+							paging: true,
+							pageSize: 5,
+							//配置搜索
+							filterable: true,
+							//配置远程分页
+							paging: true,
+							pageRemote: true,
+							//数据处理
+							remoteMethod: function(val, cb, show, pageIndex){
+								//val: 搜索框的内容, 不开启搜索默认为空, cb: 回调函数, show: 当前下拉框是否展开, pageIndex: 当前第几页
+								//这里的axios类似于ajax
+								$.ajax({
+			               type: "get",
+				              url: "/YhFoodSrecipeRecordContriller/findFoodTypeInfo",
+								data :{
+									"page": pageIndex,
+									"index":a,
+									"val":val,
+									"ftype":1,
+									"flevel":flevel,
+									"did":diseaseCodeStr
+								},
+			               success: function(data){
+			             	  console.log("renderingRecipes",data.data.data)
+			             	   cb(data.data.data, data.data.count)
+			               }   	
+			          });
+						
+								 
+							},	on: function(data){
+								//arr:  当前多选已选中的数据
+								var arr = data.arr;
+								//change, 此次选择变化的数据,数组
+								var change = data.change;
+								//isAdd, 此次操作是新增还是删除
+								var isAdd = data.isAdd;
+								var item = change[0];
+								console.log("indata",data)
+								console.log("wuNum0",idInfo)
+								console.log("item",item)
+
+
+								if(change.length>0){
+									$.ajax({
+							               type: "get",
+								              url: "/YhFoodSrecipeRecordContriller/findFoodByid",
+												data :{
+													"foodid": item.value,
+													"num":zaoInfo[1]
+
+												},
+							               success: function(data){
+
+												$("#zaoNum"+a).html(" ("+data.data+"克)")
+
+
+							               }   	
+							          });
+								}
+						
+							
+								
+								//可以return一个数组, 代表想选中的数据
+								//return []
+							},
+						})
+				 })
+				 
+				  $.each(wudeptIds,function (a,b) {
+					  var wuInfo=	b.split("_");
+					  console.log("typeid",wuInfo[0])
+						var idInfo='#wu'+a;
+						
+						$.each(yhfoodcategory,function (c,d) {
+							console.log("foodCategoryId",d.id)
+							console.log("foodCategoryId==",d.id==wuInfo[0])
+							
+							if(d.id==wuInfo[0]){
+								$("#wuType"+a).html(d.foodCategoryName+" ")
+								return false; 
+
+							}
+						})
+					 
+						  xmSelect.render({
+							el: idInfo,
+							language: 'zn',
+							layVerify: 'required',
+							layVerType: 'msg',
+							radio: true,
+							paging: true,
+							pageSize: 5,
+							//配置搜索
+							filterable: true,
+							//配置远程分页
+							paging: true,
+							pageRemote: true,
+							//数据处理
+							remoteMethod: function(val, cb, show, pageIndex){
+								//val: 搜索框的内容, 不开启搜索默认为空, cb: 回调函数, show: 当前下拉框是否展开, pageIndex: 当前第几页
+								//这里的axios类似于ajax
+								$.ajax({
+			               type: "get",
+				              url: "/YhFoodSrecipeRecordContriller/findFoodTypeInfo",
+								data :{
+									"page": pageIndex,
+									"index":a,
+									"val":val,
+									"ftype":2,
+									"flevel":flevel
+								},
+			               success: function(data){
+			             	  console.log("renderingRecipes",data.data.data)
+			             	   cb(data.data.data, data.data.count)
+			               }   	
+			          });
+						
+								 
+							},
+							on: function(data){
+								//arr:  当前多选已选中的数据
+								var arr = data.arr;
+								//change, 此次选择变化的数据,数组
+								var change = data.change;
+								//isAdd, 此次操作是新增还是删除
+								var isAdd = data.isAdd;
+								var item = change[0];
+								console.log("indata",data)
+								console.log("wuNum0",idInfo)
+								console.log("item",item)
+								if(change.length>0){
+									$.ajax({
+							               type: "get",
+								              url: "/YhFoodSrecipeRecordContriller/findFoodByid",
+												data :{
+													"foodid": item.value,
+													"num":wuInfo[1]
+												},
+							               success: function(data){
+							            		$("#wuNum"+a).html(" ("+data.data+"克)")
+							               }   	
+							          });
+								}
+						
+							
+								
+								//可以return一个数组, 代表想选中的数据
+								//return []
+							},
+						})
+				 })
+				 
+				 
+				 	 
+				  $.each(wandeptIds,function (a,b) {
+					  var wanInfo=	b.split("_");
+						
+						$.each(yhfoodcategory,function (c,d) {
+							if(d.id==wanInfo[0]){
+								$("#wanType"+a).html(d.foodCategoryName+" ")
+							}
+						})
+
+						var idInfo='#wan'+a;
+						 xmSelect.render({
+							el: idInfo,
+							language: 'zn',
+							layVerify: 'required',
+							layVerType: 'msg',
+							radio: true,
+							paging: true,
+							pageSize: 5,
+							//配置搜索
+							filterable: true,
+							//配置远程分页
+							paging: true,
+							pageRemote: true,
+							//数据处理
+							remoteMethod: function(val, cb, show, pageIndex){
+								//val: 搜索框的内容, 不开启搜索默认为空, cb: 回调函数, show: 当前下拉框是否展开, pageIndex: 当前第几页
+								//这里的axios类似于ajax
+								$.ajax({
+			               type: "get",
+				              url: "/YhFoodSrecipeRecordContriller/findFoodTypeInfo",
+								data :{
+									"page": pageIndex,
+									"index":a,
+									"val":val,
+									"ftype":3,
+									"flevel":flevel,
+									"did":diseaseCodeStr
+								},
+			               success: function(data){
+			             	  console.log("renderingRecipes",data.data.data)
+			             	   cb(data.data.data, data.data.count)
+			               }   	
+			          });
+						
+								 
+							},	on: function(data){
+								//arr:  当前多选已选中的数据
+								var arr = data.arr;
+								//change, 此次选择变化的数据,数组
+								var change = data.change;
+								//isAdd, 此次操作是新增还是删除
+								var isAdd = data.isAdd;
+								var item = change[0];
+								console.log("indata",data)
+								console.log("wuNum0",idInfo)
+								console.log("item",item)
+
+								if(change.length>0){
+									$.ajax({
+							               type: "get",
+								              url: "/YhFoodSrecipeRecordContriller/findFoodByid",
+												data :{
+													"foodid": item.value,
+													"num":wanInfo[1],
+
+												},
+							               success: function(data){
+
+
+												   $("#wanNum"+a).html(" ("+data.data+"克)")
+
+							               }   	
+							          });
+								}
+						
+							
+								
+								//可以return一个数组, 代表想选中的数据
+								//return []
+							},
+						})
+				 })
+				 
+				 
+				 
+				 	 
+				  $.each(jiadeptIds,function (a,b) {
+					  var jiaInfo=	b.split("_");
+						
+						$.each(yhfoodcategory,function (c,d) {
+							if(d.id==jiaInfo[0]){
+								$("#jiaType"+a).html(d.foodCategoryName+" ")
+							}
+						})
+						
+						var idInfo='#jia'+a;
+						 xmSelect.render({
+							el: idInfo,
+							language: 'zn',
+							layVerify: 'required',
+							layVerType: 'msg',
+							radio: true,
+							paging: true,
+							pageSize: 5,
+							//配置搜索
+							filterable: true,
+							//配置远程分页
+							paging: true,
+							pageRemote: true,
+							//数据处理
+							remoteMethod: function(val, cb, show, pageIndex){
+								//val: 搜索框的内容, 不开启搜索默认为空, cb: 回调函数, show: 当前下拉框是否展开, pageIndex: 当前第几页
+								//这里的axios类似于ajax
+								$.ajax({
+			               type: "get",
+				              url: "/YhFoodSrecipeRecordContriller/findFoodTypeInfo",
+								data :{
+									"page": pageIndex,
+									"index":a,
+									"val":val,
+									"ftype":4,
+									"flevel":flevel
+								},
+			               success: function(data){
+			             	  console.log("renderingRecipes",data.data.data)
+			             	   cb(data.data.data, data.data.count)
+			               }   	
+			          });
+						
+								 
+							},	on: function(data){
+								//arr:  当前多选已选中的数据
+								var arr = data.arr;
+								//change, 此次选择变化的数据,数组
+								var change = data.change;
+								//isAdd, 此次操作是新增还是删除
+								var isAdd = data.isAdd;
+								var item = change[0];
+								console.log("indata",data)
+								console.log("wuNum0",idInfo)
+								console.log("item",item)
+								if(change.length>0){
+									$.ajax({
+							               type: "get",
+								              url: "/YhFoodSrecipeRecordContriller/findFoodByid",
+												data :{
+													"foodid": item.value,
+													"num":jiaInfo[1]
+												},
+							               success: function(data){
+							            		$("#jiaNum"+a).html(" ("+data.data+"克)")
+							               }   	
+							          });
+								}
+						
+							
+								
+								//可以return一个数组, 代表想选中的数据
+								//return []
+							},
+						})
+				 })
+				 
+			 
+
+			}
+
+
+		form.on('checkbox(diseaseCode)', function(data){
+			console.log(data.elem.name)
+			console.log(data.elem.checked)
+
+			flevel=[[${flevel}]]
+			xmselect(flevel);
+
+
+		})
+
+
+		//eLevel
+			var flevel=[[${flevel}]]
+			$("#eLevel").find("option[value="+flevel+"]").prop("selected",true);
+			form.render();
+			xmselect(flevel);
+			form.on('select(eLevel)', function(data){
+				console.log(data.value)
+				window.location.href="/manage/intervene/addDailyRecipes?flevel="+data.value;
+			})
+			
+		$("#fanhui").click(function() {
+			console.log([[${yhType}]])
+			if([[${yhType}]]==1){
+				window.location.href="/manage/content/foodl?fanhui="+1; 
+			}else{
+				window.location.href="/manage/intervene/programme?fanhui="+1;
+			}
+			
+		})
+
+			
+			form.on('submit(formDemo2)', function (data) {
+				console.log(JSON.stringify(data.field))
+				 
+				var _num = $(".diseaseCode:checked").length;//显示确定选择按钮
+				console.log("显示确定选择按钮",_num)
+				if(_num==0){
+					 layer.msg("至少选择一个使用范围");
+				}
+				
+              var flag=true;
+              var selectArrzao = xmSelect.batch(/zao.*/, 'getValue', 'value');
+              data.field.selectArrzao=selectArrzao;
+              var selectArrwu = xmSelect.batch(/wu.*/, 'getValue', 'value');
+              data.field.selectArrwu=selectArrwu;
+              var selectArrwan = xmSelect.batch(/wan.*/, 'getValue', 'value');
+              data.field.selectArrwan=selectArrwan;
+              var selectArrjia = xmSelect.batch(/jia.*/, 'getValue', 'value');
+              data.field.selectArrjia=selectArrjia;
+               $.each(selectArrzao,function (a,b) { 
+						if(b.length==0){
+							   layer.msg("早餐第"+(a+1)+"个未选择");
+							   flag=false;
+							return false;
+						} 
+            	   
+               })
+                $.each(selectArrwu,function (a,b) { 
+						if(b.length==0){
+							   layer.msg("午餐第"+(a+1)+"个未选择");
+							   flag=false;
+							return false;
+						} 
+            	   
+               })
+                $.each(selectArrwan,function (a,b) { 
+						if(b.length==0){
+							   layer.msg("晚餐第"+(a+1)+"个未选择");
+							   flag=false;
+							return false;
+						} 
+            	   
+               })
+                $.each(selectArrjia,function (a,b) { 
+						if(b.length==0){
+							   layer.msg("加餐第"+(a+1)+"个未选择");
+							   flag=false;
+							return false;
+						} 
+            	   
+               })
+           	console.log(JSON.stringify(selectArrzao, null, 2))
+           	console.log(JSON.stringify(selectArrwu, null, 2))
+           	console.log(JSON.stringify(selectArrwan, null, 2))
+           	console.log(JSON.stringify(selectArrjia, null, 2))
+           	if(flag){
+           	 console.log(JSON.stringify(data.field));
+           	var index = layer.load();
+           		layer.load();
+           	 $.ajax({
+					type:"post",
+					url:"/YhFoodSrecipeRecordContriller/renderingRecipes",
+					contentType:'application/json;charset=UTF-8',	//发送信息至服务器时内容编码类型
+					traditional:true,	//传统的方式来序列化数据
+					data:JSON.stringify(data.field),
+					success:function(data){
+						if(uFoodErecipeId!=0){
+							 layer.msg("修改成功");
+						}else{
+							 layer.msg("添加成功");
+						}
+						
+						 layer.closeAll('loading');
+						
+						return false;
+					} 
+				});  
+           	}
+           
+  return false;
+})
+		
+			form.on('submit(formDemo)', function (data) {
+				 
+				 
+				var _num = $(".diseaseCode:checked").length;//显示确定选择按钮
+				console.log("显示确定选择按钮",_num)
+				if(_num==0){
+					alert("至少选择一个使用范围");
+				}
+				
+              var flag=true;
+              var selectArrzao = xmSelect.batch(/zao.*/, 'getValue', 'value');
+              data.field.selectArrzao=selectArrzao;
+              var selectArrwu = xmSelect.batch(/wu.*/, 'getValue', 'value');
+              data.field.selectArrwu=selectArrwu;
+              var selectArrwan = xmSelect.batch(/wan.*/, 'getValue', 'value');
+              data.field.selectArrwan=selectArrwan;
+              var selectArrjia = xmSelect.batch(/jia.*/, 'getValue', 'value');
+              data.field.selectArrjia=selectArrjia;
+               $.each(selectArrzao,function (a,b) { 
+						if(b.length==0){
+							   layer.msg("早餐第"+(a+1)+"个未选择");
+							   flag=false;
+							return false;
+						} 
+            	   
+               })
+                $.each(selectArrwu,function (a,b) { 
+						if(b.length==0){
+							   layer.msg("午餐第"+(a+1)+"个未选择");
+							   flag=false;
+							return false;
+						} 
+            	   
+               })
+                $.each(selectArrwan,function (a,b) { 
+						if(b.length==0){
+							   layer.msg("晚餐第"+(a+1)+"个未选择");
+							   flag=false;
+							return false;
+						} 
+            	   
+               })
+                $.each(selectArrjia,function (a,b) { 
+						if(b.length==0){
+							   layer.msg("加餐第"+(a+1)+"个未选择");
+							   flag=false;
+							return false;
+						} 
+            	   
+               })
+           	console.log(JSON.stringify(selectArrzao, null, 2))
+           	console.log(JSON.stringify(selectArrwu, null, 2))
+           	console.log(JSON.stringify(selectArrwan, null, 2))
+           	console.log(JSON.stringify(selectArrjia, null, 2))
+           	if(flag){
+           	 console.log(JSON.stringify(data.field));
+           		console.log("执行提交")
+           			var index = layer.load();
+           	 $.ajax({
+					type:"post",
+					url:"/YhFoodSrecipeRecordContriller/renderingRecipes",
+					contentType:'application/json;charset=UTF-8',	//发送信息至服务器时内容编码类型
+					traditional:true,	//传统的方式来序列化数据
+					data:JSON.stringify(data.field),
+					success:function(data){
+						
+						if(uFoodErecipeId!=0){
+							 layer.msg("修改成功");
+						}else{
+							 layer.msg("添加成功");
+						}
+							 
+							if(data.data==1){
+								if(layerInfo=='1'){
+									 var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+										parent.layer.close(index);
+								 }else{
+									 window.location.href="/manage/content/foodl?fanhui="+1; 
+								 }
+							}else{
+								if(layerInfo=='1'){
+									 var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+										parent.layer.close(index);
+								 }else{
+									 window.location.href="/manage/intervene/programme?fanhui="+1;
+								 }
+							}
+							
+							 return
+					
+					
+						return false;
+					} 
+				});  
+           	}
+           
+  return false;
+})
+
+		
+		//重新渲染表单
+		
+		form.on('select(ccid)', function(data){
+			console.log("进入select(ccid)")
+		})
+
+		$("#wucan2").click(function() {
+			console.log("进入wucan2")
+		})
+		
+		
+		
+	
+		
+	function zaoFoodInfo(){
+		console.log("进入")
+		   $.ajax({
+               type: "post",
+	              url: "/YhFoodSrecipeRecordContriller/renderingRecipes",
+					data :{"flevel":1200},
+               success: function(data){
+             	  console.log("renderingRecipes",data)
+             	   for (var i = 0; i < data.data.length; i++) {
+             		   //console.log("for",data.data[i])
+             		   for(var j = 0; j < data.data[i].length; j++){
+             			  $("#zao"+i).append("<option value="+data.data[i][j].fCId+">"+data.data[i][j].fCName+"</option>"); 
+             			    //console.log("for2",data.data[i][j].fCName)
+             		   }
+             		//  
+		       			}
+             	  form.render();//表单重新渲染，要不然添加完显示不出来新的option
+               }   	
+          });
+	}
+			
+			
+			 var uFoodErecipeId = $("#uFoodErecipeId").val();
+				if(uFoodErecipeId!=0){
+					var index = layer.load();
+					$.ajax({
+						type : "post",
+						url : "/YhFoodSrecipeRecordContriller/findYhFoodUserScrecipeWebNewBykey",
+						dataType : "json",
+						data : {
+							"uFoodErecipeId" : uFoodErecipeId
+						},
+						success : function(data) {
+							console.log("bykey",data)
+							$("#eLevel").val(data.data.eLevel)
+						var diseaseidlist=	data.data.diseaseid.split(";");
+							$.each(diseaseidlist, function(index, value) {
+						        console.log(index + ': ' + value);
+						        if(""!=value){
+									$("input[name='diseaseCode"+value+"']").prop("checked", true);
+								}
+
+						    });
+							 
+							$.each(data.data.zao, function(index, value) {
+						        console.log(index + ': ' + value);
+						        var demo2 = xmSelect.get('#zao'+index, true);
+						        demo2.setValue([{name: value.fCName, value: value.fCId}])
+						        	$("#zaoNum"+index).html(" ("+value.recipesNumber+"克)")
+						    });
+							$.each(data.data.wu, function(index, value) {
+						        console.log(index + ': ' + value);
+						        var demo2 = xmSelect.get('#wu'+index, true);
+						        demo2.setValue([{name: value.fCName, value: value.fCId}])
+						        $("#wuNum"+index).html(" ("+value.recipesNumber+"克)")
+						    });
+							$.each(data.data.wan, function(index, value) {
+						        console.log(index + ': ' + value);
+						        var demo2 = xmSelect.get('#wan'+index, true);
+						        demo2.setValue([{name: value.fCName, value: value.fCId}])
+						        $("#wanNum"+index).html(" ("+value.recipesNumber+"克)")
+						    });
+							$.each(data.data.jia, function(index, value) {
+						        console.log(index + ': ' + value);
+						        var demo2 = xmSelect.get('#jia'+index, true);
+						        demo2.setValue([{name: value.fCName, value: value.fCId}])
+						        $("#jiaNum"+index).html(" ("+value.recipesNumber+"克)")
+						    });
+							 
+						/* 	var demo2 = xmSelect.get('#zao0', true);
+							demo2.setValue([ 96 ]) */
+							
+							layer.closeAll('loading');
+							form.render();
+
+						}
+						})
+				}
+				
+	
+	//zaoFoodInfo();
+		
+		
+	});
+</script>
+</html>

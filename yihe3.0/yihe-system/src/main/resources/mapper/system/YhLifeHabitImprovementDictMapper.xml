@@ -1,0 +1,295 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yihe.system.mapper.YhLifeHabitImprovementDictMapper" >
+  <resultMap id="BaseResultMap" type="com.yihe.system.domain.YhLifeHabitImprovementDict" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="title" property="title" jdbcType="VARCHAR" />
+    <result column="user_code" property="userCode" jdbcType="VARCHAR" />
+    <result column="risk" property="risk" jdbcType="VARCHAR" />
+    <result column="assess_scores" property="assessScores" jdbcType="INTEGER" />
+    <result column="question_id" property="questionId" jdbcType="INTEGER" />
+    <result column="analyzename" property="analyzename" jdbcType="VARCHAR" />
+    <result column="result" property="result" jdbcType="VARCHAR" />
+    <result column="Dict_time" property="dictTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, title, user_code, risk, assess_scores, question_id, analyzename, result, Dict_time
+  </sql>
+ 
+ <select id="ShowPersonageHabit" resultMap="BaseResultMap" parameterType="map">
+   select * from  yh_life_habit_improvement_dict
+	<where>
+  		user_code=#{userCode,jdbcType=VARCHAR}
+  			<if test="result!=null and result !=''">
+  			 and result=#{result}
+  			</if>
+  			<if test="dictTime!=null and dictTime !=''">
+  			and Dict_time between #{dictTime} and #{dictTime1}
+  			</if>
+  	</where>
+	order by Dict_time desc LIMIT  #{page},#{limit}
+  </select>
+  
+  <select id="ShowPersonageHabitCount" resultType="int" parameterType="map">
+   select count(*) from  yh_life_habit_improvement_dict
+	<where>
+  		user_code=#{userCode,jdbcType=VARCHAR}
+  			<if test="result!=null and result !=''">
+  			 and result=#{result}
+  			</if>
+  			<if test="dictTime!=null and dictTime !=''">
+  			and Dict_time between #{dictTime} and #{dictTime1}
+  			</if>
+  	</where>
+  </select>
+  
+  
+  
+  <select id="ShowHabitrecord"  resultType="com.yihe.system.domain.YhLifeHabitImprovementDictVojo" parameterType="map">
+  	SELECT a.birth_date AS birthDate,a.user_code AS usercode,a.user_name AS username,a.name,
+ CASE
+  WHEN a.gender = 1 
+              THEN '男' 
+              ELSE '女' 
+            END AS sex,
+  c.analyzename AS analyzename,c.assess_scores AS assessScores,c.result AS result,c.Dict_time AS dictTime   FROM yh_user_reginfo AS a
+ INNER JOIN yh_user_make_card AS b
+ ON a.user_code=b.user_code
+ INNER JOIN yh_life_habit_improvement_dict AS c
+ ON a.user_code=c.user_code
+ where b.doctor=(SELECT id FROM yh_user_admin_info WHERE user_code=#{userCode,jdbcType=VARCHAR})
+ <if test="result!=null and result !=''">
+  			 and c.result=#{result}
+  			</if>
+  			<if test="name!=null and name !=''">
+  			 and a.name LIKE CONCAT('%',#{name},'%')
+  			</if>
+  			<if test="userName!=null and userName !=''">
+  			 and a.user_name LIKE CONCAT('%',#{userName},'%')
+  			</if>
+  			<if test="dictTime!=null and dictTime !=''">
+  			and c.Dict_time between #{dictTime} and #{dictTime1}
+  			</if>
+ order by c.Dict_time desc LIMIT  #{page},#{limit}
+  </select>
+  
+   <select id="ShowHabitrecordCount"  resultType="int" parameterType="map">
+  	SELECT Count(*)    FROM yh_user_reginfo AS a
+ INNER JOIN yh_user_make_card AS b
+ ON a.user_code=b.user_code
+ INNER JOIN yh_life_habit_improvement_dict AS c
+ ON a.user_code=c.user_code
+ where b.doctor=(SELECT id FROM yh_user_admin_info WHERE user_code=#{userCode,jdbcType=VARCHAR})
+ <if test="result!=null and result !=''">
+  			 and c.result=#{result}
+  			</if>
+  			<if test="name!=null and name !=''">
+  			 and a.name LIKE CONCAT('%',#{name},'%')
+  			</if>
+  			<if test="userName!=null and userName !=''">
+  			 and a.user_name LIKE CONCAT('%',#{userName},'%')
+  			</if>
+  			<if test="dictTime!=null and dictTime !=''">
+  			and c.Dict_time between #{dictTime} and #{dictTime1}
+  			</if>
+  </select>
+  
+  
+          
+  <select id="ShowByHabitCode" resultType="int" parameterType="java.lang.String">
+  	select count(*) from yh_life_habit_improvement_dict where user_code=#{userCode,jdbcType=VARCHAR}
+  </select>
+  
+   <select id="findHabitDictNewInfo" resultType="java.lang.String" parameterType="java.lang.String">
+  SELECT Dict_Time FROM 
+`yh_life_habit_improvement_dict`
+ WHERE user_code=#{usercode}
+ ORDER BY Dict_Time DESC LIMIT 1
+  </select>
+  
+  
+  
+  <select id="sleepbyImprovement" resultType="com.yihe.system.domain.YhLifeHabitImprovementDictVojo" parameterType="map">
+  
+  select * from	(select * from (SELECT a.birth_date AS birthDate,a.user_code AS usercode,a.user_name AS username,a.name,
+ CASE
+  WHEN a.gender = 1 
+              THEN '男' 
+              ELSE '女' 
+            END AS sex,
+  c.analyzename AS analyzename,c.assess_scores AS assessScores,c.result AS result,c.Dict_time AS dictTime,b.Org_Id as orgCode   FROM yh_user_reginfo AS a
+ INNER JOIN yh_user_make_card AS b
+ ON a.user_code=b.user_code
+ INNER JOIN yh_life_habit_improvement_dict AS c
+ ON a.user_code=c.user_code where b.doctor=(SELECT id FROM yh_user_admin_info WHERE user_code=#{userCode,jdbcType=VARCHAR}) order by dictTime desc) w   group by usercode   order by dictTime desc)d 
+ <where>
+  			<if test="result!=null and result !=''">
+  			 and d.result=#{result}
+  			</if>
+  			<if test="name!=null and name !=''">
+  			 and d.name LIKE CONCAT('%',#{name},'%')
+  			</if>
+  			<if test="orgCode!=null and orgCode !=''">
+  			 and d.orgcode LIKE CONCAT('%',#{orgCode},'%')
+  			</if>
+  	</where>
+  	LIMIT  #{page},#{limit}
+  </select>
+  
+  
+  <select id="sleepbyImprovementCount" resultType="com.yihe.system.domain.YhLifeHabitImprovementDictVojo" parameterType="map">
+    
+  select * from	(select * from (SELECT a.birth_date AS birthDate,a.user_code AS usercode,a.user_name AS username,a.name,
+ CASE
+  WHEN a.gender = 1 
+              THEN '男' 
+              ELSE '女' 
+            END AS sex,
+  c.analyzename AS analyzename,c.assess_scores AS assessScores,c.result AS result,c.Dict_time AS dictTime,b.Org_Id as orgCode  FROM yh_user_reginfo AS a
+ INNER JOIN yh_user_make_card AS b
+ ON a.user_code=b.user_code
+ INNER JOIN yh_life_habit_improvement_dict AS c
+ ON a.user_code=c.user_code where b.doctor=(SELECT id FROM yh_user_admin_info WHERE user_code=#{userCode,jdbcType=VARCHAR}) ) w   group by usercode   order by dictTime desc)d 
+ <where>
+  			<if test="result!=null and result !=''">
+  			 and d.result=#{result}
+  			</if>
+  			<if test="name!=null and name !=''">
+  			 and d.name LIKE CONCAT('%',#{name},'%')
+  			</if>
+  			<if test="orgCode!=null and orgCode !=''">
+  			 and d.orgcode LIKE CONCAT('%',#{orgCode},'%')
+  			</if>
+  	</where>
+  </select>
+  
+  
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from yh_life_habit_improvement_dict
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from yh_life_habit_improvement_dict
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.yihe.system.domain.YhLifeHabitImprovementDict" >
+    insert into yh_life_habit_improvement_dict (id, title, user_code, 
+      risk, assess_scores, question_id, 
+      analyzename, result, Dict_time
+      )
+    values (#{id,jdbcType=INTEGER}, #{title,jdbcType=VARCHAR}, #{userCode,jdbcType=VARCHAR}, 
+      #{risk,jdbcType=VARCHAR}, #{assessScores,jdbcType=INTEGER}, #{questionId,jdbcType=INTEGER}, 
+      #{analyzename,jdbcType=VARCHAR}, #{result,jdbcType=VARCHAR}, #{dictTime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.yihe.system.domain.YhLifeHabitImprovementDict" >
+    insert into yh_life_habit_improvement_dict
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="title != null" >
+        title,
+      </if>
+      <if test="userCode != null" >
+        user_code,
+      </if>
+      <if test="risk != null" >
+        risk,
+      </if>
+      <if test="assessScores != null" >
+        assess_scores,
+      </if>
+      <if test="questionId != null" >
+        question_id,
+      </if>
+      <if test="analyzename != null" >
+        analyzename,
+      </if>
+      <if test="result != null" >
+        result,
+      </if>
+      <if test="dictTime != null" >
+        Dict_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="title != null" >
+        #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="userCode != null" >
+        #{userCode,jdbcType=VARCHAR},
+      </if>
+      <if test="risk != null" >
+        #{risk,jdbcType=VARCHAR},
+      </if>
+      <if test="assessScores != null" >
+        #{assessScores,jdbcType=INTEGER},
+      </if>
+      <if test="questionId != null" >
+        #{questionId,jdbcType=INTEGER},
+      </if>
+      <if test="analyzename != null" >
+        #{analyzename,jdbcType=VARCHAR},
+      </if>
+      <if test="result != null" >
+        #{result,jdbcType=VARCHAR},
+      </if>
+      <if test="dictTime != null" >
+        #{dictTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.yihe.system.domain.YhLifeHabitImprovementDict" >
+    update yh_life_habit_improvement_dict
+    <set >
+      <if test="title != null" >
+        title = #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="userCode != null" >
+        user_code = #{userCode,jdbcType=VARCHAR},
+      </if>
+      <if test="risk != null" >
+        risk = #{risk,jdbcType=VARCHAR},
+      </if>
+      <if test="assessScores != null" >
+        assess_scores = #{assessScores,jdbcType=INTEGER},
+      </if>
+      <if test="questionId != null" >
+        question_id = #{questionId,jdbcType=INTEGER},
+      </if>
+      <if test="analyzename != null" >
+        analyzename = #{analyzename,jdbcType=VARCHAR},
+      </if>
+      <if test="result != null" >
+        result = #{result,jdbcType=VARCHAR},
+      </if>
+      <if test="dictTime != null" >
+        Dict_time = #{dictTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.yihe.system.domain.YhLifeHabitImprovementDict" >
+    update yh_life_habit_improvement_dict
+    set title = #{title,jdbcType=VARCHAR},
+      user_code = #{userCode,jdbcType=VARCHAR},
+      risk = #{risk,jdbcType=VARCHAR},
+      assess_scores = #{assessScores,jdbcType=INTEGER},
+      question_id = #{questionId,jdbcType=INTEGER},
+      analyzename = #{analyzename,jdbcType=VARCHAR},
+      result = #{result,jdbcType=VARCHAR},
+      Dict_time = #{dictTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+    <select id="selectroletype" parameterType="string" resultType="int">
+        SELECT ur.role_type FROM yh_user_role_power rp   LEFT JOIN yh_user_role ur on rp.roleId=ur.role_id
+WHERE rp.userId=#{usercode}
+    </select>
+</mapper>

@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yihe.system.mapper.YHUserBloodPressureMapper" >
+  <resultMap id="BaseResultMap" type="com.yihe.system.domain.YHUserBloodPressure" >
+    <id column="U_Bloodpressure_Id" property="uBloodpressureId" jdbcType="INTEGER" />
+    <result column="Sbp" property="sbp" jdbcType="INTEGER" />
+    <result column="Dbp" property="dbp" jdbcType="INTEGER" />
+    <result column="Entry_Time" property="entryTime" jdbcType="VARCHAR" />
+    <result column="Is_Del" property="isDel" jdbcType="INTEGER" />
+    <result column="E_User_Id" property="eUserId" jdbcType="VARCHAR" />
+    <result column="xinlv" property="xinlv" jdbcType="INTEGER" />
+    <result column="test_hj" property="testHj" jdbcType="VARCHAR" />
+    <result column="type" property="type" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    U_Bloodpressure_Id, Sbp, Dbp, Entry_Time, Is_Del, E_User_Id, xinlv, test_hj, type
+  </sql>
+  
+  
+  	<select id="selectUserBloodPressureCountByUserIdAndTime"  resultType="int">
+		select  count(*)
+		from 
+		yh_user_bloodpressure
+		where E_User_Id=#{E_User_Id}
+		and Dbp=#{dbp}
+		and Entry_Time=#{entry_Time}
+		and Sbp=#{sbp}	
+		and xinlv=#{xinlv}	
+	</select>
+	
+	
+	
+   <!-- 血压总数 -->
+   <select id="selectByBloodpressureCount" resultType="int" >
+  	select count(*) from yh_user_bloodpressure
+  </select>
+  
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from yh_user_bloodpressure
+    where U_Bloodpressure_Id = #{uBloodpressureId,jdbcType=INTEGER}
+  </select>
+  <select id="selectByPrimaryKeyByUsercodeLimit" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    SELECT  <include refid="Base_Column_List" /> FROM yh_user_bloodpressure WHERE E_user_id=#{usercode} and is_Del=2  ORDER BY Entry_Time DESC LIMIT 1
+  </select>
+  
+   <select id="selectByPrimaryKeyByeidAndOrderby" resultType="java.lang.String" parameterType="java.lang.String" >
+    SELECT Entry_Time FROM yh_user_bloodpressure WHERE  E_User_Id = #{usercode,jdbcType=VARCHAR} ORDER BY Entry_time DESC LIMIT 1
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from yh_user_bloodpressure
+    where U_Bloodpressure_Id = #{uBloodpressureId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.yihe.system.domain.YHUserBloodPressure" >
+    insert into yh_user_bloodpressure (U_Bloodpressure_Id, Sbp, Dbp, 
+      Entry_Time, Is_Del, E_User_Id, 
+      xinlv, test_hj, type
+      )
+    values (#{uBloodpressureId,jdbcType=INTEGER}, #{sbp,jdbcType=INTEGER}, #{dbp,jdbcType=INTEGER}, 
+      #{entryTime,jdbcType=VARCHAR}, #{isDel,jdbcType=INTEGER}, #{eUserId,jdbcType=INTEGER}, 
+      #{xinlv,jdbcType=INTEGER}, #{testHj,jdbcType=VARCHAR}, #{type,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.yihe.system.domain.YHUserBloodPressure" >
+    insert into yh_user_bloodpressure
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="uBloodpressureId != null" >
+        U_Bloodpressure_Id,
+      </if>
+      <if test="sbp != null" >
+        Sbp,
+      </if>
+      <if test="dbp != null" >
+        Dbp,
+      </if>
+      <if test="entryTime != null" >
+        Entry_Time,
+      </if>
+      <if test="isDel != null" >
+        Is_Del,
+      </if>
+      <if test="eUserId != null" >
+        E_User_Id,
+      </if>
+      <if test="xinlv != null" >
+        xinlv,
+      </if>
+      <if test="testHj != null" >
+        test_hj,
+      </if>
+      <if test="type != null" >
+        type,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="uBloodpressureId != null" >
+        #{uBloodpressureId,jdbcType=INTEGER},
+      </if>
+      <if test="sbp != null" >
+        #{sbp,jdbcType=INTEGER},
+      </if>
+      <if test="dbp != null" >
+        #{dbp,jdbcType=INTEGER},
+      </if>
+      <if test="entryTime != null" >
+        #{entryTime,jdbcType=VARCHAR},
+      </if>
+      <if test="isDel != null" >
+        #{isDel,jdbcType=INTEGER},
+      </if>
+      <if test="eUserId != null" >
+        #{eUserId,jdbcType=INTEGER},
+      </if>
+      <if test="xinlv != null" >
+        #{xinlv,jdbcType=INTEGER},
+      </if>
+      <if test="testHj != null" >
+        #{testHj,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null" >
+        #{type,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.yihe.system.domain.YHUserBloodPressure" >
+    update yh_user_bloodpressure
+    <set >
+      <if test="sbp != null" >
+        Sbp = #{sbp,jdbcType=INTEGER},
+      </if>
+      <if test="dbp != null" >
+        Dbp = #{dbp,jdbcType=INTEGER},
+      </if>
+      <if test="entryTime != null" >
+        Entry_Time = #{entryTime,jdbcType=VARCHAR},
+      </if>
+      <if test="isDel != null" >
+        Is_Del = #{isDel,jdbcType=INTEGER},
+      </if>
+      <if test="eUserId != null" >
+        E_User_Id = #{eUserId,jdbcType=INTEGER},
+      </if>
+      <if test="xinlv != null" >
+        xinlv = #{xinlv,jdbcType=INTEGER},
+      </if>
+      <if test="testHj != null" >
+        test_hj = #{testHj,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null" >
+        type = #{type,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where U_Bloodpressure_Id = #{uBloodpressureId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.yihe.system.domain.YHUserBloodPressure" >
+    update yh_user_bloodpressure
+    set Sbp = #{sbp,jdbcType=INTEGER},
+      Dbp = #{dbp,jdbcType=INTEGER},
+      Entry_Time = #{entryTime,jdbcType=VARCHAR},
+      Is_Del = #{isDel,jdbcType=INTEGER},
+      E_User_Id = #{eUserId,jdbcType=INTEGER},
+      xinlv = #{xinlv,jdbcType=INTEGER},
+      test_hj = #{testHj,jdbcType=VARCHAR},
+      type = #{type,jdbcType=VARCHAR}
+    where U_Bloodpressure_Id = #{uBloodpressureId,jdbcType=INTEGER}
+  </update>
+  
+   <!--  查询用户血压 -->
+  <select id="selectYHUserBloodPressure" resultType="map" parameterType="java.lang.String" >
+    select  yhb.Sbp,yhb.Dbp,
+(select count(1) from yh_user_bloodpressure where E_User_Id=#{ eUserId,jdbcType=INTEGER} and Is_Del = 2) as num,
+yhb.`type`,yhb.Entry_Time
+from yh_user_reginfo as reg 
+left join yh_user_bloodpressure yhb
+on reg.user_code = yhb.E_User_Id
+where yhb.U_Bloodpressure_Id = (select U_Bloodpressure_Id from yh_user_bloodpressure where E_User_Id=#{ eUserId,jdbcType=INTEGER} and Is_Del = 2 order by Entry_Time desc limit 1)
+  </select>
+  
+  
+  <select id="selectPageByParam" resultMap="BaseResultMap" parameterType="java.lang.String"  >
+   select  yhb.Sbp,yhb.Dbp,yhb.test_hj,yhb.Entry_Time
+	from yh_user_reginfo as reg 
+	inner join yh_user_bloodpressure yhb
+	on reg.user_code = yhb.E_User_Id
+	and Is_Del = 2
+	 where reg.user_code=#{ eUserId,jdbcType=INTEGER} order by Entry_Time desc
+  </select>
+
+  <select id="selectPressure" resultMap="BaseResultMap" parameterType="map"  >
+     select  yhb.Sbp,yhb.Dbp,yhb.test_hj,yhb.Entry_Time
+	from yh_user_reginfo as reg 
+	inner join yh_user_bloodpressure yhb
+	on reg.user_code = yhb.E_User_Id
+	and Is_Del = 2
+	 where reg.user_code=#{ userCode,jdbcType=INTEGER} 
+	 <if test="testHj != null and testHj!=''">
+      	 and test_hj = #{testHj,jdbcType=VARCHAR}
+      </if>
+	 order by Entry_Time
+  </select>
+  
+  	<insert id="importYHUserBloodPressureData" parameterType="java.util.List">
+             insert into yh_user_bloodpressure (Sbp, Dbp, 
+		      Entry_Time, Is_Del, E_User_Id, 
+		      xinlv, test_hj, type)value
+           <foreach collection="Onlist" index="index" item="item" separator=",">
+      (#{item.sbp,jdbcType=INTEGER}, #{item.dbp,jdbcType=INTEGER}, 
+      #{item.entryTime,jdbcType=VARCHAR}, #{item.isDel,jdbcType=INTEGER}, #{item.eUserId,jdbcType=INTEGER}, 
+      #{item.xinlv,jdbcType=INTEGER}, #{item.testHj,jdbcType=VARCHAR}, #{item.type,jdbcType=VARCHAR})
+           </foreach>
+     </insert>
+  
+</mapper>

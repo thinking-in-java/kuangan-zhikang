@@ -1,0 +1,446 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yihe.applet.api.mapper.YhHealthLectureInfoAppMapper" >
+  <resultMap id="BaseResultMap" type="com.yihe.applet.api.domain.YhHealthLectureInfoApp" >
+    <id column="infoId" property="infoid" jdbcType="INTEGER" />
+    <result column="tips" property="tips" jdbcType="VARCHAR" />
+    <result column="category_id" property="categoryId" jdbcType="INTEGER" />
+    <result column="typeid" property="typeid" jdbcType="INTEGER" />
+    <result column="thumbnail_url" property="thumbnailUrl" jdbcType="VARCHAR" />
+    <result column="listbox_url" property="listboxUrl" jdbcType="VARCHAR" />
+    <result column="detail_content_url" property="detailContentUrl" jdbcType="VARCHAR" />
+    <result column="video_url" property="videoUrl" jdbcType="VARCHAR" />
+    <result column="audio_url" property="audioUrl" jdbcType="VARCHAR" />
+    <result column="update_date" property="updateDate" jdbcType="TIMESTAMP" />
+    <result column="title" property="title" jdbcType="VARCHAR" />
+    <result column="author" property="author" jdbcType="VARCHAR" />
+    <result column="instruction" property="instruction" jdbcType="VARCHAR" />
+    <result column="read_count" property="readCount" jdbcType="INTEGER" />
+    <result column="addInfoTime" property="addinfotime" jdbcType="VARCHAR" />
+    <result column="usercode" property="usercode" jdbcType="VARCHAR" />
+    <result column="state" property="state" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    infoId, tips, category_id, typeid, thumbnail_url, listbox_url, detail_content_url, 
+    video_url, audio_url, update_date, title, author, instruction, read_count, addInfoTime, 
+    usercode, state
+  </sql>
+  <!-- 查询饮食学堂 -->
+  <select id="findHealthLectureInfoByFoodClass"  resultMap="BaseResultMap" parameterType="java.lang.Integer"> 
+   SELECT * FROM `yh_health_lecture_info` WHERE category_id=(SELECT categoryId FROM `yh_health_lecture_category` WHERE `name`='饮食学堂'  LIMIT 1) ORDER BY addInfoTime DESC LIMIT 3
+  </select>
+  
+   <!-- 查询运动学堂-->
+  <select id="findHealthLectureInfoBySportClass"  resultMap="BaseResultMap" parameterType="java.lang.Integer"> 
+   SELECT * FROM `yh_health_lecture_info` WHERE category_id=(SELECT categoryId FROM `yh_health_lecture_category` WHERE `name`='运动学堂'  LIMIT 1) ORDER BY addInfoTime DESC LIMIT 3
+  </select>
+  
+  
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from yh_health_lecture_info
+    where infoId = #{infoid,jdbcType=INTEGER}
+  </select>
+  
+  <select id="selectByHealthLectureInfo" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from yh_health_lecture_info
+    where category_id = #{categoryId,jdbcType=INTEGER}
+  </select>
+  
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from yh_health_lecture_info
+    where infoId = #{infoid,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.yihe.applet.api.domain.YhHealthLectureInfoApp" >
+    insert into yh_health_lecture_info (infoId, tips, category_id, 
+      typeid, thumbnail_url, listbox_url, 
+      detail_content_url, video_url, audio_url, 
+      update_date, title, author, 
+      instruction, read_count, addInfoTime, 
+      usercode, state)
+    values (#{infoid,jdbcType=INTEGER}, #{tips,jdbcType=VARCHAR}, #{categoryId,jdbcType=INTEGER}, 
+      #{typeid,jdbcType=INTEGER}, #{thumbnailUrl,jdbcType=VARCHAR}, #{listboxUrl,jdbcType=VARCHAR}, 
+      #{detailContentUrl,jdbcType=VARCHAR}, #{videoUrl,jdbcType=VARCHAR}, #{audioUrl,jdbcType=VARCHAR}, 
+      #{updateDate,jdbcType=TIMESTAMP}, #{title,jdbcType=VARCHAR}, #{author,jdbcType=VARCHAR}, 
+      #{instruction,jdbcType=VARCHAR}, #{readCount,jdbcType=INTEGER}, #{addinfotime,jdbcType=VARCHAR}, 
+      #{usercode,jdbcType=VARCHAR}, #{state,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.yihe.applet.api.domain.YhHealthLectureInfoApp" >
+    insert into yh_health_lecture_info
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="infoid != null" >
+        infoId,
+      </if>
+      <if test="tips != null" >
+        tips,
+      </if>
+      <if test="categoryId != null" >
+        category_id,
+      </if>
+      <if test="typeid != null" >
+        typeid,
+      </if>
+      <if test="thumbnailUrl != null" >
+        thumbnail_url,
+      </if>
+      <if test="listboxUrl != null" >
+        listbox_url,
+      </if>
+      <if test="detailContentUrl != null" >
+        detail_content_url,
+      </if>
+      <if test="videoUrl != null" >
+        video_url,
+      </if>
+      <if test="audioUrl != null" >
+        audio_url,
+      </if>
+      <if test="updateDate != null" >
+        update_date,
+      </if>
+      <if test="title != null" >
+        title,
+      </if>
+      <if test="author != null" >
+        author,
+      </if>
+      <if test="instruction != null" >
+        instruction,
+      </if>
+      <if test="readCount != null" >
+        read_count,
+      </if>
+      <if test="addinfotime != null" >
+        addInfoTime,
+      </if>
+      <if test="usercode != null" >
+        usercode,
+      </if>
+      <if test="state != null" >
+        state,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="infoid != null" >
+        #{infoid,jdbcType=INTEGER},
+      </if>
+      <if test="tips != null" >
+        #{tips,jdbcType=VARCHAR},
+      </if>
+      <if test="categoryId != null" >
+        #{categoryId,jdbcType=INTEGER},
+      </if>
+      <if test="typeid != null" >
+        #{typeid,jdbcType=INTEGER},
+      </if>
+      <if test="thumbnailUrl != null" >
+        #{thumbnailUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="listboxUrl != null" >
+        #{listboxUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="detailContentUrl != null" >
+        #{detailContentUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="videoUrl != null" >
+        #{videoUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="audioUrl != null" >
+        #{audioUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="updateDate != null" >
+        #{updateDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="title != null" >
+        #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="author != null" >
+        #{author,jdbcType=VARCHAR},
+      </if>
+      <if test="instruction != null" >
+        #{instruction,jdbcType=VARCHAR},
+      </if>
+      <if test="readCount != null" >
+        #{readCount,jdbcType=INTEGER},
+      </if>
+      <if test="addinfotime != null" >
+        #{addinfotime,jdbcType=VARCHAR},
+      </if>
+      <if test="usercode != null" >
+        #{usercode,jdbcType=VARCHAR},
+      </if>
+      <if test="state != null" >
+        #{state,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.yihe.applet.api.domain.YhHealthLectureInfoApp" >
+    update yh_health_lecture_info
+    <set >
+      <if test="tips != null" >
+        tips = #{tips,jdbcType=VARCHAR},
+      </if>
+      <if test="categoryId != null" >
+        category_id = #{categoryId,jdbcType=INTEGER},
+      </if>
+      <if test="typeid != null" >
+        typeid = #{typeid,jdbcType=INTEGER},
+      </if>
+      <if test="thumbnailUrl != null" >
+        thumbnail_url = #{thumbnailUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="listboxUrl != null" >
+        listbox_url = #{listboxUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="detailContentUrl != null" >
+        detail_content_url = #{detailContentUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="videoUrl != null" >
+        video_url = #{videoUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="audioUrl != null" >
+        audio_url = #{audioUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="updateDate != null" >
+        update_date = #{updateDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="title != null" >
+        title = #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="author != null" >
+        author = #{author,jdbcType=VARCHAR},
+      </if>
+      <if test="instruction != null" >
+        instruction = #{instruction,jdbcType=VARCHAR},
+      </if>
+      <if test="readCount != null" >
+        read_count = #{readCount,jdbcType=INTEGER},
+      </if>
+      <if test="addinfotime != null" >
+        addInfoTime = #{addinfotime,jdbcType=VARCHAR},
+      </if>
+      <if test="usercode != null" >
+        usercode = #{usercode,jdbcType=VARCHAR},
+      </if>
+      <if test="state != null" >
+        state = #{state,jdbcType=INTEGER},
+      </if>
+    </set>
+    where infoId = #{infoid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.yihe.applet.api.domain.YhHealthLectureInfoApp" >
+    update yh_health_lecture_info
+    set tips = #{tips,jdbcType=VARCHAR},
+      category_id = #{categoryId,jdbcType=INTEGER},
+      typeid = #{typeid,jdbcType=INTEGER},
+      thumbnail_url = #{thumbnailUrl,jdbcType=VARCHAR},
+      listbox_url = #{listboxUrl,jdbcType=VARCHAR},
+      detail_content_url = #{detailContentUrl,jdbcType=VARCHAR},
+      video_url = #{videoUrl,jdbcType=VARCHAR},
+      audio_url = #{audioUrl,jdbcType=VARCHAR},
+      update_date = #{updateDate,jdbcType=TIMESTAMP},
+      title = #{title,jdbcType=VARCHAR},
+      author = #{author,jdbcType=VARCHAR},
+      instruction = #{instruction,jdbcType=VARCHAR},
+      read_count = #{readCount,jdbcType=INTEGER},
+      addInfoTime = #{addinfotime,jdbcType=VARCHAR},
+      usercode = #{usercode,jdbcType=VARCHAR},
+      state = #{state,jdbcType=INTEGER}
+    where infoId = #{infoid,jdbcType=INTEGER}
+  </update>
+  
+   <select id="findhealthLectureTitleAndTipsAndInstruction" resultMap="BaseResultMap">
+	  SELECT * FROM `yh_health_lecture_info` WHERE  (title LIKE  CONCAT('%',#{likeValue},'%') or tips LIKE CONCAT('%',#{likeValue},'%')) and state=1   ORDER BY infoId DESC
+  </select>
+  
+   <select id="findhealthLectureByFoodSchool" resultMap="BaseResultMap">
+	 SELECT a.* FROM `yh_health_lecture_info` AS a
+INNER JOIN `yh_health_lecture_category` AS b
+ON a.`category_id`=b.`categoryId`
+WHERE b.`name` LIKE '饮食学堂' ORDER BY addInfoTime DESC
+	 
+	   </select>
+	   
+	   
+<select id="selectByExampleLimit4" parameterType="java.lang.Integer"  resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from yh_health_lecture_info
+    where category_id=#{categoryId}
+    order by infoId desc
+    limit #{curPage},#{pageSize}
+  </select>
+
+  <select id="selectByExampleLimit3" resultMap="BaseResultMap">
+    select a.* from yh_health_lecture_info as a
+    
+    <if test="1==type">
+      INNER JOIN `yh_health_lecture_enshrine` AS b
+      ON a.`infoId`=b.`categoryId`  AND b.user_code=#{userCode}
+    </if>
+    <if test="2==type">
+      INNER JOIN `yh_health_lecture_watch` AS c
+      ON a.`infoId`=c.`class_id` AND c.user_code=#{userCode}
+    </if>
+    where category_id in (SELECT categoryId FROM yh_health_lecture_category WHERE parent_id=#{categoryId,jdbcType=INTEGER}  OR categoryId=#{categoryId,jdbcType=INTEGER} )
+
+      <if test="null!=orgList and orgList.size() != 0">
+        and a.user_code in
+        <foreach collection="orgList" index="i" item="id" open="(" separator="," close=")">
+          #{id}
+        </foreach>
+      </if>
+
+
+       <if test="3==type">
+        AND   a.infoId NOT IN (SELECT class_id FROM yh_health_lecture_watch WHERE user_code=#{userCode} GROUP BY class_id)
+       </if>
+       <if test="null!=title">
+    	and  a.title LIKE CONCAT('%',#{title},'%')
+    </if>
+    and a.state=1
+      <if test="0==timeOrder">
+      		order by a.infoId desc
+    	</if>
+   <if test="1==timeOrder">
+      order by a.infoId desc
+    </if>
+    <if test="2==timeOrder">
+      order by a.read_count desc
+    </if>
+    limit #{curPage},#{pageSize}
+  </select>
+  
+   <select id="selectByExampleLimitParent" resultMap="BaseResultMap">
+    select a.* from yh_health_lecture_info as a
+    
+    <if test="1==type">
+      INNER JOIN `yh_health_lecture_enshrine` AS b
+      ON a.`infoId`=b.`categoryId`  AND b.user_code=#{userCode}
+    </if>
+    <if test="2==type">
+      INNER JOIN `yh_health_lecture_watch` AS c
+      ON a.`infoId`=c.`class_id` AND c.user_code=#{userCode}
+    </if>
+    where category_id in (SELECT categoryId FROM yh_health_lecture_category WHERE parent_id=#{categoryId,jdbcType=INTEGER}  OR categoryId=#{categoryId,jdbcType=INTEGER} )
+     <if test="null!=orgList and orgList.size() != 0">
+       and a.user_code in
+       <foreach collection="orgList" index="i" item="id" open="(" separator="," close=")">
+         #{id}
+       </foreach>
+     </if>
+
+       <if test="3==type">
+        AND   a.infoId NOT IN (SELECT class_id FROM yh_health_lecture_watch WHERE user_code=#{userCode} GROUP BY class_id)
+       </if>
+       <if test="null!=title">
+    	and  a.title LIKE CONCAT('%',#{title},'%')
+    </if>
+    and a.state=1
+    <if test="0==timeOrder">
+      order by a.infoId desc
+    </if>
+   <if test="1==timeOrder">
+      order by a.infoId desc
+    </if>
+    <if test="2==timeOrder">
+      order by a.read_count desc
+    </if>
+    limit #{curPage},#{pageSize}
+  </select>
+  
+  <select id="selectByExampleLimit3Components" parameterType="java.lang.Integer"  resultMap="BaseResultMap">
+    select
+   a.*
+    from yh_health_lecture_info as a
+    <if test="1==type">
+      INNER JOIN `yh_health_lecture_enshrine` AS b
+      ON a.`infoId`=b.`categoryId`  AND b.user_code=#{usercode}
+    </if>
+    <if test="2==type">
+
+      INNER JOIN `yh_health_lecture_watch` AS b
+      ON a.`infoId`=b.`class_id` AND b.user_code=#{usercode}
+    </if>
+    where
+    <if test="null!=cateName and ''!=cateName">
+     a.category_id IN (SELECT categoryId FROM `yh_health_lecture_category` WHERE `name` LIKE CONCAT('%',#{cateName},'%') OR tips LIKE CONCAT('%',#{cateName},'%'))
+    </if>
+    <if test="null==cateName or ''==cateName">
+      a.category_id=#{categoryId}
+    </if>
+
+    <if test="null!=title">
+      and  a.title LIKE CONCAT('%',#{title},'%')
+
+    </if>
+    <if test="3==type">
+      AND   a.infoId NOT IN (SELECT class_id FROM yh_health_lecture_watch WHERE user_code=#{usercode} GROUP BY class_id)
+    </if>
+    <if test="0==timeOrder">
+      order by a.infoId desc
+    </if>
+    <if test="1==timeOrder">
+      order by a.read_count desc
+    </if>
+    limit #{curPage},#{pageSize}
+  </select>
+  
+ 
+  <select id="selectByExampleLimitParentComponents"    resultMap="BaseResultMap">
+    select
+    a.*
+    from yh_health_lecture_info as a
+    <if test="1==type">
+      INNER JOIN `yh_health_lecture_enshrine` AS b
+      ON a.`infoId`=b.`categoryId`  AND b.user_code=#{usercode}
+    </if>
+    <if test="2==type">
+      INNER JOIN `yh_health_lecture_watch` AS b
+      ON a.`infoId`=b.`class_id` AND b.user_code=#{usercode}
+    </if>
+
+    where
+    <if test="null!=cateName and ''!=cateName">
+      a.category_id IN (SELECT categoryId FROM `yh_health_lecture_category` WHERE `name` LIKE CONCAT('%',#{cateName},'%') OR tips LIKE CONCAT('%',#{cateName},'%'))
+    </if>
+    <if test="null==cateName or ''==cateName">
+      a.category_id in (SELECT categoryId FROM yh_health_lecture_category WHERE parent_id=#{categoryId,jdbcType=INTEGER}  OR categoryId=#{categoryId,jdbcType=INTEGER} )
+    </if>
+
+    <if test="null!=title">
+    and  a.title LIKE CONCAT('%',#{title},'%')
+
+    </if>
+    <if test="3==type">
+      AND   a.infoId NOT IN (SELECT class_id FROM yh_health_lecture_watch WHERE user_code=#{usercode} GROUP BY class_id)
+    </if>
+    <if test="0==timeOrder">
+      order by a.infoId desc
+    </if>
+    <if test="1==timeOrder">
+      order by a.read_count desc
+    </if>
+    limit #{curPage},#{pageSize}
+  </select>
+  
+   <select id="findInfoLimitNew3"  resultMap="BaseResultMap">
+ 	 SELECT * FROM `yh_health_lecture_info` WHERE 1=1 ORDER BY infoId DESC LIMIT 3
+  </select>
+  
+  <select id="selectByExampleLimitAndLike"    resultMap="BaseResultMap">
+    select
+   
+    <include refid="Base_Column_List" />
+    from yh_health_lecture_info
+    where title LIKE CONCAT('%',#{like},'%')
+    order by infoId desc
+    limit #{curPage},#{pageSize}
+     
+  </select>
+  
+</mapper>

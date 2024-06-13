@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yihe.applet.api.mapper.YhSleepUserMusiclistAppMapper">
+	<sql id="allColumn">id,user_code,music_id,time</sql>
+	<sql id="insColumn">user_code,music_id,time</sql>
+	<resultMap type="com.yihe.applet.api.domain.YhSleepUserMusiclistApp" id="yhSleepUserMusiclist">
+		<id column="id" jdbcType="INTEGER" property="id" />
+		<result column="user_code" jdbcType="VARCHAR" property="userCode" />
+		<result column="music_id" jdbcType="VARCHAR" property="musicId" />
+		<result column="time" jdbcType="TIMESTAMP" property="time" />
+	</resultMap>
+	<!-- 根据用户userCode查询 -->
+	<select id="selAidListByUserCode" resultMap="yhSleepUserMusiclist">
+		SELECT <include refid="allColumn"/> FROM yh_sleep_user_musiclist 
+		WHERE user_code=#{userCode}
+	</select>
+	<!-- 添加用户音乐列表 -->
+	<insert id="addAidList" parameterType="com.yihe.applet.api.domain.YhSleepUserMusiclistApp">
+		INSERT INTO yh_sleep_user_musiclist(<include refid="insColumn"/>)
+		VALUES (#{userCode},#{musicId},NOW())
+	</insert>
+	<!-- 修改用户音乐列表 -->
+	<update id="updAidList" parameterType="com.yihe.applet.api.domain.YhSleepUserMusiclistApp">
+		UPDATE yh_sleep_user_musiclist SET music_id=#{musicId}
+		WHERE user_code=#{userCode}
+	</update>
+	<!-- 清空用户音乐列表 -->
+	<delete id="delAidList" parameterType="com.yihe.applet.api.domain.YhSleepUserMusiclistApp">
+		DELETE FROM yh_sleep_user_musiclist 
+		WHERE user_code=#{userCode}
+	</delete>
+</mapper>

@@ -1,0 +1,1054 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+    <html>
+        <head>
+            <meta charset="utf-8"/>
+            <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+            <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+            <title>账号信息管理</title>
+            <link rel="stylesheet"  th:href="@{/assets/libs/layui/css/layui.css}" />
+            <link rel="stylesheet"  th:href="@{/assets/module/admin.css}"  />
+            <style type="text/css">
+                .layui-elem-quote {
+                    margin-bottom: 10px;
+                    line-height: 3px;
+                    border-left: 5px solid #009688;
+                    border-radius: 0 2px 2px 0;
+                    background-color: white;
+                    margin-top: 20px;
+                    float: left;
+                    margin-left: 20px;
+                }
+
+                .layui-card {
+                    margin-bottom: 15px;
+                    border-radius: 2px;
+                    background-color: #fff;
+                    box-shadow: 0 0px 0px 0 rgba(0,0,0,.05);
+                }
+            </style>
+        </head>
+        <body>
+
+            <!-- 页面加载loading -->
+            <div class="page-loading">
+                <div class="ball-loader">
+                    <span></span><span></span><span></span><span></span>
+                </div>
+            </div>
+
+
+
+
+            <input id="guishu" type="hidden" value="">
+            <input id="admin" type="hidden" value="">
+            <input id="user" type="hidden" value="">
+            <div class="layui-fluid">
+                <div class="layui-card">
+                    <div class="layui-card-body">
+                        <div class="layui-row" style="height: 600px;">
+                            <div style="width: 100%; height:100%; background-color: #FFF; position: relative;">
+
+                                <div class="layui-tab layui-tab-brief" lay-filter="docDemoTabBrief">
+                                    <ul class="layui-tab-title">
+
+                                        <li  class="layui-this" th:if="${type=='0'}" onclick="add()">健管师账号</li>
+                                        <li  th:if="${type!='0'}" onclick="add()">健管师账号</li>
+                                        <li class="layui-this" th:id="22" th:if="${type=='1'}" onclick="addadmin()">管理员账号</li>
+                                        <li  th:if="${type!='1'}" th:id="22" onclick="addadmin()">管理员账号</li>
+
+
+                                        <li  class="layui-this" th:if="${type=='2'}" onclick="adduser()">用户账号</li>
+                                        <li  th:if="${type!='2'}" onclick="adduser()">用户账号</li>
+
+                                    </ul>
+
+
+
+                                    <div class="layui-tab-content" style="height: 100px;">
+                                        <!-- 内容1 -->
+                                        <div class="layui-tab-item" th:classappend="${type=='0'} ? 'layui-show' : ''">
+
+                                            <div class="layui-card">
+                                                <div class="layui-card-body">
+                                                    <div class="layui-form toolbar">
+                                                        <div class="layui-form-item">
+                                                            <div class="layui-inline">
+                                                                <div class="layui-form-item">
+                                                                    <label style="padding-right: 0px;" class="layui-form-label w-auto">归属：</label>
+                                                                    <div class="layui-input-block" style="margin-left:65px;width: 250px;">
+                                                                        <input  type="text" id="tree" lay-filter="tree" class="layui-input">
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="layui-inline">
+                                                                <div class="layui-form-item">
+                                                                    <label style="padding-right: 0px;" class="layui-form-label w-auto">角色：</label>
+                                                                    <div class="layui-input-block" style="margin-left:65px;width: 100px;">
+                                                                        <select id="role2"   lay-verify="role2" lay-search="">
+
+                                                                        </select>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="layui-inline" style="width: 160px;">
+                                                                <label style="padding-right: 0px;" class="layui-form-label w-auto">状态：</label>
+                                                                <div class="layui-input-inline mr0" style="width: 80px;">
+                                                                    <select name="" id="lockFlag" lay-filter="mySelect">
+                                                                        <option value="">全部</option>
+                                                                        <option value="2">正常</option>
+                                                                        <option value="1">锁定</option>
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+                                                            <div class="layui-inline">
+                                                                <label class="layui-form-label w-auto">姓名：</label>
+                                                                <div class="layui-input-inline mr0">
+                                                                    <input id="name" class="layui-input" placeholder="请输入"/>
+                                                                </div>
+                                                            </div>
+                                                            <div class="layui-inline">
+                                                                <label class="layui-form-label w-auto">账号：</label>
+                                                                <div class="layui-input-inline mr0">
+                                                                    <input id="userName" class="layui-input" placeholder="请输入"/>
+                                                                </div>
+                                                            </div>
+                                                            <div class="layui-inline">
+                                                                <label class="layui-form-label w-auto">手机号码：</label>
+                                                                <div class="layui-input-inline mr0">
+                                                                    <input id="mobile" class="layui-input" placeholder="请输入"/>
+                                                                </div>
+                                                            </div>
+                                                            <div class="layui-inline">
+                                                                <button onclick="add()" style="background-color: #1890ff" class="layui-btn icon-btn"><i class="layui-icon">&#xe615;</i>搜索
+                                                                </button>
+                                                                <button class="layui-btn layui-btn-primary" id="btnempty" lay-submit="" lay-filter="reset">清除</button>
+                                                            </div>
+
+                                                            <div class="layui-inline" style="float:right">
+                                                                <a target="_self" href="/manage/doctor/doctoradd?id=0&orgCode=0"><button class="layui-btn icon-btn" style="background-color:rgba(55, 177, 92, 1)"><i class="layui-icon">&#xe654;</i>添加</button></a>
+
+                                                            </div>
+
+
+                                                        </div>
+                                                    </div>
+                                                    <!-- 批量操作 -->
+                                                    <div id="piliang" class="layui-form toolbar" style="background-color: #e6f7ff;height: 50px;margin-top: 10px;margin-bottom: 10px;display: none">
+                                                        <span style="font-size: 14px;color: #505050;line-height: 50px;margin-left: 9px;">批量操作</span>
+                                                        <img alt="" src="">
+                                                        <span  id="xuanze">已选择**项</span>
+                                                        <span id="clickxuan" style="color: #1890ff;margin-left: 15px;">清空</span>
+                                                        <button id="updategrouping" style="width: 130px;float: right;margin-right: 16px;text-align: center;margin-top: 7px;"   class="layui-btn layui-btn-primary";lay-filter="fenpeiyishi">更改角色权限</button>
+                                                    </div>
+                                                    <table id="doctor" lay-filter="doctorMember"></table>
+                                                </div>
+                                            </div>
+
+
+                                        </div>
+                                        <!-- 内容2 -->
+                                        <div class="layui-tab-item" th:classappend="${type=='1'} ? 'layui-show' : ''">
+
+
+                                            <div class="layui-card">
+                                                <div class="layui-card-body">
+                                                    <div class="layui-form toolbar">
+                                                        <div class="layui-form-item">
+                                                            <div class="layui-inline">
+                                                                <div class="layui-form-item">
+                                                                    <label style="padding-right: 0px;" class="layui-form-label w-auto">归属：</label>
+                                                                    <div class="layui-input-block" style="margin-left:65px;width: 250px;">
+                                                                        <input  type="text" id="tree1" lay-filter="tree1" class="layui-input">
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="layui-inline" style="width: 160px;">
+                                                                <label style="padding-right: 0px;" class="layui-form-label w-auto">状态：</label>
+                                                                <div class="layui-input-inline mr0" style="width: 80px;">
+                                                                    <select name="" id="lockFlagadmin" lay-filter="mySelect">
+                                                                        <option value="">全部</option>
+                                                                        <option value="2">正常</option>
+                                                                        <option value="1">锁定</option>
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+                                                            <div class="layui-inline">
+                                                                <label class="layui-form-label w-auto">姓名：</label>
+                                                                <div class="layui-input-inline mr0">
+                                                                    <input id="nameadmin" class="layui-input" placeholder="请输入"/>
+                                                                </div>
+                                                            </div>
+                                                            <div class="layui-inline">
+                                                                <label class="layui-form-label w-auto">手机号码：</label>
+                                                                <div class="layui-input-inline mr0">
+                                                                    <input id="mobile1" class="layui-input" placeholder="请输入"/>
+                                                                </div>
+                                                            </div>
+                                                            <div class="layui-inline">
+                                                                <button onclick="addadmin()" style="background-color: #1890ff" class="layui-btn icon-btn"><i class="layui-icon">&#xe615;</i>搜索
+                                                                </button>
+                                                                <button class="layui-btn layui-btn-primary" id="btnemptyadmin" lay-submit="" lay-filter="reset">清除</button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <!-- 批量操作 -->
+                                                    <div id="piliang2" class="layui-form toolbar" style="background-color: #e6f7ff;height: 50px;margin-top: 10px;margin-bottom: 10px;display: none">
+                                                        <span style="font-size: 14px;color: #505050;line-height: 50px;margin-left: 9px;">批量操作</span>
+                                                        <img alt="" src="">
+                                                        <span  id="xuanze2">已选择**项</span>
+                                                        <span id="clickxuan2" style="color: #1890ff;margin-left: 15px;">清空</span>
+                                                        <button id="updategrouping2" style="width: 130px;float: right;margin-right: 16px;text-align: center;margin-top: 7px;"   class="layui-btn layui-btn-primary";lay-filter="fenpeiyishi">更改角色权限</button>
+                                                    </div>
+                                                    <table id="sport" lay-filter="sport"></table>
+                                                </div>
+                                            </div>
+
+                                        </div>
+
+                                        <!-- 内容3 -->
+                                        <div class="layui-tab-item" th:classappend="${type=='2'} ? 'layui-show' : ''">
+
+                                            <div class="layui-card">
+                                                <div class="layui-card-body">
+                                                    <div class="layui-form toolbar">
+                                                        <div class="layui-form-item">
+                                                            <div class="layui-inline">
+                                                                <div class="layui-form-item">
+                                                                    <label style="padding-right: 0px;" class="layui-form-label w-auto">归属：</label>
+                                                                    <div class="layui-input-block" style="margin-left:65px;width: 250px;">
+                                                                        <input  type="text" id="tree2" lay-filter="tree2" class="layui-input">
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="layui-inline">
+                                                                <label style="padding-right: 0px;" class="layui-form-label w-auto">健管师：</label>
+                                                                <div class="layui-input-inline mr0" lay-filter="myDivs">
+                                                                    <select id="doctors"   lay-verify="required" lay-search="">
+
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+                                                            <div class="layui-inline" style="width: 160px;">
+                                                                <label style="padding-right: 0px;" class="layui-form-label w-auto">状态：</label>
+                                                                <div class="layui-input-inline mr0" style="width: 80px;">
+                                                                    <select name="" id="lockFlagadminuser" lay-filter="mySelect">
+                                                                        <option value="">全部</option>
+                                                                        <option value="2">正常</option>
+                                                                        <option value="1">锁定</option>
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+                                                            <div class="layui-inline">
+                                                                <label class="layui-form-label w-auto">姓名：</label>
+                                                                <div class="layui-input-inline mr0">
+                                                                    <input id="nameuser" class="layui-input" placeholder="请输入"/>
+                                                                </div>
+                                                            </div>
+                                                            <div class="layui-inline">
+                                                                <label class="layui-form-label w-auto">账号：</label>
+                                                                <div class="layui-input-inline mr0">
+                                                                    <input id="userNameuser" class="layui-input" placeholder="请输入"/>
+                                                                </div>
+                                                            </div>
+                                                            <div class="layui-inline">
+                                                                <label class="layui-form-label w-auto">手机号码：</label>
+                                                                <div class="layui-input-inline mr0">
+                                                                    <input id="mobile2" class="layui-input" placeholder="请输入"/>
+                                                                </div>
+                                                            </div>
+                                                            <div class="layui-inline">
+                                                                <button onclick="adduser()" style="background-color: #1890ff" class="layui-btn icon-btn"><i class="layui-icon">&#xe615;</i>搜索
+                                                                </button>
+                                                                <button class="layui-btn layui-btn-primary" id="btnemptyadminuser" lay-submit="" lay-filter="reset">清除</button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <table id="useraccount" lay-filter="useraccount"></table>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </body>
+        <script type="text/javascript" th:src="@{/assets/libs/layui/layui.js}"></script>
+        <script type="text/javascript" th:src="@{/assets/js/common.js}"></script>
+        <script type="text/javascript" th:src="@{/assets/js/jquery-1.11.1.js}"></script>
+        <script th:src="@{/assets/libs/echarts/echarts.min.js}"></script>
+        <script th:src="@{/assets/libs/echarts/echarts-liquidfill.min.js}"></script>
+
+        <script type="text/html" id="barDemo1">
+            <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="edit">修改</a>
+        </script>
+
+        <script type="text/html" id="Administrator1">
+            <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="edit">修改</a>
+        </script>
+
+        <script type="text/html" id="switchTpl">
+            <!-- 这里的 checked 的状态只是演示 -->
+            <input type="checkbox" name="sex" value="{{d.userCode}}" lay-skin="switch" lay-text="正常|锁定"  lay-filter="sexDemo" {{ d.lockFlag == 2 ? 'checked' : '' }}>
+        </script>
+
+        <script>
+
+            //管理员账号联动跳转
+
+
+
+
+            //清除按钮
+
+
+            //导航栏
+            layui.use('element', function() {
+                var $ = layui.jquery, element = layui.element; //Tab的切换功能，切换事件监听等，需要依赖element模块
+
+                $(document).ready(function (){
+                    var parent$ = window.layui.jquery;
+                    var dk = $(window.parent.document).find("#layui-layer-iframe1").attr("src");
+                    var query = window.parent.location.search.substring(1);
+                    var vars = query.split("?");
+
+                    var theRequest = new Object();
+
+                    for(var i =0;i<vars.length;i++){
+                        theRequest=decodeURI(vars[i].split("&")[1].split("=")[1]);
+
+                    }
+                    if(theRequest == 2) {
+                        setTimeout(function(){
+                            $(".layui-tab-title li").each(function() {
+                                var tet  = $(this).text();
+                                if(tet=="管理员账号"){
+                                    $(this).click();
+                                }
+                            })
+                            // $(".layui-tab-title li:nth-of-type(2)").click()
+                        },400);
+                    }
+                });
+
+                $('.site-demo-active').on('click', function() {
+                    var othis = $(this), type = othis.data('type');
+                    active[type] ? active[type].call(this, othis) : '';
+                });
+
+            });
+
+
+            layui.use(['layer', 'form', 'admin', 'table','laydate', 'util','treeSelect', 'notice'], function () {
+                var $ = layui.jquery;
+                var layer = layui.layer;
+                var form = layui.form;
+                var admin = layui.admin;
+                var util = layui.util;
+                var laydate = layui.laydate;
+                var treeSelect= layui.treeSelect;
+                var notices = layui.notice;
+                table = layui.table;
+                var html=""
+                var table_data = new Array();
+                var ids = new Array();
+                var table_data2 = new Array();
+                var ids2 = new Array();
+                //复选框选中监听,将选中的id 设置到缓存数组,或者删除缓存数组
+                html+="<div style='background-color:#e6f7ff;width: 709px;height:293px;margin-top:20px;margin-left:31px;border-radius:4px;overflow:auto'>"
+                html+="<ul id='changedoctor'>"
+                html+="</ul>"
+                html+="</div>"
+                html+="<span id='tishi' style='color:red;margin-top:10px;margin-left:33px;display:none'>请选择1个角色</span>"
+                //监听性别操作
+                form.on('switch(sexDemo)', function(obj){
+                    // layer.tips(this.value + ' ' + this.name + '：'+ obj.elem.checked, obj.othis);
+                    var lockFlag=0;
+                    if(obj.elem.checked==true){
+                        lockFlag=2;
+                    }else{
+                        lockFlag=1;
+                    }
+                    $.ajax({
+                        type: "post",
+                        traditional:true,
+                        dataType: "json",
+                        data:{
+                            "userCode":this.value,
+                            "lockFlag":lockFlag
+                        },
+                        url: "/AccountController/amendlock",
+                        success:function(data){
+                            notices.success({
+                                title: '消息通知',
+                                message: '修改成功'
+                            });
+                            //window.location.reload();
+                        }
+                    })
+                });
+
+                $("#updategrouping").click(function(){
+                    var datas={};
+                    datas.userCodes=ids;
+                    datas.ss=2;
+                    notice(datas);
+                });
+                $("#updategrouping2").click(function(){
+                    var datas={};
+                    datas.userCodes=ids2;
+                    datas.ss=1;
+                    notice(datas);
+                });
+                function notice(datas){
+                    //示范一个公告层
+                    layer.open({
+                        type: 1
+                        ,title: "更改角色权限" //不显示标题栏
+                        ,closeBtn: false
+                        ,area:  ['771px', '487px']
+                        ,shade: 0.8
+                        ,id: 'LAY_layuipro' //设定一个id，防止重复弹出
+                        ,btn: ['保存', '取消']
+                        ,btnAlign: 'c'
+                        ,moveType: 1 //拖拽模式，0或者1
+                        ,content: html
+                        ,success: function(layero){
+                            selectdoctors({roletype:datas.ss});
+                            /* var btn = layero.find('.layui-layer-btn');
+                            btn.find('.layui-layer-btn0').attr({
+                              href: 'http://www.layui.com/'
+                              ,target: '_blank'
+                            }); */
+                        },yes: function(index, layero){
+                            var val = $('input[name="killOrder"]:checked').val();
+                            console.log(val)
+
+                            datas.roleid=val;
+
+                            if(val==null||val==""){
+                                notices.error({
+                                    title: '提示',
+                                    message: '请选择数据后再操作'
+                                });
+                                $("#tishi").css('display','block');
+                            }else{
+                                console.log(datas)
+                                fenpeiyishis(datas);
+                            }
+
+                        }
+                    });
+                }
+
+                //修改权限
+                function fenpeiyishis(data){
+                    console.log(data);
+                    $.ajax({
+                        type: "post",
+                        traditional:true,
+                        dataType: "json",
+                        data:data,
+                        url: "/YhUserManage/changeusermanager",
+                        success:function(data){
+                            notices.success({
+                                title: '消息通知',
+                                message: '修改成功'
+                            });
+                            window.location.reload();
+                        }
+                    })
+                }
+
+                function selectdoctors(datas){
+                    $.ajax({
+                        type: "GET",
+                        data:datas,
+                        url: "/YhUserManage/selectallrole",
+                        dataType: "json",
+                        success:function(data){
+                            var htmls="<div style='width: 100%;height: 10px'></div>";
+                            for (var i = 0; i < data.data.length; i++) {
+                                htmls+="<li style='margin-top: 10px;margin-left: 30px;'><input style='display: block;float: left;margin-top: 4px' type='radio'  name='killOrder' value='"+data.data[i].roleId+"'/><label class='yishiname' style='width: 25%;display: block;float: left;margin-left: 20px;'>"+data.data[i].roleName+"</label><label class='killOrder1' ;display: block;float: left>"+data.data[i].roleDescription+"</label></li>"
+                            }
+                            $("#changedoctor").empty().append(htmls);
+                        }
+
+                    })
+                }
+                usertsone();
+                function usertsone(){
+                    treeSelect.render({
+                        // 选择器
+                        elem: '#tree2',
+                        // 数据
+                        data: '/YhOrgTree/showPullDownTree',
+                        // 异步加载方式：get/post，默认get
+                        type: 'get',
+                        // 占位符
+                        placeholder: '全部',
+                        // 是否开启搜索功能：true/false，默认false
+                        search: true,
+                        // 点击回调
+                        click: function(d){
+                            $('#user').val(d.current.id);
+                        },
+                        // 加载完成后的回调函数
+                        success: function (d) {
+                            console.log(d);
+//                   选中节点，根据id筛选
+//                   treeSelect.checkNode('tree', 3);
+
+//                   获取zTree对象，可以调用zTree方法
+//                   var treeObj = treeSelect.zTree('tree');
+//                   console.log(treeObj);
+
+//                   刷新树结构
+//                   treeSelect.refresh();
+                        }
+                    });
+                }
+
+
+                selectdoctor();
+                function selectdoctor(){
+                    $.ajax({
+                        type: "POST",
+                        url: "/AccountController/showOrgCodedoctor",
+                        dataType: "json",
+                        success:function(data){
+                            var htmld="<option value=''>全部</option>";
+                            var item=data.data;
+                            for (var i = 0; i < item.length; i++) {
+                                htmld+="<option value="+item[i].userCode+">"+item[i].userName+"</option>";
+                            }
+                            $('#doctors').append(htmld);
+                            form.render();
+                        }
+
+                    })
+                }
+
+
+                $("#btnemptyadminuser").click(function(){
+                    $("#lockFlagadminuser").val('');
+                    $("#doctors").html('');
+                    $("#nameuser").val('');
+                    $("#mobile2").val('');
+                    $("#userNameuser").val('');
+                    $('#tree2').siblings().remove();
+                    usertsone();
+                    selectdoctor();
+                    layui.form.render('select');
+                    table.reload('userBank', {
+                        where: { //设定异步数据接口的额外参数，任意设
+                            'name':$("#nameuser").val(),
+                            'lockFlag':$("#lockFlagadminuser").val(),
+                            'userName':$("#userNameuser").val(),
+                            'orgCode':$("#user").val(),
+                            'doctors':$("#doctors").val(),
+                            'mobile':$("#mobile2").val(),
+                        }
+                    });
+                })
+
+                //搜索的方法
+                adduser=function(){
+                    table.reload('userBank', {
+                        where: { //设定异步数据接口的额外参数，任意设
+                            'name':$("#nameuser").val(),
+                            'lockFlag':$("#lockFlagadminuser").val(),
+                            'userName':$("#userNameuser").val(),
+                            'orgCode':$("#user").val(),
+                            'doctors':$("#doctors").val(),
+                            'mobile':$("#mobile2").val(),
+                        }
+                    });
+
+                }
+
+
+                table.on('tool(useraccount)', function(obj) { //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
+                    var data = obj.data; //获得当前行数据
+                    var layEvent = obj.event; //获得 lay-event 对应的值
+                    var tr = obj.tr; //获得当前行 tr 的DOM对象
+                    if (layEvent === 'edit') {
+                        window.location.href="/manage/doctor/UserAndphysical?userCode="+data.userCode;
+                    }
+                });
+
+
+                //医生账号查询
+                doctor();
+                function doctor(){
+                    //方法级渲染(食物套餐)
+                    table.render({
+                        elem : '#doctor',
+                        url : '/AccountController/showDoctor',
+                        method:'post',
+                        cols : [ [
+                            {type: 'checkbox', fixed: 'left'},
+                            {type:'numbers'},
+                            {
+                                field : 'userCode',
+                                title : '编码',
+                            },  {
+                                field : 'userName',
+                                title : '账号',
+                            },  {
+                                field : 'name',
+                                title : '名称',
+                            } ,  {
+                                field : 'orgname',
+                                title : '归属',
+                            },  {
+                                field : 'enrolCardId',
+                                title : '注册卡（已用/总数）',
+                            } ,{field:'sex',
+                                title:'账号状态',
+                                width:120,
+                                templet: '#switchTpl', unresize: true}
+                            ,{
+                                field : 'roleName',
+                                title : '角色',
+                            },{
+                                fixed : 'right',
+                                title : '操作',
+                                align : 'center',
+                                toolbar : '#barDemo1'
+                            } ] ],
+                        id : 'mealBank',
+                        page : true,
+                        done:function(res,curr,count){
+                            table_data = res.data;
+                            for(var i=0;i<res.data.length;i++){
+                                for(var j=0;j<ids.length;j++){
+                                    if(res.data[i].userCode==ids[j]){
+                                        //这里才是真正的有效勾选
+                                        res.data[i]["LAY_CHECKED"]='true';
+                                        //找到对应数据改变勾选样式，呈现出选中效果
+                                        var index= res.data[i]['LAY_TABLE_INDEX'];
+                                        $('.layui-table tr[data-index=' + index + '] input[type="checkbox"]').prop('checked', true);
+                                        $('.layui-table tr[data-index=' + index + '] input[type="checkbox"]').next().addClass('layui-form-checked');
+                                    }
+                                }
+                            }
+                            //设置全选checkbox的选中状态，只有改变LAY_CHECKED的值， table.checkStatus才能抓取到选中的状态
+                            var checkStatus = table.checkStatus('test');
+                            if(checkStatus.isAll){
+                                $(' .layui-table-header th[data-field="0"] input[type="checkbox"]').prop('checked', true);
+                                $('.layui-table-header th[data-field="0"] input[type="checkbox"]').next().addClass('layui-form-checked');
+                            }
+
+
+
+                        }
+                    });
+                }
+
+                //用户账号
+                usershow();
+                function usershow(){
+                    //方法级渲染
+                    table.render({
+                        elem : '#useraccount',
+                        url : '/AccountController/showUser',
+                        method:'post',
+                        cols : [ [
+                            // {type: 'checkbox', fixed: 'left'},
+                            {type:'numbers'},
+                            {
+                                field : 'userCode',
+                                title : '编码',
+                            },  {
+                                field : 'userName',
+                                title : '账号',
+                            },  {
+                                field : 'name',
+                                title : '姓名',
+                            } ,{
+                                title: '性别', templet: function (d) {
+                                    var strs = [
+                                        '男',
+                                        '女'
+                                    ];
+                                    if(d.gender==1 || d.gender=="1"){
+                                        return strs[0];
+                                    }else{
+                                        return strs[1];
+                                    }
+                                }, align: 'center', width: 100
+                            },{field:'sleepDiarytime', title:'出生年月',sort : true,
+                                templet : "<div>{{layui.util.toDateString(d.birthDate, 'yyyy-MM-dd')}}</div>"}
+                            ,{field:'sleepDiarytime', title:'服务开始时间',sort : true,
+                                templet : "<div>{{layui.util.toDateString(d.regTime, 'yyyy-MM-dd')}}</div>"}
+                            ,{
+                                field : 'treedate',
+                                title : '服务结束时间',
+                            },{
+                                field : 'doctor',
+                                title : '医生',
+                            },  {
+                                field : 'loginTimes',
+                                title : '登录次数',
+                            },{
+                                field : 'roleName',
+                                title : '角色',
+                            }  ,{field:'sex',
+                                title:'账号状态',
+                                width:120,
+                                templet: '#switchTpl', unresize: true}
+                            ,{
+                                fixed : 'right',
+                                title : '操作',
+                                align : 'center',
+                                toolbar : '#barDemo1'
+                            } ] ],
+                        id : 'userBank',
+                        page : true,
+                    });
+                }
+
+                table.on('tool(doctorMember)', function(obj) { //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
+                    var data = obj.data; //获得当前行数据
+                    var layEvent = obj.event; //获得 lay-event 对应的值
+                    var tr = obj.tr; //获得当前行 tr 的DOM对象
+                    if (layEvent === 'edit') {
+                        window.location.href="/manage/doctor/doctoradd?id="+data.userCode+"&orgCode="+data.orgCode;
+                    }
+                });
+
+                //搜索的方法
+                add=function(){
+                    table.reload('mealBank', {
+                        where: { //设定异步数据接口的额外参数，任意设
+                            'name':$("#name").val(),
+                            'lockFlag':$("#lockFlag").val(),
+                            'userName':$("#userName").val(),
+                            'orgCode':$("#guishu").val(),
+                            'mobile':$("#mobile").val(),
+                        }
+                    });
+
+                }
+
+                $("#btnempty").click(function(){
+                    $("#name").val('');
+                    $("#lockFlag").val('');
+                    $("#userName").val('');
+                    $("#mobile").val('');
+                    $('#tree').siblings().remove();
+                    randtreesone();
+                    layui.form.render('select');
+                    table.reload('mealBank', {
+                        where: { //设定异步数据接口的额外参数，任意设
+                            'name':$("#name").val(),
+                            'lockFlag':$("#lockFlag").val(),
+                            'userName':$("#userName").val(),
+                            'orgCode':$("#guishu").val(),
+                            'mobile':$("#mobile").val(),
+                        }
+                    });
+                })
+
+                $("#btnemptyadmin").click(function(){
+                    $("#nameadmin").val('');
+                    $("#lockFlagadmin").val('');
+                    $("#mobile1").val('');
+                    $('#tree1').siblings().remove();
+                    sportsone();
+                    layui.form.render('select');
+                    table.reload('Administrator', {
+                        where: { //设定异步数据接口的额外参数，任意设
+                            'lockFlag':$("#lockFlagadmin").val(),
+                            'userName':$("#nameadmin").val(),
+                            'orgCode':$("#admin").val(),
+                            'mobile':$("#mobile1").val(),
+                        }
+                    });
+
+                })
+
+                randtreesone();
+                function randtreesone(){
+                    treeSelect.render({
+                        // 选择器
+                        elem: '#tree',
+                        // 数据
+                        data: '/YhOrgTree/showPullDownTree',
+                        // 异步加载方式：get/post，默认get
+                        type: 'get',
+                        // 占位符
+                        placeholder: '全部',
+                        // 是否开启搜索功能：true/false，默认false
+                        search: true,
+                        // 点击回调
+                        click: function(d){
+                            $('#guishu').val(d.current.id);
+                        },
+                        // 加载完成后的回调函数
+                        success: function (d) {
+                            console.log(d);
+//                选中节点，根据id筛选
+//                treeSelect.checkNode('tree', 3);
+
+//                获取zTree对象，可以调用zTree方法
+//                var treeObj = treeSelect.zTree('tree');
+//                console.log(treeObj);
+
+//                刷新树结构
+//                treeSelect.refresh();
+                        }
+                    });
+                }
+
+
+
+                //管理员账号查询
+                sport();
+                function sport(){
+                    //方法级渲染(食物套餐)
+                    table.render({
+                        elem : '#sport',
+                        url : '/AccountController/showSport',
+                        method:'post',
+                        cols : [ [
+                            {type: 'checkbox', fixed: 'left'},
+                            {type:'numbers'},
+                            {
+                                field : 'userCode',
+                                title : '编码',
+                            },  {
+                                field : 'userName',
+                                title : '账号',
+                            } ,  {
+                                field : 'orgname',
+                                title : '归属',
+                            },
+                            {
+                                templet: function (d) {
+                                    return util.toDateString(d.regTime);
+                                }, title: '创建日期', align: 'regTime'
+                            },{field:'sex',
+                                title:'账号状态',
+                                width:120,
+                                templet: '#switchTpl', unresize: true}
+                            ,{
+                                field : 'roleName',
+                                title : '角色',
+                            }  ,{
+                                fixed : 'right',
+                                title : '操作',
+                                align : 'center',
+                                toolbar : '#Administrator1'
+                            } ] ],
+                        id : 'Administrator',
+                        page : true,
+                        done:function(res,curr,count){
+                            table_data2 = res.data;
+                            for(var i=0;i<res.data.length;i++){
+                                for(var j=0;j<ids2.length;j++){
+                                    if(res.data[i].userCode==ids2[j]){
+                                        //这里才是真正的有效勾选
+                                        res.data[i]["LAY_CHECKED"]='true';
+                                        //找到对应数据改变勾选样式，呈现出选中效果
+                                        var index= res.data[i]['LAY_TABLE_INDEX'];
+                                        $('.layui-table tr[data-index=' + index + '] input[type="checkbox"]').prop('checked', true);
+                                        $('.layui-table tr[data-index=' + index + '] input[type="checkbox"]').next().addClass('layui-form-checked');
+                                    }
+                                }
+                            }
+                            //设置全选checkbox的选中状态，只有改变LAY_CHECKED的值， table.checkStatus才能抓取到选中的状态
+                            var checkStatus = table.checkStatus('test');
+                            if(checkStatus.isAll){
+                                $(' .layui-table-header th[data-field="0"] input[type="checkbox"]').prop('checked', true);
+                                $('.layui-table-header th[data-field="0"] input[type="checkbox"]').next().addClass('layui-form-checked');
+                            }
+
+
+
+                        }
+                    });
+                }
+
+
+                table.on('tool(sport)', function(obj) { //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
+                    var data = obj.data; //获得当前行数据
+                    var layEvent = obj.event; //获得 lay-event 对应的值
+                    var tr = obj.tr; //获得当前行 tr 的DOM对象
+                    if (layEvent === 'edit') {
+                        window.location.href="/manage/doctor/AdministratorAmend?id="+data.userCode+"&orgname="+data.orgname;
+                    }
+                });
+
+
+
+
+                addadmin=function(){
+                    table.reload('Administrator', {
+                        where: { //设定异步数据接口的额外参数，任意设
+                            'lockFlag':$("#lockFlagadmin").val(),
+                            'userName':$("#nameadmin").val(),
+                            'orgCode':$("#admin").val(),
+                            'mobile':$("#mobile1").val(),
+                        }
+                    });
+
+                }
+
+                sportsone();
+                function sportsone(){
+                    treeSelect.render({
+                        // 选择器
+                        elem: '#tree1',
+                        // 数据
+                        data: '/YhOrgTree/showPullDownTree',
+                        // 异步加载方式：get/post，默认get
+                        type: 'get',
+                        // 占位符
+                        placeholder: '全部',
+                        // 是否开启搜索功能：true/false，默认false
+                        search: true,
+                        // 点击回调
+                        click: function(d){
+                            $('#admin').val(d.current.id);
+                        },
+                        // 加载完成后的回调函数
+                        success: function (d) {
+                            console.log(d);
+//                       选中节点，根据id筛选
+//                       treeSelect.checkNode('tree', 3);
+
+//                       获取zTree对象，可以调用zTree方法
+//                       var treeObj = treeSelect.zTree('tree');
+//                       console.log(treeObj);
+
+//                       刷新树结构
+//                       treeSelect.refresh();
+                        }
+                    });
+                }
+
+
+                table.on('checkbox(doctorMember)', function (obj) {
+                    console.log(obj);
+
+                    //debugger
+                    if(obj.checked==true){
+                        if(obj.type=='one'){
+                            ids.push(obj.data.userCode);
+
+                        }else{
+                            console.log(table_data)
+                            for(var i=0;i<table_data.length;i++){
+                                ids.push(table_data[i].userCode);
+                            }
+                        }
+                    }else{
+
+                        if(obj.type=='one'){
+                            for(var i=0;i<ids.length;i++){
+                                if(ids[i]==obj.data.userCode){
+                                    //ids.pop();
+                                    ids.splice(i,1);
+                                }
+                            }
+                        }else{
+                            var page = $("#doctor .layui-laypage-curr").text();
+                            let startIndex = (page - 1) * 20
+                            let endIndex = page * 20
+                            let curPageIds = table_data.map(function(item, index) {
+                                if (startIndex <= index >= endIndex) {
+                                    return item.userCode
+                                }
+                            })
+                            ids = ids.filter(item => !curPageIds.includes(item))
+                        }
+                    }
+
+                    //norepeat(ids);
+                    if(ids.length>0){
+                        $("#piliang").show();
+                        if(obj.type=="all"){
+                            ids.sort();
+                            for(var i = 0;i < ids.length-1;i++){
+                                if(ids[i]==ids[i+1]){
+                                    ids.splice(i+1,1);
+                                    i--;
+                                }
+                            }
+                        }
+                        $("#xuanze").html("已选择"+ids.length+"项")
+                    }else{
+                        $("#piliang").hide();
+                    }
+
+                });
+
+
+
+                table.on('checkbox(sport)', function (obj) {
+                    console.log(obj);
+
+                    //debugger
+                    if(obj.checked==true){
+                        if(obj.type=='one'){
+                            ids2.push(obj.data.userCode);
+
+                        }else{
+                            console.log(table_data2)
+                            for(var i=0;i<table_data2.length;i++){
+                                ids2.push(table_data2[i].userCode);
+                            }
+                        }
+                    }else{
+
+                        if(obj.type=='one'){
+                            for(var i=0;i<ids2.length;i++){
+                                if(ids2[i]==obj.data.userCode){
+                                    //ids.pop();
+                                    ids2.splice(i,1);
+                                }
+                            }
+                        }else{
+                            var page = $("#doctor .layui-laypage-curr").text();
+                            let startIndex = (page - 1) * 20
+                            let endIndex = page * 20
+                            let curPageIds = table_data2.map(function(item, index) {
+                                if (startIndex <= index >= endIndex) {
+                                    return item.userCode
+                                }
+                            })
+                            ids2 = ids2.filter(item => !curPageIds.includes(item))
+                        }
+                    }
+
+                    //norepeat(ids);
+                    if(ids2.length>0){
+                        $("#piliang2").show();
+                        if(obj.type=="all"){
+                            ids2.sort();
+                            for(var i = 0;i < ids2.length-1;i++){
+                                if(ids2[i]==ids2[i+1]){
+                                    ids2.splice(i+1,1);
+                                    i--;
+                                }
+                            }
+                        }
+                        $("#xuanze2").html("已选择"+ids2.length+"项")
+                    }else{
+                        $("#piliang2").hide();
+                    }
+
+                });
+            });
+
+
+        </script>
+    </html>

@@ -1,0 +1,480 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yihe.system.mapper.YhHealthLectureCommentMapper">
+  <resultMap id="BaseResultMap" type="com.yihe.system.domain.YhHealthLectureComment">
+    <id column="commentId" jdbcType="INTEGER" property="commentid" />
+    <result column="pid" jdbcType="INTEGER" property="pid" />
+    <result column="lectureInfoId" jdbcType="INTEGER" property="lectureinfoid" />
+    <result column="usercode" jdbcType="VARCHAR" property="usercode" />
+    <result column="status" jdbcType="TINYINT" property="status" />
+    <result column="commentTime" jdbcType="VARCHAR" property="commenttime" />
+    <result column="comImg" jdbcType="VARCHAR" property="comimg" />
+    <result column="title" jdbcType="VARCHAR" property="title" />
+    <result column="name" jdbcType="VARCHAR" property="userName" />
+    <result column="Org_Name" jdbcType="VARCHAR" property="orgName" />
+    <result column="mobile" jdbcType="VARCHAR" property="mobile" />
+  </resultMap>
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.yihe.system.domain.YhHealthLectureComment">
+    <result column="commentInfo" jdbcType="LONGVARCHAR" property="commentinfo" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    commentId, pid, lectureInfoId, usercode, status, commentTime, comImg
+  </sql>
+  <sql id="Blob_Column_List">
+    commentInfo
+  </sql>
+  
+  
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from yh_health_lecture_comment
+    where commentId = #{commentid,jdbcType=INTEGER}
+  </delete>
+  
+    <delete id="deleteByPrimaryKeyPid" parameterType="java.lang.Integer">
+    delete from yh_health_lecture_comment
+    where pid = #{pid,jdbcType=INTEGER}
+  </delete>
+  
+  
+  <delete id="deleteLectureCode" parameterType="map">
+  	 delete from yh_health_lecture_comment
+    where lectureInfoId =#{habitId,jdbcType=INTEGER} and usercode=#{usercode}
+  </delete>
+  
+  <select id="findCommentByUserCodeForCount" resultType="java.lang.Integer">
+   SELECT COUNT(1) FROM yh_health_lecture_comment WHERE usercode=#{usercode}
+  </select>
+  
+  
+  <select id="showHabitExport" resultMap="BaseResultMap" parameterType="map">
+  	select dict.habit_name as title,fo.name,org.Org_Name,fo.mobile,co.* from yh_health_lecture_comment co
+ inner join yh_user_reginfo fo on co.usercode=fo.user_code
+   left join yh_life_habit_dict dict on co.lectureInfoId=dict.id
+   left join yh_org_tree org on fo.Org_Code=org.Org_Code
+   <where>
+		co.pid=0 and
+		co.status =2
+		<if test="title!=null and title !=''">
+		AND
+		(
+			 dict.habit_name like CONCAT('%',#{title},'%' )
+		)
+		</if>
+		<if test="orgCode!=null and orgCode !=''">
+		AND
+		(
+			fo.Org_Code like CONCAT('%',#{orgCode},'%' )
+		)
+		</if>
+		<if test="entryTime!=null and entryTime !=''">
+		and co.commentTime between #{entryTime} and #{entryTime1}
+		</if>
+	</where>
+	order by co.commentTime desc
+  </select>
+  
+   <!-- 查询所有一级评论 -->
+    <select id="selectComment" resultMap="BaseResultMap" parameterType="map">
+  		select co.lectureInfoId,co.commentId,co.status,tr.title,dict.habit_name as title,fo.name,co.commentInfo,co.comImg,co.commentTime from yh_health_lecture_comment co
+ inner join yh_user_reginfo fo on co.usercode=fo.user_code
+   left join yh_life_habit_dict dict on co.lectureInfoId=dict.id
+  left join yh_health_lecture_info tr on co.lectureInfoId=tr.infoId
+  		<where>
+  			co.pid=0
+  			<if test="title!=null and title !=''">
+  			AND
+  			(
+  				tr.title like CONCAT('%',#{title},'%' )
+  				or dict.habit_name like CONCAT('%',#{title},'%' )
+  			)
+  			</if>
+  			<if test="orgCode!=null and orgCode !=''">
+  			AND
+  			(
+  				fo.Org_Code like CONCAT('%',#{orgCode},'%' )
+  			)
+  			</if>
+  			<if test="status !=null and status !=''">
+  			and
+  			co.status = #{status,jdbcType=INTEGER}
+  			</if>
+  			<if test="entryTime!=null and entryTime !=''">
+  			and co.commentTime between #{entryTime} and #{entryTime1}
+  			</if>
+  		</where>
+  		order by co.commentTime desc LIMIT  #{page},#{limit}
+  </select>
+  
+  
+   <!-- 查询所有一级评论总行数 -->
+    <select id="selectCommentConut" resultType="int" parameterType="map">
+  		select count(*) from yh_health_lecture_comment co
+ inner join yh_user_reginfo fo on co.usercode=fo.user_code
+ 
+  left join yh_life_habit_dict dict on co.lectureInfoId=dict.id
+  left join yh_health_lecture_info tr on co.lectureInfoId=tr.infoId
+  		<where>
+  		co.pid=0
+  			<if test="title!=null and title !=''">
+  			AND
+  			(
+  				tr.title like CONCAT('%',#{title},'%' )
+  				or dict.habit_name like CONCAT('%',#{title},'%' )
+  			)
+  			</if>
+  			<if test="orgCode!=null and orgCode !=''">
+  			AND
+  			(
+  				fo.Org_Code like CONCAT('%',#{orgCode},'%' )
+  			)
+  			</if>
+  			<if test="status !=null and status !=''">
+  			and
+  			co.status = #{status,jdbcType=INTEGER}
+  			</if>
+  			<if test="entryTime!=null and entryTime !=''">
+  			and co.commentTime between #{entryTime} and #{entryTime1}
+  			</if>
+  		</where>
+  		order by co.commentTime desc
+  </select>
+  
+  
+  
+   <!-- 查询所有二级评论 -->
+    <select id="selectsecondComment" resultMap="BaseResultMap" parameterType="map">
+  		select co.commentId,co.status,fo.name,co.commentInfo,co.comImg,co.commentTime from yh_health_lecture_comment co,yh_user_reginfo fo
+  		<where>
+  		co.usercode=fo.user_code 
+  			<if test="title!=null and title !=''">
+  			AND
+  			(
+  				tr.title like CONCAT('%',#{title},'%' )
+  			)
+  			</if>
+  			<if test="status !=null and status !=''">
+  			and
+  			co.status = #{status,jdbcType=INTEGER}
+  			</if>
+  		</where>
+  		and co.pid=#{pid,jdbcType=INTEGER}
+  		order by co.commentTime desc LIMIT  #{page},#{limit}
+  </select>
+  
+  
+   <!-- 查询所有二级评论总行数 -->
+    <select id="selectsecondCommentConut" resultType="int" parameterType="map">
+  		select count(*) from yh_health_lecture_comment co,yh_user_reginfo fo
+  		<where>
+  		co.usercode=fo.user_code 
+  			<if test="title!=null and title !=''">
+  			AND
+  			(
+  				tr.title like CONCAT('%',#{title},'%' )
+  			)
+  			</if>
+  			<if test="status !=null and status !=''">
+  			and
+  			co.status = #{status,jdbcType=INTEGER}
+  			</if>
+  		</where>
+  		and co.pid=#{pid,jdbcType=INTEGER}
+  		order by co.commentTime desc
+  </select>
+  
+  <!-- 根据pid查询二级评论次数 -->
+  <select id="selectnumber" resultType="java.lang.Integer" parameterType="java.lang.Integer">
+  	select count(*) from yh_health_lecture_comment where pid=#{pid,jdbcType=INTEGER}
+  </select>
+  
+  <!-- 根据课堂id查询评论次数 -->
+  <select id="selectByCount" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+  	select count(*) from yh_health_lecture_comment where lectureInfoId=#{lectureinfoid,jdbcType=INTEGER}
+  </select>
+  
+  
+  <!-- 查询一级评论 -->
+  <select id="">
+  	select * from yh_health_lecture_comment where pid=0
+  </select>
+  
+  <select id="selectByExampleWithBLOBs" parameterType="com.yihe.system.domain.YhHealthLectureComment" resultMap="ResultMapWithBLOBs">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from yh_health_lecture_comment
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByExample" parameterType="com.yihe.system.domain.YhHealthLectureComment" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from yh_health_lecture_comment
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="ResultMapWithBLOBs">
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from yh_health_lecture_comment
+    where commentId = #{commentid,jdbcType=INTEGER}
+  </select>
+
+  <delete id="deleteByExample" parameterType="com.yihe.system.domain.YhHealthLectureComment">
+    delete from yh_health_lecture_comment
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.yihe.system.domain.YhHealthLectureComment">
+    <selectKey keyProperty="commentid" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into yh_health_lecture_comment (pid, lectureInfoId, usercode, 
+      status, commentTime, comImg, 
+      commentInfo)
+    values (#{pid,jdbcType=INTEGER}, #{lectureinfoid,jdbcType=INTEGER}, #{usercode,jdbcType=VARCHAR}, 
+      #{status,jdbcType=TINYINT}, #{commenttime,jdbcType=VARCHAR}, #{comimg,jdbcType=VARCHAR}, 
+      #{commentinfo,jdbcType=LONGVARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.yihe.system.domain.YhHealthLectureComment">
+    <selectKey keyProperty="commentid" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into yh_health_lecture_comment
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="pid != null">
+        pid,
+      </if>
+      <if test="lectureinfoid != null">
+        lectureInfoId,
+      </if>
+      <if test="usercode != null">
+        usercode,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+      <if test="commenttime != null">
+        commentTime,
+      </if>
+      <if test="comimg != null">
+        comImg,
+      </if>
+      <if test="commentinfo != null">
+        commentInfo,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="pid != null">
+        #{pid,jdbcType=INTEGER},
+      </if>
+      <if test="lectureinfoid != null">
+        #{lectureinfoid,jdbcType=INTEGER},
+      </if>
+      <if test="usercode != null">
+        #{usercode,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=TINYINT},
+      </if>
+      <if test="commenttime != null">
+        #{commenttime,jdbcType=VARCHAR},
+      </if>
+      <if test="comimg != null">
+        #{comimg,jdbcType=VARCHAR},
+      </if>
+      <if test="commentinfo != null">
+        #{commentinfo,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.yihe.system.domain.YhHealthLectureComment" resultType="java.lang.Long">
+    select count(*) from yh_health_lecture_comment
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update yh_health_lecture_comment
+    <set>
+      <if test="record.commentid != null">
+        commentId = #{record.commentid,jdbcType=INTEGER},
+      </if>
+      <if test="record.pid != null">
+        pid = #{record.pid,jdbcType=INTEGER},
+      </if>
+      <if test="record.lectureinfoid != null">
+        lectureInfoId = #{record.lectureinfoid,jdbcType=INTEGER},
+      </if>
+      <if test="record.usercode != null">
+        usercode = #{record.usercode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.status != null">
+        status = #{record.status,jdbcType=TINYINT},
+      </if>
+      <if test="record.commenttime != null">
+        commentTime = #{record.commenttime,jdbcType=VARCHAR},
+      </if>
+      <if test="record.comimg != null">
+        comImg = #{record.comimg,jdbcType=VARCHAR},
+      </if>
+      <if test="record.commentinfo != null">
+        commentInfo = #{record.commentinfo,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExampleWithBLOBs" parameterType="map">
+    update yh_health_lecture_comment
+    set commentId = #{record.commentid,jdbcType=INTEGER},
+      pid = #{record.pid,jdbcType=INTEGER},
+      lectureInfoId = #{record.lectureinfoid,jdbcType=INTEGER},
+      usercode = #{record.usercode,jdbcType=VARCHAR},
+      status = #{record.status,jdbcType=TINYINT},
+      commentTime = #{record.commenttime,jdbcType=VARCHAR},
+      comImg = #{record.comimg,jdbcType=VARCHAR},
+      commentInfo = #{record.commentinfo,jdbcType=LONGVARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update yh_health_lecture_comment
+    set commentId = #{record.commentid,jdbcType=INTEGER},
+      pid = #{record.pid,jdbcType=INTEGER},
+      lectureInfoId = #{record.lectureinfoid,jdbcType=INTEGER},
+      usercode = #{record.usercode,jdbcType=VARCHAR},
+      status = #{record.status,jdbcType=TINYINT},
+      commentTime = #{record.commenttime,jdbcType=VARCHAR},
+      comImg = #{record.comimg,jdbcType=VARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.yihe.system.domain.YhHealthLectureComment">
+    update yh_health_lecture_comment
+    <set>
+      <if test="pid != null">
+        pid = #{pid,jdbcType=INTEGER},
+      </if>
+      <if test="lectureinfoid != null">
+        lectureInfoId = #{lectureinfoid,jdbcType=INTEGER},
+      </if>
+      <if test="usercode != null">
+        usercode = #{usercode,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=TINYINT},
+      </if>
+      <if test="commenttime != null">
+        commentTime = #{commenttime,jdbcType=VARCHAR},
+      </if>
+      <if test="comimg != null">
+        comImg = #{comimg,jdbcType=VARCHAR},
+      </if>
+      <if test="commentinfo != null">
+        commentInfo = #{commentinfo,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where commentId = #{commentid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.yihe.system.domain.YhHealthLectureComment">
+    update yh_health_lecture_comment
+    set pid = #{pid,jdbcType=INTEGER},
+      lectureInfoId = #{lectureinfoid,jdbcType=INTEGER},
+      usercode = #{usercode,jdbcType=VARCHAR},
+      status = #{status,jdbcType=TINYINT},
+      commentTime = #{commenttime,jdbcType=VARCHAR},
+      comImg = #{comimg,jdbcType=VARCHAR},
+      commentInfo = #{commentinfo,jdbcType=LONGVARCHAR}
+    where commentId = #{commentid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.yihe.system.domain.YhHealthLectureComment">
+    update yh_health_lecture_comment
+    set pid = #{pid,jdbcType=INTEGER},
+      lectureInfoId = #{lectureinfoid,jdbcType=INTEGER},
+      usercode = #{usercode,jdbcType=VARCHAR},
+      status = #{status,jdbcType=TINYINT},
+      commentTime = #{commenttime,jdbcType=VARCHAR},
+      comImg = #{comimg,jdbcType=VARCHAR}
+    where commentId = #{commentid,jdbcType=INTEGER}
+  </update>
+</mapper>

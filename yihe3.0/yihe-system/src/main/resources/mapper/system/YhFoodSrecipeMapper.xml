@@ -1,0 +1,406 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yihe.system.mapper.YhFoodSrecipeMapper" >
+  <resultMap id="BaseResultMap" type="com.yihe.system.domain.YhFoodSrecipe" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="D_Type" property="dType" jdbcType="INTEGER" />
+    <result column="E_Level" property="eLevel" jdbcType="INTEGER" />
+    <result column="genter" property="genter" jdbcType="INTEGER" />
+    <result column="Is_Use" property="isUse" jdbcType="INTEGER" />
+    <result column="Package_number" property="packageNumber" jdbcType="INTEGER" />
+    <result column="Is_Del" property="isDel" jdbcType="INTEGER" />
+    <result column="F_type" property="ftype" jdbcType="INTEGER" />
+    <result column="diseaseid" property="diseaseid" jdbcType="VARCHAR" />
+    <result column="disease_name" property="name" jdbcType="VARCHAR" />
+    <result column="oneself" property="oneself" jdbcType="INTEGER" />
+    <result column="fs_describe" property="fsDescribe" jdbcType="VARCHAR" />
+    <result column="diseaseName" property="diseaseName" jdbcType="VARCHAR" />
+    <result column="User_code" property="usercode" jdbcType="VARCHAR" />
+    <result column="creationTime" property="creationTime" jdbcType="VARCHAR" />
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="com.yihe.system.domain.YhFoodSrecipe" extends="BaseResultMap" >
+    <result column="F_Elements" property="fElements" jdbcType="LONGVARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    Fs_Id, D_Type, E_Level, genter, Is_Use, Package_number, Is_Del, diseaseid, oneself, 
+    fs_describe
+  </sql>
+  <sql id="Blob_Column_List" >
+    F_Elements
+  </sql>
+  
+  <select id="findFoodPackageManagement"  resultMap="ResultMapWithBLOBs">
+  SELECT `id`,
+   `F_type`,
+   `E_Level`,
+   `F_Elements`,
+   `Is_Del`,
+   `diseaseid`,
+   `oneself`,
+   `status`,
+   `fs_describe`,
+   `User_code`,
+   `creationTime`
+   FROM `yh_food_srecipe`
+
+    
+      
+  
+   <where> Is_Del=2
+ <if test="oneself == 1">
+ AND oneself=1
+ </if>
+ <if test="oneself == 2">
+ AND user_code=#{usercode}  AND oneself=3
+ </if>
+  <if test="oneself == 3">
+  AND oneself=3  AND user_code!=#{usercode}
+ </if>
+ 
+ <if test="ftype != null and ftype != ''">
+  AND f_type=#{ftype}
+ </if>
+ <if test="elevel != null and elevel != ''">
+ AND e_level=#{elevel}
+ </if>
+ 
+ <if test="diseaseid != null and diseaseid != ''">
+ AND CONCAT(";",diseaseid,";") LIKE CONCAT('%;',#{diseaseid},'%;')
+ </if>
+ 
+  <if test="fsDescribe != null">
+ AND fs_describe LIKE CONCAT('%',#{fsDescribe},'%')
+ </if>
+
+  
+  </where>
+  
+  order by STR_TO_DATE(creationTime, '%Y-%m-%d')  DESC 
+  </select>
+  
+  <select id="findFoodSreCipeByAllInfo"  resultMap="BaseResultMap" >
+  SELECT 
+  a.`id`,
+   a.`F_type`,
+   a.`E_Level`,
+   a.`F_Elements`,
+   a.`Is_Del`,
+   a.`diseaseid`,
+   a.`oneself`,
+   a.`status`,
+   a.`fs_describe`,
+   a.`User_code`,
+   a.`creationTime`,
+   b.disease_name AS diseaseName
+  
+FROM
+   `yh_food_srecipe`  AS a
+   LEFT JOIN `yh_disease_category` AS b
+   ON a.diseaseid=b.disease_code
+   <where>
+   <if test="ftype != null and ftype != ''">
+   AND a.F_type=#{ftype} 
+   </if>
+   
+   <if test="eLevel != null and eLevel != ''">
+   AND a.E_Level=#{eLevel} 
+   </if>
+   
+    <if test="diseaseid != null and diseaseid != ''">
+   AND a.diseaseid=#{diseaseid} 
+   </if>
+   </where>
+   
+  </select>
+  
+  <select id="findSrecipeByfsDescribeCount" resultType="java.lang.Integer">
+  SELECT count(1) FROM `yh_food_srecipe` WHERE fs_describe LIKE #{fsDescribe} and Is_Del=2
+  </select>
+  
+  <select id="findSrecipeAllInfo" resultMap="ResultMapWithBLOBs">
+  SELECT * FROM `yh_food_srecipe2` where F_type =1
+  </select>
+  
+   <!-- 查询所有食物套餐 -->
+    <select id="selectSrecipeshow" resultMap="ResultMapWithBLOBs" parameterType="map">
+  		select pe.F_Elements,pe.Fs_Id,pe.D_Type,pe.genter,ca.disease_name,pe.oneself,pe.E_Level from yh_food_srecipe2 pe,yh_disease_category ca
+  		<where>
+  		pe.diseaseid=ca.id
+  			<if test="name!=null and name !=''">
+  			AND
+  			(
+  				ca.disease_name like CONCAT('%',#{name},'%' )
+  			)
+  			</if>
+  			<if test="sex!=null and sex !=''">
+  			AND
+  			pe.genter=#{sex}
+  			</if>
+  			<if test="taste!=null and taste !=''">
+  			AND
+  			pe.D_Type=#{taste}
+  			</if>
+  		</where>
+  </select>
+  
+  
+  <!-- 查询所有食物套餐模糊查询 -->
+    <select id="selectSrecipe" resultMap="ResultMapWithBLOBs" parameterType="map">
+  		select pe.F_Elements,pe.Fs_Id,pe.D_Type,pe.genter,ca.disease_name,pe.oneself,pe.E_Level from yh_food_srecipe2 pe,yh_disease_category ca
+  		<where>
+  		pe.diseaseid=ca.id
+  			<if test="name!=null and name !=''">
+  			AND
+  			(
+  				ca.disease_name like CONCAT('%',#{name},'%' )
+  			)
+  			</if>
+  		</where>
+  		 order by pe.Fs_Id desc LIMIT  #{page},#{limit}
+  </select>
+  
+  <select id="findYhFoodSrecipeByDtypeAndSexAndNumAndDis" resultMap="ResultMapWithBLOBs">
+  SELECT * FROM `yh_food_srecipe2`
+  <where>
+  <if test="type!=null and type!=''">
+  and D_Type=#{type}
+  </if>
+  <if test="sex!=null">
+  AND genter=#{sex}
+  </if>
+  <if test="number!=null and number!=''">
+  AND Package_number=#{number}
+  </if>
+  <if test="diseaseid!=null">
+  AND diseaseid=#{diseaseid} 
+  </if>
+  </where>
+  	   limit 1
+  </select>
+  
+  <!--  3.1-->
+  
+  <select id="findYhFoodSrecipeByDtypeAndSexAndNumAndDisNew" resultMap="ResultMapWithBLOBs">
+  SELECT * FROM `yh_food_srecipe2`
+  <where>
+  <if test="type!=null and type!=''">
+  and D_Type=#{type}
+  </if>
+  <if test="sex!=null">
+  AND genter=#{sex}
+  </if>
+  <if test="number!=null and number!=''">
+  AND Package_number=#{number}
+  </if>
+  <if test="diseaseid!=null">
+  AND diseaseid=#{diseaseid} 
+  </if>
+   <if test="isUse!=null">
+  AND is_Use=#{isUse} 
+  </if>
+  </where>
+  	   limit 1
+  </select>
+   <!-- 查询所有食物套餐模糊查询总行数 -->
+    <select id="selectSrecipeConut" resultType="int" parameterType="map">
+  		select count(*) from yh_food_srecipe2 pe,yh_disease_category ca
+  		<where>
+  		pe.diseaseid=ca.id
+  			<if test="name!=null and name !=''">
+  			AND
+  			(
+  				ca.disease_name like CONCAT('%',#{name},'%' )
+  			)
+  			</if>
+  		</where>
+  		 order by pe.Fs_Id desc
+  </select>
+  
+  
+  <select id="findFoodSrecipeByFsId"  resultMap="ResultMapWithBLOBs" parameterType="java.lang.Integer" >
+    SELECT * FROM `yh_food_srecipe` WHERE id=#{fsId,jdbcType=INTEGER}  
+  </select>
+  
+  
+  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Integer" >
+   select * from yh_food_srecipe pe,yh_disease_category ca
+  		where pe.diseaseid=ca.id
+    and pe.id = #{fsId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from yh_food_srecipe2
+    where Fs_Id = #{fsId,jdbcType=INTEGER}
+  </delete>
+  
+  <insert id="insert" parameterType="com.yihe.system.domain.YhFoodSrecipe" >
+    insert into yh_food_srecipe2 (Fs_Id, D_Type, E_Level, 
+      genter, Is_Use, Package_number, 
+      Is_Del, diseaseid, oneself, 
+      fs_describe, F_Elements)
+    values (#{fsId,jdbcType=INTEGER}, #{dType,jdbcType=INTEGER}, #{eLevel,jdbcType=INTEGER}, 
+      #{genter,jdbcType=INTEGER}, #{isUse,jdbcType=INTEGER}, #{packageNumber,jdbcType=INTEGER}, 
+      #{isDel,jdbcType=INTEGER}, #{diseaseid,jdbcType=INTEGER}, #{oneself,jdbcType=INTEGER}, 
+      #{fsDescribe,jdbcType=VARCHAR}, #{fElements,jdbcType=LONGVARCHAR})
+  </insert>
+  <insert id="insertAll" parameterType="map" >
+    INSERT INTO  `yh_food_srecipe` (
+  
+  `F_type`,
+  `E_Level`,
+  `F_Elements`,
+  `Is_Del`,
+  `diseaseid`,
+  `oneself`,
+  `status`,
+  `fs_describe`
+) 
+VALUES
+  (
+   
+    '1',
+    #{elevel},
+    #{felements},
+    '2',
+    #{diseaseid},
+    '1',
+    '0',
+    #{fsdescribe}
+  ) 
+  </insert>
+  <insert id="insertSelective" parameterType="com.yihe.system.domain.YhFoodSrecipe" >
+    insert into yh_food_srecipe2
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="fsId != null" >
+        Fs_Id,
+      </if>
+      <if test="dType != null" >
+        D_Type,
+      </if>
+      <if test="eLevel != null" >
+        E_Level,
+      </if>
+      <if test="genter != null" >
+        genter,
+      </if>
+      <if test="isUse != null" >
+        Is_Use,
+      </if>
+      <if test="packageNumber != null" >
+        Package_number,
+      </if>
+      <if test="isDel != null" >
+        Is_Del,
+      </if>
+      <if test="diseaseid != null" >
+        diseaseid,
+      </if>
+      <if test="oneself != null" >
+        oneself,
+      </if>
+      <if test="fsDescribe != null" >
+        fs_describe,
+      </if>
+      <if test="fElements != null" >
+        F_Elements,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="fsId != null" >
+        #{fsId,jdbcType=INTEGER},
+      </if>
+      <if test="dType != null" >
+        #{dType,jdbcType=INTEGER},
+      </if>
+      <if test="eLevel != null" >
+        #{eLevel,jdbcType=INTEGER},
+      </if>
+      <if test="genter != null" >
+        #{genter,jdbcType=INTEGER},
+      </if>
+      <if test="isUse != null" >
+        #{isUse,jdbcType=INTEGER},
+      </if>
+      <if test="packageNumber != null" >
+        #{packageNumber,jdbcType=INTEGER},
+      </if>
+      <if test="isDel != null" >
+        #{isDel,jdbcType=INTEGER},
+      </if>
+      <if test="diseaseid != null" >
+        #{diseaseid,jdbcType=INTEGER},
+      </if>
+      <if test="oneself != null" >
+        #{oneself,jdbcType=INTEGER},
+      </if>
+      <if test="fsDescribe != null" >
+        #{fsDescribe,jdbcType=VARCHAR},
+      </if>
+      <if test="fElements != null" >
+        #{fElements,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.yihe.system.domain.YhFoodSrecipe" >
+    update yh_food_srecipe
+    <set >
+      <if test="dType != null" >
+        D_Type = #{dType,jdbcType=INTEGER},
+      </if>
+      <if test="eLevel != null" >
+        E_Level = #{eLevel,jdbcType=INTEGER},
+      </if>
+      <if test="genter != null" >
+        genter = #{genter,jdbcType=INTEGER},
+      </if>
+      <if test="isUse != null" >
+        Is_Use = #{isUse,jdbcType=INTEGER},
+      </if>
+      <if test="packageNumber != null" >
+        Package_number = #{packageNumber,jdbcType=INTEGER},
+      </if>
+      <if test="isDel != null" >
+        Is_Del = #{isDel,jdbcType=INTEGER},
+      </if>
+      <if test="diseaseid != null" >
+        diseaseid = #{diseaseid,jdbcType=INTEGER},
+      </if>
+      <if test="oneself != null" >
+        oneself = #{oneself,jdbcType=INTEGER},
+      </if>
+      <if test="fsDescribe != null" >
+        fs_describe = #{fsDescribe,jdbcType=VARCHAR},
+      </if>
+      <if test="fElements != null" >
+        F_Elements = #{fElements,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.yihe.system.domain.YhFoodSrecipe" >
+    update yh_food_srecipe2
+    set D_Type = #{dType,jdbcType=INTEGER},
+      E_Level = #{eLevel,jdbcType=INTEGER},
+      genter = #{genter,jdbcType=INTEGER},
+      Is_Use = #{isUse,jdbcType=INTEGER},
+      Package_number = #{packageNumber,jdbcType=INTEGER},
+      Is_Del = #{isDel,jdbcType=INTEGER},
+      diseaseid = #{diseaseid,jdbcType=INTEGER},
+      oneself = #{oneself,jdbcType=INTEGER},
+      fs_describe = #{fsDescribe,jdbcType=VARCHAR},
+      F_Elements = #{fElements,jdbcType=LONGVARCHAR}
+    where Fs_Id = #{fsId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.yihe.system.domain.YhFoodSrecipe" >
+    update yh_food_srecipe2
+    set D_Type = #{dType,jdbcType=INTEGER},
+      E_Level = #{eLevel,jdbcType=INTEGER},
+      genter = #{genter,jdbcType=INTEGER},
+      Is_Use = #{isUse,jdbcType=INTEGER},
+      Package_number = #{packageNumber,jdbcType=INTEGER},
+      Is_Del = #{isDel,jdbcType=INTEGER},
+      diseaseid = #{diseaseid,jdbcType=INTEGER},
+      oneself = #{oneself,jdbcType=INTEGER},
+      fs_describe = #{fsDescribe,jdbcType=VARCHAR}
+    where Fs_Id = #{fsId,jdbcType=INTEGER}
+  </update>
+</mapper>

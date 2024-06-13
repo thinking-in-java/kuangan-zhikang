@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yihe.system.mapper.YhSportSetmealMapper" >
+  <resultMap id="BaseResultMap" type="com.yihe.system.domain.YhSportSetmeal" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="disease_code" property="diseaseCode" jdbcType="INTEGER" />
+    <result column="setmeal_mame" property="setmealMame" jdbcType="VARCHAR" />
+    <result column="subject_id" property="subjectId" jdbcType="VARCHAR" />
+    <result column="setmeal_img" property="setmealImg" jdbcType="VARCHAR" />
+    <result column="oneself" property="oneself" jdbcType="INTEGER" />
+    <result column="describe" property="describe" jdbcType="VARCHAR" />
+    <result column="exercise_frequency" property="exerciseFrequency" jdbcType="INTEGER" />
+    <result column="recommend_benchmarks" property="recommendBenchmarks" jdbcType="INTEGER" />
+    <result column="setmeal_type" property="setmealType" jdbcType="INTEGER" />
+    <result column="diseaseid" property="diseaseid" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, disease_code, setmeal_mame, subject_id, setmeal_img, oneself, describe, exercise_frequency, 
+    recommend_benchmarks, setmeal_type, diseaseid
+  </sql>
+  
+   <sql id="allColumn">
+        id, setmeal_mame, subject_id, setmeal_type,disease_code, diseaseid, setmeal_img, oneself
+    </sql>
+    <!--根据疾病id以及套餐id查询，默认oneself为1-->
+    <select id="selectYhSportSetmeal" resultMap="BaseResultMap">
+        SELECT <include refid="allColumn"/> FROM yh_sport_setmeal
+        where disease_code=#{diseaseid}
+        AND setmeal_type=#{setmealType}
+        AND oneself=1
+    </select>
+    
+    
+   <!-- 查询所有运动课堂模糊查询 -->
+    <select id="selectSetmeal" resultMap="BaseResultMap" parameterType="map">
+  		select * from yh_sport_setmeal
+  		<where>
+  			<if test="setmealMame!=null and setmealMame !=''">
+  			AND
+  			(
+  				setmeal_mame like CONCAT('%',#{setmealMame},'%' )
+  			)
+  			</if>
+  		</where>
+  		order by id desc LIMIT  #{page},#{limit}
+  </select>
+  
+  
+   <!-- 查询所有运动课堂模糊查询总行数 -->
+    <select id="selectSetmealConut" resultType="int" parameterType="map">
+  		select count(*) from yh_sport_setmeal
+  		<where>
+  			<if test="setmealMame!=null and setmealMame !=''">
+  			AND
+  			(
+  				setmeal_mame like CONCAT('%',#{setmealMame},'%' )
+  			)
+  			</if>
+  		</where>
+  		order by id desc
+  </select>
+  
+  
+  <select id="selectSetmealshow" resultMap="BaseResultMap" parameterType="map">
+  	select * from yh_sport_setmeal <where>
+  			<if test="setmealMame!=null and setmealMame !=''">
+  			AND
+  			(
+  				setmeal_mame like CONCAT('%',#{setmealMame},'%' )
+  			)
+  			</if>
+  		</where>
+  </select>
+  
+  
+   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select * from yh_sport_setmeal
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from yh_sport_setmeal
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.yihe.system.domain.YhSportSetmeal" >
+    insert into yh_sport_setmeal (id, disease_code, setmeal_mame, 
+      subject_id, setmeal_img, oneself, 
+      describe, exercise_frequency, recommend_benchmarks, 
+      setmeal_type, diseaseid)
+    values (#{id,jdbcType=INTEGER}, #{diseaseCode,jdbcType=INTEGER}, #{setmealMame,jdbcType=VARCHAR}, 
+      #{subjectId,jdbcType=VARCHAR}, #{setmealImg,jdbcType=VARCHAR}, #{oneself,jdbcType=INTEGER}, 
+      #{describe,jdbcType=VARCHAR}, #{exerciseFrequency,jdbcType=INTEGER}, #{recommendBenchmarks,jdbcType=INTEGER}, 
+      #{setmealType,jdbcType=INTEGER}, #{diseaseid,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.yihe.system.domain.YhSportSetmeal" >
+    insert into yh_sport_setmeal
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="diseaseCode != null" >
+        disease_code,
+      </if>
+      <if test="setmealMame != null" >
+        setmeal_mame,
+      </if>
+      <if test="subjectId != null" >
+        subject_id,
+      </if>
+      <if test="setmealImg != null" >
+        setmeal_img,
+      </if>
+      <if test="oneself != null" >
+        oneself,
+      </if>
+      <if test="describe != null" >
+        describe,
+      </if>
+      <if test="exerciseFrequency != null" >
+        exercise_frequency,
+      </if>
+      <if test="recommendBenchmarks != null" >
+        recommend_benchmarks,
+      </if>
+      <if test="setmealType != null" >
+        setmeal_type,
+      </if>
+      <if test="diseaseid != null" >
+        diseaseid,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="diseaseCode != null" >
+        #{diseaseCode,jdbcType=INTEGER},
+      </if>
+      <if test="setmealMame != null" >
+        #{setmealMame,jdbcType=VARCHAR},
+      </if>
+      <if test="subjectId != null" >
+        #{subjectId,jdbcType=VARCHAR},
+      </if>
+      <if test="setmealImg != null" >
+        #{setmealImg,jdbcType=VARCHAR},
+      </if>
+      <if test="oneself != null" >
+        #{oneself,jdbcType=INTEGER},
+      </if>
+      <if test="describe != null" >
+        #{describe,jdbcType=VARCHAR},
+      </if>
+      <if test="exerciseFrequency != null" >
+        #{exerciseFrequency,jdbcType=INTEGER},
+      </if>
+      <if test="recommendBenchmarks != null" >
+        #{recommendBenchmarks,jdbcType=INTEGER},
+      </if>
+      <if test="setmealType != null" >
+        #{setmealType,jdbcType=INTEGER},
+      </if>
+      <if test="diseaseid != null" >
+        #{diseaseid,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.yihe.system.domain.YhSportSetmeal" >
+    update yh_sport_setmeal
+    <set >
+      <if test="diseaseCode != null" >
+        disease_code = #{diseaseCode,jdbcType=INTEGER},
+      </if>
+      <if test="setmealMame != null" >
+        setmeal_mame = #{setmealMame,jdbcType=VARCHAR},
+      </if>
+      <if test="subjectId != null" >
+        subject_id = #{subjectId,jdbcType=VARCHAR},
+      </if>
+      <if test="setmealImg != null" >
+        setmeal_img = #{setmealImg,jdbcType=VARCHAR},
+      </if>
+      <if test="oneself != null" >
+        oneself = #{oneself,jdbcType=INTEGER},
+      </if>
+      <if test="describe != null" >
+        describe = #{describe,jdbcType=VARCHAR},
+      </if>
+      <if test="exerciseFrequency != null" >
+        exercise_frequency = #{exerciseFrequency,jdbcType=INTEGER},
+      </if>
+      <if test="recommendBenchmarks != null" >
+        recommend_benchmarks = #{recommendBenchmarks,jdbcType=INTEGER},
+      </if>
+      <if test="setmealType != null" >
+        setmeal_type = #{setmealType,jdbcType=INTEGER},
+      </if>
+      <if test="diseaseid != null" >
+        diseaseid = #{diseaseid,jdbcType=INTEGER},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.yihe.system.domain.YhSportSetmeal" >
+    update yh_sport_setmeal
+    set disease_code = #{diseaseCode,jdbcType=INTEGER},
+      setmeal_mame = #{setmealMame,jdbcType=VARCHAR},
+      subject_id = #{subjectId,jdbcType=VARCHAR},
+      setmeal_img = #{setmealImg,jdbcType=VARCHAR},
+      oneself = #{oneself,jdbcType=INTEGER},
+      describe = #{describe,jdbcType=VARCHAR},
+      exercise_frequency = #{exerciseFrequency,jdbcType=INTEGER},
+      recommend_benchmarks = #{recommendBenchmarks,jdbcType=INTEGER},
+      setmeal_type = #{setmealType,jdbcType=INTEGER},
+      diseaseid = #{diseaseid,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

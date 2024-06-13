@@ -1,0 +1,370 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>评论管理</title>
+   <link rel="stylesheet"  th:href="@{/assets/libs/layui/css/layui.css}" />
+    <link rel="stylesheet"  th:href="@{/assets/module/admin.css}"  />
+     <!-- 注意：如果你直接复制所有代码到本地，上述css路径需要改成你本地的 -->
+  <style type="text/css">
+.layui-table-box {
+ min-height:425px;
+}
+
+	#sousuo td{
+		padding-right: 5px;
+		padding-top: 5px;
+	}
+	#sousuo .layui-input {
+ 		height: 40px;
+	}
+  </style>
+</head>
+<body> 
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div class="layui-card-body">
+<div class="demoTable">
+		 <!-- 搜索开始 -->
+		 
+		 <div class="layui-form-item">
+
+				<div class="layui-inline" style="margin-left: -59px;">
+					<label class="layui-form-label">来源:</label>
+					<div class="layui-input-block" style="width: 270px;">
+						   <form class="layui-form" >
+								<select lay-filter="aihao" id="status">
+									<option value="">全部</option>
+							       <option value="1">课堂</option>
+							       <option value="2">习惯</option>
+							    </select>
+							</form>
+					</div>
+				</div> 
+				
+				
+				<div class="layui-inline">
+					<label class="layui-form-label" style="width: 100px;">评论发表时间:</label>
+					<div class="layui-input-block" style="width: 270px;">
+						   <input type="text" class="layui-input" id="test6" style="    width: 230px;" placeholder=" - ">
+					</div>
+				</div>
+				
+				<div class="layui-inline">
+					<label class="layui-form-label">评论主题:</label>
+					<div class="layui-input-block" style="width: 270px;">
+						  <input class="layui-input" name="title" id="title" placeholder="请输入" autocomplete="off">
+					</div>
+				</div>
+				
+				<button class="layui-btn" data-type="reload" onclick="solo()"><i class="layui-icon"></i>搜索</button>
+		  <button class="layui-btn layui-btn-primary" id="btnempty" lay-submit="" lay-filter="reset">清除</button>
+            
+            
+		 </div>
+		 
+<!-- 搜索结束 -->
+		</div>
+
+<br>
+<table id="LAY_table_user" lay-filter="demo"></table>
+</div>
+</div>
+</div>
+<script type="text/html" id="usernameTpl">
+  <a class="layui-table-link" onclick="show('{{d.pactId}}');">{{ d.pactTitle }}</a>
+</script>
+
+ <!--<script type="text/html" id="barDemo">
+ <a class="layui-btn layui-btn-xs" data-dropdown="#dropUser{{d.LAY_INDEX}}" no-shade="true">
+        更多<i class="layui-icon layui-icon-drop" style="font-size: 12px;margin-right: 0;"></i></a>
+    <ul class="dropdown-menu-nav dropdown-bottom-right layui-hide" id="dropUser{{d.LAY_INDEX}}">
+        <div class="dropdown-anchor"></div>
+        <li><a lay-event="edit2"><i class="layui-icon layui-icon-edit"></i>修改用户</a></li>
+        <li><a lay-event="del2"><i class="layui-icon layui-icon-delete"></i>删除用户</a></li>
+        <li><a lay-event="lock2"><i class="layui-icon layui-icon-password"></i>锁定用户</a></li>
+    </ul>
+     <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="del">删除</a>
+ <a class="layui-btn layui-btn-sm" lay-event="comments">回复评论</a>
+ <a class="layui-btn layui-btn-sm" lay-event="comments"><i class="layui-icon">&#xe63a;</i>查看评论(2条)</a>
+</script>-->
+
+
+<script type="text/html" id="barDemo">
+    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="del">删除</a>
+	<a lay-event="comments" style="    color: #2d8cf0;" class="layui-btn layui-btn-primary layui-btn-xs" ><i class="layui-icon">&#xe63a;</i>查看评论({{d.number}}条)</a>
+<a lay-event="edit" class="layui-btn layui-btn-normal layui-btn-xs">回复评论</a>
+</script>
+
+
+<!-- 查看评论弹窗 -->
+<script type="text/html" id="demoEDCommentsModel">
+    <table id="demoTableEDComments" lay-filter="demoTableEDComments" class="layui-hide"></table>
+
+</script>
+         
+<script type="text/html" id="temp_img">
+  <img onclick="openImg('{{d.comimg}}');"  src="{{d.comimg}}" >
+</script>      
+
+
+<!-- 查看评论表格操作列 -->
+<script type="text/html" id="demoTableEDCommentsBar">
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+</script>
+          <!-- js部分 -->
+<script type="text/javascript" th:src="@{/assets/libs/layui/layui.js}"></script>
+<script type="text/javascript" th:src="@{/assets/js/common.js}"></script>
+<!-- 注意：如果你直接复制所有代码到本地，上述js路径需要改成你本地的 -->
+<script>
+
+function openImg(url) {
+    layer.open({
+        type: 1,
+        title: ['封面图片展示'],
+        shadeClose: true,
+        area: ['600px', 'auto'], //宽高
+        content: '<img src="' + url + '" height="auto" width="600px">'
+    });
+}
+
+layui.use(['layer', 'form', 'admin', 'table', 'util', 'dropdown','laydate'], function () {
+    var $ = layui.jquery;
+    var layer = layui.layer;
+    var form = layui.form;
+    var admin = layui.admin;
+    var util = layui.util;
+    var table = layui.table;
+    var laydate = layui.laydate;
+    var dropdown = layui.dropdown;
+  //搜索的方法
+   solo=function(){
+     table.reload('tableBank', {
+        where: { //设定异步数据接口的额外参数，任意设
+        'status':$("#status").val(),
+        'title':$("#title").val(),
+        'entryTime':$("#test6").val(),
+       }
+      });
+     
+    }
+   //日期范围
+   laydate.render({
+     elem: '#test6'
+     ,range: true,
+	   trigger: 'click'
+   });
+ //清除按钮
+   $("#btnempty").click(function(){
+   	window.location.reload();
+   })
+  
+	table.on('tool(demo)', function(obj) { //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
+		var data = obj.data; //获得当前行数据
+		var layEvent = obj.event; //获得 lay-event 对应的值
+		var tr = obj.tr; //获得当前行 tr 的DOM对象
+
+		if (layEvent === 'del') { //删除
+			layer.confirm('真的删除行么', function(index) {
+				obj.del(); //删除对应行（tr）的DOM结构，并更新缓存
+				layer.close(index);
+				//向服务端发送删除指令.
+				var url = "/YhHealthLectureComment/deleteByPrimaryKeyPid";
+				var data2 = {
+					'id' : data.commentid,
+					'type':1
+				};
+				$.post(url, data2, function(e) {
+					table.reload('tableBank');
+					if(e.data==1){
+						layer.msg("删除成功");
+						tableReload();//重载表格的方法
+					}else{
+						layer.msg("删除失败");
+					}
+						
+					
+				})
+			});
+		} else if (layEvent === 'comments') {
+			showComments(data.commentid);
+		}else if(layEvent === 'edit'){
+			demoEDBtnAddComment(data.commentid,data.lectureinfoid,data.status);
+		}
+		
+		
+		dropdown.hideAll();
+	});
+    
+	
+	 // 发表评论
+	 function demoEDBtnAddComment(id,lectureinfoid,status){
+		 layer.prompt({
+	            title: '发表评论',
+	            shade: .1,
+	            offset: '165px',
+	            skin: 'layui-layer-admin layui-layer-prompt',
+	            formType: 2
+	        }, function (value, index, elem) {
+	        	  layer.close(index);
+	            var url = "/YhHealthLectureComment/insertcomment";
+				var data2 = {
+					'pid' : id,
+					'lectureinfoid':lectureinfoid,
+					'status':status,
+					'commentinfo':value
+				};
+				$.post(url, data2, function(e) {
+					table.reload('tableBank');
+					if(e.data==1){
+						 layer.msg('评论成功', {icon: 1});
+						tableReload();//重载表格的方法
+					}else{
+						layer.msg('评论失败', {icon: 1});
+					}
+						
+					
+				})
+	        });
+	 }
+	
+	 // 查看评论
+    function showComments(id) {
+        admin.open({
+            type: 1,
+            area: '800px',
+            offset: '65px',
+            title: '查看评论',
+            content: $('#demoEDCommentsModel').html(),
+            success: function () {
+                // 渲染表格
+                var insTbCom = table.render({
+                    elem: '#demoTableEDComments',
+                    url : '/YhHealthLectureComment/selectsecondComment?pid='+id,
+                    page: true,
+                    method:'post',
+                    cellMinWidth: 100,
+                    cols : [ [
+                        {field: 'userName', sort: true, title: '评论人', width: 100},
+                        {field: 'commentinfo', sort: true, title: '评论内容'},
+                        {field : 'commenttime',title : '发布时间',},
+                        {align: 'center', toolbar: '#demoTableEDCommentsBar', title: '操作', minWidth: 80, width: 80}
+                        ] ],
+                		id : 'demoTableEDComments',
+                });
+
+                // 查看评论工具条点击事件
+                table.on('tool(demoTableEDComments)', function (obj) {
+                    var data = obj.data;
+                    var layEvent = obj.event;
+                    if (layEvent === 'del') { // 删除
+                        layer.confirm('真的删除行么', function(index) {
+            				obj.del(); //删除对应行（tr）的DOM结构，并更新缓存
+            				layer.close(index);
+            				//向服务端发送删除指令.
+            				var url = "/YhHealthLectureComment/deleteByPrimaryKeyPid";
+            				var data2 = {
+            					'id' : data.commentid,
+            					'type':2
+            				};
+            				$.post(url, data2, function(e) {
+            					table.reload('tableBank');
+            					if(e.data==1){
+            						  layer.msg('删除成功', {icon: 1});
+            						tableReload();//重载表格的方法
+            					}else{
+            						layer.msg("删除失败");
+            					}
+            						
+            					
+            				})
+            			});
+                    }
+                });
+
+               
+            }
+        });
+    }
+	 
+	 
+  //方法级渲染
+	table.render({
+		elem : '#LAY_table_user',
+		url : '/YhHealthLectureComment/selectcomment?status=1',
+		method:'post',
+		cols : [ [ {type:'numbers'}, {
+			field : 'lectureinfoid',
+			title : '文章编号',
+			hide: true
+		}, {
+			field : 'status',
+			title : '类型',
+			hide: true
+		},
+		{
+            title: '来源', templet: function (d) {
+                var strs = [
+                    '<span class="layui-badge layui-badge-green">课堂</span>',
+                    '<span class="layui-badge layui-badge-red">习惯</span>'
+                ];
+                if(d.status==1 || d.status==1){
+                    return strs[0];
+                }else{
+                    return strs[1];
+                }
+            }, align: 'status', width: 100
+        }, {
+			field : 'title',
+			title : '评论主题',
+		},{
+			field : 'commentinfo',
+			title : '发布内容',
+		},{
+			field : 'number',
+			title : '回复数',
+			 width: 100
+		},{
+			field : 'userName',
+			title : '发布人',
+			 width: 100
+		},{
+			field : 'commenttime',
+			title : '发布时间',
+			width: 200
+		}/* ,{
+			title: '封面图片'
+			, templet: '#temp_img'
+			, field: 'comimg' 
+				, width: 100
+		} */,{
+			fixed : 'right',
+			title : '操作',
+			align : 'center',
+			toolbar : '#barDemo'
+		} ] ],
+		id : 'tableBank',
+		page : true,
+	/* 	done: function(res, curr, count){
+	         if(count > 20) {
+	          $(".layui-table-page").show();
+	         }else {
+	          $(".layui-table-page").hide();
+	         }
+	       } */
+	
+	});
+ 
+
+    
+
+  
+  
+});
+
+
+
+
+</script>
+
+</body>
+</html>

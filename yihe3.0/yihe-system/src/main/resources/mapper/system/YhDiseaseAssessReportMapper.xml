@@ -1,0 +1,1419 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yihe.system.mapper.YhDiseaseAssessReportMapper">
+	<resultMap id="BaseResultMap" type="com.yihe.system.domain.YhDiseaseAssessReport">
+		<id column="id" jdbcType="INTEGER" property="id" />
+		<result column="user_code" jdbcType="VARCHAR" property="userCode" />
+		<result column="result_serialNum" jdbcType="VARCHAR" property="resultSerialnum" />
+		<result column="qtime" jdbcType="TIMESTAMP" property="qtime" />
+		<result column="request_serialNum" jdbcType="VARCHAR" property="requestSerialnum" />
+		<result column="diseasId" jdbcType="INTEGER" property="diseasid" />
+		<result column="disease_name" jdbcType="VARCHAR" property="diseaseName" />
+		<result column="risk_level" jdbcType="VARCHAR" property="riskLevel" />
+		<result column="risk_desc" jdbcType="VARCHAR" property="riskDesc" />
+		<result column="now_risk_desc" jdbcType="VARCHAR" property="nowRiskDesc" />
+		<result column="now_risk_value" jdbcType="VARCHAR" property="nowRiskValue" />
+		<result column="now_risk_level" jdbcType="VARCHAR" property="nowRiskLevel" />
+		<result column="now_risk_last_value" jdbcType="VARCHAR"
+			property="nowRiskLastValue" />
+		<result column="ideal_risk_level" jdbcType="VARCHAR" property="idealRiskLevel" />
+		<result column="ideal_risk_desc" jdbcType="VARCHAR" property="idealRiskDesc" />
+		<result column="last_time" jdbcType="VARCHAR" property="lastTime" />
+		<result column="age_forecast_r20" jdbcType="VARCHAR" property="ageForecastR20" />
+		<result column="age_forecast_r30" jdbcType="VARCHAR" property="ageForecastR30" />
+		<result column="age_forecast_r40" jdbcType="VARCHAR" property="ageForecastR40" />
+		<result column="age_forecast_r50" jdbcType="VARCHAR" property="ageForecastR50" />
+		<result column="age_forecast_r60" jdbcType="VARCHAR" property="ageForecastR60" />
+		<result column="age_forecast_r70" jdbcType="VARCHAR" property="ageForecastR70" />
+		<result column="age_forecast_r80" jdbcType="VARCHAR" property="ageForecastR80" />
+		<result column="age_op_forecast_r20_op" jdbcType="VARCHAR"
+			property="ageOpForecastR20Op" />
+		<result column="age_op_forecast_r30_op" jdbcType="VARCHAR"
+			property="ageOpForecastR30Op" />
+		<result column="age_op_forecast_r40_op" jdbcType="VARCHAR"
+			property="ageOpForecastR40Op" />
+		<result column="age_op_forecast_r50_op" jdbcType="VARCHAR"
+			property="ageOpForecastR50Op" />
+		<result column="age_op_forecast_r60_op" jdbcType="VARCHAR"
+			property="ageOpForecastR60Op" />
+		<result column="age_op_forecast_r70_op" jdbcType="VARCHAR"
+			property="ageOpForecastR70Op" />
+		<result column="age_op_forecast_r80_op" jdbcType="VARCHAR"
+			property="ageOpForecastR80Op" />
+	</resultMap>
+	<resultMap type="com.yihe.system.domain.YhDiseaseRiskResultAppVOJO" id="YhDiseaseRiskResultResult">
+        <result property="id" column="id"/>
+        <result property="diseaseid" column="diseaseId"/>
+        <result property="userCode" column="user_code"/>
+        <result property="requestSerialize" column="request_serialize"/>
+        <result property="age" column="age"/>
+        <result property="hdlc" column="hdlc"/>
+        <result property="ldlc" column="ldlc"/>
+        <result property="food" column="food"/>
+        <result property="sport" column="sport"/>
+        <result property="b4" column="b4"/>
+        <result property="smoke" column="smoke"/>
+        <result property="drink" column="drink"/>
+        <result property="hwCheck" column="hw_check"/>
+        <result property="bmi" column="BMI"/>
+        <result property="waist" column="waist"/>
+        <result property="diabHis" column="diab_his"/>
+        <result property="hbpHis" column="hbp_his"/>
+        <result property="fbg" column="FBG"/>
+        <result property="sbp" column="sbp"/>
+        <result property="cholesterol" column="cholesterol"/>
+        <result property="tg" column="TG"/>
+        <result property="bf" column="BF"/>
+        <result property="dbp" column="dbp"/>
+        <result property="hbps" column="HBPS"/>
+        <result property="hfs" column="HFS"/>
+        <result property="hfHis" column="hf_his"/>
+        <result property="c1" column="C1"/>
+        <result property="milk" column="milk"/>
+        <result property="tfa" column="tfa"/>
+        <result property="chds" column="chds"/>
+        <result property="dms" column="dms"/>
+        <result property="smokeSencod" column="smoke_sencod"/>
+        <result property="lungs" column="lungs"/>
+        <result property="emphyHis" column="emphy_his"/>
+        <result property="asbestosContactHis" column="asbestos_contact_his"/>
+        <result property="decorateHouse" column="decorate_house"/>
+        <result property="psyNervous" column="psy_nervous"/>
+        <result property="bronchHis" column="bronch_his"/>
+        <result property="lampblackContact" column="lampblack_contact"/>
+        <result property="gouts" column="gouts"/>
+        <result property="tea" column="tea"/>
+        <result property="foodPurine" column="food_purine"/>
+        <result property="chdHis" column="chd_his"/>
+        <result property="bua" column="bua"/>
+        <result property="medUsePill" column="med_use_pill"/>
+        <result property="breastPlasticSurgery" column="breast_plastic_surgery"/>
+        <result property="bcs" column="BCS"/>
+        <result property="begindBreastHis" column="begind_breast_his"/>
+        <result property="femaleMenstruation" column="female_menstruation"/>
+        <result property="femaleTire" column="female_tire"/>
+        <result property="femaleBreastTime" column="female_breast_time"/>
+        <result property="femaleMenopauseAge" column="female_menopause_age"/>
+        <result property="hasMedErt" column="has_med_ert"/>
+        <result property="css" column="CSS"/>
+        <result property="cardHis" column="card_his"/>
+        <result property="lvdHis" column="lvd_his"/>
+        <result property="afHis" column="af_his"/>
+        <result property="pcs" column="PCS"/>
+        <result property="prostateDisease" column="prostate_disease"/>
+        <result property="urinaryTractInfection" column="urinary_tract_infection"/>
+        <result property="urineSymptom" column="urine_symptom"/>
+        <result property="tScore" column="t_score"/>
+        <result property="raHis" column="ra_his"/>
+        <result property="livingEnvir" column="living_envir"/>
+        <result property="foodDrinkBeer" column="food_drink_beer"/>
+        <result property="remark" column="remark"/>
+        <result property="qtime" column="qtime"/>
+    </resultMap>
+    
+    <resultMap type="com.yihe.system.domain.YHDiseaseAssessResolve" id="YHDiseaseAssessResolveResult">
+        <result property="id" column="id"/>
+        <result property="diseaseId" column="diseaseId"/>
+        <result property="resultSerialNum" column="result_serialNum"/>
+        <result property="resolveType" column="resolve_type" jdbcType="LONGVARCHAR"/>
+        <result property="resolveName" column="resolve_name" jdbcType="LONGVARCHAR"/>
+    </resultMap>
+    <resultMap id="BaseResultMapOptimal" type="com.yihe.system.domain.YHDiseaseRiskOptimal">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="request_serial" jdbcType="VARCHAR" property="requestSerial" />
+    <result column="depart" jdbcType="VARCHAR" property="depart" />
+    <result column="sno" jdbcType="INTEGER" property="sno" />
+    <result column="qname" jdbcType="VARCHAR" property="qname" />
+    <result column="qcode" jdbcType="VARCHAR" property="qcode" />
+    <result column="optimal" jdbcType="VARCHAR" property="optimal" />
+    <result column="weight" jdbcType="REAL" property="weight" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+    <result column="value" jdbcType="VARCHAR" property="value" />
+    <result column="minv" jdbcType="REAL" property="minv" />
+    <result column="maxv" jdbcType="REAL" property="maxv" />
+    <result column="qtype" jdbcType="VARCHAR" property="qtype" />
+    <result column="sex" jdbcType="VARCHAR" property="sex" />
+    <result column="diseaseid" jdbcType="VARCHAR" property="diseaseid" />
+    <result column="xpath" jdbcType="VARCHAR" property="xpath" />
+    <result column="isRadar" jdbcType="INTEGER" property="isradar" />
+    <result column="Radar_range_point" jdbcType="VARCHAR" property="radarRangePoint" />
+    <result column="Radar_range_name" jdbcType="VARCHAR" property="radarRangeName" />
+  </resultMap>
+
+	<!-- 自定义结果映射 -->
+	<resultMap type="com.yihe.system.domain.YhReportDetailsVOJO" id="ReportDetailsResult">
+		<result property="requestSerialNum" column="requestSerialNum"/>
+		<result property="diseasid" column="diseasId"/>
+		<result property="diseaseName" column="diseaseName"/>
+		<result property="riskLevel" column="riskLevel"/>
+		<result property="riskDesc" column="riskDesc"/>
+		<result property="nowRiskDesc" column="nowRiskDesc"/>
+		<result property="nowRiskValue" column="nowRiskValue"/>
+		<result property="nowRiskLastValue" column="nowRiskLastValue"/>
+		<result property="idealRiskLevel" column="idealRiskLevel"/>
+		<result property="idealRiskDesc" column="idealRiskDesc"/>
+		<!-- 多表关联映射 -->
+		<collection property="glist" ofType="com.yihe.system.domain.YhReportResolveVOJO">
+			<id property="id" column="id"/>
+			<result property="resultSerialNum" column="resultSerialNum"/>
+			<result property="diseaseId" column="diseaseId"/>
+			<result property="type" column="type"/>
+			<result property="name" column="name"/>
+		</collection>
+	</resultMap>
+	<sql id="Example_Where_Clause">
+		<where>
+			<foreach collection="oredCriteria" item="criteria" separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" prefixOverrides="and" suffix=")">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value} and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach close=")" collection="criterion.value" item="listItem"
+										open="(" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Update_By_Example_Where_Clause">
+		<where>
+			<foreach collection="example.oredCriteria" item="criteria"
+				separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" prefixOverrides="and" suffix=")">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value} and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach close=")" collection="criterion.value" item="listItem"
+										open="(" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Base_Column_List">
+		id, user_code, result_serialNum, qtime, request_serialNum, diseasId,
+		risk_level,
+		risk_desc, now_risk_desc, now_risk_value, now_risk_level, now_risk_last_value,
+		ideal_risk_level,
+		ideal_risk_desc, last_time, age_forecast_r20, age_forecast_r30, age_forecast_r40,
+		age_forecast_r50, age_forecast_r60, age_forecast_r70,
+		age_forecast_r80, age_op_forecast_r20_op,
+		age_op_forecast_r30_op, age_op_forecast_r40_op, age_op_forecast_r50_op,
+		age_op_forecast_r60_op,
+		age_op_forecast_r70_op, age_op_forecast_r80_op
+	</sql>
+	 <sql id="Base_Column_Listoptimal">
+    id, request_serial, depart, sno, qname, qcode, optimal, weight, remark, value, minv, 
+    maxv, qtype, sex, diseaseid, xpath, isRadar, Radar_range_point, Radar_range_name
+  </sql>
+	
+	<!-- 查询某次评估某疾病风险因素改善指南 -->
+	<select id="findAssessResolveInfoByrs" resultType="com.yihe.system.domain.YHDiseaseAssessResolve">
+	SELECT id,result_serialNum as resultSerialNum,diseaseId,resolve_type as type,resolve_name  as name
+	FROM `yh_disease_assess_resolve` WHERE result_serialNum=#{rs} AND diseaseId=#{did}
+	
+	</select>
+	
+	<!-- 查询某次评估某疾病风险因素改善指南 -->
+	<select id="findAssessResolveInfoByrsInfo" resultType="com.yihe.system.domain.YHDiseaseAssessResolve">
+	SELECT id,result_serialNum as resultSerialNum,diseaseId,resolve_type as type,resolve_name  as name
+	FROM `yh_disease_assess_resolve` WHERE result_serialNum=#{rs} 
+	
+	</select>
+	 
+	<!-- 根据疾病id查询与他相关危险因素 -->
+	<select id="findYhDiseaseRiskOptimal"  resultMap="BaseResultMapOptimal">
+	SELECT <include refid="Base_Column_Listoptimal" /> 
+	FROM `yh_disease_risk_optimal` WHERE diseaseId=#{did}  AND isRadar=#{isRadar}   and sex IN (#{sex},0) 
+	order by sno
+	</select>
+	
+	<select id="findYhDiseaseRiskOptimalByXpath"  resultMap="BaseResultMapOptimal">
+	SELECT <include refid="Base_Column_Listoptimal" /> 
+	FROM `yh_disease_risk_optimal`
+	<where> 1=1
+		<if test="null!=did"> and diseaseId=#{did}</if>
+	  AND isRadar=#{isRadar}   and sex IN (#{sex},0)  and xpath=#{xpath} limit 1
+	</where>
+	</select>
+	
+	
+	<!-- 根据疾病id查询与他相关危险因素 -->
+	<select id="findYhDiseaseRiskOptimal2"  resultMap="BaseResultMapOptimal">
+	SELECT <include refid="Base_Column_Listoptimal" /> 
+	FROM `yh_disease_risk_optimal` WHERE diseaseId=#{did}    and sex IN (#{sex},0) 
+	
+	</select>
+	
+	<!--  -->
+	<select id="findYhDiseaseRiskOptimalByStr" resultType="java.lang.String">
+	SELECT GROUP_CONCAT(xpath SEPARATOR ',') FROM `yh_disease_risk_optimal` WHERE diseaseId=#{did}  AND isRadar=#{isRadar} and sex != #{sex}
+	
+	</select>
+	
+	
+	<select id="findDiseaseRiskResultByRsForRs" resultType="com.yihe.system.domain.YhDiseaseRiskResultAppVOJO" parameterType="com.yihe.system.domain.YhDiseaseRiskResultAppVOJO">
+	SELECT ${columnName}  FROM `yh_disease_risk_result2` WHERE request_serialize=#{rs}  AND diseaseId=#{did} limit 1
+	
+	</select>
+	
+	<select id="findDiseaseRiskResultByRsForResultString" resultType="java.lang.String" parameterType="com.yihe.system.domain.YhDiseaseRiskResultAppVOJO">
+	SELECT ${columnName}  FROM `yh_disease_risk_result2` WHERE request_serialize=#{rs} AND diseaseId=#{did} limit 1
+	
+	</select>
+	
+	
+	<!-- 查询疾病危险因素表 -->
+	<select id="findAssessResultInfo" resultMap="YhDiseaseRiskResultResult">
+	SELECT * FROM `yh_disease_risk_result2` WHERE request_serialize=#{rs} AND diseaseid=0 limit 1
+	</select>
+	<!-- 查询某次评估问卷答案 -->
+	<select id="findQuestionCheckForCheckAnswerByrs" resultType="java.lang.String">
+	SELECT user_check_answer FROM `yh_question_check_json2` WHERE request_serialNum=#{rs}
+	</select>
+	<!-- 查询某次评估问卷答案 -->
+	 
+	<!-- 查询评估报告信息 -->
+	<select id="findAssessReportByRs" resultType="com.yihe.system.domain.YhDiseaseAssessReport">
+	 SELECT         a.request_serialNum AS resultSerialnum, a.diseasId,b.disease_name AS diseaseName,
+		a.risk_level AS riskLevel,
+		a.risk_desc AS riskDesc, a.now_risk_desc AS nowRiskDesc, a.now_risk_value AS nowRiskValue, a.now_risk_level AS nowRiskLevel, a.now_risk_last_value AS nowRiskLastValue,
+		a.ideal_risk_level AS idealRiskLevel,
+		a.ideal_risk_desc AS idealRiskDesc, 
+		c.user_check_answer AS userCheckAnswer
+		FROM `yh_disease_assess_report` AS a
+ INNER JOIN `yh_disease_category` AS b
+ ON a.diseasId=b.disease_code
+ INNER JOIN `yh_question_check_json2` AS c
+ ON a.request_serialNum=c.request_serialNum
+  WHERE a.request_serialNum=#{rs}
+	
+	</select>
+	
+	<select id="findDiseaseRiskResultByRsFor3" resultType="com.yihe.system.domain.YhDiseaseRiskResultAppVOJO">
+	SELECT age,HBPS,sbp,dbp,BMI,smoke  FROM `yh_disease_risk_result2` WHERE request_serialize=#{rs}  AND diseaseId=3 limit 1
+	
+	</select>
+
+
+	<select id="findDiseaseNameAndRiskLevelByRsNew" resultMap="ReportDetailsResult">
+
+ SELECT
+	a.request_serialNum AS requestSerialNum,
+	a.diseasId,
+	(
+		SELECT
+			disease_name
+		FROM
+			yh_disease_category
+		WHERE
+			disease_code = a.diseasId
+	) AS diseaseName,
+	a.risk_level AS riskLevel,
+	a.risk_desc AS riskDesc,
+	a.now_risk_desc AS nowRiskDesc,
+	a.now_risk_value AS nowRiskValue,
+	a.now_risk_last_value AS nowRiskLastValue,
+	a.ideal_risk_level AS idealRiskLevel,
+	a.ideal_risk_desc AS idealRiskDesc,
+	b.id,
+	b.resolve_type AS type,
+	b.resolve_name AS `name`
+FROM
+	`yh_disease_assess_report` AS a
+LEFT JOIN yh_disease_assess_resolve AS b ON a.diseasId = b.diseaseId
+AND b.result_serialNum = #{rs}
+WHERE
+	a.request_serialNum = #{rs} and a.diseasId!=11
+
+	</select>
+
+
+	<select id="findDiseaseNameAndRiskLevelByRs" resultType="com.yihe.system.domain.YhDiseaseAssessReport">
+	
+ SELECT          a.request_serialNum AS requestSerialNum,a.diseasId,b.disease_name AS diseaseName,
+		a.risk_level AS riskLevel,
+		a.risk_desc AS riskDesc,
+		a.now_risk_desc AS nowRiskDesc,
+		a.now_risk_value AS nowRiskValue,
+		a.now_risk_last_value AS nowRiskLastValue,
+		a.ideal_risk_level AS idealRiskLevel,
+		a.ideal_risk_desc AS idealRiskDesc
+		
+		FROM `yh_disease_assess_report` AS a
+ INNER JOIN `yh_disease_category` AS b
+ ON a.diseasId=b.disease_code
+ WHERE a.request_serialNum=#{rs}
+	
+	</select>
+	<!-- 查询高风险人群 冠心病-->
+	<select id="selectHighRiskGroupCoronary" parameterType="map" resultMap="BaseResultMap">
+		select * from (select por.* from yh_disease_assess_report por,yh_disease_category cat,yh_user_reginfo reg where por.diseasId=cat.id  and por.user_code=reg.user_code and 
+		cat.disease_name='冠心病' and (por.risk_level like '%高%' or  por.risk_level like '%患%' ) and (${orgCode})  order by qtime desc) w group by user_code;
+	</select>
+	
+	<!-- 查询高风险人群 脑卒中-->
+	<select id="selectHighRiskGroupStroke" parameterType="map" resultMap="BaseResultMap">
+		select * from (select por.* from yh_disease_assess_report por,yh_disease_category cat,yh_user_reginfo reg where por.diseasId=cat.id  and por.user_code=reg.user_code and 
+		cat.disease_name='脑卒中' and (por.risk_level like '%高%' or  por.risk_level like '%患%' ) and (${orgCode})  order by qtime desc) w group by user_code;
+	</select>
+	
+	<!-- 查询高风险人群 高血压-->
+	<select id="selectHighRiskGroupPressure" parameterType="map" resultMap="BaseResultMap">
+		select * from (select por.* from yh_disease_assess_report por,yh_disease_category cat,yh_user_reginfo reg where por.diseasId=cat.id  and por.user_code=reg.user_code and 
+		cat.disease_name='高血压' and (por.risk_level like '%高%' or  por.risk_level like '%患%' ) and (${orgCode})  order by qtime desc) w group by user_code;
+	</select>
+	
+	<!-- 查询高风险人群 糖尿病-->
+	<select id="selectHighRiskGroupDiabetes" parameterType="map" resultMap="BaseResultMap">
+		select * from (select por.* from yh_disease_assess_report por,yh_disease_category cat,yh_user_reginfo reg where por.diseasId=cat.id  and por.user_code=reg.user_code and 
+		cat.disease_name='糖尿病' and (por.risk_level like '%高%' or  por.risk_level like '%患%' ) and (${orgCode})  order by qtime desc) w group by user_code;
+	</select>
+	
+	<!-- 查询高风险人群 痛风-->
+	<select id="selectHighRiskGroupout" parameterType="map" resultMap="BaseResultMap">
+		select * from (select por.* from yh_disease_assess_report por,yh_disease_category cat,yh_user_reginfo reg where por.diseasId=cat.id  and por.user_code=reg.user_code and 
+		cat.disease_name='痛风' and (por.risk_level like '%高%' or  por.risk_level like '%患%' ) and (${orgCode})  order by qtime desc) w group by user_code;
+	</select>
+	
+	<!-- 查询高风险人群 血脂异常-->
+	<select id="selectHighRiskGroupDyslipidemia" parameterType="map" resultMap="BaseResultMap">
+		select * from (select por.* from yh_disease_assess_report por,yh_disease_category cat,yh_user_reginfo reg where por.diseasId=cat.id  and por.user_code=reg.user_code and 
+		cat.disease_name='血脂异常' and (por.risk_level like '%高%' or  por.risk_level like '%患%' or  por.risk_level like '%异常%') and (${orgCode})  order by qtime desc) w group by user_code;
+	</select>
+	
+	<!-- 查询高风险人群 骨质疏松症-->
+	<select id="selectHighRiskGroupOsteoporosis" parameterType="map" resultMap="BaseResultMap">
+		select * from (select por.* from yh_disease_assess_report por,yh_disease_category cat,yh_user_reginfo reg where por.diseasId=cat.id  and por.user_code=reg.user_code and 
+		cat.disease_name='骨质疏松症' and (por.risk_level like '%高%' or  por.risk_level like '%患%' ) and (${orgCode})  order by qtime desc) w group by user_code;
+	</select>
+	
+	<!-- 查询高风险人群肥胖症-->
+	<select id="selectHighRiskGroupObesity" parameterType="map" resultMap="BaseResultMap">
+		select * from (select por.* from yh_disease_assess_report por,yh_disease_category cat,yh_user_reginfo reg where por.diseasId=cat.id  and por.user_code=reg.user_code and 
+		cat.disease_name='肥胖症' and (por.risk_level like '%高%' or  por.risk_level like '%患%' ) and (${orgCode})  order by qtime desc) w group by user_code;
+	</select>
+	
+	<!-- 查询高风险人群乳腺癌-->
+	<select id="selectHighRiskGroupBreast" parameterType="map" resultMap="BaseResultMap">
+		select * from (select por.* from yh_disease_assess_report por,yh_disease_category cat,yh_user_reginfo reg where por.diseasId=cat.id  and por.user_code=reg.user_code and 
+		cat.disease_name='乳腺癌' and (por.risk_level like '%高%' or  por.risk_level like '%患%' ) and (${orgCode})  order by qtime desc) w group by user_code;
+	</select>
+	
+	<!-- 查询高风险人群肺癌-->
+	<select id="selectHighRiskGroupLung" parameterType="map" resultMap="BaseResultMap">
+		select * from (select por.* from yh_disease_assess_report por,yh_disease_category cat,yh_user_reginfo reg where por.diseasId=cat.id  and por.user_code=reg.user_code and 
+		cat.disease_name='肺癌' and (por.risk_level like '%高%' or  por.risk_level like '%患%' ) and (${orgCode})  order by qtime desc) w group by user_code;
+	</select>
+	
+	<!-- 查询高风险人群前列腺癌-->
+	<select id="selectHighRiskGroupPca" parameterType="map" resultMap="BaseResultMap">
+		select * from (select por.* from yh_disease_assess_report por,yh_disease_category cat,yh_user_reginfo reg where por.diseasId=cat.id  and por.user_code=reg.user_code and 
+		cat.disease_name='前列腺癌' and (por.risk_level like '%高%' or  por.risk_level like '%患%' ) and (${orgCode})  order by qtime desc) w group by user_code;
+	</select>
+	
+	  <!-- 查询所有健康评估总数 -->
+  <select id="showDiseaseAssess" resultType="int">
+  	select count(*) from yh_disease_assess_report
+  </select>
+  
+   <!-- 查询每天健康评估总数 -->
+  <select id="showDiseaseAssessTian" resultType="int" >
+  	select count(*) from yh_disease_assess_report where DATE_FORMAT(qtime, '%Y%m' ) = DATE_FORMAT( CURDATE( ) , '%Y%m' )
+  </select>
+  
+  <!-- 查询用户最新一次评估信息 -->
+  <select id="findUserAssessReportInfoByTimeDesc"  resultType="com.yihe.system.domain.YhDiseaseAssessReport">
+  
+
+SELECT request_serialNum as requestSerialnum,df_names,sk_names,ld_names FROM `yh_disease_assess_total_report2` WHERE user_code=#{usercode} ORDER BY qtime DESC LIMIT 1
+
+
+  </select>
+  <select id="findDiseaseNameInfo" resultType="java.lang.String">
+  SELECT disease_name FROM `yh_disease_category` WHERE disease_code=#{code}
+  </select>
+  <!-- 所有疾病患者现状查询 -->
+  <select id="selectCurrentSituation" resultMap="BaseResultMap">
+  	SELECT repo.*,drr.id AS did,drr.diseasId,drr.risk_level,category.disease_name FROM( SELECT * FROM (SELECT  * from yh_disease_assess_total_report2  order by qtime desc ) a GROUP BY user_code) repo
+	  LEFT JOIN yh_disease_assess_report  drr
+	  ON repo.request_serialNum=drr.request_serialNum
+	  LEFT JOIN yh_user_reginfo regi
+	  ON regi.user_code=repo.user_code
+	  LEFT JOIN yh_org_tree orgtree 
+	  on regi.Org_Code=orgtree.Org_Code
+	LEFT JOIN yh_disease_category category 
+	  on drr.diseasId=category.id
+  </select>
+	
+	
+	<select id="findAssessReportInfoList" resultMap="BaseResultMap">
+	  SELECT  b.`disease_name`,a.`risk_level` FROM `yh_disease_assess_report`  AS a
+		  LEFT JOIN `yh_disease_category` AS b
+		  ON a.`diseasId`=b.id
+		  
+		  WHERE a.`request_serialNum`=(
+		  SELECT request_serialNum FROM `yh_disease_assess_total_report2` WHERE user_code=#{usercode} ORDER BY qtime DESC LIMIT 1)
+	</select>
+	<select id="findxls" resultType="map">
+		select json1.user_code,user_check_answer, DATE_FORMAT(reg.birth_date,'%Y-%m-%d')as birth_date,reg.mobile
+		from yh_question_check_json2 json1
+		inner join (select min(id)as id from yh_question_check_json2 where user_check_ts=1 and user_code != 'system'  group by user_code)json2 on json1.id=json2.id
+		inner join yh_user_reginfo reg on json1.user_code = reg.user_code
+		union all
+		select json1.user_code,user_check_answer, DATE_FORMAT(reg.birth_date,'%Y-%m-%d')as birth_date,reg.mobile
+		from yh_question_check_json2 json1
+		inner join (select max(id)as id,count(1) as con from yh_question_check_json2 where user_check_ts=1 and user_code != 'system'  group by user_code)json2 on json1.id=json2.id and con &gt; 1
+		inner join yh_user_reginfo reg on json1.user_code = reg.user_code	</select>
+	<select id="findYhDiseaseAssessReportByAbnormal" resultType="java.lang.String">
+	SELECT diseasId FROM  `yh_disease_assess_report` WHERE  risk_level   REGEXP '异常|已患' AND  request_serialNum =#{serialNum} limit 1
+	</select>
+	<select id="selectByPrimaryKeyByrequestserialNum"
+		resultMap="BaseResultMap">
+	
+    SELECT * FROM `yh_disease_assess_report`  
+      
+    <where>
+    <if test="coronarydiseaserisk1!=null and coronarydiseaserisk2!=null and coronarydiseaserisk3!=null and coronarydiseaserisk4!=null">
+    OR diseasId=1   AND request_serialNum=#{rs}
+    </if>
+    <if test="coronarydiseaserisk1==null and coronarydiseaserisk2!=null and coronarydiseaserisk3!=null  and coronarydiseaserisk4!=null">
+    OR diseasId=1 AND risk_level REGEXP "低|高|中" AND request_serialNum=#{rs}
+    </if>
+     <if test="coronarydiseaserisk1!=null and coronarydiseaserisk2==null and coronarydiseaserisk3==null">
+    OR diseasId=1 AND risk_level REGEXP "低" AND request_serialNum=#{rs}
+    </if>
+    <if test="coronarydiseaserisk1==null and coronarydiseaserisk2!=null and coronarydiseaserisk3==null">
+    OR diseasId=1 AND risk_level REGEXP "中" AND request_serialNum=#{rs}   
+    </if>
+    <if test="coronarydiseaserisk1==null and coronarydiseaserisk2==null and coronarydiseaserisk3!=null">
+    OR diseasId=1 AND risk_level REGEXP "高" AND request_serialNum=#{rs}  
+    </if>
+     <if test="coronarydiseaserisk1!=null and coronarydiseaserisk2!=null and coronarydiseaserisk3==null">
+    OR diseasId=1 AND risk_level REGEXP "低|中" AND request_serialNum=#{rs}  
+    </if>
+     <if test="coronarydiseaserisk1!=null and coronarydiseaserisk2==null and coronarydiseaserisk3!=null">
+    OR diseasId=1 AND risk_level REGEXP "低|高" AND request_serialNum=#{rs}   
+    </if>
+     <if test="coronarydiseaserisk1==null and coronarydiseaserisk2!=null and coronarydiseaserisk3!=null">
+    OR diseasId=1 AND risk_level REGEXP "中|高" AND request_serialNum=#{rs}   
+    </if>
+      
+    
+    
+     <if test="apoplexyrisk4!=null and apoplexyrisk1==null and apoplexyrisk2==null and apoplexyrisk3==null">
+		OR diseasId=2 AND NOT (risk_level REGEXP "低|中|高") AND request_serialNum=#{rs}   
+		</if>
+		<if test="apoplexyrisk4==null and apoplexyrisk1!=null and apoplexyrisk2==null and apoplexyrisk3==null">
+		OR diseasId=2 AND risk_level REGEXP "低" AND request_serialNum=#{rs}   
+		</if>
+		<if test="apoplexyrisk4==null and apoplexyrisk1==null and apoplexyrisk2!=null and apoplexyrisk3==null">
+		OR diseasId=2 AND risk_level REGEXP "中" AND request_serialNum=#{rs}   
+		</if>
+		<if test="apoplexyrisk4==null and apoplexyrisk1==null and apoplexyrisk2==null and apoplexyrisk3!=null">
+		OR diseasId=2 AND risk_level REGEXP "高" AND request_serialNum=#{rs}   
+		</if>
+		<if test="apoplexyrisk4!=null and apoplexyrisk1!=null and apoplexyrisk2==null and apoplexyrisk3==null">
+		OR diseasId=2 AND  NOT (risk_level REGEXP "低")  AND request_serialNum=#{rs}   
+		</if>
+		<if test="apoplexyrisk4!=null and apoplexyrisk1==null and apoplexyrisk2!=null and apoplexyrisk3==null">
+		OR diseasId=2 AND  NOT (risk_level REGEXP "低|高")  AND request_serialNum=#{rs}   
+		</if>
+		<if test="apoplexyrisk4!=null and apoplexyrisk1==null and apoplexyrisk2==null and apoplexyrisk3!=null">
+		OR diseasId=2 AND  NOT (risk_level REGEXP "低|中")  AND request_serialNum=#{rs}   
+		</if>
+		<if test="apoplexyrisk4==null and apoplexyrisk1!=null and apoplexyrisk2!=null and apoplexyrisk3==null">
+		OR diseasId=2 AND  risk_level REGEXP "低|中"  AND request_serialNum=#{rs}   
+		</if>
+		<if test="apoplexyrisk4==null and apoplexyrisk1!=null and apoplexyrisk2==null and apoplexyrisk3!=null">
+		OR diseasId=2 AND  risk_level REGEXP "低|高"  AND request_serialNum=#{rs}   
+		</if>
+		<if test="apoplexyrisk4==null and apoplexyrisk1==null and apoplexyrisk2!=null and apoplexyrisk3!=null">
+		OR diseasId=2 AND  risk_level REGEXP "中|高"  AND request_serialNum=#{rs}   
+		</if>
+		<if test="apoplexyrisk4!=null and apoplexyrisk1!=null and apoplexyrisk2!=null and apoplexyrisk3==null">
+		OR diseasId=2 AND  NOT (risk_level REGEXP "高")  AND request_serialNum=#{rs}   
+		</if>
+		<if test="apoplexyrisk4!=null and apoplexyrisk1!=null and apoplexyrisk2!=null and apoplexyrisk3==null">
+		OR diseasId=2 AND  NOT (risk_level REGEXP "中")  AND request_serialNum=#{rs}   
+		</if>
+		<if test="apoplexyrisk4==null and apoplexyrisk1!=null and apoplexyrisk2!=null and apoplexyrisk3!=null">
+		OR diseasId=2 AND  risk_level REGEXP "低|中|高"  AND request_serialNum=#{rs}   
+		</if>
+		<if test="apoplexyrisk4!=null and apoplexyrisk1==null and apoplexyrisk2!=null and apoplexyrisk3!=null">
+		OR diseasId=2 AND   NOT (risk_level REGEXP "中|高")  AND request_serialNum=#{rs}   
+		</if>
+     
+       <if test="hypertensionrisk4!=null and hypertensionrisk1==null and hypertensionrisk2==null and hypertensionrisk3==null">
+		OR diseasId=3 AND NOT (risk_level REGEXP "低|中|高") AND request_serialNum=#{rs}   
+		</if>
+		<if test="hypertensionrisk4==null and hypertensionrisk1!=null and hypertensionrisk2==null and hypertensionrisk3==null">
+		OR diseasId=3 AND risk_level REGEXP "低" AND request_serialNum=#{rs}   
+		</if>
+		<if test="hypertensionrisk4==null and hypertensionrisk1==null and hypertensionrisk2!=null and hypertensionrisk3==null">
+		OR diseasId=3 AND risk_level REGEXP "中" AND request_serialNum=#{rs}   
+		</if>
+		<if test="hypertensionrisk4==null and hypertensionrisk1==null and hypertensionrisk2==null and hypertensionrisk3!=null">
+		OR diseasId=3 AND risk_level REGEXP "高" AND request_serialNum=#{rs}   
+		</if>
+		<if test="hypertensionrisk4!=null and hypertensionrisk1!=null and hypertensionrisk2==null and hypertensionrisk3==null">
+		OR diseasId=3 AND  NOT (risk_level REGEXP "低")  AND request_serialNum=#{rs}   
+		</if>
+		<if test="hypertensionrisk4!=null and hypertensionrisk1==null and hypertensionrisk2!=null and hypertensionrisk3==null">
+		OR diseasId=3 AND  NOT (risk_level REGEXP "低|高")  AND request_serialNum=#{rs}   
+		</if>
+		<if test="hypertensionrisk4!=null and hypertensionrisk1==null and hypertensionrisk2==null and hypertensionrisk3!=null">
+		OR diseasId=3 AND  NOT (risk_level REGEXP "低|中")  AND request_serialNum=#{rs}   
+		</if>
+		<if test="hypertensionrisk4==null and hypertensionrisk1!=null and hypertensionrisk2!=null and hypertensionrisk3==null">
+		OR diseasId=3 AND  risk_level REGEXP "低|中"  AND request_serialNum=#{rs}   
+		</if>
+		<if test="hypertensionrisk4==null and hypertensionrisk1!=null and hypertensionrisk2==null and hypertensionrisk3!=null">
+		OR diseasId=3 AND  risk_level REGEXP "低|高"  AND request_serialNum=#{rs}   
+		</if>
+		<if test="hypertensionrisk4==null and hypertensionrisk1==null and hypertensionrisk2!=null and hypertensionrisk3!=null">
+		OR diseasId=3 AND  risk_level REGEXP "中|高"  AND request_serialNum=#{rs}   
+		</if>
+		<if test="hypertensionrisk4!=null and hypertensionrisk1!=null and hypertensionrisk2!=null and hypertensionrisk3==null">
+		OR diseasId=3 AND  NOT (risk_level REGEXP "高")  AND request_serialNum=#{rs}   
+		</if>
+		<if test="hypertensionrisk4!=null and hypertensionrisk1!=null and hypertensionrisk2!=null and hypertensionrisk3==null">
+		OR diseasId=3 AND  NOT (risk_level REGEXP "中")  AND request_serialNum=#{rs}   
+		</if>
+		<if test="hypertensionrisk4==null and hypertensionrisk1!=null and hypertensionrisk2!=null and hypertensionrisk3!=null">
+		OR diseasId=3 AND  risk_level REGEXP "低|中|高"  AND request_serialNum=#{rs}   
+		</if>
+		<if test="hypertensionrisk4!=null and hypertensionrisk1==null and hypertensionrisk2!=null and hypertensionrisk3!=null">
+		OR diseasId=3 AND   NOT (risk_level REGEXP "中|高")  AND request_serialNum=#{rs}   
+		</if>
+     
+    
+     <if test="diabetesrisk4!=null and diabetesrisk1==null and diabetesrisk2==null and diabetesrisk3==null">
+		OR diseasId=4 AND NOT (risk_level REGEXP "低|中|高") AND request_serialNum=#{rs}   
+		</if>
+		<if test="diabetesrisk4==null and diabetesrisk1!=null and diabetesrisk2==null and diabetesrisk3==null">
+		OR diseasId=4 AND risk_level REGEXP "低" AND request_serialNum=#{rs}   
+		</if>
+		<if test="diabetesrisk4==null and diabetesrisk1==null and diabetesrisk2!=null and diabetesrisk3==null">
+		OR diseasId=4 AND risk_level REGEXP "中" AND request_serialNum=#{rs}   
+		</if>
+		<if test="diabetesrisk4==null and diabetesrisk1==null and diabetesrisk2==null and diabetesrisk3!=null">
+		OR diseasId=4 AND risk_level REGEXP "高" AND request_serialNum=#{rs}   
+		</if>
+		<if test="diabetesrisk4!=null and diabetesrisk1!=null and diabetesrisk2==null and diabetesrisk3==null">
+		OR diseasId=4 AND  NOT (risk_level REGEXP "低")  AND request_serialNum=#{rs}   
+		</if>
+		<if test="diabetesrisk4!=null and diabetesrisk1==null and diabetesrisk2!=null and diabetesrisk3==null">
+		OR diseasId=4 AND  NOT (risk_level REGEXP "低|高")  AND request_serialNum=#{rs}   
+		</if>
+		<if test="diabetesrisk4!=null and diabetesrisk1==null and diabetesrisk2==null and diabetesrisk3!=null">
+		OR diseasId=4 AND  NOT (risk_level REGEXP "低|中")  AND request_serialNum=#{rs}   
+		</if>
+		<if test="diabetesrisk4==null and diabetesrisk1!=null and diabetesrisk2!=null and diabetesrisk3==null">
+		OR diseasId=4 AND  risk_level REGEXP "低|中"  AND request_serialNum=#{rs}   
+		</if>
+		<if test="diabetesrisk4==null and diabetesrisk1!=null and diabetesrisk2==null and diabetesrisk3!=null">
+		OR diseasId=4 AND  risk_level REGEXP "低|高"  AND request_serialNum=#{rs}   
+		</if>
+		<if test="diabetesrisk4==null and diabetesrisk1==null and diabetesrisk2!=null and diabetesrisk3!=null">
+		OR diseasId=4 AND  risk_level REGEXP "中|高"  AND request_serialNum=#{rs}   
+		</if>
+		<if test="diabetesrisk4!=null and diabetesrisk1!=null and diabetesrisk2!=null and diabetesrisk3==null">
+		OR diseasId=4 AND  NOT (risk_level REGEXP "高")  AND request_serialNum=#{rs}   
+		</if>
+		<if test="diabetesrisk4!=null and diabetesrisk1!=null and diabetesrisk2!=null and diabetesrisk3==null">
+		OR diseasId=4 AND  NOT (risk_level REGEXP "中")  AND request_serialNum=#{rs}   
+		</if>
+		<if test="diabetesrisk4==null and diabetesrisk1!=null and diabetesrisk2!=null and diabetesrisk3!=null">
+		OR diseasId=4 AND  risk_level REGEXP "低|中|高"  AND request_serialNum=#{rs}   
+		</if>
+		<if test="diabetesrisk4!=null and diabetesrisk1==null and diabetesrisk2!=null and diabetesrisk3!=null">
+		OR diseasId=4 AND   NOT (risk_level REGEXP "中|高")  AND request_serialNum=#{rs}   
+		</if>
+    
+    
+      
+      <if test="dyslipidemiarisk4!=null and dyslipidemiarisk1==null and dyslipidemiarisk2==null and dyslipidemiarisk3==null">
+		OR diseasId=6 AND NOT (risk_level REGEXP "低|中|高") AND request_serialNum=#{rs}   
+		</if>
+		<if test="dyslipidemiarisk4==null and dyslipidemiarisk1!=null and dyslipidemiarisk2==null and dyslipidemiarisk3==null">
+		OR diseasId=6 AND risk_level REGEXP "低" AND request_serialNum=#{rs}   
+		</if>
+		<if test="dyslipidemiarisk4==null and dyslipidemiarisk1==null and dyslipidemiarisk2!=null and dyslipidemiarisk3==null">
+		OR diseasId=6 AND risk_level REGEXP "中" AND request_serialNum=#{rs}   
+		</if>
+		<if test="dyslipidemiarisk4==null and dyslipidemiarisk1==null and dyslipidemiarisk2==null and dyslipidemiarisk3!=null">
+		OR diseasId=6 AND risk_level REGEXP "高" AND request_serialNum=#{rs}   
+		</if>
+		<if test="dyslipidemiarisk4!=null and dyslipidemiarisk1!=null and dyslipidemiarisk2==null and dyslipidemiarisk3==null">
+		OR diseasId=6 AND  NOT (risk_level REGEXP "低")  AND request_serialNum=#{rs}   
+		</if>
+		<if test="dyslipidemiarisk4!=null and dyslipidemiarisk1==null and dyslipidemiarisk2!=null and dyslipidemiarisk3==null">
+		OR diseasId=6 AND  NOT (risk_level REGEXP "低|高")  AND request_serialNum=#{rs}   
+		</if>
+		<if test="dyslipidemiarisk4!=null and dyslipidemiarisk1==null and dyslipidemiarisk2==null and dyslipidemiarisk3!=null">
+		OR diseasId=6 AND  NOT (risk_level REGEXP "低|中")  AND request_serialNum=#{rs}   
+		</if>
+		<if test="dyslipidemiarisk4==null and dyslipidemiarisk1!=null and dyslipidemiarisk2!=null and dyslipidemiarisk3==null">
+		OR diseasId=6 AND  risk_level REGEXP "低|中"  AND request_serialNum=#{rs}   
+		</if>
+		<if test="dyslipidemiarisk4==null and dyslipidemiarisk1!=null and dyslipidemiarisk2==null and dyslipidemiarisk3!=null">
+		OR diseasId=6 AND  risk_level REGEXP "低|高"  AND request_serialNum=#{rs}   
+		</if>
+		<if test="dyslipidemiarisk4==null and dyslipidemiarisk1==null and dyslipidemiarisk2!=null and dyslipidemiarisk3!=null">
+		OR diseasId=6 AND  risk_level REGEXP "中|高"  AND request_serialNum=#{rs}   
+		</if>
+		<if test="dyslipidemiarisk4!=null and dyslipidemiarisk1!=null and dyslipidemiarisk2!=null and dyslipidemiarisk3==null">
+		OR diseasId=6 AND  NOT (risk_level REGEXP "高")  AND request_serialNum=#{rs}   
+		</if>
+		<if test="dyslipidemiarisk4!=null and dyslipidemiarisk1!=null and dyslipidemiarisk2!=null and dyslipidemiarisk3==null">
+		OR diseasId=6 AND  NOT (risk_level REGEXP "中")  AND request_serialNum=#{rs}   
+		</if>
+		<if test="dyslipidemiarisk4==null and dyslipidemiarisk1!=null and dyslipidemiarisk2!=null and dyslipidemiarisk3!=null">
+		OR diseasId=6 AND  risk_level REGEXP "低|中|高"  AND request_serialNum=#{rs}   
+		</if>
+		<if test="dyslipidemiarisk4!=null and dyslipidemiarisk1==null and dyslipidemiarisk2!=null and dyslipidemiarisk3!=null">
+		OR diseasId=6 AND   NOT (risk_level REGEXP "中|高")  AND request_serialNum=#{rs}   
+		</if>
+    
+    
+     
+      <if test="osteoporosisrisk4!=null and osteoporosisrisk1==null and osteoporosisrisk2==null and osteoporosisrisk3==null">
+		OR diseasId=7 AND NOT (risk_level REGEXP "低|中|高") AND request_serialNum=#{rs}   
+		</if>
+		<if test="osteoporosisrisk4==null and osteoporosisrisk1!=null and osteoporosisrisk2==null and osteoporosisrisk3==null">
+		OR diseasId=7 AND risk_level REGEXP "低" AND request_serialNum=#{rs}   
+		</if>
+		<if test="osteoporosisrisk4==null and osteoporosisrisk1==null and osteoporosisrisk2!=null and osteoporosisrisk3==null">
+		OR diseasId=7 AND risk_level REGEXP "中" AND request_serialNum=#{rs}   
+		</if>
+		<if test="osteoporosisrisk4==null and osteoporosisrisk1==null and osteoporosisrisk2==null and osteoporosisrisk3!=null">
+		OR diseasId=7 AND risk_level REGEXP "高" AND request_serialNum=#{rs}   
+		</if>
+		<if test="osteoporosisrisk4!=null and osteoporosisrisk1!=null and osteoporosisrisk2==null and osteoporosisrisk3==null">
+		OR diseasId=7 AND  NOT (risk_level REGEXP "低")  AND request_serialNum=#{rs}   
+		</if>
+		<if test="osteoporosisrisk4!=null and osteoporosisrisk1==null and osteoporosisrisk2!=null and osteoporosisrisk3==null">
+		OR diseasId=7 AND  NOT (risk_level REGEXP "低|高")  AND request_serialNum=#{rs}   
+		</if>
+		<if test="osteoporosisrisk4!=null and osteoporosisrisk1==null and osteoporosisrisk2==null and osteoporosisrisk3!=null">
+		OR diseasId=7 AND  NOT (risk_level REGEXP "低|中")  AND request_serialNum=#{rs}   
+		</if>
+		<if test="osteoporosisrisk4==null and osteoporosisrisk1!=null and osteoporosisrisk2!=null and osteoporosisrisk3==null">
+		OR diseasId=7 AND  risk_level REGEXP "低|中"  AND request_serialNum=#{rs}   
+		</if>
+		<if test="osteoporosisrisk4==null and osteoporosisrisk1!=null and osteoporosisrisk2==null and osteoporosisrisk3!=null">
+		OR diseasId=7 AND  risk_level REGEXP "低|高"  AND request_serialNum=#{rs}   
+		</if>
+		<if test="osteoporosisrisk4==null and osteoporosisrisk1==null and osteoporosisrisk2!=null and osteoporosisrisk3!=null">
+		OR diseasId=7 AND  risk_level REGEXP "中|高"  AND request_serialNum=#{rs}   
+		</if>
+		<if test="osteoporosisrisk4!=null and osteoporosisrisk1!=null and osteoporosisrisk2!=null and osteoporosisrisk3==null">
+		OR diseasId=7 AND  NOT (risk_level REGEXP "高")  AND request_serialNum=#{rs}   
+		</if>
+		<if test="osteoporosisrisk4!=null and osteoporosisrisk1!=null and osteoporosisrisk2!=null and osteoporosisrisk3==null">
+		OR diseasId=7 AND  NOT (risk_level REGEXP "中")  AND request_serialNum=#{rs}   
+		</if>
+		<if test="osteoporosisrisk4==null and osteoporosisrisk1!=null and osteoporosisrisk2!=null and osteoporosisrisk3!=null">
+		OR diseasId=7 AND  risk_level REGEXP "低|中|高"  AND request_serialNum=#{rs}   
+		</if>
+		<if test="osteoporosisrisk4!=null and osteoporosisrisk1==null and osteoporosisrisk2!=null and osteoporosisrisk3!=null">
+		OR diseasId=7 AND   NOT (risk_level REGEXP "中|高")  AND request_serialNum=#{rs}   
+		</if>
+    
+      
+     <if test="lungcancerrisk4!=null and lungcancerrisk1==null and lungcancerrisk2==null and lungcancerrisk3==null">
+		OR diseasId=8 AND NOT (risk_level REGEXP "低|中|高") AND request_serialNum=#{rs}   
+		</if>
+		<if test="lungcancerrisk4==null and lungcancerrisk1!=null and lungcancerrisk2==null and lungcancerrisk3==null">
+		OR diseasId=8 AND risk_level REGEXP "低" AND request_serialNum=#{rs}   
+		</if>
+		<if test="lungcancerrisk4==null and lungcancerrisk1==null and lungcancerrisk2!=null and lungcancerrisk3==null">
+		OR diseasId=8 AND risk_level REGEXP "中" AND request_serialNum=#{rs}   
+		</if>
+		<if test="lungcancerrisk4==null and lungcancerrisk1==null and lungcancerrisk2==null and lungcancerrisk3!=null">
+		OR diseasId=8 AND risk_level REGEXP "高" AND request_serialNum=#{rs}   
+		</if>
+		<if test="lungcancerrisk4!=null and lungcancerrisk1!=null and lungcancerrisk2==null and lungcancerrisk3==null">
+		OR diseasId=8 AND  NOT (risk_level REGEXP "低")  AND request_serialNum=#{rs}   
+		</if>
+		<if test="lungcancerrisk4!=null and lungcancerrisk1==null and lungcancerrisk2!=null and lungcancerrisk3==null">
+		OR diseasId=8 AND  NOT (risk_level REGEXP "低|高")  AND request_serialNum=#{rs}   
+		</if>
+		<if test="lungcancerrisk4!=null and lungcancerrisk1==null and lungcancerrisk2==null and lungcancerrisk3!=null">
+		OR diseasId=8 AND  NOT (risk_level REGEXP "低|中")  AND request_serialNum=#{rs}   
+		</if>
+		<if test="lungcancerrisk4==null and lungcancerrisk1!=null and lungcancerrisk2!=null and lungcancerrisk3==null">
+		OR diseasId=8 AND  risk_level REGEXP "低|中"  AND request_serialNum=#{rs}   
+		</if>
+		<if test="lungcancerrisk4==null and lungcancerrisk1!=null and lungcancerrisk2==null and lungcancerrisk3!=null">
+		OR diseasId=8 AND  risk_level REGEXP "低|高"  AND request_serialNum=#{rs}   
+		</if>
+		<if test="lungcancerrisk4==null and lungcancerrisk1==null and lungcancerrisk2!=null and lungcancerrisk3!=null">
+		OR diseasId=8 AND  risk_level REGEXP "中|高"  AND request_serialNum=#{rs}   
+		</if>
+		<if test="lungcancerrisk4!=null and lungcancerrisk1!=null and lungcancerrisk2!=null and lungcancerrisk3==null">
+		OR diseasId=8 AND  NOT (risk_level REGEXP "高")  AND request_serialNum=#{rs}   
+		</if>
+		<if test="lungcancerrisk4!=null and lungcancerrisk1!=null and lungcancerrisk2!=null and lungcancerrisk3==null">
+		OR diseasId=8 AND  NOT (risk_level REGEXP "中")  AND request_serialNum=#{rs}   
+		</if>
+		<if test="lungcancerrisk4==null and lungcancerrisk1!=null and lungcancerrisk2!=null and lungcancerrisk3!=null">
+		OR diseasId=8 AND  risk_level REGEXP "低|中|高"  AND request_serialNum=#{rs}   
+		</if>
+		<if test="lungcancerrisk4!=null and lungcancerrisk1==null and lungcancerrisk2!=null and lungcancerrisk3!=null">
+		OR diseasId=8 AND   NOT (risk_level REGEXP "中|高")  AND request_serialNum=#{rs}   
+		</if>
+    
+    
+     
+      <if test="prostaterisk4!=null and prostaterisk1==null and prostaterisk2==null and prostaterisk3==null">
+		OR diseasId=9 AND NOT (risk_level REGEXP "低|中|高") AND request_serialNum=#{rs}   
+		</if>
+		<if test="prostaterisk4==null and prostaterisk1!=null and prostaterisk2==null and prostaterisk3==null">
+		OR diseasId=9 AND risk_level REGEXP "低" AND request_serialNum=#{rs}   
+		</if>
+		<if test="prostaterisk4==null and prostaterisk1==null and prostaterisk2!=null and prostaterisk3==null">
+		OR diseasId=9 AND risk_level REGEXP "中" AND request_serialNum=#{rs}   
+		</if>
+		<if test="prostaterisk4==null and prostaterisk1==null and prostaterisk2==null and prostaterisk3!=null">
+		OR diseasId=9 AND risk_level REGEXP "高" AND request_serialNum=#{rs}   
+		</if>
+		<if test="prostaterisk4!=null and prostaterisk1!=null and prostaterisk2==null and prostaterisk3==null">
+		OR diseasId=9 AND  NOT (risk_level REGEXP "低")  AND request_serialNum=#{rs}   
+		</if>
+		<if test="prostaterisk4!=null and prostaterisk1==null and prostaterisk2!=null and prostaterisk3==null">
+		OR diseasId=9 AND  NOT (risk_level REGEXP "低|高")  AND request_serialNum=#{rs}   
+		</if>
+		<if test="prostaterisk4!=null and prostaterisk1==null and prostaterisk2==null and prostaterisk3!=null">
+		OR diseasId=9 AND  NOT (risk_level REGEXP "低|中")  AND request_serialNum=#{rs}   
+		</if>
+		<if test="prostaterisk4==null and prostaterisk1!=null and prostaterisk2!=null and prostaterisk3==null">
+		OR diseasId=9 AND  risk_level REGEXP "低|中"  AND request_serialNum=#{rs}   
+		</if>
+		<if test="prostaterisk4==null and prostaterisk1!=null and prostaterisk2==null and prostaterisk3!=null">
+		OR diseasId=9 AND  risk_level REGEXP "低|高"  AND request_serialNum=#{rs}   
+		</if>
+		<if test="prostaterisk4==null and prostaterisk1==null and prostaterisk2!=null and prostaterisk3!=null">
+		OR diseasId=9 AND  risk_level REGEXP "中|高"  AND request_serialNum=#{rs}   
+		</if>
+		<if test="prostaterisk4!=null and prostaterisk1!=null and prostaterisk2!=null and prostaterisk3==null">
+		OR diseasId=9 AND  NOT (risk_level REGEXP "高")  AND request_serialNum=#{rs}   
+		</if>
+		<if test="prostaterisk4!=null and prostaterisk1!=null and prostaterisk2!=null and prostaterisk3==null">
+		OR diseasId=9 AND  NOT (risk_level REGEXP "中")  AND request_serialNum=#{rs}   
+		</if>
+		<if test="prostaterisk4==null and prostaterisk1!=null and prostaterisk2!=null and prostaterisk3!=null">
+		OR diseasId=9 AND  risk_level REGEXP "低|中|高"  AND request_serialNum=#{rs}   
+		</if>
+		<if test="prostaterisk4!=null and prostaterisk1==null and prostaterisk2!=null and prostaterisk3!=null">
+		OR diseasId=9 AND   NOT (risk_level REGEXP "中|高")  AND request_serialNum=#{rs}   
+		</if>
+    
+      
+      <if test="breastcancerrisk4!=null and breastcancerrisk1==null and breastcancerrisk2==null and breastcancerrisk3==null">
+		OR diseasId=10 AND NOT (risk_level REGEXP "低|中|高") AND request_serialNum=#{rs}   
+		</if>
+		<if test="breastcancerrisk4==null and breastcancerrisk1!=null and breastcancerrisk2==null and breastcancerrisk3==null">
+		OR diseasId=10 AND risk_level REGEXP "低" AND request_serialNum=#{rs}   
+		</if>
+		<if test="breastcancerrisk4==null and breastcancerrisk1==null and breastcancerrisk2!=null and breastcancerrisk3==null">
+		OR diseasId=10 AND risk_level REGEXP "中" AND request_serialNum=#{rs}   
+		</if>
+		<if test="breastcancerrisk4==null and breastcancerrisk1==null and breastcancerrisk2==null and breastcancerrisk3!=null">
+		OR diseasId=10 AND risk_level REGEXP "高" AND request_serialNum=#{rs}   
+		</if>
+		<if test="breastcancerrisk4!=null and breastcancerrisk1!=null and breastcancerrisk2==null and breastcancerrisk3==null">
+		OR diseasId=10 AND  NOT (risk_level REGEXP "低")  AND request_serialNum=#{rs}   
+		</if>
+		<if test="breastcancerrisk4!=null and breastcancerrisk1==null and breastcancerrisk2!=null and breastcancerrisk3==null">
+		OR diseasId=10 AND  NOT (risk_level REGEXP "低|高")  AND request_serialNum=#{rs}   
+		</if>
+		<if test="breastcancerrisk4!=null and breastcancerrisk1==null and breastcancerrisk2==null and breastcancerrisk3!=null">
+		OR diseasId=10 AND  NOT (risk_level REGEXP "低|中")  AND request_serialNum=#{rs}   
+		</if>
+		<if test="breastcancerrisk4==null and breastcancerrisk1!=null and breastcancerrisk2!=null and breastcancerrisk3==null">
+		OR diseasId=10 AND  risk_level REGEXP "低|中"  AND request_serialNum=#{rs}   
+		</if>
+		<if test="breastcancerrisk4==null and breastcancerrisk1!=null and breastcancerrisk2==null and breastcancerrisk3!=null">
+		OR diseasId=10 AND  risk_level REGEXP "低|高"  AND request_serialNum=#{rs}   
+		</if>
+		<if test="breastcancerrisk4==null and breastcancerrisk1==null and breastcancerrisk2!=null and breastcancerrisk3!=null">
+		OR diseasId=10 AND  risk_level REGEXP "中|高"  AND request_serialNum=#{rs}   
+		</if>
+		<if test="breastcancerrisk4!=null and breastcancerrisk1!=null and breastcancerrisk2!=null and breastcancerrisk3==null">
+		OR diseasId=10 AND  NOT (risk_level REGEXP "高")  AND request_serialNum=#{rs}   
+		</if>
+		<if test="breastcancerrisk4!=null and breastcancerrisk1!=null and breastcancerrisk2!=null and breastcancerrisk3==null">
+		OR diseasId=10 AND  NOT (risk_level REGEXP "中")  AND request_serialNum=#{rs}   
+		</if>
+		<if test="breastcancerrisk4==null and breastcancerrisk1!=null and breastcancerrisk2!=null and breastcancerrisk3!=null">
+		OR diseasId=10 AND  risk_level REGEXP "低|中|高"  AND request_serialNum=#{rs}   
+		</if>
+		<if test="breastcancerrisk4!=null and breastcancerrisk1==null and breastcancerrisk2!=null and breastcancerrisk3!=null">
+		OR diseasId=10 AND   NOT (risk_level REGEXP "中|高")  AND request_serialNum=#{rs}   
+		</if>
+     
+     <if test="rs!=null">
+      AND request_serialNum=#{rs}   
+     </if>
+     
+	</where>
+	 
+	</select>
+	<select id="selectByExample"
+		parameterType="com.yihe.system.domain.YhDiseaseAssessReportExample"
+		resultMap="BaseResultMap">
+		select
+		<if test="distinct">
+			distinct
+		</if>
+		<include refid="Base_Column_List" />
+		from yh_disease_assess_report
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+		<if test="orderByClause != null">
+			order by ${orderByClause}
+		</if>
+	</select>
+	<select id="selectByPrimaryKey" parameterType="java.lang.Integer"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from yh_disease_assess_report
+		where id = #{id,jdbcType=INTEGER}
+	</select>
+
+	<select id="selectByPrimaryKeyBycount" parameterType="java.lang.String"
+		resultType="int">
+		select
+		count(1)
+		from yh_disease_assess_report
+		where user_code = #{usercode}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+		delete from yh_disease_assess_report
+		where id = #{id,jdbcType=INTEGER}
+	</delete>
+	<delete id="deleteByExample"
+		parameterType="com.yihe.system.domain.YhDiseaseAssessReportExample">
+		delete from yh_disease_assess_report
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</delete>
+	<insert id="insert" parameterType="com.yihe.system.domain.YhDiseaseAssessReport">
+		<selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+			SELECT LAST_INSERT_ID()
+		</selectKey>
+		insert into yh_disease_assess_report (user_code, result_serialNum,
+		qtime,
+		request_serialNum, diseasId, risk_level,
+		risk_desc, now_risk_desc, now_risk_value,
+		now_risk_level, now_risk_last_value, ideal_risk_level,
+		ideal_risk_desc, last_time, age_forecast_r20,
+		age_forecast_r30, age_forecast_r40, age_forecast_r50,
+		age_forecast_r60, age_forecast_r70, age_forecast_r80,
+		age_op_forecast_r20_op, age_op_forecast_r30_op,
+		age_op_forecast_r40_op, age_op_forecast_r50_op,
+		age_op_forecast_r60_op, age_op_forecast_r70_op,
+		age_op_forecast_r80_op)
+		values (#{userCode,jdbcType=VARCHAR}, #{resultSerialnum,jdbcType=VARCHAR},
+		#{qtime,jdbcType=TIMESTAMP},
+		#{requestSerialnum,jdbcType=VARCHAR}, #{diseasid,jdbcType=INTEGER}, #{riskLevel,jdbcType=VARCHAR},
+		#{riskDesc,jdbcType=VARCHAR}, #{nowRiskDesc,jdbcType=VARCHAR},
+		#{nowRiskValue,jdbcType=VARCHAR},
+		#{nowRiskLevel,jdbcType=VARCHAR}, #{nowRiskLastValue,jdbcType=VARCHAR},
+		#{idealRiskLevel,jdbcType=VARCHAR},
+		#{idealRiskDesc,jdbcType=VARCHAR}, #{lastTime,jdbcType=VARCHAR}, #{ageForecastR20,jdbcType=VARCHAR},
+		#{ageForecastR30,jdbcType=VARCHAR},
+		#{ageForecastR40,jdbcType=VARCHAR},
+		#{ageForecastR50,jdbcType=VARCHAR},
+		#{ageForecastR60,jdbcType=VARCHAR},
+		#{ageForecastR70,jdbcType=VARCHAR},
+		#{ageForecastR80,jdbcType=VARCHAR},
+		#{ageOpForecastR20Op,jdbcType=VARCHAR},
+		#{ageOpForecastR30Op,jdbcType=VARCHAR},
+		#{ageOpForecastR40Op,jdbcType=VARCHAR},
+		#{ageOpForecastR50Op,jdbcType=VARCHAR},
+		#{ageOpForecastR60Op,jdbcType=VARCHAR},
+		#{ageOpForecastR70Op,jdbcType=VARCHAR},
+		#{ageOpForecastR80Op,jdbcType=VARCHAR})
+	</insert>
+	<insert id="insertSelective" parameterType="com.yihe.system.domain.YhDiseaseAssessReport">
+		<selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+			SELECT LAST_INSERT_ID()
+		</selectKey>
+		insert into yh_disease_assess_report
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="userCode != null">
+				user_code,
+			</if>
+			<if test="resultSerialnum != null">
+				result_serialNum,
+			</if>
+			<if test="qtime != null">
+				qtime,
+			</if>
+			<if test="requestSerialnum != null">
+				request_serialNum,
+			</if>
+			<if test="diseasid != null">
+				diseasId,
+			</if>
+			<if test="riskLevel != null">
+				risk_level,
+			</if>
+			<if test="riskDesc != null">
+				risk_desc,
+			</if>
+			<if test="nowRiskDesc != null">
+				now_risk_desc,
+			</if>
+			<if test="nowRiskValue != null">
+				now_risk_value,
+			</if>
+			<if test="nowRiskLevel != null">
+				now_risk_level,
+			</if>
+			<if test="nowRiskLastValue != null">
+				now_risk_last_value,
+			</if>
+			<if test="idealRiskLevel != null">
+				ideal_risk_level,
+			</if>
+			<if test="idealRiskDesc != null">
+				ideal_risk_desc,
+			</if>
+			<if test="lastTime != null">
+				last_time,
+			</if>
+			<if test="ageForecastR20 != null">
+				age_forecast_r20,
+			</if>
+			<if test="ageForecastR30 != null">
+				age_forecast_r30,
+			</if>
+			<if test="ageForecastR40 != null">
+				age_forecast_r40,
+			</if>
+			<if test="ageForecastR50 != null">
+				age_forecast_r50,
+			</if>
+			<if test="ageForecastR60 != null">
+				age_forecast_r60,
+			</if>
+			<if test="ageForecastR70 != null">
+				age_forecast_r70,
+			</if>
+			<if test="ageForecastR80 != null">
+				age_forecast_r80,
+			</if>
+			<if test="ageOpForecastR20Op != null">
+				age_op_forecast_r20_op,
+			</if>
+			<if test="ageOpForecastR30Op != null">
+				age_op_forecast_r30_op,
+			</if>
+			<if test="ageOpForecastR40Op != null">
+				age_op_forecast_r40_op,
+			</if>
+			<if test="ageOpForecastR50Op != null">
+				age_op_forecast_r50_op,
+			</if>
+			<if test="ageOpForecastR60Op != null">
+				age_op_forecast_r60_op,
+			</if>
+			<if test="ageOpForecastR70Op != null">
+				age_op_forecast_r70_op,
+			</if>
+			<if test="ageOpForecastR80Op != null">
+				age_op_forecast_r80_op,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="userCode != null">
+				#{userCode,jdbcType=VARCHAR},
+			</if>
+			<if test="resultSerialnum != null">
+				#{resultSerialnum,jdbcType=VARCHAR},
+			</if>
+			<if test="qtime != null">
+				#{qtime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="requestSerialnum != null">
+				#{requestSerialnum,jdbcType=VARCHAR},
+			</if>
+			<if test="diseasid != null">
+				#{diseasid,jdbcType=INTEGER},
+			</if>
+			<if test="riskLevel != null">
+				#{riskLevel,jdbcType=VARCHAR},
+			</if>
+			<if test="riskDesc != null">
+				#{riskDesc,jdbcType=VARCHAR},
+			</if>
+			<if test="nowRiskDesc != null">
+				#{nowRiskDesc,jdbcType=VARCHAR},
+			</if>
+			<if test="nowRiskValue != null">
+				#{nowRiskValue,jdbcType=VARCHAR},
+			</if>
+			<if test="nowRiskLevel != null">
+				#{nowRiskLevel,jdbcType=VARCHAR},
+			</if>
+			<if test="nowRiskLastValue != null">
+				#{nowRiskLastValue,jdbcType=VARCHAR},
+			</if>
+			<if test="idealRiskLevel != null">
+				#{idealRiskLevel,jdbcType=VARCHAR},
+			</if>
+			<if test="idealRiskDesc != null">
+				#{idealRiskDesc,jdbcType=VARCHAR},
+			</if>
+			<if test="lastTime != null">
+				#{lastTime,jdbcType=VARCHAR},
+			</if>
+			<if test="ageForecastR20 != null">
+				#{ageForecastR20,jdbcType=VARCHAR},
+			</if>
+			<if test="ageForecastR30 != null">
+				#{ageForecastR30,jdbcType=VARCHAR},
+			</if>
+			<if test="ageForecastR40 != null">
+				#{ageForecastR40,jdbcType=VARCHAR},
+			</if>
+			<if test="ageForecastR50 != null">
+				#{ageForecastR50,jdbcType=VARCHAR},
+			</if>
+			<if test="ageForecastR60 != null">
+				#{ageForecastR60,jdbcType=VARCHAR},
+			</if>
+			<if test="ageForecastR70 != null">
+				#{ageForecastR70,jdbcType=VARCHAR},
+			</if>
+			<if test="ageForecastR80 != null">
+				#{ageForecastR80,jdbcType=VARCHAR},
+			</if>
+			<if test="ageOpForecastR20Op != null">
+				#{ageOpForecastR20Op,jdbcType=VARCHAR},
+			</if>
+			<if test="ageOpForecastR30Op != null">
+				#{ageOpForecastR30Op,jdbcType=VARCHAR},
+			</if>
+			<if test="ageOpForecastR40Op != null">
+				#{ageOpForecastR40Op,jdbcType=VARCHAR},
+			</if>
+			<if test="ageOpForecastR50Op != null">
+				#{ageOpForecastR50Op,jdbcType=VARCHAR},
+			</if>
+			<if test="ageOpForecastR60Op != null">
+				#{ageOpForecastR60Op,jdbcType=VARCHAR},
+			</if>
+			<if test="ageOpForecastR70Op != null">
+				#{ageOpForecastR70Op,jdbcType=VARCHAR},
+			</if>
+			<if test="ageOpForecastR80Op != null">
+				#{ageOpForecastR80Op,jdbcType=VARCHAR},
+			</if>
+		</trim>
+	</insert>
+	<select id="countByExample"
+		parameterType="com.yihe.system.domain.YhDiseaseAssessReportExample"
+		resultType="java.lang.Long">
+		select count(*) from yh_disease_assess_report
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</select>
+	<update id="updateByExampleSelective" parameterType="map">
+		update yh_disease_assess_report
+		<set>
+			<if test="record.id != null">
+				id = #{record.id,jdbcType=INTEGER},
+			</if>
+			<if test="record.userCode != null">
+				user_code = #{record.userCode,jdbcType=VARCHAR},
+			</if>
+			<if test="record.resultSerialnum != null">
+				result_serialNum = #{record.resultSerialnum,jdbcType=VARCHAR},
+			</if>
+			<if test="record.qtime != null">
+				qtime = #{record.qtime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="record.requestSerialnum != null">
+				request_serialNum = #{record.requestSerialnum,jdbcType=VARCHAR},
+			</if>
+			<if test="record.diseasid != null">
+				diseasId = #{record.diseasid,jdbcType=INTEGER},
+			</if>
+			<if test="record.riskLevel != null">
+				risk_level = #{record.riskLevel,jdbcType=VARCHAR},
+			</if>
+			<if test="record.riskDesc != null">
+				risk_desc = #{record.riskDesc,jdbcType=VARCHAR},
+			</if>
+			<if test="record.nowRiskDesc != null">
+				now_risk_desc = #{record.nowRiskDesc,jdbcType=VARCHAR},
+			</if>
+			<if test="record.nowRiskValue != null">
+				now_risk_value = #{record.nowRiskValue,jdbcType=VARCHAR},
+			</if>
+			<if test="record.nowRiskLevel != null">
+				now_risk_level = #{record.nowRiskLevel,jdbcType=VARCHAR},
+			</if>
+			<if test="record.nowRiskLastValue != null">
+				now_risk_last_value = #{record.nowRiskLastValue,jdbcType=VARCHAR},
+			</if>
+			<if test="record.idealRiskLevel != null">
+				ideal_risk_level = #{record.idealRiskLevel,jdbcType=VARCHAR},
+			</if>
+			<if test="record.idealRiskDesc != null">
+				ideal_risk_desc = #{record.idealRiskDesc,jdbcType=VARCHAR},
+			</if>
+			<if test="record.lastTime != null">
+				last_time = #{record.lastTime,jdbcType=VARCHAR},
+			</if>
+			<if test="record.ageForecastR20 != null">
+				age_forecast_r20 = #{record.ageForecastR20,jdbcType=VARCHAR},
+			</if>
+			<if test="record.ageForecastR30 != null">
+				age_forecast_r30 = #{record.ageForecastR30,jdbcType=VARCHAR},
+			</if>
+			<if test="record.ageForecastR40 != null">
+				age_forecast_r40 = #{record.ageForecastR40,jdbcType=VARCHAR},
+			</if>
+			<if test="record.ageForecastR50 != null">
+				age_forecast_r50 = #{record.ageForecastR50,jdbcType=VARCHAR},
+			</if>
+			<if test="record.ageForecastR60 != null">
+				age_forecast_r60 = #{record.ageForecastR60,jdbcType=VARCHAR},
+			</if>
+			<if test="record.ageForecastR70 != null">
+				age_forecast_r70 = #{record.ageForecastR70,jdbcType=VARCHAR},
+			</if>
+			<if test="record.ageForecastR80 != null">
+				age_forecast_r80 = #{record.ageForecastR80,jdbcType=VARCHAR},
+			</if>
+			<if test="record.ageOpForecastR20Op != null">
+				age_op_forecast_r20_op = #{record.ageOpForecastR20Op,jdbcType=VARCHAR},
+			</if>
+			<if test="record.ageOpForecastR30Op != null">
+				age_op_forecast_r30_op = #{record.ageOpForecastR30Op,jdbcType=VARCHAR},
+			</if>
+			<if test="record.ageOpForecastR40Op != null">
+				age_op_forecast_r40_op = #{record.ageOpForecastR40Op,jdbcType=VARCHAR},
+			</if>
+			<if test="record.ageOpForecastR50Op != null">
+				age_op_forecast_r50_op = #{record.ageOpForecastR50Op,jdbcType=VARCHAR},
+			</if>
+			<if test="record.ageOpForecastR60Op != null">
+				age_op_forecast_r60_op = #{record.ageOpForecastR60Op,jdbcType=VARCHAR},
+			</if>
+			<if test="record.ageOpForecastR70Op != null">
+				age_op_forecast_r70_op = #{record.ageOpForecastR70Op,jdbcType=VARCHAR},
+			</if>
+			<if test="record.ageOpForecastR80Op != null">
+				age_op_forecast_r80_op = #{record.ageOpForecastR80Op,jdbcType=VARCHAR},
+			</if>
+		</set>
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByExample" parameterType="map">
+		update yh_disease_assess_report
+		set id = #{record.id,jdbcType=INTEGER},
+		user_code = #{record.userCode,jdbcType=VARCHAR},
+		result_serialNum = #{record.resultSerialnum,jdbcType=VARCHAR},
+		qtime = #{record.qtime,jdbcType=TIMESTAMP},
+		request_serialNum = #{record.requestSerialnum,jdbcType=VARCHAR},
+		diseasId = #{record.diseasid,jdbcType=INTEGER},
+		risk_level = #{record.riskLevel,jdbcType=VARCHAR},
+		risk_desc = #{record.riskDesc,jdbcType=VARCHAR},
+		now_risk_desc = #{record.nowRiskDesc,jdbcType=VARCHAR},
+		now_risk_value = #{record.nowRiskValue,jdbcType=VARCHAR},
+		now_risk_level = #{record.nowRiskLevel,jdbcType=VARCHAR},
+		now_risk_last_value = #{record.nowRiskLastValue,jdbcType=VARCHAR},
+		ideal_risk_level = #{record.idealRiskLevel,jdbcType=VARCHAR},
+		ideal_risk_desc = #{record.idealRiskDesc,jdbcType=VARCHAR},
+		last_time = #{record.lastTime,jdbcType=VARCHAR},
+		age_forecast_r20 = #{record.ageForecastR20,jdbcType=VARCHAR},
+		age_forecast_r30 = #{record.ageForecastR30,jdbcType=VARCHAR},
+		age_forecast_r40 = #{record.ageForecastR40,jdbcType=VARCHAR},
+		age_forecast_r50 = #{record.ageForecastR50,jdbcType=VARCHAR},
+		age_forecast_r60 = #{record.ageForecastR60,jdbcType=VARCHAR},
+		age_forecast_r70 = #{record.ageForecastR70,jdbcType=VARCHAR},
+		age_forecast_r80 = #{record.ageForecastR80,jdbcType=VARCHAR},
+		age_op_forecast_r20_op = #{record.ageOpForecastR20Op,jdbcType=VARCHAR},
+		age_op_forecast_r30_op =
+		#{record.ageOpForecastR30Op,jdbcType=VARCHAR},
+		age_op_forecast_r40_op = #{record.ageOpForecastR40Op,jdbcType=VARCHAR},
+		age_op_forecast_r50_op =
+		#{record.ageOpForecastR50Op,jdbcType=VARCHAR},
+		age_op_forecast_r60_op = #{record.ageOpForecastR60Op,jdbcType=VARCHAR},
+		age_op_forecast_r70_op =
+		#{record.ageOpForecastR70Op,jdbcType=VARCHAR},
+		age_op_forecast_r80_op = #{record.ageOpForecastR80Op,jdbcType=VARCHAR}
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByPrimaryKeySelective" parameterType="com.yihe.system.domain.YhDiseaseAssessReport">
+		update yh_disease_assess_report
+		<set>
+			<if test="userCode != null">
+				user_code = #{userCode,jdbcType=VARCHAR},
+			</if>
+			<if test="resultSerialnum != null">
+				result_serialNum = #{resultSerialnum,jdbcType=VARCHAR},
+			</if>
+			<if test="qtime != null">
+				qtime = #{qtime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="requestSerialnum != null">
+				request_serialNum = #{requestSerialnum,jdbcType=VARCHAR},
+			</if>
+			<if test="diseasid != null">
+				diseasId = #{diseasid,jdbcType=INTEGER},
+			</if>
+			<if test="riskLevel != null">
+				risk_level = #{riskLevel,jdbcType=VARCHAR},
+			</if>
+			<if test="riskDesc != null">
+				risk_desc = #{riskDesc,jdbcType=VARCHAR},
+			</if>
+			<if test="nowRiskDesc != null">
+				now_risk_desc = #{nowRiskDesc,jdbcType=VARCHAR},
+			</if>
+			<if test="nowRiskValue != null">
+				now_risk_value = #{nowRiskValue,jdbcType=VARCHAR},
+			</if>
+			<if test="nowRiskLevel != null">
+				now_risk_level = #{nowRiskLevel,jdbcType=VARCHAR},
+			</if>
+			<if test="nowRiskLastValue != null">
+				now_risk_last_value = #{nowRiskLastValue,jdbcType=VARCHAR},
+			</if>
+			<if test="idealRiskLevel != null">
+				ideal_risk_level = #{idealRiskLevel,jdbcType=VARCHAR},
+			</if>
+			<if test="idealRiskDesc != null">
+				ideal_risk_desc = #{idealRiskDesc,jdbcType=VARCHAR},
+			</if>
+			<if test="lastTime != null">
+				last_time = #{lastTime,jdbcType=VARCHAR},
+			</if>
+			<if test="ageForecastR20 != null">
+				age_forecast_r20 = #{ageForecastR20,jdbcType=VARCHAR},
+			</if>
+			<if test="ageForecastR30 != null">
+				age_forecast_r30 = #{ageForecastR30,jdbcType=VARCHAR},
+			</if>
+			<if test="ageForecastR40 != null">
+				age_forecast_r40 = #{ageForecastR40,jdbcType=VARCHAR},
+			</if>
+			<if test="ageForecastR50 != null">
+				age_forecast_r50 = #{ageForecastR50,jdbcType=VARCHAR},
+			</if>
+			<if test="ageForecastR60 != null">
+				age_forecast_r60 = #{ageForecastR60,jdbcType=VARCHAR},
+			</if>
+			<if test="ageForecastR70 != null">
+				age_forecast_r70 = #{ageForecastR70,jdbcType=VARCHAR},
+			</if>
+			<if test="ageForecastR80 != null">
+				age_forecast_r80 = #{ageForecastR80,jdbcType=VARCHAR},
+			</if>
+			<if test="ageOpForecastR20Op != null">
+				age_op_forecast_r20_op = #{ageOpForecastR20Op,jdbcType=VARCHAR},
+			</if>
+			<if test="ageOpForecastR30Op != null">
+				age_op_forecast_r30_op = #{ageOpForecastR30Op,jdbcType=VARCHAR},
+			</if>
+			<if test="ageOpForecastR40Op != null">
+				age_op_forecast_r40_op = #{ageOpForecastR40Op,jdbcType=VARCHAR},
+			</if>
+			<if test="ageOpForecastR50Op != null">
+				age_op_forecast_r50_op = #{ageOpForecastR50Op,jdbcType=VARCHAR},
+			</if>
+			<if test="ageOpForecastR60Op != null">
+				age_op_forecast_r60_op = #{ageOpForecastR60Op,jdbcType=VARCHAR},
+			</if>
+			<if test="ageOpForecastR70Op != null">
+				age_op_forecast_r70_op = #{ageOpForecastR70Op,jdbcType=VARCHAR},
+			</if>
+			<if test="ageOpForecastR80Op != null">
+				age_op_forecast_r80_op = #{ageOpForecastR80Op,jdbcType=VARCHAR},
+			</if>
+		</set>
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.yihe.system.domain.YhDiseaseAssessReport">
+		update yh_disease_assess_report
+		set user_code = #{userCode,jdbcType=VARCHAR},
+		result_serialNum = #{resultSerialnum,jdbcType=VARCHAR},
+		qtime = #{qtime,jdbcType=TIMESTAMP},
+		request_serialNum = #{requestSerialnum,jdbcType=VARCHAR},
+		diseasId = #{diseasid,jdbcType=INTEGER},
+		risk_level = #{riskLevel,jdbcType=VARCHAR},
+		risk_desc = #{riskDesc,jdbcType=VARCHAR},
+		now_risk_desc = #{nowRiskDesc,jdbcType=VARCHAR},
+		now_risk_value = #{nowRiskValue,jdbcType=VARCHAR},
+		now_risk_level = #{nowRiskLevel,jdbcType=VARCHAR},
+		now_risk_last_value = #{nowRiskLastValue,jdbcType=VARCHAR},
+		ideal_risk_level = #{idealRiskLevel,jdbcType=VARCHAR},
+		ideal_risk_desc = #{idealRiskDesc,jdbcType=VARCHAR},
+		last_time = #{lastTime,jdbcType=VARCHAR},
+		age_forecast_r20 = #{ageForecastR20,jdbcType=VARCHAR},
+		age_forecast_r30 = #{ageForecastR30,jdbcType=VARCHAR},
+		age_forecast_r40 = #{ageForecastR40,jdbcType=VARCHAR},
+		age_forecast_r50 = #{ageForecastR50,jdbcType=VARCHAR},
+		age_forecast_r60 = #{ageForecastR60,jdbcType=VARCHAR},
+		age_forecast_r70 = #{ageForecastR70,jdbcType=VARCHAR},
+		age_forecast_r80 = #{ageForecastR80,jdbcType=VARCHAR},
+		age_op_forecast_r20_op = #{ageOpForecastR20Op,jdbcType=VARCHAR},
+		age_op_forecast_r30_op = #{ageOpForecastR30Op,jdbcType=VARCHAR},
+		age_op_forecast_r40_op = #{ageOpForecastR40Op,jdbcType=VARCHAR},
+		age_op_forecast_r50_op = #{ageOpForecastR50Op,jdbcType=VARCHAR},
+		age_op_forecast_r60_op = #{ageOpForecastR60Op,jdbcType=VARCHAR},
+		age_op_forecast_r70_op = #{ageOpForecastR70Op,jdbcType=VARCHAR},
+		age_op_forecast_r80_op = #{ageOpForecastR80Op,jdbcType=VARCHAR}
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+</mapper>

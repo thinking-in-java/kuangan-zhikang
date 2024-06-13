@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, maximum-scale=1">
+<title>注册信息</title>
+<link rel="stylesheet" th:href="@{/assets/libs/layui/css/layui.css}" />
+<link rel="stylesheet" th:href="@{/assets/module/admin.css}" />
+
+</head>
+<body style="margin: 7px;">
+<!-- 页面加载loading -->
+	<div class="page-loading">
+		<div class="ball-loader">
+			<span></span><span></span><span></span><span></span>
+		</div>
+	</div>
+	<div class="layui-fluid">
+		<div class="layui-row">
+			<div style="width: 100%; height: 100%; background-color: #FFF; position: relative;">
+				<div style="font-size: 20px; font-weight: bold; margin-left: 20px; padding-top: 30px;">注册</div>
+				<div style="width: 1166px; background-color: rgb(231, 244, 255); line-height: 50px; margin-left: 19px; margin-top: 10px;">
+					<span style="margin-left: 10px;" th:text="${orgFullName}"></span>
+				</div>
+
+
+				<form class="layui-form" action="" id="regForm" lay-filter="regForm">
+					<div class="layui-form-item">
+						<label style="width: 72px;"
+							class="layui-form-label layui-form-required">真实姓名</label>
+						<div class="layui-input-block">
+							<div class="layui-row">
+							<div >
+							<input type="hidden" name="enrolCardId"  id="enrolCardId" th:value ="${cardId}">
+							<input type="hidden" name="orgCode" id="orgCode" th:value ="${orgId}">
+							<input type="hidden" name="userCode" th:value ="${userCode}">
+							</div>
+							<!-- maxlength="10" -->
+								<input type="hidden" name="userType" value="5"> 
+								<input style="margin-left: -89px; width: 450px;" type="text"
+									name="name"  lay-verify="name" lay-reqtext="不能为空" 
+									placeholder="请输入名称，最大限制20个字符" autocomplete="off" 
+									class="layui-input">
+							</div>
+						</div>
+					</div>
+					<!-- 性别 -->
+					<div class="layui-form-item">
+						<label class="layui-form-label layui-form-required"
+							style="margin-left: -35px;">性别</label>
+						<div class="layui-input-block">
+							<div class="layui-row" style="margin-left: -89px;">
+								<input type="radio" name="gender" value="1" title="男"> <input
+									type="radio" name="gender" value="2" title="女" checked>
+							</div>
+						</div>
+					</div>
+				<!-- 	出生日期 -->
+					<div class="layui-form-item">
+						<label style="width: 72px"
+							class="layui-form-label layui-form-required">出生日期</label>
+						<div class="layui-input-block">
+							<div class="layui-row">
+								<input class="layui-input icon-date" style="margin-left: -89px; width: 200px;" type="text"
+									name="birthDate" required lay-verify="required" id="test1" lay-reqtext="不能为空"
+									placeholder="请选择日期" autocomplete="off" >
+							</div>
+						</div>
+					</div>
+					<!-- 手机号 -->
+					<div class="layui-form-item">
+					<div style="height: 36px;line-height: 35px;">
+						<label style="width: 74px; "class="layui-form-label layui-form-required">手机号码							   
+						</label>
+						<i class="layui-icon layui-icon-help" id="help"></i></div>
+						<div class="layui-input-block">
+							<div class="layui-row">
+								<input  style="margin-left: -89px; width: 250px;"  lay-reqtext="不能为空"
+									name="mobile"   required lay-verify="mobile" id="mobile"
+									placeholder="请输入手机号码" autocomplete="off" class="layui-input">
+							</div>
+						</div>
+					</div>
+					<!-- 身份証 -->
+					<div class="layui-form-item">
+						<div style="height: 36px;line-height: 35px;">
+							<label style="width: 72px;"
+								   class="layui-form-label layui-form-required">身份证号</label>
+						</div>
+						<div class="layui-input-block">
+							<div class="layui-row">
+								<input  style="margin-left: -89px; width: 250px;" type="text" lay-reqtext="不能为空"
+										name="cardidentity" lay-verify="required" required id="cardidentity"
+										placeholder="请输入身份证号码" autocomplete="off" class="layui-input">
+							</div>
+						</div>
+					</div>
+					<!-- 登录账号 -->
+					<div class="layui-form-item">
+						<div style="height: 36px;line-height: 35px;">
+						<label style="width: 72px;"
+							class="layui-form-label layui-form-required">登录账号 </label>
+							 <span style="font-size: 12px;color:#D2D2D2;">只能输入汉字、字母和数字</span>
+							</div>
+						<div class="layui-input-block">
+							<div class="layui-row">
+								<input style="margin-left: -89px; width: 450px;" type="text" lay-reqtext="不能为空"
+									name="userName" lay-verify="userName"  readonly onfocus="this.removeAttribute('readonly');"
+									placeholder="请输入账号，由4-20位字符组成" autocomplete="off" id="userName"
+									class="layui-input">
+							</div>
+						</div>
+					</div>
+
+
+
+
+
+
+
+					<div class="layui-form-item">
+						<label style="width: 72px;"
+							class="layui-form-label layui-form-required">登录密码 </label>
+						<div class="layui-input-block">
+							<div class="layui-row">
+								<input style="margin-left: -89px; width: 450px;" type="password" lay-reqtext="不能为空"
+									name="userPwd" required lay-verify="userPwd" readonly onfocus="this.removeAttribute('readonly');"
+									placeholder="请输入账号登录密码，6~20位任意字符" autocomplete="off" 
+									class="layui-input">
+							</div>
+						</div>
+					</div>
+
+					<div class="layui-form-item"
+						>
+						<label style="width: 130px;"
+							class="layui-form-label layui-form-required">再次输入登录密码</label>
+						<div class="layui-input-block">
+							<div class="layui-row">
+								<input style="margin-left: -89px; width: 450px;"  type="password" lay-reqtext="不能为空"
+									 lay-verify="required|confirmPass"  readonly onfocus="this.removeAttribute('readonly');"
+									placeholder="请再次输入账号登录密码" autocomplete="off"  
+									class="layui-input">
+							</div>
+						</div>
+					</div>
+
+					<div class="layui-form-item">
+						<div class="layui-inline">
+							<label style="width: 60px;"
+								   class="layui-form-label layui-form-required">有效期 </label>
+							<div class="layui-input-inline" id="sexid">
+
+							</div>
+							<!--  <div class="layui-input-inline" th:if="${type!='1'}">
+                               <input type="radio" name="sex" value="1" title="不限" disabled="">
+                             <input type="radio" name="sex"  value="2" title="指定日期" checked="">
+                             </div> -->
+						</div>
+
+						<div class="layui-inline" id="erqi">
+							<label class="layui-form-label">有效时间</label>
+							<div class="layui-input-inline" id="addDateid">
+								<input type="text"  readonly="readonly"  name="linetime" class="layui-input" id="test-limit2" placeholder="yyyy-MM-dd">
+							</div>
+						</div>
+
+						<!-- <div class="layui-inline" th:if="${type!='1'}">
+                          <label class="layui-form-label">有效时间</label>
+                          <div class="layui-input-inline">
+                            <input type="text" name="addDate" id="test-limit1" lay-verify="date" placeholder="yyyy-MM-dd" autocomplete="off" class="layui-input">
+                          </div>
+                        </div>  -->
+
+					</div>
+
+					<div class="layui-form-item" style="margin-left: -88px;padding-bottom: 40px;">
+						<div class="layui-input-block">
+							<button class="layui-btn" lay-submit='' lay-filter="regSubmit" >提交</button>
+						  
+						   
+						  <!--  <a href="/manage/register/userIndex?page=health&userCode='+userCode" target='_blank'> <button type="button" class="layui-btn layui-btn-normal">补充更多信息</button></a> -->
+							<button type="reset" class="layui-btn layui-btn-primary" id ="cancel">取消</button>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</body>
+<!-- js部分 -->
+<script type="text/javascript" th:src="@{/assets/libs/layui/layui.js}"></script>
+<script type="text/javascript" th:src="@{/assets/js/common.js}"></script>
+<script type="text/javascript" th:src="@{/assets/js/jquery-1.11.1.js}"></script>
+<script type="text/javascript">
+
+layui.use(['layer','form','laydate'], function(){
+	 var $ = layui.jquery;
+     var layer = layui.layer;
+     var form = layui.form;
+     var laydate = layui.laydate;
+
+
+     var tip_index;
+	$("#help").hover(function(){
+	    tip_index =  layer.tips('可以通过手机号码找回登录密码', this,{
+	        tips: [2, 'rgba(0, 0, 0, 1)'],
+	        time:0
+	    });
+	},function(){
+	    layer.close(tip_index);
+	});
+
+	//前后若干天可选，这里以7天为例
+	if('[[${AddDate}]]'==''){
+		$("#sexid").html('<input type="radio" name="sex" value="1" title="不限" id="pro1" lay-filter="beshared" checked=""><input type="radio" name="sex"  value="2" title="指定日期" id="pro" lay-filter="beshared">');
+		$("#erqi").hide();
+		form.render(); //更新全部
+		laydate.render({
+			elem: '#test-limit2'
+			,min: getDate(),
+			trigger: 'click'
+		});
+	}else{
+		$("#sexid").html('<input type="radio" name="sex" value="1" title="不限" id="pro1" lay-filter="beshared"  disabled=""><input type="radio" name="sex" checked=""  value="2" title="指定日期" id="pro" lay-filter="beshared">');
+		$("#erqi").show();
+		laydate.render({
+			elem: '#test-limit2'
+			,min: getDate(),
+			trigger: 'click'
+			,max: '[[${AddDate}]]'
+			,value:'[[${AddDate}]]'
+		});
+		form.render(); //更新全部
+	}
+
+	form.on('radio(beshared)', function (data) {
+		if(data.value=="2"){
+			$("#erqi").show();
+		}else{
+			$("#erqi").hide();
+		}
+		form.render();
+	})
+
+	function getDate() {
+
+		var timezone = 8;
+		var offset_GMT = new Date().getTimezoneOffset();
+		var nowDate = new Date().getTime();
+
+		var today = new Date(nowDate + offset_GMT * 60 * 1000 + timezone * 60 * 60 * 1000);
+		var date = today.getFullYear() + "-" + twoDigits(today.getMonth() + 1) + "-" + twoDigits(today.getDate());
+		var time = twoDigits(today.getHours()) + ":" + twoDigits(today.getMinutes()) + ":" + twoDigits(today.getSeconds());
+		return date;
+	}
+
+	function twoDigits(val) {
+		if (val < 10) return "0" + val;
+		return val;
+	}
+     // 校验两次密码是否一
+     form.verify({
+         confirmPass:function(value){
+             if($('input[name=userPwd]').val() !== value)
+                 return '两次密码输入不一致！';	
+         	
+         }
+     
+     }); 
+     
+     $("#cancel").click(function(){
+	    	// window.location.href='/manage/register/manageinsert';
+		 window.history.go(-1);
+	    })
+
+     
+	 $('#mobile').blur(function () {
+	    var mobile = $("#mobile").val();
+	    $.ajax({
+	 		type:'get', 
+	 		url:'/YhUserReginfo/selectMobile',
+	 		data:{mobile:mobile},
+	 		success : function(data){
+	 			console.log(data.mobile,"--------")
+	 			if(data.mobile ==mobile){
+	 				layer.msg("手机号码已被其他用户使用");	
+	 			}
+	 		}
+	 	});
+	 })
+	 
+	 	$('#userName').blur(function () {
+		 var userName = $("#userName").val();
+	    $.ajax({
+	 		type:'get', 
+	 		url:'/YhUserReginfo/selectName',
+	 		data:{userName:userName},
+	 		success : function(data){
+	 			if(userName!=""){
+	 				if(data.userName ==userName){
+		 				layer.msg("登录账号已存在，不能重名创建");		
+		 			}
+	 			}
+	 		}
+	 	});
+	 })
+    
+  //监听提交
+  form.on('submit(regSubmit)', function(dataYh){
+
+	  var cardId=$("#enrolCardId").val(); //注册卡id
+	  var orgId=$("#orgCode").val();  //机构id
+	  $.ajax({
+		  type:'get',
+		  url:'/YhUserReginfo/selectCardId',
+		  data:{cardId: cardId,orgId: orgId},
+		  success : function(data){
+			  if(data=="false"){
+				  layer.msg("该注册码已被其他用户使用，请重新注册");
+				  return false;
+			  }else {
+				  console.log("表单数据",JSON.stringify(dataYh.field))
+				  var userName = $("#userName").val();
+				  var mobile = $("#mobile").val();
+				  var linetime=$("#test-limit2").val();
+				  if(dataYh.field.sex==2){
+					  if(dataYh.field.linetime==""){
+						  layer.msg('有效时间不能为空!', {
+							  offset: 'auto',
+							  anim: 6,
+							  icon: 5
+						  });
+						  return false;
+					  }
+				  }else{
+					  dataYh.field.linetime==""
+				  }
+				  $.ajax({
+					  type:'get',
+					  url:'/YhUserReginfo/selectMobileAndName',
+					  async: false,
+					  data:{userName:userName,mobile:mobile},
+					  success : function(data){
+						  console.log(data)
+
+						  /**
+						   *  如果返回的是100 会提示 用户名 或者 号码存着
+						   *  如果返回 200 就可以注册
+						   */
+						  if(data.code==100){
+							  layer.msg(data.msg);
+						  }
+						  if(data.code==200){
+							  $.ajax({
+								  type:'post',
+								  url:'/YhUserReginfo/regSubmit',
+								  data:dataYh.field,
+								  success : function(data){
+									  if(data==1){
+										  layer.msg("注册成功");
+										  window.location.href='/manage/register/manageinsert';
+										  window.history.go(-1);
+									  }else{
+										  layer.msg("注册失败");
+									  }
+								  }
+							  })
+						  }
+					  }
+				  });
+			  }
+		  }
+	  });
+
+
+	// 阻止表单跳转。如果需要表单跳转，去掉这段即可。
+	return false;
+  });
+  
+ /*  $("#").o */
+	
+  	
+//自定义验证规则
+	
+	 form.verify({
+		 userPwd: function(value){
+			 if(value==null || value==""){
+				 return '不能为空';
+			 }else if(value.length < 6){
+		        return '密码长度不能低于6位字符';
+		      }else if(value.length > 20){
+		    	  return '密码长度不能超过20位字符';
+		      }
+		    },
+		    mobile: function(value){
+		    	console.info(value)
+				 if(value==null || value==""){
+					 return '不能为空';
+				 }else if(value.length < 11){
+			        return '手机号不能低于11位数字';
+			      }else if(value.length > 11){
+			    	  return '手机号不能超过11位数字';
+			      }
+			    }, 
+		    userName: function(value){
+		    	 var userName2 = $("#userName").val();
+	                if (!new RegExp("^[\u4e00-\u9fa5_a-zA-Z0-9]+$").test(value)) {
+	                    return '账号不能有特殊字符';
+	                }
+		    	 
+
+		    	    if (userName2.indexOf(" ") == -1) {
+		    	       // alert("没有空格");
+		    	    } else {
+		    	    	 return '账号存在非法字符';
+		    	    }
+				 var name = 0;
+				  for(var i = 0; i<value.length;i++){
+					  if (escape(value[i]).indexOf("%u")!=-1) {
+						  name = name + 2;
+					  }else{
+						  name = name + 1;
+					  }
+				  }
+				 if(name<=0){
+					 return '不能为空';
+				  }else if(name<4 || name>20){
+					  return '账号必须是4到20位字符'; 
+				  } 
+			 },
+			 
+			 name: function(value){
+				 var name2 = 0;
+				  for(var i = 0; i<value.length;i++){
+					  if (escape(value[i]).indexOf("%u")!=-1) {
+						  name2 = name2 + 2;
+					  }else{
+						  name2 = name2 + 1;
+					  }
+				  }
+				 if(name2<=0){
+					 return '不能为空';
+				  }else if(name2>20){
+					  return '最大限制20个字符'; 
+				  } 
+			 }
+			 
+			 
+	  });
+  
+  //执行一个laydate实例
+  laydate.render({
+    elem: '#test1',//指定元素
+	  trigger: 'click'
+  });
+});
+</script>
+
+</html>
+

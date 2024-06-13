@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yihe.system.mapper.AssessmentMapper">
+
+
+    <select id="selectusercode" resultType="java.lang.String" parameterType="String">
+        select user_code from  yh_user_reginfo where mobile=#{mobile}
+    </select>
+
+    <select id="selectgender" resultType="java.lang.Integer" parameterType="String">
+        select gender from  yh_user_reginfo where mobile=#{mobile}
+    </select>
+</mapper>

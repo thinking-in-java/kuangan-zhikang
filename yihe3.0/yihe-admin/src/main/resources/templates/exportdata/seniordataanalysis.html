@@ -1,0 +1,1214 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<meta name="viewport"
+		  content="width=device-width, initial-scale=1, maximum-scale=1">
+	<title>分步表单</title>
+	<link rel="stylesheet" th:href="@{/assets/libs/layui/css/layui.css}" />
+	<link rel="stylesheet" th:href="@{/assets/module/admin.css}" />
+	<style>
+		.yincang{
+			display: none;
+		}
+		.xianshi{
+			display: block;
+		}
+		.layui-form-item {
+			margin-bottom: 25px;
+		}
+		.layui-form-item .layui-form-checkbox[lay-skin=primary] {
+
+			width: 30%;
+			width: 40%;
+		}
+		.layui-input-block{
+			margin-left: 50px;
+			min-height: 36px;
+		}
+		.layui-form-item .layui-form-checkbox[lay-skin=primary] {
+			margin-top: 18px;
+		}
+		.fontsize{
+			font-size: 16px;
+		}
+		.layui-form-label{
+			width:100px !important;
+		}
+		@media screen and (max-width: 1060px) {
+			.lay-step {
+				padding-left: 50px !important;
+			}
+		}
+		.step-item-main-title{
+			margin-top: 0%  !important;
+		}
+		.step-item-main{
+			margin-left: -42%  !important;
+		}
+		.layui-forms{
+			margin-left: 35% !important;
+		}
+	</style>
+	<style type="text/css">
+		.step-item-head-active{
+			height:52px	!important;
+			width:52px	!important;
+			line-height: 52px	!important;
+			position: relative;
+			top: -10px;
+		}
+		.step-item-head {
+			line-height: 26px;
+		}
+		.step-item{
+			line-height: 52px	!important;
+		}
+		.step-item-main-title{
+			margin-top: 20px;
+		}
+	</style>
+</head>
+<body>
+<!-- 加载动画 -->
+<div class="page-loading">
+	<div class="ball-loader">
+		<span></span><span></span><span></span><span></span>
+	</div>
+</div>
+
+<!-- 正文开始 -->
+<div class="layui-fluid">
+	<div class="layui-tab layui-card"  lay-filter="docDemoTabBrief" >
+		<ul class="layui-tab-title">
+			<li class="layui-this">因素对比与分析</li>
+			<li >时间段对比</li>
+		</ul>
+		<div class="layui-tab-content">
+			<div class=" layui-tab-item layui-show layui-card-body" style="padding-top: 40px;height: 650px;">
+				<div class="layui-carousel" id="stepForm" lay-filter="stepForm"
+					 style="margin: 0 auto">
+					<div carousel-item style="height:1000px;">
+						<div>
+
+							<form class="layui-form layui-forms"
+								  style="margin: 0 auto; max-width: 460px; padding-top: 60px;">
+
+								<div class="layui-form-item">
+									<label class="layui-input-block  layui-form-required">客户:</label>
+									<img id="customer" style="width: 16px;height: 16px;margin-left: 5px;"  src="/assets/images/unpo.jpg">
+									<div class="layui-input-block">
+										<div id="demoXmSelect" style="max-width: 460px;"></div>
+
+									</div>
+								</div>
+
+
+
+								<div class="layui-form-item">
+									<label class=" layui-input-block  layui-form-required">数据时间段:</label>
+									<img id="times" style="width: 16px;height: 16px;margin-left: 5px;"  src="/assets/images/unpo.jpg">
+									<div class="layui-input-block">
+										<div>
+											<input name="times" type="text"
+												   class="layui-input" id="test6" placeholder=" - ">
+										</div>
+									</div>
+								</div>
+
+
+								<div class="layui-form-item">
+									<label class="layui-input-block">性别:</label>
+									<div class="layui-input-block" style="display: block;width: auto;float: none;">
+										<input type="radio" name="sex" value="0" title="全部" checked>
+										<input type="radio" name="sex" value="1" title="男">
+										<input type="radio" name="sex" value="2" title="女">
+									</div>
+								</div>
+
+								<div class="layui-form-item">
+									<div class="layui-inline">
+										<label class="layui-input-block  layui-form-required" >年龄</label>
+										<div class="layui-input-block">
+											<div class="layui-input-inline" style="width: 120px;">
+												<input oninput = "value=value.replace(/[^\d]/g,'')" type="text" name="sui_min" style="width:100px;display: inline"   class="layui-input"><text style="color:#a6a6a6">岁</text>
+											</div>
+											<div class="layui-form-mid">~</div>
+											<div class="layui-input-inline" style="width: 120px;">
+												<input oninput = "value=value.replace(/[^\d]/g,'')" type="text" name="sui_max"  autocomplete="off" style="width:100px;display: inline"  class="layui-input"><text style="color:#a6a6a6">岁</text>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="layui-form-item" style="position: fixed;bottom: 0px;width: 98%;left: 0px;margin: 0;background-color: #FFF;">
+									<div class="layui-input-block">
+										<button class="layui-btn" lay-submit lay-filter="formDemo" style="margin-left: 45%">&emsp;下一步&emsp;
+										</button>
+									</div>
+								</div>
+							</form>
+
+						</div>
+						<div>
+
+							<form class="layui-form"
+								  style="margin: 0 auto; max-width: 460px; padding-top: 60px;">
+								<div class="layui-form-item">
+									<label class="layui-input-block  layui-form-required">因素选择:</label>
+									<label style="color: #a6a6a6;font-size: 14px;margin-left: 10px;">最少选择1个，最多选择4个</label>
+									<div class="layui-input-block" style="margin-top: 20px;">
+										<div id="yinsu" style="max-width: 400px;" lay-filter="formyinsu"></div>
+
+									</div>
+								</div>
+
+								<div class="layui-form-item  choose" style="width: 760px;">
+									<label class="layui-form-label fontsize">收缩压</label>
+									<div class="layui-input-inline" style="display: block;width: auto;float: none;">
+										<input lay-filter="shousuo" type="radio"  name="shousuo" value="0" title="<120" checked>
+										<input lay-filter="shousuo" type="radio" name="shousuo" value="1" title="≥120且<140">
+										<input lay-filter="shousuo" type="radio" name="shousuo" value="2" title="≥ 140">
+										<input lay-filter="shousuo" class='mychange zidingyi' type="radio" name="shousuo" value="3" title="自定义">
+										<div class="yincang  fanwei" style="float: right;">
+											<div class="layui-input-inline" style="width: 100px;float: right;">
+												<input oninput = "value=value.replace(/[^\d]/g,'')" type="text" name="shousuo_max" style="width:100px;display: inline"   class="layui-input">
+											</div>
+											<div class="layui-form-mid" style="float: right;">~</div>
+											<div class="layui-input-inline" style="width: 100px;float: right;">
+												<input oninput = "value=value.replace(/[^\d]/g,'')" type="text" name="shousuo_min"  autocomplete="off" style="width:100px;display: inline"  class="layui-input">
+											</div>
+										</div>
+									</div>
+								</div>
+
+								<div class="layui-form-item  choose" style="width: 750px;">
+									<label class="layui-form-label fontsize">舒张压</label>
+									<div class="layui-input-inline" style="display: block;width: auto;float: none;">
+										<input lay-filter="shuzhang" type="radio" name="shuzhang" value="0" title="< 80" checked>
+										<input lay-filter="shuzhang" type="radio" name="shuzhang" value="1" title="≥ 80 且 < 90">
+										<input lay-filter="shuzhang" type="radio" name="shuzhang" value="2" title="≥ 90">
+										<input lay-filter="shuzhang" class='mychange zidingyi' type="radio" name="shuzhang" value="3" title="自定义">
+										<div class="yincang fanwei" style="float: right;">
+											<div class="layui-input-inline" style="width: 100px;float: right;">
+												<input oninput = "value=value.replace(/[^\d]/g,'')"  type="text" name="shuzhang_max" style="width:100px;display: inline"   class="layui-input">
+											</div>
+											<div class="layui-form-mid" style="float: right;">~</div>
+											<div class="layui-input-inline" style="width: 100px;float: right;">
+												<input oninput = "value=value.replace(/[^\d]/g,'')" type="text" name="shuzhang_min"  autocomplete="off" style="width:100px;display: inline"  class="layui-input">
+											</div>
+										</div>
+									</div>
+								</div>
+
+								<div class="layui-form-item  choose" style="width: 750px;">
+									<label class="layui-form-label fontsize">空腹血糖</label>
+									<div class="layui-input-inline" style="display: block;width: auto;float: none;">
+										<input lay-filter="kongfu" type="radio" name="kongfu" value="0" title="< 5.6" checked>
+										<input lay-filter="kongfu" type="radio" name="kongfu" value="1" title="≥ 5.6 且 < 7">
+										<input lay-filter="kongfu" type="radio" name="kongfu" value="2" title="≥ 7">
+										<input lay-filter="kongfu" class='mychange zidingyi' type="radio" name="kongfu" value="3" title="自定义">
+										<div class="yincang fanwei" style="float: right;">
+											<div class="layui-input-inline" style="width: 100px;float: right;">
+												<input oninput="value=value.replace(/^\D*(\d*(?:\.\d{0,2})?).*$/g, '$1')" type="text" name="kongfu_max" style="width:100px;display: inline"   class="layui-input">
+											</div>
+											<div class="layui-form-mid" style="float: right;">~</div>
+											<div class="layui-input-inline" style="width: 100px;float: right;">
+												<input oninput="value=value.replace(/^\D*(\d*(?:\.\d{0,2})?).*$/g, '$1')" type="text" name="kongfu_min"  autocomplete="off" style="width:100px;display: inline"  class="layui-input">
+											</div>
+										</div>
+									</div>
+								</div>
+
+								<div class="layui-form-item  choose" style="width: 670px;">
+									<label class="layui-form-label fontsize">总胆固醇</label>
+									<div class="layui-input-inline" style="display: block;width: auto;float: none;">
+										<input lay-filter="zongdan" type="radio" name="zongdan" value="0" title="< 5.18" checked>
+										<input lay-filter="zongdan" type="radio" name="zongdan" value="1" title="≥ 5.18">
+										<input lay-filter="zongdan" class='mychange zidingyi' type="radio" name="zongdan" value="2" title="自定义">
+										<div class="yincang fanwei" style="float: right;">
+											<div class="layui-input-inline" style="width: 100px;float: right;">
+												<input oninput="value=value.replace(/^\D*(\d*(?:\.\d{0,2})?).*$/g, '$1')" type="text" name="zongdan_max" style="width:100px;display: inline"   class="layui-input">
+											</div>
+											<div class="layui-form-mid" style="float: right;">~</div>
+											<div class="layui-input-inline" style="width: 100px;float: right;">
+												<input oninput="value=value.replace(/^\D*(\d*(?:\.\d{0,2})?).*$/g, '$1')" type="text" name="zongdan_min"  autocomplete="off" style="width:100px;display: inline"  class="layui-input">
+											</div>
+										</div>
+									</div>
+								</div>
+
+								<div class="layui-form-item  choose" style="width: 800px;">
+									<label class="layui-form-label fontsize">甘油三酯</label>
+									<div class="layui-input-inline" style="display: block;width: auto;float: none;">
+										<input lay-filter="ganyou" type="radio" name="ganyou" value="0" title="< 1.70" checked>
+										<input lay-filter="ganyou" type="radio" name="ganyou" value="1" title="≥ 1.70 且＜2.25">
+										<input lay-filter="ganyou" type="radio" name="ganyou" value="2" title="≥2.25">
+										<input lay-filter="ganyou" class='mychange zidingyi' type="radio" name="ganyou" value="3" title="自定义">
+										<div class="yincang fanwei" style="float: right;">
+											<div class="layui-input-inline" style="width: 100px;float: right;">
+												<input oninput="value=value.replace(/^\D*(\d*(?:\.\d{0,2})?).*$/g, '$1')" type="text" name="ganyou_max" style="width:100px;display: inline"   class="layui-input">
+											</div>
+											<div class="layui-form-mid" style="float: right;">~</div>
+											<div class="layui-input-inline" style="width: 100px;float: right;">
+												<input oninput="value=value.replace(/^\D*(\d*(?:\.\d{0,2})?).*$/g, '$1')" type="text" name="ganyou_min"  autocomplete="off" style="width:100px;display: inline"  class="layui-input">
+											</div>
+										</div>
+									</div>
+								</div>
+
+								<div class="layui-form-item  choose" style="width: 670px;">
+									<label class="layui-form-label fontsize">HDL胆固醇</label>
+									<div class="layui-input-inline" style="display: block;width: auto;float: none;">
+										<input lay-filter="HDL" type="radio" name="HDL" value="0" title="< 1.04" checked>
+										<input lay-filter="HDL" type="radio" name="HDL" value="1" title="≥ 1.04">
+										<input lay-filter="HDL" class='mychange zidingyi' type="radio" name="HDL" value="2" title="自定义">
+										<div class="yincang fanwei" style="float: right;">
+											<div class="layui-input-inline" style="width: 100px;float: right;">
+												<input oninput="value=value.replace(/^\D*(\d*(?:\.\d{0,2})?).*$/g, '$1')" type="text" name="HDL_max" style="width:100px;display: inline"   class="layui-input">
+											</div>
+											<div class="layui-form-mid" style="float: right;">~</div>
+											<div class="layui-input-inline" style="width: 100px;float: right;">
+												<input oninput="value=value.replace(/^\D*(\d*(?:\.\d{0,2})?).*$/g, '$1')" type="text" name="HDL_min"  autocomplete="off" style="width:100px;display: inline"  class="layui-input">
+											</div>
+										</div>
+									</div>
+								</div>
+
+								<div class="layui-form-item  choose" style="width: 670px;">
+									<label class="layui-form-label fontsize">LDL胆固醇</label>
+									<div class="layui-input-inline" style="display: block;width: auto;float: none;">
+										<input lay-filter="LDL" type="radio" name="LDL" value="0" title="< 3.37" checked>
+										<input lay-filter="LDL" type="radio" name="LDL" value="1" title="≥ 3.37">
+										<input lay-filter="LDL" class='mychange zidingyi' type="radio" name="LDL" value="2" title="自定义">
+										<div class="yincang fanwei"  style="float: right;">
+											<div class="layui-input-inline" style="width: 100px;float: right;">
+												<input oninput="value=value.replace(/^\D*(\d*(?:\.\d{0,2})?).*$/g, '$1')"  type="text" name="LDL_max" style="width:100px;display: inline"   class="layui-input">
+											</div>
+											<div class="layui-form-mid" style="float: right;">~</div>
+											<div class="layui-input-inline" style="width: 100px;float: right;">
+												<input oninput="value=value.replace(/^\D*(\d*(?:\.\d{0,2})?).*$/g, '$1')" type="text" name="LDL_min"  autocomplete="off" style="width:100px;display: inline"  class="layui-input">
+											</div>
+										</div>
+									</div>
+								</div>
+
+								<div class="layui-form-item  choose" style="width: 820px;">
+									<label class="layui-form-label fontsize">体重指数</label>
+									<div class="layui-input-inline" style="display: block;width: auto;float: none;">
+										<input lay-filter="tizhong" type="radio" name="tizhong" value="0" title="< 18.5" checked>
+										<input lay-filter="tizhong" type="radio" name="tizhong" value="1" title="≥ 18.5 且 < 24">
+										<input lay-filter="tizhong" type="radio" name="tizhong" value="2" title="≥ 24 且 < 28">
+										<input lay-filter="tizhong" class='mychange zidingyi' type="radio" name="tizhong" value="3" title="自定义">
+										<div class="yincang fanwei" style="float: right;">
+											<div class="layui-input-inline" style="width: 100px;float: right;">
+												<input oninput="value=value.replace(/^\D*(\d*(?:\.\d{0,2})?).*$/g, '$1')" type="text" name="tizhong_max" style="width:100px;display: inline"   class="layui-input">
+											</div>
+											<div class="layui-form-mid" style="float: right;">~</div>
+											<div class="layui-input-inline" style="width: 100px;float: right;">
+												<input oninput="value=value.replace(/^\D*(\d*(?:\.\d{0,2})?).*$/g, '$1')" type="text" name="tizhong_min"  autocomplete="off" style="width:100px;display: inline"  class="layui-input">
+											</div>
+										</div>
+									</div>
+								</div>
+
+								<div class="layui-form-item  choose" style="width: 670px;">
+									<label class="layui-form-label fontsize">腰围</label>
+									<div class="layui-input-inline" style="display: block;width: auto;float: none;">
+										<input lay-filter="yaowei" type="radio" name="yaowei" value="0" title="正常" checked>
+										<input lay-filter="yaowei" type="radio" name="yaowei" value="1" title="过大">
+										<input lay-filter="yaowei" class='mychange zidingyi' type="radio" name="yaowei" value="2" title="自定义">
+										<div class="yincang fanwei" style="float: right;">
+											<div class="layui-input-inline" style="width: 100px;float: right;">
+												<input oninput="value=value.replace(/^\D*(\d*(?:\.\d{0,2})?).*$/g, '$1')" type="text" name="yaowei_max" style="width:100px;display: inline"   class="layui-input">
+											</div>
+											<div class="layui-form-mid" style="float: right;">~</div>
+											<div class="layui-input-inline" style="width: 100px;float: right;">
+												<input oninput="value=value.replace(/^\D*(\d*(?:\.\d{0,2})?).*$/g, '$1')" type="text" name="yaowei_min"  autocomplete="off" style="width:100px;display: inline"  class="layui-input">
+											</div>
+										</div>
+									</div>
+								</div>
+
+
+								<div class="layui-form-item  choose" style="width: 670px;">
+									<label class="layui-form-label fontsize">吸烟比率</label>
+									<div class="layui-input-inline" style="display: block;width: auto;float: none;">
+										<input type="radio" name="xiyan" value="0" title="不吸烟" checked>
+										<input type="radio" name="xiyan" value="1" title="吸烟">
+									</div>
+								</div>
+
+								<div class="layui-form-item  choose" style="width: 670px;">
+									<label class="layui-form-label fontsize">饮酒比率</label>
+									<div class="layui-input-inline" style="display: block;width: auto;float: none;">
+										<input type="radio" name="yinjiu" value="0" title="过量" checked>
+										<input type="radio" name="yinjiu" value="1" title="适量">
+										<input  type="radio" name="yinjiu" value="2" title="不饮酒">
+									</div>
+								</div>
+
+								<div class="layui-form-item  choose" style="width: 670px;">
+									<label class="layui-form-label fontsize">体力活动比率</label>
+									<div class="layui-input-inline" style="display: block;width: auto;float: none;">
+										<input type="radio" name="tili" value="0" title="充分" checked>
+										<input type="radio" name="tili" value="1" title="中等">
+										<input  type="radio" name="tili" value="2" title="不足">
+									</div>
+								</div>
+
+								<div class="layui-form-item  choose" style="width: 670px;">
+									<label class="layui-form-label fontsize">肺癌风险评估</label>
+									<div class="layui-input-inline" style="display: block;width: auto;float: none;">
+										<input type="radio" name="feiai" value="0" title="高风险" checked>
+										<input type="radio" name="feiai" value="1" title="较高风险">
+										<input  type="radio" name="feiai" value="2" title="中等风险">
+										<input  type="radio" name="feiai" value="3" title="较低风险">
+										<input  type="radio" name="feiai" value="4" title="低风险">
+									</div>
+								</div>
+
+								<div class="layui-form-item  choose" style="width: 670px;">
+									<label class="layui-form-label fontsize">糖尿病风险评估</label>
+									<div class="layui-input-inline" style="display: block;width: auto;float: none;">
+										<input type="radio" name="tangniao" value="0" title="高风险" checked>
+										<input type="radio" name="tangniao" value="1" title="较高风险">
+										<input  type="radio" name="tangniao" value="2" title="中等风险">
+										<input  type="radio" name="tangniao" value="3" title="较低风险">
+										<input  type="radio" name="tangniao" value="4" title="低风险">
+									</div>
+								</div>
+
+								<div class="layui-form-item  choose" style="width: 670px;">
+									<label class="layui-form-label fontsize">高血压风险评估</label>
+									<div class="layui-input-inline" style="display: block;width: auto;float: none;">
+										<input type="radio" name="gaoxueya" value="0" title="高风险" checked>
+										<input type="radio" name="gaoxueya" value="1" title="中等风险">
+										<input  type="radio" name="gaoxueya" value="2" title="低风险">
+									</div>
+								</div>
+								<div class="layui-form-item  choose" style="width: 670px;">
+									<label class="layui-form-label fontsize">高血压风险评估</label>
+									<div class="layui-input-inline" style="display: block;width: auto;float: none;">
+										<input type="radio" name="gaoxueya" value="0" title="高风险" checked>
+										<input type="radio" name="gaoxueya" value="1" title="中等风险">
+										<input  type="radio" name="gaoxueya" value="2" title="低风险">
+									</div>
+								</div>
+								<div class="layui-form-item  choose" style="width: 670px;">
+									<label class="layui-form-label">个人糖尿病史</label>
+									<div class="layui-input-inline" style="display: block;width: auto;float: none;">
+										<input type="radio" name="tangniaoshi" value="1" title="有" checked>
+										<input type="radio" name="tangniaoshi" value="0" title="无">
+									</div>
+								</div>
+
+								<div class="layui-form-item  choose" style="width: 670px;">
+									<label class="layui-form-label">个人高血压史</label>
+									<div class="layui-input-inline" style="display: block;width: auto;float: none;">
+										<input type="radio" name="gaoxueyashi" value="1" title="有" checked>
+										<input type="radio" name="gaoxueyashi" value="0" title="无">
+									</div>
+								</div>
+
+								<div class="layui-form-item  choose" style="width: 670px;">
+									<label class="layui-form-label">个人肺癌史</label>
+									<div class="layui-input-inline" style="display: block;width: auto;float: none;">
+										<input type="radio" name="feiaishi" value="1" title="有" checked>
+										<input type="radio" name="feiaishi" value="0" title="无">
+									</div>
+								</div>
+
+								<div class="layui-form-item  choose" style="width: 670px;">
+									<label class="layui-form-label">血脂异常</label>
+									<div class="layui-input-inline" style="display: block;width: auto;float: none;">
+										<input type="radio" name="xuezhi" value="1" title="有" checked>
+										<input type="radio" name="xuezhi" value="0" title="无">
+									</div>
+								</div>
+
+								<div class="layui-form-item  choose" style="width: 670px;">
+									<label class="layui-form-label">冠心病</label>
+									<div class="layui-input-inline" style="display: block;width: auto;float: none;">
+										<input type="radio" name="guanxin" value="1" title="有" checked>
+										<input type="radio" name="guanxin" value="0" title="无">
+									</div>
+								</div>
+
+								<div class="layui-form-item">
+									<label class="layui-input-block layui-form-required">分析形式</label>
+									<div class="layui-input-block" style="display: block;width: auto;float: none;">
+										<input type="radio" name="chooseyinsu" value="0" title="因素对比" checked>
+										<input type="radio" name="chooseyinsu" value="1" title="趋势分析">
+									</div>
+								</div>
+								<div class="layui-form-item" style="position: fixed;bottom: 0px;width: 98%;left: 0px;margin: 0;background-color: #FFF;">
+									<div class="layui-input-block">
+										<button type="button" class="layui-btn layui-btn-primary pre" style="margin-left: 45%">上一步</button>
+										<button class="layui-btn" lay-submit lay-filter="formDemo2">&emsp;提交&emsp;
+										</button>
+									</div>
+								</div>
+							</form>
+
+						</div>
+						<div>
+
+							<div style="text-align: center; margin-top: 90px;">
+								<i class="layui-icon layui-circle"
+								   style="color: white; font-size: 30px; font-weight: bold; background: #52C41A; padding: 20px; line-height: 80px;">&#xe605;</i>
+								<div
+										style="font-size: 24px; color: #333; font-weight: 500; margin-top: 30px;">已完成
+								</div>
+								<div style="font-size: 14px; color: #666; margin-top: 20px;"></div>
+							</div>
+
+							<div style="text-align: center; margin-top: 50px;text-align: center; margin-top: 50px;position: fixed;bottom: 0px;width: 98%;left: 0px;margin: 0;background-color: #FFF;">
+								<button class="layui-btn next" style="margin-left: 5%">继续导出</button>
+							</div>
+
+						</div>
+					</div>
+				</div>
+
+
+			</div>
+			<!--时间段对比-->
+			<div class="layui-tab-item layui-card-body" style="padding-top: 40px;height: 650px;">
+
+
+				<div class="layui-carousel" id="stepForm9" lay-filter="stepForm9"
+					 style="margin: 0 auto">
+					<div carousel-item style="height:1000px;">
+						<div>
+
+							<form class="layui-form layui-forms"
+								  style="margin: 0 auto; max-width: 460px; padding-top: 60px;">
+
+								<div class="layui-form-item">
+									<label class="layui-input-block  layui-form-required">客户:</label>
+									<img id="customer9" style="width: 16px;height: 16px;margin-left: 5px;"  src="/assets/images/unpo.jpg">
+									<div class="layui-input-block">
+										<div id="demoXmSelect9" style="max-width: 460px;"></div>
+
+									</div>
+								</div>
+
+
+
+
+
+
+								<div class="layui-form-item">
+									<label class="layui-input-block">性别:</label>
+									<div class="layui-input-block" style="display: block;width: auto;float: none;">
+										<input type="radio" name="sex" value="0" title="全部" checked>
+										<input type="radio" name="sex" value="1" title="男">
+										<input type="radio" name="sex" value="2" title="女">
+									</div>
+								</div>
+
+								<div class="layui-form-item">
+									<div class="layui-inline">
+										<label class="layui-input-block  layui-form-required" >年龄</label>
+										<div class="layui-input-block">
+											<div class="layui-input-inline" style="width: 120px;">
+												<input oninput = "value=value.replace(/[^\d]/g,'')" type="text" name="ageStart" style="width:100px;display: inline"   class="layui-input"><text style="color:#a6a6a6">岁</text>
+											</div>
+											<div class="layui-form-mid">~</div>
+											<div class="layui-input-inline" style="width: 120px;">
+												<input oninput = "value=value.replace(/[^\d]/g,'')" type="text" name="ageEnd"  autocomplete="off" style="width:100px;display: inline"  class="layui-input"><text style="color:#a6a6a6">岁</text>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="layui-form-item" style="position: fixed;bottom: 0px;width: 98%;left: 0px;margin: 0;background-color: #FFF;">
+									<div class="layui-input-block">
+										<button class="layui-btn" lay-submit lay-filter="formDemo9" style="margin-left: 45%">&emsp;下一步&emsp;
+										</button>
+									</div>
+								</div>
+							</form>
+
+						</div>
+						<div>
+
+							<form class="layui-form"
+								  style="margin: 0 auto; max-width: 460px; padding-top: 60px;">
+
+								<div class="layui-form-item">
+									<label class=" layui-input-block  layui-form-required">干预前数据时间段:</label>
+									<img id="times9" style="width: 16px;height: 16px;margin-left: 5px;"  src="/assets/images/unpo.jpg">
+									<div style="height: 20px;width: 5px"></div>
+									<div class="layui-input-block">
+										<div>
+											<input name="befortime" type="text"
+												   class="layui-input" id="test69" placeholder=" - ">
+										</div>
+									</div>
+								</div>
+
+
+								<div class="layui-form-item">
+									<label class=" layui-input-block  layui-form-required">干预后数据时间段:</label>
+									<img id="times29" style="width: 16px;height: 16px;margin-left: 5px;"  src="/assets/images/unpo.jpg">
+									<div style="height: 20px;width: 5px"></div>
+									<div class="layui-input-block">
+										<div>
+											<input name="endtime" type="text"
+												   class="layui-input" id="test79" placeholder=" - ">
+										</div>
+									</div>
+								</div>
+
+
+								<div class="layui-form-item">
+									<label class=" layui-input-block  layui-form-required">对比内容:</label>
+									<div style="height: 20px;width: 5px"></div>
+									<div class="layui-form-item" style="margin-bottom:55px;" >
+
+										<div class="layui-input-blocks" style="margin-left: 50px;">
+											<input type="checkbox" name="rick" lay-skin="primary"title="危险因素聚集情况" >
+											<input type="checkbox" name="disease" lay-skin="primary" title="慢性疾病高风险">
+										</div>
+									</div>
+								</div>
+
+
+
+
+
+
+
+
+
+
+								<div class="layui-form-item" style="position: fixed;bottom: 0px;width: 98%;left: 0px;margin: 0;background-color: #FFF;">
+									<div class="layui-input-block">
+										<button type="button" class="layui-btn layui-btn-primary pre" style="margin-left: 45%">上一步</button>
+										<button class="layui-btn" lay-submit lay-filter="formDemo29">&emsp;提交&emsp;
+										</button>
+									</div>
+								</div>
+							</form>
+
+						</div>
+						<div>
+
+							<div style="text-align: center; margin-top: 90px;">
+								<i class="layui-icon layui-circle"
+								   style="color: white; font-size: 30px; font-weight: bold; background: #52C41A; padding: 20px; line-height: 80px;">&#xe605;</i>
+								<div
+										style="font-size: 24px; color: #333; font-weight: 500; margin-top: 30px;">已完成
+								</div>
+								<div style="font-size: 14px; color: #666; margin-top: 20px;"></div>
+							</div>
+
+							<div style="text-align: center; margin-top: 50px;text-align: center; margin-top: 50px;position: fixed;bottom: 0px;width: 98%;left: 0px;margin: 0;background-color: #FFF;">
+								<button class="layui-btn next" style="margin-left: 5%">继续导出</button>
+							</div>
+
+						</div>
+					</div>
+				</div>
+
+
+			</div>
+		</div>
+
+		<!-- js部分 -->
+		<script type="text/javascript" th:src="@{/assets/libs/layui/layui.js}"></script>
+		<script type="text/javascript" th:src="@{/assets/js/common.js}"></script>
+
+		<script>
+			var xuanzhong='';
+			layui.use([ 'layer', 'form', 'step', 'xmSelect', 'laydate' , 'notice','element'],
+
+					function() {
+						var $ = layui.jquery;
+						var layer = layui.layer;
+						var form = layui.form;
+						var step = layui.step;
+						var laydate = layui.laydate;
+						var notice = layui.notice;
+						var element = layui.element;
+						var date1=null;
+						var date2=null;
+						var yinsu=new Array();
+						yinsu[0]={id:"0",name:"收缩压",value:"0"}
+						yinsu[1]={id:"1",name:"舒张压",value:"1"}
+						yinsu[2]={id:"2",name:"空腹血糖",value:"2"}
+						yinsu[3]={id:"3",name:"总胆固醇",value:"3"}
+						yinsu[4]={id:"4",name:"甘油三酯",value:"4"}
+						yinsu[5]={id:"5",name:"HDL胆固醇",value:"5"}
+						yinsu[6]={id:"6",name:"LDL胆固醇",value:"6"}
+						yinsu[7]={id:"7",name:"体重指数",value:"7"}
+						yinsu[8]={id:"8",name:"腰围",value:"8"}
+						yinsu[9]={id:"9",name:"吸烟比率",value:"9"}
+						yinsu[10]={id:"10",name:"饮酒比率",value:"10"}
+						yinsu[11]={id:"11",name:"体力活动比率",value:"11"}
+						//yinsu[12]={id:"12",name:"肺癌风险评估",value:"12"}
+						//yinsu[13]={id:"13",name:"糖尿病风险评估",value:"13"}
+						//yinsu[14]={id:"12",name:"高血压风险评估",value:"14"}
+						//yinsu[15]={id:"15",name:"生活方式评估",value:"15"}
+						yinsu[16]={id:"16",name:"个人糖尿病史",value:"16"}
+						yinsu[17]={id:"17",name:"个人高血压史",value:"17"}
+						//yinsu[18]={id:"18",name:"个人肺癌史",value:"18"}
+						yinsu[19]={id:"19",name:"个人血脂异常",value:"19"}
+						yinsu[20]={id:"20",name:"个人冠心病",value:"20"}
+
+						xmSelect.render({
+							el : '#yinsu',
+							data :yinsu,
+							max:4,
+							maxMethod(seles, item){
+								notice.warning({
+									title: '提示',
+									message:' 最多选择4个同时导出！'
+								});
+							},
+							filterable: true,
+							on: function(data){
+								//arr:  当前多选已选中的数据
+								var arr = data.arr;
+								//change, 此次选择变化的数据,数组
+								var change = data.change;
+								//isAdd, 此次操作是新增还是删除
+								var isAdd = data.isAdd;
+								if(isAdd){
+									console.log(change[0]);
+									console.log($(".choose"));
+									$(".choose").eq(change[0].id).addClass("xianshi");
+									$(".choose").eq(change[0].id).removeClass("yincang")
+								}else{
+									$(".choose").eq(change[0].id).addClass("yincang");
+									$(".choose").eq(change[0].id).removeClass("xianshi")
+								}
+								//可以return一个数组, 代表想选中的数据
+								//return []
+							},
+						});
+						var type=$("#types").val();
+						if(type==1){
+							$("#thisclicks").trigger("click");
+						}
+
+						$(".choose").addClass("yincang");
+						$.ajax({
+							type: "GET",
+							url: "/Exprot/selectorg",
+							dataType: "json",
+							success: function(data){
+								// 渲染多选下拉
+								xmSelect.render({
+									el : '#demoXmSelect',
+									data :data.data,
+									filterable:true
+								});
+							}
+
+						});
+						form.on('radio(shousuo)', function (data) {
+							if(data.value==3){
+								$(".fanwei").eq(0).addClass("xianshi");
+								$(".fanwei").eq(0).removeClass("yincang");
+							}else{
+								$(".fanwei").eq(0).addClass("yincang");
+								$(".fanwei").eq(0).removeClass("xianshi");
+							}
+						});
+						form.on('radio(shuzhang)', function (data) {
+							if(data.value==3){
+								$(".fanwei").eq(1).addClass("xianshi");
+								$(".fanwei").eq(1).removeClass("yincang");
+							}else{
+								$(".fanwei").eq(1).addClass("yincang");
+								$(".fanwei").eq(1).removeClass("xianshi");
+							}
+						});
+						form.on('radio(shuzhang)', function (data) {
+							if(data.value==3){
+								$(".fanwei").eq(1).addClass("xianshi");
+								$(".fanwei").eq(1).removeClass("yincang");
+							}else{
+								$(".fanwei").eq(1).addClass("yincang");
+								$(".fanwei").eq(1).removeClass("xianshi");
+							}
+						});
+						form.on('radio(kongfu)', function (data) {
+							if(data.value==3){
+								$(".fanwei").eq(2).addClass("xianshi");
+								$(".fanwei").eq(2).removeClass("yincang");
+							}else{
+								$(".fanwei").eq(2).addClass("yincang");
+								$(".fanwei").eq(2).removeClass("xianshi");
+							}
+						});
+
+						form.on('radio(zongdan)', function (data) {
+							if(data.value==2){
+								$(".fanwei").eq(3).addClass("xianshi");
+								$(".fanwei").eq(3).removeClass("yincang");
+							}else{
+								$(".fanwei").eq(3).addClass("yincang");
+								$(".fanwei").eq(3).removeClass("xianshi");
+							}
+						});
+						form.on('radio(ganyou)', function (data) {
+							if(data.value==3){
+								$(".fanwei").eq(4).addClass("xianshi");
+								$(".fanwei").eq(4).removeClass("yincang");
+							}else{
+								$(".fanwei").eq(4).addClass("yincang");
+								$(".fanwei").eq(4).removeClass("xianshi");
+							}
+						});
+						form.on('radio(HDL)', function (data) {
+							if(data.value==2){
+								$(".fanwei").eq(5).addClass("xianshi");
+								$(".fanwei").eq(5).removeClass("yincang");
+							}else{
+								$(".fanwei").eq(5).addClass("yincang");
+								$(".fanwei").eq(5).removeClass("xianshi");
+							}
+						});
+						form.on('radio(LDL)', function (data) {
+							if(data.value==2){
+								$(".fanwei").eq(6).addClass("xianshi");
+								$(".fanwei").eq(6).removeClass("yincang");
+							}else{
+								$(".fanwei").eq(6).addClass("yincang");
+								$(".fanwei").eq(6).removeClass("xianshi");
+							}
+						});
+						form.on('radio(tizhong)', function (data) {
+							if(data.value==3){
+								$(".fanwei").eq(7).addClass("xianshi");
+								$(".fanwei").eq(7).removeClass("yincang");
+							}else{
+								$(".fanwei").eq(7).addClass("yincang");
+								$(".fanwei").eq(7).removeClass("xianshi");
+							}
+						});
+						form.on('radio(yaowei)', function (data) {
+							if(data.value==2){
+								$(".fanwei").eq(8).addClass("xianshi");
+								$(".fanwei").eq(8).removeClass("yincang");
+							}else{
+								$(".fanwei").eq(8).addClass("yincang");
+								$(".fanwei").eq(8).removeClass("xianshi");
+							}
+						});
+						var tips;
+						$('#customer').on({
+
+							mouseenter:function(){
+								tips=layer.tips("包含客户及其下所有子节点的全部用户","#customer",{time:0});
+							},
+							mouseleave:function(){
+								layer.close(tips);
+							}
+						});
+						$('#times').on({
+
+							mouseenter:function(){
+								tips=layer.tips("用户在指定时间范围内有多条数据，取最新数据","#times",{time:0});
+							},
+							mouseleave:function(){
+								layer.close(tips);
+							}
+						});
+						//定义接收本月的第一天和最后一天
+						var startDate1=new Date(new Date().setDate(1));
+						var endDate1=new Date(new Date(new Date().setMonth(new Date().getMonth()+1)).setDate(0));
+						//定义接收上个月的第一天和最后一天
+						var startDate2=new Date(new Date(new Date().setMonth(new Date().getMonth()-1)).setDate(1));
+						var endDate2=new Date(new Date().setDate(0));
+						laydate.render({
+							elem : '#test6',
+							max:"date",
+							range : true,
+							trigger: 'click',
+							extrabtns: [
+								{id:'today', text:'今天', range:[new Date(), new Date()]},
+								{id:'lastday-7', text:'过去7天', range:[new Date(new Date().setDate(new Date().getDate()-7)),
+										new Date(new Date().setDate(new Date().getDate()-1))]},
+								{id:'lastday-30', text:'过去30天', range:[new Date(new Date().setDate(new Date().getDate()-30)),
+										new Date(new Date().setDate(new Date().getDate()-1))]},
+								{id:'yesterday', text:'昨天', range:[new Date(new Date().setDate(new Date().getDate()-1)),
+										new Date(new Date().setDate(new Date().getDate()-1))]},
+								{id:'thismonth', text:'本月', range:[startDate1,endDate1]},
+								{id:'lastmonth', text:'上个月', range:[startDate2,endDate2]}],
+							done: function(val, stdate, ovdate){
+								//当确认选择时间后调用这里
+							}
+						});
+
+						step.render({
+							elem : '#stepForm',
+							filter : 'stepForm',
+							width : '100%', //设置容器宽度
+							stepWidth : '750px',
+							height : '500px',
+							stepItems : [ {
+								title : '选择数据源'
+							}, {
+								title : '选择数据'
+							}, {
+								title : '导出数据'
+							} ]
+						});
+
+						form.on('submit(formDemo)', function(data) {
+							console.log(data);
+							if(data.field.select==""|| data.field.select == null || data.field.select == undefined){
+								notice.msg('请选择客户', {icon: 3});
+							}else if(data.field.times==""|| data.field.times == null || data.field.times == undefined){
+								notice.msg('请选择时间段', {icon: 3});
+							}else if(data.field.sui_min=="" || data.field.sui_max==""){
+								notice.msg('请选择年龄范围', {icon: 3});
+							}else{
+								console.log(data.field.times=data.field.times+ " 23:59:59");
+								date1={select1:data.field.select,sex:data.field.sex,sui_max:data.field.sui_max,sui_min:data.field.sui_min,times:data.field.times};
+								step.next('#stepForm');
+							}
+							return false;
+						});
+						function getIntervalMonth(date1,date2){
+							date1 = date1.split('-');
+// 得到月数
+							date1 = parseInt(date1[0]) * 12 + parseInt(date1[1]);
+// 拆分年月日
+							date2 = date2.split('-');
+// 得到月数
+							date2 = parseInt(date2[0]) * 12 + parseInt(date2[1]);
+							var m = Math.abs(date1 - date2);
+							return m+1;
+						}
+						form.on('submit(formDemo2)', function(data) {
+							console.log(data);
+							if(data.field.select==""){
+								notice.msg('请选择数据', {icon: 3});
+							}else{
+								date2=$.extend(date1,data.field);
+								console.log(date2.times.substring(0,10));
+								console.log(date2.times.substring(13,24));
+								console.log(getIntervalMonth(date2.times.substring(0,10),date2.times.substring(13,23)))
+								if(date2.chooseyinsu==1){
+									if(getIntervalMonth(date2.times.substring(0,10),date2.times.substring(13,23))>10){
+										notice.msg('趋势选择时间段不能超过十个月', {icon: 3});
+										return false;
+									}
+								}
+								var hrefs='/ExprotPDFSenior/exportsenior?'
+								for(var item in date2){
+									hrefs+=item+'='+date2[item]+"&"
+								}
+								layer.msg("正在导出,请稍后...",{
+									icon:16,
+									shade: [0.5, '#f5f5f5'],
+									time:-1
+								});
+								fetch(hrefs, {
+									method: 'GET',
+									headers: {'Content-Type': 'application/json'},
+									//body: '<请求参数：json字符串>',
+								}).then(res => res.blob()).then(data => {
+									var blobUrl = window.URL.createObjectURL(data);
+									step.next('#stepForm');
+									downloads(blobUrl);
+
+								});
+								//window.open(hrefs);
+
+							}
+
+							return false;
+						});
+						function downloads(blobUrl) {
+							//关闭提示框
+							layer.closeAll();
+							const a = document.createElement('a');
+							a.style.display = 'none';
+							a.download ='高级数据分析 因素对比-'+ getFormatDate()+'.pdf';
+							a.href = blobUrl;
+							a.click();
+							document.body.removeChild(a);
+
+						}
+						function getFormatDate() {
+							var date = new Date();
+							var month = date.getMonth() + 1;
+							var strDate = date.getDate();
+							if (month >= 1 && month <= 9) {
+								month = "0" + month;
+							}
+							if (strDate >= 0 && strDate <= 9) {
+								strDate = "0" + strDate;
+							}
+							var currentDate = date.getFullYear() + "" + month + "" + strDate
+									+ "" + date.getHours() + "" + date.getMinutes() + "" + date.getSeconds();
+							return currentDate;
+						}
+						$('.pre').click(function() {
+							step.pre('#stepForm');
+						});
+
+						$('.next').click(function() {
+							step.next('#stepForm');
+						});
+						sum=function(data1,data2){
+							var data={};
+
+						}
+
+
+						$(".choose").addClass("yincang");
+						$.ajax({
+							type: "GET",
+							url: "/Exprot/selectorg",
+							dataType: "json",
+							success: function(data){
+								console.log(data);
+								// 渲染多选下拉
+								xmSelect.render({
+									el : '#demoXmSelect9',
+									data :data.data,
+									filterable:true
+								});
+							}
+
+						});
+
+
+						var tips;
+						$('#customer9').on({
+
+							mouseenter:function(){
+								tips=layer.tips("包含客户及其下所有子节点的全部用户","#customer9",{time:0});
+							},
+							mouseleave:function(){
+								layer.close(tips);
+							}
+						});
+						$('#times9').on({
+
+							mouseenter:function(){
+								tips=layer.tips("用户在指定时间范围内有多条数据，取最早数据","#times9",{time:0});
+							},
+							mouseleave:function(){
+								layer.close(tips);
+							}
+						});
+						$('#times29').on({
+
+							mouseenter:function(){
+								tips=layer.tips("用户在指定时间范围内有多条数据，取最新数据","#times29",{time:0});
+							},
+							mouseleave:function(){
+								layer.close(tips);
+							}
+						});
+						//定义接收本月的第一天和最后一天
+						var startDate1=new Date(new Date().setDate(1));
+						var endDate1=new Date(new Date(new Date().setMonth(new Date().getMonth()+1)).setDate(0));
+						//定义接收上个月的第一天和最后一天
+						var startDate2=new Date(new Date(new Date().setMonth(new Date().getMonth()-1)).setDate(1));
+						var endDate2=new Date(new Date().setDate(0));
+						laydate.render({
+							elem : '#test69',
+							max:"date",
+							range : true,
+							trigger: 'click',
+							extrabtns: [
+								{id:'today', text:'今天', range:[new Date(), new Date()]},
+								{id:'lastday-7', text:'过去7天', range:[new Date(new Date().setDate(new Date().getDate()-7)),
+										new Date(new Date().setDate(new Date().getDate()-1))]},
+								{id:'lastday-30', text:'过去30天', range:[new Date(new Date().setDate(new Date().getDate()-30)),
+										new Date(new Date().setDate(new Date().getDate()-1))]},
+								{id:'yesterday', text:'昨天', range:[new Date(new Date().setDate(new Date().getDate()-1)),
+										new Date(new Date().setDate(new Date().getDate()-1))]},
+								{id:'thismonth', text:'本月', range:[startDate1,endDate1]},
+								{id:'lastmonth', text:'上个月', range:[startDate2,endDate2]}],
+							done: function(val, stdate, ovdate){
+								//当确认选择时间后调用这里
+							}
+						});
+						laydate.render({
+							elem : '#test79',
+							max:"date",
+							range : true,
+							trigger: 'click',
+							extrabtns: [
+								{id:'today', text:'今天', range:[new Date(), new Date()]},
+								{id:'lastday-7', text:'过去7天', range:[new Date(new Date().setDate(new Date().getDate()-7)),
+										new Date(new Date().setDate(new Date().getDate()-1))]},
+								{id:'lastday-30', text:'过去30天', range:[new Date(new Date().setDate(new Date().getDate()-30)),
+										new Date(new Date().setDate(new Date().getDate()-1))]},
+								{id:'yesterday', text:'昨天', range:[new Date(new Date().setDate(new Date().getDate()-1)),
+										new Date(new Date().setDate(new Date().getDate()-1))]},
+								{id:'thismonth', text:'本月', range:[startDate1,endDate1]},
+								{id:'lastmonth', text:'上个月', range:[startDate2,endDate2]}],
+							done: function(val, stdate, ovdate){
+								//当确认选择时间后调用这里
+							}
+						});
+
+						step.render({
+							elem : '#stepForm9',
+							filter : 'stepForm9',
+							width : '100%', //设置容器宽度
+							stepWidth : '750px',
+							height : '500px',
+							stepItems : [ {
+								title : '选择数据源'
+							}, {
+								title : '选择数据'
+							}, {
+								title : '导出数据'
+							} ]
+						});
+
+						form.on('submit(formDemo9)', function(data) {
+							console.log(data);
+							if(data.field.select==""|| data.field.select == null || data.field.select == undefined){
+								notice.msg('请选择客户', {icon: 3});
+							}else if(data.field.ageStart=="" || data.field.ageEnd==""){
+								notice.msg('请选择年龄范围', {icon: 3});
+							}else{
+
+								date1={select1:data.field.select,sex:data.field.sex,ageStart:data.field.ageStart,ageEnd:data.field.ageEnd};
+								step.next('#stepForm9');
+							}
+							return false;
+						});
+						function getIntervalMonth(date1,date2){
+							date1 = date1.split('-');
+							// 得到月数
+							date1 = parseInt(date1[0]) * 12 + parseInt(date1[1]);
+							// 拆分年月日
+							date2 = date2.split('-');
+							// 得到月数
+							date2 = parseInt(date2[0]) * 12 + parseInt(date2[1]);
+							var m = Math.abs(date1 - date2);
+							return m+1;
+						}
+						form.on('submit(formDemo29)', function(data) {
+
+							if(data.field.befortime==""|| data.field.befortime == null || data.field.befortime == undefined){
+								notice.msg('请选择干预前数据时间段', {icon: 3});
+							}else if(data.field.endtime==""|| data.field.endtime == null || data.field.endtime == undefined){
+								notice.msg('请选择干预后数据时间段', {icon: 3});
+							}else{
+								if(CompareDate(data.field.befortime.substring(13),data.field.endtime.substring(0,10))){
+									notice.msg('干预前后数据时间段不正确', {icon: 3});
+									return false;
+								}
+								console.log(data.field.befortime.substring(13));
+								console.log(data.field.endtime.substring(0,10));
+
+								date2=$.extend(date1,data.field);
+
+
+								var hrefs='/YhPeriodComparisonController/returnname?'
+								for(var item in date2){
+									hrefs+=item+'='+date2[item]+"&"
+								}
+								//sleep(2000)
+								hrefss(hrefs);
+
+								// fetch(hrefs, {
+								//     method: 'GET',
+								//     headers: {'Content-Type': 'application/json'},
+								//     //body: '<请求参数：json字符串>',
+								// }).then(res => res.blob()).then(data => {
+								//     var blobUrl = window.URL.createObjectURL(data);
+								//    // step.next('#stepForm');
+								//     downloads(blobUrl);
+								//
+								// });
+								//window.open(hrefs);
+
+							}
+
+							return false;
+						});
+						function CompareDate(d1,d2)
+						{
+							return ((new Date(d1.replace(/-/g,"\/"))) > (new Date(d2.replace(/-/g,"\/"))));
+						}
+						function hrefss(hrefs){
+							$.ajax({
+								url:hrefs,
+								data:{},
+								type:"post",
+								dataType:"json",
+								beforeSend:beforeSend,
+								success: function(data){
+
+									window.location.href="/YhPeriodComparisonController/download?fileName="+data.data+".pdf";
+									sleep(1000);
+									layer.closeAll();
+									step.next('#stepForm9');
+								},
+								error: function(data){
+									console.log("error")
+								}
+							})
+						}
+						function beforeSend(){
+							layer.msg("正在导出,请稍后...",{
+								icon:16,
+								shade: [0.5, '#f5f5f5'],
+								time:-1
+							});
+						}
+						function sleep(n) {
+
+							var start = new Date().getTime();
+
+							while(true)  if(new Date().getTime()-start > n) break;
+
+						}
+						function downloads(blobUrl) {
+							//关闭提示框
+							layer.closeAll();
+							const a = document.createElement('a');
+							a.style.display = 'none';
+							a.download ='高级数据分析 因素对比-'+ getFormatDate()+'.pdf';
+							a.href = blobUrl;
+							a.click();
+							document.body.removeChild(a);
+
+						}
+						function getFormatDate() {
+							var date = new Date();
+							var month = date.getMonth() + 1;
+							var strDate = date.getDate();
+							if (month >= 1 && month <= 9) {
+								month = "0" + month;
+							}
+							if (strDate >= 0 && strDate <= 9) {
+								strDate = "0" + strDate;
+							}
+							var currentDate = date.getFullYear() + "" + month + "" + strDate
+									+ "" + date.getHours() + "" + date.getMinutes() + "" + date.getSeconds();
+							return currentDate;
+						}
+						$('.pre').click(function() {
+							step.pre('#stepForm9');
+						});
+
+						$('.next').click(function() {
+							step.next('#stepForm9');
+						});
+						sum=function(data1,data2){
+							var data={};
+
+						}
+					});
+
+		</script>
+</body>
+
+</html>

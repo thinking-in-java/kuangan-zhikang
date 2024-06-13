@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yihe.system.mapper.YhSportCourseDetailWebMapper" >
+  <resultMap id="BaseResultMap" type="com.yihe.system.domain.YhSportCourseDetailWeb" >
+    <id column="cdetail_id" property="cdetailId" jdbcType="INTEGER" />
+    <result column="cdetail_day" property="cdetailDay" jdbcType="INTEGER" />
+    <result column="cdetail_name" property="cdetailName" jdbcType="VARCHAR" />
+    <result column="cdetail_url" property="cdetailUrl" jdbcType="VARCHAR" />
+    <result column="course_id" property="courseId" jdbcType="INTEGER" />
+    <result column="vicon_ids" property="viconIds" jdbcType="VARCHAR" />
+    <result column="cdetail_totals" property="cdetailTotals" jdbcType="INTEGER" />
+    <result column="cdetail_totalKal" property="cdetailTotalkal" jdbcType="INTEGER" />
+    <result column="cdetail_totalDuration" property="cdetailTotalduration" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    cdetail_id, cdetail_day, cdetail_name, cdetail_url, course_id, vicon_ids, cdetail_totals, 
+    cdetail_totalKal, cdetail_totalDuration
+  </sql>
+  
+   <!-- 查询所有运动精彩移动模糊查询 -->
+    <select id="selectSportVicon" resultMap="BaseResultMap" parameterType="map">
+  		select * from yh_sport_course_detail
+  		<where>
+  			<if test="cdetailName != null and cdetailName != ''">
+				AND cdetail_name LIKE CONCAT('%',#{cdetailName},'%')
+			</if>
+  		</where>
+  		LIMIT  #{page},#{limit}
+  </select>
+  
+    <!-- 查询所有运动精彩移动模糊查询 -->
+    <select id="selectSportViconCount" resultType="int" parameterType="map">
+  		select count(*) from yh_sport_course_detail
+  		<where>
+  			<if test="cdetailName != null and cdetailName != ''">
+				AND cdetail_name LIKE CONCAT('%',#{cdetailName},'%')
+			</if>
+  		</where>
+  </select>
+  
+  
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from yh_sport_course_detail
+    where cdetail_id = #{cdetailId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from yh_sport_course_detail
+    where cdetail_id = #{cdetailId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.yihe.system.domain.YhSportCourseDetailWeb" >
+    insert into yh_sport_course_detail (cdetail_id, cdetail_day, cdetail_name, 
+      cdetail_url, course_id, vicon_ids, 
+      cdetail_totals, cdetail_totalKal, cdetail_totalDuration
+      )
+    values (#{cdetailId,jdbcType=INTEGER}, #{cdetailDay,jdbcType=INTEGER}, #{cdetailName,jdbcType=VARCHAR}, 
+      #{cdetailUrl,jdbcType=VARCHAR}, #{courseId,jdbcType=INTEGER}, #{viconIds,jdbcType=VARCHAR}, 
+      #{cdetailTotals,jdbcType=INTEGER}, #{cdetailTotalkal,jdbcType=INTEGER}, #{cdetailTotalduration,jdbcType=INTEGER}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.yihe.system.domain.YhSportCourseDetailWeb" >
+    insert into yh_sport_course_detail
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="cdetailId != null" >
+        cdetail_id,
+      </if>
+      <if test="cdetailDay != null" >
+        cdetail_day,
+      </if>
+      <if test="cdetailName != null" >
+        cdetail_name,
+      </if>
+      <if test="cdetailUrl != null" >
+        cdetail_url,
+      </if>
+      <if test="courseId != null" >
+        course_id,
+      </if>
+      <if test="viconIds != null" >
+        vicon_ids,
+      </if>
+      <if test="cdetailTotals != null" >
+        cdetail_totals,
+      </if>
+      <if test="cdetailTotalkal != null" >
+        cdetail_totalKal,
+      </if>
+      <if test="cdetailTotalduration != null" >
+        cdetail_totalDuration,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="cdetailId != null" >
+        #{cdetailId,jdbcType=INTEGER},
+      </if>
+      <if test="cdetailDay != null" >
+        #{cdetailDay,jdbcType=INTEGER},
+      </if>
+      <if test="cdetailName != null" >
+        #{cdetailName,jdbcType=VARCHAR},
+      </if>
+      <if test="cdetailUrl != null" >
+        #{cdetailUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="courseId != null" >
+        #{courseId,jdbcType=INTEGER},
+      </if>
+      <if test="viconIds != null" >
+        #{viconIds,jdbcType=VARCHAR},
+      </if>
+      <if test="cdetailTotals != null" >
+        #{cdetailTotals,jdbcType=INTEGER},
+      </if>
+      <if test="cdetailTotalkal != null" >
+        #{cdetailTotalkal,jdbcType=INTEGER},
+      </if>
+      <if test="cdetailTotalduration != null" >
+        #{cdetailTotalduration,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.yihe.system.domain.YhSportCourseDetailWeb" >
+    update yh_sport_course_detail
+    <set >
+      <if test="cdetailDay != null" >
+        cdetail_day = #{cdetailDay,jdbcType=INTEGER},
+      </if>
+      <if test="cdetailName != null" >
+        cdetail_name = #{cdetailName,jdbcType=VARCHAR},
+      </if>
+      <if test="cdetailUrl != null" >
+        cdetail_url = #{cdetailUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="courseId != null" >
+        course_id = #{courseId,jdbcType=INTEGER},
+      </if>
+      <if test="viconIds != null" >
+        vicon_ids = #{viconIds,jdbcType=VARCHAR},
+      </if>
+      <if test="cdetailTotals != null" >
+        cdetail_totals = #{cdetailTotals,jdbcType=INTEGER},
+      </if>
+      <if test="cdetailTotalkal != null" >
+        cdetail_totalKal = #{cdetailTotalkal,jdbcType=INTEGER},
+      </if>
+      <if test="cdetailTotalduration != null" >
+        cdetail_totalDuration = #{cdetailTotalduration,jdbcType=INTEGER},
+      </if>
+    </set>
+    where cdetail_id = #{cdetailId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.yihe.system.domain.YhSportCourseDetailWeb" >
+    update yh_sport_course_detail
+    set cdetail_day = #{cdetailDay,jdbcType=INTEGER},
+      cdetail_name = #{cdetailName,jdbcType=VARCHAR},
+      cdetail_url = #{cdetailUrl,jdbcType=VARCHAR},
+      course_id = #{courseId,jdbcType=INTEGER},
+      vicon_ids = #{viconIds,jdbcType=VARCHAR},
+      cdetail_totals = #{cdetailTotals,jdbcType=INTEGER},
+      cdetail_totalKal = #{cdetailTotalkal,jdbcType=INTEGER},
+      cdetail_totalDuration = #{cdetailTotalduration,jdbcType=INTEGER}
+    where cdetail_id = #{cdetailId,jdbcType=INTEGER}
+  </update>
+</mapper>

@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yihe.system.mapper.YhUserHabitGuideMapper" >
+  <resultMap id="BaseResultMap" type="com.yihe.system.domain.YhUserHabitGuide" >
+    <id column="habit_guide_id" property="habitGuideId" jdbcType="INTEGER" />
+    <result column="Start_Time" property="startTime" jdbcType="DATE" />
+    <result column="End_Time" property="endTime" jdbcType="DATE" />
+    <result column="user_code" property="userCode" jdbcType="VARCHAR" />
+    <result column="newly_Time" property="newlyTime" jdbcType="TIMESTAMP" />
+    <result column="name" property="userName" jdbcType="VARCHAR" />
+	    <result column="gender" property="gender" jdbcType="INTEGER" />
+	     <result column="birth_date" property="birthdate" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    habit_guide_id, Start_Time, End_Time, user_code, newly_Time
+  </sql>
+  
+     <!-- 查询用户查看习惯分析报告 -->
+    <select id="selectHabitlyze" resultMap="BaseResultMap" parameterType="map">
+  		select * from yh_user_habit_guide where user_code=#{userCode,jdbcType=VARCHAR} order by newly_Time desc LIMIT  #{page},#{limit}
+  </select>
+  
+  
+  <!-- 查询用户查看习惯分析报告总行数 -->
+    <select id="selectHabitlyzeConut" resultType="int" parameterType="map">
+  		select count(*) from yh_user_habit_guide where user_code=#{userCode,jdbcType=VARCHAR} order by newly_Time desc
+  </select>
+  
+  
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+   select  de.*,info.name,info.gender,info.birth_date from yh_user_habit_guide de,yh_user_reginfo info
+    where de.user_code=info.user_code and  habit_guide_id = #{habitGuideId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from yh_user_habit_guide
+    where habit_guide_id = #{habitGuideId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.yihe.system.domain.YhUserHabitGuide" >
+    insert into yh_user_habit_guide (habit_guide_id, Start_Time, End_Time, 
+      user_code, newly_Time)
+    values (#{habitGuideId,jdbcType=INTEGER}, #{startTime,jdbcType=DATE}, #{endTime,jdbcType=DATE}, 
+      #{userCode,jdbcType=VARCHAR}, #{newlyTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.yihe.system.domain.YhUserHabitGuide" useGeneratedKeys="true" keyProperty="habitGuideId">
+  <selectKey resultType="java.lang.Integer" order="AFTER"    keyProperty="habitGuideId"> 
+                      SELECT LAST_INSERT_ID()      
+   </selectKey>  
+    insert into yh_user_habit_guide
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="habitGuideId != null" >
+        habit_guide_id,
+      </if>
+      <if test="startTime != null" >
+        Start_Time,
+      </if>
+      <if test="endTime != null" >
+        End_Time,
+      </if>
+      <if test="userCode != null" >
+        user_code,
+      </if>
+      <if test="newlyTime != null" >
+        newly_Time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="habitGuideId != null" >
+        #{habitGuideId,jdbcType=INTEGER},
+      </if>
+      <if test="startTime != null" >
+        #{startTime,jdbcType=DATE},
+      </if>
+      <if test="endTime != null" >
+        #{endTime,jdbcType=DATE},
+      </if>
+      <if test="userCode != null" >
+        #{userCode,jdbcType=VARCHAR},
+      </if>
+      <if test="newlyTime != null" >
+        #{newlyTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.yihe.system.domain.YhUserHabitGuide" >
+    update yh_user_habit_guide
+    <set >
+      <if test="startTime != null" >
+        Start_Time = #{startTime,jdbcType=DATE},
+      </if>
+      <if test="endTime != null" >
+        End_Time = #{endTime,jdbcType=DATE},
+      </if>
+      <if test="userCode != null" >
+        user_code = #{userCode,jdbcType=VARCHAR},
+      </if>
+      <if test="newlyTime != null" >
+        newly_Time = #{newlyTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where habit_guide_id = #{habitGuideId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.yihe.system.domain.YhUserHabitGuide" >
+    update yh_user_habit_guide
+    set Start_Time = #{startTime,jdbcType=DATE},
+      End_Time = #{endTime,jdbcType=DATE},
+      user_code = #{userCode,jdbcType=VARCHAR},
+      newly_Time = #{newlyTime,jdbcType=TIMESTAMP}
+    where habit_guide_id = #{habitGuideId,jdbcType=INTEGER}
+  </update>
+</mapper>

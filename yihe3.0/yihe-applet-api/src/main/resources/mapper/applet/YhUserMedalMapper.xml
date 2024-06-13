@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yihe.applet.api.mapper.YhUserMedalMapper">
+  <resultMap id="BaseResultMap" type="com.yihe.applet.api.domain.YhUserMedal">
+    <id column="medal_id" jdbcType="INTEGER" property="medalId" />
+    <result column="medal_name" jdbcType="VARCHAR" property="medalName" />
+    <result column="medal_type" jdbcType="INTEGER" property="medalType" />
+    <result column="medal_stype" jdbcType="INTEGER" property="medalStype" />
+    <result column="medal_img" jdbcType="VARCHAR" property="medalImg" />
+    <result column="medal_num" jdbcType="INTEGER" property="medalNum" />
+    <result column="medal_level" jdbcType="INTEGER" property="medalLevel" />
+    <result column="medal_num1" jdbcType="INTEGER" property="medalNum1" />
+    <result column="medal_num2" jdbcType="INTEGER" property="medalNum2" />
+    <result column="user_code" jdbcType="VARCHAR" property="userCode" />
+    <result column="meal_time" jdbcType="TIMESTAMP" property="mealTime" />
+  </resultMap>
+  <select id="selectmealcount" parameterType="com.yihe.applet.api.domain.YhUserMedal" resultType="int">
+      SELECT count(*) FROM yh_user_medal WHERE medal_type=#{medalType} and medal_stype=#{medalStype} and user_code=#{userCode}
+  </select>
+  <update id="addnum" parameterType="com.yihe.applet.api.domain.YhUserMedal">
+    UPDATE  yh_user_medal SET medal_num=medal_num+1 WHERE medal_type=#{medalType} and medal_stype=#{medalStype} and user_code=#{userCode};
+  </update>
+  <insert id="insertmeal" parameterType="com.yihe.applet.api.domain.YhUserMedal">
+    insert into yh_user_medal
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="medalId != null">
+        medal_id,
+      </if>
+      <if test="medalName != null">
+        medal_name,
+      </if>
+      <if test="medalType != null">
+        medal_type,
+      </if>
+      <if test="medalStype != null">
+        medal_stype,
+      </if>
+      <if test="medalImg != null">
+        medal_img,
+      </if>
+      <if test="medalNum != null">
+        medal_num,
+      </if>
+      <if test="medalLevel != null">
+        medal_level,
+      </if>
+      <if test="medalNum1 != null">
+        medal_num1,
+      </if>
+      <if test="medalNum2 != null">
+        medal_num2,
+      </if>
+      <if test="userCode != null">
+        user_code,
+      </if>
+      <if test="mealTime != null">
+        meal_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="medalId != null">
+        #{medalId,jdbcType=INTEGER},
+      </if>
+      <if test="medalName != null">
+        #{medalName,jdbcType=VARCHAR},
+      </if>
+      <if test="medalType != null">
+        #{medalType,jdbcType=INTEGER},
+      </if>
+      <if test="medalStype != null">
+        #{medalStype,jdbcType=INTEGER},
+      </if>
+      <if test="medalImg != null">
+        #{medalImg,jdbcType=VARCHAR},
+      </if>
+      <if test="medalNum != null">
+        #{medalNum,jdbcType=INTEGER},
+      </if>
+      <if test="medalLevel != null">
+        #{medalLevel,jdbcType=INTEGER},
+      </if>
+      <if test="medalNum1 != null">
+        #{medalNum1,jdbcType=INTEGER},
+      </if>
+      <if test="medalNum2 != null">
+        #{medalNum2,jdbcType=INTEGER},
+      </if>
+      <if test="userCode != null">
+        #{userCode,jdbcType=VARCHAR},
+      </if>
+      <if test="mealTime != null">
+        #{mealTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+
+  </insert>
+</mapper>

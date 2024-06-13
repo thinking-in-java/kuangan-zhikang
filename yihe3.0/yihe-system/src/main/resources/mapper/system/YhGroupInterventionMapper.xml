@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yihe.system.mapper.YhGroupInterventionMapper">
+    <resultMap id="BaseResultMap" type="com.yihe.system.domain.YhUserEnrolinfo">
+        <id column="E_User_Id" jdbcType="INTEGER" property="eUserId" />
+        <result column="Seq_Instrument" jdbcType="VARCHAR" property="seqInstrument" />
+        <result column="Doc_Ruserid" jdbcType="VARCHAR" property="docRuserid" />
+        <result column="Flag_Dgroup" jdbcType="VARCHAR" property="flagDgroup" />
+        <result column="Sex_Code" jdbcType="INTEGER" property="sexCode" />
+        <result column="Height" jdbcType="REAL" property="height" />
+        <result column="Weight" jdbcType="REAL" property="weight" />
+        <result column="Hw_Uptime" jdbcType="TIMESTAMP" property="hwUptime" />
+        <result column="Waistc" jdbcType="REAL" property="waistc" />
+        <result column="W_Uptime" jdbcType="TIMESTAMP" property="wUptime" />
+        <result column="Hipc" jdbcType="REAL" property="hipc" />
+        <result column="H_Uptime" jdbcType="TIMESTAMP" property="hUptime" />
+        <result column="Sbp" jdbcType="INTEGER" property="sbp" />
+        <result column="Dbp" jdbcType="INTEGER" property="dbp" />
+        <result column="Sd_Uptime" jdbcType="TIMESTAMP" property="sdUptime" />
+        <result column="Bs" jdbcType="REAL" property="bs" />
+        <result column="Bs_Uptime" jdbcType="TIMESTAMP" property="bsUptime" />
+        <result column="Cholesterin" jdbcType="REAL" property="cholesterin" />
+        <result column="Tring" jdbcType="REAL" property="tring" />
+        <result column="Hdl" jdbcType="REAL" property="hdl" />
+        <result column="Ldl" jdbcType="REAL" property="ldl" />
+        <result column="Bf_Uptime" jdbcType="TIMESTAMP" property="bfUptime" />
+        <result column="Fooddiary_Uptime" jdbcType="TIMESTAMP" property="fooddiaryUptime" />
+        <result column="sportdiary_uptime" jdbcType="TIMESTAMP" property="sportdiaryUptime" />
+        <result column="Foodmon_Uptime" jdbcType="TIMESTAMP" property="foodmonUptime" />
+        <result column="Energy_Uptime" jdbcType="TIMESTAMP" property="energyUptime" />
+        <result column="Lifestyle_Uptime" jdbcType="TIMESTAMP" property="lifestyleUptime" />
+        <result column="Health_Monitoring" jdbcType="TIMESTAMP" property="healthMonitoring" />
+        <result column="evaluateFlag_Uptime" jdbcType="TIMESTAMP" property="evaluateFlagUptime" />
+        <result column="Is_Del" jdbcType="INTEGER" property="isDel" />
+        <result column="user_code" jdbcType="VARCHAR" property="userCode" />
+        <result column="evaluateFlag" jdbcType="INTEGER" property="evaluateflag" />
+        <result column="L_Ventricular_Hype" jdbcType="INTEGER" property="lVentricularHype" />
+        <result column="measure_card" jdbcType="VARCHAR" property="measureCard" />
+    </resultMap>
+    <resultMap id="BaseResultMapdetail" type="com.yihe.system.domain.YhTemplateDetail" >
+        <id column="details_id" property="detailsId" jdbcType="INTEGER" />
+        <result column="execute_date" property="executeDate" jdbcType="TIMESTAMP" />
+        <result column="service_way" property="serviceWay" jdbcType="INTEGER" />
+        <result column="plan_count" property="planCount" jdbcType="VARCHAR" />
+        <result column="count_prompt" property="countPrompt" jdbcType="VARCHAR" />
+        <result column="user_code" property="userCode" jdbcType="VARCHAR" />
+        <result column="returnway" property="servicenam" jdbcType="VARCHAR" />
+        <result column="counts" property="counts" jdbcType="VARCHAR" />
+        <result column="var_count" property="var_count" jdbcType="VARCHAR" />
+    </resultMap>
+<update id="updategroupintervention" parameterType="com.yihe.system.domain.YHDocGroup">
+    UPDATE yh_doc_group SET Gname=#{gname} where U_Docgroup_Id=#{uDocgroupId}
+</update>
+
+    <select id="selectenroinfo" parameterType="string" resultMap="BaseResultMap">
+      SELECT * FROM  yh_user_enrolinfo WHERE Flag_Dgroup LIKE CONCAT('%',#{isname},'%')
+    </select>
+
+    <update id="updateYhUserEnrolinfo" parameterType="com.yihe.system.domain.YhUserEnrolinfo">
+        UPDATE yh_user_enrolinfo SET Flag_Dgroup=#{flagDgroup} where E_User_Id=#{eUserId}
+    </update>
+
+    <delete id="deletegropvention" parameterType="com.yihe.system.domain.YHDocGroup">
+        DELETE FROM yh_doc_group WHERE U_Docgroup_Id=#{uDocgroupId}
+    </delete>
+    
+    <select id="selectgroppage" parameterType="com.yihe.system.domain.YHDocGroup" resultType="com.yihe.system.domain.Yhgroupintervention">
+        SELECT enro.E_User_Id,enro.Flag_Dgroup,regin.`name`,regin.birth_date,regin.gender,exe.last_plan_time,exe.plan_count,enro.user_code,detail.execute_date
+            FROM yh_user_enrolinfo enro LEFT JOIN yh_user_reginfo regin
+            ON enro.user_code=regin.user_code
+            LEFT JOIN yh_template_execution exe
+            ON enro.user_code=exe.user_code
+            LEFT JOIN yh_user_make_card card
+            ON enro.user_code=card.User_Code
+            LEFT JOIN yh_template_detail detail
+            ON	enro.user_code=detail.User_Code
+            WHERE	card.doctor=(SELECT  id FROM yh_user_admin_info WHERE user_code =#{Usercode})  AND enro.Flag_Dgroup LIKE CONCAT('%',#{uDocgroupIdJoining},'%')
+            <if test="minage != null and minage !=''" >
+                AND regin.birth_date &lt;=  #{minage}
+            </if>
+            <if test="maxage != null and maxage !=''" >
+                AND regin.birth_date &gt;=  #{maxage}
+            </if>
+            <if test="Orgcode != null and Orgcode !=''" >
+                AND regin.Org_Code =  #{Orgcode}
+            </if>
+            <if test="sex != null and sex !=''" >
+                AND regin.gender =  #{sex}
+            </if>
+            <if test="leves != null and leves !=''" >
+                and   enro.Flag_Dgroup  LIKE CONCAT('%',#{leves},'%')
+            </if>
+            <if test="isplan == 1" >
+                and   exe.plan_count  >0
+            </if>
+            <if test="isplan == 2" >
+               and    (exe.plan_count  &lt;= 0 or exe.plan_count is null)
+            </if>
+            <if test="name != null and name !=''" >
+                and   regin.name  LIKE CONCAT('%',#{name},'%')
+            </if>
+            GROUP BY enro.E_User_Id
+            ORDER BY exe.last_plan_time DESC
+            LIMIT #{start},#{limit}
+    </select>
+
+
+    <select id="selectgroppagecount" parameterType="com.yihe.system.domain.YHDocGroup" resultType="int">
+        SELECT count(enro.E_User_Id)
+        FROM yh_user_enrolinfo enro LEFT JOIN yh_user_reginfo regin
+        ON enro.user_code=regin.user_code
+        LEFT JOIN yh_template_execution exe
+        ON enro.user_code=exe.user_code
+        LEFT JOIN yh_user_make_card card
+        ON enro.user_code=card.User_Code
+        LEFT JOIN yh_template_detail detail
+        ON	enro.user_code=detail.User_Code
+        WHERE	card.doctor=(SELECT  id FROM yh_user_admin_info WHERE user_code =#{Usercode})  AND enro.Flag_Dgroup LIKE CONCAT('%',#{uDocgroupIdJoining},'%')
+        <if test="minage != null and minage !=''" >
+            AND regin.birth_date &lt;=  #{minage}
+        </if>
+        <if test="maxage != null and maxage !=''" >
+            AND regin.birth_date &gt;=  #{maxage}
+        </if>
+        <if test="Orgcode != null and Orgcode !=''" >
+            AND regin.Org_Code =  #{Orgcode}
+        </if>
+        <if test="sex != null and sex !=''" >
+            AND regin.gender =  #{sex}
+        </if>
+        <if test="leves != null and leves !=''" >
+            and   enro.Flag_Dgroup  LIKE CONCAT('%',#{leves},'%')
+        </if>
+        <if test="isplan == 1" >
+            and   exe.plan_count  >0
+        </if>
+        <if test="isplan == 2" >
+             and   (exe.plan_count  &lt;= 0 or exe.plan_count is null)
+        </if>
+        <if test="name != null and name !=''" >
+            and   regin.name  LIKE CONCAT('%',#{name},'%')
+        </if>
+        GROUP BY enro.E_User_Id
+    </select>
+
+    <select id="needdelete" parameterType="com.yihe.system.domain.YHDocGroup" resultMap="BaseResultMap">
+        SELECT  * FROM yh_user_enrolinfo WHERE E_User_Id in<foreach collection="names" index="index" item="item" open="(" separator="," close=")">#{item}</foreach>
+    </select>
+
+
+    <select id="selectplanbyuser" parameterType="com.yihe.system.domain.YhTemplateDetail" resultMap="BaseResultMapdetail">
+        SELECT detail.*,way.*,dic.plan_count as counts FROM yh_template_detail detail
+        LEFT JOIN yh_jz_service_returnway way
+        ON detail.service_way=way.id
+        LEFT JOIN yh_programs_dictionary dic
+        ON dic.plancount_id=detail.plan_count
+        WHERE user_code=#{userCode}
+        AND execute_date &gt;= (select now())
+        <if test="begintime!=null">
+            AND execute_date &gt;=#{begintime}
+        </if>
+        <if test="endtime!=null">
+            AND execute_date &lt;=#{endtime}
+        </if>
+        <if test="serviceWay!=null and serviceWay!=''">
+            AND service_way=#{serviceWay}
+        </if>
+          order by execute_date
+        LIMIT #{start},#{limit}
+    </select>
+    <select id="selectcount"  parameterType="com.yihe.system.domain.YhTemplateDetail" resultType="int">
+        SELECT COUNT(*) FROM yh_template_detail detail
+        LEFT JOIN yh_jz_service_returnway way
+        ON detail.service_way=way.id
+        WHERE user_code=#{userCode}
+        AND execute_date &gt;= (select now())
+        <if test="begintime!=null">
+            AND execute_date &gt;=#{begintime}
+        </if>
+        <if test="endtime!=null">
+            AND execute_date &lt;=#{endtime}
+        </if>
+        <if test="serviceWay!=null and serviceWay!=''">
+            AND service_way=#{serviceWay}
+        </if>
+    </select>
+
+    <delete id="deletesplanbyid" parameterType="com.yihe.system.domain.YhTemplateDetail">
+        DELETE FROM yh_template_detail WHERE details_id IN<foreach collection="deleteids" index="index" item="item" open="(" separator="," close=")">#{item}</foreach>
+    </delete>
+
+    <update id="updatelasttime" parameterType="com.yihe.system.domain.YhTemplateDetail">
+        update yh_template_execution set last_plan_time=(select max(execute_date) from  yh_template_detail where user_code=#{userCode}) where user_code=#{userCode}
+    </update>
+    
+    <select id="selectplancount" resultType="com.yihe.system.domain.YhProgramsDictionary">
+        SELECT * FROM  yh_programs_dictionary
+    </select>
+
+    <update id="jianfa" >
+        update yh_template_execution set plan_count=IF((plan_count-(#{jianshu}))>0,(plan_count-(#{jianshu})),0) where user_code=#{usercode}
+    </update>
+</mapper>

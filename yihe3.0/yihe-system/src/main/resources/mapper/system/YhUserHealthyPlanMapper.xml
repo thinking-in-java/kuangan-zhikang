@@ -1,0 +1,394 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yihe.system.mapper.YhUserHealthyPlanMapper">
+
+	<resultMap type="YhUserHealthyPlan" id="YhUserHealthyPlanResult">
+		<result property="id" column="id" />
+		<result property="userCode" column="user_code" />
+		<result property="courseseq" column="courseseq" />
+		<result property="planDay" column="plan_day" />
+		<result property="plandetailId" column="plandetail_id" />
+		<result property="planId" column="plan_id" />
+		<result property="planStartdate" column="plan_startdate" />
+		<result property="planEnddate" column="plan_enddate" />
+		<result property="planState" column="plan_state" />
+		<result property="planChoose" column="plan_choose" />
+		<result property="planUnique" column="plan_unique" />
+	</resultMap>
+
+	<sql id="selectYhUserHealthyPlanVo">
+		select id, user_code, courseseq, plan_day, plandetail_id, plan_id,
+		plan_startdate, plan_enddate, plan_state, plan_choose, plan_unique
+		from yh_user_healthy_plan
+	</sql>
+
+<!-- 查询用户做过几种健康计划 -->
+<select id="findUserHealthyPlanGroupByPlanId" resultType="java.lang.Integer">
+SELECT COUNT(1) FROM (SELECT id FROM `yh_user_healthy_plan` WHERE user_code=#{usercode} GROUP BY plan_id) AS a
+</select>
+<!-- 查询用户做过多少次健康计划日记 -->
+<select id="findUserHealthyPlanByuserCodeForCount" resultType="java.lang.Integer">
+SELECT COUNT(1) FROM `yh_user_healthy_plan` WHERE user_code=#{usercode}
+</select>
+
+  <!-- 查询最近半年新增用户 -->
+  <select id="showPlanCount" resultType="int" >
+  	select count(*) from yh_user_healthy_plan where  DATE_FORMAT(plan_startdate, '%Y%m' ) = DATE_FORMAT( CURDATE( ) , '%Y%m' )
+  </select>
+  
+  
+	<select id="findYhUserHealthyPlanByplanUnique" resultMap="YhUserHealthyPlanResult">
+		<include refid="selectYhUserHealthyPlanVo" />
+		where plan_unique=#{planUnique} ORDER BY plan_startdate
+	</select>
+
+	<select id="findPlanByPlanId" resultType="java.lang.Integer">
+		SELECT plan_allnumber FROM `yh_healthy_plan` WHERE id=#{planId}
+	</select>
+
+	<select id="findPlanByTimeAndUserCodeAndPlanUnique" resultType="java.lang.Integer">
+	 
+		SELECT  SUM(courseseq) AS completedNum FROM `yh_user_healthy_plan` WHERE plan_startdate
+		&lt;=#{planStrTime} AND user_code=#{usercode} AND
+		plan_unique=#{planUnique}
+		
+		 
+	</select>
+	<!-- 查询医生名下所以用户的健康计划日记信息 -->
+	<select id="findUserHealthyPlanInfoByDoctor"  resultType="com.yihe.system.domain.HealthPlanVOJO">
+	SELECT   
+  b.`user_code` AS usercode,b.`user_name` AS username,b.`name`,a.`plan_startdate` AS planStrTime,c.`plan_name` AS planName,a.`courseseq`,d.`plan_num` AS planNum,a.`plan_day` AS planDay ,a.`plan_state` AS planState
+
+ FROM `yh_user_healthy_plan` AS a 
+INNER JOIN `yh_user_reginfo` AS b
+ON a.`user_code`=b.`user_code`
+INNER JOIN  `yh_healthy_plan` AS c
+ON a.`plan_id`=c.`id`
+INNER JOIN `yh_healthy_plandays` AS d
+ON a.`plan_id`=d.`plan_id` AND a.`plan_day`=d.`planday`
+INNER JOIN
+`yh_user_make_card` AS e
+ON e.user_code=a.`user_code`
+<where>
+<if test="usercode != null and usercode !=''">
+and e.doctor=(SELECT id FROM `yh_user_admin_info` WHERE
+		user_code=#{usercode}) and a.courseseq!=0
+</if>
+		<if test="planName != null">
+		AND c.`plan_name` LIKE CONCAT('%',#{planName},'%')
+		</if>
+		
+		<if test="nameLike != null">
+		AND b.`name` LIKE CONCAT('%',#{nameLike},'%')
+		</if>
+
+<if test="usernameLike != null">
+AND b.`user_name` LIKE CONCAT('%',#{usernameLike},'%')
+</if>
+
+<if test="strtime!=null and endtime!=null">
+AND a.plan_startdate BETWEEN #{strtime} AND #{endtime}
+</if>
+
+	
+</where>
+		ORDER BY a.plan_startdate DESC
+	</select>
+
+
+	<select id="findUserPlanInfoByUserCode" resultType="com.yihe.system.domain.HealthPlanVOJO">
+		SELECT a.`user_code` AS usercode,a.id,c.`plan_name` AS
+		planName,a.`plan_startdate` AS
+		planStrTime,a.`courseseq`,b.plandetail_id AS plandetailId,b.plan_num
+		AS planNum,a.`plan_unique` AS planUnique,a.`plan_day` AS
+		planDay,a.`plan_id` AS planId FROM `yh_user_healthy_plan` AS a
+		INNER JOIN yh_healthy_plandays AS b
+		ON a.`plan_id`=b.`plan_id` AND a.`plan_day`=b.planday
+		and a.`courseseq`!=0
+		<if test="complete =='true'">
+			AND a.`courseseq`&lt;= b.plan_num
+		</if>
+		<if test="complete =='false'">
+			AND a.`courseseq`&gt;= b.plan_num
+		</if>
+
+
+		INNER JOIN `yh_healthy_plan` AS c
+		ON a.`plan_id`=c.id
+
+		<where>
+			a.user_code=#{usercode}
+			<if
+				test="strTime != null and strTime != '' and endTime != null and endTime != ''">
+				and a.plan_startdate between #{strTime} and #{endTime}
+			</if>
+			<if test="planName != null">
+				and c.`plan_name` like concat('%',#{planName},'%')
+			</if>
+		</where>
+		order by a.plan_startdate desc 
+	</select>
+
+	<select id="findUserPlanTongJiTu" resultType="com.yihe.system.domain.HealthPlanVOJO">
+
+		SELECT a.plan_startdate AS planStrTime,a.courseseq,b.plan_num AS planNum
+		FROM `yh_user_healthy_plan` AS a
+		INNER JOIN `yh_healthy_plandays` AS b
+		ON a.`plan_id` = b.`plan_id` AND a.`plan_day` = b.planday
+		WHERE a.user_code = #{usercode} and a.courseseq!=0
+		ORDER BY a.plan_startdate
+	</select>
+	<select id="findUserPlanTongJiTuByUsercodeAndPlanUnique"
+		resultType="com.yihe.system.domain.HealthPlanVOJO">
+
+		SELECT a.plan_startdate AS planStrTime,a.courseseq,b.plan_num AS planNum
+		FROM `yh_user_healthy_plan` AS a
+		INNER JOIN `yh_healthy_plandays` AS b
+		ON a.`plan_id` = b.`plan_id` AND a.`plan_day` = b.planday
+		WHERE a.user_code = #{usercode} AND plan_unique=#{planUnique}
+		ORDER BY a.plan_startdate
+	</select>
+	<select id="findPlanCumulativeInfo" resultType="java.lang.Integer">
+		SELECT COUNT(1) FROM `yh_user_healthy_plan` WHERE plan_unique=#{planUnique} and user_code=#{usercode}
+
+	</select>
+
+
+	<select id="findPlanDetailByid" resultType="java.lang.String">
+		SELECT plandetail_id FROM `yh_user_healthy_plan` WHERE id=#{id}
+	</select>
+	<select id="findPlanDetailByPlanIdAndPlanDay" resultType="java.lang.String">
+		SELECT plandetail_id FROM `yh_healthy_plandays` WHERE plan_id=#{planId} AND
+		planday=#{planDay}
+	</select>
+
+	<select id="findPlanDetailTitleById" resultType="java.lang.String">
+		SELECT plandetail_title FROM `yh_healthy_plandetail` WHERE id=#{id}
+	</select>
+
+	<select id="findPlanContinuityInfo" resultType="java.lang.Integer">
+		SELECT ntmp.lianxu_days
+		FROM (SELECT *
+		FROM (
+		SELECT
+		plan_unique,
+		MAX(days) lianxu_days,
+		MIN(login_day) start_date,
+		MAX(login_day) end_date
+		FROM (SELECT
+		plan_unique,
+		@cont_day :=
+		(CASE
+		WHEN (@last_uid = plan_unique AND DATEDIFF(plan_startdate, @last_dt) = 1)
+		THEN
+		(@cont_day + 1)
+		WHEN (@last_uid = plan_unique AND DATEDIFF(plan_startdate, @last_dt) &lt; 1)
+		THEN
+		(@cont_day + 0)
+		ELSE
+		1
+		END) AS days,
+		(@cont_ix := (@cont_ix + IF(@cont_day = 1, 1, 0))) AS cont_ix,
+		@last_uid := plan_unique,
+		@last_dt := plan_startdate login_day
+		FROM (SELECT
+		plan_unique,
+		DATE(plan_startdate) plan_startdate
+		FROM yh_user_healthy_plan
+		WHERE plan_unique != 0
+		AND plan_unique=#{planUnique}  AND user_code=#{usercode}
+		ORDER BY plan_unique, plan_startdate) AS t,
+		(SELECT
+		@last_uid := '',
+		@last_dt := '',
+		@cont_ix := 0,
+		@cont_day := 0) AS t1
+		) AS t2
+		GROUP BY plan_unique, cont_ix
+
+		) tmp
+		ORDER BY lianxu_days DESC) ntmp
+
+		GROUP BY plan_unique
+	</select>
+
+
+	<select id="findHealthyPlanUserIsNum2" resultType="com.yihe.system.domain.HealthPlanVOJO">
+
+		SELECT a.planNum,a.planStrTime,a.planName,a.planState,MAX(planRunDay) AS planRunDay FROM (SELECT
+  (SELECT
+    COUNT(1)
+  FROM
+    (SELECT
+      *
+    FROM
+      yh_user_healthy_plan
+    WHERE user_code = #{usercode}
+    GROUP BY plan_unique) AS a) AS planNum,
+  a.`plan_startdate` AS planStrTime,
+  b.`plan_name` AS planName,
+  a.`plan_day` AS planRunDay,
+  a.plan_state as planState
+FROM
+  `yh_user_healthy_plan` AS a
+  INNER JOIN `yh_healthy_plan` AS b
+    ON a.`plan_id` = b.`id`
+WHERE (a.plan_state = 1  or a.plan_state = 0) and  (a.plan_state!=0 or a.courseseq!=0)
+  AND a.user_code = #{usercode} OR (a.user_code = #{usercode} and a.plan_state=0 AND plan_day=1)
+) AS a
+	</select>
+
+
+	<select id="findHealthyPlanUserIsNum" resultType="com.yihe.system.domain.HealthPlanVOJO">
+
+		SELECT a.planNum,a.planStrTime,a.planName,a.planState,MAX(planRunDay) AS planRunDay FROM (SELECT
+  (SELECT 
+    COUNT(1) 
+  FROM
+    (SELECT 
+      * 
+    FROM
+      yh_user_healthy_plan 
+    WHERE user_code = #{usercode}
+    GROUP BY plan_unique) AS a) AS planNum,
+  a.`plan_startdate` AS planStrTime,
+  b.`plan_name` AS planName,
+  a.`plan_day` AS planRunDay,
+  a.plan_state as planState
+FROM
+  `yh_user_healthy_plan` AS a 
+  INNER JOIN `yh_healthy_plan` AS b 
+    ON a.`plan_id` = b.`id` 
+WHERE (a.plan_state = 1  or a.plan_state = 0) and  (a.plan_state!=0 or a.courseseq!=0)
+  AND a.user_code = #{usercode} 
+) AS a
+	</select>
+	<select id="findHealthyPlanUserByuserCode" resultType="com.yihe.system.domain.HealthPlanVOJO">
+	SELECT * FROM (
+		SELECT MAX(a.plan_day) AS planRunDay,CASE
+		WHEN a.plan_state = '1' THEN '已开始'
+		WHEN a.plan_state = '2' THEN '已结束'
+		WHEN a.plan_state = '3' THEN '已取消'
+		ELSE '未开始' END AS planState,a.`plan_name` AS planName,a.`plan_startdate`
+		AS planStrTime,a.plan_unique AS planUnique FROM (SELECT
+		a.`plan_day`,a.`plan_startdate`,a.`plan_state`,b.`plan_name`,a.plan_unique
+		FROM `yh_user_healthy_plan` AS a
+		INNER JOIN `yh_healthy_plan` AS b
+		ON
+		a.`plan_id`=b.`id`
+		WHERE a.user_code=#{usercode} and  (a.plan_state!=0 or a.courseseq!=0)
+		ORDER BY
+		a.`plan_startdate`) AS a
+		GROUP BY a.`plan_unique` HAVING
+		MAX(a.plan_day)
+		) AS b
+ORDER BY b.planStrTime DESC
+	</select>
+
+
+	<select id="findHealthyPlanUserByuserCode2" resultType="com.yihe.system.domain.HealthPlanVOJO">
+	SELECT * FROM (
+		SELECT MAX(a.plan_day) AS planRunDay,CASE
+		WHEN a.plan_state = '1' THEN '已开始'
+		WHEN a.plan_state = '2' THEN '已结束'
+		WHEN a.plan_state = '3' THEN '已取消'
+		ELSE '未开始' END AS planState,a.`plan_name` AS planName,a.`plan_startdate`
+		AS planStrTime,a.plan_unique AS planUnique FROM (SELECT
+		a.`plan_day`,a.`plan_startdate`,a.`plan_state`,b.`plan_name`,a.plan_unique
+		FROM `yh_user_healthy_plan` AS a
+		INNER JOIN `yh_healthy_plan` AS b
+		ON
+		a.`plan_id`=b.`id`
+		WHERE a.user_code=#{usercode} and  (a.plan_state!=0 or a.courseseq!=0)
+		ORDER BY
+		a.`plan_startdate`) AS a
+		GROUP BY a.`plan_unique` HAVING
+		MAX(a.plan_day)
+		) AS b
+ORDER BY b.planStrTime DESC
+	</select>
+
+	<select id="selectYhUserHealthyPlanList" parameterType="YhUserHealthyPlan"
+		resultMap="YhUserHealthyPlanResult">
+		<include refid="selectYhUserHealthyPlanVo" />
+		<where>
+			<if test="userCode != null  and userCode != ''"> and user_code = #{userCode}</if>
+			<if test="courseseq != null "> and courseseq = #{courseseq}</if>
+			<if test="planDay != null "> and plan_day = #{planDay}</if>
+			<if test="plandetailId != null  and plandetailId != ''"> and plandetail_id = #{plandetailId}</if>
+			<if test="planId != null "> and plan_id = #{planId}</if>
+			<if test="planStartdate != null "> and plan_startdate = #{planStartdate}</if>
+			<if test="planEnddate != null "> and plan_enddate = #{planEnddate}</if>
+			<if test="planState != null "> and plan_state = #{planState}</if>
+			<if test="planChoose != null  and planChoose != ''"> and plan_choose = #{planChoose}</if>
+			<if test="planUnique != null "> and plan_unique = #{planUnique}</if>
+		</where>
+	</select>
+
+	<select id="selectYhUserHealthyPlanById" parameterType="Long"
+		resultMap="YhUserHealthyPlanResult">
+		<include refid="selectYhUserHealthyPlanVo" />
+		where id = #{id}
+	</select>
+
+	<insert id="insertYhUserHealthyPlan" parameterType="YhUserHealthyPlan"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into yh_user_healthy_plan
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="userCode != null  and userCode != ''">user_code,</if>
+			<if test="courseseq != null ">courseseq,</if>
+			<if test="planDay != null ">plan_day,</if>
+			<if test="plandetailId != null  and plandetailId != ''">plandetail_id,</if>
+			<if test="planId != null ">plan_id,</if>
+			<if test="planStartdate != null ">plan_startdate,</if>
+			<if test="planEnddate != null ">plan_enddate,</if>
+			<if test="planState != null ">plan_state,</if>
+			<if test="planChoose != null  and planChoose != ''">plan_choose,</if>
+			<if test="planUnique != null ">plan_unique,</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="userCode != null  and userCode != ''">#{userCode},</if>
+			<if test="courseseq != null ">#{courseseq},</if>
+			<if test="planDay != null ">#{planDay},</if>
+			<if test="plandetailId != null  and plandetailId != ''">#{plandetailId},</if>
+			<if test="planId != null ">#{planId},</if>
+			<if test="planStartdate != null ">#{planStartdate},</if>
+			<if test="planEnddate != null ">#{planEnddate},</if>
+			<if test="planState != null ">#{planState},</if>
+			<if test="planChoose != null  and planChoose != ''">#{planChoose},</if>
+			<if test="planUnique != null ">#{planUnique},</if>
+		</trim>
+	</insert>
+
+	<update id="updateYhUserHealthyPlan" parameterType="YhUserHealthyPlan">
+		update yh_user_healthy_plan
+		<trim prefix="SET" suffixOverrides=",">
+			<if test="userCode != null  and userCode != ''">user_code = #{userCode},</if>
+			<if test="courseseq != null ">courseseq = #{courseseq},</if>
+			<if test="planDay != null ">plan_day = #{planDay},</if>
+			<if test="plandetailId != null  and plandetailId != ''">plandetail_id = #{plandetailId},</if>
+			<if test="planId != null ">plan_id = #{planId},</if>
+			<if test="planStartdate != null ">plan_startdate = #{planStartdate},</if>
+			<if test="planEnddate != null ">plan_enddate = #{planEnddate},</if>
+			<if test="planState != null ">plan_state = #{planState},</if>
+			<if test="planChoose != null  and planChoose != ''">plan_choose = #{planChoose},</if>
+			<if test="planUnique != null ">plan_unique = #{planUnique},</if>
+		</trim>
+		where id = #{id}
+	</update>
+
+	<delete id="deleteYhUserHealthyPlanById" parameterType="Long">
+		delete from yh_user_healthy_plan where id = #{id}
+	</delete>
+
+	<delete id="deleteYhUserHealthyPlanByIds" parameterType="String">
+		delete from yh_user_healthy_plan where id in
+		<foreach item="id" collection="array" open="(" separator=","
+			close=")">
+			#{id}
+		</foreach>
+	</delete>
+
+</mapper>

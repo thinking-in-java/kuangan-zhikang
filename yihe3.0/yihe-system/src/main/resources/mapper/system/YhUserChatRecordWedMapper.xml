@@ -1,0 +1,234 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yihe.system.mapper.YhUserChatRecordWedMapper" >
+  <resultMap id="BaseResultMap" type="com.yihe.system.domain.YhUserChatRecordWed" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="user_code" property="userCode" jdbcType="VARCHAR" />
+    <result column="to_user_code" property="toUserCode" jdbcType="VARCHAR" />
+    <result column="message" property="message" jdbcType="VARCHAR" />
+    <result column="addTimeInfo" property="addtimeinfo" jdbcType="VARCHAR" />
+    <result column="read" property="read" jdbcType="INTEGER" />
+    <result column="roomid" property="roomid" jdbcType="VARCHAR" />
+    <result column="mtype" property="mtype" jdbcType="INTEGER" />
+    <result column="messageType" property="messageType" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, user_code, to_user_code, message, addTimeInfo, `read`,roomid,mtype,messageType
+  </sql>
+  <select id="findChatRecordByAddTime" resultType="java.lang.String">
+  SELECT addTimeInfo FROM  `yh_user_chat_record` WHERE user_code=#{usercode} ORDER BY addTimeInfo DESC LIMIT 1
+  </select>
+  
+  <select id="findChatInfo" resultMap="BaseResultMap" parameterType="com.yihe.system.domain.YhUserChatRecordWed">
+    SELECT
+    b.user_code,
+    b.`name`,
+    c.message,
+    c.addTimeInfo,
+    c.`read`,
+    c.messageType
+    FROM
+    yh_user_make_card AS a
+    INNER JOIN yh_user_reginfo AS b ON a.user_code = b.user_code
+    LEFT JOIN (
+    SELECT
+    message,
+    addTimeInfo,
+    `read`,
+    messageType,
+    user_code
+    FROM
+    (
+    SELECT
+    id,
+    message,
+    addTimeInfo,
+    `read`,
+    messageType,
+    user_code
+    FROM
+    yh_user_chat_record
+    WHERE
+    to_user_code = #{usercode} UNION ALL
+    SELECT
+    id,
+    message,
+    addTimeInfo,
+    `read`,
+    messageType,
+    user_code
+    FROM
+    yh_user_chat_record
+    WHERE
+    to_user_code IS NULL
+    ) zc1
+    INNER JOIN ( SELECT MAX( id ) id FROM yh_user_chat_record GROUP BY user_code ) zc2 ON zc1.id = zc2.id
+    ) AS c ON a.user_code = c.user_code
+    WHERE
+    a.doctor = ( SELECT id FROM `yh_user_admin_info` WHERE user_code = #{usercode} )
+    <if test="read != null">AND c.`read` = #{read}  </if>
+    <if test="name != null">AND b.`name` LIKE CONCAT('%',#{name},'%')</if>
+    ORDER BY
+    c.addTimeInfo DESC
+
+ 
+  
+    
+  </select>
+  
+  <!-- 修改记录为已读 -->
+  <update id="modifyRead1" parameterType="java.lang.String" >
+  UPDATE 
+   `yh_user_chat_record` 
+SET
+  
+  `read` = '1' 
+WHERE user_code=#{usercode} AND to_user_code=#{tousercode}
+  </update>
+   
+  
+  <select id="findChatInfoByUserCode" resultMap="BaseResultMap" >
+   SELECT <include refid="Base_Column_List" /> FROM `yh_user_chat_record` WHERE (user_code=#{usercode} AND to_user_code=#{tousercode}) OR (user_code=#{tousercode} AND to_user_code=#{usercode}) ORDER BY addTimeinfo 
+  </select>
+  
+  <select id="getList" resultMap="BaseResultMap" >
+  select a.* from (
+   SELECT <include refid="Base_Column_List" /> FROM `yh_user_chat_record` 
+  <where>
+            <if test="roomid != null ">roomid=#{roomid}</if>
+            <if test="roomid2 != null ">or roomid=#{roomid2}</if>
+           
+        </where>
+        order by Id DESC  limit 20  
+  ) as a 
+   <where>
+   <if test="lastId != null and lastId!=0" >  a.id &lt; #{lastId}</if>
+    </where>
+  order by a.id
+  </select>
+  
+  <select id="findWXuserStatus" resultType="java.lang.Integer">
+  SELECT `status` FROM  `yh_wx_user` WHERE  user_id=#{usercode} limit 1
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from yh_user_chat_record
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from yh_user_chat_record
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.yihe.system.domain.YhUserChatRecordWed" >
+    insert into yh_user_chat_record (id, user_code, to_user_code, 
+      message, addTimeInfo, `read`
+      )
+    values (#{id,jdbcType=INTEGER}, #{userCode,jdbcType=VARCHAR}, #{toUserCode,jdbcType=VARCHAR}, 
+      #{message,jdbcType=VARCHAR}, #{addtimeinfo,jdbcType=VARCHAR}, #{read,jdbcType=INTEGER}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.yihe.system.domain.YhUserChatRecordWed" >
+    insert into yh_user_chat_record
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="userCode != null" >
+        user_code,
+      </if>
+      <if test="toUserCode != null" >
+        to_user_code,
+      </if>
+      <if test="message != null" >
+        message,
+      </if>
+      
+      
+       
+      <if test="read != null" >
+        `read`,
+      </if>
+      <if test="roomid != null" >
+        `roomid`,
+      </if>
+      <if test="mtype != null" >
+        `mtype`,
+      </if>
+      <if test="messageType != null" >
+        `messageType`,
+      </if>
+      <if test="filesize != null" >
+        `filesize`,
+      </if>
+      <if test="filename != null" >
+        `filename`,
+      </if>
+        addTimeInfo
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="userCode != null" >
+        #{userCode,jdbcType=VARCHAR},
+      </if>
+      <if test="toUserCode != null" >
+        #{toUserCode,jdbcType=VARCHAR},
+      </if>
+      <if test="message != null" >
+        #{message,jdbcType=VARCHAR},
+      </if>
+      
+      <if test="read != null" >
+        #{read,jdbcType=INTEGER},
+      </if>
+      <if test="roomid != null" >
+        #{roomid,jdbcType=INTEGER},
+      </if>
+      <if test="mtype != null" >
+        #{mtype,jdbcType=INTEGER},
+      </if>
+      <if test="messageType != null" >
+        #{messageType,jdbcType=INTEGER},
+      </if>
+      <if test="filesize != null" >
+        #{filesize,jdbcType=VARCHAR},
+      </if>
+      <if test="filename != null" >
+        #{filename,jdbcType=VARCHAR},
+      </if>
+      NOW()
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.yihe.system.domain.YhUserChatRecordWed" >
+    update yh_user_chat_record
+    <set >
+      <if test="userCode != null" >
+        user_code = #{userCode,jdbcType=VARCHAR},
+      </if>
+      <if test="toUserCode != null" >
+        to_user_code = #{toUserCode,jdbcType=VARCHAR},
+      </if>
+      <if test="message != null" >
+        message = #{message,jdbcType=VARCHAR},
+      </if>
+      <if test="addtimeinfo != null" >
+        addTimeInfo = #{addtimeinfo,jdbcType=VARCHAR},
+      </if>
+      <if test="read != null" >
+        `read` = #{read,jdbcType=INTEGER},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.yihe.system.domain.YhUserChatRecordWed" >
+    update yh_user_chat_record
+    set user_code = #{userCode,jdbcType=VARCHAR},
+      to_user_code = #{toUserCode,jdbcType=VARCHAR},
+      message = #{message,jdbcType=VARCHAR},
+      addTimeInfo = #{addtimeinfo,jdbcType=VARCHAR},
+      `read` = #{read,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

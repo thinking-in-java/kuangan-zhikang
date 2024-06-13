@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yihe.system.mapper.YhUserPersonageHospitalizedMapper" >
+  <resultMap id="BaseResultMap" type="com.yihe.system.domain.YhUserPersonageHospitalized" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="user_code" property="userCode" jdbcType="VARCHAR" />
+    <result column="timedeta" property="timedeta" jdbcType="VARCHAR" />
+    <result column="cause" property="cause" jdbcType="VARCHAR" />
+    <result column="Dischargetime" property="dischargetime" jdbcType="VARCHAR" />
+    <result column="yiyuanname" property="yiyuanname" jdbcType="VARCHAR" />
+    <result column="disease" property="disease" jdbcType="VARCHAR" />
+    <result column="hospitalizedtype" property="hospitalizedtype" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, user_code, timedeta, cause, Dischargetime, yiyuanname, disease, hospitalizedtype
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from yh_user_personage_hospitalized
+    where user_code = #{userCode,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from yh_user_personage_hospitalized
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteAll" parameterType="java.lang.String">
+   	delete from yh_user_personage_hospitalized  where user_code = #{userCode,jdbcType=VARCHAR}
+  </delete>
+  
+  
+  
+  
+ <!--  <insert id="insert" parameterType="java.util.List">
+   insert into yh_user_personage_hospitalized ( user_code, timedeta, 
+      cause, Dischargetime, yiyuanname,disease, hospitalizedtype) value
+	 	 <foreach collection="listHospitalized" open="(" close=")" separator="," item="item" index="index">
+			 (#{item.userCode,jdbcType=VARCHAR}, #{item.timedeta,jdbcType=VARCHAR}, 
+		      #{item.cause,jdbcType=VARCHAR}, #{item.dischargetime,jdbcType=VARCHAR}, #{item.yiyuanname,jdbcType=VARCHAR}, 
+		      #{item.disease,jdbcType=VARCHAR}, #{item.hospitalizedtype,jdbcType=VARCHAR})
+	    </foreach> 
+</insert> -->
+  
+	<insert id="insert" parameterType="com.yihe.system.domain.YhUserPersonageHospitalized">
+    insert into yh_user_personage_hospitalized (id, user_code, timedeta, 
+      cause, Dischargetime, yiyuanname, 
+      disease, hospitalizedtype) values	
+    	(#{id,jdbcType=INTEGER}, #{userCode,jdbcType=VARCHAR}, #{timedeta,jdbcType=VARCHAR}, 
+      #{cause,jdbcType=VARCHAR}, #{dischargetime,jdbcType=VARCHAR}, #{yiyuanname,jdbcType=VARCHAR}, 
+      #{disease,jdbcType=VARCHAR}, #{hospitalizedtype,jdbcType=VARCHAR})
+    
+  </insert> 
+  
+  <insert id="insertSelective" parameterType="com.yihe.system.domain.YhUserPersonageHospitalized" >
+    insert into yh_user_personage_hospitalized
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="userCode != null" >
+        user_code,
+      </if>
+      <if test="timedeta != null" >
+        timedeta,
+      </if>
+      <if test="cause != null" >
+        cause,
+      </if>
+      <if test="dischargetime != null" >
+        Dischargetime,
+      </if>
+      <if test="yiyuanname != null" >
+        yiyuanname,
+      </if>
+      <if test="disease != null" >
+        disease,
+      </if>
+      <if test="hospitalizedtype != null" >
+        hospitalizedtype,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="userCode != null" >
+        #{userCode,jdbcType=VARCHAR},
+      </if>
+      <if test="timedeta != null" >
+        #{timedeta,jdbcType=VARCHAR},
+      </if>
+      <if test="cause != null" >
+        #{cause,jdbcType=VARCHAR},
+      </if>
+      <if test="dischargetime != null" >
+        #{dischargetime,jdbcType=VARCHAR},
+      </if>
+      <if test="yiyuanname != null" >
+        #{yiyuanname,jdbcType=VARCHAR},
+      </if>
+      <if test="disease != null" >
+        #{disease,jdbcType=VARCHAR},
+      </if>
+      <if test="hospitalizedtype != null" >
+        #{hospitalizedtype,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.yihe.system.domain.YhUserPersonageHospitalized" >
+    update yh_user_personage_hospitalized
+    <set >
+      <if test="userCode != null" >
+        user_code = #{userCode,jdbcType=VARCHAR},
+      </if>
+      <if test="timedeta != null" >
+        timedeta = #{timedeta,jdbcType=VARCHAR},
+      </if>
+      <if test="cause != null" >
+        cause = #{cause,jdbcType=VARCHAR},
+      </if>
+      <if test="dischargetime != null" >
+        Dischargetime = #{dischargetime,jdbcType=VARCHAR},
+      </if>
+      <if test="yiyuanname != null" >
+        yiyuanname = #{yiyuanname,jdbcType=VARCHAR},
+      </if>
+      <if test="disease != null" >
+        disease = #{disease,jdbcType=VARCHAR},
+      </if>
+      <if test="hospitalizedtype != null" >
+        hospitalizedtype = #{hospitalizedtype,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.yihe.system.domain.YhUserPersonageHospitalized" >
+    update yh_user_personage_hospitalized
+    set user_code = #{userCode,jdbcType=VARCHAR},
+      timedeta = #{timedeta,jdbcType=VARCHAR},
+      cause = #{cause,jdbcType=VARCHAR},
+      Dischargetime = #{dischargetime,jdbcType=VARCHAR},
+      yiyuanname = #{yiyuanname,jdbcType=VARCHAR},
+      disease = #{disease,jdbcType=VARCHAR},
+      hospitalizedtype = #{hospitalizedtype,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

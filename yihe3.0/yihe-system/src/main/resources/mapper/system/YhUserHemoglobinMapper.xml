@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yihe.system.mapper.YhUserHemoglobinMapper" >
+  <resultMap id="BaseResultMap" type="com.yihe.system.domain.YhUserHemoglobin" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="he_hb" property="heHb" jdbcType="REAL" />
+    <result column="he_tyep" property="heTyep" jdbcType="VARCHAR" />
+    <result column="he_data" property="heData" jdbcType="TIMESTAMP" />
+    <result column="user_code" property="userCode" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, he_hb, he_tyep, he_data, user_code
+  </sql>
+  <select id="selectByPrimaryKeyFindEntryTimeAnduserid"   resultMap="BaseResultMap">
+    SELECT
+    <include refid="Base_Column_List" />
+    FROM `yh_user_hemoglobin` WHERE he_data LIKE concat(concat('',#{time}),'%') AND user_code=#{usercode}  order by he_data desc
+  </select>
+
+  <!-- 查询用户最新血红蛋白信息   -->
+  <select id="selectUserHemoglobin" resultType="map" parameterType="java.lang.String">
+    select
+	(select count(1) from yh_user_hemoglobin where user_code=#{usercode,jdbcType=INTEGER}) as num,
+    hemo.he_hb, hemo.he_tyep, hemo.he_data
+	from yh_user_hemoglobin as hemo
+	inner join yh_user_reginfo reg
+	on hemo.user_code=reg.user_code
+	and hemo.id= (select id from yh_user_hemoglobin where user_code=#{userCode,jdbcType=INTEGER} order by he_data desc limit 1 )
+  </select>
+  <!-- 分页查询 -->
+  <select id="selectPageByParam" resultMap="BaseResultMap" parameterType="java.lang.String">
+   select he_hb,he_data
+		from yh_user_reginfo reg
+		inner join yh_user_hemoglobin hemo
+		on reg.user_code = hemo.user_code
+		where reg.user_code  = #{ userCode,jdbcType=INTEGER}
+  		 order by he_data desc
+  </select>
+
+  <select id="selectByPrimaryKeyByUsercodeLimit" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    SELECT
+    <include refid="Base_Column_List" />
+    FROM yh_user_hemoglobin WHERE user_code=#{userCode}  ORDER BY he_data DESC LIMIT 1
+  </select>
+
+  <select id="selectHemoglobin" resultMap="BaseResultMap" parameterType="java.lang.String">
+    select hemo.he_hb,hemo.he_data
+		from yh_user_reginfo reg
+		inner join yh_user_hemoglobin hemo
+		on reg.user_code=hemo.user_code
+		where reg.user_code=#{ userCode,jdbcType=INTEGER}
+  		 order by he_data asc
+  </select>
+  <select id="selectByPrimaryKeyFindEntryTime" parameterType="java.lang.String" resultType="java.lang.String">
+    select
+    he_data
+    from yh_user_hemoglobin
+    where user_code = #{usercode}
+  </select>
+  <select id="findHemoglobinNewInfo" resultMap="BaseResultMap">
+    SELECT
+    <include refid="Base_Column_List" />
+     FROM yh_user_hemoglobin WHERE user_code=#{usercode} ORDER BY he_data DESC LIMIT 1
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from yh_user_hemoglobin
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from yh_user_hemoglobin
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.yihe.system.domain.YhUserHemoglobin" >
+    insert into yh_user_hemoglobin (id, he_hb, he_tyep, 
+      he_data, user_code)
+    values (#{id,jdbcType=INTEGER}, #{heHb,jdbcType=REAL}, #{heTyep,jdbcType=VARCHAR}, 
+      #{heData,jdbcType=TIMESTAMP}, #{userCode,jdbcType=VARCHAR})
+  </insert>
+  <select id="selectByPrimaryKeyNewest" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    FROM `yh_user_hemoglobin` WHERE   user_code=#{usercode}
+    ORDER BY he_data DESC LIMIT 1
+  </select>
+  <select id="findhemoglobinAllByUserCode" resultMap="BaseResultMap">
+    select * from yh_user_hemoglobin where   user_code=#{usercode}
+    <if test="timetype==0">
+      AND he_data &gt;=  #{strTime} AND he_data &lt;= #{endTime}
+    </if>
+    <if test="timetype==1">
+      AND he_data LIKE CONCAT('',#{strTime},'%')
+    </if>
+    <if test="timetype==2">
+      AND YEAR(he_data) =#{strTime}
+    </if>
+  </select>
+  <insert id="insertSelective" parameterType="com.yihe.system.domain.YhUserHemoglobin" >
+    insert into yh_user_hemoglobin
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="heHb != null" >
+        he_hb,
+      </if>
+      <if test="heTyep != null" >
+        he_tyep,
+      </if>
+      <if test="heData != null" >
+        he_data,
+      </if>
+      <if test="userCode != null" >
+        user_code,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="heHb != null" >
+        #{heHb,jdbcType=REAL},
+      </if>
+      <if test="heTyep != null" >
+        #{heTyep,jdbcType=VARCHAR},
+      </if>
+      <if test="heData != null" >
+        #{heData,jdbcType=TIMESTAMP},
+      </if>
+      <if test="userCode != null" >
+        #{userCode,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.yihe.system.domain.YhUserHemoglobin" >
+    update yh_user_hemoglobin
+    <set >
+      <if test="heHb != null" >
+        he_hb = #{heHb,jdbcType=REAL},
+      </if>
+      <if test="heTyep != null" >
+        he_tyep = #{heTyep,jdbcType=VARCHAR},
+      </if>
+      <if test="heData != null" >
+        he_data = #{heData,jdbcType=TIMESTAMP},
+      </if>
+      <if test="userCode != null" >
+        user_code = #{userCode,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.yihe.system.domain.YhUserHemoglobin" >
+    update yh_user_hemoglobin
+    set he_hb = #{heHb,jdbcType=REAL},
+      he_tyep = #{heTyep,jdbcType=VARCHAR},
+      he_data = #{heData,jdbcType=TIMESTAMP},
+      user_code = #{userCode,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

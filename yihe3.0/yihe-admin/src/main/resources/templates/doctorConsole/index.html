@@ -1,0 +1,1276 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>医生控制台</title>
+    <link rel="stylesheet" th:href="@{/assets/libs/layui/css/layui.css}"/>
+    <link rel="stylesheet" th:href="@{/assets/module/admin.css}"/>
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    <style>
+        /** 统计快捷方式样式 */
+        .console-link-block {
+            font-size: 16px;
+            padding: 20px 20px;
+            border-radius: 4px;
+            background-color: #9BC539;
+            color: rgba(255, 255, 255, .8);
+            box-shadow: 0 2px 3px rgba(0, 0, 0, .05);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .console-link-block .console-link-block-num {
+            font-size: 40px;
+            margin-bottom: 5px;
+            color: rgba(255, 255, 255, .9);
+        }
+
+        .console-link-block .console-link-block-icon {
+            position: absolute;
+            top: 50%;
+            right: 20px;
+            width: 50px;
+            height: 50px;
+            font-size: 50px;
+            line-height: 50px;
+            margin-top: -25px;
+            color: rgba(255, 255, 255, .65);
+        }
+
+        .console-link-block .console-link-block-band {
+            width: 80px;
+            line-height: 1;
+            padding: 4px 0;
+            font-size: 12px;
+            text-align: center;
+            background-color: #E32A16;
+            color: rgba(255, 255, 255, .8);
+            position: absolute;
+            top: 8px;
+            right: -20px;
+            transform: rotate(45deg);
+            transform-origin: center;
+            z-index: 1;
+        }
+
+        /** //统计快捷方式样式 */
+
+        /** 设置每个快捷块的颜色 */
+        .layui-row > div:nth-child(2) .console-link-block {
+            background-color: rgb(85, 165, 234);
+        }
+
+        .layui-row > div:nth-child(3) .console-link-block {
+            background-color: rgb(157, 175, 291);
+        }
+
+        .layui-row > div:nth-child(4) .console-link-block {
+            background-color: rgb(245, 145, 162);
+        }
+
+        .layui-row > div:nth-child(5) .console-link-block {
+            background-color: rgb(254, 170, 79);
+        }
+
+        .layui-row > div:last-child .console-link-block {
+            background-color: rgb(64, 212, 176);
+        }
+
+        /** 应用快捷块样式 */
+        .console-app-group {
+            padding: 16px;
+            border-radius: 4px;
+            text-align: center;
+            background-color: #fff;
+            cursor: pointer;
+        }
+
+        .console-app-group .console-app-icon {
+            width: 32px;
+            height: 32px;
+            line-height: 32px;
+            margin-bottom: 6px;
+            display: inline-block;
+            -webkit-box-sizing: border-box;
+            -moz-box-sizing: border-box;
+            box-sizing: border-box;
+            font-size: 32px;
+            color: #000000;
+        }
+
+        .console-app-group:hover {
+            box-shadow: 0 0 15px rgba(0, 0, 0, .08);
+        }
+
+
+    </style>
+</head>
+<body>
+
+<!-- 正文开始 -->
+<div class="layui-fluid ew-console-wrapper">
+    <!-- 快捷方式 -->
+    <div class="layui-row layui-col-space15">
+        <!-- <div class="layui-col-lg2 layui-col-sm4 layui-col-xs6">
+            <div class="console-link-block"
+                ew-title="咨询 新增">
+                <div class="console-link-block-num">15</div>
+                <div class="console-link-block-text">咨询 新增</div>
+                <i class="console-link-block-icon layui-icon layui-icon-service"></i>
+                <div class="console-link-block-band">去查看</div>
+            </div>
+        </div> -->
+        <!-- 	<div class="layui-col-lg2 layui-col-sm4 layui-col-xs6" id="jkgj" th:if="${info.healthAlarmNum>0}">
+                <div class="console-link-block"
+                    ew-title="健康数据告警">
+                    <div class="console-link-block-num">[[${info.healthAlarmNum}]]</div>
+                    <div class="console-link-block-text">健康数据告警</div>
+                    <i class="console-link-block-icon layui-icon layui-icon-print"></i>
+                    <div class="console-link-block-band">待处理</div>
+                </div>
+            </div> -->
+
+    </div>
+    <!-- 统计图表 -->
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-md4 layui-col-sm6 layui-col-xs12">
+            <div class="layui-card">
+                <div class="layui-card-header">
+                    <div style="text-align: left;float: left;">注册卡</div>
+                    <div style="text-align: right" id="chucekaNum"></div>
+                </div>
+                <div class="layui-card-body">
+                    <div id="tjDivDay" style="height: 400px;"></div>
+
+                </div>
+            </div>
+        </div>
+        <div class="layui-col-md4 layui-col-sm6 layui-col-xs12">
+            <div class="layui-card">
+                <div class="layui-card-header">
+                    <div style="text-align: left;float: left;">性别</div>
+                    <div style="text-align: right" id="sexNum"></div>
+
+                </div>
+                <div class="layui-card-body">
+                    <div id="tjDivWeek" style="height: 400px;"></div>
+                </div>
+            </div>
+        </div>
+        <div class="layui-col-md4 layui-col-sm6 layui-col-xs12">
+            <div class="layui-card">
+                <div class="layui-card-header">
+                    <div style="text-align: left;float: left;">年龄</div>
+                    <div style="text-align: right" id="ageNum"></div>
+
+                </div>
+                <div class="layui-card-body">
+                    <div id="tjDivMonth" style="height: 400px;"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- 统计图表 -->
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-md4 layui-col-sm6 layui-col-xs12">
+            <div class="layui-card">
+                <div class="layui-card-header">
+                    <div style="text-align: left;float: left;">健康风险评估</div>
+                    <div style="text-align: right" id="fxpingguNum"></div>
+                </div>
+                <div class="layui-card-body">
+                    <div id="pingguTu" style="height: 400px;"></div>
+
+                </div>
+            </div>
+        </div>
+        <div class="layui-col-md4 layui-col-sm6 layui-col-xs12">
+            <div class="layui-card">
+                <div class="layui-card-header">
+                    <div style="text-align: left;float: left;">患病情况</div>
+                    <div style="text-align: right" id="huanbinNum"></div>
+
+                </div>
+                <div class="layui-card-body">
+                    <div id="huanbinTu" style="height: 400px;"></div>
+                </div>
+            </div>
+        </div>
+        <div class="layui-col-md4 layui-col-sm6 layui-col-xs12">
+            <div class="layui-card">
+                <div class="layui-card-header">
+                    <div style="text-align: left;float: left;">未患人群-患病风险情况</div>
+                    <div style="text-align: right" id="weihuanNum"></div>
+
+                </div>
+                <div class="layui-card-body">
+                    <div id="weihuanTu" style="height: 400px;"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-xs12" style="padding-top: 20px;">
+
+            <div class="layui-card">
+                <div class="layui-card-header">今日新增数据统计</div>
+                <div class="layui-card-body" style="padding: 17px 15px;">
+                    <div class="layui-row layui-col-space15">
+                        <div class="layui-col-xs6 layui-col-sm3" id="zhuce">
+                            <div class="console-app-group">
+                                <div class="console-app-icon">[[${info.registerNum}]]</div>
+                                <div class="console-app-name">注册用户</div>
+                            </div>
+                        </div>
+                        <div class="layui-col-xs6 layui-col-sm3" id="pingguNum">
+                            <div class="console-app-group">
+                                <i class="console-app-icon">[[${info.healthAssessmentNum}]]</i>
+                                <div class="console-app-name">健康评估次数</div>
+                            </div>
+                        </div>
+                        <div class="layui-col-xs6 layui-col-sm3" id="jkjc">
+                            <div class="console-app-group">
+                                <i class="console-app-icon">[[${info.healthMonitoringNum}]]</i>
+                                <div class="console-app-name">健康监测次数</div>
+                            </div>
+                        </div>
+                        <div class="layui-col-xs6 layui-col-sm3" id="ylpg">
+                            <div class="console-app-group">
+                                <i class="console-app-icon">[[${info.pressureAssessmentNum}]]</i>
+                                <div class="console-app-name">压力评估次数</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="layui-row layui-col-space15">
+
+                        <div class="layui-col-xs6 layui-col-sm3" id="foodDiary">
+                            <div class="console-app-group">
+                                <i class="console-app-icon">[[${info.foodDiaryNum}]]</i>
+                                <div class="console-app-name">饮食日记</div>
+                            </div>
+                        </div>
+                        <div class="layui-col-xs6 layui-col-sm3" id="sportDiary">
+                            <div class="console-app-group">
+                                <i class="console-app-icon">[[${info.sportDiaryNum}]]</i>
+                                <div class="console-app-name">运动日记</div>
+                            </div>
+                        </div>
+                        <div class="layui-col-xs6 layui-col-sm3" id="sleepDiary">
+                            <div class="console-app-group">
+                                <i class="console-app-icon">[[${info.sleepDiaryNum}]]</i>
+                                <div class="console-app-name">睡眠日记</div>
+                            </div>
+                        </div>
+                        <div class="layui-col-xs6 layui-col-sm3" id="healthPlan">
+                            <div class="console-app-group">
+                                <i class="console-app-icon">[[${info.healthPlanDiaryNum}]]</i>
+                                <div class="console-app-name">健康计划日记</div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="layui-row layui-col-space15">
+
+                        <div class="layui-col-xs6 layui-col-sm3" id="habitDiaryNum">
+                            <div class="console-app-group">
+                                <i class="console-app-icon">[[${info.habitDiaryNum}]]</i>
+                                <div class="console-app-name">习惯日记</div>
+                            </div>
+                        </div>
+                        <div class="layui-col-xs6 layui-col-sm3" id="habitAssessmentNum">
+                            <div class="console-app-group">
+                                <i class="console-app-icon">[[${info.habitAssessmentNum}]]</i>
+                                <div class="console-app-name">习惯评估次数</div>
+                            </div>
+                        </div>
+                        <div class="layui-col-xs6 layui-col-sm3">
+                            <div class="console-app-group">
+                            </div>
+                        </div>
+                        <div class="layui-col-xs6 layui-col-sm3">
+                            <div class="console-app-group">
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+
+
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-xs12" style="padding-top: 20px;">
+            <div class="layui-card">
+                <div class="layui-card-header">数据变化趋势图</div>
+                <div class="layui-card-body" style="padding: 17px 15px;">
+                    时间：
+                    <button type="button" class="layui-btn layui-btn-primary diyperiod2 activebtn2"
+                            style="background-color:#01AAED;color:#ffffff"
+                            name="day">日
+                    </button>
+                    <button type="button" class="layui-btn layui-btn-primary diyperiod2" name="month">月</button>
+                    </br>
+                    </br>数据：
+                    <button type="button" class="layui-btn layui-btn-primary diyperiod activebtn"
+                            style="background-color:#01AAED;color:#fff;margin-top: 10px;"
+                            name="1">注册用户
+                    </button>
+                    <button type="button" class="layui-btn layui-btn-primary diyperiod" name="2"
+                            style="margin-top: 10px;">健康评估次数
+                    </button>
+                    <button type="button" class="layui-btn layui-btn-primary diyperiod" name="3"
+                            style="margin-top: 10px;">压力评估次数
+                    </button>
+                    <button type="button" class="layui-btn layui-btn-primary diyperiod" name="4"
+                            style="margin-top: 10px;">睡眠评估次数
+                    </button>
+                    <button type="button" class="layui-btn layui-btn-primary diyperiod" name="9"
+                            style="margin-top: 10px;">习惯评估次数
+                    </button>
+                    <button type="button" class="layui-btn layui-btn-primary diyperiod" name="5"
+                            style="margin-top: 10px;">运动日记数
+                    </button>
+                    <button type="button" class="layui-btn layui-btn-primary diyperiod" name="6"
+                            style="margin-top: 10px;">饮食日记数
+                    </button>
+                    <button type="button" class="layui-btn layui-btn-primary diyperiod" name="7"
+                            style="margin-top: 10px;">睡眠日记数
+                    </button>
+                    <button type="button" class="layui-btn layui-btn-primary diyperiod" name="10"
+                            style="margin-top: 10px;">习惯日记数
+                    </button>
+                    <button type="button" class="layui-btn layui-btn-primary diyperiod" name="8"
+                            style="margin-top: 10px;">健康计划日记数
+                    </button>
+                    </br>
+                    <div id="xse2" style="height: 300px; margin-top: 20px;"></div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+
+</div>
+</div>
+</div>
+</div>
+</div>
+-->
+
+</div>
+
+<!-- 加载动画 -->
+<div class="page-loading">
+    <div class="ball-loader">
+        <span></span><span></span><span></span><span></span>
+    </div>
+</div>
+<!-- js部分 -->
+<script type="text/javascript" th:src="@{/assets/libs/layui/layui.js}"></script>
+<script type="text/javascript" th:src="@{/assets/js/common.js}"></script>
+<script th:src="@{/assets/libs/echarts/echarts.min.js}"></script>
+<script th:src="@{/assets/libs/echarts/echartsTheme.js}"></script>
+<script th:inline="javascript">
+    /*<![CDATA[*/
+
+    layui.use(['layer', 'element', 'index'], function () {
+        var $ = layui.jquery;
+        var layer = layui.layer;
+        var element = layui.element;
+        var index = layui.index;
+
+        $('#zhuce')
+            .click(
+                function () {
+                    index.openTab({
+                        title: '健康档案管理',
+                        url: '/manage/health/archives?strTime=1',
+                        end: function () {
+                            // table.reload('userTable');
+                        }
+                    });
+                });
+        $('#pingguNum')
+            .click(
+                function () {
+                    index.openTab({
+                        title: '健康评估管理',
+                        url: '/manage/health/healthAssessment?strTime=1',
+                        end: function () {
+                            // table.reload('userTable');
+                        }
+                    });
+
+                });
+        $('#jkjc')
+            .click(
+                function () {
+                    index.openTab({
+                        title: '健康检测管理',
+                        url: '/manage/health/testing?strTime=1',
+                        end: function () {
+                            // table.reload('userTable');
+                        }
+                    });
+
+                });
+        $('#ylpg')
+            .click(
+                function () {
+                    index.openTab({
+                        title: '压力评估管理',
+                        url: '/manage/health/stressevaluation?strTime=1',
+                        end: function () {
+                            // table.reload('userTable');
+                        }
+                    });
+
+                });
+
+        $('#foodDiary')
+            .click(
+                function () {
+                    index.openTab({
+                        title: '饮食日记管理',
+                        url: '/manage/diary/fooddiary?strTime=1',
+                        end: function () {
+                            // table.reload('userTable');
+                        }
+                    });
+
+                });
+        $('#sportDiary')
+            .click(
+                function () {
+                    index.openTab({
+                        title: '运动日记管理',
+                        url: '/manage/diary/movediary?strTime=1',
+                        end: function () {
+                            // table.reload('userTable');
+                        }
+                    });
+
+                });
+
+        $('#sleepDiary')
+            .click(
+                function () {
+                    index.openTab({
+                        title: '睡眠日记管理',
+                        url: '/manage/diary/sleep?strTime=1',
+                        end: function () {
+                            // table.reload('userTable');
+                        }
+                    });
+
+                });
+        $('#healthPlan')
+            .click(
+                function () {
+                    index.openTab({
+                        title: '计划日记管理',
+                        url: '/manage/detectiondiary?strTime=1',
+                        end: function () {
+                            // table.reload('userTable');
+                        }
+                    });
+
+                });
+        $('#habitAssessmentNum')
+            .click(
+                function () {
+                    index.openTab({
+                        title: '计划日记管理',
+                        url: '/manage/habit/habitAssess?strTime=1',
+                        end: function () {
+                            // table.reload('userTable');
+                        }
+                    });
+
+                });
+        $('#habitDiaryNum')
+            .click(
+                function () {
+                    index.openTab({
+                        title: '计划日记管理',
+                        url: '/manage/diary/habit?strTime=1',
+                        end: function () {
+                            // table.reload('userTable');
+                        }
+                    });
+
+                });
+
+
+
+        $('#jkgj')
+            .click(
+                function () {
+                    index.openTab({
+                        title: '告警信息管理',
+                        url: '/manage/giveanalarm/administration',
+                        end: function () {
+                            // table.reload('userTable');
+                        }
+                    });
+                });
+
+
+        // 渲染日签到图表
+        var myCharts1 = echarts.init(document.getElementById('tjDivDay'));
+        var options1 = {
+
+            color: ['#18B4E7', '#ffc300'],
+
+            tooltip: {
+                trigger: 'item'
+            },
+            series: [{
+
+                type: 'pie',
+                radius: '50%',
+                center: ['50%', '55%'],
+                itemStyle: {
+                    normal: {
+                        label: {
+                            show: true,
+                            formatter: '{b} :' + "\n" + ' {c} ({d}%)'
+                        },
+                        labelLine: {show: true}
+                    }
+                }
+
+            }]
+        };
+        myCharts1.setOption(options1);
+        $("#chucekaNum").html([[${info.useCardNum}]]+[[${info.surplusCardNum}]]+"张");
+        // 赋值
+        myCharts1.setOption({
+
+            series: [{
+                label: {
+                    normal: {
+                        formatter(v) {
+                            let text = v.name;
+                            let value_format = v.value + "张";
+                            let percent_format = Math.round(v.percent) + '%';
+                            if (text.length <= 6) {
+                                return `${text}\n${value_format}\n${percent_format}`;
+                            } else if (text.length > 6 && text.length <= 12) {
+                                return text = `${text.slice(0, 6)}\n${text.slice(6)}\n${value_format}\n${percent_format}`
+                            } else if (text.length > 12 && text.length <= 18) {
+                                return text = `${text.slice(0, 6)}\n${text.slice(6, 12)}\n${text.slice(12)}\n${value_format}\n${percent_format}`
+                            } else if (text.length > 18 && text.length <= 24) {
+                                return text = `${text.slice(0, 6)}\n${text.slice(6, 12)}\n${text.slice(12, 18)}\n${text.slice(18)}\n${value_format}\n${percent_format}`
+                            } else if (text.length > 24 && text.length <= 30) {
+                                return text = `${text.slice(0, 6)}\n${text.slice(6, 12)}\n${text.slice(12, 18)}\n${text.slice(18, 24)}\n${text.slice(24)}\n${value_format}\n${percent_format}`
+                            } else if (text.length > 30) {
+                                return text = `${text.slice(0, 6)}\n${text.slice(6, 12)}\n${text.slice(12, 18)}\n${text.slice(18, 24)}\n${text.slice(24, 30)}\n${text.slice(30)}\n${value_format}\n${percent_format}`
+                            }
+                        },
+                        textStyle: {
+                            fontSize: 14
+                        }
+                    }
+                },
+                data: [{
+                    name: '已使用注册卡',
+                    value: [[${info.useCardNum}]]
+                }, {
+                    name: '剩余注册卡',
+                    value: [[${info.surplusCardNum}]]
+                }]
+            }]
+        });
+
+        // ------------------------------------------------------------------------
+        // 渲染周签到图表
+        var myCharts3 = echarts.init(document.getElementById('tjDivMonth'));
+        var options3 = {
+
+            color: ['#18B4E7', '#76EEC6', '#FF7F50', '#009688', '#b0b2ff', '#ffc300'],
+
+
+            tooltip: {
+                trigger: 'item'
+            },
+            series: [{
+
+                type: 'pie',
+                radius: '50%',
+                center: ['50%', '55%'],
+                itemStyle: {
+                    normal: {
+                        label: {
+                            show: true,
+                            formatter: '{b} :' + "\n" + ' {c} ({d}%)'
+                        },
+                        labelLine: {show: true}
+                    }
+                }
+            }]
+        };
+        myCharts3.setOption(options3);
+        $("#ageNum").html([[${info.ageType1}]]+[[${info.ageType2}]]+[[${info.ageType3}]]+[[${info.ageType4}]]+[[${info.ageType5}]]+[[${info.ageType6}]]+"人");
+        // 赋值
+        myCharts3.setOption({
+
+            series: [{
+                label: {
+                    normal: {
+                        formatter(v) {
+                            let text = v.name;
+                            let value_format = v.value + "人";
+                            let percent_format = Math.round(v.percent) + '%';
+                            if (text.length <= 6) {
+                                return `${text}\n${value_format}\n${percent_format}`;
+                            } else if (text.length > 6 && text.length <= 12) {
+                                return text = `${text.slice(0, 6)}\n${text.slice(6)}\n${value_format}\n${percent_format}`
+                            } else if (text.length > 12 && text.length <= 18) {
+                                return text = `${text.slice(0, 6)}\n${text.slice(6, 12)}\n${text.slice(12)}\n${value_format}\n${percent_format}`
+                            } else if (text.length > 18 && text.length <= 24) {
+                                return text = `${text.slice(0, 6)}\n${text.slice(6, 12)}\n${text.slice(12, 18)}\n${text.slice(18)}\n${value_format}\n${percent_format}`
+                            } else if (text.length > 24 && text.length <= 30) {
+                                return text = `${text.slice(0, 6)}\n${text.slice(6, 12)}\n${text.slice(12, 18)}\n${text.slice(18, 24)}\n${text.slice(24)}\n${value_format}\n${percent_format}`
+                            } else if (text.length > 30) {
+                                return text = `${text.slice(0, 6)}\n${text.slice(6, 12)}\n${text.slice(12, 18)}\n${text.slice(18, 24)}\n${text.slice(24, 30)}\n${text.slice(30)}\n${value_format}\n${percent_format}`
+                            }
+                        },
+                        textStyle: {
+                            fontSize: 14
+                        }
+                    }
+                },
+
+                data: [{
+                    name: '25岁以下',
+                    value: [[${info.ageType1}]]
+                }, {
+                    name: '26~35岁',
+                    value: [[${info.ageType2}]]
+                }, {
+                    name: '36~45岁',
+                    value: [[${info.ageType3}]]
+                }, {
+                    name: '46~55岁',
+                    value: [[${info.ageType4}]]
+                }, {
+                    name: '56~60岁',
+                    value: [[${info.ageType5}]]
+                }, {
+                    name: '60岁以上',
+                    value: [[${info.ageType6}]]
+                }]
+            }]
+        });
+
+        // -------------------------------------------------------------------------
+        // 渲染周签到图表
+        var myCharts2 = echarts.init(document.getElementById('tjDivWeek'));
+        $("#sexNum").html([[${info.manNum}]]+[[${info.womanNum}]]+"人")
+        var options2 = {
+
+            color: ['#b0b2ff', '#76EEC6'],
+
+
+            tooltip: {
+                trigger: 'item'
+            },
+            series: [{
+
+                type: 'pie',
+                radius: '50%',
+                center: ['50%', '55%'],
+                label: {
+                    normal: {
+                        formatter(v) {
+                            let text = v.name;
+                            let value_format = v.value + "人";
+                            let percent_format = Math.round(v.percent) + '%';
+                            if (text.length <= 6) {
+                                return `${text}\n${value_format}\n${percent_format}`;
+                            } else if (text.length > 6 && text.length <= 12) {
+                                return text = `${text.slice(0, 6)}\n${text.slice(6)}\n${value_format}\n${percent_format}`
+                            } else if (text.length > 12 && text.length <= 18) {
+                                return text = `${text.slice(0, 6)}\n${text.slice(6, 12)}\n${text.slice(12)}\n${value_format}\n${percent_format}`
+                            } else if (text.length > 18 && text.length <= 24) {
+                                return text = `${text.slice(0, 6)}\n${text.slice(6, 12)}\n${text.slice(12, 18)}\n${text.slice(18)}\n${value_format}\n${percent_format}`
+                            } else if (text.length > 24 && text.length <= 30) {
+                                return text = `${text.slice(0, 6)}\n${text.slice(6, 12)}\n${text.slice(12, 18)}\n${text.slice(18, 24)}\n${text.slice(24)}\n${value_format}\n${percent_format}`
+                            } else if (text.length > 30) {
+                                return text = `${text.slice(0, 6)}\n${text.slice(6, 12)}\n${text.slice(12, 18)}\n${text.slice(18, 24)}\n${text.slice(24, 30)}\n${text.slice(30)}\n${value_format}\n${percent_format}`
+                            }
+                        },
+                        textStyle: {
+                            fontSize: 14
+                        }
+                    }
+                },
+            }]
+        };
+        myCharts2.setOption(options2);
+        // 赋值
+        console.log("男" + [[${info.manNum}]])
+        console.log("女" + [[${info.womanNum}]])
+        myCharts2.setOption({
+
+            series: [{
+                data: [{
+                    name: '男',
+                    value: [[${info.manNum}]]
+                }, {
+                    name: '女',
+                    value: [[${info.womanNum}]]
+                }]
+            }]
+        });
+        // -------------------------------------------------------------------------
+
+
+        // 渲染周签到图表
+        var myCharts21 = echarts.init(document.getElementById('xse2'));
+        var options21 = {
+            tooltip: {
+                trigger: 'axis',
+                axisPointer: {
+                    lineStyle: {
+                        color: '#E0E0E0'
+                    }
+                },
+                formatter: '<span style="display:inline-block;margin-right:5px;border-radius:10px;width:10px;height:10px;background-color:#10B4E8;"></span>{a0}: {c0}'
+            },
+            color: ['#10B4E8'],
+            legend: {
+                orient: 'vertical',
+                right: '0px',
+                top: '0px',
+                data: ['注册用户'],
+                textStyle: {
+                    color: '#595959'
+                }
+            },
+            grid: {
+                top: '75px',
+                left: '35px',
+                right: '55px',
+                bottom: '40px'
+            },
+            xAxis: {
+
+
+                type: 'category',
+                data: ['1', '2', '3', '4', '5', '6', '7'],
+                axisLine: {
+                    lineStyle: {
+                        color: '#E0E0E0'
+                    },
+                    symbol: ['none', 'arrow'],
+                    symbolOffset: [0, 10]
+                },
+                axisTick: {
+                    alignWithLabel: true
+                }
+            },
+            yAxis: {
+
+                type: 'value',
+                boundaryGap: ['0', '20%'],
+                axisTick: {
+                    show: false
+                },
+                axisLine: {
+                    lineStyle: {
+                        color: '#E0E0E0'
+                    },
+                    symbol: ['none', 'arrow'],
+                    symbolOffset: [0, 10]
+                },
+                axisLabel: {
+                    color: '#8c8c8c'
+                },
+                splitLine: {
+                    show: false
+                },
+                splitArea: {
+                    show: false
+                },
+                minInterval: 1
+            },
+            series: [{
+                name: '注册用户',
+                type: 'line',
+                smooth: false
+            }
+
+            ]
+        };
+
+        myCharts21.setOption(options21);
+
+
+        // 渲染日签到图表
+        var myChartsWh = echarts.init(document.getElementById('weihuanTu'));
+        var optionsWh = {
+
+            color: ['#009688', '#FFD600'],
+
+            tooltip: {
+                trigger: 'item'
+            },
+            series: [{
+
+                type: 'pie',
+                radius: '50%',
+                center: ['50%', '55%'],
+                itemStyle: {
+                    normal: {
+                        label: {
+                            show: true,
+                            formatter: '{b} :' + "\n" + ' {c} ({d}%)'
+                        },
+                        labelLine: {show: true}
+                    }
+                }
+
+            }]
+        };
+        myChartsWh.setOption(optionsWh);
+        $("#weihuanNum").html([[${info.highRisk}]]+[[${info.otherRisk}]]+"人");
+        // 赋值
+        myChartsWh.setOption({
+
+            series: [{
+                label: {
+                    normal: {
+                        formatter(v) {
+                            let text = v.name;
+                            let value_format = v.value + "人";
+                            let percent_format = Math.round(v.percent) + '%';
+                            if (text.length <= 6) {
+                                return `${text}\n${value_format}\n${percent_format}`;
+                            } else if (text.length > 6 && text.length <= 12) {
+                                return text = `${text.slice(0, 6)}\n${text.slice(6)}\n${value_format}\n${percent_format}`
+                            } else if (text.length > 12 && text.length <= 18) {
+                                return text = `${text.slice(0, 6)}\n${text.slice(6, 12)}\n${text.slice(12)}\n${value_format}\n${percent_format}`
+                            } else if (text.length > 18 && text.length <= 24) {
+                                return text = `${text.slice(0, 6)}\n${text.slice(6, 12)}\n${text.slice(12, 18)}\n${text.slice(18)}\n${value_format}\n${percent_format}`
+                            } else if (text.length > 24 && text.length <= 30) {
+                                return text = `${text.slice(0, 6)}\n${text.slice(6, 12)}\n${text.slice(12, 18)}\n${text.slice(18, 24)}\n${text.slice(24)}\n${value_format}\n${percent_format}`
+                            } else if (text.length > 30) {
+                                return text = `${text.slice(0, 6)}\n${text.slice(6, 12)}\n${text.slice(12, 18)}\n${text.slice(18, 24)}\n${text.slice(24, 30)}\n${text.slice(30)}\n${value_format}\n${percent_format}`
+                            }
+                        },
+                        textStyle: {
+                            fontSize: 14
+                        }
+                    }
+                },
+                data: [{
+                    name: '其他人群',
+                    value: [[${info.otherRisk}]]
+                }, {
+                    name: '高风险人群',
+                    value: [[${info.highRisk}]]
+                }]
+            }]
+        });
+
+
+// 渲染日签到图表
+        var myChartsHb = echarts.init(document.getElementById('huanbinTu'));
+        var optionsHb = {
+
+            color: ['#FF7F50', '#B0B2FF'],
+
+            tooltip: {
+                trigger: 'item'
+            },
+            series: [{
+
+                type: 'pie',
+                radius: '50%',
+                center: ['50%', '55%'],
+                itemStyle: {
+                    normal: {
+                        label: {
+                            show: true,
+                            formatter: '{b} :' + "\n" + ' {c} ({d}%)'
+                        },
+                        labelLine: {show: true}
+                    }
+                }
+
+            }]
+        };
+        myChartsHb.setOption(optionsHb);
+        $("#huanbinNum").html([[${info.beillNum}]]+[[${info.notBeillNum}]]+"人");
+        // 赋值
+        myChartsHb.setOption({
+
+            series: [{
+                label: {
+                    normal: {
+                        formatter(v) {
+                            let text = v.name;
+                            let value_format = v.value + "人";
+                            let percent_format = Math.round(v.percent) + '%';
+                            if (text.length <= 6) {
+                                return `${text}\n${value_format}\n${percent_format}`;
+                            } else if (text.length > 6 && text.length <= 12) {
+                                return text = `${text.slice(0, 6)}\n${text.slice(6)}\n${value_format}\n${percent_format}`
+                            } else if (text.length > 12 && text.length <= 18) {
+                                return text = `${text.slice(0, 6)}\n${text.slice(6, 12)}\n${text.slice(12)}\n${value_format}\n${percent_format}`
+                            } else if (text.length > 18 && text.length <= 24) {
+                                return text = `${text.slice(0, 6)}\n${text.slice(6, 12)}\n${text.slice(12, 18)}\n${text.slice(18)}\n${value_format}\n${percent_format}`
+                            } else if (text.length > 24 && text.length <= 30) {
+                                return text = `${text.slice(0, 6)}\n${text.slice(6, 12)}\n${text.slice(12, 18)}\n${text.slice(18, 24)}\n${text.slice(24)}\n${value_format}\n${percent_format}`
+                            } else if (text.length > 30) {
+                                return text = `${text.slice(0, 6)}\n${text.slice(6, 12)}\n${text.slice(12, 18)}\n${text.slice(18, 24)}\n${text.slice(24, 30)}\n${text.slice(30)}\n${value_format}\n${percent_format}`
+                            }
+                        },
+                        textStyle: {
+                            fontSize: 14
+                        }
+                    }
+                },
+                data: [{
+                    name: '已患病人群',
+                    value: [[${info.notBeillNum}]]
+                }, {
+                    name: '未患病人群',
+                    value: [[${info.beillNum}]]
+                }]
+            }]
+        });
+
+        // 渲染日签到图表
+        var myChartsPg = echarts.init(document.getElementById('pingguTu'));
+        var optionsPg = {
+
+            color: ['#18B4E7', '#81FFD9'],
+
+            tooltip: {
+                trigger: 'item'
+            },
+            series: [{
+
+                type: 'pie',
+                radius: '50%',
+                center: ['50%', '55%'],
+                itemStyle: {
+                    normal: {
+                        label: {
+                            show: true,
+                            formatter: '{b} :' + "\n" + ' {c} ({d}%)'
+                        },
+                        labelLine: {show: true}
+                    }
+                }
+
+            }]
+        };
+        myChartsPg.setOption(optionsPg);
+        $("#fxpingguNum").html([[${info.notassessment}]]+[[${info.assessment}]]+"人");
+        // 赋值
+        myChartsPg.setOption({
+
+            series: [{
+                label: {
+                    normal: {
+                        formatter(v) {
+                            let text = v.name;
+                            let value_format = v.value + "人";
+                            let percent_format = Math.round(v.percent) + '%';
+                            if (text.length <= 6) {
+                                return `${text}\n${value_format}\n${percent_format}`;
+                            } else if (text.length > 6 && text.length <= 12) {
+                                return text = `${text.slice(0, 6)}\n${text.slice(6)}\n${value_format}\n${percent_format}`
+                            } else if (text.length > 12 && text.length <= 18) {
+                                return text = `${text.slice(0, 6)}\n${text.slice(6, 12)}\n${text.slice(12)}\n${value_format}\n${percent_format}`
+                            } else if (text.length > 18 && text.length <= 24) {
+                                return text = `${text.slice(0, 6)}\n${text.slice(6, 12)}\n${text.slice(12, 18)}\n${text.slice(18)}\n${value_format}\n${percent_format}`
+                            } else if (text.length > 24 && text.length <= 30) {
+                                return text = `${text.slice(0, 6)}\n${text.slice(6, 12)}\n${text.slice(12, 18)}\n${text.slice(18, 24)}\n${text.slice(24)}\n${value_format}\n${percent_format}`
+                            } else if (text.length > 30) {
+                                return text = `${text.slice(0, 6)}\n${text.slice(6, 12)}\n${text.slice(12, 18)}\n${text.slice(18, 24)}\n${text.slice(24, 30)}\n${text.slice(30)}\n${value_format}\n${percent_format}`
+                            }
+                        },
+                        textStyle: {
+                            fontSize: 14
+                        }
+                    }
+                },
+                data: [{
+                    name: '未评估',
+                    value: [[${info.notassessment}]]
+                }, {
+                    name: '已评估',
+                    value: [[${info.assessment}]]
+                }]
+            }]
+        });
+        // 赋值
+        var dataList = [[${info.regdataInfo}]]
+        console.log(dataList)
+        options21.series[0].data = dataList;
+        options21.xAxis.data = [[${info.regtimeList}]]
+        myCharts21.setOption(options21);
+        /* myCharts21.setOption({
+            series: [{
+                    data: [15, 14, 13, 13, 13, 14, 15]
+                }
+            ]
+        }); */
+
+        $(".diyperiod").on("click", function () {
+            $('.diyperiod').css("background-color", "#fff");
+            $('.diyperiod').css("color", "#595959");
+
+            //点击后变色
+            $(this).css("background-color", "#01AAED");
+            $(this).css("color", "#fff");
+            $(this).addClass("activebtn");
+            $(".activebtn").not($(this)).removeClass('activebtn');
+            if (null != $(this).attr("name") && null != $(".activebtn2").attr("name")) {
+                console.log($(this).attr("name"))
+                console.log($(".activebtn2").attr("name"))
+                if ($(this).attr("name") == '1') {
+                    options21.series[0].name = "注册用户";
+                    options21.legend.data[0] = "注册用户";
+                    $.post("/YhUserMakeCard/regInfoByTimeType",
+                        {
+                            timetype: $(".activebtn2").attr("name"),
+                            datatype: $(this).attr("name")
+                        }, function (result) {
+                            console.log(result)
+                            options21.xAxis.data = result.data.regtimeList;
+                            options21.series[0].data = result.data.regdataInfo;
+                            myCharts21.setOption(options21);
+                        });
+                }
+                if ($(this).attr("name") == '2') {
+                    options21.series[0].name = "健康评估次数";
+                    options21.legend.data[0] = "健康评估次数";
+                    $.post("/YhUserMakeCard/regInfoByTimeType",
+                        {
+                            timetype: $(".activebtn2").attr("name"),
+                            datatype: $(this).attr("name")
+                        }, function (result) {
+                            console.log(result)
+                            options21.xAxis.data = result.data.regtimeList;
+                            options21.series[0].data = result.data.regdataInfo;
+                            myCharts21.setOption(options21);
+                        });
+                }
+
+                if ($(this).attr("name") == '3') {
+                    options21.series[0].name = "压力评估次数";
+                    options21.legend.data[0] = "压力评估次数";
+                    $.post("/YhUserMakeCard/regInfoByTimeType",
+                        {
+                            timetype: $(".activebtn2").attr("name"),
+                            datatype: $(this).attr("name")
+                        }, function (result) {
+                            console.log(result)
+                            options21.xAxis.data = result.data.regtimeList;
+                            options21.series[0].data = result.data.regdataInfo;
+                            myCharts21.setOption(options21);
+                        });
+                }
+                if ($(this).attr("name") == '4') {
+                    options21.series[0].name = "睡眠评估次数";
+                    options21.legend.data[0] = "睡眠评估次数";
+                    $.post("/YhUserMakeCard/regInfoByTimeType",
+                        {
+                            timetype: $(".activebtn2").attr("name"),
+                            datatype: $(this).attr("name")
+                        }, function (result) {
+                            console.log(result)
+                            options21.xAxis.data = result.data.regtimeList;
+                            options21.series[0].data = result.data.regdataInfo;
+                            myCharts21.setOption(options21);
+                        });
+                }
+                if ($(this).attr("name") == '5') {
+                    options21.series[0].name = "运动日记数";
+                    options21.legend.data[0] = "运动日记数";
+                    $.post("/YhUserMakeCard/regInfoByTimeType",
+                        {
+                            timetype: $(".activebtn2").attr("name"),
+                            datatype: $(this).attr("name")
+                        }, function (result) {
+                            console.log(result)
+                            options21.xAxis.data = result.data.regtimeList;
+                            options21.series[0].data = result.data.regdataInfo;
+                            myCharts21.setOption(options21);
+                        });
+                }
+                if ($(this).attr("name") == '6') {
+                    options21.series[0].name = "饮食日记数";
+                    options21.legend.data[0] = "饮食日记数";
+                    $.post("/YhUserMakeCard/regInfoByTimeType",
+                        {
+                            timetype: $(".activebtn2").attr("name"),
+                            datatype: $(this).attr("name")
+                        }, function (result) {
+                            console.log(result)
+                            options21.xAxis.data = result.data.regtimeList;
+                            options21.series[0].data = result.data.regdataInfo;
+                            myCharts21.setOption(options21);
+                        });
+                }
+
+                if ($(this).attr("name") == '7') {
+                    options21.series[0].name = "睡眠日记数";
+                    options21.legend.data[0] = "睡眠日记数";
+                    $.post("/YhUserMakeCard/regInfoByTimeType",
+                        {
+                            timetype: $(".activebtn2").attr("name"),
+                            datatype: $(this).attr("name")
+                        }, function (result) {
+                            console.log(result)
+                            options21.xAxis.data = result.data.regtimeList;
+                            options21.series[0].data = result.data.regdataInfo;
+                            myCharts21.setOption(options21);
+                        });
+                }
+                if ($(this).attr("name") == '8') {
+                    options21.series[0].name = "健康计划日记数";
+                    options21.legend.data[0] = "健康计划日记数";
+                    $.post("/YhUserMakeCard/regInfoByTimeType",
+                        {
+                            timetype: $(".activebtn2").attr("name"),
+                            datatype: $(this).attr("name")
+                        }, function (result) {
+                            console.log(result)
+                            options21.xAxis.data = result.data.regtimeList;
+                            options21.series[0].data = result.data.regdataInfo;
+                            myCharts21.setOption(options21);
+                        });
+                }
+                if ($(this).attr("name") == '9') {
+                    options21.series[0].name = "习惯评估次数";
+                    options21.legend.data[0] = "习惯评估次数";
+                    $.post("/YhUserMakeCard/regInfoByTimeType",
+                        {
+                            timetype: $(".activebtn2").attr("name"),
+                            datatype: $(this).attr("name")
+                        }, function (result) {
+                            console.log(result)
+                            options21.xAxis.data = result.data.regtimeList;
+                            options21.series[0].data = result.data.regdataInfo;
+                            myCharts21.setOption(options21);
+                        });
+                }
+                if ($(this).attr("name") == '10') {
+                    options21.series[0].name = "习惯日记数";
+                    options21.legend.data[0] = "习惯日记数";
+                    $.post("/YhUserMakeCard/regInfoByTimeType",
+                        {
+                            timetype: $(".activebtn2").attr("name"),
+                            datatype: $(this).attr("name")
+                        }, function (result) {
+                            console.log(result)
+                            options21.xAxis.data = result.data.regtimeList;
+                            options21.series[0].data = result.data.regdataInfo;
+                            myCharts21.setOption(options21);
+                        });
+                }
+            }
+
+        });
+        $(".diyperiod2").on("click", function () {
+            $('.diyperiod2').css("background-color", "#fff");
+            $('.diyperiod2').css("color", "#595959");
+
+            //点击后变色
+            $(this).css("background-color", "#01AAED");
+            $(this).css("color", "#fff");
+            $(this).addClass("activebtn2");
+            $(".activebtn2").not($(this)).removeClass('activebtn2');
+
+            if (null != $(this).attr("name") && null != $(".activebtn").attr("name")) {
+                console.log($(this).attr("name"))
+                console.log($(".activebtn").attr("name"))
+                if ($(this).attr("name") == 'day') {
+                    $.post("/YhUserMakeCard/regInfoByTimeType",
+                        {
+                            timetype: $(this).attr("name"),
+                            datatype: $(".activebtn").attr("name")
+                        }, function (result) {
+                            console.log(result)
+                            options21.xAxis.data = result.data.regtimeList;
+                            options21.series[0].data = result.data.regdataInfo;
+                            myCharts21.setOption(options21);
+                        });
+                }
+
+                if ($(this).attr("name") == 'month') {
+                    $.post("/YhUserMakeCard/regInfoByTimeType",
+                        {
+                            timetype: $(this).attr("name"),
+                            datatype: $(".activebtn").attr("name")
+                        }, function (result) {
+                            console.log(result)
+                            options21.xAxis.data = result.data.regtimeList;
+                            options21.series[0].data = result.data.regdataInfo;
+                            myCharts21.setOption(options21);
+                        });
+
+                }
+            }
+        });
+
+        /* 	// 切换选项卡重新渲染
+            element.on('tab(tabZZT)', function(data) {
+                if (data.index == 0) {
+                    myCharts21.resize();
+
+                } else if (data.index == 1) {
+                    myCharts41.resize();
+                } else {
+                    myCharts31.resize();
+
+                }
+            }); */
+
+
+        // 窗口大小改变事件
+        window.onresize = function () {
+            myCharts1.resize();
+            myCharts2.resize();
+            myCharts3.resize();
+            myCharts21.resize();
+            myChartsWh.resize();
+            myChartsHb.resize();
+            myChartsPg.resize();
+            //myCharts31.resize();
+            //myCharts41.resize();
+        };
+
+
+    });
+    /*]]>*/
+</script>
+</body>
+
+</html>

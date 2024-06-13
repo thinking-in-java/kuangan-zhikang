@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yihe.system.mapper.YhQuestionCheckJsonMapper">
+    
+    <resultMap type="YhQuestionCheckJson" id="YhQuestionCheckJsonResult">
+        <result property="id"    column="id"    />
+        <result property="userCode"    column="user_code"    />
+        <result property="userCheckAnswer"    column="user_check_answer"    />
+        <result property="userCheckIndex"    column="user_check_index"    />
+        <result property="userCheckTs"    column="user_check_ts"    />
+        <result property="userCheckTime"    column="user_check_time"    />
+    </resultMap>
+
+    <sql id="selectYhQuestionCheckJsonVo">
+        select id, user_code, user_check_answer, user_check_index, user_check_ts, user_check_time from yh_question_check_json
+    </sql>
+
+    <select id="selectYhQuestionCheckJsonList" parameterType="YhQuestionCheckJson" resultMap="YhQuestionCheckJsonResult">
+        <include refid="selectYhQuestionCheckJsonVo"/>
+        <where>  
+            <if test="userCode != null  and userCode != ''"> and user_code = #{userCode}</if>
+            <if test="userCheckAnswer != null  and userCheckAnswer != ''"> and user_check_answer = #{userCheckAnswer}</if>
+            <if test="userCheckIndex != null "> and user_check_index = #{userCheckIndex}</if>
+            <if test="userCheckTs != null "> and user_check_ts = #{userCheckTs}</if>
+            <if test="userCheckTime != null "> and user_check_time = #{userCheckTime}</if>
+        </where>
+    </select>
+    
+    <select id="selectYhQuestionCheckJsonById" parameterType="Long" resultMap="YhQuestionCheckJsonResult">
+        <include refid="selectYhQuestionCheckJsonVo"/>
+        where id = #{id}
+    </select>
+    
+    
+    <select id="findThQuestionCheckJson" resultMap="YhQuestionCheckJsonResult">
+	SELECT * FROM yh_question_check_json2 WHERE user_code=#{usercode} ORDER BY  user_check_time DESC LIMIT 1
+    </select>
+   
+        
+    <insert id="insertYhQuestionCheckJson" parameterType="YhQuestionCheckJson" useGeneratedKeys="true" keyProperty="id">
+        insert into yh_question_check_json
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="userCode != null  and userCode != ''">user_code,</if>
+            <if test="userCheckAnswer != null  and userCheckAnswer != ''">user_check_answer,</if>
+            <if test="userCheckIndex != null ">user_check_index,</if>
+            <if test="userCheckTs != null ">user_check_ts,</if>
+            <if test="userCheckTime != null ">user_check_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="userCode != null  and userCode != ''">#{userCode},</if>
+            <if test="userCheckAnswer != null  and userCheckAnswer != ''">#{userCheckAnswer},</if>
+            <if test="userCheckIndex != null ">#{userCheckIndex},</if>
+            <if test="userCheckTs != null ">#{userCheckTs},</if>
+            <if test="userCheckTime != null ">#{userCheckTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateYhQuestionCheckJson" parameterType="YhQuestionCheckJson">
+        update yh_question_check_json
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="userCode != null  and userCode != ''">user_code = #{userCode},</if>
+            <if test="userCheckAnswer != null  and userCheckAnswer != ''">user_check_answer = #{userCheckAnswer},</if>
+            <if test="userCheckIndex != null ">user_check_index = #{userCheckIndex},</if>
+            <if test="userCheckTs != null ">user_check_ts = #{userCheckTs},</if>
+            <if test="userCheckTime != null ">user_check_time = #{userCheckTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteYhQuestionCheckJsonById" parameterType="Long">
+        delete from yh_question_check_json where id = #{id}
+    </delete>
+
+    <delete id="deleteYhQuestionCheckJsonByIds" parameterType="String">
+        delete from yh_question_check_json where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+</mapper>

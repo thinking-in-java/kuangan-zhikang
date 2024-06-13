@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yihe.system.mapper.YhTaskServiceAPIMapper">
+	<select id="queryassessmentswitchbyid" resultType="com.yihe.system.domain.YhJzServiceAssessmentSwitch" >
+		select * from yh_jz_service_assessment_switch
+		<where >
+			<if test="childname!=null">
+				and name=#{childname}
+			</if>
+		</where>
+	</select>
+		
+	<select id="querybodydataswitchbyid" resultType="com.yihe.system.domain.YhJzServiceBodydataSwitch">
+		select * from yh_jz_service_bodydata_switch
+		<where >
+			<if test="childname!=null">
+				and name=#{childname}
+			</if>
+		</where>
+	</select>
+	
+	<select id="selecttotalperson" parameterType="com.yihe.system.domain.YhManageTask" resultType="java.lang.Integer">
+		select count(*) from yh_jz_service_total_person where user_code=#{usercode}
+	</select>
+	
+	<select id="mainswitch" parameterType="java.lang.Integer" resultType="com.yihe.system.domain.YhJzService">
+		select * from yh_jz_service_switch where id=#{switchid}
+	</select>
+	
+	<select id="selectdoctorid" parameterType="com.yihe.system.domain.YhManageTask" resultType="java.lang.String">
+		SELECT IFNULL(max(admi.user_code),0) FROM yh_user_make_card card
+			LEFT JOIN yh_user_admin_info admi
+			ON card.doctor=admi.id
+			WHERE card.User_Code=#{usercode}
+	</select>
+	
+	<insert id="inserttotalperson" parameterType="com.yihe.system.domain.YhManageTask">
+				 insert into yh_jz_service_total_person
+		    <trim prefix="(" suffix=")" suffixOverrides="," >
+			      <if test="usercode != null" >
+			        user_code,
+			      </if>
+			      <if test="doctorid != null" >
+			        doctor_code,
+			      </if>
+		    </trim>
+		    <trim prefix="values (" suffix=")" suffixOverrides="," >
+		      <if test="usercode != null" >
+		        #{usercode},
+		      </if>
+		      <if test="doctorid != null" >
+		        #{doctorid},
+		      </if>
+		    </trim>
+	</insert>
+	
+	<insert id="insertyhjzserviceperson" parameterType="com.yihe.system.domain.YhManageTask">
+				 insert into yh_jz_service_person
+		    <trim prefix="(" suffix=")" suffixOverrides="," >
+		      <if test="usercode != null" >
+		        user_code,
+		      </if>
+		      <if test="gender != null" >
+		        gender,
+		      </if>
+		      <if test="service_state != null" >
+		        service_state,
+		      </if>
+		      <if test="service_waiting_time != null" >
+		        service_waiting_time,
+		      </if>
+		      <if test="service_content != null" >
+		        service_content,
+		      </if>
+		      <if test="service_type != null" >
+		        service_type,
+		      </if>
+		      <if test="service_record != null" >
+		        service_record,
+		      </if>
+
+		      <if test="returnvisit != null" >
+		        returnvisit,
+		      </if>
+		      <if test="longitude != null" >
+		        longitude,
+		      </if>
+		      <if test="dimension != null" >
+		        dimension,
+		      </if>
+		        <if test="time != null" >
+		        insert_time,
+		      </if>
+		       <if test="childnodes != null" >
+		        childnodes,
+		      </if>
+		      <if test="childtag != null" >
+		        childtag,
+		      </if>
+		    </trim>
+		    <trim prefix="values (" suffix=")" suffixOverrides="," >
+		      <if test="usercode != null" >
+		        #{usercode},
+		      </if>
+		      <if test="gender != null" >
+		        #{gender},
+		      </if>
+		      <if test="service_state != null" >
+		        #{service_state},
+		      </if>
+		      <if test="service_waiting_time != null" >
+		        #{service_waiting_time},
+		      </if>
+		      <if test="service_content != null" >
+		        #{service_content},
+		      </if>
+		      <if test="service_type != null" >
+		        #{service_type},
+		      </if>
+		      <if test="service_record != null" >
+		        #{service_record},
+		      </if>
+		      <if test="returnvisit != null" >
+		        #{returnvisit},
+		      </if>
+		      <if test="longitude != null" >
+		        #{longitude},
+		      </if>
+		      <if test="dimension != null" >
+		        #{dimension},
+		      </if>
+		      <if test="time != null" >
+		        #{time},
+		      </if>
+		      <if test="childnodes != null" >
+		        #{childnodes},
+		      </if>
+		      <if test="childtag != null" >
+		        #{childtag},
+		      </if>
+		    </trim>
+	</insert>
+	
+	<select id='selectbloodpressurecount' resultType="java.lang.Integer" parameterType="java.lang.String">
+			SELECT COUNT(E_User_Id) FROM yh_user_bloodpressure WHERE E_User_Id=#{Usercode}
+	</select>
+	
+	<select id='selectbloodsuger' resultType="java.lang.Integer" parameterType="java.lang.String">
+			SELECT COUNT(E_User_Id) FROM yh_user_bloodsuger WHERE E_User_Id=#{Usercode}
+	</select>
+	
+	<select id='selectbloodfat' resultType="java.lang.Integer" parameterType="java.lang.String">
+			SELECT COUNT(E_User_Id) FROM yh_user_bloodfat WHERE E_User_Id=#{Usercode}
+	</select>
+	
+	<select id="selectbmicount"	resultType="java.lang.Integer" parameterType="java.lang.String">
+			SELECT COUNT(E_User_Id) FROM yh_user_bmi WHERE E_User_Id=#{Usercode}
+	</select>
+</mapper>

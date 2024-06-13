@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yihe.applet.api.mapper.YhQuestionAssessTitleFrontAppMapper">
+    <resultMap type="com.yihe.applet.api.domain.YhQuestionAssessTitleFrontApp" id="YhQuestionAssessTitleFront2Result">
+        <result property="id"    column="id"    />
+        <result property="type"    column="type"    />
+        <result property="title"    column="title"    />
+        <result property="questionItemName"    column="question_item_name"    />
+        <result property="choose1"    column="choose1"    />
+        <result property="choose1Value"    column="choose1_value"    />
+        <result property="choose2"    column="choose2"    />
+        <result property="choose2Value"    column="choose2_value"    />
+        <result property="choose3"    column="choose3"    />
+        <result property="choose3Value"    column="choose3_value"    />
+        <result property="choose4"    column="choose4"    />
+        <result property="choose4Value"    column="choose4_value"    />
+        <result property="choose5"    column="choose5"    />
+        <result property="choose5Value"    column="choose5_value"    />
+        <result property="choose6"    column="choose6"    />
+        <result property="choose6Value"    column="choose6_value"    />
+        <result property="parentId"    column="parent_id"    />
+        <result property="gender"    column="gender"    />
+        <result property="delFlag"    column="del_flag"    />
+    </resultMap>
+    <sql id="allColumn">
+        id,type,title,question_item_name,choose1,choose1_value,choose2,
+        choose2_value,choose3,choose3_value,choose4,choose4_value,
+        choose5,choose5_value,choose6,choose6_value,parent_id,gender,del_flag
+    </sql>
+    <select id="selAllQuestion" resultMap="YhQuestionAssessTitleFront2Result">
+      SELECT * FROM yh_question_assess_title_front2
+      WHERE gender= 0 or gender=#{gender}
+    </select>
+</mapper>

@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yihe.applet.api.mapper.YhMyLifeHabitAssessResultAppMapper" >
+  <resultMap id="BaseResultMap" type="com.yihe.applet.api.domain.YhMyLifeHabitAssessResultApp" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="user_code" property="userCode" jdbcType="VARCHAR" />
+    <result column="dict_id" property="dictId" jdbcType="INTEGER" />
+    <result column="assess_scores" property="assessScores" jdbcType="INTEGER" />
+    <result column="assess_improved" property="assessImproved" jdbcType="VARCHAR" />
+    <result column="result_time" property="resultTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, user_code, dict_id, assess_scores, assess_improved, result_time
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from yh_my_life_habit_assess_result
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from yh_my_life_habit_assess_result
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.yihe.applet.api.domain.YhMyLifeHabitAssessResultApp" >
+    insert into yh_my_life_habit_assess_result (id, user_code, dict_id, 
+      assess_scores, assess_improved, result_time
+      )
+    values (#{id,jdbcType=INTEGER}, #{userCode,jdbcType=VARCHAR}, #{dictId,jdbcType=INTEGER}, 
+      #{assessScores,jdbcType=INTEGER}, #{assessImproved,jdbcType=VARCHAR}, #{resultTime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.yihe.applet.api.domain.YhMyLifeHabitAssessResultApp" >
+    insert into yh_my_life_habit_assess_result
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="userCode != null" >
+        user_code,
+      </if>
+      <if test="dictId != null" >
+        dict_id,
+      </if>
+      <if test="assessScores != null" >
+        assess_scores,
+      </if>
+      <if test="assessImproved != null" >
+        assess_improved,
+      </if>
+      <if test="resultTime != null" >
+        result_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="userCode != null" >
+        #{userCode,jdbcType=VARCHAR},
+      </if>
+      <if test="dictId != null" >
+        #{dictId,jdbcType=INTEGER},
+      </if>
+      <if test="assessScores != null" >
+        #{assessScores,jdbcType=INTEGER},
+      </if>
+      <if test="assessImproved != null" >
+        #{assessImproved,jdbcType=VARCHAR},
+      </if>
+      <if test="resultTime != null" >
+        #{resultTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.yihe.applet.api.domain.YhMyLifeHabitAssessResultApp" >
+    update yh_my_life_habit_assess_result
+    <set >
+      <if test="userCode != null" >
+        user_code = #{userCode,jdbcType=VARCHAR},
+      </if>
+      <if test="dictId != null" >
+        dict_id = #{dictId,jdbcType=INTEGER},
+      </if>
+      <if test="assessScores != null" >
+        assess_scores = #{assessScores,jdbcType=INTEGER},
+      </if>
+      <if test="assessImproved != null" >
+        assess_improved = #{assessImproved,jdbcType=VARCHAR},
+      </if>
+      <if test="resultTime != null" >
+        result_time = #{resultTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.yihe.applet.api.domain.YhMyLifeHabitAssessResultApp" >
+    update yh_my_life_habit_assess_result
+    set user_code = #{userCode,jdbcType=VARCHAR},
+      dict_id = #{dictId,jdbcType=INTEGER},
+      assess_scores = #{assessScores,jdbcType=INTEGER},
+      assess_improved = #{assessImproved,jdbcType=VARCHAR},
+      result_time = #{resultTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

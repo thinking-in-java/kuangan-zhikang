@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+		<title>数据表格</title>
+			   <link rel="stylesheet"  th:href="@{/assets/libs/layui/css/layui.css}" />
+    <link rel="stylesheet"  th:href="@{/assets/module/admin.css}"  />
+		<!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+	</head>
+	<body>
+		<!-- 加载动画 -->
+		<div class="page-loading">
+			<div class="ball-loader">
+				<span></span><span></span><span></span><span></span>
+			</div>
+		</div>
+		<!-- 正文开始 -->
+		<div class="layui-fluid">
+			<div class="layui-card">
+				<div class="layui-card-body">
+
+					<div class="layui-form toolbar">
+						<div class="layui-form-item">
+
+							<div class="layui-inline">
+								<label class="layui-form-label">时间：</label>
+								<div class="layui-input-inline"  style="    width: 300px;">
+						 			<input type="text" class="layui-input" id="test1" name="startTime" placeholder=" - ">
+								</div>
+							</div>
+								<div class="layui-inline">
+										<label class="layui-form-label">评估类型：</label>
+										<div class="layui-input-inline">
+											<select name="type" id="type">
+					 							<option value="">全部</option>
+												<option value="1">A型性格</option>
+												<option value="2">PSTRI压力</option>
+												<option value="3">心理健康</option>
+											</select>
+										</div>
+									</div>
+							<div class="layui-inline" style="padding-left: 20px;">
+										<button class="layui-btn icon-btn sousuoDN" data-type="reload"><i class="layui-icon"></i>搜索</button>
+										<button class="layui-btn layui-btn-primary" id="btnempty" lay-submit="" lay-filter="reset">清除</button>
+								
+							</div>
+
+
+						</div>
+					</div>
+
+					<table id="tableTbBas" lay-filter="tableTbBas"></table>
+				</div>
+			</div>
+		</div>
+
+		 <!-- js部分 -->
+			<script type="text/javascript" th:src="@{/assets/libs/layui/layui.js}"></script>
+			<script type="text/javascript" th:src="@{/assets/js/common.js}"></script>
+			<!-- 表格状态列 -->
+			<script type="text/html" id="demoEDStateBar1">
+
+				<span class="icon-text" style="color: green;" lay-tips="{{d.jib}}">
+        {{d.sex}}
+    </span>
+	
+    
+</script>
+
+			<script>
+				layui.use(['layer', 'form', 'table', 'util', 'laydate'], function() {
+					var $ = layui.jquery;
+					var layer = layui.layer;
+					var form = layui.form;
+					var table = layui.table;
+					var util = layui.util;
+					var dropdown = layui.dropdown;
+
+					var laydate = layui.laydate;
+					  //清除按钮
+			        $("#btnempty").click(function(){
+			        	window.location.reload()
+			         
+			        })
+			        
+			        
+					//日期时间范围
+					laydate.render({
+						elem: '#test1',
+						type: 'datetime',
+						range: true,
+						trigger: 'click'
+					});
+
+
+					var usercode= [[${usercode}]]
+					// 渲染表格
+					var insTb = table.render({
+						page : true,
+						elem: '#tableTbBas',
+						url: '/system/evaluate/findpressureRecordListByuser?usercode='+usercode,
+						cellMinWidth: 100,
+						cols: [
+							[{
+									type: 'numbers'
+								},
+								{
+									field: 'assessmentTime',
+									align: 'center',
+									sort: true,
+									title: '评估时间'
+								},
+								{
+									field: 'assessmentContent',
+									align: 'center',
+									sort: true,
+									title: '评估内容'
+								},
+								{
+									field: 'assessmentResults',
+									align: 'center',
+									sort: true,
+									title: '评估结果'
+								},
+								{
+					    			fixed : 'right',
+					    			title : '操作',
+					    			align : 'center',
+					    			toolbar : '#barDemo'
+					    		} 
+
+							]
+						],
+						response : {
+
+							statusCode : 0
+						//规定成功的状态码，默认：0
+
+						},
+						parseData : function(res) { //将原始数据解析成 table 组件所规定的数据
+							return {
+								"code" : res.data.code, //解析接口状态
+								"msg" : res.data.msg, //解析提示文本
+								"count" : res.data.count, //解析数据长度
+								"data" : res.data.data
+							//解析数据列表
+							}
+
+						}
+					});
+
+					//这是Layui 给 后台添加的映射  映射controller 的实体类
+					var $ = layui.$,
+						active2 = {
+							reload: function() {
+								//获取 上面input 值
+
+								var startTime = $('#test1').val();
+								var type = $('#type').val();
+								//执行重载
+								table.reload('tableTbBas', {
+									page: {
+										curr: 1
+										//重新从第 1 页开始
+									},
+									where: {
+										//这里注意一定要跟Bean 里面的属性对应
+										startTime: startTime,
+										type: type
+
+
+									}
+								});
+							}
+						};
+
+
+
+
+
+					$('.sousuoDN').on('click', function() {
+
+						var type = $(this).data('type');
+						active2[type] ? active2[type].call(this) : '';
+
+					});
+					
+					//分类表格监听			
+			      	   table.on('tool(tableTbBas)', function(obj) { //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
+			    		var data = obj.data; //获得当前行数据
+			    		console.info(data,"获得当前行数据下载数据");
+			    		var layEvent = obj.event; //获得 lay-event 对应的值
+			    		var tr = obj.tr; //获得当前行 tr 的DOM对象
+						var tr = obj ,tr;                                                                                                                                                                                                                                                                                                                                                                                                                                                            
+			    		if(layEvent === 'downloadReport'){//下载报告
+			    			var id = data.id;
+			    			window.location.href="/system/evaluate/exportPdf?id="+id;
+			    		}else if(layEvent === 'downloadQuestionnaire'){//下载问卷
+			    			var assessmentTime = data.assessmentTime;
+			    			var evaluateType = data.assessmentType;
+			    			var id = data.id;
+			    			window.location.href="/system/evaluate/exportXls?usercode="+usercode+"&id="+id+"&evaluateType="+evaluateType+"";
+			    		}
+			    			
+			    		
+			    		
+			    	});
+
+			});
+				
+				
+				
+				
+				
+			</script>
+	<script type="text/html" id="barDemo">
+    
+ 	<a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="downloadReport">下载报告</a>
+	<a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="downloadQuestionnaire">下载问卷</a>
+</script>	
+		
+	</body>
+
+</html>

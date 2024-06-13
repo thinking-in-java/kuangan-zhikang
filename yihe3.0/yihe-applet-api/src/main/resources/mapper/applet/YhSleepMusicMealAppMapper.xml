@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yihe.applet.api.mapper.YhSleepMusicMealAppMapper">
+	<sql id="allColumn">meal_id,meal_title,music_ids,meal_img,meal_listennum</sql>
+	<resultMap type="com.yihe.applet.api.domain.YhSleepMusicMealApp" id="sleepMusicMeal">
+		<id column="meal_id" jdbcType="INTEGER" property="mealId"/>
+		<result column="meal_title" jdbcType="VARCHAR" property="mealTitle" />
+		<result column="music_ids" jdbcType="VARCHAR" property="musicTds" />
+		<result column="meal_img" jdbcType="VARCHAR" property="mealImg" />
+		<result column="meal_listennum" jdbcType="INTEGER" property="mealListennum" />
+	</resultMap>
+	<select id="selAllMusicMeal" resultMap="sleepMusicMeal">
+		SELECT <include refid="allColumn"/> FROM yh_sleep_music_meal
+		ORDER BY meal_listennum DESC 
+	</select>
+		<select id="selTypeMusicMeal" resultMap="sleepMusicMeal">
+		select * from yh_sleep_music_meal where meal_title = #{mealTitle}
+	</select>
+	
+</mapper>

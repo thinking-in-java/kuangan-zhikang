@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yihe.applet.api.mapper.YhSleepMusicAppMapper">
+	<sql id="allColumn">music_id,music_title,music_video,music_img,music_listennum,music_time
+	</sql>
+	<resultMap type="com.yihe.applet.api.domain.YhSleepMusicApp" id="sleepMusicMap">
+		<id column="music_id" jdbcType="INTEGER" property="musicId" />
+		<result column="music_title" jdbcType="VARCHAR" property="musicTitle" />
+		<result column="music_video" jdbcType="VARCHAR" property="musicVideo" />
+		<result column="music_img" jdbcType="VARCHAR" property="musicImg" />
+		<result column="music_listennum" jdbcType="VARCHAR" property="musicListennum" />
+		<result column="music_time" jdbcType="VARCHAR" property="musicTime" />
+	</resultMap>
+	
+	
+	
+	
+	<select id="selAllMusicByIds"  resultMap="sleepMusicMap">
+ 	  SELECT * FROM yh_sleep_music
+    <if test="idsList!=null and idsList.size()&gt; 0">
+    	where music_id in 
+        <foreach collection="idsList" item="item" open="(" separator="," close=")">
+             #{item}
+        </foreach>
+    </if>
+ </select>
+	
+	
+	<!-- 查询所有助眠音 -->
+	<select id="selAllMusic" resultMap="sleepMusicMap">
+		SELECT
+		<include refid="allColumn" />
+		FROM yh_sleep_music
+		ORDER BY music_listennum DESC
+	</select>
+	<!-- 根据id查询助眠音 -->
+	<select id="selMusicById" resultMap="sleepMusicMap">
+		SELECT
+		<include refid="allColumn" />
+		FROM yh_sleep_music
+		WHERE music_id=#{musicId}
+	</select>
+	<!-- 听完音乐修改已听人数musicListennum+1 -->
+	<update id="uptMusicListenById">
+		UPDATE yh_sleep_music 
+		SET music_listennum=music_listennum+1
+		WHERE music_id=#{musicId}
+	</update>
+</mapper>

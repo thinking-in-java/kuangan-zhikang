@@ -1,0 +1,332 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yihe.applet.api.mapper.YhLifeHabitSignAppMapper" >
+  <resultMap id="BaseResultMap" type="com.yihe.applet.api.domain.YhLifeHabitSignApp" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="habit_id" property="habitId" jdbcType="INTEGER" />
+    <result column="signId_date" property="signidDate" jdbcType="DATE" />
+    <result column="mark" property="mark" jdbcType="VARCHAR" />
+    <result column="user_code" property="userCode" jdbcType="VARCHAR" />
+    <result column="life_add" property="lifeAdd" jdbcType="INTEGER" />
+    <result column="sign_img" property="signImg" jdbcType="VARCHAR" />
+    <result column="increase_time" property="increaseTime" jdbcType="TIMESTAMP" />
+     <result column="name" property="name" jdbcType="VARCHAR" />
+     <result column="head_img" property="headImg" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, habit_id, signId_date, mark, user_code, life_add, sign_img, increase_time
+  </sql>
+  
+  
+  <select id="showSignhabitidCount" parameterType="java.lang.String">
+  	select count(*) from yh_life_habit_sign where habit_id=#{habitId,jdbcType=INTEGER};
+  </select>
+  
+  <!-- 本年统计图 -->
+   <select id="findHabitDiaryByuserCodeForyear" resultType="map">
+     SELECT 
+SUM(CASE MONTH(signId_date) WHEN '1' THEN 1 ELSE 0 END) AS '1',
+SUM(CASE MONTH(signId_date) WHEN '2' THEN 1 ELSE 0 END) AS '2',
+SUM(CASE MONTH(signId_date) WHEN '3' THEN 1 ELSE 0 END) AS '3',
+SUM(CASE MONTH(signId_date) WHEN '4' THEN 1 ELSE 0 END) AS '4',
+SUM(CASE MONTH(signId_date) WHEN '5' THEN 1 ELSE 0 END) AS '5',
+SUM(CASE MONTH(signId_date) WHEN '6' THEN 1 ELSE 0 END) AS '6',
+SUM(CASE MONTH(signId_date) WHEN '7' THEN 1 ELSE 0 END) AS '7',
+SUM(CASE MONTH(signId_date) WHEN '8' THEN 1 ELSE 0 END) AS '8',
+SUM(CASE MONTH(signId_date) WHEN '9' THEN 1 ELSE 0 END) AS '9',
+SUM(CASE MONTH(signId_date) WHEN '10' THEN 1 ELSE 0 END) AS '10',
+SUM(CASE MONTH(signId_date) WHEN '11' THEN 1 ELSE 0 END) AS '11',
+SUM(CASE MONTH(signId_date) WHEN '12' THEN 1 ELSE 0 END) AS '12',
+YEAR(signId_date) AS YEAR
+FROM yh_life_habit_sign elr
+WHERE user_code=#{usercode} and habit_id=#{habitId,jdbcType=INTEGER}  AND  YEAR(signId_date) IN(#{year})  GROUP BY  YEAR;
+ 
+    </select>
+  
+  <!-- 本月统计图 -->
+  <select id="findHabitDiaryByUserCodeForMonth" resultType="map">
+	SELECT 
+	SUM(CASE DAY(signId_date) WHEN '1' THEN 1 ELSE 0 END) AS '1',
+	SUM(CASE DAY(signId_date) WHEN '2' THEN 1 ELSE 0 END) AS '2',
+	SUM(CASE DAY(signId_date) WHEN '3' THEN 1 ELSE 0 END) AS '3',
+	SUM(CASE DAY(signId_date) WHEN '4' THEN 1 ELSE 0 END) AS '4',
+	SUM(CASE DAY(signId_date) WHEN '5' THEN 1 ELSE 0 END) AS '5',
+	SUM(CASE DAY(signId_date) WHEN '6' THEN 1 ELSE 0 END) AS '6',
+	SUM(CASE DAY(signId_date) WHEN '7' THEN 1 ELSE 0 END) AS '7',
+	SUM(CASE DAY(signId_date) WHEN '8' THEN 1 ELSE 0 END) AS '8',
+	SUM(CASE DAY(signId_date) WHEN '9' THEN 1 ELSE 0 END) AS '9',
+	SUM(CASE DAY(signId_date) WHEN '10' THEN 1 ELSE 0 END) AS '10',
+	SUM(CASE DAY(signId_date) WHEN '11' THEN 1 ELSE 0 END) AS '11',
+	SUM(CASE DAY(signId_date) WHEN '12' THEN 1 ELSE 0 END) AS '12',
+	SUM(CASE DAY(signId_date) WHEN '13' THEN 1 ELSE 0 END) AS '13',
+	SUM(CASE DAY(signId_date) WHEN '14' THEN 1 ELSE 0 END) AS '14',
+	SUM(CASE DAY(signId_date) WHEN '15' THEN 1 ELSE 0 END) AS '15',
+	SUM(CASE DAY(signId_date) WHEN '16' THEN 1 ELSE 0 END) AS '16',
+	SUM(CASE DAY(signId_date) WHEN '17' THEN 1 ELSE 0 END) AS '17',
+	SUM(CASE DAY(signId_date) WHEN '18' THEN 1 ELSE 0 END) AS '18',
+	SUM(CASE DAY(signId_date) WHEN '19' THEN 1 ELSE 0 END) AS '19',
+	SUM(CASE DAY(signId_date) WHEN '20' THEN 1 ELSE 0 END) AS '20',
+	SUM(CASE DAY(signId_date) WHEN '21' THEN 1 ELSE 0 END) AS '21',
+	SUM(CASE DAY(signId_date) WHEN '22' THEN 1 ELSE 0 END) AS '22',
+	SUM(CASE DAY(signId_date) WHEN '23' THEN 1 ELSE 0 END) AS '23',
+	SUM(CASE DAY(signId_date) WHEN '24' THEN 1 ELSE 0 END) AS '24',
+	SUM(CASE DAY(signId_date) WHEN '25' THEN 1 ELSE 0 END) AS '25',
+	SUM(CASE DAY(signId_date) WHEN '26' THEN 1 ELSE 0 END) AS '26',
+	SUM(CASE DAY(signId_date) WHEN '27' THEN 1 ELSE 0 END) AS '27',
+	SUM(CASE DAY(signId_date) WHEN '28' THEN 1 ELSE 0 END) AS '28',
+	SUM(CASE DAY(signId_date) WHEN '29' THEN 1 ELSE 0 END) AS '29',
+	SUM(CASE DAY(signId_date) WHEN '30' THEN 1 ELSE 0 END) AS '30',
+	SUM(CASE DAY(signId_date) WHEN '31' THEN 1 ELSE 0 END) AS '31',
+	MONTH(signId_date) AS MONTH,
+	YEAR(signId_date) AS YEAR
+	FROM yh_life_habit_sign
+	WHERE MONTH(`signId_date`) IN(#{month}) AND YEAR(signId_date) IN(#{year}) AND user_code=#{usercode} and habit_id=#{habitId,jdbcType=INTEGER}  GROUP BY MONTH;
+    </select>
+  
+  <!-- 本周统计图 -->
+   <select id="findHabitDiaryByUserCodeForWeekDay" resultType="com.yihe.system.domain.InformationSummary">
+    SELECT DAY, MAX(num) AS daynum
+FROM (
+    SELECT 
+       WEEKDAY(osr.signId_date)+1 AS DAY, 
+       IF (COUNT(1) IS NULL, 0, COUNT(1)) AS num 
+    FROM yh_life_habit_sign AS osr
+    
+    WHERE 
+        osr.user_code=#{usercode,jdbcType=VARCHAR} and osr.habit_id=#{habitId,jdbcType=INTEGER} AND
+        YEARWEEK(DATE_FORMAT(osr.signId_date,'%Y-%m-%d'), 1) = YEARWEEK(NOW(), 1)
+    GROUP BY WEEKDAY(osr.signId_date)
+    UNION
+    SELECT * FROM (
+        SELECT 1 DAY, 0 num
+        UNION
+        SELECT 2, 0  
+        UNION
+        SELECT 3, 0  
+        UNION
+        SELECT 4, 0  
+        UNION
+        SELECT 5, 0  
+        UNION
+        SELECT 6, 0
+        UNION
+        SELECT 7, 0  
+    ) b
+) c 
+GROUP BY DAY
+    </select>
+  
+  <!-- 根据code与习惯id查询本周记录 -->
+  <select id="ShowthisweekSign" parameterType="map" resultMap="BaseResultMap">
+  	select * from yh_life_habit_sign where user_code=#{userCode,jdbcType=VARCHAR} and habit_id=#{habitId,jdbcType=INTEGER} and YEARWEEK( date_format( signId_date,'%Y-%m-%d' ) ) = YEARWEEK( now() );
+  </select>
+  
+   <!-- 根据code与习惯id查询本月记录 -->
+  <select id="ShowthismonthSign" parameterType="map" resultMap="BaseResultMap">
+  	select * from yh_life_habit_sign where user_code=#{userCode,jdbcType=VARCHAR} and habit_id=#{habitId,jdbcType=INTEGER} and DATE_FORMAT( signId_date, '%Y%m' ) = DATE_FORMAT( CURDATE( ) ,'%Y%m' );
+  </select>
+  
+  <!-- 所有记录 -->
+   <select id="ShowthisAllSign" parameterType="map"  resultMap="BaseResultMap">
+  	select * from   yh_life_habit_sign where habit_id=#{habitId,jdbcType=INTEGER} and user_code=#{userCode,jdbcType=VARCHAR}
+  </select>
+  
+  
+  
+  <!-- 根据code与习惯id查询最大持续天数 -->
+  <select id="ShowMaxSign" parameterType="map" resultType="int">
+	select max(num) as numm from (
+	select
+	s.habit_id,
+	s.signId_date,@c_day,
+	@row_number:=case
+	when DATEDIFF(s.signId_date,@c_day) = 1 then @row_number + 1
+	else 1
+	end    as num,
+	@c_day := s.signId_date as c_day,
+	s.user_code
+	from
+	yh_life_habit_sign s,(select @row_number :=0, @c_day := '')  as t
+	order by s.user_code,s.signId_date) t1
+    where t1.user_code=#{userCode,jdbcType=VARCHAR} and t1.habit_id=#{habitId,jdbcType=INTEGER}   group by t1.user_code ;
+  </select>
+  
+    
+  <!-- 根据code查询用户习惯日期 -->
+  <select id="selectByLifeTime" parameterType="java.lang.String" resultMap="BaseResultMap">
+  	SELECT * FROM(select signId_date from yh_life_habit_sign where user_code=#{userCode,jdbcType=VARCHAR}) AS b GROUP BY b.signId_date
+  </select>
+  
+  <select id="showThatverydayRanking" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+  	select wx.head_img,sig.*,reg.name from yh_life_habit_sign sig,yh_user_reginfo reg,yh_wx_user wx where wx.user_id=sig.user_code and sig.user_code=reg.user_code and to_days(sig.signId_date) = to_days(now()) and sig.habit_id=#{habitId,jdbcType=INTEGER} limit 0,10
+  </select>
+  
+  
+  <select id="showSignCount" parameterType="map"  resultMap="BaseResultMap">
+  	select * from   yh_life_habit_sign where habit_id=#{habitId,jdbcType=INTEGER} and user_code=#{userCode,jdbcType=VARCHAR} and date_format(increase_time,'%Y-%m-%d')&gt;=#{date}
+  </select>
+  
+  
+   <select id="ShowDaysStatistics" parameterType="map" resultType="int">
+	select max(days) incessancy_days
+	from
+	(
+	select user_code
+	,@cont_day :=
+	(
+	case when (@last_uid = user_code and DATEDIFF(ot, @last_ot)=1) then
+	(@cont_day + 1)
+	when (@last_uid = user_code and DATEDIFF(ot, @last_ot)&lt;1) then
+	(@cont_day + 0)
+	else 1
+	end
+	) as days
+	,(@cont_ix := (@cont_ix + if(@cont_day = 1, 1, 0))) AS cont_ix
+	,@last_uid := user_code
+	,@last_ot := ot ot
+	from
+	(
+	select user_code
+	,signId_date as ot
+	from yh_life_habit_sign
+	where signId_date &gt;= #{signidDate}
+	and signId_date &lt;= #{signidDate1}
+	and habit_id=#{habitId,jdbcType=INTEGER}
+	and user_code=#{userCode,jdbcType=VARCHAR}
+	order by user_code ,signId_date
+	) as t1,
+	(
+	select @last_uid := '',
+	@last_ot  := '',
+	@cont_ix  := 0,
+	@cont_day := 0
+	) as t2
+	) as t
+	group by user_code;
+	  
+	  	
+  </select>
+  
+ 
+  
+  
+  <select id="selectBySignCount" resultType="int" parameterType="java.lang.Integer">
+  	select count(*) from yh_life_habit_sign where habit_id=#{habitId,jdbcType=INTEGER}
+  </select>
+  
+ <select id="showHabitSignRecord" resultType="int" parameterType="map">
+ 	select count(*) from yh_life_habit_sign where user_code=#{userCode,jdbcType=VARCHAR} and signId_date=#{signidDate,jdbcType=DATE} and habit_id=#{habitId,jdbcType=INTEGER}
+ </select>
+  
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from yh_life_habit_sign
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from yh_life_habit_sign
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.yihe.applet.api.domain.YhLifeHabitSignApp" >
+    insert into yh_life_habit_sign (id, habit_id, signId_date, 
+      mark, user_code, life_add, 
+      sign_img, increase_time)
+    values (#{id,jdbcType=INTEGER}, #{habitId,jdbcType=INTEGER}, #{signidDate,jdbcType=DATE}, 
+      #{mark,jdbcType=VARCHAR}, #{userCode,jdbcType=VARCHAR}, #{lifeAdd,jdbcType=INTEGER}, 
+      #{signImg,jdbcType=VARCHAR}, #{increaseTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.yihe.applet.api.domain.YhLifeHabitSignApp" >
+    insert into yh_life_habit_sign
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="habitId != null" >
+        habit_id,
+      </if>
+      <if test="signidDate != null" >
+        signId_date,
+      </if>
+      <if test="mark != null" >
+        mark,
+      </if>
+      <if test="userCode != null" >
+        user_code,
+      </if>
+      <if test="lifeAdd != null" >
+        life_add,
+      </if>
+      <if test="signImg != null" >
+        sign_img,
+      </if>
+      <if test="increaseTime != null" >
+        increase_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="habitId != null" >
+        #{habitId,jdbcType=INTEGER},
+      </if>
+      <if test="signidDate != null" >
+        #{signidDate,jdbcType=DATE},
+      </if>
+      <if test="mark != null" >
+        #{mark,jdbcType=VARCHAR},
+      </if>
+      <if test="userCode != null" >
+        #{userCode,jdbcType=VARCHAR},
+      </if>
+      <if test="lifeAdd != null" >
+        #{lifeAdd,jdbcType=INTEGER},
+      </if>
+      <if test="signImg != null" >
+        #{signImg,jdbcType=VARCHAR},
+      </if>
+      <if test="increaseTime != null" >
+        #{increaseTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.yihe.applet.api.domain.YhLifeHabitSignApp" >
+    update yh_life_habit_sign
+    <set >
+      <if test="habitId != null" >
+        habit_id = #{habitId,jdbcType=INTEGER},
+      </if>
+      <if test="signidDate != null" >
+        signId_date = #{signidDate,jdbcType=DATE},
+      </if>
+      <if test="mark != null" >
+        mark = #{mark,jdbcType=VARCHAR},
+      </if>
+      <if test="userCode != null" >
+        user_code = #{userCode,jdbcType=VARCHAR},
+      </if>
+      <if test="lifeAdd != null" >
+        life_add = #{lifeAdd,jdbcType=INTEGER},
+      </if>
+      <if test="signImg != null" >
+        sign_img = #{signImg,jdbcType=VARCHAR},
+      </if>
+      <if test="increaseTime != null" >
+        increase_time = #{increaseTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.yihe.applet.api.domain.YhLifeHabitSignApp" >
+    update yh_life_habit_sign
+    set habit_id = #{habitId,jdbcType=INTEGER},
+      signId_date = #{signidDate,jdbcType=DATE},
+      mark = #{mark,jdbcType=VARCHAR},
+      user_code = #{userCode,jdbcType=VARCHAR},
+      life_add = #{lifeAdd,jdbcType=INTEGER},
+      sign_img = #{signImg,jdbcType=VARCHAR},
+      increase_time = #{increaseTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

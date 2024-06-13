@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>定位管理</title>
+    <link rel="stylesheet" th:href="@{/assets/libs/layui/css/layui.css}"/>
+    <link rel="stylesheet" th:href="@{/assets/module/admin.css}"/>
+    <style>
+
+    </style>
+    <link rel="stylesheet" th:href="@{/assets/libs/layui/css/layui.css}"/>
+    <link rel="stylesheet" th:href="@{/assets/module/admin.css}"/>
+    <style>
+        .layui-form {
+            padding: 15px;
+        }
+        form{
+            background-color: #fff;
+        }
+        .layui-elem-quote{
+            background-color: #fff;
+        }
+    </style>
+</head>
+<body>
+<!-- 加载动画 -->
+<div class="page-loading">
+    <div class="ball-loader">
+        <span></span><span></span><span></span><span></span>
+    </div>
+</div>
+<div style="padding: 15px 30px 15px 30px;background-color: #fff;margin-bottom: 15px">
+    <span  style="padding-right: 30px;padding-left: 17px;">[[${name}]]</span>
+    <span  style="padding-right: 30px;">[[${sex}]]</span>
+    <span  style="padding-right: 30px;">[[${age}]]</span>
+    <span style="padding-right: 30px;">智能手环</span>
+    <span>[[${tid}]]</span>
+    <span style="float: right;padding-right: 56px;" onclick="window.history.back(-1);" >← 返回设备设置</span>
+
+</div>
+    <div style="padding-bottom: 15px">
+        <blockquote class="layui-elem-quote">请求（最多一分钟一次）</blockquote>
+
+    <div class="layui-inline" style="padding-top: 20px;">
+        <div class="layui-input-block" style="margin-left: 40px;">
+            <button class="layui-btn" id="dingwei">定位请求</button>
+        </div>
+
+    </div>
+<div class="layui-inline" style="padding-top: 20px;">
+
+    <div class="layui-input-block" style="margin-left: 40px;">
+        <button class="layui-btn" id="xinlv">心率测量</button>
+    </div>
+
+</div>
+
+<div class="layui-inline" style="padding-top: 20px;">
+
+    <div class="layui-input-block" style="margin-left: 40px;">
+        <button class="layui-btn" id="xueya">血压测量</button>
+    </div>
+
+</div>
+
+        <div class="Dingweiimmune" style="float: right; padding-left: 15px; margin-top: 13px;padding-right: 100px;" >
+            <i class="layui-icon layui-icon-location" style="font-size: 18px;color:#F59A00"></i>
+            <span style="color:#e0cc1f">查看定位</span>
+        </div>
+    </div>
+<form class="layui-form" action="">
+    <div>
+        <blockquote class="layui-elem-quote">SOS设置（更新设备的SOS呼叫设置）</blockquote>
+        <div class="layui-inline">
+            <label class="layui-form-label">姓名1</label>
+            <div class="layui-input-inline" style="width: 100px;">
+                <input type="input" lay-verify="required"  name="mobileName1" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-inline">
+            <label class="layui-form-label">号码1</label>
+            <div class="layui-input-inline" style="width: 200px;">
+                <input type="input" lay-verify="required|phone" name="mobile1" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-inline">
+            <label class="layui-form-label">姓名2</label>
+            <div class="layui-input-inline" style="width: 100px;">
+                <input type="input" name="mobileName2" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-inline">
+            <label class="layui-form-label">号码2</label>
+            <div class="layui-input-inline" style="width: 200px;">
+                <input type="input" name="mobile2" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-inline">
+            <label class="layui-form-label">姓名3</label>
+            <div class="layui-input-inline" style="width: 100px;">
+                <input type="input" name="mobileName3" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-inline">
+            <label class="layui-form-label">号码3</label>
+            <div class="layui-input-inline" style="width: 200px;">
+                <input type="input" name="mobile3" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+    </div>
+
+
+    <div class="layui-inline" style="padding-top: 20px;">
+        <div class="layui-input-block" style="margin-left: 40px;">
+            <button class="layui-btn" lay-submit lay-filter="formDemo2">保存</button>
+        </div>
+    </div>
+</form>
+
+<form class="layui-form" action="">
+    <div>
+        <blockquote class="layui-elem-quote">设置心率测量周期（每过一个间隔时长获取一次设备上的相关数据）</blockquote>
+        <input type="hidden" name="type" value="1" autocomplete="off" class="layui-input">
+        <div class="layui-inline">
+            <label class="layui-form-label" style="width: 120px;">心率测量周期</label>
+            <div class="layui-input-inline" style="width: 100px;">
+                <input type="input" name="interval" id="xinlvVal" lay-verify="required|integer" autocomplete="off"
+                       class="layui-input">
+            </div>
+            <span style="color: #999 !important;">间隔周期，以分为单位，不可为0且大于2</span>
+        </div>
+
+
+    </div>
+    <div class="layui-inline" style="padding-top: 20px;">
+        <div class="layui-input-block" style="margin-left: 40px;">
+            <button class="layui-btn" lay-submit lay-filter="formDemo3">保存</button>
+        </div>
+    </div>
+</form>
+
+<form class="layui-form" action="">
+    <div>
+        <blockquote class="layui-elem-quote">设置血压测量周期（每过一个间隔时长获取一次设备上的相关数据）</blockquote>
+        <input type="hidden" name="type" value="2" autocomplete="off" class="layui-input">
+        <div class="layui-inline">
+            <label class="layui-form-label" style="width: 120px;">血压测量周期</label>
+            <div class="layui-input-inline" style="width: 100px;">
+                <input type="input" name="interval" id="xueyaVal" lay-verify="required|integer" autocomplete="off"
+                       class="layui-input">
+            </div>
+            <span style="color: #999 !important;">间隔周期，以分为单位，不可为0且大于2</span>
+        </div>
+
+    </div>
+    <div class="layui-inline" style="padding-top: 20px;">
+        <div class="layui-input-block" style="margin-left: 40px;">
+            <button class="layui-btn" lay-submit lay-filter="formDemo4">保存</button>
+        </div>
+    </div>
+</form>
+<!--
+
+<form class="layui-form" action="">
+    <div>
+        <blockquote class="layui-elem-quote">设置体温计测量周期（每过一个间隔时长获取一次设备上的相关数据）</blockquote>
+
+        <input type="hidden" name="type" value="3" autocomplete="off" class="layui-input">
+        <div class="layui-inline">
+            <label class="layui-form-label" style="width: 120px;">体温测量周期</label>
+            <div class="layui-input-inline" style="width: 100px;">
+                <input type="input" name="interval" lay-verify="required|integer" autocomplete="off"
+                       class="layui-input">
+            </div>
+            <span style="color: #999 !important;">间隔周期，以分为单位，不可为 0</span>
+        </div>
+    </div>
+    <div class="layui-inline" style="padding-top: 20px;">
+        <div class="layui-input-block" style="margin-left: 40px;">
+            <button class="layui-btn" lay-submit lay-filter="formDemo5">保存</button>
+        </div>
+    </div>
+</form>
+-->
+
+
+<!-- js部分 -->
+<script type="text/javascript" th:src="@{/assets/libs/layui/layui.js}"></script>
+<script type="text/javascript" th:src="@{/assets/js/common.js}"></script>
+
+<script  type="text/javascript" th:inline="javascript">
+
+    layui
+        .use(
+            ['layer', 'form', 'table',
+                'laypage', 'treeSelect', 'admin', 'element', 'laydate'
+            ],
+            function () {
+                var $ = layui.jquery;
+                var layer = layui.layer;
+                var form = layui.form;
+                var table = layui.table;
+                var laypage = layui.laypage;
+                var element = layui.element;
+                var admin = layui.admin;
+                var form = layui.form;
+                var laydate = layui.laydate;
+
+                var usercode = [[${usercode}]];
+
+                var tid = [[${tid}]];
+
+                var jiaiWatchInfo=[[${jiaiWatchInfo}]]
+                console.log("用户" + usercode);
+                console.log("用户" + tid);
+                console.log("对象" + jiaiWatchInfo);
+                $(".Dingweiimmune").on('click',function(){
+
+
+                    window.location.href="/manage/setting/thealarmdetectionMap?usercode="+usercode+"&tid="+tid;
+                })
+
+                if(null!=jiaiWatchInfo){
+                    $("input[name='mobileName1']").val(jiaiWatchInfo.sosname1)
+                    $("input[name='mobile1']").val(jiaiWatchInfo.mobile1)
+
+                    $("input[name='mobileName2']").val(jiaiWatchInfo.sosname2)
+                    $("input[name='mobile2']").val(jiaiWatchInfo.mobile2)
+
+                    $("input[name='mobileName3']").val(jiaiWatchInfo.sosname3)
+                    $("input[name='mobile3']").val(jiaiWatchInfo.mobile3)
+
+                    $("#xinlvVal").val(jiaiWatchInfo.heartinterval)
+                    $("#xueyaVal").val(jiaiWatchInfo.bloodpressureinterval)
+
+                }
+
+                form.verify({
+                    integer: [
+                        /^[1-9]\d*$/
+                        , '只能输入正整数'
+                    ]
+                });
+
+                $("#dingwei").click(function(){
+                    //询问框
+
+                    layer.confirm('您确定获得设备最新定位吗？', {
+                        btn: ['确定','取消'] //按钮
+                    }, function(){
+                        var index = layer.load();
+                        $.ajax({
+                            url: '/SmartWatchJiAi/JA10003',
+                            type: "post",
+                            data: {
+                                terminalId: tid
+                            },
+                            success: function (regdata) {
+                                //关闭
+                                layer.close(index);
+                                console.log("data", regdata)
+                                if (regdata.data == "OK") {
+                                    layer.msg("请求成功！");
+                                } else {
+                                    layer.msg(regdata.data);
+                                }
+
+                            }
+                        })
+                    }, function(){
+
+                    });
+
+
+                });
+                $("#xinlv").click(function(){
+                    layer.confirm('您确定获得设备最新心率吗？', {
+                        btn: ['确定','取消'] //按钮
+                    }, function(){
+                        var index = layer.load();
+                        $.ajax({
+                            url: '/SmartWatchJiAi/JA10004',
+                            type: "post",
+                            data: {
+                                terminalId: tid
+                            },
+                            success: function (regdata) {
+                                //关闭
+                                layer.close(index);
+                                console.log("data", regdata)
+                                if (regdata.data == "OK") {
+                                    layer.msg("请求成功！");
+                                } else {
+                                    layer.msg(regdata.data);
+                                }
+                            }
+                        })
+                    }, function(){
+
+                    });
+
+
+
+                });
+        $("#xueya").click(function(){
+
+            layer.confirm('您确定获得设备最新血压吗？', {
+                btn: ['确定','取消'] //按钮
+            }, function(){
+                var index = layer.load();
+                $.ajax({
+                    url: '/SmartWatchJiAi/JA10008',
+                    type: "post",
+                    data: {
+                        terminalId: tid
+                    },
+                    success: function (regdata) {
+                        //关闭
+                        layer.close(index);
+                        console.log("data", regdata)
+                        if (regdata.data == "OK") {
+                            layer.msg("请求成功！");
+                        } else {
+                            layer.msg(regdata.data);
+                        }
+                    }
+                })
+            }, function(){
+
+            });
+
+
+                });
+
+                //定位设置
+                form.on('submit(formDemo1)', function (data) {
+
+                    $.ajax({
+                        url: '/SmartWatchJiAi/JA10006',
+                        type: "post",
+                        data: {
+                            gps: data.field.gps,
+                            intervalTime: data.field.intervalTime,
+                            terminalId: tid
+                        },
+                        success: function (regdata) {
+                            console.log("data", regdata)
+                            if (regdata.data == "OK") {
+                                layer.msg("设置成功！");
+                            } else {
+                                layer.msg(regdata.data);
+                            }
+                        }
+                    })
+                    return false;
+                });
+                //SOS设置
+                form.on('submit(formDemo2)', function (data) {
+                    var index = layer.load();
+                    $.ajax({
+                        url: '/SmartWatchJiAi/JA10002',
+                        type: "post",
+                        data: {
+                            mobileName1: data.field.mobileName1,
+                            mobile1: data.field.mobile1,
+                            mobileName2: data.field.mobileName2,
+                            mobile2: data.field.mobile2,
+                            mobileName3: data.field.mobileName3,
+                            mobile3: data.field.mobile3,
+                            terminalId: tid
+                        },
+                        success: function (regdata) {
+                            //关闭
+                            layer.close(index);
+                            console.log("data", regdata)
+                            if (regdata.data == "OK") {
+                                layer.msg("设置成功！");
+                            } else {
+                                layer.msg(regdata.data);
+                            }
+                        }
+                    })
+
+                    return false;
+                });
+
+                //设置心率
+                form.on('submit(formDemo3)', function (data) {
+
+                    if(data.field.interval>2){
+                        var index = layer.load();
+                        $.ajax({
+                            url: '/SmartWatchJiAi/JA10007',
+                            type: "post",
+                            data: {
+                                type: data.field.type,
+                                interval: data.field.interval,
+                                terminalId: tid
+                            },
+                            success: function (regdata) {
+                                //关闭
+                                layer.close(index);
+                                console.log("data", regdata)
+                                if (regdata.data == "OK") {
+                                    layer.msg("设置成功！");
+                                } else {
+                                    layer.msg(regdata.data);
+                                }
+                            }
+                        })
+                    }else{
+                        layer.msg("心率测量周期需要大于2");
+                    }
+
+
+
+                    return false;
+                });
+                //设置血压测量周期
+                form.on('submit(formDemo4)', function (data) {
+
+                    if(data.field.interval>2){
+                        var index = layer.load();
+                        $.ajax({
+                            url: '/SmartWatchJiAi/JA10007',
+                            type: "post",
+                            data: {
+                                type: data.field.type,
+                                interval: data.field.interval,
+                                terminalId: tid
+                            },
+                            success: function (regdata) {
+                                //关闭
+                                layer.close(index);
+                                console.log("data", regdata)
+                                if (regdata.data == "OK") {
+                                    layer.msg("设置成功！");
+                                } else {
+                                    layer.msg(regdata.data);
+                                }
+                            }
+                        })
+                    }else{
+                        layer.msg("血压测量周期需要大于2");
+                    }
+
+
+                    return false;
+                });
+                //设置体温计测量周期
+                form.on('submit(formDemo5)', function (data) {
+                    var index = layer.load();
+                    $.ajax({
+                        url: '/SmartWatchJiAi/JA10007',
+                        type: "post",
+                        data: {
+                            type: data.field.type,
+                            interval: data.field.interval,
+                            terminalId: tid
+                        },
+                        success: function (regdata) {
+                            //关闭
+                            layer.close(index);
+                            console.log("data", regdata)
+                            if (regdata.data == "OK") {
+                                layer.msg("设置成功！");
+                            } else {
+                                layer.msg(regdata.data);
+                            }
+                        }
+                    })
+
+                    return false;
+                });
+
+
+            });
+</script>
+</body>
+
+</html>

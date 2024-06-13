@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yihe.system.mapper.YhTemplateMessageMapper" >
+  <resultMap id="BaseResultMap" type="com.yihe.system.domain.YhTemplateMessage" >
+    <id column="T_M_ID" property="tMId" jdbcType="INTEGER" />
+    <result column="T_M_Content" property="tMContent" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    T_M_ID, T_M_Content
+  </sql>
+  
+  <select id="selectByMessage" resultMap="BaseResultMap" >
+  	select * from yh_template_message 
+  </select>
+  
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from yh_template_message
+    where T_M_ID = #{tMId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from yh_template_message
+    where T_M_ID = #{tMId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.yihe.system.domain.YhTemplateMessage" >
+    insert into yh_template_message (T_M_ID, T_M_Content)
+    values (#{tMId,jdbcType=INTEGER}, #{tMContent,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.yihe.system.domain.YhTemplateMessage" >
+    insert into yh_template_message
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="tMId != null" >
+        T_M_ID,
+      </if>
+      <if test="tMContent != null" >
+        T_M_Content,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="tMId != null" >
+        #{tMId,jdbcType=INTEGER},
+      </if>
+      <if test="tMContent != null" >
+        #{tMContent,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.yihe.system.domain.YhTemplateMessage" >
+    update yh_template_message
+    <set >
+      <if test="tMContent != null" >
+        T_M_Content = #{tMContent,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where T_M_ID = #{tMId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.yihe.system.domain.YhTemplateMessage" >
+    update yh_template_message
+    set T_M_Content = #{tMContent,jdbcType=VARCHAR}
+    where T_M_ID = #{tMId,jdbcType=INTEGER}
+  </update>
+</mapper>

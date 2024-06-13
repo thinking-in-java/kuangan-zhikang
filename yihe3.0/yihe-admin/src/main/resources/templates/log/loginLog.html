@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link th:href="${topimg}" rel="icon">
+    <title>鲨鱼健康咨询平台</title>
+    <style>
+
+    </style>
+    <link rel="stylesheet" th:href="@{/assets/js/layui/css/layui.css}"/>
+    <script type="text/javascript" th:src="@{/assets/js/layui/layui.js}"></script>
+
+</head>
+<body>
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div class="layui-card-body table-tool-mini full-table">
+            <div class="layui-form toolbar">
+                <form class="layui-form" action="">
+
+                <div class="layui-form-item">
+                    <div class="layui-inline">
+                        <label class="layui-form-label w-auto">登录地址：</label>
+                        <div class="layui-input-inline mr0">
+                            <input name="ipaddr" class="layui-input" type="text" placeholder="登录地址"/>
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label w-auto">账号：</label>
+                        <div class="layui-input-inline mr0">
+                            <input name="userName" class="layui-input" type="text" placeholder="账号"/>
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label w-auto">状态：</label>
+                        <div class="layui-input-inline mr0">
+                            <select name="status" lay-filter="status">
+                                <option value=""></option>
+                                <option value="0">成功</option>
+                                <option value="1">失败</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label w-auto">登录时间：</label>
+                        <div class="layui-input-inline mr0">
+                            <input name="loginTime" type="text"
+                                   class="layui-input" id="test6" placeholder=" - ">
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <button class="layui-btn icon-btn" lay-filter="formSubSearchJob" lay-submit>
+                            <i class="layui-icon">&#xe615;</i>查询
+                        </button>
+                    </div>
+                    <div class="layui-inline">
+                        <button type="reset"  lay-filter="reset" class="layui-btn layui-btn-primary" id="reset">重置</button>
+                    </div>
+                </div>
+                </form>
+            </div>
+
+            <table id="test" lay-filter="test"></table>
+        </div>
+    </div>
+</div>
+<script type="text/javascript" th:src="@{/assets/libs/layui/layui.js}"></script>
+<script type="text/javascript" th:src="@{/assets/js/common.js}"></script>
+<script type="text/javascript" th:inline="javascript">
+    layui.use(['table','form','laydate'], function () {
+        var table = layui.table;
+        var $ = layui.jquery;
+        var form = layui.form;
+        var laydate = layui.laydate;
+
+
+        //日期范围
+        laydate.render({
+            elem: '#test6'
+            //设置开始日期、日期日期的 input 选择器
+            ,range: true
+        });
+
+        //第一个实例
+        var insTb =  table.render({
+            elem: '#test'
+            ,id:'TableReload'
+            , url: '/monitor/logininfor/list'  //数据接口
+            , method: 'get'
+            , page: true //开启分页
+            ,request: {
+                pageName: 'pageNum',// page
+                limitName: 'pageSize'// limit
+            }
+            , limit: 20// 每页显示的条数
+            , limits: [5, 10, 20, 50, 100] // 每页条数的选择项
+            , loading: true // 是否显示加载条(切换分页的时候显示）
+            , cellMinWidth: 80 // 全局定义所有常规单元格的最小宽度（默认：60）
+            , sort: true
+            , cols: [ //表头
+                [
+                    {field: 'infoId', title: '访问编号', align: 'center'}
+                    , {field: 'userName', title: '账号', align: 'center'}
+                    , {field: 'ipaddr', title: '登录地址', align: 'center'}
+                    , {field: 'loginLocation', title: '登录地点', align: 'center'}
+                    , {field: 'browser', title: '浏览器', align: 'center'}
+                    , {field: 'os', title: '操作系统', align: 'center'}
+                    , {
+                    field: 'status', title: '状态', align: 'center', templet: function (d) {
+                        return d.status == 0 ? '成功' : '失败'
+                    }
+                }
+                    , {field: 'msg', title: '操作信息', align: 'center'}
+                    , {field: 'loginTime', title: '登录日期', align: 'center'}
+                ]
+            ],
+            done: function (res, curr, count) {
+                console.log(res)
+                if (count > 20) {
+                    $(".layui-table-page").show();
+                } else {
+                    $(".layui-table-page").hide();
+                }
+            }
+        });
+
+        // 搜索
+        form.on('submit(formSubSearchJob)', function (data) {
+            data.field.params={}
+            if(""!=data.field.loginTime){
+
+                data.field.params.beginTime=data.field.loginTime.split(" - ")[0]
+                data.field.params.endTime=data.field.loginTime.split(" - ")[1]
+            }else{
+                data.field.params.beginTime=""
+                data.field.params.endTime=""
+            }
+            data.field.params.reset=false
+            insTb.reload({where: data.field}, 'data');
+            return false;
+        });
+
+
+
+
+        $("#reset").on('click',function () {
+            form.render();
+            insTb.reload({where: {"params":{"reset":true}}}, 'data');
+        })
+
+
+    });
+</script>
+
+</body>
+</html>

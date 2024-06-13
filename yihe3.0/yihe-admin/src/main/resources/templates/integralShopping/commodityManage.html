@@ -1,0 +1,698 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, maximum-scale=1">
+<title>商品管理</title>
+<link rel="stylesheet" th:href="@{/assets/libs/layui/css/layui.css}" />
+<link rel="stylesheet" th:href="@{/assets/module/admin.css}" />
+<style type="text/css">
+.theme-colorful {
+	background-color: white;
+}
+
+.layui-table-cell {
+	height: auto !important;
+}
+
+.removestyle {layui-btn-primary;
+	
+}
+
+.yishiname {
+	display: inline-block;
+	margin-left: 20px;
+}
+
+.layui-form-switch {
+	position: relative;
+	height: 22px;
+	line-height: 22px;
+	min-width: 35px;
+	padding: 0 5px;
+	margin-top: 0px;
+	border: 1px solid #d2d2d2;
+	border-radius: 20px;
+	cursor: pointer;
+	background-color: #fff;
+	-webkit-transition: .1s linear;
+	transition: .1s linear;
+}
+
+.addstyle {layui-btn-normal;
+	
+}
+</style>
+</head>
+<body>
+	<div id="search-header" style="margin-top: 7px;">
+		<form id="regForm" lay-filter="regForm" class="layui-form queryForm">
+			<div class="layui-form-item" style="margin-bottom: 0px;">
+				<div class="layui-inline">
+					<div class="layui-input-inline" style="width: 110px">
+						<select id="merchandiseType" name="merchandiseType">
+							<option value="">全部类型</option>
+							<option value="1">实物商品</option>
+							<option value="2">优惠礼劵</option>
+						</select>
+					</div>
+				</div>
+
+				<div class="layui-inline">
+					<div class="layui-input-inline" style="width: 110px">
+						<select name="groupingId" id="groupingId"
+							lay-filter="selectLouPan">
+							<option value="">全部分组</option>
+						</select>
+					</div>
+				</div>
+
+				<div class="layui-inline">
+					<div class="layui-input-inline" style="width: 110px">
+						<select id="putaway" name="putaway">
+							<option value="">全部状态</option>
+							<option value="1">已上架</option>
+							<option value="2">未上架</option>
+						</select>
+					</div>
+				</div>
+
+				<div class="layui-inline">
+					<div class="layui-input-inline" style="width: 126px">
+						<select id="conversion" name="conversion">
+							<option value="">全部商品</option>
+							<option value="1">未兑完的商品</option>
+							<option value="2">已兑完的商品</option>
+						</select>
+					</div>
+				</div>
+
+
+
+				<div class="layui-inline" style="margin-left: 3px;">
+					<label class="layui-form-label w-auto">商品名称:</label>
+					<div class="layui-input-inline">
+						<input id="merchandiseName" name="merchandiseName"
+							class="layui-input" placeholder="请输入" style="width: 124px;" />
+					</div>
+				</div>
+
+				<div class="layui-inline" style="padding-left: 20px;">
+					<button class="layui-btn icon-btn sousuoDN" lay-submit=""
+						lay-filter="regManageQueryBtn">
+						<i class="layui-icon"></i>搜索
+					</button>
+					<button class="layui-btn layui-btn-primary" lay-submit=""
+						lay-filter="reset">清除</button>
+
+				</div>
+
+
+				<div class="layui-inline" style="float: inline-end;">
+					<button class="layui-btn" type="button" id="addData">
+						<i class="layui-icon layui-icon-addition"></i> 发布商品
+					</button>
+				</div>
+
+
+			</div>
+
+		</form>
+	</div>
+	<!-- 批量操作 -->
+	<div id="piliang" class="layui-form toolbar"
+		style="background-color: #e6f7ff; height: 50px; margin-top: 10px; margin-bottom: 10px; display: none">
+		<span
+			style="font-size: 14px; color: #505050; line-height: 50px; margin-left: 9px;">批量操作</span>
+		<img alt="" src=""> <span id="xuanze">已选择**项</span>
+		<!-- <span id="huoqu" style="padding-left:15px ">跨页全选:</span>
+				<input type="checkbox"  lay-filter="checkall" style="margin-top: 0px;" title="跨页全选"  name="checkall"   lay-skin="switch" lay-text="跨页全选|取消"> -->
+		<span id="clickxuan" style="color: #1890ff; margin-left: 15px;">清空</span>
+		<span id="message"
+			style="color: #1890ff; margin-left: 15px; display: none;">不能同时操作已上架和未上架的商品</span>
+		<button id="updategrouping"
+			style="width: 80px; float: right; margin-right: 16px; text-align: center; margin-top: 7px;"
+			class="layui-btn layui-btn-primary" ;lay-filter="fenpeiyishi">改分组</button>
+		<button id="putaway2"
+			style="width: 60px; float: right; margin-right: 16px; text-align: center; margin-top: 7px;"
+			class="layui-btn layui-btn-primary">上架</button>
+		<button id="soldout"
+			style="width: 60px; float: right; margin-right: 16px; text-align: center; margin-top: 7px;"
+			class="layui-btn layui-btn-primary">下架</button>
+		<button id="deleteAll"
+			style="width: 60px; float: right; margin-right: 16px; text-align: center; margin-top: 7px;"
+			class="layui-btn layui-btn-primary">删除</button>
+	</div>
+	<table id="demo" lay-filter="demo"></table>
+
+
+</body>
+
+<script type="text/html" id="tableBar">
+    	<a href="#" style="color:#36A4FF" lay-event="lookOver">编辑</a>
+	</script>
+<script type="text/html" id="toutiao">
+
+
+
+<div class='layui-inline' style='margin-top:14px;float:left '><label class='layui-form-label w-auto'></label><div class='layui-input-inline mr0'><input id='setmealMame' style='width: 160px;' class='layui-input' placeholder='请输入分组名称'/></div></div>
+<input id='guishujishu' type='hidden' value=''>
+      <button id='selectyishi' style='margin-top:14px;margin-left:10px;background-color: #5a9ae2'  class='layui-btn'>搜索</button>
+		<button id="eliminate" style='margin-top:14px;margin-left:10px;'  class='layui-btn layui-btn-primary'>清除</button>
+<div style='background-color:#e6f7ff;width: 550px;height:193px;margin-top:20px;margin-left:15px;border-radius:4px;overflow:auto'>
+<form id="RoleForm" lay-filter="RoleForm" class="layui-form">
+<ul id='changedoctor'>
+<li style='margin-left: 20px;'><input type='checkbox'  lay-filter='filter' value='1' name='like1' lay-skin='primary'><label  class='yishiname'>啦啦啦啦</label><label class='killOrder1'>正常       使用啦啦啦啦患者</label><label  style='color: red;margin-left: 50px'>执行中</label></li>
+<li style='margin-left: 20px;'><input type='checkbox'  lay-filter='filter' value='2' name='like1' lay-skin='primary'><label  class='yishiname'>啦啦啦啦2</label><label class='killOrder1'>正常       使用啦啦啦啦患者</label></li>
+</ul>
+</div>
+        <input id="pitch" name="pitch" type="hidden" value="">
+    
+
+        <div class="layui-form-item text-right" style="    text-align: center;    padding-top: 10px;">
+            <button class="layui-btn layui-btn-primary" type="button" ew-event="closePageDialog">取消</button>
+            <button class="layui-btn" lay-filter="SubmitRole" lay-submit>保存</button>
+        </div>
+    </form>
+    
+</script>
+
+
+
+<script type="text/javascript" th:src="@{/assets/libs/layui/layui.js}"></script>
+<script type="text/javascript" th:src="@{/assets/js/common.js}"></script>
+<script type="text/javascript" th:src="@{/assets/js/jquery-1.11.1.js}"></script>
+<script th:src="@{/assets/libs/echarts/echarts.min.js}"></script>
+<script type="text/javascript" th:inline="javascript">
+	var groupingId="";
+	layui.use(['laypage', 'layer','element','admin', 'treeTable','table','form','treeSelect','laydate','util','upload'], function(){
+		  var laypage = layui.laypage;
+		  var layer = layui.layer;
+		  var element = layui.element;
+		  var table = layui.table;
+		  var form = layui.form;
+		  var $ = layui.jquery;
+		  var laydate = layui.laydate;
+		  var util = layui.util;
+		  var treeSelect= layui.treeSelect;
+		  var upload = layui.upload;
+		  var admin = layui.admin;
+		//自定义数组
+		  var ids = new Array();// 勾选的id集合
+		  var table_data = new Array();// 表格数据缓存
+		  var putaway = []; //对象数组状态缓存
+		     selectAllGrouping();
+		     function selectAllGrouping(){
+		       	 $.ajax({
+		 			type: 'get',
+		 			url: '/IntegralShoppingGrouping/selectAllGrouping',
+		 			success: function (data) {
+		              $.each(data.data, function(index, item) {
+		                  $('#groupingId')
+		                      .append(new Option(item.name, item.groupingId));
+		              });
+		              layui.form.render("select");
+		 			}
+		 		});
+		     }
+		  
+		  //第一个实例
+			var shoppingTab = table.render({
+			  id : 'shoppingTab',
+		    elem: '#demo'
+		    ,url: '/YhUserCommodityData/pageCommodity'  //数据接口
+		    ,method : 'get'
+		    ,where : {} // 你额外要携带数据，以键值对的方式存入
+		    ,page: true //开启分页
+		    ,limit : 20// 每页显示的条数
+			,limits : [ 5, 10, 20, 50, 100 ] // 每页条数的选择项
+			,loading : true // 是否显示加载条(切换分页的时候显示）
+			,cellMinWidth : 80 // 全局定义所有常规单元格的最小宽度（默认：60）
+			 ,sort:true
+		    ,cols: [ //表头  
+		    	[
+		    	{type: 'checkbox',LAY_CHECKED: false}
+		    	,{type:'numbers', title:'序号', align: 'center',width: 50}
+		        ,{field:'merchandiseName', title:'商品', align: 'center',templet:function(d){
+			      	 return "<div style='margin-top: 10px;'><img  src='" + d.coverImg+"' style=\"height:50px;width:80px\" /></div>" + d.merchandiseName;
+			      
+	        	}
+		        }
+		        ,{field: 'pzkIntegral', title: '积分', align: 'center',width: 100}
+		        ,{field: 'inventory', title: '剩余库存', align: 'center'}
+		        ,{field: 'num', title: '已兑换量', align: 'center',templet:function(d){
+			     	if(d.num == null || d.num ==""){
+			     		return "--";
+			     	}else{
+			     		return d.num;
+			     	}
+			      	 
+		         }
+		        }
+		        ,{field:'merchandiseName', title:'状态', align: 'center',templet:function(d){
+			      	var putaway = '';
+			     	if(d.putaway == 1){
+			     		putaway = '已上架';
+			     	}else{
+			     		putaway = '未上架';
+			     	}
+			      	 return putaway;
+		         }
+	        	}
+		        ,{field: 'addDate', title: '更新时间', align: 'center'}
+		        ,{ title: '操作', toolbar : '#tableBar',align: 'center', width:100}
+		        
+		      ]
+		      ],
+		      done:function(res,curr,count){
+		    	   $('table tr').on('click',function(){
+		    	     $('table tr').css('background','');
+		    	     $(this).css('background','<%=PropKit.use("config.properties").get("table_color")%>');
+		    	    });
+		    	   // 设置换页勾选之前的
+		    	   table_data = res.data;
+		    	   //在缓存中找到PM_CODE ,然后设置data表格中的选中状态
+		    	   //循环所有数据，找出对应关系，设置checkbox选中状态
+		    	   for(var i=0;i<res.data.length;i++){
+		    	    for(var j=0;j<ids.length;j++){
+		    	     if(res.data[i].merchandiseId==ids[j]){
+		    	      //这里才是真正的有效勾选
+		    	      res.data[i]["LAY_CHECKED"]='true';
+		    	      //找到对应数据改变勾选样式，呈现出选中效果
+		    	      var index= res.data[i]['LAY_TABLE_INDEX'];
+		    	      $('.layui-table tr[data-index=' + index + '] input[type="checkbox"]').prop('checked', true);
+		    	      $('.layui-table tr[data-index=' + index + '] input[type="checkbox"]').next().addClass('layui-form-checked');
+		    	     }
+		    	    }
+		    	   }
+		    	   //设置全选checkbox的选中状态，只有改变LAY_CHECKED的值， table.checkStatus才能抓取到选中的状态
+		    	   var checkStatus = table.checkStatus('test');
+		    	   if(checkStatus.isAll){
+		    	    $(' .layui-table-header th[data-field="0"] input[type="checkbox"]').prop('checked', true);
+		    	    $('.layui-table-header th[data-field="0"] input[type="checkbox"]').next().addClass('layui-form-checked');
+		    	   }
+		    	   if(count > 20) {
+			        	$(".layui-table-page").show();
+			        }else {
+			        	$(".layui-table-page").hide();
+			        }
+		    	 
+		    	  }
+		  
+		  });
+		    
+			 //复选框选中监听,将选中的id 设置到缓存数组,或者删除缓存数组
+			 table.on('checkbox(demo)', function (obj) {
+				 console.log(obj);
+				
+			     const { type, checked } = obj
+
+			      // 勾选全选复选框
+			      if (type === 'all' && checked) {
+			        table_data.forEach(item => {
+			          const { merchandiseId: id, putaway: flag } = item
+			          const findIndex = putaway.findIndex(x => x.id === id)
+			          if (findIndex === -1) {
+			        	ids.push(id);
+			            putaway.push({
+			              id,
+			              flag
+			            })
+			          }
+			        })
+			      } else if (type === 'all' && !checked) { // 取消勾选全选复选框
+			    	  table_data.forEach(item => {
+			              const { merchandiseId: id } = item
+			              const findIndex = putaway.findIndex(x => x.id === id)
+			              if (findIndex !== -1) {
+			            	ids.splice(findIndex, 1)
+			                putaway.splice(findIndex, 1)
+			              }
+			            })
+			      } else if (type === 'one' && checked) { // 勾选单行复选框
+			    	  const { merchandiseId: id , putaway: flag} = obj.data
+			          const findIndex = putaway.findIndex(x => x.id === id)
+			          if (findIndex === -1) {
+			        	ids.push(id);
+			            putaway.push({
+			              id,
+			              flag
+			            })
+			          }
+			      } else if (type === 'one' && !checked) { // 取消勾选单行复选框
+			    	  const { merchandiseId: id } = obj.data
+			          const findIndex = putaway.findIndex(x => x.id === id)
+			          if (findIndex !== -1) {
+			        	ids.splice(findIndex, 1)
+			            putaway.splice(findIndex, 1)
+			          }
+			      }
+				  if(ids.length>0){
+						 $("#piliang").show();
+						 $("#xuanze").html("已选择"+ids.length+"项")
+					 }else{
+						 $("#piliang").hide();
+					 }
+			  console.log("所有对象数组",putaway);
+			  console.log("所有id",ids);
+			 });
+			 
+			//全部全选
+				form.on('switch(checkall)', function (data) {
+				//先将存id的数组清空
+				ids.length = 0;
+					var checked = data.elem.checked;
+					console.log("checked",data)
+					if(this.checked){
+						 console.log("进入 ",checked);
+							$.ajax({
+		                		url: '/YhUserCommodityData/selectAll',
+		                		success: function (data) {
+		    						table_data = data.data
+		    						console.log(table_data,"所有商品")
+		    						   for(var i=0;i<table_data.length;i++){
+		    							     ids.push(table_data[i].merchandiseId);
+		    							   }
+		    						
+		    				    	   for(var i=0;i<table_data.length;i++){
+		    					    	    for(var j=0;j<ids.length;j++){
+		    					    	     if(table_data[i].merchandiseId==ids[j]){
+		    					    	      //这里才是真正的有效勾选
+		    					    	      table_data[i]["LAY_CHECKED"]='true';
+		    					    	      //找到对应数据改变勾选样式，呈现出选中效果
+		    					    	      var index= table_data[i]['LAY_TABLE_INDEX'];
+		    					    	      $('.layui-table tr[data-index=' + i + '] input[type="checkbox"]').prop('checked', true);
+		    					    	      $('.layui-table tr[data-index=' + i + '] input[type="checkbox"]').next().addClass('layui-form-checked');
+		    					    	     }
+		    					    	    }
+		    					    	   }
+		    					    	   //设置全选checkbox的选中状态，只有改变LAY_CHECKED的值， table.checkStatus才能抓取到选中的状态
+		    					    	   var checkStatus = table.checkStatus('test');
+		    					    	   if(checkStatus.isAll){
+		    					    	    $('.layui-table-header th[data-field="0"] input[type="checkbox"]').prop('checked', true);
+		    					    	    $('.layui-table-header th[data-field="0"] input[type="checkbox"]').next().addClass('layui-form-checked');
+		    					    	   }
+		    						 console.log("所有id===",ids);
+		    					}
+		                	})
+						 
+					}else{
+						ids.length = 0;
+						 console.log("所有id--------",ids);
+						for(var i = 0;i < table_data.length;i++){   //勾选行回显
+							  table_data[i]["LAY_CHECKED"]='false';
+							//找到对应数据改变勾选样式，呈现出选中效果
+							 $('.layui-table tr[data-index=' + i + '] input[type="checkbox"]').prop('checked', false);
+				    	     $('.layui-table tr[data-index=' + i + '] input[type="checkbox"]').next().removeClass('layui-form-checked');
+						}
+						form.render("checkbox");
+					}
+				});
+			  
+			//清空操作
+			$("#clickxuan").on('click',function(){
+				location.reload();//刷新页面 
+			})
+			
+			var list = [];
+			function isAllEqual(array) {
+			    if (array.length > 0) {
+			        return !array.some(function(value, index) {
+			            return value !== array[0];
+			        });
+			    } else {
+			        return true;
+			    }
+			}
+			
+			//下架
+			$("#soldout").on('click',function(){
+				list.length = 0;
+				for(let i = 0;i< putaway.length;i++) {
+				    list.push(putaway[i].flag)
+				}
+				console.log(isAllEqual(list));
+				if(!isAllEqual(list)){
+					layer.msg('不能同时操作已上架和未上架的商品');
+					return;
+				}
+				var variable = false;
+				for(let i = 0;i< list.length;i++) {
+				    if(list[i] == 1){
+				    	variable = true;
+				    }
+				}
+		    	layer.confirm(variable?'是否确认下架？':'该商品未上架', {
+          		  btn: [ '确认', '取消'] //可以无限个按钮
+          		  ,btn3: function(index, layero){
+          		    //按钮【按钮三】的回调
+          		  } 
+          		},function(index){
+          			if(!variable){
+          				layer.msg('该商品未上架');
+          				return;
+          			}
+    				$.ajax({
+                		url: '/YhUserCommodityData/soldoutCommodity',
+                		data:{flag:2,ids:ids},
+                		 traditional: true,//这里设置为true
+                		success: function (data) {
+    						console.log(data,"下架")
+    						if(data.code==20000){
+    							 parent.layer.msg('操作成功');
+    							//layer.closeAll();
+    							 location.reload(); 
+    						}else{
+    							parent.layer.msg('操作失败');
+    						}
+    					}
+                	})
+          	
+          });
+
+	})
+	
+	//批量删除
+	$("#deleteAll").on('click',function(){
+    	layer.confirm('是否确认删除？', {
+  		  btn: [ '确认', '取消'] //可以无限个按钮
+  		  ,btn3: function(index, layero){
+  		    //按钮【按钮三】的回调
+  		  }
+  		},function(index){
+			$.ajax({
+        		url: '/YhUserCommodityData/soldoutCommodity',
+        		data:{flag:4,ids:ids},
+        		 traditional: true,//这里设置为true
+        		success: function (data) {
+					console.log(data,"删除")
+					if(data.code==20000){
+						 parent.layer.msg('操作成功');
+						//layer.closeAll();
+						 location.reload(); 
+					}else{
+						parent.layer.msg('操作失败');
+					}
+				}
+        	})
+  	
+  });
+
+})
+			//上架
+			$("#putaway2").on('click',function(){
+				list.length = 0;
+				for(let i = 0;i< putaway.length;i++) {
+				    list.push(putaway[i].flag)
+				}
+				console.log(isAllEqual(list));
+				if(!isAllEqual(list)){
+					layer.msg('不能同时操作已上架和未上架的商品');
+					return;
+				}
+				var variable = false;
+				for(let i = 0;i< list.length;i++) {
+				    if(list[i] == 2){
+				    	variable = true;
+				    }
+				}
+				layer.confirm(variable?'是否确认上架？':'该商品已上架', {
+          		  btn: [ '确认', '取消'] //可以无限个按钮
+          		  ,btn3: function(index, layero){
+          		    //按钮【按钮三】的回调
+          		  }
+          		},function(index){
+          			if(!variable){
+          				layer.msg('该商品已上架');
+          				return;
+          			}
+    				$.ajax({
+                		url: '/YhUserCommodityData/soldoutCommodity',
+                		data:{flag:1,ids:ids},
+                		 traditional: true,//这里设置为true
+                		success: function (data) {
+    						console.log(data,"下架")
+    						if(data.code==20000){
+    							 parent.layer.msg('操作成功');
+    							//layer.closeAll();
+    							 location.reload(); 
+    						}else{
+    							parent.layer.msg('操作失败');
+    						}
+    					}
+                	})
+          	
+          });
+
+	})
+	//修改分组
+	$("#updategrouping").on('click',function(){
+		showhealth();
+		showheadline();
+	})
+			
+	
+	 //显示编辑弹窗头条
+    function showheadline(mRole) {
+        admin.open({
+            type: 1,
+            title: '修改分组',
+            content: $('#toutiao').html(),
+            area: ['450px', '400px'],
+            success: function (layero, dIndex) {
+               // var url = '/YhSportRecommendRecordController/insertSelective';
+                // 表单提交事件
+                form.on('submit(SubmitRole)', function (data) {
+                    
+                    var groupingId= $('#changedoctor input[name="like1"]:checked ').val()//获取选中的值
+                    console.log(groupingId)
+                    if( typeof(groupingId)=='undefined'){
+                    	layer.msg('请选择分组');
+                    }else{
+                     	$.ajax({
+                    		url: '/YhUserCommodityData/soldoutCommodity',
+                    		data:{flag:3,ids:ids,groupingId:groupingId},
+                    		 traditional: true,//这里设置为true
+                    		success: function (data) {
+        						console.log(data,"修改分组")
+        						if(data.code==20000){
+        							 parent.layer.msg('操作成功');
+        							 setTimeout(function () {
+        								 location.reload();
+        					            }, 2000);
+        							  
+        						}else{
+        							parent.layer.msg('操作失败');
+        						}
+        					}
+                    	})
+                    }
+              
+                    
+                 
+                });
+            }
+        });
+    }
+			
+			   function showhealth(){
+				    	 $.ajax({
+				     	 type: "get",
+				          url: '/IntegralShoppingGrouping/selectAllGrouping',
+				          success: function(data){
+				        	  console.log(data)
+				        	  var item=data.data;
+				   	     	var htmld="";
+				   	        for (var i = 0; i < item.length; i++) {
+				   	        	var setmealMame = item[i].name;
+				   	        	var groupingId = item[i].groupingId;
+				  	        	 htmld+="<li style='margin-left: 20px;margin-top: 10px;'><input type='radio'  lay-filter='filter' value="+groupingId+" name='like1' lay-skin='primary'><label  class='yishiname' style='width: 30%;'>"+setmealMame+"</label></li>";
+					      
+					        		 
+				   	       }
+				   	     $("#changedoctor").empty().append(htmld);
+				   	        form.render();
+				        	  
+				          }
+				     });
+				   }
+			   //查询分组
+			   $(document).on('click', '#selectyishi', function() {
+				   $("#changedoctor").empty().append("");
+			    	var name=$("#setmealMame").val();
+			    	console.log(name)
+			   	 $.ajax({
+			     	 type: "get",
+			          url: '/IntegralShoppingGrouping/selectGrouping',
+			          data:{name:name},
+			          success: function(data){
+			        	  console.log(data)
+			        	  var item=data.data;
+			   	     	var htmld="";
+			   	        for (var i = 0; i < item.length; i++) {
+			   	        	var setmealMame = item[i].name;
+			   	        	var groupingId = item[i].groupingId;
+			  	        	 htmld+="<li style='margin-left: 20px;margin-top: 10px;'><input type='radio'  lay-filter='filter' value="+groupingId+" name='like1' lay-skin='primary'><label  class='yishiname' style='width: 30%;'>"+setmealMame+"</label></li>";
+				      
+				        		 
+			   	       }
+			   	     $("#changedoctor").empty().append(htmld);
+			   	        form.render();
+			        	  
+			          }
+			     });
+			   });
+			   
+			   $(document).on('click','#eliminate',function(){
+				   console.log("清除")
+				   $("#setmealMame").val("");
+			   })
+			   
+		  table.on('tool(demo)', function(obj) { //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
+			  var data = obj.data;
+	          var layEvent = obj.event;
+	          merchandiseId = obj.data.merchandiseId;
+	         var  groupingId = obj.data.groupingId;
+	           if(layEvent === 'lookOver'){
+	        	   window.location.href="/manage/shopping/addCommodity?merchandiseId="+merchandiseId + "&groupingId="+groupingId+"";
+	           }
+	     });
+		  
+		  //添加商品
+		  $("#addData").on('click',function(){
+			  window.location.href="/manage/shopping/addCommodity";
+			  //window.open('/manage/shopping/addCommodity'); 
+		})
+		  
+
+		  
+		
+		//头部搜素表单提交1
+		  form.on('submit(regManageQueryBtn)', function(data){
+			 /*   console.log(data.elem);//被执行事件的元素DOM对象，一般为button对象
+			  console.log(data.form); //被执行提交的form对象，一般在存在form标签时才会返回
+			 console.log(data.field); //当前容器的全部表单字段，名值对形式：{name: value} */
+			 shoppingTab.reload({
+				  where : {
+						//这里注意一定要跟Bean 里面的属性对应
+					 merchandiseType:$('#merchandiseType').val(), 
+					 groupingId:$('#groupingId').val(), 
+					 putaway:$('#putaway').val(), 
+					 conversion:$('#conversion').val(), 
+					 merchandiseName:$('#merchandiseName').val()
+					},
+				  page : {
+					  curr : 1
+				  }
+				  
+			  });
+			// 阻止表单跳转。如果需要表单跳转，去掉这段即可。
+			  return false;
+		  });
+		    
+	
+
+});
+</script>

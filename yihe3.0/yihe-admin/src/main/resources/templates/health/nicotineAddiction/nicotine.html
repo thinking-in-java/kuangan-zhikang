@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1"
+          name="viewport">
+    <title>尼古丁成瘾</title>
+    <link rel="stylesheet" th:href="@{/assets/libs/layui/css/layui.css}"/>
+    <link rel="stylesheet" th:href="@{/assets/module/admin.css}"/>
+    <!-- js部分 -->
+
+    <style type="text/css">
+        .layui-form-label {
+            float: left;
+            display: block;
+            padding: 9px 15px;
+            padding-top: 9px;
+            padding-bottom: 9px;
+            width: 43px;
+            font-weight: 400;
+            line-height: 20px;
+            text-align: right;
+        }
+
+        .layui-form-item .layui-inline {
+            margin-bottom: 1px;
+            margin-right: 10px;
+        }
+
+        .layui-form-item {
+            margin-bottom: 1px;
+            clear: both;
+            *zoom: 1;
+        }
+        .listUser span{
+            display: inline-block;
+            margin: 10px 0 10px 10px;
+            font-size: 14px;
+        }
+        .listUser span:nth-child(1){
+            color: #bababa;
+        }
+    </style>
+
+</head>
+<body style="overflow-x: hidden; overflow-y: scroll">
+<!-- 加载动画 -->
+<div class="page-loading">
+    <div class="ball-loader">
+        <span></span><span></span><span></span><span></span>
+    </div>
+</div>
+
+
+<div class="layui-row layui-col-space15" style="padding: 20px;">
+    <div class="layui-card">
+
+        <div class="layui-tab layui-tab-brief" lay-filter="indexTab">
+            <div class="layui-tab-content">
+                <input id="guishu" type="hidden" value="">
+                <!-- 注册卡头部搜索 -->
+                <div id="search-header">
+                    <form class="layui-form queryForm" id="regForm" lay-filter="regForm">
+                        <div class="layui-form-item">
+
+                            <div class="layui-inline" style="margin-left: -31px;">
+                                <label class="layui-form-label">归属:</label>
+                                <div class="layui-input-block"
+                                     style="width: 240px; margin-left: 73px;">
+                                    <input class="layui-input" id="tree" lay-filter="tree" name="tree"
+                                           placeholder="当前用户管理的注册卡所属机构" type="text">
+                                </div>
+                            </div>
+
+                            <div class="layui-inline" style="margin-left: 15px;">
+                                <label class="layui-form-label w-auto" style="width:80px">评估结果:</label>
+                                <div class="layui-input-block"
+                                     style="width: 280px; margin-left: 100px;">
+                                    <select id="pinggu" lay-verify="" name="jieguo">
+                                        <option value="">全部</option>
+                                        <option value="轻度依赖">轻度依赖</option>
+                                        <option value="中度依赖">中度依赖</option>
+                                        <option value="重度依赖">重度依赖</option>
+
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="layui-inline" style="margin-left: -3px;">
+                                <label class="layui-form-label w-auto">用户:</label>
+                                <div class="layui-input-inline">
+                                    <input class="layui-input" id="name" name="name" placeholder="姓名/ID/手机号码"
+                                           style="width: 150px;"/>
+                                </div>
+                            </div>
+
+                            <div class="layui-inline" style="margin-left: 1px;">
+                                <label class="layui-form-label" style="width: 120px;">最新评估时间:</label>
+                                <div class="layui-input-inline" style="width: 290px;">
+                                    <input class="layui-input" id="test10" name="startTime"
+                                           placeholder="开始时间~结束时间" type="text">
+                                </div>
+                            </div>
+
+
+                            <div class="layui-inline"
+                                 style="width: 0px;margin-top: -16px;/*! margin-right: 5px; */margin-right: 1px;">
+                                <label class="layui-form-label"></label>
+                                <div class="layui-input-inline">
+                                    <button class="layui-btn icon-btn sousuoDN" lay-filter="regManageQueryBtn"
+                                            lay-submit="">
+                                        <i class="layui-icon"></i>搜索
+                                    </button>
+                                    <button class="layui-btn layui-btn-primary" id="symptoms" type="button">清除</button>
+                                </div>
+
+                            </div>
+                        </div>
+
+
+                    </form>
+
+                </div>
+
+                <div class="layui-tab-item layui-show">
+                    <table id="demo" lay-filter="demo"></table>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<div id="drawer" style="display: none">
+    <div style="padding: 0 20px">
+        <div class="listUser">
+            <span></span><span></span><span></span>
+        </div>
+        <table class="layui-hide" id="listUserAss" lay-filter="listUserAss"></table>
+    </div>
+</div>
+
+
+<script th:src="@{/assets/libs/layui/layui.js}" type="text/javascript"></script>
+<script th:src="@{/assets/js/common.js}" type="text/javascript"></script>
+<script type="text/javascript">
+
+
+    layui.use(['laypage', 'layer', 'element', 'treeTable', 'table', 'form', 'treeSelect', 'laydate', 'util', 'upload'], function () {
+        var element = layui.element;
+        var table = layui.table;
+        var form = layui.form;
+        var $ = layui.jquery;
+        var laydate = layui.laydate;
+        var treeSelect = layui.treeSelect;
+
+
+        //机构归属查询
+        treeSelect.render({
+            // 选择器
+            elem: '#tree',
+            // 数据
+            data: '/YhUserMakeCard/showPullDownTree',
+            // 异步加载方式：get/post，默认get
+            type: 'get',
+            // 占位符
+            placeholder: '全部',
+            // 是否开启搜索功能：true/false，默认false
+            search: true,
+            // 点击回调
+            click: function (d) {
+                $('#tree').val(d.current.id)
+                console.log(d.current.id);
+            },
+            // 加载完成后的回调函数
+            success: function (d) {
+                console.log(d);
+            }
+
+        });
+
+        //日期时间范围
+        laydate.render({
+            elem: '#test10'
+            , type: 'datetime'
+            , range: true,
+            trigger: 'click'
+        });
+
+        //第一个实例
+        var regManageTb = table.render({
+            elem: '#demo',
+            url: '/dataDetection/report/list',//数据接口
+            method: 'get',
+            where: {}, // 你额外要携带数据，以键值对的方式存入
+            page: true,  //开启分页
+            limits:[10,20,30,40,50,60,70,80,90],
+            cols: [ //表头
+                [
+                    {type: 'numbers', title: '序号', align: 'center'}
+                    , {field: 'userCode', title: '用户编码', align: 'center'}
+                    , {field: 'name', title: '姓名', align: 'center'}
+                    , {field: 'mobile', align: 'center', title: '手机号码'}
+                    , {field: 'num', align: 'center', title: '评估次数'}
+                    , {field: 'smokingReportLevel', align: 'center', title: '评估结果', templet: function (d) {
+                        if (null != d.smokingReportLevel && null != d.smokingReportScore) {
+                            return d.smokingReportLevel + "(" + d.smokingReportScore + ")";
+                        }
+                        return "--"
+                       }
+                     }
+                    , {field: 'qtime', title: '最新评估日期', align: 'center'}
+                    , {title: '操作', toolbar: '#tableBar', align: 'center'}
+                ]
+            ],
+            parseData: function (res) { //将原始数据解析成 table 组件所规定的数据
+                console.log("尼古丁评估",res);
+                return {
+                    "code": 20000, //解析接口状态
+                    "msg": res.msg, //解析提示文本
+                    "count": res.count, //解析数据长度
+                    "data": res.data,
+                    //解析数据列表
+                }
+
+            },
+            done: function (res, curr, count) {
+            }
+        });
+
+        //清除按钮
+        $("#symptoms").click(function () {
+            $("#tree").val(""),
+                $("#pinggu").val(""),
+                $("#name").val(""),
+                $("#test10").val("")
+            window.location.reload()
+
+        })
+
+
+        function createTime(v) {
+            var date = new Date(v);
+            var y = date.getFullYear();
+            var m = date.getMonth() + 1;
+            m = m < 10 ? '0' + m : m;
+            var d = date.getDate();
+            d = d < 10 ? ("0" + d) : d;
+            var h = date.getHours();
+            h = h < 10 ? ("0" + h) : h;
+            var M = date.getMinutes();
+            M = M < 10 ? ("0" + M) : M;
+            var str = y + "-" + m + "-" + d;
+            return str;
+        }
+
+        //头部搜素表单提交
+        form.on('submit(regManageQueryBtn)', function (data) {
+            // console.log(data.elem, "1");//被执行事件的元素DOM对象，一般为button对象
+            // console.log(data.form, "2"); //被执行提交的form对象，一般在存在form标签时才会返回
+            console.log(data.field, "3"); //当前容器的全部表单字段，名值对形式：{name: value}
+            console.log($("#tree").val(), "3"); //当前容器的全部表单字段，名值对形式：{name: value}
+
+
+            regManageTb.reload({
+                where: {
+                    //这里注意一定要跟Bean 里面的属性对应
+                    'orgId': $("#tree").val(),
+                    'smokingReportLevel': $("#pinggu").val(),
+                    'name': $("#name").val(),
+                    'strTime': $("#test10").val()
+                },
+                page: {
+                    curr: 1
+                }
+            });
+
+
+            // 阻止表单跳转。如果需要表单跳转，去掉这段即可。
+            return false;
+        });
+
+
+        //查看跳转
+        table.on('tool(demo)', function (obj) { //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
+            var data = obj.data;
+            console.log(data)
+            var layEvent = obj.event;
+            if (layEvent === 'look') { //查看
+                //window.open("/manage/register/userIndex?page=healthAssessment&userCode="+data.userCode+"&type2=zhongyi");
+                console.log(data.userCode)
+                $(".listUser").html("")
+                $(".listUser").append("<span>" + data.userCode + "</span><span>" + data.name + "</span><span>" + data.mobile + "</span>");
+                listUserAss(data.userCode);
+                layer.open({
+                    type: 1,
+                    // r表示right,b表示bottom
+                    offset: 'rb',
+                    // 标题
+                    title: '评估记录',
+                    //
+                    // anim 特效 0-平滑放大 1-从上掉落 2-从底部往上滑入 3-从左滑入 4-从左翻转 5-渐显 6-抖动
+                    anim: 3,
+                    // 第一个参数宽度，第二个参数高度
+                    area: ['50%', '100%'],
+                    // 内容区 在body中写入<div id="draw">。。。。</div>代码，即弹窗内容
+                    content: $("#drawer"),
+                })
+
+            }
+        });
+
+
+        //评估记录
+        function listUserAss(userId) {
+            var regManageTb2 = table.render({
+                elem: '#listUserAss',
+                url: '/dataDetection/report/listByUser',
+                where: {userCode: userId},
+                page: true, //开启分页
+                request: {
+                    pageName: 'pageNum',// page
+                    limitName: 'pageSize'// limit
+                },
+                limit: 10,// 每页显示的条数
+                cols: [
+                    [
+                        {type: 'numbers', title: '序号'},
+                        {
+                            align: 'center', title: '评估结果', templet: function (d) {
+                                if (null != d.smokingReportLevel && null != d.smokingReportScore) {
+                                    return d.smokingReportLevel + "(" + d.smokingReportScore + ")";
+                                }
+                                return "--"
+                            }
+                        },
+                        {field: 'qtime', title: '评估时间', sort: true},
+                        {
+                            title: '操作', align: 'center', templet: function (d) {
+                                var id = d.smokingReportId;
+                                return '<a href="/dataDetection/report/getAssessXls?id=' + id + '" style="color:#36A4FF;margin-right: 10px">下载问卷</a><a href="/dataDetection/report/exportPdf?id=' + id + '" style="color:#36A4FF">下载报告</a>';
+                            }
+                        }
+                    ]
+                ],
+                response: {
+                    statusCode: 0
+                    //规定成功的状态码，默认：0
+                },
+                parseData: function (res) { //将原始数据解析成 table 组件所规定的数据
+                    console.log(res)
+                    return {
+                        "code": 0, //解析接口状态
+                        "msg": res.msg, //解析提示文本
+                        "count": res.count, //解析数据长度
+                        "data": res.data,
+                        //解析数据列表
+                    }
+
+                }
+            });
+        }
+
+    });
+</script>
+<script id="tableBar" type="text/html">
+    <a href="#" style="color:#36A4FF" lay-event="look">查看</a>
+</script>
+</body>
+</html>

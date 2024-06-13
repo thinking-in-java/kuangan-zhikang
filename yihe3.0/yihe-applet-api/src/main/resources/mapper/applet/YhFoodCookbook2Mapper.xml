@@ -1,0 +1,510 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yihe.applet.api.mapper.YhFoodCookbook2Mapper" >
+  <resultMap id="BaseResultMap" type="com.yihe.applet.api.domain.YhFoodCookbook2" >
+   <id column="F_C_ID" property="fCId" jdbcType="INTEGER" /> 
+    <result column="F_C_NAME" property="fCName" jdbcType="VARCHAR" />
+    <result column="Appraise" property="appraise" jdbcType="VARCHAR" />
+    <result column="F_C_IMG" property="fCImg" jdbcType="VARCHAR" />
+    <result column="Measuring_unit" property="measuringUnit" jdbcType="VARCHAR" />
+    <result column="F_type" property="fType" jdbcType="VARCHAR" />
+    <result column="Cook_Person" property="cookPerson" jdbcType="VARCHAR" />
+    <result column="Used_Food" property="usedFood" jdbcType="INTEGER" />
+    <result column="Edible_Part" property="ediblePart" jdbcType="INTEGER" />
+    <result column="Moisture" property="moisture" jdbcType="REAL" />
+    <result column="Energy_Kcal" property="energyKcal" jdbcType="REAL" />
+    <result column="Cho" property="cho" jdbcType="REAL" />
+    <result column="Fat" property="fat" jdbcType="REAL" />
+    <result column="Protein" property="protein" jdbcType="REAL" />
+    <result column="Insoluble_Dietary_Fiber" property="insolubleDietaryFiber" jdbcType="REAL" />
+    <result column="Cholesterol" property="cholesterol" jdbcType="REAL" />
+    <result column="VitaminA" property="vitamina" jdbcType="REAL" />
+    <result column="Cellulose" property="cellulose" jdbcType="REAL" />
+    <result column="VitaminC" property="vitaminc" jdbcType="REAL" />
+    <result column="VitaminE" property="vitamine" jdbcType="REAL" />
+    <result column="Thiamine" property="thiamine" jdbcType="REAL" />
+    <result column="Riboflavin" property="riboflavin" jdbcType="REAL" />
+    <result column="Niacin" property="niacin" jdbcType="REAL" />
+    <result column="Magnesium" property="magnesium" jdbcType="REAL" />
+    <result column="Calcium" property="calcium" jdbcType="REAL" />
+    <result column="Rron" property="rron" jdbcType="REAL" />
+    <result column="Zinc" property="zinc" jdbcType="REAL" />
+    <result column="Copper" property="copper" jdbcType="REAL" />
+    <result column="Manganese" property="manganese" jdbcType="REAL" />
+    <result column="Potassium" property="potassium" jdbcType="REAL" />
+    <result column="Phosphorus" property="phosphorus" jdbcType="REAL" />
+    <result column="Sodium" property="sodium" jdbcType="REAL" />
+    <result column="Selenium" property="selenium" jdbcType="REAL" />
+    <result column="Saturated_Fat" property="saturatedFat" jdbcType="REAL" />
+    <result column="Monounsaturated_Fatty_Acids" property="monounsaturatedFattyAcids" jdbcType="REAL" />
+    <result column="Polyunsaturated_Fatty_Acids" property="polyunsaturatedFattyAcids" jdbcType="REAL" />
+    <result column="common" property="common" jdbcType="INTEGER" />
+    <result column="oneself" property="oneself" jdbcType="INTEGER" />
+    <result column="is_del" property="isDel" jdbcType="INTEGER" />
+    <result column="user_code" property="userCode" jdbcType="VARCHAR" />
+    <result column="Not_Recommend_Food" property="notRecommendFood" jdbcType="VARCHAR" />
+    <result column="F_B_NAME" property="fbName" jdbcType="VARCHAR" />
+  </resultMap>
+ 
+  
+  <sql id="Base_Column_List" >
+    F_C_ID, F_C_NAME, Appraise, F_C_IMG, Measuring_unit, F_type, Cook_Person, Used_Food, 
+    Edible_Part, Moisture, Energy_Kcal, Cho, Fat, Protein, Insoluble_Dietary_Fiber, Cholesterol, 
+    VitaminA, Cellulose, VitaminC, VitaminE, Thiamine, Riboflavin, Niacin, Magnesium, 
+    Calcium, Rron, Zinc, Copper, Manganese, Potassium, Phosphorus, Sodium, Selenium, 
+    Saturated_Fat, Monounsaturated_Fatty_Acids, Polyunsaturated_Fatty_Acids, common, 
+    oneself, is_del, user_code,Not_Recommend_Food,F_B_NAME
+  </sql>
+  <!--查询最近吃的-->
+  <select id="findZuiJinEat" resultType="java.lang.String">
+
+      SELECT
+      SUBSTRING_INDEX(SUBSTRING_INDEX((SELECT F_Elements FROM `yh_food_user_diary` WHERE user_code=#{usercode} ORDER BY U_Fd_Id DESC LIMIT #{page},1),';',help_topic_id+1),';',-1) AS num
+      FROM
+      mysql.help_topic
+      WHERE
+      help_topic_id &lt; LENGTH((SELECT F_Elements FROM `yh_food_user_diary` WHERE user_code=#{usercode} ORDER BY U_Fd_Id DESC LIMIT #{page},1))-LENGTH(REPLACE((SELECT F_Elements FROM `yh_food_user_diary` WHERE user_code=#{usercode} ORDER BY U_Fd_Id DESC LIMIT #{page},1),';',''))+1
+
+
+  </select>
+
+  <!-- 查询该食物种类总数 -->
+<select id="findFoodCookBookAllNumByType" resultType="java.lang.Integer">
+SELECT COUNT(1) FROM yh_food_cookbook2 WHERE F_type=(SELECT F_type FROM `yh_food_cookbook2` WHERE F_c_id=#{fcid}) 
+</select>
+<!-- 查询大于它的热量食物总数 -->
+<select id="findFoodCookBookNumByTypeGTFood"  resultType="java.lang.Integer">
+SELECT COUNT(1) FROM yh_food_cookbook2 WHERE Energy_Kcal &gt; (SELECT Energy_Kcal FROM `yh_food_cookbook2` WHERE F_c_id=#{fcid}) AND F_type=(SELECT F_type FROM `yh_food_cookbook2` WHERE F_c_id=#{fcid})
+</select>
+<!-- 查询食物分类名称 -->
+<select id="findFoodInfoByIDForName" resultType="java.lang.String">
+SELECT food_category_name FROM `yh_food_category` WHERE id=#{id} limit 1
+</select>
+  <!-- 模糊查询食物名称 -->
+  <select id="selectFoodCookBookName"  resultMap="BaseResultMap">
+   SELECT 
+    <include refid="Base_Column_List" />
+    FROM yh_food_cookbook2
+    WHERE
+       (F_C_NAME LIKE CONCAT('%',#{foodName},'%')  OR  F_B_NAME LIKE CONCAT('%',#{foodName},'%'))
+    AND is_del=2
+   ORDER BY LENGTH(REPLACE(F_C_NAME,#{foodName},''))/LENGTH(F_C_NAME),Used_Food DESC
+    limit #{curPage},#{pageSize}
+  </select>
+  
+  <!-- 查询用户所有膳食日记 -->
+  <select id="findUserFoodDiaryAllInfo"  resultType="java.lang.String">
+  SELECT F_Elements FROM `yh_food_user_diary` WHERE user_code=#{usercode}
+  </select>
+  
+  <!-- 查询用户收藏 -->
+  <select id="findFoodCookCollectionByUserCodeForFoodInfo"  resultMap="BaseResultMap">
+  
+      SELECT <include refid="Base_Column_List" />
+       FROM `yh_food_cookbook2` WHERE F_C_ID IN (SELECT foodid FROM `yh_food_cookbook_collection` WHERE USERCODE=#{usercode} ORDER BY insertTime DESC)
+  </select>
+   
+   
+     <!-- 查询五条实物 -->
+  <select id="findFoodName"  resultMap="BaseResultMap">
+ 	 SELECT F_C_NAME,Used_Food,F_C_ID
+	 FROM yh_food_cookbook2
+     WHERE F_C_NAME LIKE CONCAT('%',#{fCName},'%')
+	 ORDER BY LENGTH(REPLACE(F_C_NAME,#{fCName},''))/LENGTH(F_C_NAME),Used_Food desc limit 5
+  </select>
+   
+  <!-- 最近常吃10条 -->
+  <select id="findFoodCookBookInfoByUserCodeAndDescCommon" resultMap="BaseResultMap">
+  
+     SELECT <include refid="Base_Column_List" />
+     
+      FROM `yh_food_cookbook2` WHERE
+    (user_code=#{usercode}  OR user_code='') AND 
+      is_del=2 ORDER BY common DESC  LIMIT 20
+  </select>
+  
+   <select id="selectBYshowName" resultMap="BaseResultMap">
+  select * from yh_food_cookbook2 where F_C_NAME = #{fCName} ORDER BY Used_Food DESC limit 1
+  </select>
+  
+  
+  
+  
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from yh_food_cookbook2
+    where F_C_ID = #{fCId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from yh_food_cookbook2
+    where F_C_ID = #{fCId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.yihe.applet.api.domain.YhFoodCookbook2" >
+    insert into yh_food_cookbook2 (F_C_ID, F_C_NAME, Appraise, 
+      F_C_IMG, Measuring_unit, F_type, 
+      Cook_Person, Energy_Kcal, Cho, 
+      Fat, Protein, Cholesterol, VitaminA, 
+      Cellulose, VitaminC, VitaminE, 
+      Thiamine, Riboflavin, Niacin, 
+      Magnesium, Calcium, Rron, Zinc, 
+      Copper, Manganese, Potassium, 
+      Phosphorus, Sodium, Selenium, 
+      common, oneself, is_del, 
+      user_code)
+    values (#{fCId,jdbcType=INTEGER}, #{fCName,jdbcType=VARCHAR}, #{appraise,jdbcType=VARCHAR}, 
+      #{fCImg,jdbcType=VARCHAR}, #{measuringUnit,jdbcType=VARCHAR}, #{fType,jdbcType=VARCHAR}, 
+      #{cookPerson,jdbcType=VARCHAR}, #{energyKcal,jdbcType=REAL}, #{cho,jdbcType=REAL}, 
+      #{fat,jdbcType=REAL}, #{protein,jdbcType=REAL}, #{cholesterol,jdbcType=REAL}, #{vitamina,jdbcType=REAL}, 
+      #{cellulose,jdbcType=REAL}, #{vitaminc,jdbcType=REAL}, #{vitamine,jdbcType=REAL}, 
+      #{thiamine,jdbcType=REAL}, #{riboflavin,jdbcType=REAL}, #{niacin,jdbcType=REAL}, 
+      #{magnesium,jdbcType=REAL}, #{calcium,jdbcType=REAL}, #{rron,jdbcType=REAL}, #{zinc,jdbcType=REAL}, 
+      #{copper,jdbcType=REAL}, #{manganese,jdbcType=REAL}, #{potassium,jdbcType=REAL}, 
+      #{phosphorus,jdbcType=REAL}, #{sodium,jdbcType=REAL}, #{selenium,jdbcType=REAL}, 
+      #{common,jdbcType=INTEGER}, #{oneself,jdbcType=INTEGER}, #{isDel,jdbcType=INTEGER}, 
+      #{userCode,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.yihe.applet.api.domain.YhFoodCookbook2" >
+    insert into yh_food_cookbook2
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="fCId != null" >
+        F_C_ID,
+      </if>
+      <if test="fCName != null" >
+        F_C_NAME,
+      </if>
+      <if test="appraise != null" >
+        Appraise,
+      </if>
+      <if test="fCImg != null" >
+        F_C_IMG,
+      </if>
+      <if test="measuringUnit != null" >
+        Measuring_unit,
+      </if>
+      <if test="fType != null" >
+        F_type,
+      </if>
+      <if test="cookPerson != null" >
+        Cook_Person,
+      </if>
+      <if test="energyKcal != null" >
+        Energy_Kcal,
+      </if>
+      <if test="cho != null" >
+        Cho,
+      </if>
+      <if test="fat != null" >
+        Fat,
+      </if>
+      <if test="protein != null" >
+        Protein,
+      </if>
+      <if test="cholesterol != null" >
+        Cholesterol,
+      </if>
+      <if test="vitamina != null" >
+        VitaminA,
+      </if>
+      <if test="cellulose != null" >
+        Cellulose,
+      </if>
+      <if test="vitaminc != null" >
+        VitaminC,
+      </if>
+      <if test="vitamine != null" >
+        VitaminE,
+      </if>
+      <if test="thiamine != null" >
+        Thiamine,
+      </if>
+      <if test="riboflavin != null" >
+        Riboflavin,
+      </if>
+      <if test="niacin != null" >
+        Niacin,
+      </if>
+      <if test="magnesium != null" >
+        Magnesium,
+      </if>
+      <if test="calcium != null" >
+        Calcium,
+      </if>
+      <if test="rron != null" >
+        Rron,
+      </if>
+      <if test="zinc != null" >
+        Zinc,
+      </if>
+      <if test="copper != null" >
+        Copper,
+      </if>
+      <if test="manganese != null" >
+        Manganese,
+      </if>
+      <if test="potassium != null" >
+        Potassium,
+      </if>
+      <if test="phosphorus != null" >
+        Phosphorus,
+      </if>
+      <if test="sodium != null" >
+        Sodium,
+      </if>
+      <if test="selenium != null" >
+        Selenium,
+      </if>
+      <if test="common != null" >
+        common,
+      </if>
+      <if test="oneself != null" >
+        oneself,
+      </if>
+      <if test="isDel != null" >
+        is_del,
+      </if>
+      <if test="userCode != null" >
+        user_code,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="fCId != null" >
+        #{fCId,jdbcType=INTEGER},
+      </if>
+      <if test="fCName != null" >
+        #{fCName,jdbcType=VARCHAR},
+      </if>
+      <if test="appraise != null" >
+        #{appraise,jdbcType=VARCHAR},
+      </if>
+      <if test="fCImg != null" >
+        #{fCImg,jdbcType=VARCHAR},
+      </if>
+      <if test="measuringUnit != null" >
+        #{measuringUnit,jdbcType=VARCHAR},
+      </if>
+      <if test="fType != null" >
+        #{fType,jdbcType=VARCHAR},
+      </if>
+      <if test="cookPerson != null" >
+        #{cookPerson,jdbcType=VARCHAR},
+      </if>
+      <if test="energyKcal != null" >
+        #{energyKcal,jdbcType=REAL},
+      </if>
+      <if test="cho != null" >
+        #{cho,jdbcType=REAL},
+      </if>
+      <if test="fat != null" >
+        #{fat,jdbcType=REAL},
+      </if>
+      <if test="protein != null" >
+        #{protein,jdbcType=REAL},
+      </if>
+      <if test="cholesterol != null" >
+        #{cholesterol,jdbcType=REAL},
+      </if>
+      <if test="vitamina != null" >
+        #{vitamina,jdbcType=REAL},
+      </if>
+      <if test="cellulose != null" >
+        #{cellulose,jdbcType=REAL},
+      </if>
+      <if test="vitaminc != null" >
+        #{vitaminc,jdbcType=REAL},
+      </if>
+      <if test="vitamine != null" >
+        #{vitamine,jdbcType=REAL},
+      </if>
+      <if test="thiamine != null" >
+        #{thiamine,jdbcType=REAL},
+      </if>
+      <if test="riboflavin != null" >
+        #{riboflavin,jdbcType=REAL},
+      </if>
+      <if test="niacin != null" >
+        #{niacin,jdbcType=REAL},
+      </if>
+      <if test="magnesium != null" >
+        #{magnesium,jdbcType=REAL},
+      </if>
+      <if test="calcium != null" >
+        #{calcium,jdbcType=REAL},
+      </if>
+      <if test="rron != null" >
+        #{rron,jdbcType=REAL},
+      </if>
+      <if test="zinc != null" >
+        #{zinc,jdbcType=REAL},
+      </if>
+      <if test="copper != null" >
+        #{copper,jdbcType=REAL},
+      </if>
+      <if test="manganese != null" >
+        #{manganese,jdbcType=REAL},
+      </if>
+      <if test="potassium != null" >
+        #{potassium,jdbcType=REAL},
+      </if>
+      <if test="phosphorus != null" >
+        #{phosphorus,jdbcType=REAL},
+      </if>
+      <if test="sodium != null" >
+        #{sodium,jdbcType=REAL},
+      </if>
+      <if test="selenium != null" >
+        #{selenium,jdbcType=REAL},
+      </if>
+      <if test="common != null" >
+        #{common,jdbcType=INTEGER},
+      </if>
+      <if test="oneself != null" >
+        #{oneself,jdbcType=INTEGER},
+      </if>
+      <if test="isDel != null" >
+        #{isDel,jdbcType=INTEGER},
+      </if>
+      <if test="userCode != null" >
+        #{userCode,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.yihe.applet.api.domain.YhFoodCookbook2" >
+    update yh_food_cookbook2
+    <set >
+      <if test="fCName != null" >
+        F_C_NAME = #{fCName,jdbcType=VARCHAR},
+      </if>
+      <if test="appraise != null" >
+        Appraise = #{appraise,jdbcType=VARCHAR},
+      </if>
+      <if test="fCImg != null" >
+        F_C_IMG = #{fCImg,jdbcType=VARCHAR},
+      </if>
+      <if test="measuringUnit != null" >
+        Measuring_unit = #{measuringUnit,jdbcType=VARCHAR},
+      </if>
+      <if test="fType != null" >
+        F_type = #{fType,jdbcType=VARCHAR},
+      </if>
+      <if test="cookPerson != null" >
+        Cook_Person = #{cookPerson,jdbcType=VARCHAR},
+      </if>
+      <if test="energyKcal != null" >
+        Energy_Kcal = #{energyKcal,jdbcType=REAL},
+      </if>
+      <if test="cho != null" >
+        Cho = #{cho,jdbcType=REAL},
+      </if>
+      <if test="fat != null" >
+        Fat = #{fat,jdbcType=REAL},
+      </if>
+      <if test="protein != null" >
+        Protein = #{protein,jdbcType=REAL},
+      </if>
+      <if test="cholesterol != null" >
+        Cholesterol = #{cholesterol,jdbcType=REAL},
+      </if>
+      <if test="vitamina != null" >
+        VitaminA = #{vitamina,jdbcType=REAL},
+      </if>
+      <if test="cellulose != null" >
+        Cellulose = #{cellulose,jdbcType=REAL},
+      </if>
+      <if test="vitaminc != null" >
+        VitaminC = #{vitaminc,jdbcType=REAL},
+      </if>
+      <if test="vitamine != null" >
+        VitaminE = #{vitamine,jdbcType=REAL},
+      </if>
+      <if test="thiamine != null" >
+        Thiamine = #{thiamine,jdbcType=REAL},
+      </if>
+      <if test="riboflavin != null" >
+        Riboflavin = #{riboflavin,jdbcType=REAL},
+      </if>
+      <if test="niacin != null" >
+        Niacin = #{niacin,jdbcType=REAL},
+      </if>
+      <if test="magnesium != null" >
+        Magnesium = #{magnesium,jdbcType=REAL},
+      </if>
+      <if test="calcium != null" >
+        Calcium = #{calcium,jdbcType=REAL},
+      </if>
+      <if test="rron != null" >
+        Rron = #{rron,jdbcType=REAL},
+      </if>
+      <if test="zinc != null" >
+        Zinc = #{zinc,jdbcType=REAL},
+      </if>
+      <if test="copper != null" >
+        Copper = #{copper,jdbcType=REAL},
+      </if>
+      <if test="manganese != null" >
+        Manganese = #{manganese,jdbcType=REAL},
+      </if>
+      <if test="potassium != null" >
+        Potassium = #{potassium,jdbcType=REAL},
+      </if>
+      <if test="phosphorus != null" >
+        Phosphorus = #{phosphorus,jdbcType=REAL},
+      </if>
+      <if test="sodium != null" >
+        Sodium = #{sodium,jdbcType=REAL},
+      </if>
+      <if test="selenium != null" >
+        Selenium = #{selenium,jdbcType=REAL},
+      </if>
+      <if test="common != null" >
+        common = #{common,jdbcType=INTEGER},
+      </if>
+      <if test="oneself != null" >
+        oneself = #{oneself,jdbcType=INTEGER},
+      </if>
+      <if test="isDel != null" >
+        is_del = #{isDel,jdbcType=INTEGER},
+      </if>
+      <if test="userCode != null" >
+        user_code = #{userCode,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where F_C_ID = #{fCId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.yihe.applet.api.domain.YhFoodCookbook2" >
+    update yh_food_cookbook2
+    set F_C_NAME = #{fCName,jdbcType=VARCHAR},
+      Appraise = #{appraise,jdbcType=VARCHAR},
+      F_C_IMG = #{fCImg,jdbcType=VARCHAR},
+      Measuring_unit = #{measuringUnit,jdbcType=VARCHAR},
+      F_type = #{fType,jdbcType=VARCHAR},
+      Cook_Person = #{cookPerson,jdbcType=VARCHAR},
+      Energy_Kcal = #{energyKcal,jdbcType=REAL},
+      Cho = #{cho,jdbcType=REAL},
+      Fat = #{fat,jdbcType=REAL},
+      Protein = #{protein,jdbcType=REAL},
+      Cholesterol = #{cholesterol,jdbcType=REAL},
+      VitaminA = #{vitamina,jdbcType=REAL},
+      Cellulose = #{cellulose,jdbcType=REAL},
+      VitaminC = #{vitaminc,jdbcType=REAL},
+      VitaminE = #{vitamine,jdbcType=REAL},
+      Thiamine = #{thiamine,jdbcType=REAL},
+      Riboflavin = #{riboflavin,jdbcType=REAL},
+      Niacin = #{niacin,jdbcType=REAL},
+      Magnesium = #{magnesium,jdbcType=REAL},
+      Calcium = #{calcium,jdbcType=REAL},
+      Rron = #{rron,jdbcType=REAL},
+      Zinc = #{zinc,jdbcType=REAL},
+      Copper = #{copper,jdbcType=REAL},
+      Manganese = #{manganese,jdbcType=REAL},
+      Potassium = #{potassium,jdbcType=REAL},
+      Phosphorus = #{phosphorus,jdbcType=REAL},
+      Sodium = #{sodium,jdbcType=REAL},
+      Selenium = #{selenium,jdbcType=REAL},
+      common = #{common,jdbcType=INTEGER},
+      oneself = #{oneself,jdbcType=INTEGER},
+      is_del = #{isDel,jdbcType=INTEGER},
+      user_code = #{userCode,jdbcType=VARCHAR}
+    where F_C_ID = #{fCId,jdbcType=INTEGER}
+  </update>
+</mapper>
