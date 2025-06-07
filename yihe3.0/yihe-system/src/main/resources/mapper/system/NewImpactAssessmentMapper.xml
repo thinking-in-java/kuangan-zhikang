@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yihe.system.mapper.NewImpactAssessmentMapper">
+  <resultMap id="BaseResultMap" type="com.yihe.system.domain.NewImpactAssessment">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="reg_id" jdbcType="INTEGER" property="regId" />
+    <result column="service_date" jdbcType="DATE" property="serviceDate" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="file_path" jdbcType="VARCHAR" property="filePath" />
+    <result column="health_management_specialist" jdbcType="VARCHAR" property="healthManagementSpecialist" />
+    <result column="insert_time" jdbcType="TIMESTAMP" property="insertTime" />
+    <result column="user_code" jdbcType="VARCHAR" property="userCode" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, reg_id, service_date, name, file_path, health_management_specialist, insert_time
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    SELECT
+    nia.id,
+    nia.reg_id,
+    nia.service_date,
+    nia.`NAME`,
+    nia.file_path,
+    nia.health_management_specialist,
+    nia.insert_time,
+    nr.user_code
+    FROM
+    new_impact_assessment as nia
+    inner join new_reg as  nr on nia.reg_id=nr.id
+    WHERE
+    nia.id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from new_impact_assessment
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.yihe.system.domain.NewImpactAssessment">
+    insert into new_impact_assessment (id, reg_id, service_date, 
+      name, file_path, health_management_specialist, 
+      insert_time)
+    values (#{id,jdbcType=INTEGER}, #{regId,jdbcType=INTEGER}, #{serviceDate,jdbcType=DATE}, 
+      #{name,jdbcType=VARCHAR}, #{filePath,jdbcType=VARCHAR}, #{healthManagementSpecialist,jdbcType=VARCHAR}, 
+      #{insertTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.yihe.system.domain.NewImpactAssessment">
+    insert into new_impact_assessment
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="regId != null">
+        reg_id,
+      </if>
+      <if test="serviceDate != null">
+        service_date,
+      </if>
+      <if test="name != null">
+        name,
+      </if>
+      <if test="filePath != null">
+        file_path,
+      </if>
+      <if test="healthManagementSpecialist != null">
+        health_management_specialist,
+      </if>
+      <if test="insertTime != null">
+        insert_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="regId != null">
+        #{regId,jdbcType=INTEGER},
+      </if>
+      <if test="serviceDate != null">
+        #{serviceDate,jdbcType=DATE},
+      </if>
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="filePath != null">
+        #{filePath,jdbcType=VARCHAR},
+      </if>
+      <if test="healthManagementSpecialist != null">
+        #{healthManagementSpecialist,jdbcType=VARCHAR},
+      </if>
+      <if test="insertTime != null">
+        #{insertTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.yihe.system.domain.NewImpactAssessment">
+    update new_impact_assessment
+    <set>
+      <if test="regId != null">
+        reg_id = #{regId,jdbcType=INTEGER},
+      </if>
+      <if test="serviceDate != null">
+        service_date = #{serviceDate,jdbcType=DATE},
+      </if>
+      <if test="name != null">
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="filePath != null">
+        file_path = #{filePath,jdbcType=VARCHAR},
+      </if>
+      <if test="healthManagementSpecialist != null">
+        health_management_specialist = #{healthManagementSpecialist,jdbcType=VARCHAR},
+      </if>
+      <if test="insertTime != null">
+        insert_time = #{insertTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.yihe.system.domain.NewImpactAssessment">
+    update new_impact_assessment
+    set reg_id = #{regId,jdbcType=INTEGER},
+      service_date = #{serviceDate,jdbcType=DATE},
+      name = #{name,jdbcType=VARCHAR},
+      file_path = #{filePath,jdbcType=VARCHAR},
+      health_management_specialist = #{healthManagementSpecialist,jdbcType=VARCHAR},
+      insert_time = #{insertTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+  <select id="selectByPage" parameterType="com.yihe.system.domain.NewImpactAssessment" resultMap="BaseResultMap">
+    select * from new_impact_assessment
+    ni left join new_reg ur
+    on ni.reg_id=ur.id
+    LEFT JOIN `yh_user_make_card` AS c ON ur.`user_code` = c.`User_Code`
+    LEFT JOIN yh_user_admin_info AS ai ON c.doctor = ai.id
+    <where>
+      <if test="name!=null and name!=''">
+        and ni.name LIKE CONCAT('%', #{name}, '%')
+      </if>
+      <if test="treeCode!=null and treeCode!=''">
+        and  ur.work_unit =#{treeCode}
+      </if>
+
+    </where>
+    LIMIT #{begin}, #{limit};
+  </select>
+
+  <select id="selectByPageCount" parameterType="com.yihe.system.domain.NewImpactAssessment" resultType="int">
+    select count(*) from new_impact_assessment
+    ni left join new_reg ur
+    on ni.reg_id=ur.id
+    LEFT JOIN `yh_user_make_card` AS c ON ur.`user_code` = c.`User_Code`
+    LEFT JOIN yh_user_admin_info AS ai ON c.doctor = ai.id
+    <where>
+      <if test="name!=null and name!=''">
+        and ni.name LIKE CONCAT('%', #{name}, '%')
+      </if>
+      <if test="treeCode!=null and treeCode!=''">
+        and  ur.work_unit =#{treeCode}
+      </if>
+    </where>
+  </select>
+</mapper>

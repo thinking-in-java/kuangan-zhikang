@@ -1,0 +1,875 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>
+        职业健康检查结果告知书
+
+    </title>
+    <link rel="stylesheet" th:href="@{/assets/js/layui-v2.9.16/layui/css/layui.css}"/>
+    <script type="text/javascript" th:src="@{/assets/libs/layui/layui.js}"></script>
+    <style>
+        body{
+            background:#F1F1F1
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            table-layout: fixed;
+            border-color:rgb(144, 186, 221)
+        }
+        th, td {
+            border: 1px solid #ccc;
+            padding: 2px;
+            text-align: left;
+        }
+        th {
+            background-color: rgb(231, 243, 252);
+            font-size: 10pt;
+            font-family: "Microsoft YaHei";
+            word-break: break-word;
+            overflow-wrap: break-word;
+            text-align: center;
+        }
+        .section-title {
+            text-align: center;
+            font-weight: bold;
+            background-color: #e6f7ff;
+        }
+        .input-full {
+            width: 100%;
+            box-sizing: border-box;
+        }
+        .radio-group {
+            display: flex;
+            align-items: center;
+        }
+        .radio-group label {
+            margin-right: 10px;
+        }
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        .checkbox-group label {
+            margin-right: 15px;
+        }
+        .heng{
+            text-align: center;
+            font-size: 10pt;
+            font-family: "Microsoft YaHei";
+            word-break: break-word;
+            overflow-wrap: break-word;
+        }
+        .datainput{
+            border-color: #eee !important;
+            border-width: 1px;
+        }
+
+        .layui-form-checked[lay-skin=primary] i{
+            border-color:#2d8cf0 !important;
+            background-color:#FFF !important;
+            color:#2d8cf0 !important;
+            font-weight: bold;
+        }
+
+        .layui-form-checkbox[lay-skin=primary]:hover i{
+            border-color:#2d8cf0 !important;
+        }
+        .layui-form-radio>i:hover, .layui-form-radioed>i{
+            color: #2d8cf0 !important;
+        }
+
+        /* 覆盖 layui 的默认主题颜色 */
+        .theme-colorful .layui-btn {
+            height: 36px;
+            line-height: 36px;
+            border-radius: 4px;
+            background-color: #2d8cf0;
+            box-shadow: 0 1px 0 rgba(0, 0, 0, .03);
+        }
+        .layui-form-radio:hover>*, .layui-form-radioed, .layui-form-radioed>i{
+            color: #2d8cf0 !important;
+        }
+
+        /*.layui-input {*/
+        /*    border-color: #597FC0 !important;*/
+        /*}*/
+
+        /* ...其他元素样式 */
+        /* 修改分页按钮的背景颜色和字体颜色 */
+        .layui-laypage a {
+            background-color: #f0f0f0; /* 设置按钮的背景颜色 */
+            color: #333; /* 设置按钮的字体颜色 */
+        }
+
+        /* 鼠标悬停时按钮的背景颜色 */
+        .layui-laypage a:hover {
+            background-color: #fff;
+            color: #2d8cf0;
+        }
+
+        /* 当前页的背景颜色和字体颜色 */
+        .layui-laypage .layui-laypage-curr .layui-laypage-em {
+            background-color: #2d8cf0; /* 当前页的背景颜色 */
+            color: white; /* 当前页的字体颜色 */
+        }
+        .underline {
+            display: inline-block;
+            border-bottom: 1px solid #000;
+            width: 100px;
+            text-align: center;
+        }
+        .underline-short {
+            display: inline-block;
+            border-bottom: 1px solid #000;
+            width: 50px;
+            text-align: center;
+        }
+        .content {
+            margin: 20px;
+            width: 100%;
+            word-break: break-word;
+            overflow-wrap: break-word;
+        }
+        .underline, .underline-short, .underlinet, .signature-section p {
+            display: inline-block;
+            word-break: break-word;
+            overflow-wrap: break-word;
+            white-space: normal;
+        }
+        .signature-section {
+            display: flex;
+            justify-content: space-between;
+        }
+        .signature-section p {
+            width: 45%; /* 左右两侧宽度相等 */
+        }
+        .signature-block {
+            text-align: center;
+        }
+        h3 {
+            text-align: center; /* 标题居中 */
+        }
+
+        .letter-spaced {
+            letter-spacing: 0.1em;
+        }
+        li{
+            /*margin-top: 0.5em;*/
+            /*font-size: 20px;*/
+        }
+
+        .signature-section2 {
+            position: relative;
+            padding: 10px;
+        }
+
+        .underline2 {
+            display: inline-block;
+            width: 150px;
+            height: 120px;
+            border-bottom: 1px solid black;
+            position: relative;
+        }
+
+        .underline2 img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        p{
+            /*margin-top: 2.8em;*/
+            line-height: 1.5;
+            /*font-size: 20px;*/
+        }
+
+        span{
+            /*margin-top: 1.8em;*/
+            line-height: 1.5;
+            /*font-size: 20px;*/
+        }
+
+        @media print {
+            .no-print {
+                display: none !important;
+            }
+        }
+        @page {
+            /* 尝试去除默认的页眉和页脚 */
+            margin: 0;
+        }
+
+
+    </style>
+</head>
+<body>
+
+<div class="layui-form " style="width:70%;margin:auto;padding:0 5%;background:#FFF;margin-top:0">
+    <h2 class="letter-spaced" style="text-align: center;font-size: 35px">
+
+<!--        职业健康检查结果告知书-->
+
+    </h2>
+    <input id="userCode" type="hidden" value="">
+
+
+
+
+
+    <form class="layui-form letter-spaced" id="myForm" lay-filter="myForm">
+        <button style="float: right;z-index: 9999;position: fixed; font-size: 18px; padding: 12px 24px; height: 60px;width: 120px;right: 320px" type="submit" class="no-print layui-btn layui-btn-lg" lay-submit lay-filter="myFormSave">保存</button>
+        <button style="float: right;z-index: 9999;position: fixed; font-size: 18px; padding: 12px 24px; height: 60px;width: 120px;right: 480px" type="submit" class="no-print layui-btn layui-btn-lg" lay-submit lay-filter="generatePDF">打印</button>
+
+        <div class="content layui-container letter-spaced">
+            <!-- 职业健康检查结果通知书（单位留存） -->
+            <h3 style="font-size: 18px;padding-top: 2em;padding-bottom: 1em"  class="letter-spaced">职业健康检查结果告知书(单位留存)</h3>
+
+            <p>
+                <span class="underline underlinet"  contenteditable="true"></span>
+                同志：<span class="underline-short" id="yearPicker" contenteditable="true"></span>年
+                <span class="underline-short" id="mouthPic" contenteditable="true"></span>月
+                <span class="underline-short" id="dayPic" contenteditable="true"></span>日参加了我单位组织的
+                <input type="checkbox" lay-filter="checkbox3" name="checkbox3" value="岗前" lay-skin="primary"> 岗前
+                <input type="checkbox" lay-filter="checkbox3" name="checkbox3" value="岗中" lay-skin="primary"> 岗中
+                <input type="checkbox" lay-filter="checkbox3" name="checkbox3" value="离岗" lay-skin="primary"> 离岗
+                职业健康检查，依据《中华人民共和国职业病防治法》第三十六条的规定，经过
+                <span class="underline underlinet" contenteditable="true"></span>医院按照《职业健康监护技术规范》标准，对你进行相关项目健康检查，现将职业健康检查情况告知您如下：
+            </p>
+
+            <ul style="display: flex; flex-wrap: wrap; list-style: none;padding-top: 1.5em; margin: 0;">
+                <li style="width: 50%; display: flex; align-items: center;"><input type="checkbox" lay-filter="checkbox4" name="checkbox4" value="未观察职业禁忌症" lay-skin="primary"> 未观察职业禁忌症</li>
+                <li style="width: 50%; display: flex; align-items: center;"><input type="checkbox" lay-filter="checkbox4" name="checkbox4" value="暂时职业禁忌症" lay-skin="primary"> 暂时职业禁忌症</li>
+                <li style="width: 50%; display: flex; align-items: center;"><input type="checkbox" lay-filter="checkbox4" name="checkbox4" value="疑似职业病" lay-skin="primary"> 疑似职业病</li>
+                <li style="width: 50%; display: flex; align-items: center;"><input type="checkbox" lay-filter="checkbox4" name="checkbox4" value="罹患职业病"  lay-skin="primary"> 罹患职业病</li>
+                <li style="width: 50%; display: flex; align-items: center;"><input type="checkbox" lay-filter="checkbox4" name="checkbox4" value="可以继续从事本岗位工作"  lay-skin="primary"> 可以继续从事本岗位工作</li>
+                <li style="width: 50%; display: flex; align-items: center;"><input type="checkbox" lay-filter="checkbox4" name="checkbox4" value="需要调离现岗位"  lay-skin="primary"> 需要调离现岗位</li>
+                <li style="width: 50%; display: flex; align-items: center;"><input type="checkbox" lay-filter="checkbox4" name="checkbox4" value="可疑职业接害尚在"  lay-skin="primary"> 可疑职业接害尚在</li>
+                <li style="width: 50%; display: flex; align-items: center;"><input type="checkbox" lay-filter="checkbox4" name="checkbox4" value="到有资质的职业病诊断机构诊断"  lay-skin="primary"> 到有资质的职业病诊断机构诊断</li>
+            </ul>
+
+            <div class="signature-section signature-section2" id="noImg"  style="display: none;" >
+                <p>用人单位（盖章）：<span class="underline underline2" style="width: 50px;height: 50px"><img id="companySeal" src="" alt="公司印章"></span></p>
+                <p>被告知人（签字按手印）：<span style="width: 50px"  class="underline  image"></span></p>
+            </div>
+
+            <div class="signature-section" id="yesImg">
+                <div style="flex: 1; display: flex; align-items: center;">
+                <p style="height: 200px;width: auto">用人单位（盖章）：  <span style="border-bottom:0px" class="underline2"></span></p>
+
+                        <div class="layui-upload-drag" id="test10" style="width: 100px;height: 50px;margin-left: -150px">
+                            <i class="layui-icon"></i>
+                        </div>
+                </div>
+
+                <p style="height: 200px">被告知人（签字按手印）：<span class="underline  image underline2"></span></p>
+            </div>
+
+
+            <div class="signature-section" style="margin-top: 0.5em">
+                <p> <span id="yearPicker1" class="underline-short" contenteditable="true"></span>年<span id="mouthPic1" class="underline-short"  contenteditable="true"></span>月<span id="dayPic1" class="underline-short"  contenteditable="true"></span>日</p>
+                <p> <span id="yearPicker2" class="underline-short" contenteditable="true"></span>年<span id="mouthPic2" class="underline-short"  contenteditable="true"></span>月<span id="dayPic2" class="underline-short"  contenteditable="true"></span>日</p>
+            </div>
+
+
+
+            <div style="text-align: center; font-size: 16px; line-height: 2; word-spacing: 10px;margin-left: 0%;width: 100%;margin-top: 8em">
+                .............................
+
+                <span id="image">
+                    ......盖骑缝......
+                </span>
+                .............................
+            </div>
+
+
+
+
+
+            <div id="personalCopy" style="margin-top: 8em">
+            <!-- 职业健康检查结果通知书（本人留存） -->
+            <h3 style="font-size: 18px;padding-bottom: 1em"  class="letter-spaced">职业健康检查结果通知书（本人留存）</h3>
+
+            <p>
+                <span class="underline underlinet" contenteditable="true"></span>
+                同志：<span class="underline-short" contenteditable="true"></span>年
+                <span class="underline-short" contenteditable="true"></span>月
+                <span class="underline-short" contenteditable="true"></span>日参加了我单位组织的
+                <input type="checkbox" lay-filter="checkbox1" name="checkbox1" value="岗前" lay-skin="primary"> 岗前
+                <input type="checkbox" lay-filter="checkbox1" name="checkbox1" value="岗中" lay-skin="primary"> 岗中
+                <input type="checkbox" lay-filter="checkbox1" name="checkbox1" value="离岗" lay-skin="primary"> 离岗
+                职业健康检查，依据《中华人民共和国职业病防治法》第三十六条的规定，经
+                <span class="underline underlinet" contenteditable="true"></span>医院按照《职业健康监护技术规范》标准，对你进行相关项目健康检查，现将职业健康检查情况告知您如下：
+            </p>
+
+            <ul style="display: flex; flex-wrap: wrap; list-style: none;padding-top: 1.5em; margin: 0;">
+                <li style="width: 50%; display: flex; align-items: center;"><input type="checkbox" lay-filter="checkbox2" name="checkbox2" value="未观察职业禁忌症" lay-skin="primary"> 未观察职业禁忌症</li>
+                <li style="width: 50%; display: flex; align-items: center;"><input type="checkbox" lay-filter="checkbox2" name="checkbox2" value="暂时职业禁忌症" lay-skin="primary"> 暂时职业禁忌症</li>
+                <li style="width: 50%; display: flex; align-items: center;"><input type="checkbox" lay-filter="checkbox2" name="checkbox2" value="疑似职业病" lay-skin="primary"> 疑似职业病</li>
+                <li style="width: 50%; display: flex; align-items: center;"><input type="checkbox" lay-filter="checkbox2" name="checkbox2" value="罹患职业病" lay-skin="primary"> 罹患职业病</li>
+                <li style="width: 50%; display: flex; align-items: center;"><input type="checkbox" lay-filter="checkbox2" name="checkbox2" value="可以继续从事本岗位工作" lay-skin="primary"> 可以继续从事本岗位工作</li>
+                <li style="width: 50%; display: flex; align-items: center;"><input type="checkbox" lay-filter="checkbox2" name="checkbox2" value="需要调离现岗位" lay-skin="primary"> 需要调离现岗位</li>
+                <li style="width: 50%; display: flex; align-items: center;"><input type="checkbox" lay-filter="checkbox2" name="checkbox2" value="可疑职业接害尚在" lay-skin="primary"> 可疑职业接害尚在</li>
+                <li style="width: 50%; display: flex; align-items: center;"><input type="checkbox" lay-filter="checkbox2" name="checkbox2" value="到有资质的职业病诊断机构诊断" lay-skin="primary"> 到有资质的职业病诊断机构诊断</li>
+            </ul>
+
+                <div class="signature-section signature-section2" id="noImg2"   style="display: none;" >
+                    <p>用人单位（盖章）：<span class="underline underline2" style="width: 50px;height: 50px" ><img id="companySeal2" src="" alt="公司印章"></span></p>
+                    <p>被告知人（签字按手印）：<span style="width: 50px" class="underline  image"></span></p>
+                </div>
+
+                <div class="signature-section" id="yesImg2">
+                    <p>用人单位（盖章）：<span class="underline underline2"></span></p>
+                    <p>被告知人（签字按手印）：<span class="underline   image underline2"></span></p>
+                </div>
+
+
+            <div class="signature-section" style="margin-top: 0.5em">
+
+                <p> <span class="underline-short" contenteditable="true"></span>年<span class="underline-short"  contenteditable="true"></span>月<span class="underline-short"  contenteditable="true"></span>日</p>
+                <p> <span class="underline-short" contenteditable="true"></span>年<span class="underline-short"  contenteditable="true"></span>月<span class="underline-short"  contenteditable="true"></span>日</p>
+            </div>
+        </div>
+
+        </div>
+    </form>
+</div>
+
+<script type="text/javascript" th:src="@{/assets/js/common.js}"></script>
+<script th:inline="javascript">
+    layui.use(['form',"table",'treeSelect','notice','upload','laydate'], function(){
+        var form = layui.form;
+        var $ = layui.jquery;
+        var layer = layui.layer;
+        var table = layui.table;
+        var treeSelect= layui.treeSelect;
+        var notice=layui.notice;
+        var upload = layui.upload;
+        var laydate = layui.laydate;
+        //拖拽上传图片
+        upload.render({
+            elem: '#test10'
+            ,url: '/Uploading/addEnrollImg' //改成您自己的上传接口
+            ,done: function(res){
+                layer.msg('上传成功');
+                // 获取 img 元素
+                showgz(res.files)
+            }
+        });
+        laydate.render({
+            elem: '#yearPicker',  // 绑定的元素
+            type: 'year' ,
+            done: function (value) {
+                // 当选择完年份后，替换 <span> 的内容
+                document.getElementById('yearPicker').innerText = value;
+                $(".underline-short").eq(9).text(value)
+            }
+        });
+        laydate.render({
+            elem: '#mouthPic',  // 绑定的元素
+            type: 'month' ,
+            format: 'MM',
+            done: function (value) {
+                // 当选择完年份后，替换 <span> 的内容
+                document.getElementById('mouthPic').innerText = value;
+                $(".underline-short").eq(10).text(value)
+            }
+        });
+        form.on('submit(generatePDF)', function(data){
+            window.print();
+            return false;
+        });
+        laydate.render({
+            elem: '#dayPic',  // 绑定的元素
+            type: 'date' ,
+            format: 'd',
+            done: function (value) {
+                // 当选择完年份后，替换 <span> 的内容
+                let formattedValue = value.length === 1 ? '0' + value : value;
+                document.getElementById('dayPic').innerText = formattedValue;
+                $(".underline-short").eq(11).text(formattedValue)
+            }
+        });
+
+        laydate.render({
+            elem: '#yearPicker1',  // 绑定的元素
+            type: 'year' ,
+            done: function (value) {
+                // 当选择完年份后，替换 <span> 的内容
+                document.getElementById('yearPicker1').innerText = value;
+                $(".underline-short").eq(12).text(value)
+            }
+        });
+        laydate.render({
+            elem: '#mouthPic1',  // 绑定的元素
+            type: 'month' ,
+            format: 'MM',
+            done: function (value) {
+                // 当选择完年份后，替换 <span> 的内容
+                document.getElementById('mouthPic1').innerText = value;
+                $(".underline-short").eq(13).text(value)
+            }
+        });
+
+        laydate.render({
+            elem: '#dayPic1',  // 绑定的元素
+            type: 'date' ,
+            format: 'd',
+            done: function (value) {
+                // 当选择完年份后，替换 <span> 的内容
+                let formattedValue = value.length === 1 ? '0' + value : value;
+                document.getElementById('dayPic1').innerText = formattedValue;
+                $(".underline-short").eq(14).text(formattedValue)
+            }
+        });
+
+        laydate.render({
+            elem: '#yearPicker2',  // 绑定的元素
+            type: 'year' ,
+            done: function (value) {
+                // 当选择完年份后，替换 <span> 的内容
+                document.getElementById('yearPicker2').innerText = value;
+                $(".underline-short").eq(15).text(value)
+            }
+        });
+        laydate.render({
+            elem: '#mouthPic2',  // 绑定的元素
+            type: 'month' ,
+            format: 'MM',
+            done: function (value) {
+                // 当选择完年份后，替换 <span> 的内容
+                document.getElementById('mouthPic2').innerText = value;
+                $(".underline-short").eq(16).text(value)
+            }
+        });
+
+        laydate.render({
+            elem: '#dayPic2',  // 绑定的元素
+            type: 'date' ,
+            format: 'd',
+            done: function (value) {
+                // 当选择完年份后，替换 <span> 的内容
+                let formattedValue = value.length === 1 ? '0' + value : value;
+                document.getElementById('dayPic2').innerText = formattedValue;
+                $(".underline-short").eq(17).text(formattedValue)
+            }
+        });
+
+       function showgz(src){
+            const imgElement = document.getElementById('companySeal');
+            // 设置 img 元素的 src 属性
+            imgElement.src = src;
+
+           const imgElement2 = document.getElementById('companySeal2');
+           // 设置 img 元素的 src 属性
+           imgElement2.src = src;
+
+            const div = document.getElementById('noImg');
+            div.style.display = 'block';
+
+            const div2 = document.getElementById('yesImg');
+            div2.style.display = 'none';
+
+           const div3 = document.getElementById('noImg2');
+           div3.style.display = 'block';
+
+           const div4 = document.getElementById('yesImg2');
+           div4.style.display = 'none';
+        }
+
+        layui.config({
+            skin: 'blue'  // 设置主题为蓝色
+        });
+        var nations = [ "汉族", "蒙古族", "回族", "藏族", "维吾尔族", "苗族",
+            "彝族", "壮族", "布依族", "朝鲜族", "满族", "侗族", "瑶族",
+            "白族", "土家族", "哈尼族", "哈萨克族", "傣族", "黎族", "傈僳族",
+            "佤族", "畲族", "高山族", "拉祜族", "水族", "东乡族", "纳西族",
+            "景颇族", "柯尔克孜族", "土族", "达斡尔族", "仫佬族", "羌族",
+            "布朗族", "撒拉族", "毛南族", "仡佬族", "锡伯族", "阿昌族",
+            "普米族", "塔吉克族", "怒族", "乌孜别克族", "俄罗斯族", "鄂温克族",
+            "德昂族", "保安族", "裕固族", "京族", "塔塔尔族", "独龙族",
+            "鄂伦春族", "赫哲族", "门巴族", "珞巴族", "基诺族" ];
+
+        var option = "";
+        for (var i = 0; i < nations.length; i++) {
+            option += '<option value="' + nations[i] + '">'
+                + nations[i] + '</option>';
+        }
+        /*  console.log(option+"-----------");  */
+        $(option).appendTo("#nation");
+
+
+
+        //下拉框回显
+        form.render("select");
+        var params = new URLSearchParams(window.location.search);
+        var paramValue = params.get('medicalExaminationInformation');
+        var uuid = params.get('uuid');
+        selectForm(paramValue,uuid);
+
+
+
+
+
+        $(document).on('input', '.underline-short', function () {
+
+            const index = $(this).index('.underline-short'); // 获取当前索引
+            console.log("1111111111",$('.underline-short').eq(index).text())
+            let targetIndex = index - 9;
+            if(index<9){
+                targetIndex = index + 9;
+            }
+             // 计算目标索引
+            console.log("1111111111",index)
+            // 找到对应的目标 input 并更新其内容
+            $('.underline-short').eq(targetIndex).text($('.underline-short').eq(index).text());
+            form.render();
+        });
+
+        $(document).on('input', '.underlinet', function () {
+            const index = $(this).index('.underlinet'); // 获取当前索引
+            console.log("1111111111",$('.underlinet').eq(index).text())
+            let targetIndex = index - 2; // 计算目标索引
+            if(index<2){
+                targetIndex = index + 2;
+            }
+            console.log("1111111111",index)
+            // 找到对应的目标 input 并更新其内容
+            $('.underlinet').eq(targetIndex).text($('.underlinet').eq(index).text());
+            form.render();
+        });
+        // 必要时重新渲染表单
+        form.on('checkbox(checkbox3)', function (data) {
+            console.log(888888888888888888888888888888)
+            console.log(data.value,"-------------------------------")
+            // 获取当前点击的值
+            var value = data.value;
+            var isChecked = data.elem.checked;
+
+            // 同步 checkbox3
+            $("input[name='checkbox1'][value='" + value + "']").prop('checked', isChecked);
+
+            // 重新渲染 checkbox3 的样式
+            form.render('checkbox');
+        });
+
+        form.on('checkbox(checkbox1)', function (data) {
+            console.log(888888888888888888888888888888)
+            console.log(data.value,"-------------------------------")
+            // 获取当前点击的值
+            var value = data.value;
+            var isChecked = data.elem.checked;
+
+            // 同步 checkbox3
+            $("input[name='checkbox3'][value='" + value + "']").prop('checked', isChecked);
+
+            // 重新渲染 checkbox3 的样式
+            form.render('checkbox');
+        });
+
+        // 监听 checkbox2 的状态改变并同步到 checkbox4
+        form.on('checkbox(checkbox4)', function (data) {
+            // 获取当前点击的值
+            var value = data.value;
+            var isChecked = data.elem.checked;
+
+            // 同步 checkbox4
+            $("input[name='checkbox2'][value='" + value + "']").prop('checked', isChecked);
+
+            // 重新渲染 checkbox4 的样式
+            form.render('checkbox');
+        });
+
+        form.on('checkbox(checkbox2)', function (data) {
+            // 获取当前点击的值
+            var value = data.value;
+            var isChecked = data.elem.checked;
+
+            // 同步 checkbox4
+            $("input[name='checkbox4'][value='" + value + "']").prop('checked', isChecked);
+
+            // 重新渲染 checkbox4 的样式
+            form.render('checkbox');
+        });
+
+        form.on('submit(myFormSave)', function(data){
+            console.log(data,"dddddddddddddddddddddddddddddddd")
+            // 获取 img 元素
+            const imgElement = document.getElementById('companySeal');
+
+            // 获取 img 元素的 src 属性
+            const imgSrc = imgElement.src;
+
+            var formData = {
+                notice: {
+                    v1: $('.underline-short').eq(0).text(),
+                    v2: $('.underline-short').eq(1).text(),
+                    v3: $('.underline-short').eq(2).text(),
+                    v4: $('.underline-short').eq(3).text(),
+                    v5: $('.underline-short').eq(4).text(),
+                    v6: $('.underline-short').eq(5).text(),
+                    v7: $('.underline-short').eq(6).text(),
+                    v8: $('.underline-short').eq(7).text(),
+                    v9: $('.underline-short').eq(8).text(),
+
+                    v10: $('.underline-short').eq(9).text(),
+                    v11: $('.underline-short').eq(10).text(),
+                    v12: $('.underline-short').eq(11).text(),
+                    v13: $('.underline-short').eq(12).text(),
+                    v14: $('.underline-short').eq(13).text(),
+                    v15: $('.underline-short').eq(14).text(),
+                    v16: $('.underline-short').eq(15).text(),
+                    v17: $('.underline-short').eq(16).text(),
+                    v18: $('.underline-short').eq(17).text(),
+                    v20: imgSrc,
+                    d1:$('.underlinet').eq(0).text(),
+                    d2:$('.underlinet').eq(1).text(),
+                    d3:$('.underlinet').eq(2).text(),
+                    d4:$('.underlinet').eq(3).text(),
+                },
+            };
+
+
+
+
+
+
+
+            var v13Values = [];
+            var v14Values = [];
+            var v15Values = [];
+            var v16Values = [];
+            $("input[name='checkbox1']:checked").each(function() {
+                v13Values.push($(this).val());
+            });
+            formData.notice.d5 = v13Values.join(',');
+            $("input[name='checkbox2']:checked").each(function() {
+                v14Values.push($(this).val());
+            });
+            formData.notice.d6 = v14Values.join(',');
+            $("input[name='checkbox3']:checked").each(function() {
+                v15Values.push($(this).val());
+            });
+            formData.notice.d7 = v15Values.join(',');
+            $("input[name='checkbox4']:checked").each(function() {
+                v16Values.push($(this).val());
+            });
+            formData.notice.d8= v16Values.join(',');
+            console.log("表单数据:", formData);
+
+
+            $(this).data('submitted', true);
+            if(paramValue){
+                $.ajax({
+                    type:'get',
+                    url:'/NewEmployeePersonalInformationCardController/selectById',
+                    data:{id:paramValue},
+                    success : function(data){
+                        console.log("这里是查询出来的数据",data);
+                        if(data.code==20000){
+                            const medicalHistory = JSON.parse(data.data.previousOccupationalHealthExaminationResults);
+                            var nowData=null;
+                            var thisIndex=0;
+                            medicalHistory.forEach((item, index) => {
+                                if(item.uuid==uuid){
+                                    nowData=item;
+                                    thisIndex=index;
+                                }
+                            });
+                            var rowData = {
+                                "uuid":nowData.uuid,
+                                "add1": formData.notice.v1+"-"+formData.notice.v2+"-"+formData.notice.v3,
+                                "add2": formData.notice.v13,
+                                "add3": formData.notice.d2,
+                                "add4": formData.notice.v14,
+                                "add5": nowData?.add5,
+                                "add6": nowData?.add6,
+                                "add7": nowData?.add7,
+                                "add9": nowData?.add9,
+                                "add8": nowData?.add8,
+                                "notice":formData.notice
+                            };
+
+                            medicalHistory[thisIndex]=rowData;
+                            $.ajax({
+                                type : 'post',
+                                url : '/NewEmployeePersonalInformationCardController/updateById',
+                                data : {
+                                    id:paramValue,
+                                    previousOccupationalHealthExaminationResults:JSON.stringify(medicalHistory),
+                                },
+                                success : function(data) {
+                                    if (data.code == 20000) {
+
+                                        notice.success({
+                                            title : '消息通知',
+                                            message : '操作成功!'
+                                        });
+
+
+                                    } else {
+                                        notice.error({
+                                            title : '消息通知',
+                                            message : '操作失败!'
+                                        });
+                                    }
+                                }
+                            })
+
+
+
+
+                        }
+
+                    }
+                })
+            }
+
+            return false; // 阻止默认 form 跳转
+        });
+
+        form.on('checkbox(v14)', function(data){
+            console.log(data.value);
+            const otherInput1 = document.getElementById('otherInput1');
+            if (data.value === '其它') {
+                if (data.elem.checked) {
+                    otherInput1.style.display = 'block';
+                } else {
+                    otherInput1.style.display = 'none';
+                }
+            }
+        });
+
+        form.on('checkbox(v13)', function(data){
+            console.log(data,"dadadadadaaaaaaaaaaaaaaaaaa")
+            const otherInput = document.getElementById('otherInput');
+            if (data.value === '其它') {
+                if (data.elem.checked) {
+                    console.log("1111111111111111111111")
+                    otherInput.style.display = 'block';
+                } else {
+                    otherInput.style.display = 'none';
+                }
+            }
+
+        });
+
+        function selectForm(paramValue,uuid){
+            if(paramValue){
+                $.ajax({
+                    type:'get',
+                    url:'/NewEmployeePersonalInformationCardController/selectById',
+                    data:{id:paramValue},
+                    success : function(data){
+                        console.log("这里是查询出来的数据",data);
+                        if(data.code==20000){
+                            var noticeOccupationalHealthExaminationResults = "";
+
+                            const medicalHistory = JSON.parse(data.data.previousOccupationalHealthExaminationResults);
+                           medicalHistory.forEach((item, index) => {
+                               if(item.uuid==uuid){
+                                   console.log(item,"thisitemitemitemitemitemitemitemitemitem")
+                                   noticeOccupationalHealthExaminationResults=(item.notice);
+                               }
+                            });
+
+
+                            $("input[name='v13']").prop('checked', false);
+                            const historyDrugAllergies = noticeOccupationalHealthExaminationResults.d5.split(",").map(item => item.trim());
+                            const exposureHistory = noticeOccupationalHealthExaminationResults.d6.split(",").map(item => item.trim());
+                            const kitchenExhaustFacilities = noticeOccupationalHealthExaminationResults.d7.split(",").map(item => item.trim());
+                            const fuelType = noticeOccupationalHealthExaminationResults.d8.split(",").map(item => item.trim());
+                            historyDrugAllergies.forEach(value => {
+                                $("input[name='checkbox1'][value='" + value + "']").prop('checked', true);
+                            });
+                            $("input[name='checkbox2']").prop('checked', false);
+                            exposureHistory.forEach(value => {
+                                $("input[name='checkbox2'][value='" + value + "']").prop('checked', true);
+                            });
+                            $("input[name='checkbox3']").prop('checked', false);
+                            kitchenExhaustFacilities.forEach(value => {
+                                $("input[name='checkbox3'][value='" + value + "']").prop('checked', true);
+                            });
+                            $("input[name='checkbox4']").prop('checked', false);
+                            fuelType.forEach(value => {
+                                $("input[name='checkbox4'][value='" + value + "']").prop('checked', true);
+                            });
+                            $('.underline-short').eq(0).text(noticeOccupationalHealthExaminationResults.v1);
+                            $('.underline-short').eq(1).text(noticeOccupationalHealthExaminationResults.v2);
+                            $('.underline-short').eq(2).text(noticeOccupationalHealthExaminationResults.v3);
+                            $('.underline-short').eq(3).text(noticeOccupationalHealthExaminationResults.v4);
+                            $('.underline-short').eq(4).text(noticeOccupationalHealthExaminationResults.v5);
+                            $('.underline-short').eq(5).text(noticeOccupationalHealthExaminationResults.v6);
+                            $('.underline-short').eq(6).text(noticeOccupationalHealthExaminationResults.v7);
+                            $('.underline-short').eq(7).text(noticeOccupationalHealthExaminationResults.v8);
+                            $('.underline-short').eq(8).text(noticeOccupationalHealthExaminationResults.v9);
+                            $('.underline-short').eq(9).text(noticeOccupationalHealthExaminationResults.v10);
+                            $('.underline-short').eq(10).text(noticeOccupationalHealthExaminationResults.v11);
+                            $('.underline-short').eq(11).text(noticeOccupationalHealthExaminationResults.v12);
+                            $('.underline-short').eq(12).text(noticeOccupationalHealthExaminationResults.v13);
+                            $('.underline-short').eq(13).text(noticeOccupationalHealthExaminationResults.v14);
+                            $('.underline-short').eq(14).text(noticeOccupationalHealthExaminationResults.v15);
+                            $('.underline-short').eq(15).text(noticeOccupationalHealthExaminationResults.v16);
+                            $('.underline-short').eq(16).text(noticeOccupationalHealthExaminationResults.v17);
+                            $('.underline-short').eq(17).text(noticeOccupationalHealthExaminationResults.v18);
+
+
+
+                            $('.underlinet').eq(1).text(noticeOccupationalHealthExaminationResults.d2);
+                            $('.underlinet').eq(2).text(noticeOccupationalHealthExaminationResults.d3);
+                            $('.underlinet').eq(3).text(noticeOccupationalHealthExaminationResults.d4);
+
+                            console.log(data,"-----**********",noticeOccupationalHealthExaminationResults.d1)
+                            if(noticeOccupationalHealthExaminationResults.d1){
+                                $('.underlinet').eq(0).text(noticeOccupationalHealthExaminationResults.d1);
+                            }else{
+                                $('.underlinet').eq(0).text(data.data.name)
+                                $('.underlinet').eq(2).text(data.data.name)
+                            }
+
+                            if(!noticeOccupationalHealthExaminationResults.v1){
+
+                            }
+
+                            if(noticeOccupationalHealthExaminationResults.v20){
+                                showgz(noticeOccupationalHealthExaminationResults.v20)
+                                $('#image').html('<img style="width: 100px; height: 100px;" src="' + noticeOccupationalHealthExaminationResults.v20 + '" alt="图片" />');
+                            }else{
+                                $('#image').text('......盖骑缝......');
+                            }
+
+
+
+                            if(noticeOccupationalHealthExaminationResults.v19){
+                                    // 如果有内容，添加一张图片到 span 后
+                                    $('.underline.image').html('<img src="'+noticeOccupationalHealthExaminationResults.v19+'" alt="签字图示" style="width: 50px; height: 50px;margin-top: -50px">');
+                                $('.underline.image1').html('<img src="'+noticeOccupationalHealthExaminationResults.v19+'" alt="签字图示" style="width: 50px; height: 50px;margin-top: -50px">');
+                            }
+                            form.render();
+
+
+
+                        }
+
+                    }
+                })
+            }
+
+
+        }
+
+
+
+        // 初始化表单
+        form.render();
+    });
+</script>
+
+</body>
+</html>

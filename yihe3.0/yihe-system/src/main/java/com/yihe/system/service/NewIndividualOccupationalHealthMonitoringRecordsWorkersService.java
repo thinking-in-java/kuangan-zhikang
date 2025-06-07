@@ -1,0 +1,18 @@
+package com.yihe.system.service;
+
+import com.yihe.system.domain.NewIndividualOccupationalHealthMonitoringRecordsWorkers;
+import com.yihe.system.domain.NewThreeSimultaneous;
+
+import java.util.List;
+
+public interface NewIndividualOccupationalHealthMonitoringRecordsWorkersService {
+    int insetNew(NewIndividualOccupationalHealthMonitoringRecordsWorkers newIndividualOccupationalHealthMonitoringRecordsWorkers);
+
+    int updateNew(NewIndividualOccupationalHealthMonitoringRecordsWorkers newIndividualOccupationalHealthMonitoringRecordsWorkers);
+
+    NewIndividualOccupationalHealthMonitoringRecordsWorkers selectById(NewIndividualOccupationalHealthMonitoringRecordsWorkers newIndividualOccupationalHealthMonitoringRecordsWorkers);
+
+    List<NewIndividualOccupationalHealthMonitoringRecordsWorkers> selectByPage(NewIndividualOccupationalHealthMonitoringRecordsWorkers newIndividualOccupationalHealthMonitoringRecordsWorkers);
+
+    int selectByPageCount(NewIndividualOccupationalHealthMonitoringRecordsWorkers newIndividualOccupationalHealthMonitoringRecordsWorkers);
+}

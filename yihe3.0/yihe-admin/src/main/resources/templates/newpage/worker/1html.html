@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>劳动者个人信息卡
+    </title>
+    <link rel="stylesheet" th:href="@{/assets/js/layui-v2.9.16/layui/css/layui.css}"/>
+    <script type="text/javascript" th:src="@{/assets/libs/layui/layui.js}"></script>
+    <style>
+        body{
+            background:#F1F1F1
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            table-layout: fixed;
+            border-color:rgb(144, 186, 221)
+        }
+        th, td {
+            border: 1px solid #ccc;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: rgb(231, 243, 252);
+            font-size: 10pt;
+            font-family: "Microsoft YaHei";
+            word-break: break-word;
+            overflow-wrap: break-word;
+            text-align: center;
+        }
+        .section-title {
+            text-align: center;
+            font-weight: bold;
+            background-color: #e6f7ff;
+        }
+        .input-full {
+            width: 100%;
+            box-sizing: border-box;
+        }
+        .radio-group {
+            display: flex;
+            align-items: center;
+        }
+        .radio-group label {
+            margin-right: 10px;
+        }
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        .checkbox-group label {
+            margin-right: 15px;
+        }
+        .heng{
+            text-align: center;
+            font-size: 10pt;
+            font-family: "Microsoft YaHei";
+            word-break: break-word;
+            overflow-wrap: break-word;
+        }
+        .datainput{
+            border-color: #eee !important;
+            border-width: 1px;
+        }
+
+        .layui-form-checked[lay-skin=primary] i{
+            border-color:#2d8cf0 !important;
+            background-color:#FFF !important;
+            color:#2d8cf0 !important;
+            font-weight: bold;
+        }
+
+        .layui-form-checkbox[lay-skin=primary]:hover i{
+            border-color:#2d8cf0 !important;
+        }
+        .layui-form-radio>i:hover, .layui-form-radioed>i{
+            color: #2d8cf0 !important;
+        }
+
+        /* 覆盖 layui 的默认主题颜色 */
+        .theme-colorful .layui-btn {
+            height: 36px;
+            line-height: 36px;
+            border-radius: 4px;
+            background-color: #2d8cf0;
+            box-shadow: 0 1px 0 rgba(0, 0, 0, .03);
+        }
+        .layui-form-radio:hover>*, .layui-form-radioed, .layui-form-radioed>i{
+            color: #2d8cf0 !important;
+        }
+
+        /*.layui-input {*/
+        /*    border-color: #597FC0 !important;*/
+        /*}*/
+
+        /* ...其他元素样式 */
+        /* 修改分页按钮的背景颜色和字体颜色 */
+        .layui-laypage a {
+            background-color: #f0f0f0; /* 设置按钮的背景颜色 */
+            color: #333; /* 设置按钮的字体颜色 */
+        }
+
+        /* 鼠标悬停时按钮的背景颜色 */
+        .layui-laypage a:hover {
+            background-color: #fff;
+            color: #2d8cf0;
+        }
+
+        /* 当前页的背景颜色和字体颜色 */
+        .layui-laypage .layui-laypage-curr .layui-laypage-em {
+            background-color: #2d8cf0; /* 当前页的背景颜色 */
+            color: white; /* 当前页的字体颜色 */
+        }
+
+
+
+
+        .upload-area {
+            width: 100%;
+            height: 220px;
+            border: 2px dashed #ccc;
+            display: flex;
+            justify-content: center; /* 水平居中 */
+            align-items: center; /* 垂直居中 */
+            cursor: pointer;
+            text-align: center;
+            color: #999;
+            font-size: 14px;
+            position: relative;
+        }
+
+        .upload-area img {
+            max-width: 100%;
+            max-height: 100%;
+            display: block;
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            margin: auto;
+        }
+
+        .upload-area:hover {
+            border-color: #2d8cf0;
+        }
+
+        #uploadText {
+            display: flex;
+            justify-content: center; /* 水平居中 */
+            align-items: center; /* 垂直居中 */
+            width: 100%;
+            height: 100%;
+            color: #999;
+            font-size: 14px;
+            position: absolute;
+            z-index: 1; /* 确保文字在前 */
+        }
+
+
+    </style>
+</head>
+<body>
+
+<div class="layui-form " style="margin:auto;background:#FFF;margin-top:0">
+    <h2 style="text-align: center;">劳动者个人信息卡
+    </h2>
+    <input id="userCode" type="hidden" value="">
+    <input id="regId" type="hidden" value="">
+
+    <form class="layui-form" id="addfolder" lay-filter="folderForm" style="display: none;min-height: 300px">
+        <div id="search-header">
+            <input id="guishu" type="hidden" value="">
+            <div class="layui-inline" style="margin-left: -59px;display: none">
+                <label class="layui-form-label">单位</label>
+                <div class="layui-input-block" style="width: 270px;">
+                    <input type="text" id="tree" lay-filter="tree" class="layui-input">
+                </div>
+            </div>
+
+            <div class="layui-inline" style="margin-left: 3px;">
+                <label class="layui-form-label w-auto">姓名:</label>
+                <div class="layui-input-inline">
+                    <input id="name" class="layui-input" placeholder="请输入" style="width: 124px;"/>
+                </div>
+            </div>
+
+            <div class="layui-inline" style="padding-left: 20px;">
+                <button class="layui-btn icon-btn sousuoDN " lay-submit="" lay-filter="regManageQueryBtn"><i class="layui-icon"></i>搜索</button>
+                <button id="btnempty" style="background-color: #fff;width: 69px;color: black;border: 1px solid #e5e5e5;" class="layui-btn icon-btn"></i>清除</button>
+            </div>
+        </div>
+        <div id="tables" class="text-center layui-text"  style="width: 100%;">
+
+        </div>
+    </form>
+
+
+
+    <form class="layui-form" id="myForm" lay-filter="myForm">
+        <table>
+            <tr >
+                <th colspan="2">姓名</th>
+                <td colspan="4">
+                    <div class="layui-input-group">
+                        <input name="v1" type="text" class="input-full layui-input" placeholder="请输入姓名" readonly>
+                        <div class="layui-input-split layui-input-suffix chooseName" style="cursor: pointer;">
+                            <i class="layui-icon layui-icon-search"></i>
+                        </div>
+                    </div>
+                </td>
+                <th colspan="2">性别</th>
+                <td colspan="4" >
+                    <input type="radio" name="v2" value="1" title="男">
+                    <input type="radio" name="v2" value="2" title="女" >
+                </td >
+                <th colspan="4">出生日期</th>
+                <td colspan="4"><input type="date" name="v3" class="input-full datainput layui-input"></td>
+
+                <td rowspan="4" colspan="3">
+                    <div class="upload-area" id="uploadPhoto">
+                        <img id="previewImg" src="" alt="点击上传照片" style="display:none;max-width:100px;max-height:100px;margin-top:10px;">
+                        <span id="uploadText">点击上传照片</span>
+                        <button style="display:none;" type="button" class="layui-btn layui-btn-radius layui-btn-normal" id="uploadInput">
+                        </button>
+                    </div>
+                </td>
+
+            </tr>
+
+
+            <tr>
+                <th colspan="2">曾用名
+                </th>
+                <td colspan="4"><input type="text"  class="input-full layui-input" name="v4"  placeholder="请输入曾用名"></td>
+                <th colspan="2">婚姻状况</th>
+                <td colspan="4">
+                    <select name="v5"  class="input-full">
+                        <option value="">请选择婚姻状况</option>
+                        <option value="未婚">未婚</option>
+                        <option value="已婚">已婚</option>
+                        <!-- 其他选项 -->
+                    </select>
+                </td>
+
+                <th colspan="4">文化程度</th>
+                <td colspan="4">
+                    <select name="v6" class="input-full">
+                        <option  value="">请选择文化程度</option>
+                        <option  value="小学">小学</option>
+                        <option  value="初中">初中</option>
+                        <option  value="高中">高中</option>
+                        <option  value="大学">大学</option>
+                        <option  value="研究生">研究生</option>
+                        <option  value="博士">博士</option>
+                    </select>
+
+
+                </td>
+
+
+            </tr>
+
+
+            <tr >
+                <th colspan="4">籍贯</th>
+                <td colspan="6"><input type="text" class="input-full layui-input" name="v7" placeholder="请输入籍贯"></td>
+                <th colspan="4">本人电话</th>
+                <td colspan="6"><input type="text" class="input-full layui-input" name="v8" placeholder="请输入本人电话"></td>
+
+            </tr>
+
+            <tr >
+                <th colspan="4">嗜好</th>
+                <td colspan="6"><input type="text" class="input-full layui-input" name="v9" placeholder="嗜好"></td>
+                <th colspan="4">身份证号</th>
+                <td colspan="6"><input type="text" class="input-full layui-input" name="v10" placeholder="请输入身份证号"></td>
+            </tr>
+
+
+
+
+            <tr class="section-title">
+                <td class="heng" colspan="23">职业史及职业病危害接触史</td>
+            </tr>
+
+            <tr >
+                <th colspan="1">序号</th>
+                <th colspan="3">用人单位名称</th>
+                <th colspan="3">从事工种（或岗位）</th>
+                <th colspan="6">工作起始时间</th>
+                <th colspan="6">接触职业病危害因素名称</th>
+                <th colspan="3">证明人</th>
+                <th colspan="1">操作</th>
+            </tr>
+            <tr  id="disease-history-table" class="section-title disease-rowc">
+
+
+            </tr>
+            <tr th:each="item, iterStat : ${medicalHistory}" class="disease-row1">
+                <td style="text-align: center;" colspan="1" th:text="${iterStat.index + 1}"></td>
+                <td colspan="3">
+                    <input type="text" th:value="${item.add1}" name="adda1" class="input-full layui-input" placeholder="用人单位名称">
+                </td>
+                <td colspan="3">
+                    <input type="text" th:value="${item.add2}" name="adda2" class="input-full layui-input" placeholder="从事工种(或岗位)">
+                </td>
+                <td colspan="6">
+                    <div class="layui-input-inline">
+                        <input type="date" th:value="${item.add3}" name="adda3" class="input-full datainput layui-input" placeholder="开始日期">
+                    </div>
+                    <span style="margin: 0 10px;">至</span>
+                    <div class="layui-input-inline">
+                        <input type="date" th:value="${item.add4}" name="adda4" class="input-full datainput layui-input" placeholder="结束日期">
+                    </div>
+                </td>
+                <td colspan="6">
+                    <input type="text" th:value="${item.add5}" name="adda5" class="input-full layui-input" placeholder="接触职业病危害因素名称">
+                </td>
+                <td colspan="3">
+                    <input type="text" th:value="${item.add6}" name="adda6" class="input-full layui-input" placeholder="证明人">
+                </td>
+                <td colspan="1" class="operation-btn" style="text-align: center;">
+                    <i style="color: red; font-size: 30px;" class="layui-icon layui-icon-delete delete-btn"></i>
+                </td>
+            </tr>
+            <tr class="section-title">
+                <td colspan="23" class="operation-btn" style="text-align: center"><i id="add-disease-row1" style="font-size: 20px;color: #2d8cf0" class="layui-icon layui-icon-add-circle add-btn"></i></td>
+            </tr>
+
+
+
+
+
+            <tr >
+                <th colspan="2">序号</th>
+                <th colspan="3">曾患病</th>
+                <th colspan="4">诊断日期</th>
+
+                <th colspan="4">诊断单位</th>
+                <th colspan="5">治疗结果</th>
+                <th colspan="4">备注</th>
+                <th colspan="1">操作</th>
+            </tr>
+            <tr  id="disease-history-table2" class="section-title disease-rowb">
+
+            </tr>
+
+            <tr class="section-title">
+                <td colspan="23" class="operation-btn" style="text-align: center"><i id="add-disease-row2" style="font-size: 20px;color: #2d8cf0" class="layui-icon layui-icon-add-circle add-btn"></i></td>
+            </tr>
+            <tr th:each="data, iterStat : ${surgicalHistory}" class="disease-row2">
+                <td style="text-align: center;" colSpan="2" th:text="${iterStat.index + 1}"></td>
+                <td colSpan="3">
+                    <input type="text" th:value="${data.add1}" name="addb1" class="input-full layui-input" placeholder="曾患病">
+                </td>
+                <td colSpan="4">
+                    <input type="date" th:value="${data.add2}" name="addb2" class="input-full datainput layui-input">
+                </td>
+                <td colSpan="4">
+                    <input type="text" th:value="${data.add3}" name="addb3" class="input-full layui-input" placeholder="诊断单位">
+                </td>
+                <td colSpan="5">
+                    <input type="text" th:value="${data.add4}" name="addb4" class="input-full layui-input" placeholder="治疗结果">
+                </td>
+                <td colSpan="4">
+                    <input type="text" th:value="${data.add5}" name="addb5" class="input-full layui-input" placeholder="备注">
+                </td>
+                <td colspan="1" class="operation-btn" style="text-align: center;">
+                    <i style="color: red; font-size: 30px;" class="layui-icon layui-icon-delete delete-btn"></i>
+                </td>
+            </tr>
+
+
+
+
+
+
+            <tr>
+                <th colspan="8">月经史及生育史（女职工填写）</th>
+                <td colspan="15">
+                    <!--          <input type="text" name="v22" class="input-full layui-input" placeholder="责任健管师" >-->
+                        <textarea name="v11" placeholder="请输入内容" class="layui-textarea" maxlength="200"></textarea>
+                </td>
+
+            </tr>
+
+
+            <tr>
+                <td colspan="23">
+                    <!--          <input type="text" name="v22" class="input-full layui-input" placeholder="责任健管师" >-->
+                        <textarea name="remark" placeholder="请输入内容" class="layui-textarea"  readonly>
+                            注：1）本表记录用人单位接触职业病危害的作业人员基本信息；2）职业病人的职业史是指职业病病人从事过的职业及从业期限:职业病危害接触史是指劳动者接触职业病危害的种类及接触时间的长短；3）职业史、职业病危害接触史主要从到本单位工作时间开始填写，能够源到初次参加工作时间的、从初次参加工作时间开始填写；4)既往病史是指劳动者曾患病情况，包括职业病和其它疾病。
+                        </textarea>
+                </td>
+            </tr>
+
+        </table>
+    </form>
+</div>
+
+<script type="text/javascript" th:src="@{/assets/js/common.js}"></script>
+<script th:inline="javascript">
+    layui.use(['form',"table",'treeSelect','notice',"upload"], function(){
+        var form = layui.form;
+        var $ = layui.jquery;
+        var layer = layui.layer;
+        var table = layui.table;
+        var notice=layui.notice;
+        var upload = layui.upload;
+        layui.config({
+            skin: 'blue'  // 设置主题为蓝色
+        });
+
+        //下拉框回显
+        form.render("select");
+
+        document.getElementById('uploadPhoto').addEventListener('click', function() {
+            document.getElementById('uploadInput').click(); // 模拟点击隐藏的 input 文件选择框
+        });
+
+
+
+
+
+
+
+
+
+
+        // 删除行功能
+
+        // 更新序号
+        function updateRowNumbers() {
+            var rows = document.querySelectorAll('.disease-row');
+            rows.forEach(function(row, index) {
+                row.querySelector('td[colspan="1"]').textContent = index + 1;
+            });
+            var rows1 = document.querySelectorAll('.disease-row1');
+            rows1.forEach(function(row, index) {
+                rows1.querySelector('td[colspan="1"]').textContent = index + 1;
+            });
+            var rows2 = document.querySelectorAll('.disease-row2');
+            rows2.forEach(function(row, index) {
+                rows2.querySelector('td[colspan="1"]').textContent = index + 1;
+            });
+
+
+
+        }
+
+        var data= [[${data}]];
+        if(data.code==20000){
+            form.val("myForm", {
+                "v1": data.data.name,
+                "v2":data.data.sex,
+                "v3":data.data.birth,
+                "v4":data.data.nameUsedBefore,
+                "v5":data.data.maritalStatus,
+                "v6":data.data.degreeEducation,
+                "v7":data.data.nativePlace,
+                "v8":data.data.myPhoneNumber,
+                "v9":data.data.hobby,
+                "v10":data.data.idNumber,
+                "v11":data.data.menstrualReproductiveHistory,
+
+            });
+            if(data.data.photo){
+                document.getElementById('previewImg').style.display = 'block';
+                const uploadText = document.getElementById('uploadText');
+                uploadText.style.display = 'none'; // 隐藏文字
+                $("#previewImg").attr("src",data.data.photo);
+            }
+
+
+            $("#userCode").val(data.data.userCode)
+            $("#regId").val(data.data.regId)
+            $("input[name='v13']").prop('checked', false);
+
+            document.querySelector('input[name="v3"]').value =data.data.birth.substring(0, 10);
+            const medicalHistory = [[${medicalHistory}]];
+            // const surgicalHistory = JSON.parse(data.data.textJson);
+            console.log(medicalHistory,"medicalHistorymedicalHistorymedicalHistorymedicalHistorymedicalHistorymedicalHistorymedicalHistorymedicalHistorymedicalHistorymedicalHistorymedicalHistory")
+            // if(medicalHistory){
+            //     for (let index = 0; index < medicalHistory.length; index++) {
+            //         const item = medicalHistory[index];
+            //         var $lastRow = $('#disease-history-table').siblings('.disease-row1').last();
+            //         const $newRow = $('<tr class="disease-row1"></tr>');
+            //         $newRow.html(`
+            //                          <td style="text-align: center;" colSpan="1">${index + 1}</td>
+            //                         <td colSpan="3"><input type="text" value="${item.add1}" name="adda1" class="input-full layui-input" placeholder="用人单位名称"></td>
+            //                         <td colSpan="3"><input type="text" value="${item.add2}" name="adda2" class="input-full layui-input" placeholder="从事工种(或岗位)"></td>
+            //                        <td colSpan="6">
+            //                             <div class="layui-input-inline">
+            //                                 <input type="date" name="adda3" value="${item.add3}" class="input-full datainput layui-input" placeholder="开始日期">
+            //                             </div>
+            //                             <span style="margin: 0 10px;">至</span>
+            //                             <div class="layui-input-inline">
+            //                                 <input type="date" name="adda4" value="${item.add4}" class="input-full datainput layui-input" placeholder="结束日期">
+            //                             </div>
+            //                         </td>
+            //                         <td colSpan="6"><input type="text" value="${item.add5}" name="adda5" class="input-full layui-input" placeholder="接触职业病危害因素名称"></td>
+            //                         <td colSpan="3"><input type="text" value="${item.add6}" name="adda6" class="input-full layui-input" placeholder="证明人"></td>
+            //                         <td colspan="1" class="operation-btn" style="text-align: center;"><i style="color: red;font-size: 30px;" class="layui-icon layui-icon-delete delete-btn"></i></td>
+            //                     `);
+            //         if ($lastRow.length > 0) {
+            //             $lastRow.after($newRow);
+            //         } else {
+            //             $('.disease-rowc').after($newRow);
+            //         }
+            //     };
+            //
+            // }
+            // for (let index = 0; index < surgicalHistory.length; index++) {
+            //     const data = surgicalHistory[index];
+            //     var $lastRow = $('#disease-history-table2').siblings('.disease-row2').last();
+            //     const $newRow = $('<tr class="disease-row2"></tr>');
+            //     $newRow.html(`
+            //                     <td style="text-align: center;" colSpan="2">${index + 1}</td>
+            //                     <td colSpan="3"><input type="text" value="${data.add1}" name="addb1" class="input-full layui-input" placeholder="曾患病"></td>
+            //                     <td colSpan="4"><input type="date" value="${data.add2}" name="addb2" class="input-full datainput layui-input"></td>
+            //                     <td colSpan="4"><input type="text" value="${data.add3}" name="addb3" class="input-full layui-input" placeholder="诊断单位"></td>
+            //                     <td colSpan="5"><input type="text" value="${data.add4}" name="addb4" class="input-full layui-input" placeholder="治疗结果"></td>
+            //                     <td colSpan="4"><input type="text" value="${data.add5}" name="addb5" class="input-full layui-input" placeholder="备注"></td>
+            //                         <td colspan="1" class="operation-btn" style="text-align: center;"><i style="color: red;font-size: 30px;" class="layui-icon layui-icon-delete delete-btn"></i></td>
+            //                     `);
+            //
+            //     if ($lastRow.length > 0) {
+            //         $lastRow.after($newRow);
+            //     } else {
+            //         $('.disease-rowb').after($newRow);
+            //     }
+            // };
+
+            form.render();
+        }
+
+
+
+
+
+        // 初始化表单
+        form.render();
+
+
+
+        });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,20 @@
+package com.yihe.system.service;
+
+import com.yihe.system.domain.NewOccupationalHealthManagementArchives;
+import com.yihe.system.domain.NewUnitOccupationalHealthSurveillanceManagementArchives;
+
+import java.util.List;
+
+public interface unitOccupationalHealthSurveillanceManagementArchivesFormService {
+    int insetNew(NewUnitOccupationalHealthSurveillanceManagementArchives newUnitOccupationalHealthSurveillanceManagementArchives) ;
+
+    int updateNew(NewUnitOccupationalHealthSurveillanceManagementArchives newUnitOccupationalHealthSurveillanceManagementArchives);
+
+    NewUnitOccupationalHealthSurveillanceManagementArchives selectById(NewUnitOccupationalHealthSurveillanceManagementArchives newUnitOccupationalHealthSurveillanceManagementArchives);
+
+    List<NewUnitOccupationalHealthSurveillanceManagementArchives> selectByPage(NewUnitOccupationalHealthSurveillanceManagementArchives newUnitOccupationalHealthSurveillanceManagementArchives);
+
+    int selectByPageCount(NewUnitOccupationalHealthSurveillanceManagementArchives newUnitOccupationalHealthSurveillanceManagementArchives);
+
+    int deleteById(NewUnitOccupationalHealthSurveillanceManagementArchives newUnitOccupationalHealthSurveillanceManagementArchives) ;
+}

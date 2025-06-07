@@ -1,0 +1,18 @@
+package com.yihe.system.service;
+
+import com.yihe.system.domain.NewAnxietyDisorderInterventionRecordForm;
+import com.yihe.system.domain.NewObsessiveCompulsiveDisorderInterventionRecordForm;
+
+import java.util.List;
+
+public interface NewObsessiveCompulsiveDisorderInterventionRecordFormService {
+    int insetNew(NewObsessiveCompulsiveDisorderInterventionRecordForm newObsessiveCompulsiveDisorderInterventionRecordForm);
+
+    int updateNew(NewObsessiveCompulsiveDisorderInterventionRecordForm newObsessiveCompulsiveDisorderInterventionRecordForm);
+
+    NewObsessiveCompulsiveDisorderInterventionRecordForm selectById(NewObsessiveCompulsiveDisorderInterventionRecordForm newObsessiveCompulsiveDisorderInterventionRecordForm);
+
+    List<NewObsessiveCompulsiveDisorderInterventionRecordForm> selectByPage(NewObsessiveCompulsiveDisorderInterventionRecordForm newObsessiveCompulsiveDisorderInterventionRecordForm);
+
+    int selectByPageCount(NewObsessiveCompulsiveDisorderInterventionRecordForm newObsessiveCompulsiveDisorderInterventionRecordForm);
+}

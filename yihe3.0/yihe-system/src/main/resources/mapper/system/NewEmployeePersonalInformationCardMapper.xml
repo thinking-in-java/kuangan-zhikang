@@ -1,0 +1,500 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yihe.system.mapper.NewEmployeePersonalInformationCardMapper">
+  <resultMap id="BaseResultMap" type="com.yihe.system.domain.NewEmployeePersonalInformationCard">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="user_code" jdbcType="VARCHAR" property="userCode" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="sex" jdbcType="VARCHAR" property="sex" />
+    <result column="birth" jdbcType="DATE" property="birth" />
+    <result column="name_used_before" jdbcType="VARCHAR" property="nameUsedBefore" />
+    <result column="marital_status" jdbcType="VARCHAR" property="maritalStatus" />
+    <result column="degree_education" jdbcType="VARCHAR" property="degreeEducation" />
+    <result column="native_place" jdbcType="VARCHAR" property="nativePlace" />
+    <result column="my_phone_number" jdbcType="INTEGER" property="myPhoneNumber" />
+    <result column="hobby" jdbcType="VARCHAR" property="hobby" />
+    <result column="id_number" jdbcType="INTEGER" property="idNumber" />
+    <result column="occupational_history_exposure_history_to_occupational_hazards" jdbcType="VARCHAR" property="occupationalHistoryExposureHistoryToOccupationalHazards" />
+    <result column="text_json" jdbcType="VARCHAR" property="textJson" />
+    <result column="menstrual_reproductive_history" jdbcType="VARCHAR" property="menstrualReproductiveHistory" />
+    <result column="testing_results_occupational_hazards_in_workplace" jdbcType="VARCHAR" property="testingResultsOccupationalHazardsInWorkplace" />
+    <result column="previous_occupational_health_examination_results" jdbcType="VARCHAR" property="previousOccupationalHealthExaminationResults" />
+    <result column="sign" jdbcType="VARCHAR" property="sign" />
+    <result column="notice_occupational_health_examination_results" jdbcType="VARCHAR" property="noticeOccupationalHealthExaminationResults" />
+    <result column="occupational_health_examination1" jdbcType="VARCHAR" property="occupationalHealthExamination1" />
+    <result column="occupational_health_examination2" jdbcType="VARCHAR" property="occupationalHealthExamination2" />
+    <result column="occupational_health_examination3" jdbcType="VARCHAR" property="occupationalHealthExamination3" />
+    <result column="occupational_health_examination4" jdbcType="VARCHAR" property="occupationalHealthExamination4" />
+    <result column="examination_results" jdbcType="VARCHAR" property="examinationResults" />
+    <result column="examination_results_sign" jdbcType="VARCHAR" property="examinationResultsSign" />
+    <result column="examination_results_file" jdbcType="VARCHAR" property="examinationResultsFile" />
+    <result column="regarding_materials" jdbcType="VARCHAR" property="regardingMaterials" />
+    <result column="notes" jdbcType="VARCHAR" property="notes" />
+    <result column="other" jdbcType="VARCHAR" property="other" />
+    <result column="photo" jdbcType="VARCHAR" property="photo" />
+    <result column="reg_id" jdbcType="VARCHAR" property="regId" />
+    <result column="v888" jdbcType="VARCHAR" property="v888" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, user_code, name, sex, birth, name_used_before, marital_status, degree_education, 
+    native_place, my_phone_number, hobby, id_number, occupational_history_exposure_history_to_occupational_hazards, 
+    text_json, menstrual_reproductive_history, testing_results_occupational_hazards_in_workplace, 
+    previous_occupational_health_examination_results, sign, notice_occupational_health_examination_results, 
+    occupational_health_examination1, occupational_health_examination2, occupational_health_examination3, 
+    occupational_health_examination4, examination_results, examination_results_sign, 
+    examination_results_file, regarding_materials, notes, other, photo,reg_id
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from new_employee_personal_information_card
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+
+
+  <select id="selectByUser" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select  <include refid="Base_Column_List" /> from new_employee_personal_information_card where  user_code=#{userCode}  ORDER BY time DESC
+  </select>
+
+  <select id="selectId" parameterType="com.yihe.system.domain.NewEmployeePersonalInformationCard" resultType="integer">
+    select id from new_employee_personal_information_card where  user_code=#{userCode}  ORDER BY time DESC LIMIT 1
+  </select>
+
+  <select id="inserCount" parameterType="com.yihe.system.domain.NewEmployeePersonalInformationCard" resultType="integer">
+    select count(*) from new_employee_personal_information_card where  user_code=#{userCode}
+  </select>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from new_employee_personal_information_card
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.yihe.system.domain.NewEmployeePersonalInformationCard">
+    insert into new_employee_personal_information_card (id, user_code, name, 
+      sex, birth, name_used_before, 
+      marital_status, degree_education, native_place, 
+      my_phone_number, hobby, id_number, 
+      occupational_history_exposure_history_to_occupational_hazards, text_json, 
+      menstrual_reproductive_history, testing_results_occupational_hazards_in_workplace, 
+      previous_occupational_health_examination_results, sign, 
+      notice_occupational_health_examination_results, occupational_health_examination1, 
+      occupational_health_examination2, occupational_health_examination3, 
+      occupational_health_examination4, examination_results, 
+      examination_results_sign, examination_results_file, 
+      regarding_materials, notes, other, 
+      photo)
+    values (#{id,jdbcType=INTEGER}, #{userCode,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, 
+      #{sex,jdbcType=VARCHAR}, #{birth,jdbcType=DATE}, #{nameUsedBefore,jdbcType=VARCHAR}, 
+      #{maritalStatus,jdbcType=VARCHAR}, #{degreeEducation,jdbcType=VARCHAR}, #{nativePlace,jdbcType=VARCHAR}, 
+      #{myPhoneNumber,jdbcType=INTEGER}, #{hobby,jdbcType=VARCHAR}, #{idNumber,jdbcType=INTEGER}, 
+      #{occupationalHistoryExposureHistoryToOccupationalHazards,jdbcType=VARCHAR}, #{textJson,jdbcType=VARCHAR}, 
+      #{menstrualReproductiveHistory,jdbcType=VARCHAR}, #{testingResultsOccupationalHazardsInWorkplace,jdbcType=VARCHAR}, 
+      #{previousOccupationalHealthExaminationResults,jdbcType=VARCHAR}, #{sign,jdbcType=VARCHAR}, 
+      #{noticeOccupationalHealthExaminationResults,jdbcType=VARCHAR}, #{occupationalHealthExamination1,jdbcType=VARCHAR}, 
+      #{occupationalHealthExamination2,jdbcType=VARCHAR}, #{occupationalHealthExamination3,jdbcType=VARCHAR}, 
+      #{occupationalHealthExamination4,jdbcType=VARCHAR}, #{examinationResults,jdbcType=VARCHAR}, 
+      #{examinationResultsSign,jdbcType=VARCHAR}, #{examinationResultsFile,jdbcType=VARCHAR}, 
+      #{regardingMaterials,jdbcType=VARCHAR}, #{notes,jdbcType=VARCHAR}, #{other,jdbcType=VARCHAR}, 
+      #{photo,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.yihe.system.domain.NewEmployeePersonalInformationCard">
+    insert into new_employee_personal_information_card
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="userCode != null">
+        user_code,
+      </if>
+      <if test="name != null">
+        name,
+      </if>
+      <if test="sex != null">
+        sex,
+      </if>
+      <if test="birth != null">
+        birth,
+      </if>
+      <if test="nameUsedBefore != null">
+        name_used_before,
+      </if>
+      <if test="maritalStatus != null">
+        marital_status,
+      </if>
+      <if test="degreeEducation != null">
+        degree_education,
+      </if>
+      <if test="nativePlace != null">
+        native_place,
+      </if>
+      <if test="myPhoneNumber != null">
+        my_phone_number,
+      </if>
+      <if test="hobby != null">
+        hobby,
+      </if>
+      <if test="idNumber != null">
+        id_number,
+      </if>
+      <if test="occupationalHistoryExposureHistoryToOccupationalHazards != null">
+        occupational_history_exposure_history_to_occupational_hazards,
+      </if>
+      <if test="textJson != null">
+        text_json,
+      </if>
+      <if test="menstrualReproductiveHistory != null">
+        menstrual_reproductive_history,
+      </if>
+      <if test="testingResultsOccupationalHazardsInWorkplace != null">
+        testing_results_occupational_hazards_in_workplace,
+      </if>
+      <if test="previousOccupationalHealthExaminationResults != null">
+        previous_occupational_health_examination_results,
+      </if>
+      <if test="sign != null">
+        sign,
+      </if>
+      <if test="noticeOccupationalHealthExaminationResults != null">
+        notice_occupational_health_examination_results,
+      </if>
+      <if test="occupationalHealthExamination1 != null">
+        occupational_health_examination1,
+      </if>
+      <if test="occupationalHealthExamination2 != null">
+        occupational_health_examination2,
+      </if>
+      <if test="occupationalHealthExamination3 != null">
+        occupational_health_examination3,
+      </if>
+      <if test="occupationalHealthExamination4 != null">
+        occupational_health_examination4,
+      </if>
+      <if test="examinationResults != null">
+        examination_results,
+      </if>
+      <if test="examinationResultsSign != null">
+        examination_results_sign,
+      </if>
+      <if test="examinationResultsFile != null">
+        examination_results_file,
+      </if>
+      <if test="regardingMaterials != null">
+        regarding_materials,
+      </if>
+      <if test="notes != null">
+        notes,
+      </if>
+      <if test="other != null">
+        other,
+      </if>
+      <if test="photo != null">
+        photo,
+      </if>
+      <if test="regId != null">
+        reg_id,
+      </if>
+      <if test="time != null">
+        `time`,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="userCode != null">
+        #{userCode,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="sex != null">
+        #{sex,jdbcType=VARCHAR},
+      </if>
+      <if test="birth != null">
+        #{birth,jdbcType=DATE},
+      </if>
+      <if test="nameUsedBefore != null">
+        #{nameUsedBefore,jdbcType=VARCHAR},
+      </if>
+      <if test="maritalStatus != null">
+        #{maritalStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="degreeEducation != null">
+        #{degreeEducation,jdbcType=VARCHAR},
+      </if>
+      <if test="nativePlace != null">
+        #{nativePlace,jdbcType=VARCHAR},
+      </if>
+      <if test="myPhoneNumber != null">
+        #{myPhoneNumber,jdbcType=INTEGER},
+      </if>
+      <if test="hobby != null">
+        #{hobby,jdbcType=VARCHAR},
+      </if>
+      <if test="idNumber != null">
+        #{idNumber,jdbcType=INTEGER},
+      </if>
+      <if test="occupationalHistoryExposureHistoryToOccupationalHazards != null">
+        #{occupationalHistoryExposureHistoryToOccupationalHazards,jdbcType=VARCHAR},
+      </if>
+      <if test="textJson != null">
+        #{textJson,jdbcType=VARCHAR},
+      </if>
+      <if test="menstrualReproductiveHistory != null">
+        #{menstrualReproductiveHistory,jdbcType=VARCHAR},
+      </if>
+      <if test="testingResultsOccupationalHazardsInWorkplace != null">
+        #{testingResultsOccupationalHazardsInWorkplace,jdbcType=VARCHAR},
+      </if>
+      <if test="previousOccupationalHealthExaminationResults != null">
+        #{previousOccupationalHealthExaminationResults,jdbcType=VARCHAR},
+      </if>
+      <if test="sign != null">
+        #{sign,jdbcType=VARCHAR},
+      </if>
+      <if test="noticeOccupationalHealthExaminationResults != null">
+        #{noticeOccupationalHealthExaminationResults,jdbcType=VARCHAR},
+      </if>
+      <if test="occupationalHealthExamination1 != null">
+        #{occupationalHealthExamination1,jdbcType=VARCHAR},
+      </if>
+      <if test="occupationalHealthExamination2 != null">
+        #{occupationalHealthExamination2,jdbcType=VARCHAR},
+      </if>
+      <if test="occupationalHealthExamination3 != null">
+        #{occupationalHealthExamination3,jdbcType=VARCHAR},
+      </if>
+      <if test="occupationalHealthExamination4 != null">
+        #{occupationalHealthExamination4,jdbcType=VARCHAR},
+      </if>
+      <if test="examinationResults != null">
+        #{examinationResults,jdbcType=VARCHAR},
+      </if>
+      <if test="examinationResultsSign != null">
+        #{examinationResultsSign,jdbcType=VARCHAR},
+      </if>
+      <if test="examinationResultsFile != null">
+        #{examinationResultsFile,jdbcType=VARCHAR},
+      </if>
+      <if test="regardingMaterials != null">
+        #{regardingMaterials,jdbcType=VARCHAR},
+      </if>
+      <if test="notes != null">
+        #{notes,jdbcType=VARCHAR},
+      </if>
+      <if test="other != null">
+        #{other,jdbcType=VARCHAR},
+      </if>
+      <if test="photo != null">
+        #{photo,jdbcType=VARCHAR},
+      </if>
+      <if test="regId != null">
+        #{regId},
+      </if>
+      <if test="time != null">
+        #{time},
+      </if>
+
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.yihe.system.domain.NewEmployeePersonalInformationCard">
+    update new_employee_personal_information_card
+    <set>
+      <if test="userCode != null">
+        user_code = #{userCode,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null">
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="sex != null">
+        sex = #{sex,jdbcType=VARCHAR},
+      </if>
+      <if test="birth != null">
+        birth = #{birth,jdbcType=DATE},
+      </if>
+      <if test="nameUsedBefore != null">
+        name_used_before = #{nameUsedBefore,jdbcType=VARCHAR},
+      </if>
+      <if test="maritalStatus != null">
+        marital_status = #{maritalStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="degreeEducation != null">
+        degree_education = #{degreeEducation,jdbcType=VARCHAR},
+      </if>
+      <if test="nativePlace != null">
+        native_place = #{nativePlace,jdbcType=VARCHAR},
+      </if>
+      <if test="myPhoneNumber != null">
+        my_phone_number = #{myPhoneNumber,jdbcType=INTEGER},
+      </if>
+      <if test="hobby != null">
+        hobby = #{hobby,jdbcType=VARCHAR},
+      </if>
+      <if test="idNumber != null">
+        id_number = #{idNumber,jdbcType=INTEGER},
+      </if>
+      <if test="occupationalHistoryExposureHistoryToOccupationalHazards != null">
+        occupational_history_exposure_history_to_occupational_hazards = #{occupationalHistoryExposureHistoryToOccupationalHazards,jdbcType=VARCHAR},
+      </if>
+      <if test="textJson != null">
+        text_json = #{textJson,jdbcType=VARCHAR},
+      </if>
+      <if test="menstrualReproductiveHistory != null">
+        menstrual_reproductive_history = #{menstrualReproductiveHistory,jdbcType=VARCHAR},
+      </if>
+      <if test="testingResultsOccupationalHazardsInWorkplace != null">
+        testing_results_occupational_hazards_in_workplace = #{testingResultsOccupationalHazardsInWorkplace,jdbcType=VARCHAR},
+      </if>
+      <if test="previousOccupationalHealthExaminationResults != null">
+        previous_occupational_health_examination_results = #{previousOccupationalHealthExaminationResults,jdbcType=VARCHAR},
+      </if>
+      <if test="sign != null">
+        sign = #{sign,jdbcType=VARCHAR},
+      </if>
+      <if test="noticeOccupationalHealthExaminationResults != null">
+        notice_occupational_health_examination_results = #{noticeOccupationalHealthExaminationResults,jdbcType=VARCHAR},
+      </if>
+      <if test="occupationalHealthExamination1 != null">
+        occupational_health_examination1 = #{occupationalHealthExamination1,jdbcType=VARCHAR},
+      </if>
+      <if test="occupationalHealthExamination2 != null">
+        occupational_health_examination2 = #{occupationalHealthExamination2,jdbcType=VARCHAR},
+      </if>
+      <if test="occupationalHealthExamination3 != null">
+        occupational_health_examination3 = #{occupationalHealthExamination3,jdbcType=VARCHAR},
+      </if>
+      <if test="occupationalHealthExamination4 != null">
+        occupational_health_examination4 = #{occupationalHealthExamination4,jdbcType=VARCHAR},
+      </if>
+      <if test="examinationResults != null">
+        examination_results = #{examinationResults,jdbcType=VARCHAR},
+      </if>
+      <if test="examinationResultsSign != null">
+        examination_results_sign = #{examinationResultsSign,jdbcType=VARCHAR},
+      </if>
+      <if test="examinationResultsFile != null">
+        examination_results_file = #{examinationResultsFile,jdbcType=VARCHAR},
+      </if>
+      <if test="regardingMaterials != null">
+        regarding_materials = #{regardingMaterials,jdbcType=VARCHAR},
+      </if>
+      <if test="notes != null">
+        notes = #{notes,jdbcType=VARCHAR},
+      </if>
+      <if test="other != null">
+        other = #{other,jdbcType=VARCHAR},
+      </if>
+      <if test="photo != null">
+        photo = #{photo,jdbcType=VARCHAR},
+      </if>
+      <if test="regId != null">
+        reg_id = #{regId},
+      </if>
+      <if test="time != null">
+        `time` = #{time},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.yihe.system.domain.NewEmployeePersonalInformationCard">
+    update new_employee_personal_information_card
+    set user_code = #{userCode,jdbcType=VARCHAR},
+      name = #{name,jdbcType=VARCHAR},
+      sex = #{sex,jdbcType=VARCHAR},
+      birth = #{birth,jdbcType=DATE},
+      name_used_before = #{nameUsedBefore,jdbcType=VARCHAR},
+      marital_status = #{maritalStatus,jdbcType=VARCHAR},
+      degree_education = #{degreeEducation,jdbcType=VARCHAR},
+      native_place = #{nativePlace,jdbcType=VARCHAR},
+      my_phone_number = #{myPhoneNumber,jdbcType=INTEGER},
+      hobby = #{hobby,jdbcType=VARCHAR},
+      id_number = #{idNumber,jdbcType=INTEGER},
+      occupational_history_exposure_history_to_occupational_hazards = #{occupationalHistoryExposureHistoryToOccupationalHazards,jdbcType=VARCHAR},
+      text_json = #{textJson,jdbcType=VARCHAR},
+      menstrual_reproductive_history = #{menstrualReproductiveHistory,jdbcType=VARCHAR},
+      testing_results_occupational_hazards_in_workplace = #{testingResultsOccupationalHazardsInWorkplace,jdbcType=VARCHAR},
+      previous_occupational_health_examination_results = #{previousOccupationalHealthExaminationResults,jdbcType=VARCHAR},
+      sign = #{sign,jdbcType=VARCHAR},
+      notice_occupational_health_examination_results = #{noticeOccupationalHealthExaminationResults,jdbcType=VARCHAR},
+      occupational_health_examination1 = #{occupationalHealthExamination1,jdbcType=VARCHAR},
+      occupational_health_examination2 = #{occupationalHealthExamination2,jdbcType=VARCHAR},
+      occupational_health_examination3 = #{occupationalHealthExamination3,jdbcType=VARCHAR},
+      occupational_health_examination4 = #{occupationalHealthExamination4,jdbcType=VARCHAR},
+      examination_results = #{examinationResults,jdbcType=VARCHAR},
+      examination_results_sign = #{examinationResultsSign,jdbcType=VARCHAR},
+      examination_results_file = #{examinationResultsFile,jdbcType=VARCHAR},
+      regarding_materials = #{regardingMaterials,jdbcType=VARCHAR},
+      notes = #{notes,jdbcType=VARCHAR},
+      other = #{other,jdbcType=VARCHAR},
+      photo = #{photo,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+  <select id="selectByPage" parameterType="com.yihe.system.domain.NewEmployeePersonalInformationCard" resultMap="BaseResultMap">
+    select * from new_employee_personal_information_card
+    ni left join new_reg ur
+    on ni.reg_id=ur.id
+    LEFT JOIN `yh_user_make_card` AS c ON ur.`user_code` = c.`User_Code`
+    LEFT JOIN yh_user_admin_info AS ai ON c.doctor = ai.id
+    <where>
+      <if test="orgCode!=null and orgCode!=''">
+        and c.Org_Id = #{orgCode}
+      </if>
+      <if test="sex!=null and sex!=''">
+        and ni.sex = #{sex}
+      </if>
+
+      <if test="department!=null and department!=''">
+        and ur.department LIKE CONCAT('%', #{department}, '%')
+      </if>
+      <if test="team!=null and team!=''">
+        and ur.v888 LIKE CONCAT('%', #{team}, '%')
+      </if>
+      <if test="name!=null and name!=''">
+        and ni.name LIKE CONCAT('%', #{name}, '%')
+      </if>
+
+      <if test="startTime!=null and startTime!=''">
+        and ni.time &gt;  #{startTime}
+      </if>
+      <if test="endTime!=null and endTime!=''">
+        and ni.time &lt;  #{endTime}
+      </if>
+
+    </where>
+    LIMIT #{begin}, #{limit};
+  </select>
+
+  <select id="selectByPageCount" parameterType="com.yihe.system.domain.NewEmployeePersonalInformationCard" resultType="int">
+    select count(*) from new_employee_personal_information_card
+    ni left join new_reg ur
+    on ni.reg_id=ur.id
+    LEFT JOIN `yh_user_make_card` AS c ON ur.`user_code` = c.`User_Code`
+    LEFT JOIN yh_user_admin_info AS ai ON c.doctor = ai.id
+    <where>
+      <if test="orgCode!=null and orgCode!=''">
+        and c.Org_Id = #{orgCode}
+      </if>
+      <if test="sex!=null and sex!=''">
+        and ni.sex = #{sex}
+      </if>
+
+      <if test="department!=null and department!=''">
+        and ur.department LIKE CONCAT('%', #{department}, '%')
+      </if>
+      <if test="team!=null and team!=''">
+        and ur.v888 LIKE CONCAT('%', #{team}, '%')
+      </if>
+      <if test="name!=null and name!=''">
+        and ni.name LIKE CONCAT('%', #{name}, '%')
+      </if>
+
+      <if test="startTime!=null and startTime!=''">
+        and ni.time &gt;  #{startTime}
+      </if>
+      <if test="endTime!=null and endTime!=''">
+        and ni.time &lt;  #{endTime}
+      </if>
+    </where>
+  </select>
+
+</mapper>

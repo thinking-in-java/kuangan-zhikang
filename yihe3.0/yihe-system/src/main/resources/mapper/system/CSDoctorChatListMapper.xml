@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yihe.system.mapper.CSDoctorChatListMapper" >
+  <resultMap id="BaseResultMap" type="com.yihe.system.domain.CSDoctorChatList" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="type" property="type" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, type
+  </sql>
+
+  <select id="findUserForDoctor" resultType="string">
+    select b.user_code from cs_user_make_card as a
+                              left join cs_user_admin_info as b
+                                        on a.doctor=b.id
+where a.user_code=#{usercode}
+  </select>
+
+  <select id="findSessionList" resultType="com.yihe.system.domain.CSChatListByUserResVo">
+    SELECT
+      e.type,
+      d.doc_id as docId,
+      IF (
+                f.post_code IS NOT NULL
+                AND f.post_code != '',
+                f.post_code,
+
+                IF (
+                        a.gender,
+                        'https://ybqny.szosen.com/image/new/maleDoctor.png',
+                        'https://ybqny.szosen.com/image/new/femaleDoctor.png'
+                  )
+        ) AS postCode,
+      f.gender,e.info
+    FROM
+      cs_user_reginfo AS a
+        LEFT JOIN cs_user_make_card AS b ON a.user_code = b.User_Code
+        LEFT JOIN cs_user_admin_info AS i ON b.doctor = i.id
+        LEFT JOIN cs_org_tree AS c ON b.Org_Id = c.Org_Code
+        LEFT JOIN cs_org_doctor_chat AS d ON c.User_Code = d.org_id
+        LEFT JOIN cs_doctor_chat_list AS e ON d.type = e.id
+        left join cs_user_reginfo as f
+                  on d.doc_id=f.user_code
+    where a.user_code=#{usercode}  and d.doc_id!=i.user_code
+    GROUP BY d.doc_id
+  </select>
+
+
+  <select id="selectByPrimaryKeyAll" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from cs_doctor_chat_list
+  </select>
+
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from cs_doctor_chat_list
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from cs_doctor_chat_list
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.yihe.system.domain.CSDoctorChatList" >
+    insert into cs_doctor_chat_list (id, type)
+    values (#{id,jdbcType=INTEGER}, #{type,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.yihe.system.domain.CSDoctorChatList" >
+    insert into cs_doctor_chat_list
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="type != null" >
+        type,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="type != null" >
+        #{type,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.yihe.system.domain.CSDoctorChatList" >
+    update cs_doctor_chat_list
+    <set >
+      <if test="type != null" >
+        type = #{type,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.yihe.system.domain.CSDoctorChatList" >
+    update cs_doctor_chat_list
+    set type = #{type,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

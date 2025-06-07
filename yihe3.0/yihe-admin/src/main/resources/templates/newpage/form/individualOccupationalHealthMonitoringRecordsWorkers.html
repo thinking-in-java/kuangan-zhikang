@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>劳动者个人职业健康监护档案</title>
+    <style>
+        body {
+            display: flex;
+            height: 100vh;
+            margin: 0;
+        }
+        .sidebar {
+            width: 220px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 20px 0;
+        }
+        .sidebar div {
+            padding: 15px;
+            margin: 10px 0;
+            cursor: pointer;
+            border-radius: 5px;
+            text-align: center;
+            transition: background-color 0.3s;
+        }
+        .sidebar div:hover {
+            background-color: #e6f7ff;
+        }
+        .sidebar div.active {
+            background-color: #58b0f5;
+            color: #f0faff;
+        }
+        .content {
+            flex-grow: 1;
+            overflow: hidden; /* 防止内容溢出 */
+        }
+        iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+    </style>
+</head>
+<body>
+<div class="sidebar">
+    <div class="active" onclick="showContent('个人基本信息', event)">个人基本信息</div>
+    <div onclick="showContent('劳动者职业史、既往病史和职业病危害接触史', event)">劳动者职业史、既往病史和职业病危害接触史</div>
+    <div onclick="showContent('工作场所职业病危害因素检测结果', event)">工作场所职业病危害因素检测结果</div>
+    <div onclick="showContent('历次职业健康检查结果及处理情况', event)">历次职业健康检查结果及处理情况</div>
+    <div onclick="showContent('职业健康检查结果告知书', event)">职业健康检查结果告知书</div>
+
+    <div onclick="showContent('职业健康体检报告、职业病诊疗等健康资料', event)">职业健康体检报告、职业病诊疗等健康资料</div>
+    <div onclick="showContent('职业病诊疗、伤残鉴定及处理情况', event)">职业病诊疗、伤残鉴定及处理情况</div>
+    <div onclick="showContent('需要存入职业健康监护档案的其它有关资料', event)">需要存入职业健康监护档案的其它有关资料</div>
+    <div onclick="showContent('记事', event)">记事</div>
+    <div onclick="showContent('其它', event)">其它
+    </div>
+</div>
+<div class="content" id="content">
+    <iframe id="contentFrame" src=""></iframe>
+</div>
+<script type="text/javascript" th:src="@{/assets/libs/layui/layui.js}"></script>
+<script type="text/javascript" th:src="@{/assets/js/common.js}"></script>
+<script>
+    // 在这里定义 showContent 函数
+    var userCode = null;
+    const params = new URLSearchParams(window.location.search);
+    const paramValue = params.get('medicalExaminationInformation');
+    function showContent(title, event) {
+        const frame = document.getElementById('contentFrame');
+        console.log(userCode,"----------------------")
+        // 更新选中样式
+        if(title != '1'){
+            const sidebarItems = document.querySelectorAll('.sidebar div');
+            sidebarItems.forEach(item => {
+                item.classList.remove('active');
+            });
+            if (event) {
+                event.target.classList.add('active');
+            }
+        }
+        // 根据选择的标题更新 iframe 源
+        if (title === '个人基本信息' || title === '1') {
+            frame.src = `/manage/newpage/1?personalBasicInformation=${paramValue}`;
+        } else if (title === '工作场所职业病危害因素检测结果') {
+            frame.src = `/manage/newpage/2?personalBasicInformation=${paramValue}`;
+        } else if (title === '历次职业健康检查结果及处理情况') {
+            frame.src = `/manage/newpage/3?personalBasicInformation=${paramValue}&page=healthAssessment&userCode=${userCode}`;
+        }else if (title === '职业健康检查结果告知书') {
+            frame.src = `/manage/newpage/4?personalBasicInformation=${paramValue}&page=healthAssessment&userCode=${userCode}`;
+        }else if (title === '职业健康体检报告、职业病诊疗等健康资料') {
+            frame.src = `/manage/newpage/5?personalBasicInformation=${paramValue}&page=healthAssessment&userCode=${userCode}`;
+        }else if (title === '职业病诊疗、伤残鉴定及处理情况') {
+            frame.src = `/manage/newpage/6?personalBasicInformation=${paramValue}&page=healthAssessment&userCode=${userCode}`;
+        }else if (title === '需要存入职业健康监护档案的其它有关资料') {
+            frame.src = `/manage/newpage/7?personalBasicInformation=${paramValue}&page=healthAssessment&userCode=${userCode}`;
+        }else if (title === '记事') {
+            frame.src = `/manage/newpage/8?personalBasicInformation=${paramValue}&page=healthAssessment&userCode=${userCode}`;
+        }else if (title === '其它') {
+            frame.src = `/manage/newpage/9?personalBasicInformation=${paramValue}&page=healthAssessment&userCode=${userCode}`;
+        }
+
+    }
+
+    layui.use(['layer', 'form', 'step', 'element', 'table', 'laydate', 'treeSelect', 'notice', 'admin', 'layedit'], function() {
+        var $ = layui.jquery,
+            element = layui.element;
+        // if (!userCode) {
+        //     $.ajax({
+        //         type: 'get',
+        //         url: '/newRegController/selectNewReg',
+        //         data: { id: paramValue },
+        //         success: function(data) {
+        //             console.log("这里是查询出来的数据", data);
+        //             userCode = data.data.userCode;
+        //
+        //
+        //         }
+        //     });
+        // }
+
+        // 默认显示个人基本信息
+        showContent('1', null);
+    });
+</script>
+</body>
+</html>

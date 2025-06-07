@@ -1,0 +1,20 @@
+package com.yihe.system.service;
+
+import com.yihe.system.domain.NewAnnualOccupationalHealthPromotionTrainingList;
+import com.yihe.system.domain.NewOccupationalHealthManagementArchives;
+
+import java.util.List;
+
+public interface NewAnnualOccupationalHealthPromotionTrainingListService {
+    int insetNew(NewAnnualOccupationalHealthPromotionTrainingList newAnnualOccupationalHealthPromotionTrainingList) ;
+
+    int updateNew(NewAnnualOccupationalHealthPromotionTrainingList newAnnualOccupationalHealthPromotionTrainingList) ;
+
+    NewAnnualOccupationalHealthPromotionTrainingList selectById(NewAnnualOccupationalHealthPromotionTrainingList newAnnualOccupationalHealthPromotionTrainingList) ;
+
+    List<NewAnnualOccupationalHealthPromotionTrainingList> selectByPage(NewAnnualOccupationalHealthPromotionTrainingList newAnnualOccupationalHealthPromotionTrainingList) ;
+
+    int selectByPageCount(NewAnnualOccupationalHealthPromotionTrainingList newAnnualOccupationalHealthPromotionTrainingList) ;
+
+    int deleteById(NewAnnualOccupationalHealthPromotionTrainingList newAnnualOccupationalHealthPromotionTrainingList) ;
+}

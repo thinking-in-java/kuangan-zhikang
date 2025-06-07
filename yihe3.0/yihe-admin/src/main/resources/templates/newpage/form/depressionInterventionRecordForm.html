@@ -1,0 +1,1168 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>抑郁症干预记录表</title>
+  <link rel="stylesheet" th:href="@{/assets/js/layui-v2.9.16/layui/css/layui.css}"/>
+  <script type="text/javascript" th:src="@{/assets/js/layui-v2.9.16/layui/layui.js}"></script>
+  <style>
+    body{
+      background:#F1F1F1
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      table-layout: fixed;
+      border-color:rgb(144, 186, 221)
+    }
+    th, td {
+      border: 1px solid #ccc;
+      padding: 8px;
+      text-align: left;
+    }
+    th {
+      background-color: rgb(231, 243, 252);
+      font-size: 10pt;
+      font-family: "Microsoft YaHei";
+      word-break: break-word;
+      overflow-wrap: break-word;
+      text-align: center;
+    }
+    .section-title {
+      text-align: center;
+      font-weight: bold;
+      background-color: #e6f7ff;
+    }
+    .input-full {
+      width: 100%;
+      box-sizing: border-box;
+    }
+    .radio-group {
+      display: flex;
+      align-items: center;
+    }
+    .radio-group label {
+      margin-right: 10px;
+    }
+    .checkbox-group {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    .checkbox-group label {
+      margin-right: 15px;
+    }
+    .heng{
+      text-align: center;
+      font-size: 10pt;
+      font-family: "Microsoft YaHei";
+      word-break: break-word;
+      overflow-wrap: break-word;
+    }
+    .datainput{
+      border-color: #eee !important;
+      border-width: 1px;
+    }
+
+    .layui-form-checked[lay-skin=primary] i{
+      border-color:#2d8cf0 !important;
+      background-color:#FFF !important;
+      color:#2d8cf0 !important;
+      font-weight: bold;
+    }
+
+    .layui-form-checkbox[lay-skin=primary]:hover i{
+      border-color:#2d8cf0 !important;
+    }
+    .layui-form-radio>i:hover, .layui-form-radioed>i{
+      color: #2d8cf0 !important;
+    }
+
+    /* 覆盖 layui 的默认主题颜色 */
+    .theme-colorful .layui-btn {
+      height: 36px;
+      line-height: 36px;
+      border-radius: 4px;
+      background-color: #2d8cf0;
+      box-shadow: 0 1px 0 rgba(0, 0, 0, .03);
+    }
+    .layui-form-radio:hover>*, .layui-form-radioed, .layui-form-radioed>i{
+      color: #2d8cf0 !important;
+    }
+
+    /*.layui-input {*/
+    /*    border-color: #597FC0 !important;*/
+    /*}*/
+
+    /* ...其他元素样式 */
+    /* 修改分页按钮的背景颜色和字体颜色 */
+    .layui-laypage a {
+      background-color: #f0f0f0; /* 设置按钮的背景颜色 */
+      color: #333; /* 设置按钮的字体颜色 */
+    }
+
+    /* 鼠标悬停时按钮的背景颜色 */
+    .layui-laypage a:hover {
+      background-color: #fff;
+      color: #2d8cf0;
+    }
+
+    /* 当前页的背景颜色和字体颜色 */
+    .layui-laypage .layui-laypage-curr .layui-laypage-em {
+      background-color: #2d8cf0; /* 当前页的背景颜色 */
+      color: white; /* 当前页的字体颜色 */
+    }
+
+    .file-row {
+      background-color: #e6f7ff;
+      padding: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-radius: 5px;
+      margin: 10px 0;
+      width: 98%;
+    }
+    .file-row .file-info {
+      display: flex;
+      align-items: center;
+    }
+    .file-row .file-info img {
+      width: 20px;
+      margin-right: 10px;
+    }
+    .file-row .file-info span {
+      font-size: 14px;
+    }
+    .file-row .actions {
+      display: flex;
+      align-items: center;
+    }
+    .file-row .actions button {
+      border: none;
+      background: none;
+      cursor: pointer;
+      margin-left: 10px;
+      font-size: 16px;
+    }
+
+    .layui-laydate-header {
+      background-color: #2d8cf0; /* 顶部背景颜色 */
+      color: #fff; /* 顶部文字颜色 */
+    }
+
+    .layui-laydate-list li:hover {
+      background-color: #2d8cf0; /* 鼠标悬停时的背景颜色 */
+      color: #fff; /* 鼠标悬停时的文字颜色 */
+    }
+
+    .layui-this, .layui-this:hover {
+      background-color: #fff !important; /* 选中的背景颜色 */
+      color: #2d8cf0 !important; /* 选中的文字颜色 */
+    }
+    @media print {
+      .no-print {
+        display: none !important;
+      }
+      @page {
+        size: A4; /* 或者你可以指定其他页面大小 */
+        margin: 1cm; /* 调整打印边距 */
+      }
+      body {
+        width: 100%;
+        height: 100%;
+        zoom: 0.8; /* 缩小页面内容 */
+      }
+    }
+    @page {
+      /* 尝试去除默认的页眉和页脚 */
+      margin: 0;
+    }
+  </style>
+</head>
+<body>
+
+<div class="layui-form " style="width:70%;margin:auto;padding:0 5%;background:#FFF;margin-top:0">
+  <h2 style="text-align: center;">抑郁症干预记录表</h2>
+  <input id="guishu" type="hidden" value="">
+  <input id="userCode" type="hidden" value="">
+  <input id="regId" type="hidden" value="">
+
+  <form class="layui-form" id="addfolder" lay-filter="folderForm" style="display: none;min-height: 300px">
+    <div id="search-header">
+
+
+      <div class="layui-inline" style="margin-left: 3px;">
+        <label class="layui-form-label w-auto">姓名:</label>
+        <div class="layui-input-inline">
+          <input id="name" class="layui-input" placeholder="请输入" style="width: 124px;"/>
+        </div>
+      </div>
+
+      <div class="layui-inline" style="padding-left: 20px;">
+        <button class="layui-btn icon-btn sousuoDN " lay-submit="" lay-filter="regManageQueryBtn"><i class="layui-icon"></i>搜索</button>
+        <button id="btnempty" style="background-color: #fff;width: 69px;color: black;border: 1px solid #e5e5e5;" class="layui-btn icon-btn"></i>清除</button>
+      </div>
+    </div>
+    <div id="tables" class="text-center layui-text"  style="width: 100%;">
+
+    </div>
+  </form>
+
+
+
+  <form class="layui-form" id="myForm" lay-filter="myForm">
+
+    <button style="float: right" type="submit" class="layui-btn no-print" lay-submit lay-filter="myFormSave">保存</button>
+    <button style="float: right;margin-right: 30px" type="submit" class="layui-btn no-print" lay-submit lay-filter="generatePDF">打印</button>
+    <table>
+      <tr >
+        <th colspan="4">姓名</th>
+        <td colspan="8">
+          <div class="layui-input-group">
+            <input name="v1" type="text" class="input-full layui-input" readonly>
+            <div class="layui-input-split layui-input-suffix chooseName" style="cursor: pointer;">
+              <i class="layui-icon layui-icon-search"></i>
+            </div>
+          </div>
+        </td>
+
+
+        <th colspan="4">编号</th>
+        <td colspan="8">
+          <input name="v2" type="text" class="input-full layui-input" readonly>
+        </td>
+
+
+      </tr>
+
+
+      <tr>
+        <th colspan="4">随访日期</th>
+        <td colspan="20"><input type="date" class="input-full layui-input" name="v3" placeholder=""></td>
+      </tr>
+
+
+      <tr >
+        <th colspan="4">随访方式</th>
+        <td colspan="20">
+          <input type="radio" name="v4" value="健康小屋" title="健康小屋">
+          <input type="radio" name="v4" value="小程序" title="小程序" >
+          <input type="radio" name="v4" value="电话" title="电话" >
+          <input type="radio" name="v4" value="微信" title="微信" >
+        </td>
+
+
+      </tr>
+
+      <tr >
+        <th colspan="4">症状</th>
+        <td colspan="20">
+          <table border="1" width="100%">
+            <tr >
+              <td colspan="20">
+                <div class="checkbox-group">
+                  <input name="v5" type="checkbox"  value="情绪低落，苦恼忧伤，兴趣索然"  title="情绪低落，苦恼忧伤，兴趣索然">
+                  <input name="v5" type="checkbox"  value="感到悲观绝望，痛苦难熬，生不如死的感觉"  title="感到悲观绝望，痛苦难熬，生不如死的感觉">
+                  <input name="v5" type="checkbox"  value="反应迟钝，语速明显减慢，思维问题费力"  title="反应迟钝，语速明显减慢，思维问题费力">
+                  <input name="v5" type="checkbox"  value="自我评价低，自卑，有无用感和无价值感"  title="自我评价低，自卑，有无用感和无价值感">
+
+                  <input name="v5" type="checkbox"  value="不愿参加外界和平素感兴趣的活动，独处居多"  title="不愿参加外界和平素感兴趣的活动，独处居多">
+                  <input name="v5" type="checkbox"  value="生活懒散，发展为不语不动，可达木僵程度"  title="生活懒散，发展为不语不动，可达木僵程度">
+
+                  <input name="v5" type="checkbox"  value="心悸、胸闷"  title="心悸、胸闷">
+
+
+
+                  <input name="v5" type="checkbox"  value="胃肠不适、便秘"  title="胃肠不适、便秘">
+                  <input name="v5" type="checkbox"  value="食欲下降体重减轻"  title="食欲下降体重减轻">
+                  <input name="v5" type="checkbox"  value="出现幻觉，人格解体"  title="出现幻觉，人格解体">
+
+                </div>
+              </td>
+            </tr>
+            <tr >
+              <td colspan="20"><div style="line-height: 40px;width: 5%;float: left">其他：</div><input style="width: 95%;float: right"  type="text" class="input-full layui-input" name="v6" ></td>
+            </tr>
+
+          </table>
+
+        </td>
+
+      </tr>
+
+
+
+      <tr >
+        <th colspan="4">体征</th>
+        <td colspan="20" style="padding: 0">
+          <table border="1" width="100%">
+            <tr >
+              <th colspan="4">血压（mmHg）</th>
+              <td colspan="20">
+                <div style="line-height: 40px;width: 5%;float: left">测量</div><input style="width: 30%;float: left"  type="text" class="input-full layui-input" name="v7" >
+
+                <div style="line-height: 40px;width: 5%;float: left">目标</div><input style="width: 30%;float: left"  type="text" class="input-full layui-input" name="v8" >
+              </td>
+            </tr>
+
+            <tr >
+              <th colspan="4">体  重（kg)</th>
+              <td colspan="20">
+                <div style="line-height: 40px;width: 5%;float: left">测量</div><input style="width: 30%;float: left"  type="text" class="input-full layui-input" name="v9" >
+
+                <div style="line-height: 40px;width: 5%;float: left">目标</div><input style="width: 30%;float: left"  type="text" class="input-full layui-input" name="v10" >
+              </td>
+            </tr>
+
+            <tr >
+              <th colspan="4">体质指数</th>
+              <td colspan="20">
+                <div style="line-height: 40px;width: 5%;float: left">测量</div><input style="width: 30%;float: left"  type="text" class="input-full layui-input" name="v11" >
+
+                <div style="line-height: 40px;width: 5%;float: left">目标</div><input style="width: 30%;float: left"  type="text" class="input-full layui-input" name="v12" >
+              </td>
+            </tr>
+
+            <tr >
+              <th colspan="4">心率（次/分钟）</th>
+              <td colspan="20"><input type="text" class="input-full layui-input" name="v13" ></td>
+            </tr>
+
+            <tr >
+              <th colspan="4">其他</th>
+              <td colspan="20"><input type="text" class="input-full layui-input" name="v14" ></td>
+            </tr>
+
+          </table>
+
+        </td>
+
+      </tr>
+
+
+
+
+
+      <tr >
+        <th colspan="4">生活方式指导</th>
+        <td colspan="20" style="padding: 0">
+          <table border="1" width="100%">
+            <tr >
+              <th colspan="4">日吸烟量（支）</th>
+              <td colspan="20">
+                <div style="line-height: 40px;width: 5%;float: left">测量</div><input style="width: 30%;float: left"  type="text" class="input-full layui-input" name="v15" >
+
+                <div style="line-height: 40px;width: 5%;float: left">/目标</div><input style="width: 30%;float: left"  type="text" class="input-full layui-input" name="v16">
+              </td>
+            </tr>
+
+            <tr >
+              <th colspan="4">日饮酒量（两）</th>
+              <td colspan="20">
+                <div style="line-height: 40px;width: 5%;float: left">测量</div><input style="width: 30%;float: left"  type="text" class="input-full layui-input" name="v17" >
+
+                <div style="line-height: 40px;width: 5%;float: left">/目标</div><input style="width: 30%;float: left"  type="text" class="input-full layui-input" name="v18" >
+              </td>
+            </tr>
+
+            <tr >
+              <th colspan="4">运动</th>
+              <td colspan="20">
+                <div style="line-height: 40px; width: 5%; float: left;">测量</div>
+                <input style="width: 44%; float: left;" type="text" class="input-full layui-input" name="v19">
+
+                <div style="line-height: 40px; width: 4%; float: left;">/目标</div>
+                <input style="width: 44%; float: left;" type="text" class="input-full layui-input" name="v20">
+
+                <div style="clear: both;"></div> <!-- 清除浮动 -->
+
+                <div style="line-height: 40px; width: 5%; float: left;">测量</div>
+                <input style="width: 44%; float: left;" type="text" class="input-full layui-input" name="v21">
+
+                <div style="line-height: 40px; width: 4%; float: left;">/目标</div>
+                <input style="width: 44%; float: left;" type="text" class="input-full layui-input" name="v22">
+
+                <div style="clear: both;"></div>
+
+              </td>
+            </tr>
+
+            <tr >
+              <th colspan="4">摄盐情况（咸淡）</th>
+              <td colspan="20">
+                <div style="line-height: 40px;width: 5%;float: left">测量</div>
+                <div style="width: 35%;float: left"  >
+                  <input type="radio" name="v23" value="轻" title="轻">
+                  <input type="radio" name="v23" value="中" title="中" >
+                  <input type="radio" name="v23" value="重" title="重" >
+                </div>
+
+                <div style="line-height: 40px;width: 5%;float: left">/目标</div>
+                <div style="width: 35%;float: left"  >
+                  <input type="radio" name="v24" value="轻" title="轻">
+                  <input type="radio" name="v24" value="中" title="中" >
+                  <input type="radio" name="v24" value="重" title="重" >
+                </div>
+              </td>
+            </tr>
+
+            <tr >
+              <th colspan="4">心理调整</th>
+              <td colspan="20">
+                <input type="radio" name="v25" value="良好" title="良好">
+                <input type="radio" name="v25" value="一般" title="一般" >
+                <input type="radio" name="v25" value="差" title="差" >
+              </td>
+            </tr>
+
+            <tr >
+              <th colspan="4">遵医行为</th>
+              <td colspan="20">
+                <input type="radio" name="v26" value="良好" title="良好">
+                <input type="radio" name="v26" value="一般" title="一般" >
+                <input type="radio" name="v26" value="差" title="差" >
+              </td>
+            </tr>
+
+          </table>
+
+        </td>
+
+      </tr>
+
+      <tr >
+        <th colspan="4">辅助检查</th>
+        <td colspan="20"><input type="text" class="input-full layui-input" name="v27" style="width: 90%"></td>
+      </tr>
+
+      <tr >
+        <th colspan="4">服药依从性</th>
+        <td colspan="20">
+          <input type="radio" name="v28" value="规律" title="规律">
+          <input type="radio" name="v28" value="间断" title="间断" >
+          <input type="radio" name="v28" value="不服药" title="不服药" >
+        </td>
+      </tr>
+
+      <tr >
+        <th colspan="4">药物不良反应</th>
+        <td colspan="20">
+          <input type="radio" name="v29" value="无" title="无">
+          <input type="radio" name="v29" value="有" title="有" >
+          <input type="text" class="input-full layui-input" name="v30" >
+        </td>
+      </tr>
+
+      <tr >
+        <th colspan="4">此次服务分类</th>
+        <td colspan="20">
+          <input type="radio" name="v31" value="控制满意" title="控制满意">
+          <input type="radio" name="v31" value="控制不满意" title="控制不满意" >
+          <input type="radio" name="v31" value="不良反应" title="不良反应" >
+          <input type="radio" name="v31" value="并发症" title="并发症" >
+        </td>
+      </tr>
+
+
+
+
+
+      <tr >
+        <th colspan="4">用药情况</th>
+        <td colspan="20" style="padding: 0">
+          <table border="1" width="100%">
+            <tr  id="disease-history-table">
+              <th colspan="4">序号</th>
+              <th colspan="7">药物名称</th>
+              <th colspan="10">用法用量</th>
+              <td colspan="3" class="operation-btn" style="text-align: center"><i id="add-disease-row" style="font-size: 20px;color: #2d8cf0" class="layui-icon layui-icon-add-circle add-btn"></i></td>
+            </tr>
+
+
+
+
+
+
+
+          </table>
+        </td>
+
+      </tr>
+
+
+
+
+      <tr >
+        <th colspan="4">转诊</th>
+        <td colspan="20" style="padding: 0">
+          <table border="1" width="100%">
+            <tr >
+              <th colspan="4">原 因</th>
+              <td colspan="20"><input type="text" class="input-full layui-input" name="v32" ></td>
+            </tr>
+
+            <tr >
+              <th colspan="4">机构及科别</th>
+              <td colspan="20"><input type="text" class="input-full layui-input" name="v33" ></td>
+            </tr>
+
+          </table>
+        </td>
+
+      </tr>
+
+
+      <tr >
+        <th colspan="4">健康指导意见</th>
+        <td colspan="20"><textarea  type="textarea" class="input-full layui-textarea" name="v34" placeholder=""></textarea></td>
+      </tr>
+
+      <tr >
+        <th colspan="4">下次随访日期</th>
+        <td colspan="20"><input type="date" class="input-full layui-input" name="v35"></td>
+      </tr>
+
+      <tr >
+        <th colspan="4">
+          [[${roleName == '心理咨询师' ? '心理咨询师' : '健管师'}]]
+        </th>
+        <td colspan="20">
+          <input type="text" class="input-full layui-input" name="v36" ></td>
+        </td>
+      </tr>
+
+
+
+
+
+    </table>
+  </form>
+</div>
+
+<script type="text/javascript" th:src="@{/assets/js/layui-v2.9.16/layui/layui.js}"></script>
+<script type="text/javascript" th:src="@{/assets/js/common.js}"></script>
+<script type="text/javascript" th:src="@{/assets/js/jquery-1.11.1.js}"></script>
+<script th:inline="javascript">
+  layui.use(['form',"table",'treeSelect','notice','upload',"laydate"], function(){
+    var form = layui.form;
+    var $ = layui.jquery;
+    var layer = layui.layer;
+    var table = layui.table;
+    var notice=layui.notice;
+    var upload = layui.upload;
+    var treeSelect= layui.treeSelect;
+    layui.config({
+      skin: 'blue'  // 设置主题为蓝色
+    });
+    form.on('submit(generatePDF)', function(data){
+      window.print();
+      return false;
+    });
+    $(".chooseName").on("click",function (){
+      var closeIndex = layer.open({
+        type: 1, // page 层类型
+        area: ['800px', '600px'],
+        title: '选择名字',
+        shade: 0.6, // 遮罩透明度
+        anim: 0, // 0-6 的动画形式，-1 不开启
+        content: $("#addfolder"),
+        success: function(layero, index){
+          // 在弹出层初始化完成后渲染表格
+          var regManageTb=table.render({
+            elem: '#tables',
+            url: '/newRegController/queryLocallyManagedArchives',
+            page: true,
+            limit : 10,
+            where : {regTime:""},
+            cols: [[
+              // {type: 'radio', fixed: 'left'},
+              {field:'userCode', title:'用户编号', fixed: 'center'},
+              {field: 'name', title: '姓名', align: 'center'},
+              {field: 'phone', align: 'center', title: '电话'} ,
+            ]],
+            parseData: function(res) {
+              if (res.code === 20000) {
+                return {
+                  "code": 0,
+                  "msg": res.msg || "",
+                  "count": res.count || 0,
+                  "data": res.data.data || []
+                };
+              } else {
+                return {
+                  "code": 1,
+                  "msg": res.msg || "获取数据失败",
+                  "count": 0,
+                  "data": []
+                };
+              }
+            },
+            done: function() {
+              $('#tables').css('visibility', 'visible');
+            }
+          });
+          $('#tables').css('visibility', 'hidden');
+
+
+          // 行单击事件( 双击事件为: rowDouble )
+          table.on('row(tables)', function(obj){
+            var data = obj.data; // 获取当前行数据
+            console.log(data,"这里是点击事件啊啊啊")
+            // 显示 - 仅用于演示
+
+            form.val("myForm", {
+              "v1": data.name,
+              "v2":data.id,
+            });
+
+            form.render();
+            layer.close(closeIndex);
+
+          });
+
+          form.on('submit(regManageQueryBtn)', function(data){
+            regManageTb.reload({
+              where : {
+                //这里注意一定要跟Bean 里面的属性对应
+                name:$('#name').val(),
+                regTime:"",
+              },
+              page : {
+                curr : 1
+              }
+
+            });
+            // 阻止表单跳转。如果需要表单跳转，去掉这段即可。
+            return false;
+          });
+
+
+        },
+        end: function () {
+          // 关闭弹出层时隐藏 addfolder
+          $("#addfolder").hide();
+        }
+      });
+    });
+
+
+    var laydate = layui.laydate;
+
+    // 初始化年份选择器
+    laydate.render({
+      elem: '#yearPicker',
+      type: 'year',
+      theme: '#2d8cf0',
+      format: 'yyyy',
+      trigger: 'click'
+    });
+
+    var params = new URLSearchParams(window.location.search);
+    var paramValue = params.get('medicalExaminationInformation');
+
+
+    $('#add-disease-row').on('click', function() {
+      var $lastRow = $('#disease-history-table').siblings('.disease-row').last();
+      var rowCount = $('#disease-history-table').siblings('.disease-row').length;
+      var $newRow = $('<tr class="disease-row"></tr>');
+
+      $newRow.html(`
+                 <th colspan="4">${rowCount + 1}</th>
+                 <td colspan="7">
+                     <input  type="text" class="input-full layui-input" name="add1" >
+                 </td>
+
+                 <td colspan="10">
+                     <input  type="text" class="input-full layui-input" name="add2" >
+                 </td>
+                <td colspan="3"  style="text-align: center;" class="operation-btn"><i style="color: red;font-size: 30px;" class="layui-icon layui-icon-delete delete-btn"></i></td>
+            `);
+
+
+      if ($lastRow.length > 0) {
+        $lastRow.after($newRow);
+      } else {
+        $('#disease-history-table').after($newRow);
+      }
+
+      bindDeleteEvents(); // 绑定删除事件
+    });
+
+    function bindDeleteEvents() {
+      var deleteBtns = document.querySelectorAll('.delete-btn');
+      deleteBtns.forEach(function(btn, index) {
+        btn.addEventListener('click', function() {
+          var row = this.parentElement.parentElement;
+          row.parentElement.removeChild(row);
+          updateRowNumbers(); // 更新序号
+        });
+      });
+
+
+    }
+
+    function updateRowNumbers() {
+      var rows = document.querySelectorAll('.disease-row');
+      rows.forEach(function(row, index) {
+        row.querySelector('td[colspan="4"]').textContent = index + 1;
+      });
+
+
+    }
+
+
+    form.on('submit(myFormSave)', function(data){
+      console.log(data,"dddddddddddddddddddddddddddddddd")
+
+      var field = data.field;
+      if (!field.v1) {
+        layer.msg('请补充完整表单');
+        $("input[name='v1']").focus();
+        return false;  // 阻止提交
+      }
+      if (!field.v2) {
+        layer.msg('请补充完整表单');
+        $("input[name='v2']").focus();
+        return false;  // 阻止提交
+      }
+
+      if (!field.v3) {
+        layer.msg('请补充完整表单');
+        $("input[name='v3']").focus();
+        return false;
+      }
+      if (!field.v4) {
+        layer.msg('请补充完整表单');
+        $("input[name='v4']").focus();
+        return false;
+      }
+
+      if (!field.v5) {
+        layer.msg('请补充完整表单');
+        $("input[name='v5']").focus();
+        return false;
+      }
+      if (!field.v6) {
+        layer.msg('请补充完整表单');
+        $("input[name='v6']").focus();
+        return false;
+      }
+
+      if (!field.v7) {
+        layer.msg('请补充完整表单');
+        $("input[name='v7']").focus();
+        return false;
+      }
+      if (!field.v8) {
+        layer.msg('请补充完整表单');
+        $("input[name='v8']").focus();
+        return false;
+      }
+      if (!field.v9) {
+        layer.msg('请补充完整表单');
+        $("input[name='v9']").focus();
+        return false;
+      }
+      if (!field.v10) {
+        layer.msg('请补充完整表单');
+        $("input[name='v10']").focus();
+        return false;
+      }
+
+      if (!field.v11) {
+        layer.msg('请补充完整表单');
+        $("input[name='v11']").focus();
+        return false;
+      }
+      if (!field.v12) {
+        layer.msg('请补充完整表单');
+        $("input[name='v12']").focus();
+        return false;
+      }
+      if (!field.v13) {
+        layer.msg('请补充完整表单');
+        $("input[name='v13']").focus();
+        return false;
+      }
+      if (!field.v14) {
+        layer.msg('请补充完整表单');
+        $("input[name='v14']").focus();
+        return false;
+      }
+      if (!field.v15) {
+        layer.msg('请补充完整表单');
+        $("input[name='v15']").focus();
+        return false;
+      }
+
+      if (!field.v16) {
+        layer.msg('请补充完整表单');
+        $("input[name='v16']").focus();
+        return false;
+      }
+      if (!field.v17) {
+        layer.msg('请补充完整表单');
+        $("input[name='v17']").focus();
+        return false;
+      }
+      if (!field.v18) {
+        layer.msg('请补充完整表单');
+        $("input[name='v18']").focus();
+        return false;
+      }
+      if (!field.v19) {
+        layer.msg('请补充完整表单');
+        $("input[name='v19']").focus();
+        return false;
+      }
+      if (!field.v20) {
+        layer.msg('请补充完整表单');
+        $("input[name='v20']").focus();
+        return false;
+      }
+      if (!field.v21) {
+        layer.msg('请补充完整表单');
+        $("input[name='v21']").focus();
+        return false;
+      }
+      if (!field.v22) {
+        layer.msg('请补充完整表单');
+        $("input[name='v22']").focus();
+        return false;
+      }
+      if (!field.v23) {
+        layer.msg('请补充完整表单');
+        $("input[name='v23']").focus();
+        return false;
+      }
+      if (!field.v24) {
+        layer.msg('请补充完整表单');
+        $("input[name='v24']").focus();
+        return false;
+      }
+      if (!field.v25) {
+        layer.msg('请补充完整表单');
+        $("input[name='v25']").focus();
+        return false;
+      }
+      if (!field.v26) {
+        layer.msg('请补充完整表单');
+        $("input[name='v26']").focus();
+        return false;
+      }
+      if (!field.v27) {
+        layer.msg('请补充完整表单');
+        $("input[name='v27']").focus();
+        return false;
+      }
+      if (!field.v28) {
+        layer.msg('请补充完整表单');
+        $("input[name='v28']").focus();
+        return false;
+      }
+      if (!field.v29) {
+        layer.msg('请补充完整表单');
+        $("input[name='v29']").focus();
+        return false;
+      }
+      if (!field.v30) {
+        layer.msg('请补充完整表单');
+        $("input[name='v30']").focus();
+        return false;
+      }
+      if (!field.v31) {
+        layer.msg('请补充完整表单');
+        $("input[name='v31']").focus();
+        return false;
+      }
+      if (!field.v32) {
+        layer.msg('请补充完整表单');
+        $("input[name='v32']").focus();
+        return false;
+      }
+      if (!field.v33) {
+        layer.msg('请补充完整表单');
+        $("input[name='v33']").focus();
+        return false;
+      }
+      if (!field.v34) {
+        layer.msg('请补充完整表单');
+        $("input[name='v34']").focus();
+        return false;
+      }
+      if (!field.v35) {
+        layer.msg('请补充完整表单');
+        $("input[name='v35']").focus();
+        return false;
+      }
+
+
+      var v5Values = [];
+      $("input[name='v5']:checked").each(function() {
+        v5Values.push($(this).val());
+      });
+      data.field.v5 = v5Values.join(',');
+      var allRowsData = [];
+      $("#disease-history-table").siblings('.disease-row').each(function() {
+        var row = $(this); // 当前行
+        var add1Input = row.find('input[name="add1"]');
+        var add2Input = row.find('input[name="add2"]');
+        if (add1Input.length > 0 && add2Input.length > 0) {
+          var add1Value = add1Input.val();
+          var add2Value = add2Input.val();
+          var rowData = {
+            "add1": add1Value,
+            "add2": add2Value
+          };
+          allRowsData.push(rowData);
+        }
+      });
+
+      if ($(this).data('submitted') === true) {
+        return false; // 阻止重复提交
+      }
+      $(this).data('submitted', true);
+      if(paramValue){
+        $.ajax({
+          type : 'post',
+          url : '/newDepressionInterventionRecordFormController/updateNew',
+          data : {
+            id:paramValue,
+            name: data.field.v1,
+            regId: data.field.v2,
+            serviceDate: data.field.v3?.substring(0, 10),
+            serviceMode: data.field.v4,
+            symptom: data.field.v5,
+            symptom1: data.field.v6,
+            bloodPressure: data.field.v7,
+            bloodPressure1: data.field.v8,
+            weight: data.field.v9,
+            weight1: data.field.v10,
+            bodyMassIndex: data.field.v11,
+            bodyMassIndex1: data.field.v12,
+            heartRate: data.field.v13,
+            other: data.field.v14,
+            dailySmokingVolume: data.field.v15,
+            dailySmokingVolume1: data.field.v16,
+            dailyAlcoholConsumption: data.field.v17,
+            dailyAlcoholConsumption1: data.field.v18,
+            motion: data.field.v19,
+            motion1: data.field.v20,
+            motion2: data.field.v21,
+            motion3: data.field.v22,
+
+            dietarySituation: data.field.v23,
+            dietarySituation1: data.field.v24,
+            psychologicalAdjustment: data.field.v25,
+            complianceBehavior: data.field.v26,
+
+            supplementaryExamination: data.field.v27,
+            medicationCompliance: data.field.v28,
+
+            adverseDrugReactions: data.field.v29,
+            adverseDrugReactions1: data.field.v30,
+            thisServiceClassification: data.field.v31,
+            reason: data.field.v32,
+            institutionDepartment: data.field.v33,
+            healthGuidanceOpinions: data.field.v34,
+            medicationSituation:JSON.stringify(allRowsData),
+            nextServiceDate: data.field.v35?.substring(0, 10)
+
+
+          },
+          success : function(data) {
+            if (data.code == 20000) {
+
+              notice.success({
+                title : '消息通知',
+                message : '操作成功!'
+              });
+
+              setTimeout(function() {
+                window.close();
+              }, 2000);
+            } else {
+              notice.error({
+                title : '消息通知',
+                message : '操作失败!'
+              });
+              setTimeout(function() {
+                window.close();
+              }, 2000);
+            }
+          }
+        })
+      }else{
+        $.ajax({
+          type : 'post',
+          url : '/newDepressionInterventionRecordFormController/insetNew',
+          data : {
+            name: data.field.v1,
+            regId: data.field.v2,
+            serviceDate: data.field.v3?.substring(0, 10),
+            serviceMode: data.field.v4,
+            symptom: data.field.v5,
+            symptom1: data.field.v6,
+            bloodPressure: data.field.v7,
+            bloodPressure1: data.field.v8,
+            weight: data.field.v9,
+            weight1: data.field.v10,
+            bodyMassIndex: data.field.v11,
+            bodyMassIndex1: data.field.v12,
+            heartRate: data.field.v13,
+            other: data.field.v14,
+            dailySmokingVolume: data.field.v15,
+            dailySmokingVolume1: data.field.v16,
+            dailyAlcoholConsumption: data.field.v17,
+            dailyAlcoholConsumption1: data.field.v18,
+            motion: data.field.v19,
+            motion1: data.field.v20,
+            motion2: data.field.v21,
+            motion3: data.field.v22,
+
+            dietarySituation: data.field.v23,
+            dietarySituation1: data.field.v24,
+            psychologicalAdjustment: data.field.v25,
+            complianceBehavior: data.field.v26,
+
+            supplementaryExamination: data.field.v27,
+            medicationCompliance: data.field.v28,
+
+            adverseDrugReactions: data.field.v29,
+            adverseDrugReactions1: data.field.v30,
+            thisServiceClassification: data.field.v31,
+            reason: data.field.v32,
+            institutionDepartment: data.field.v33,
+            healthGuidanceOpinions: data.field.v34,
+            medicationSituation:JSON.stringify(allRowsData),
+            nextServiceDate: data.field.v35?.substring(0, 10)
+
+          },
+
+          success : function(data) {
+            if (data.code == 20000) {
+
+              notice.success({
+                title : '消息通知',
+                message : '操作成功!'
+              });
+
+              setTimeout(function() {
+                window.close();
+              }, 2000);
+            } else {
+              notice.error({
+                title : '消息通知',
+                message : '操作失败!'
+              });
+              setTimeout(function() {
+                window.close();
+              }, 2000);
+            }
+          }
+        })
+      }
+      return false; // 阻止默认 form 跳转
+    });
+
+
+    function selectForm(paramValue){
+      if(paramValue){
+        $.ajax({
+          type:'get',
+          url:'/newDepressionInterventionRecordFormController/selectById',
+          data:{id:paramValue},
+          success : function(data){
+            console.log("这里是查询出来的数据",data);
+            if(data.code==20000){
+              form.val("myForm", {
+                "v1": data.data.name, // 对应上面的 name
+                "v2": data.data.regId, // 对应上面的 regId
+                "v3": data.data.serviceDate?.substring(0, 10), // 对应上面的 serviceDate (截取日期部分)
+                "v4": data.data.serviceMode, // 对应上面的 serviceMode
+                "v5": data.data.symptom, // 对应上面的 symptom
+                "v6": data.data.symptom1, // 对应上面的 symptom1
+                "v7": data.data.bloodPressure, // 对应上面的 bloodPressure
+                "v8": data.data.bloodPressure1, // 对应上面的 bloodPressure1
+                "v9": data.data.weight, // 对应上面的 weight
+                "v10": data.data.weight1, // 对应上面的 weight1
+                "v11": data.data.bodyMassIndex, // 对应上面的 bodyMassIndex
+                "v12": data.data.bodyMassIndex1, // 对应上面的 bodyMassIndex1
+                "v13": data.data.heartRate, // 对应上面的 heartRate
+                "v14": data.data.other, // 对应上面的 other
+                "v15": data.data.dailySmokingVolume, // 对应上面的 dailySmokingVolume
+                "v16": data.data.dailySmokingVolume1, // 对应上面的 dailySmokingVolume1
+                "v17": data.data.dailyAlcoholConsumption, // 对应上面的 dailyAlcoholConsumption
+                "v18": data.data.dailyAlcoholConsumption1, // 对应上面的 dailyAlcoholConsumption1
+                "v19": data.data.motion, // 对应上面的 motion
+                "v20": data.data.motion1, // 对应上面的 motion1
+                "v21": data.data.motion2, // 对应上面的 motion2
+                "v22": data.data.motion3, // 对应上面的 motion3
+                "v23": data.data.dietarySituation,
+                "v24": data.data.dietarySituation1,// 对应上面的 dietarySituation
+                "v25": data.data.psychologicalAdjustment, // 对应上面的 psychologicalAdjustment
+                "v26": data.data.complianceBehavior, // 对应上面的 complianceBehavior
+                "v27": data.data.supplementaryExamination, // 对应上面的 supplementaryExamination
+                "v28": data.data.medicationCompliance, // 对应上面的 medicationCompliance
+                "v29": data.data.adverseDrugReactions,
+                "v30": data.data.adverseDrugReactions1,// 对应上面的 adverseDrugReactions
+                "v31": data.data.thisServiceClassification, // 对应上面的 thisServiceClassification
+                "v32": data.data.reason, // 对应上面的 reason
+                "v33": data.data.institutionDepartment, // 对应上面的 institutionDepartment
+                "v34": data.data.healthGuidanceOpinions,
+                "v35": data.data.nextServiceDate?.substring(0, 10), // 对应上面的 nextServiceDate (截取日期部分)
+                "v36": data.data.dname,
+              });
+
+              const medicalHistory = JSON.parse(data.data.medicationSituation);
+              medicalHistory.forEach((item, index) => {
+                var $lastRow = $('#disease-history-table').siblings('.disease-row').last();
+                var rowCount = $('#disease-history-table').siblings('.disease-row').length;
+                const $newRow = $('<tr class="disease-row"></tr>');
+                $newRow.html(`
+                                     <th colspan="4">${rowCount + 1}</th>
+                                     <td colspan="7">
+                                         <input  type="text" class="input-full layui-input"  value="${item.add1}" name="add1" >
+                                     </td>
+
+                                     <td colspan="10">
+                                         <input  type="text" class="input-full layui-input"  value="${item.add2}" name="add2" >
+                                     </td>
+                                    <td colspan="3"  style="text-align: center;" class="operation-btn"><i style="color: red;font-size: 30px;" class="layui-icon layui-icon-delete delete-btn"></i></td>
+                                `);
+                console.log($newRow.innerHTML)
+                if ($lastRow.length > 0) {
+                  $lastRow.after($newRow);
+                } else {
+                  $('#disease-history-table').after($newRow);
+                }
+
+                bindDeleteEvents();
+              });
+              $("input[name='v5']").prop('checked', false);
+              const historyDrugAllergies = data.data.symptom.split(",").map(item => item.trim());
+              historyDrugAllergies.forEach(value => {
+                $("input[name='v5'][value='" + value + "']").prop('checked', true);
+              });
+
+              form.render();
+            }
+
+          }
+        })
+      }
+
+
+    }
+
+    selectForm(paramValue);
+
+    // 初始化表单
+    form.render();
+  });
+</script>
+
+</body>
+</html>

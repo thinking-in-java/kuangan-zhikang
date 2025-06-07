@@ -1,0 +1,318 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yihe.system.mapper.NewEmployeePsychologicalCounselingRecordFormMapper">
+  <resultMap id="BaseResultMap" type="com.yihe.system.domain.NewEmployeePsychologicalCounselingRecordForm">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="customer_affiliation" jdbcType="VARCHAR" property="customerAffiliation" />
+    <result column="customer_contact" jdbcType="VARCHAR" property="customerContact" />
+    <result column="reg_id" jdbcType="INTEGER" property="regId" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="sex" jdbcType="VARCHAR" property="sex" />
+    <result column="age" jdbcType="VARCHAR" property="age" />
+    <result column="company" jdbcType="VARCHAR" property="company" />
+    <result column="departments" jdbcType="VARCHAR" property="departments" />
+    <result column="service_date" jdbcType="DATE" property="serviceDate" />
+    <result column="chief_complaint" jdbcType="VARCHAR" property="chiefComplaint" />
+    <result column="objective_observation" jdbcType="VARCHAR" property="objectiveObservation" />
+    <result column="assessment" jdbcType="VARCHAR" property="assessment" />
+    <result column="plan" jdbcType="VARCHAR" property="plan" />
+    <result column="important_interaction" jdbcType="VARCHAR" property="importantInteraction" />
+    <result column="family_social_background" jdbcType="VARCHAR" property="familySocialBackground" />
+    <result column="resources_strength" jdbcType="VARCHAR" property="resourcesStrength" />
+    <result column="consultation_effectiveness_feedback" jdbcType="VARCHAR" property="consultationEffectivenessFeedback" />
+    <result column="next_visit_date" jdbcType="DATE" property="nextVisitDate" />
+    <result column="health_management_specialist" jdbcType="VARCHAR" property="healthManagementSpecialist" />
+    <result column="insert_time" jdbcType="TIMESTAMP" property="insertTime" />
+    <result column="dname" jdbcType="VARCHAR" property="dname" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, customer_affiliation, customer_contact, reg_id, name, sex, age, company, departments, 
+    service_date, chief_complaint, objective_observation, assessment, plan, important_interaction, 
+    family_social_background, resources_strength, consultation_effectiveness_feedback, 
+    next_visit_date, health_management_specialist, insert_time
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select ni.*,yur.name as dname from new_employee_psychological_counseling_record_form ni left join yh_user_reginfo yur on ni.health_management_specialist=yur.user_code
+    where ni.id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from new_employee_psychological_counseling_record_form
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.yihe.system.domain.NewEmployeePsychologicalCounselingRecordForm">
+    insert into new_employee_psychological_counseling_record_form (id, customer_affiliation, customer_contact, 
+      reg_id, name, sex, age, 
+      company, departments, service_date, 
+      chief_complaint, objective_observation, assessment, 
+      plan, important_interaction, family_social_background, 
+      resources_strength, consultation_effectiveness_feedback, 
+      next_visit_date, health_management_specialist, 
+      insert_time)
+    values (#{id,jdbcType=INTEGER}, #{customerAffiliation,jdbcType=VARCHAR}, #{customerContact,jdbcType=VARCHAR}, 
+      #{regId,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{sex,jdbcType=VARCHAR}, #{age,jdbcType=VARCHAR}, 
+      #{company,jdbcType=VARCHAR}, #{departments,jdbcType=VARCHAR}, #{serviceDate,jdbcType=DATE}, 
+      #{chiefComplaint,jdbcType=VARCHAR}, #{objectiveObservation,jdbcType=VARCHAR}, #{assessment,jdbcType=VARCHAR}, 
+      #{plan,jdbcType=VARCHAR}, #{importantInteraction,jdbcType=VARCHAR}, #{familySocialBackground,jdbcType=VARCHAR}, 
+      #{resourcesStrength,jdbcType=VARCHAR}, #{consultationEffectivenessFeedback,jdbcType=VARCHAR}, 
+      #{nextVisitDate,jdbcType=DATE}, #{healthManagementSpecialist,jdbcType=VARCHAR}, 
+      #{insertTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.yihe.system.domain.NewEmployeePsychologicalCounselingRecordForm">
+    insert into new_employee_psychological_counseling_record_form
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="customerAffiliation != null">
+        customer_affiliation,
+      </if>
+      <if test="customerContact != null">
+        customer_contact,
+      </if>
+      <if test="regId != null">
+        reg_id,
+      </if>
+      <if test="name != null">
+        name,
+      </if>
+      <if test="sex != null">
+        sex,
+      </if>
+      <if test="age != null">
+        age,
+      </if>
+      <if test="company != null">
+        company,
+      </if>
+      <if test="departments != null">
+        departments,
+      </if>
+      <if test="serviceDate != null">
+        service_date,
+      </if>
+      <if test="chiefComplaint != null">
+        chief_complaint,
+      </if>
+      <if test="objectiveObservation != null">
+        objective_observation,
+      </if>
+      <if test="assessment != null">
+        assessment,
+      </if>
+      <if test="plan != null">
+        plan,
+      </if>
+      <if test="importantInteraction != null">
+        important_interaction,
+      </if>
+      <if test="familySocialBackground != null">
+        family_social_background,
+      </if>
+      <if test="resourcesStrength != null">
+        resources_strength,
+      </if>
+      <if test="consultationEffectivenessFeedback != null">
+        consultation_effectiveness_feedback,
+      </if>
+      <if test="nextVisitDate != null">
+        next_visit_date,
+      </if>
+      <if test="healthManagementSpecialist != null">
+        health_management_specialist,
+      </if>
+      <if test="insertTime != null">
+        insert_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="customerAffiliation != null">
+        #{customerAffiliation,jdbcType=VARCHAR},
+      </if>
+      <if test="customerContact != null">
+        #{customerContact,jdbcType=VARCHAR},
+      </if>
+      <if test="regId != null">
+        #{regId,jdbcType=INTEGER},
+      </if>
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="sex != null">
+        #{sex,jdbcType=VARCHAR},
+      </if>
+      <if test="age != null">
+        #{age,jdbcType=VARCHAR},
+      </if>
+      <if test="company != null">
+        #{company,jdbcType=VARCHAR},
+      </if>
+      <if test="departments != null">
+        #{departments,jdbcType=VARCHAR},
+      </if>
+      <if test="serviceDate != null">
+        #{serviceDate,jdbcType=DATE},
+      </if>
+      <if test="chiefComplaint != null">
+        #{chiefComplaint,jdbcType=VARCHAR},
+      </if>
+      <if test="objectiveObservation != null">
+        #{objectiveObservation,jdbcType=VARCHAR},
+      </if>
+      <if test="assessment != null">
+        #{assessment,jdbcType=VARCHAR},
+      </if>
+      <if test="plan != null">
+        #{plan,jdbcType=VARCHAR},
+      </if>
+      <if test="importantInteraction != null">
+        #{importantInteraction,jdbcType=VARCHAR},
+      </if>
+      <if test="familySocialBackground != null">
+        #{familySocialBackground,jdbcType=VARCHAR},
+      </if>
+      <if test="resourcesStrength != null">
+        #{resourcesStrength,jdbcType=VARCHAR},
+      </if>
+      <if test="consultationEffectivenessFeedback != null">
+        #{consultationEffectivenessFeedback,jdbcType=VARCHAR},
+      </if>
+      <if test="nextVisitDate != null">
+        #{nextVisitDate,jdbcType=DATE},
+      </if>
+      <if test="healthManagementSpecialist != null">
+        #{healthManagementSpecialist,jdbcType=VARCHAR},
+      </if>
+      <if test="insertTime != null">
+        #{insertTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.yihe.system.domain.NewEmployeePsychologicalCounselingRecordForm">
+    update new_employee_psychological_counseling_record_form
+    <set>
+      <if test="customerAffiliation != null">
+        customer_affiliation = #{customerAffiliation,jdbcType=VARCHAR},
+      </if>
+      <if test="customerContact != null">
+        customer_contact = #{customerContact,jdbcType=VARCHAR},
+      </if>
+      <if test="regId != null">
+        reg_id = #{regId,jdbcType=INTEGER},
+      </if>
+      <if test="name != null">
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="sex != null">
+        sex = #{sex,jdbcType=VARCHAR},
+      </if>
+      <if test="age != null">
+        age = #{age,jdbcType=VARCHAR},
+      </if>
+      <if test="company != null">
+        company = #{company,jdbcType=VARCHAR},
+      </if>
+      <if test="departments != null">
+        departments = #{departments,jdbcType=VARCHAR},
+      </if>
+      <if test="serviceDate != null">
+        service_date = #{serviceDate,jdbcType=DATE},
+      </if>
+      <if test="chiefComplaint != null">
+        chief_complaint = #{chiefComplaint,jdbcType=VARCHAR},
+      </if>
+      <if test="objectiveObservation != null">
+        objective_observation = #{objectiveObservation,jdbcType=VARCHAR},
+      </if>
+      <if test="assessment != null">
+        assessment = #{assessment,jdbcType=VARCHAR},
+      </if>
+      <if test="plan != null">
+        plan = #{plan,jdbcType=VARCHAR},
+      </if>
+      <if test="importantInteraction != null">
+        important_interaction = #{importantInteraction,jdbcType=VARCHAR},
+      </if>
+      <if test="familySocialBackground != null">
+        family_social_background = #{familySocialBackground,jdbcType=VARCHAR},
+      </if>
+      <if test="resourcesStrength != null">
+        resources_strength = #{resourcesStrength,jdbcType=VARCHAR},
+      </if>
+      <if test="consultationEffectivenessFeedback != null">
+        consultation_effectiveness_feedback = #{consultationEffectivenessFeedback,jdbcType=VARCHAR},
+      </if>
+      <if test="nextVisitDate != null">
+        next_visit_date = #{nextVisitDate,jdbcType=DATE},
+      </if>
+      <if test="healthManagementSpecialist != null">
+        health_management_specialist = #{healthManagementSpecialist,jdbcType=VARCHAR},
+      </if>
+      <if test="insertTime != null">
+        insert_time = #{insertTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.yihe.system.domain.NewEmployeePsychologicalCounselingRecordForm">
+    update new_employee_psychological_counseling_record_form
+    set customer_affiliation = #{customerAffiliation,jdbcType=VARCHAR},
+      customer_contact = #{customerContact,jdbcType=VARCHAR},
+      reg_id = #{regId,jdbcType=INTEGER},
+      name = #{name,jdbcType=VARCHAR},
+      sex = #{sex,jdbcType=VARCHAR},
+      age = #{age,jdbcType=VARCHAR},
+      company = #{company,jdbcType=VARCHAR},
+      departments = #{departments,jdbcType=VARCHAR},
+      service_date = #{serviceDate,jdbcType=DATE},
+      chief_complaint = #{chiefComplaint,jdbcType=VARCHAR},
+      objective_observation = #{objectiveObservation,jdbcType=VARCHAR},
+      assessment = #{assessment,jdbcType=VARCHAR},
+      plan = #{plan,jdbcType=VARCHAR},
+      important_interaction = #{importantInteraction,jdbcType=VARCHAR},
+      family_social_background = #{familySocialBackground,jdbcType=VARCHAR},
+      resources_strength = #{resourcesStrength,jdbcType=VARCHAR},
+      consultation_effectiveness_feedback = #{consultationEffectivenessFeedback,jdbcType=VARCHAR},
+      next_visit_date = #{nextVisitDate,jdbcType=DATE},
+      health_management_specialist = #{healthManagementSpecialist,jdbcType=VARCHAR},
+      insert_time = #{insertTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+  <select id="selectByPage" parameterType="com.yihe.system.domain.NewEmployeePsychologicalCounselingRecordForm" resultMap="BaseResultMap">
+    select * from new_employee_psychological_counseling_record_form
+    ni left join new_reg ur
+    on ni.reg_id=ur.id
+    LEFT JOIN `yh_user_make_card` AS c ON ur.`user_code` = c.`User_Code`
+    LEFT JOIN yh_user_admin_info AS ai ON c.doctor = ai.id
+    <where>
+     ( ai.user_code = #{healthManagementSpecialist} or 1=1)
+      <if test="name!=null and name!=''">
+        and ni.name LIKE CONCAT('%', #{name}, '%')
+      </if>
+      <if test="workUnit!=null and workUnit!=''">
+        and ur.work_unit  LIKE CONCAT('%', #{workUnit}, '%')
+      </if>
+    </where>
+    LIMIT #{begin}, #{limit};
+  </select>
+
+  <select id="selectByPageCount" parameterType="com.yihe.system.domain.NewEmployeePsychologicalCounselingRecordForm" resultType="int">
+    select count(*) from new_employee_psychological_counseling_record_form
+    ni left join new_reg ur
+    on ni.reg_id=ur.id
+    LEFT JOIN `yh_user_make_card` AS c ON ur.`user_code` = c.`User_Code`
+    LEFT JOIN yh_user_admin_info AS ai ON c.doctor = ai.id
+    <where>
+      ( ai.user_code = #{healthManagementSpecialist} or 1=1)
+      <if test="name!=null and name!=''">
+        and ni.name LIKE CONCAT('%', #{name}, '%')
+      </if>
+      <if test="workUnit!=null and workUnit!=''">
+        and ur.work_unit  LIKE CONCAT('%', #{workUnit}, '%')
+      </if>
+    </where>
+  </select>
+</mapper>

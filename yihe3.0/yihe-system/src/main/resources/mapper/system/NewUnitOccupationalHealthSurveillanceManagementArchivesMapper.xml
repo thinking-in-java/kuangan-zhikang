@@ -1,0 +1,275 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yihe.system.mapper.NewUnitOccupationalHealthSurveillanceManagementArchivesMapper">
+  <resultMap id="BaseResultMap" type="com.yihe.system.domain.NewUnitOccupationalHealthSurveillanceManagementArchives">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="org_code" jdbcType="VARCHAR" property="orgCode" />
+    <result column="staffing_personnel" jdbcType="VARCHAR" property="staffingPersonnel" />
+    <result column="preparation_time" jdbcType="DATE" property="preparationTime" />
+    <result column="file_names" jdbcType="VARCHAR" property="fileNames" />
+    <result column="archive_number" jdbcType="VARCHAR" property="archiveNumber" />
+    <result column="archive_year" jdbcType="VARCHAR" property="archiveYear" />
+    <result column="archive_time" jdbcType="DATE" property="archiveTime" />
+    <result column="insert_time" jdbcType="TIMESTAMP" property="insertTime" />
+  </resultMap>
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.yihe.system.domain.NewUnitOccupationalHealthSurveillanceManagementArchives">
+    <result column="file1" jdbcType="LONGVARCHAR" property="file1" />
+    <result column="file2" jdbcType="LONGVARCHAR" property="file2" />
+    <result column="file3" jdbcType="LONGVARCHAR" property="file3" />
+    <result column="file4" jdbcType="LONGVARCHAR" property="file4" />
+    <result column="file5" jdbcType="LONGVARCHAR" property="file5" />
+    <result column="file6" jdbcType="LONGVARCHAR" property="file6" />
+    <result column="file7" jdbcType="LONGVARCHAR" property="file7" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, org_code, staffing_personnel, preparation_time, file_names, archive_number, archive_year, 
+    archive_time, insert_time
+  </sql>
+  <sql id="Blob_Column_List">
+    file1,file2,file3,file4,file5,file6,file7
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="ResultMapWithBLOBs">
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from new_unit_occupational_health_surveillance_management_archives
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from new_unit_occupational_health_surveillance_management_archives
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.yihe.system.domain.NewUnitOccupationalHealthSurveillanceManagementArchives">
+    insert into new_unit_occupational_health_surveillance_management_archives (id, org_code, staffing_personnel, 
+      preparation_time, file_names, archive_number, 
+      archive_year, archive_time, insert_time, 
+      file1)
+    values (#{id,jdbcType=INTEGER}, #{orgCode,jdbcType=VARCHAR}, #{staffingPersonnel,jdbcType=VARCHAR}, 
+      #{preparationTime,jdbcType=DATE}, #{fileNames,jdbcType=VARCHAR}, #{archiveNumber,jdbcType=VARCHAR}, 
+      #{archiveYear,jdbcType=VARCHAR}, #{archiveTime,jdbcType=DATE}, #{insertTime,jdbcType=TIMESTAMP}, 
+      #{file1,jdbcType=LONGVARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.yihe.system.domain.NewUnitOccupationalHealthSurveillanceManagementArchives">
+    insert into new_unit_occupational_health_surveillance_management_archives
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="orgCode != null">
+        org_code,
+      </if>
+      <if test="staffingPersonnel != null">
+        staffing_personnel,
+      </if>
+      <if test="preparationTime != null">
+        preparation_time,
+      </if>
+      <if test="fileNames != null">
+        file_names,
+      </if>
+      <if test="archiveNumber != null">
+        archive_number,
+      </if>
+      <if test="archiveYear != null">
+        archive_year,
+      </if>
+      <if test="archiveTime != null">
+        archive_time,
+      </if>
+      <if test="insertTime != null">
+        insert_time,
+      </if>
+      <if test="file1 != null">
+        file1,
+      </if>
+      <if test="file2 != null">
+        file2,
+      </if>
+      <if test="file3 != null">
+        file3,
+      </if>
+      <if test="file4 != null">
+        file4,
+      </if>
+      <if test="file5 != null">
+        file5,
+      </if>
+      <if test="file6 != null">
+        file6,
+      </if>
+      <if test="file7 != null">
+        file7,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="orgCode != null">
+        #{orgCode,jdbcType=VARCHAR},
+      </if>
+      <if test="staffingPersonnel != null">
+        #{staffingPersonnel,jdbcType=VARCHAR},
+      </if>
+      <if test="preparationTime != null">
+        #{preparationTime,jdbcType=DATE},
+      </if>
+      <if test="fileNames != null">
+        #{fileNames,jdbcType=VARCHAR},
+      </if>
+      <if test="archiveNumber != null">
+        #{archiveNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="archiveYear != null">
+        #{archiveYear,jdbcType=VARCHAR},
+      </if>
+      <if test="archiveTime != null">
+        #{archiveTime,jdbcType=DATE},
+      </if>
+      <if test="insertTime != null">
+        #{insertTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="file1 != null">
+        #{file1,jdbcType=LONGVARCHAR},
+      </if>
+
+      <if test="file2 != null">
+        #{file2,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="file3 != null">
+        #{file3,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="file4 != null">
+        #{file4,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="file5 != null">
+        #{file5,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="file6 != null">
+        #{file6,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="file7 != null">
+        #{file7,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.yihe.system.domain.NewUnitOccupationalHealthSurveillanceManagementArchives">
+    update new_unit_occupational_health_surveillance_management_archives
+    <set>
+      <if test="orgCode != null">
+        org_code = #{orgCode,jdbcType=VARCHAR},
+      </if>
+      <if test="staffingPersonnel != null">
+        staffing_personnel = #{staffingPersonnel,jdbcType=VARCHAR},
+      </if>
+      <if test="preparationTime != null">
+        preparation_time = #{preparationTime,jdbcType=DATE},
+      </if>
+      <if test="fileNames != null">
+        file_names = #{fileNames,jdbcType=VARCHAR},
+      </if>
+      <if test="archiveNumber != null">
+        archive_number = #{archiveNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="archiveYear != null">
+        archive_year = #{archiveYear,jdbcType=VARCHAR},
+      </if>
+      <if test="archiveTime != null">
+        archive_time = #{archiveTime,jdbcType=DATE},
+      </if>
+      <if test="insertTime != null">
+        insert_time = #{insertTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="file1 != null">
+        file1 = #{file1,jdbcType=LONGVARCHAR},
+      </if>
+
+      <if test="file2 != null">
+        file2 = #{file2,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="file3 != null">
+        file3 = #{file3,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="file4 != null">
+        file4 = #{file4,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="file5 != null">
+        file5 = #{file5,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="file6 != null">
+        file6 = #{file6,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="file7 != null">
+        file7 = #{file7,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.yihe.system.domain.NewUnitOccupationalHealthSurveillanceManagementArchives">
+    update new_unit_occupational_health_surveillance_management_archives
+    set org_code = #{orgCode,jdbcType=VARCHAR},
+      staffing_personnel = #{staffingPersonnel,jdbcType=VARCHAR},
+      preparation_time = #{preparationTime,jdbcType=DATE},
+      file_names = #{fileNames,jdbcType=VARCHAR},
+      archive_number = #{archiveNumber,jdbcType=VARCHAR},
+      archive_year = #{archiveYear,jdbcType=VARCHAR},
+      archive_time = #{archiveTime,jdbcType=DATE},
+      insert_time = #{insertTime,jdbcType=TIMESTAMP},
+      file1 = #{file1,jdbcType=LONGVARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.yihe.system.domain.NewUnitOccupationalHealthSurveillanceManagementArchives">
+    update new_unit_occupational_health_surveillance_management_archives
+    set org_code = #{orgCode,jdbcType=VARCHAR},
+      staffing_personnel = #{staffingPersonnel,jdbcType=VARCHAR},
+      preparation_time = #{preparationTime,jdbcType=DATE},
+      file_names = #{fileNames,jdbcType=VARCHAR},
+      archive_number = #{archiveNumber,jdbcType=VARCHAR},
+      archive_year = #{archiveYear,jdbcType=VARCHAR},
+      archive_time = #{archiveTime,jdbcType=DATE},
+      insert_time = #{insertTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+
+  <select id="selectByPage" parameterType="com.yihe.system.domain.NewUnitOccupationalHealthSurveillanceManagementArchives" resultMap="BaseResultMap">
+    select * from new_unit_occupational_health_surveillance_management_archives
+    <where>
+
+      <if test="fileNames!=null and fileNames!=''">
+        and file_names like  CONCAT('%',#{fileNames},'%')
+      </if>
+
+      <if test="archiveNumber!=null and archiveNumber!=''">
+        and archive_number like  CONCAT('%',#{archiveNumber},'%')
+      </if>
+      <if test="file1!=null and file1!=''">
+        and archive_year = #{file1}
+      </if>
+    </where>
+    LIMIT #{begin}, #{limit};
+
+  </select>
+
+  <select id="selectByPageCount" parameterType="com.yihe.system.domain.NewUnitOccupationalHealthSurveillanceManagementArchives" resultType="int">
+    select count(*) from new_unit_occupational_health_surveillance_management_archives
+    <where>
+
+      <if test="fileNames!=null and fileNames!=''">
+        and file_names like  CONCAT('%',#{fileNames},'%')
+      </if>
+      <if test="archiveNumber!=null and archiveNumber!=''">
+        and archive_number like  CONCAT('%',#{archiveNumber},'%')
+      </if>
+      <if test="file1!=null and file1!=''">
+        and archive_year = #{file1}
+      </if>
+    </where>
+    LIMIT #{begin}, #{limit};
+  </select>
+
+  <select id="selectOrder" resultMap="BaseResultMap">
+    select * from  new_unit_occupational_health_surveillance_management_archives ORDER BY insert_time DESC limit 1
+  </select>
+</mapper>

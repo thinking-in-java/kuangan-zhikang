@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>职业病诊疗、伤残鉴定及处理情况
+
+    </title>
+    <link rel="stylesheet" th:href="@{/assets/js/layui-v2.9.16/layui/css/layui.css}"/>
+    <script type="text/javascript" th:src="@{/assets/libs/layui/layui.js}"></script>
+    <style>
+        body{
+            background:#F1F1F1
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            table-layout: fixed;
+            border-color:rgb(144, 186, 221)
+        }
+        th, td {
+            border: 1px solid #ccc;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: rgb(231, 243, 252);
+            font-size: 10pt;
+            font-family: "Microsoft YaHei";
+            word-break: break-word;
+            overflow-wrap: break-word;
+            text-align: center;
+        }
+        .section-title {
+            text-align: center;
+            font-weight: bold;
+            background-color: #e6f7ff;
+        }
+        .input-full {
+            width: 100%;
+            box-sizing: border-box;
+        }
+        .radio-group {
+            display: flex;
+            align-items: center;
+        }
+        .radio-group label {
+            margin-right: 10px;
+        }
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        .checkbox-group label {
+            margin-right: 15px;
+        }
+        .heng{
+            text-align: center;
+            font-size: 10pt;
+            font-family: "Microsoft YaHei";
+            word-break: break-word;
+            overflow-wrap: break-word;
+        }
+        .datainput{
+            border-color: #eee !important;
+            border-width: 1px;
+        }
+
+        .layui-form-checked[lay-skin=primary] i{
+            border-color:#2d8cf0 !important;
+            background-color:#FFF !important;
+            color:#2d8cf0 !important;
+            font-weight: bold;
+        }
+
+        .layui-form-checkbox[lay-skin=primary]:hover i{
+            border-color:#2d8cf0 !important;
+        }
+        .layui-form-radio>i:hover, .layui-form-radioed>i{
+            color: #2d8cf0 !important;
+        }
+
+        /* 覆盖 layui 的默认主题颜色 */
+        .theme-colorful .layui-btn {
+            height: 36px;
+            line-height: 36px;
+            border-radius: 4px;
+            background-color: #2d8cf0;
+            box-shadow: 0 1px 0 rgba(0, 0, 0, .03);
+        }
+        .layui-form-radio:hover>*, .layui-form-radioed, .layui-form-radioed>i{
+            color: #2d8cf0 !important;
+        }
+
+        /*.layui-input {*/
+        /*    border-color: #597FC0 !important;*/
+        /*}*/
+
+        /* ...其他元素样式 */
+        /* 修改分页按钮的背景颜色和字体颜色 */
+        .layui-laypage a {
+            background-color: #f0f0f0; /* 设置按钮的背景颜色 */
+            color: #333; /* 设置按钮的字体颜色 */
+        }
+
+        /* 鼠标悬停时按钮的背景颜色 */
+        .layui-laypage a:hover {
+            background-color: #fff;
+            color: #2d8cf0;
+        }
+
+        /* 当前页的背景颜色和字体颜色 */
+        .layui-laypage .layui-laypage-curr .layui-laypage-em {
+            background-color: #2d8cf0; /* 当前页的背景颜色 */
+            color: white; /* 当前页的字体颜色 */
+        }
+
+        .file-row {
+            background-color: #e6f7ff;
+            padding: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-radius: 5px;
+            margin: 10px 0;
+            width: 98%;
+        }
+        .file-row .file-info {
+            display: flex;
+            align-items: center;
+        }
+        .file-row .file-info img {
+            width: 20px;
+            margin-right: 10px;
+        }
+        .file-row .file-info span {
+            font-size: 14px;
+        }
+        .file-row .actions {
+            display: flex;
+            align-items: center;
+        }
+        .file-row .actions button {
+            border: none;
+            background: none;
+            cursor: pointer;
+            margin-left: 10px;
+            font-size: 16px;
+        }
+
+    </style>
+</head>
+<body>
+
+<div class="layui-form " style="margin:auto;background:#FFF;margin-top:0">
+    <h2 style="text-align: center;">职业病诊疗、伤残鉴定及处理情况
+
+    </h2>
+    <input id="userCode" type="hidden" value="">
+
+    <form class="layui-form" id="addfolder" lay-filter="folderForm" style="display: none;min-height: 300px">
+        <div id="search-header">
+            <input id="guishu" type="hidden" value="">
+            <div class="layui-inline" style="margin-left: -59px;display: none">
+                <label class="layui-form-label">单位</label>
+                <div class="layui-input-block" style="width: 270px;">
+                    <input type="text" id="tree" lay-filter="tree" class="layui-input">
+                </div>
+            </div>
+
+            <div class="layui-inline" style="margin-left: 3px;">
+                <label class="layui-form-label w-auto">姓名:</label>
+                <div class="layui-input-inline">
+                    <input id="name" class="layui-input" placeholder="请输入" style="width: 124px;"/>
+                </div>
+            </div>
+
+            <div class="layui-inline" style="padding-left: 20px;">
+                <button class="layui-btn icon-btn sousuoDN " lay-submit="" lay-filter="regManageQueryBtn"><i class="layui-icon"></i>搜索</button>
+                <button id="btnempty" style="background-color: #fff;width: 69px;color: black;border: 1px solid #e5e5e5;" class="layui-btn icon-btn"></i>清除</button>
+            </div>
+        </div>
+        <div id="tables" class="text-center layui-text"  style="width: 100%;">
+
+        </div>
+    </form>
+
+
+
+    <form class="layui-form" id="myForm" lay-filter="myForm">
+        <table>
+
+
+
+
+
+            <tr >
+                <th rowspan="2" colspan="2">序号</th>
+                <th rowspan="2" colspan="4">罹患职业病名称
+
+                </th>
+
+                <th rowspan="2" colspan="4">诊断机构名称
+
+
+                </th>
+                <th rowspan="2" colspan="5">诊断日期
+
+
+                </th>
+                <th rowspan="2" colspan="4">鉴定结果（期、级别）
+
+
+                </th>
+                <th rowspan="2" colspan="4">伤残鉴定机构名称
+
+
+
+                </th>
+                <th rowspan="2" colspan="4">伤残鉴定日期
+
+
+                </th>
+                <th colspan="16">处理情况</th>
+
+                <th rowspan="2" colspan="1">操作</th>
+            </tr>
+            <tr class="disease-rowb">
+                <th colspan="4">调离原工作</th>
+                <th colspan="4">治疗</th>
+                <th colspan="4">病退/病休</th>
+                <th colspan="4">告知本人（签字）</th>
+            </tr>
+            <tr id="disease-history-table" class="section-title">
+
+            </tr>
+            <tr th:each="item, iterStat : ${medicalHistory}">
+                <td style="text-align: center;" colspan="2" th:text="${iterStat.index + 1}"></td>
+                <td colspan="4">
+                    <input type="text" name="addb1" class="input-full layui-input" th:value="${item.add1}" placeholder="罹患职业病名称">
+                </td>
+                <td colspan="4">
+                    <input type="text" name="addb2" class="input-full layui-input" th:value="${item.add2}" placeholder="诊断机构名称">
+                </td>
+                <td colspan="5">
+                    <input type="date" name="addb3" class="input-full datainput layui-input" th:value="${item.add3}">
+                </td>
+                <td colspan="4">
+                    <input type="text" name="addb4" class="input-full layui-input" th:value="${item.add4}" placeholder="鉴定结果">
+                </td>
+                <td colspan="4">
+                    <input type="text" name="addb5" class="input-full layui-input" th:value="${item.add5}" placeholder="伤残鉴定机构名称">
+                </td>
+                <td colspan="4">
+                    <input type="text" name="addb6" class="input-full layui-input" th:value="${item.add6}" placeholder="伤残鉴定日期">
+                </td>
+                <td colspan="4">
+                    <input type="text" name="addb7" class="input-full layui-input" th:value="${item.add7}" placeholder="调离原工作">
+                </td>
+                <td colspan="4">
+                    <input type="text" name="addb8" class="input-full layui-input" th:value="${item.add8}" placeholder="治疗">
+                </td>
+                <td colspan="4">
+                    <input type="text" name="addb9" class="input-full layui-input" th:value="${item.add9}" placeholder="病退/病休">
+                </td>
+                <td colspan="4">
+                    <div>
+                <span th:if="${item.add10 != null}">
+                    <img th:src="${item.add10}" style="width: 50px; cursor: pointer;" class="signature-img" title="点击查看大图">
+                </span>
+                        <input type="text" name="addb10" th:if="${item.add10 == null}" value="未签名" class="input-full layui-input" readonly placeholder="本人签字（告知）">
+                        <input type="text" style="display: none" name="addb77" th:value="${item.add10}" class="input-full layui-input" readonly>
+                    </div>
+                </td>
+                <td colspan="1" class="operation-btn" style="text-align: center;">
+                    <i style="color: red; font-size: 30px;" class="layui-icon layui-icon-delete delete-btn"></i>
+                </td>
+            </tr>
+            <tr class="section-title">
+                <td colspan="44" class="operation-btn" style="text-align: center"><i id="add-disease-row2" style="font-size: 20px;color: #2d8cf0" class="layui-icon layui-icon-add-circle add-btn"></i></td>
+            </tr>
+
+
+
+
+
+
+
+
+            <tr >
+                <th colspan="10">职业病诊断、伤残鉴定书原件</th>
+                <td colspan="34">
+
+                    <table id="file-table" border="1" width="100%">
+                        <tr th:each="res : ${occupationalHealthExamination4}">
+                            <td>
+                                <div class="file-row">
+                                    <div class="file-info">
+                                        <span th:text="${res.v14}"></span>
+                                    </div>
+                                    <div class="actions">
+                                        <input type="text" style="display: none" class="input-full layui-input" name="v11" th:value="${res.v13}">
+                                        <input type="text" style="display: none" class="input-full layui-input" name="v12" th:value="${res.v14}">
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                    <button type="button" class="layui-btn layui-btn-radius layui-btn-normal" id="test1">
+                        <i class="layui-icon">&#xe67c;</i>上传文件
+                    </button>
+                </td>
+            </tr>
+
+        </table>
+    </form>
+</div>
+
+<script type="text/javascript" th:src="@{/assets/js/common.js}"></script>
+<script th:inline="javascript">
+    layui.use(['form',"table",'treeSelect','notice','upload'], function(){
+        var form = layui.form;
+        var $ = layui.jquery;
+        var layer = layui.layer;
+        var table = layui.table;
+        var treeSelect= layui.treeSelect;
+        var notice=layui.notice;
+        var upload = layui.upload;
+        layui.config({
+            skin: 'blue'  // 设置主题为蓝色
+        });
+        var nations = [ "汉族", "蒙古族", "回族", "藏族", "维吾尔族", "苗族",
+            "彝族", "壮族", "布依族", "朝鲜族", "满族", "侗族", "瑶族",
+            "白族", "土家族", "哈尼族", "哈萨克族", "傣族", "黎族", "傈僳族",
+            "佤族", "畲族", "高山族", "拉祜族", "水族", "东乡族", "纳西族",
+            "景颇族", "柯尔克孜族", "土族", "达斡尔族", "仫佬族", "羌族",
+            "布朗族", "撒拉族", "毛南族", "仡佬族", "锡伯族", "阿昌族",
+            "普米族", "塔吉克族", "怒族", "乌孜别克族", "俄罗斯族", "鄂温克族",
+            "德昂族", "保安族", "裕固族", "京族", "塔塔尔族", "独龙族",
+            "鄂伦春族", "赫哲族", "门巴族", "珞巴族", "基诺族" ];
+
+        var option = "";
+        for (var i = 0; i < nations.length; i++) {
+            option += '<option value="' + nations[i] + '">'
+                + nations[i] + '</option>';
+        }
+        /*  console.log(option+"-----------");  */
+        $(option).appendTo("#nation");
+
+
+        //下拉框回显
+        form.render("select");
+
+
+
+
+
+
+
+
+
+
+        // 删除行功能
+        function bindDeleteEvents() {
+            var deleteBtns = document.querySelectorAll('.delete-btn');
+            deleteBtns.forEach(function(btn, index) {
+                btn.addEventListener('click', function() {
+                    var row = this.parentElement.parentElement;
+                    row.parentElement.removeChild(row);
+                    updateRowNumbers(); // 更新序号
+                });
+            });
+        }
+
+        // 更新序号
+        function updateRowNumbers() {
+            var rows = document.querySelectorAll('.disease-row');
+            rows.forEach(function(row, index) {
+                row.querySelector('td[colspan="1"]').textContent = index + 1;
+            });
+            var rows1 = document.querySelectorAll('.disease-row1');
+            rows1.forEach(function(row, index) {
+                rows1.querySelector('td[colspan="1"]').textContent = index + 1;
+            });
+            var rows2 = document.querySelectorAll('.disease-row2');
+            rows2.forEach(function(row, index) {
+                rows2.querySelector('td[colspan="1"]').textContent = index + 1;
+            });
+            var rows3 = document.querySelectorAll('.disease-row3');
+            rows3.forEach(function(row, index) {
+                rows3.querySelector('td[colspan="1"]').textContent = index + 1;
+            });
+            var rows4 = document.querySelectorAll('.disease-row4');
+            rows4.forEach(function(row, index) {
+                rows4.querySelector('td[colspan="1"]').textContent = index + 1;
+            });
+
+        }
+
+
+
+        function selectForm(paramValue){
+            if(paramValue){
+                $.ajax({
+                    type:'get',
+                    url:'/NewEmployeePersonalInformationCardController/selectById',
+                    data:{id:paramValue},
+                    success : function(data){
+                        console.log("这里是查询出来的数据",data);
+                        if(data.code==20000){
+                            const medicalHistory = JSON.parse(data.data.examinationResults);
+
+                            medicalHistory.forEach((item, index) => {
+                                console.log(item,"sssssssssssss",)
+                                var $lastRow = $('#disease-history-table').siblings('.disease-row2').last();
+                                const $newRow = $('<tr class="disease-row2"></tr>');
+
+                                $newRow.html(`
+                                                <td style="text-align: center;" colSpan="2">${index + 1}</td>
+                                                            <td colSpan="4"><input value="${item.add1}" type="text" name="addb1" class="input-full layui-input" placeholder="罹患职业病名称
+                                    "></td>
+                                                <td colSpan="4"><input type="text" value="${item.add2}"  name="addb2" class="input-full layui-input" placeholder="诊断机构名称
+                                    "></td>
+                                                <td colSpan="5"><input type="date" value="${item.add3}" name="addb3" class="input-full datainput layui-input"></td>
+
+                                                <td colSpan="4"><input type="text" value="${item.add4}" name="addb4" class="input-full layui-input" placeholder="鉴定结果
+                                    "></td>
+                                                 <td colSpan="4"><input type="text" value="${item.add5}" name="addb5" class="input-full layui-input" placeholder="伤残鉴定机构名称
+                                    "></td>
+                                                  <td colSpan="4"><input type="text" value="${item.add6}" name="addb6" class="input-full layui-input" placeholder="伤残鉴定日期
+                                    "></td>
+                                                <td colSpan="4"><input type="text" value="${item.add7}" name="addb7" class="input-full layui-input" placeholder="调离原工作
+
+                                    "></td>
+                                                 <td colSpan="4"><input type="text" value="${item.add8}" name="addb8" class="input-full layui-input" placeholder="治疗
+
+                                    "></td>
+                                                 <td colSpan="4"><input type="text" value="${item.add9}" name="addb9" class="input-full layui-input" placeholder="病退/病休
+
+                                    "></td>
+                                      <td colSpan="4">
+        ${item.add10 ?
+                                    `<img src="${item.add10}" style="width: 50px; cursor: pointer;" class="signature-img" title="点击查看大图">` :
+                                    `<input type="text" name="addb10" value="未签名" class="input-full layui-input" readonly placeholder="本人签字（告知）">`}
+         <input type="text" style="display: none" name="addb77" value="${item.add10}" class="input-full layui-input" readonly >
+    </td>
+                                                    <td colspan="1" class="operation-btn" style="text-align: center;"><i style="color: red;font-size: 30px;" class="layui-icon layui-icon-delete delete-btn"></i></td>
+                                `);
+                                console.log($newRow.innerHTML)
+                                if ($lastRow.length > 0) {
+                                    $lastRow.after($newRow);
+                                } else {
+                                    $('#disease-history-table').after($newRow);
+                                }
+                            });
+
+                            const pairsArr = JSON.parse(data.data.examinationResultsFile);
+                            var fileTable = document.getElementById('file-table');
+                            pairsArr.forEach(function(res) {
+                                // 创建新的行元素
+                                var newRow = document.createElement('tr');
+
+                                // 创建新的单元格元素
+                                var newCell = document.createElement('td');
+
+                                // 设置单元格的 HTML 内容，包含文件名、隐藏的输入框、下载按钮和删除按钮
+                                newCell.innerHTML = `
+                                    <div class="file-row">
+                                        <div class="file-info">
+                                            <span>${res.v14}</span>
+                                        </div>
+                                        <div class="actions">
+                                            <input type="text" style="display: none" class="input-full layui-input" name="v13" value="${res.v13}">
+                                            <input type="text" style="display: none" class="input-full layui-input" name="v14" value="${res.v14}">
+                                            <button title="修改" class="edit-btn" style="border: none; background: none; cursor: pointer;">
+                                                <i class="layui-icon layui-icon-edit"></i>
+                                            </button>
+                                            <button title="下载" lay-submit=""  lay-filter="down"   data-url="${res.v13}"  >&#8681;</button>
+                                           <button title="删除" lay-submit=""  lay-filter="deleteRowBtn"  >&#10006;</button>
+                                        </div>
+                                    </div>
+                                `;
+
+                                // 将单元格加入到行中
+                                newRow.appendChild(newCell);
+
+                                // 将新行插入到表格的最后一行
+                                fileTable.appendChild(newRow);
+                                newCell.querySelector('.edit-btn').onclick = function() {
+                                    event.preventDefault();
+                                    var currentName = res.name;
+                                    layer.prompt({
+                                        title: '修改文件名',
+                                        value: currentName,
+                                        formType: 0 // 输入框类型，0：单行文本
+                                    }, function(value, index) {
+                                        // 更新文件名逻辑
+                                        newCell.querySelector('.file-info span').innerText = value; // 更新显示的文件名
+                                        newCell.querySelector('input[name="v14"]').value = value; // 更新隐藏的文件名输入
+                                        layer.close(index); // 关闭输入框
+                                    });
+                                };
+
+
+                            });
+
+                            form.render();
+                        }
+
+                    }
+                })
+            }
+
+
+        }
+
+
+
+        // 初始化表单
+        form.render();
+        bindDeleteEvents(); // 初次绑定删除事件
+    });
+</script>
+
+</body>
+</html>

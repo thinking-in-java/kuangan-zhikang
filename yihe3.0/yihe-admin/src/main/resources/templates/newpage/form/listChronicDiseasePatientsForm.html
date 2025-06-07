@@ -1,0 +1,818 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>个人基本信息表</title>
+    <link rel="stylesheet" th:href="@{/assets/js/layui-v2.9.16/layui/css/layui.css}"/>
+    <script type="text/javascript" th:src="@{/assets/js/layui-v2.9.16/layui/layui.js}"></script>
+    <style>
+        body{
+            background:#F1F1F1
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            table-layout: fixed;
+            border-color:rgb(144, 186, 221)
+        }
+        th, td {
+            border: 1px solid #ccc;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: rgb(231, 243, 252);
+            font-size: 10pt;
+            font-family: "Microsoft YaHei";
+            word-break: break-word;
+            overflow-wrap: break-word;
+            text-align: center;
+        }
+        .section-title {
+            text-align: center;
+            font-weight: bold;
+            background-color: #e6f7ff;
+        }
+        .input-full {
+            width: 100%;
+            box-sizing: border-box;
+        }
+        .radio-group {
+            display: flex;
+            align-items: center;
+        }
+        .radio-group label {
+            margin-right: 10px;
+        }
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        .checkbox-group label {
+            margin-right: 15px;
+        }
+        .heng{
+            text-align: center;
+            font-size: 10pt;
+            font-family: "Microsoft YaHei";
+            word-break: break-word;
+            overflow-wrap: break-word;
+        }
+        .datainput{
+            border-color: #eee !important;
+            border-width: 1px;
+        }
+
+        .layui-form-checked[lay-skin=primary] i{
+            border-color:#2d8cf0 !important;
+            background-color:#FFF !important;
+            color:#2d8cf0 !important;
+            font-weight: bold;
+        }
+
+        .layui-form-checkbox[lay-skin=primary]:hover i{
+            border-color:#2d8cf0 !important;
+        }
+        .layui-form-radio>i:hover, .layui-form-radioed>i{
+            color: #2d8cf0 !important;
+        }
+
+        /* 覆盖 layui 的默认主题颜色 */
+        .theme-colorful .layui-btn {
+            height: 36px;
+            line-height: 36px;
+            border-radius: 4px;
+            background-color: #2d8cf0;
+            box-shadow: 0 1px 0 rgba(0, 0, 0, .03);
+        }
+        .layui-form-radio:hover>*, .layui-form-radioed, .layui-form-radioed>i{
+            color: #2d8cf0 !important;
+        }
+
+        /*.layui-input {*/
+        /*    border-color: #597FC0 !important;*/
+        /*}*/
+
+        /* ...其他元素样式 */
+        /* 修改分页按钮的背景颜色和字体颜色 */
+        .layui-laypage a {
+            background-color: #f0f0f0; /* 设置按钮的背景颜色 */
+            color: #333; /* 设置按钮的字体颜色 */
+        }
+
+        /* 鼠标悬停时按钮的背景颜色 */
+        .layui-laypage a:hover {
+            background-color: #fff;
+            color: #2d8cf0;
+        }
+
+        /* 当前页的背景颜色和字体颜色 */
+        .layui-laypage .layui-laypage-curr .layui-laypage-em {
+            background-color: #2d8cf0; /* 当前页的背景颜色 */
+            color: white; /* 当前页的字体颜色 */
+        }
+
+        .file-row {
+            background-color: #e6f7ff;
+            padding: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-radius: 5px;
+            margin: 10px 0;
+            width: 98%;
+        }
+        .file-row .file-info {
+            display: flex;
+            align-items: center;
+        }
+        .file-row .file-info img {
+            width: 20px;
+            margin-right: 10px;
+        }
+        .file-row .file-info span {
+            font-size: 14px;
+        }
+        .file-row .actions {
+            display: flex;
+            align-items: center;
+        }
+        .file-row .actions button {
+            border: none;
+            background: none;
+            cursor: pointer;
+            margin-left: 10px;
+            font-size: 16px;
+        }
+
+        .layui-laydate-header {
+            background-color: #2d8cf0; /* 顶部背景颜色 */
+            color: #fff; /* 顶部文字颜色 */
+        }
+
+        .layui-laydate-list li:hover {
+            background-color: #2d8cf0; /* 鼠标悬停时的背景颜色 */
+            color: #fff; /* 鼠标悬停时的文字颜色 */
+        }
+
+        .layui-this, .layui-this:hover {
+            background-color: #fff !important; /* 选中的背景颜色 */
+            color: #2d8cf0 !important; /* 选中的文字颜色 */
+        }
+
+    </style>
+</head>
+<body>
+
+<div class="layui-form " style="width:80%;margin:auto;padding:0 5%;background:#FFF;margin-top:0">
+    <h2 style="text-align: center;">慢病患者一览表</h2>
+    <input id="guishu" type="hidden" value="">
+    <input id="userCode" type="hidden" value="">
+    <input id="regId" type="hidden" value="">
+
+    <form class="layui-form" id="addfolder" lay-filter="folderForm" style="display: none;min-height: 300px">
+        <div id="search-header">
+
+
+            <div class="layui-inline" style="margin-left: 3px;">
+                <label class="layui-form-label w-auto">姓名:</label>
+                <div class="layui-input-inline">
+                    <input id="name" class="layui-input" placeholder="请输入" style="width: 124px;"/>
+                </div>
+            </div>
+
+            <div class="layui-inline" style="padding-left: 20px;">
+                <button class="layui-btn icon-btn sousuoDN " lay-submit="" lay-filter="regManageQueryBtn"><i class="layui-icon"></i>搜索</button>
+                <button id="btnempty" style="background-color: #fff;width: 69px;color: black;border: 1px solid #e5e5e5;" class="layui-btn icon-btn"></i>清除</button>
+            </div>
+        </div>
+        <div id="tables" class="text-center layui-text"  style="width: 100%;">
+
+        </div>
+    </form>
+
+
+
+    <form class="layui-form" id="myForm" lay-filter="myForm">
+
+        <button style="float: right" type="submit" class="layui-btn" lay-submit lay-filter="myFormSave">保存</button>
+
+        <table>
+            <tr  class="section-title" style="background-color: transparent; border: none;">
+                <td colspan="24" style="border: none;"></td>
+                <td class="operation-btn" style="text-align: center; border: none;">
+                    <i id="add-disease-row" style="font-size: 20px; color: #2d8cf0;" class="layui-icon layui-icon-add-circle add-btn"></i>
+                </td>
+            </tr>
+
+            <tr id="disease-history-table">
+                <th colspan="1">序号</th>
+                <th colspan="2">姓名</th>
+                <th colspan="1">年龄</th>
+                <th colspan="1">性别</th>
+
+                <th colspan="2">单位</th>
+                <th colspan="1">部门</th>
+                <th colspan="2">病症</th>
+                <th colspan="2">其他病症</th>
+
+                <th colspan="1">等级</th>
+                <th colspan="2">转诊情况</th>
+                <th colspan="2">干预情况</th>
+                <th colspan="2">首次干预时间</th>
+
+                <th colspan="1">干预次数</th>
+                <th colspan="2">最新干预时间</th>
+                <th colspan="2">干预效果</th>
+                <th colspan="1">操作</th>
+            </tr>
+
+
+
+
+        </table>
+    </form>
+</div>
+
+<script type="text/javascript" th:src="@{/assets/js/layui-v2.9.16/layui/layui.js}"></script>
+<script type="text/javascript" th:src="@{/assets/js/common.js}"></script>
+<script type="text/javascript" th:src="@{/assets/js/jquery-1.11.1.js}"></script>
+<script th:inline="javascript">
+    layui.use(['form',"table",'treeSelect','notice','upload',"laydate"], function(){
+        var form = layui.form;
+        var $ = layui.jquery;
+        var layer = layui.layer;
+        var table = layui.table;
+        var notice=layui.notice;
+        var upload = layui.upload;
+        var treeSelect= layui.treeSelect;
+        layui.config({
+            skin: 'blue'  // 设置主题为蓝色
+        });
+
+
+
+
+        var params = new URLSearchParams(window.location.search);
+        var paramValue = params.get('medicalExaminationInformation');
+
+        form.on('submit(deleteRowBtn)', function(event){
+            var row = event.elem.closest('tr');
+            // 删除该行
+            row.parentNode.removeChild(row);
+            return false;
+        });
+
+        $('#add-disease-row').on('click', function() {
+            var $lastRow = $('#disease-history-table').siblings('.disease-row').last();
+            var rowCount = $('#disease-history-table').siblings('.disease-row').length;
+            var $newRow = $('<tr class="disease-row"></tr>');
+            var $id="three"+rowCount + 1;
+            var $idOrg="threeOrg"+rowCount + 1;
+            $newRow.html(`
+                <td colspan="1">${rowCount + 1}</td>
+                <td colspan="2">
+                     <div class="layui-input-group">
+                        <input name="v1" type="text" class="input-full layui-input" placeholder="请输入姓名">
+                        <div class="layui-input-split layui-input-suffix chooseName" style="cursor: pointer;">
+                            <i class="layui-icon layui-icon-search"></i>
+                        </div>
+                    </div>
+                </td>
+                <td colspan="1"><input type="text" name="v2" class="input-full layui-input" placeholder="年龄"></td>
+                <td colspan="1">
+                        <select name="v2"  class="input-full">
+                          <option value="男">男</option>
+                          <option value="女">女</option>
+                          <!-- 其他选项 -->
+                        </select>
+                </td>
+
+                <td colspan="2">
+                 <input type="text" name="v13"  class="layui-input" style="display: none">
+                 <div class="layui-input-block" style="width: 100%;margin-left: 0" >
+                        <input type="text"  id="${$id}" lay-filter="tree" class="layui-input">
+
+                    </div>
+                </td>
+                <td colspan="1"><input type="text" name="v3" class="input-full layui-input" placeholder="部门"></td>
+                <td colspan="2">
+                    <div class="checkbox-group">
+                     <input type="checkbox" name="v4" value="慢性气管炎"  title="慢性气管炎">
+                     <input type="checkbox" name="v4" value="哮喘"  title="哮喘">
+                     <input type="checkbox" name="v4" value="心脏病"  title="心脏病">
+                     <input type="checkbox" name="v4" value="痛风"  title="痛风">
+                     <input type="checkbox" name="v4" value="高血糖"  title="高血糖">
+
+                     <input type="checkbox" name="v4" value="肿瘤"  title="肿瘤">
+                     <input type="checkbox" name="v4" value="高血脂"  title="高血脂">
+                     <input type="checkbox" name="v4" value="慢性胃炎"  title="慢性胃炎">
+                     <input type="checkbox" name="v4" value="高血压"  title="高血压">
+                     <input type="checkbox" name="v4" value="骨质疏松"  title="骨质疏松">
+
+                     <input type="checkbox" name="v4" value="高尿酸"  title="高尿酸">
+                     <input type="checkbox" name="v4" value="肥胖"  title="肥胖">
+                     <input type="checkbox" name="v4" value="关节炎"  title="关节炎">
+                     <input type="checkbox" name="v4" value="乳腺增生"  title="乳腺增生">
+                     <input type="checkbox" name="v4" value="其他"  title="其他">
+                    </div>
+                </td>
+                <td colspan="2"><input type="text" name="v5" class="input-full layui-input" placeholder="其他病症"></td>
+
+                 <td colspan="1">
+                   <select name="v6"  class="input-full">
+                          <option value="1">1</option>
+                          <option value="2">2</option>
+                          <option value="3">3</option>
+                          <option value="4">4</option>
+                   </select>
+
+                </td>
+                <td colspan="2">
+                    <select name="v7"  class="input-full">
+                          <option value="已转诊">已转诊</option>
+                          <option value="未转诊">未转诊</option>
+
+                          <!-- 其他选项 -->
+                   </select>
+                </td>
+                <td colspan="2">
+                    <select name="v8"  class="input-full">
+                          <option value="已干预">已干预</option>
+                          <option value="未干预">未干预</option>
+                   </select>
+
+                </td>
+                <td colspan="2"><input type="date" name="v9" class="input-full datainput layui-input"></td>
+
+                 <td colspan="1"><input type="text" name="v10" class="input-full layui-input" placeholder="干预次数"></td>
+                <td colspan="2"><input type="date" name="v11" class="input-full datainput layui-input"></td>
+                <td colspan="2">
+                    <select name="v12"  class="input-full">
+                          <option value="优秀">优秀</option>
+                          <option value="良好">良好</option>
+                          <option value="差">差</option>
+                   </select>
+
+                </td>
+                 <td colspan="1"  style="text-align: center;" class="operation-btn"><i style="color: red;font-size: 30px;" class="layui-icon layui-icon-delete delete-btn"></i></td>
+
+
+            `);
+
+            if ($lastRow.length > 0) {
+                $lastRow.after($newRow);
+            } else {
+                $('#disease-history-table').after($newRow);
+            }
+
+            treeSelect.render({
+                // 选择器
+                elem: `#${$id}`,
+                // 数据
+                data: '/YhUserMakeCard/showPullDownTree',
+                // 异步加载方式：get/post，默认get
+                type: 'get',
+                // 占位符
+                placeholder: '全部',
+                // 是否开启搜索功能：true/false，默认false
+                search: true,
+                // 点击回调
+                click: function(d){
+                    $newRow.find('input[name="v13"]').val(d.current.id);
+                },
+                // 加载完成后的回调函数
+                success: function (d) {
+                    console.log(d);
+
+                }
+
+            });
+
+            form.render();
+
+            bindDeleteEvents(); // 绑定删除事件
+        });
+
+
+
+
+        function bindDeleteEvents() {
+            var deleteBtns = document.querySelectorAll('.delete-btn');
+            deleteBtns.forEach(function(btn, index) {
+                btn.addEventListener('click', function() {
+                    var row = this.parentElement.parentElement;
+                    row.parentElement.removeChild(row);
+                    updateRowNumbers(); // 更新序号
+                });
+            });
+
+
+        }
+
+        function updateRowNumbers() {
+            var rows = document.querySelectorAll('.disease-row');
+            rows.forEach(function(row, index) {
+                row.querySelector('td[colspan="1"]').textContent = index + 1;
+            });
+            var rows1 = document.querySelectorAll('.disease-row1');
+            rows1.forEach(function(row, index) {
+                rows1.querySelector('td[colspan="1"]').textContent = index + 1;
+            });
+            var rows2 = document.querySelectorAll('.disease-row2');
+            rows2.forEach(function(row, index) {
+                rows2.querySelector('td[colspan="1"]').textContent = index + 1;
+            });
+            var rows3 = document.querySelectorAll('.disease-row3');
+            rows3.forEach(function(row, index) {
+                rows3.querySelector('td[colspan="1"]').textContent = index + 1;
+            });
+            var rows4 = document.querySelectorAll('.disease-row4');
+            rows4.forEach(function(row, index) {
+                rows4.querySelector('td[colspan="1"]').textContent = index + 1;
+            });
+
+        }
+
+        $(document).on("click", ".chooseName", function () {
+            var $row = $(this).closest('tr');
+            var closeIndex = layer.open({
+                type: 1, // page 层类型
+                area: ['800px', '600px'],
+                title: '选择名字',
+                shade: 0.6, // 遮罩透明度
+                anim: 0, // 0-6 的动画形式，-1 不开启
+                content: $("#addfolder"),
+                success: function(layero, index){
+                    // 在弹出层初始化完成后渲染表格
+                    var regManageTb=table.render({
+                        elem: '#tables',
+                        url: '/newRegController/queryLocallyManagedArchives', // 此处为静态模拟数据，实际使用时需换成真实接口
+                        page: true,
+                        limit : 10,
+                        where : {regTime:""},
+                        cols: [[
+                            // {type: 'radio', fixed: 'left'},
+                            {field:'userCode', title:'用户编号', fixed: 'center'},
+                            {field: 'name', title: '姓名', align: 'center'},
+                            {field: 'phone', align: 'center', title: '电话'} ,
+                        ]],
+                        parseData: function(res) {
+                            if (res.code === 20000) {
+                                return {
+                                    "code": 0,
+                                    "msg": res.msg || "",
+                                    "count": res.count || 0,
+                                    "data": res.data.data || []
+                                };
+                            } else {
+                                return {
+                                    "code": 1,
+                                    "msg": res.msg || "获取数据失败",
+                                    "count": 0,
+                                    "data": []
+                                };
+                            }
+                        },
+                        done: function() {
+                            $('#tables').css('visibility', 'visible');
+                        }
+                    });
+                    $('#tables').css('visibility', 'hidden');
+                    // 行单击事件( 双击事件为: rowDouble )
+                    table.on('row(tables)', function(obj){
+                        var xx = obj.data; // 获取当前行数据
+                        // 显示 - 仅用于演示
+                        $.ajax({
+                            type:'get',
+                            url:'/YhUserReginfo/yhUserReginfo',
+                            data:{userCode:xx.userCode},
+                            success : function(data){
+                                console.log(data,"--------------------------------------")
+                                if(data!=null){
+                                    $row.find('input[name="v1"]').val(data.name);
+                                    console.log(data.newestAssessTime);
+                                }else{
+                                    $row.find('input[name="v1"]').val(data.data.data.name);
+                                }
+
+                                // 刷新表单，让Layui重新渲染
+                                form.render();
+                                layer.close(closeIndex);
+                            }
+                        })
+
+
+                        // 标注当前点击行的选中状态
+                        obj.setRowChecked({
+                            type: 'radio' // radio 单选模式；checkbox 复选模式
+                        });
+                    });
+
+                    form.on('submit(regManageQueryBtn)', function(data){
+                        regManageTb.reload({
+                            where : {
+                                //这里注意一定要跟Bean 里面的属性对应
+                                orgCode:$('#guishu').val(),
+                                name:$('#name').val(),
+                                regTime:"",
+                            },
+                            page : {
+                                curr : 1
+                            }
+
+                        });
+                        // 阻止表单跳转。如果需要表单跳转，去掉这段即可。
+                        return false;
+                    });
+
+
+                },
+                end: function () {
+                    // 关闭弹出层时隐藏 addfolder
+                    $("#addfolder").hide();
+                }
+            });
+        });
+
+
+
+
+
+
+
+
+
+        form.on('submit(myFormSave)', function(data){
+            console.log(data,"dddddddddddddddddddddddddddddddd")
+
+
+            var diseaseData = [];
+
+            // 遍历每一行 `.disease-row`
+            $('#disease-history-table').siblings('.disease-row').each(function() {
+                var $row = $(this);
+
+                // 获取每个输入框和选择框的值
+                var rowData = {
+                    name: $row.find('input[name="v1"]').val(),          // 姓名
+                    age: $row.find('input[name="v2"]').val(),           // 年龄
+                    gender: $row.find('select[name="v2"]').val(),       // 性别
+                    department: $row.find('input[name="v3"]').val(),    // 部门
+                    diseases: [],                                       // 疾病（多个复选框值）
+                    otherDiseases: $row.find('input[name="v5"]').val(), // 其他病症
+                    level: $row.find('select[name="v6"]').val(),        // 级别
+                    transferStatus: $row.find('select[name="v7"]').val(), // 转诊状态
+                    interventionStatus: $row.find('select[name="v8"]').val(), // 干预状态
+                    firstInterventionDate: $row.find('input[name="v9"]').val(), // 首次干预时间
+                    interventionTimes: $row.find('input[name="v10"]').val(),    // 干预次数
+                    lastInterventionDate: $row.find('input[name="v11"]').val(), // 最新干预时间
+                    evaluation: $row.find('select[name="v12"]').val() ,   // 评估
+                    tree: $row.find('input[name="v13"]').val()
+                };
+
+                // 获取疾病复选框的值（多个）
+                $row.find('input[name="v4"]:checked').each(function() {
+                    rowData.diseases.push($(this).val());
+                });
+
+                // 将该行的数据对象添加到数组中
+                diseaseData.push(rowData);
+            });
+
+            // 输出或提交数据
+            console.log(diseaseData,"输出或提交数据输出或提交数据输出或提交数据输出或提交数据输出或提交数据输出或提交数据输出或提交数据");
+            if ($(this).data('submitted') === true) {
+                return false; // 阻止重复提交
+            }
+            $(this).data('submitted', true);
+            if(paramValue){
+                $.ajax({
+                    type : 'post',
+                    url : '/NewListChronicDiseasePatientsController/updateNew',
+                    data : {
+                        id:paramValue,
+                        jsonData:JSON.stringify(diseaseData)
+                    },
+
+                    success : function(data) {
+                        if (data.code == 20000) {
+
+                            notice.success({
+                                title : '消息通知',
+                                message : '操作成功!'
+                            });
+
+                            setTimeout(function() {
+                                window.close();
+                            }, 2000);
+                        } else {
+                            notice.error({
+                                title : '消息通知',
+                                message : '操作失败!'
+                            });
+                            setTimeout(function() {
+                                window.close();
+                            }, 2000);
+                        }
+                    }
+                })
+            }else{
+                $.ajax({
+                    type : 'post',
+                    url : '/NewListChronicDiseasePatientsController/insetNew',
+                    data : {
+                        jsonData:JSON.stringify(diseaseData)
+                    },
+
+                    success : function(data) {
+                        if (data.code == 20000) {
+
+                            notice.success({
+                                title : '消息通知',
+                                message : '操作成功!'
+                            });
+
+                            setTimeout(function() {
+                                window.close();
+                            }, 2000);
+                        } else {
+                            notice.error({
+                                title : '消息通知',
+                                message : '操作失败!'
+                            });
+                            setTimeout(function() {
+                                window.close();
+                            }, 2000);
+                        }
+                    }
+                })
+            }
+            return false; // 阻止默认 form 跳转
+        });
+
+        function selectForm(paramValue){
+            if(paramValue){
+                $.ajax({
+                    type:'get',
+                    url:'/NewListChronicDiseasePatientsController/selectById',
+                    data:{id:paramValue},
+                    success : function(data){
+                        console.log("这里是查询出来的数据",data);
+                        if(data.code==20000){
+                            var rowDataArr = JSON.parse(data.data.jsonData);
+                            $('#disease-history-table').siblings('.disease-row').remove();
+                            rowDataArr.forEach(function(rowData, index) {
+                                var rowCount = index + 1;
+                                var $id = "three" + rowCount;
+                                var $idOrg = null;
+                                var $lastRow = $('#disease-history-table').siblings('.disease-row').last();
+                                var $newRow = $(`
+                                        <tr class="disease-row">
+                                            <td colspan="1">${rowCount}</td>
+                                            <td colspan="2">
+                                                <div class="layui-input-group">
+                                                    <input name="v1" type="text" class="input-full layui-input" value="${rowData.name}" placeholder="请输入姓名">
+                                                    <div class="layui-input-split layui-input-suffix chooseName" style="cursor: pointer;">
+                                                        <i class="layui-icon layui-icon-search"></i>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td colspan="1"><input type="text" name="v2" class="input-full layui-input" value="${rowData.age}" placeholder="年龄"></td>
+                                            <td colspan="1">
+                                                <select name="v2" class="input-full">
+                                                    <option value="男" ${rowData.gender === '男' ? 'selected' : ''}>男</option>
+                                                    <option value="女" ${rowData.gender === '女' ? 'selected' : ''}>女</option>
+                                                </select>
+                                            </td>
+                                            <td colspan="2">
+                                                <input type="text" name="v13" class="layui-input" style="display: none" value="${rowData.tree}">
+                                                <div class="layui-input-block" style="width: 100%; margin-left: 0;">
+                                                    <input type="text" id="${$id}"  class="layui-input">
+                                                </div>
+                                            </td>
+                                            <td colspan="1"><input type="text" name="v3" class="input-full layui-input" value="${rowData.department}" placeholder="部门"></td>
+                                            <td colspan="2">
+                                                <div class="checkbox-group">
+                                                    <input type="checkbox" name="v4" value="慢性气管炎" title="慢性气管炎" ${rowData.diseases.includes('慢性气管炎') ? 'checked' : ''}>
+                                                    <input type="checkbox" name="v4" value="哮喘" title="哮喘" ${rowData.diseases.includes('哮喘') ? 'checked' : ''}>
+                                                    <input type="checkbox" name="v4" value="心脏病" title="心脏病" ${rowData.diseases.includes('心脏病') ? 'checked' : ''}>
+                                                    <input type="checkbox" name="v4" value="痛风" title="痛风" ${rowData.diseases.includes('痛风') ? 'checked' : ''}>
+                                                    <input type="checkbox" name="v4" value="高血糖" title="高血糖" ${rowData.diseases.includes('高血糖') ? 'checked' : ''}>
+                                                    <input type="checkbox" name="v4" value="肿瘤" title="肿瘤" ${rowData.diseases.includes('肿瘤') ? 'checked' : ''}>
+                                                    <input type="checkbox" name="v4" value="高血脂" title="高血脂" ${rowData.diseases.includes('高血脂') ? 'checked' : ''}>
+                                                    <input type="checkbox" name="v4" value="慢性胃炎" title="慢性胃炎" ${rowData.diseases.includes('慢性胃炎') ? 'checked' : ''}>
+                                                    <input type="checkbox" name="v4" value="高血压" title="高血压" ${rowData.diseases.includes('高血压') ? 'checked' : ''}>
+                                                    <input type="checkbox" name="v4" value="骨质疏松" title="骨质疏松" ${rowData.diseases.includes('骨质疏松') ? 'checked' : ''}>
+
+                                                    <input type="checkbox" name="v4" value="高尿酸" title="高尿酸" ${rowData.diseases.includes('高尿酸') ? 'checked' : ''}>
+                                                    <input type="checkbox" name="v4" value="肥胖" title="肥胖" ${rowData.diseases.includes('肥胖') ? 'checked' : ''}>
+                                                    <input type="checkbox" name="v4" value="关节炎" title="关节炎" ${rowData.diseases.includes('关节炎') ? 'checked' : ''}>
+                                                    <input type="checkbox" name="v4" value="乳腺增生" title="乳腺增生" ${rowData.diseases.includes('乳腺增生') ? 'checked' : ''}>
+                                                    <input type="checkbox" name="v4" value="其他" title="其他" ${rowData.diseases.includes('其他') ? 'checked' : ''}>
+                                                    <!-- 其他复选框 -->
+                                                </div>
+                                            </td>
+                                            <td colspan="2"><input type="text" name="v5" class="input-full layui-input" value="${rowData.otherDiseases}" placeholder="其他病症"></td>
+                                            <td colspan="1">
+                                                <select name="v6" class="input-full">
+                                                    <option value="1" ${rowData.level === '1' ? 'selected' : ''}>1</option>
+                                                    <option value="2" ${rowData.level === '2' ? 'selected' : ''}>2</option>
+                                                    <option value="3" ${rowData.level === '3' ? 'selected' : ''}>3</option>
+                                                    <option value="4" ${rowData.level === '4' ? 'selected' : ''}>4</option>
+                                                </select>
+                                            </td>
+                                            <td colspan="2">
+                                                <select name="v7" class="input-full">
+                                                    <option value="已转诊" ${rowData.transferStatus === '已转诊' ? 'selected' : ''}>已转诊</option>
+                                                    <option value="未转诊" ${rowData.transferStatus === '未转诊' ? 'selected' : ''}>未转诊</option>
+                                                </select>
+                                            </td>
+                                            <td colspan="2">
+                                                <select name="v8" class="input-full">
+                                                    <option value="已干预" ${rowData.interventionStatus === '已干预' ? 'selected' : ''}>已干预</option>
+                                                    <option value="未干预" ${rowData.interventionStatus === '未干预' ? 'selected' : ''}>未干预</option>
+                                                </select>
+                                            </td>
+                                            <td colspan="2"><input type="date" name="v9" class="input-full datainput layui-input" value="${rowData.firstInterventionDate}"></td>
+                                            <td colspan="1"><input type="text" name="v10" class="input-full layui-input" value="${rowData.interventionTimes}" placeholder="干预次数"></td>
+                                            <td colspan="2"><input type="date" name="v11" class="input-full datainput layui-input" value="${rowData.lastInterventionDate}"></td>
+                                            <td colspan="2">
+                                                <select name="v12" class="input-full">
+                                                    <option value="优秀" ${rowData.evaluation === '优秀' ? 'selected' : ''}>优秀</option>
+                                                    <option value="良好" ${rowData.evaluation === '良好' ? 'selected' : ''}>良好</option>
+                                                    <option value="差" ${rowData.evaluation === '差' ? 'selected' : ''}>差</option>
+                                                </select>
+                                            </td>
+                                            <td colspan="1" style="text-align: center;" class="operation-btn"><i style="color: red; font-size: 30px;" class="layui-icon layui-icon-delete delete-btn"></i></td>
+                                        </tr>
+                                    `);
+                                console.log("插入",$newRow)
+                                // 插入新行到表格中
+                                if ($lastRow.length > 0) {
+                                    $lastRow.after($newRow);
+                                } else {
+                                    $('#disease-history-table').after($newRow);
+                                }
+
+
+                                // 初始化树选择插件
+
+                                // 用于存储每个实例的对象
+                                (function(id, treeValue, rowCount) {
+                                    var uniqueFilter = 'treeFilter_' + rowCount; // 生成唯一的 lay-filter 值
+                                    var instanceName = 'treeSelectInstance_' + rowCount; // 生成唯一实例名
+
+                                    $(`#${id}`).attr('lay-filter', uniqueFilter); // 设置唯一的 lay-filter
+
+                                    window[instanceName] = treeSelect.render({
+                                        elem: `#${id}`,
+                                        data: '/YhUserMakeCard/showPullDownTree',
+                                        type: 'get',
+                                        placeholder: '全部',
+                                        search: true,
+                                        click: function(d) {
+                                            $newRow.find('input[name="v13"]').val(d.current.id);
+                                        },
+                                        success: function(d) {
+                                            console.log('TreeSelect data:', d, treeValue);
+                                            if (window[instanceName]) {
+                                                window[instanceName].checkNode(uniqueFilter, treeValue);
+                                                console.log(d, treeValue);
+                                            } else {
+                                                console.error('TreeSelect instance is not properly initialized');
+                                            }
+                                        }
+                                    });
+                                })($id, rowData.tree, rowCount);
+
+                                bindDeleteEvents();
+
+
+
+
+
+
+
+                            });
+                            form.render();
+                        }
+
+                    }
+                })
+            }
+
+
+        }
+
+        selectForm(paramValue);
+
+        // 初始化表单
+        form.render();
+    });
+</script>
+
+</body>
+</html>

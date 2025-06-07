@@ -1,0 +1,580 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yihe.system.mapper.NewCoronaryHeartDiseasePatientsMapper">
+  <resultMap id="BaseResultMap" type="com.yihe.system.domain.NewCoronaryHeartDiseasePatients">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="reg_id" jdbcType="INTEGER" property="regId" />
+    <result column="service_date" jdbcType="DATE" property="serviceDate" />
+    <result column="service_mode" jdbcType="VARCHAR" property="serviceMode" />
+    <result column="symptom" jdbcType="VARCHAR" property="symptom" />
+    <result column="symptom1" jdbcType="VARCHAR" property="symptom1" />
+    <result column="height" jdbcType="VARCHAR" property="height" />
+    <result column="body_mass_index" jdbcType="VARCHAR" property="bodyMassIndex" />
+    <result column="weight" jdbcType="VARCHAR" property="weight" />
+    <result column="blood_pressure" jdbcType="VARCHAR" property="bloodPressure" />
+    <result column="heart_rate" jdbcType="VARCHAR" property="heartRate" />
+    <result column="HDLC" jdbcType="VARCHAR" property="hdlc" />
+    <result column="fasting_blood_glucose" jdbcType="VARCHAR" property="fastingBloodGlucose" />
+    <result column="cholesterol" jdbcType="VARCHAR" property="cholesterol" />
+    <result column="triglyceride" jdbcType="VARCHAR" property="triglyceride" />
+    <result column="electrocardiogram_examination" jdbcType="VARCHAR" property="electrocardiogramExamination" />
+    <result column="exercise_load_test" jdbcType="VARCHAR" property="exerciseLoadTest" />
+    <result column="myocardial_enzyme" jdbcType="VARCHAR" property="myocardialEnzyme" />
+    <result column="coronary_angiography" jdbcType="VARCHAR" property="coronaryAngiography" />
+    <result column="daily_smoking_volume" jdbcType="VARCHAR" property="dailySmokingVolume" />
+    <result column="daily_alcohol_consumption" jdbcType="VARCHAR" property="dailyAlcoholConsumption" />
+    <result column="motion" jdbcType="VARCHAR" property="motion" />
+    <result column="motion1" jdbcType="VARCHAR" property="motion1" />
+    <result column="motion2" jdbcType="VARCHAR" property="motion2" />
+    <result column="motion3" jdbcType="VARCHAR" property="motion3" />
+    <result column="medication_compliance" jdbcType="VARCHAR" property="medicationCompliance" />
+    <result column="special_treatment" jdbcType="VARCHAR" property="specialTreatment" />
+    <result column="this_service_classification" jdbcType="VARCHAR" property="thisServiceClassification" />
+    <result column="non_pharmacological_treatment_measures" jdbcType="VARCHAR" property="nonPharmacologicalTreatmentMeasures" />
+    <result column="non_pharmacological_treatment_measures1" jdbcType="VARCHAR" property="nonPharmacologicalTreatmentMeasures1" />
+    <result column="medication_situation" jdbcType="VARCHAR" property="medicationSituation" />
+    <result column="medication_situation1" jdbcType="VARCHAR" property="medicationSituation1" />
+    <result column="medication_situation2" jdbcType="VARCHAR" property="medicationSituation2" />
+    <result column="medication_situation3" jdbcType="VARCHAR" property="medicationSituation3" />
+    <result column="medication_situation4" jdbcType="VARCHAR" property="medicationSituation4" />
+    <result column="medication_situation5" jdbcType="VARCHAR" property="medicationSituation5" />
+    <result column="reason" jdbcType="VARCHAR" property="reason" />
+    <result column="institution_department" jdbcType="VARCHAR" property="institutionDepartment" />
+    <result column="next_service_date" jdbcType="DATE" property="nextServiceDate" />
+    <result column="health_management_specialist" jdbcType="VARCHAR" property="healthManagementSpecialist" />
+    <result column="insert_time" jdbcType="TIMESTAMP" property="insertTime" />
+    <result column="dname" jdbcType="VARCHAR" property="dname" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, name, reg_id, service_date, service_mode, symptom, symptom1, height, body_mass_index, 
+    weight, blood_pressure, heart_rate, HDLC, fasting_blood_glucose, cholesterol, triglyceride, 
+    electrocardiogram_examination, exercise_load_test, myocardial_enzyme, coronary_angiography, 
+    daily_smoking_volume, daily_alcohol_consumption, motion, motion1, motion2, motion3, 
+    medication_compliance, special_treatment, this_service_classification, non_pharmacological_treatment_measures, 
+    non_pharmacological_treatment_measures1, medication_situation, medication_situation1, 
+    medication_situation2, medication_situation3, medication_situation4, medication_situation5, 
+    reason, institution_department, next_service_date, health_management_specialist, 
+    insert_time
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select ni.*,yur.name as dname from new_coronary_heart_disease_patients ni left join yh_user_reginfo yur on ni.health_management_specialist=yur.user_code
+    where ni.id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from new_coronary_heart_disease_patients
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.yihe.system.domain.NewCoronaryHeartDiseasePatients">
+    insert into new_coronary_heart_disease_patients (id, name, reg_id, 
+      service_date, service_mode, symptom, 
+      symptom1, height, body_mass_index, 
+      weight, blood_pressure, heart_rate, 
+      HDLC, fasting_blood_glucose, cholesterol, 
+      triglyceride, electrocardiogram_examination, 
+      exercise_load_test, myocardial_enzyme, coronary_angiography, 
+      daily_smoking_volume, daily_alcohol_consumption, 
+      motion, motion1, motion2, 
+      motion3, medication_compliance, special_treatment, 
+      this_service_classification, non_pharmacological_treatment_measures, 
+      non_pharmacological_treatment_measures1, medication_situation, 
+      medication_situation1, medication_situation2, 
+      medication_situation3, medication_situation4, 
+      medication_situation5, reason, institution_department, 
+      next_service_date, health_management_specialist, 
+      insert_time)
+    values (#{id,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{regId,jdbcType=INTEGER}, 
+      #{serviceDate,jdbcType=DATE}, #{serviceMode,jdbcType=VARCHAR}, #{symptom,jdbcType=VARCHAR}, 
+      #{symptom1,jdbcType=VARCHAR}, #{height,jdbcType=VARCHAR}, #{bodyMassIndex,jdbcType=VARCHAR}, 
+      #{weight,jdbcType=VARCHAR}, #{bloodPressure,jdbcType=VARCHAR}, #{heartRate,jdbcType=VARCHAR}, 
+      #{hdlc,jdbcType=VARCHAR}, #{fastingBloodGlucose,jdbcType=VARCHAR}, #{cholesterol,jdbcType=VARCHAR}, 
+      #{triglyceride,jdbcType=VARCHAR}, #{electrocardiogramExamination,jdbcType=VARCHAR}, 
+      #{exerciseLoadTest,jdbcType=VARCHAR}, #{myocardialEnzyme,jdbcType=VARCHAR}, #{coronaryAngiography,jdbcType=VARCHAR}, 
+      #{dailySmokingVolume,jdbcType=VARCHAR}, #{dailyAlcoholConsumption,jdbcType=VARCHAR}, 
+      #{motion,jdbcType=VARCHAR}, #{motion1,jdbcType=VARCHAR}, #{motion2,jdbcType=VARCHAR}, 
+      #{motion3,jdbcType=VARCHAR}, #{medicationCompliance,jdbcType=VARCHAR}, #{specialTreatment,jdbcType=VARCHAR}, 
+      #{thisServiceClassification,jdbcType=VARCHAR}, #{nonPharmacologicalTreatmentMeasures,jdbcType=VARCHAR}, 
+      #{nonPharmacologicalTreatmentMeasures1,jdbcType=VARCHAR}, #{medicationSituation,jdbcType=VARCHAR}, 
+      #{medicationSituation1,jdbcType=VARCHAR}, #{medicationSituation2,jdbcType=VARCHAR}, 
+      #{medicationSituation3,jdbcType=VARCHAR}, #{medicationSituation4,jdbcType=VARCHAR}, 
+      #{medicationSituation5,jdbcType=VARCHAR}, #{reason,jdbcType=VARCHAR}, #{institutionDepartment,jdbcType=VARCHAR}, 
+      #{nextServiceDate,jdbcType=DATE}, #{healthManagementSpecialist,jdbcType=VARCHAR}, 
+      #{insertTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.yihe.system.domain.NewCoronaryHeartDiseasePatients">
+    insert into new_coronary_heart_disease_patients
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="name != null">
+        name,
+      </if>
+      <if test="regId != null">
+        reg_id,
+      </if>
+      <if test="serviceDate != null">
+        service_date,
+      </if>
+      <if test="serviceMode != null">
+        service_mode,
+      </if>
+      <if test="symptom != null">
+        symptom,
+      </if>
+      <if test="symptom1 != null">
+        symptom1,
+      </if>
+      <if test="height != null">
+        height,
+      </if>
+      <if test="bodyMassIndex != null">
+        body_mass_index,
+      </if>
+      <if test="weight != null">
+        weight,
+      </if>
+      <if test="bloodPressure != null">
+        blood_pressure,
+      </if>
+      <if test="heartRate != null">
+        heart_rate,
+      </if>
+      <if test="hdlc != null">
+        HDLC,
+      </if>
+      <if test="fastingBloodGlucose != null">
+        fasting_blood_glucose,
+      </if>
+      <if test="cholesterol != null">
+        cholesterol,
+      </if>
+      <if test="triglyceride != null">
+        triglyceride,
+      </if>
+      <if test="electrocardiogramExamination != null">
+        electrocardiogram_examination,
+      </if>
+      <if test="exerciseLoadTest != null">
+        exercise_load_test,
+      </if>
+      <if test="myocardialEnzyme != null">
+        myocardial_enzyme,
+      </if>
+      <if test="coronaryAngiography != null">
+        coronary_angiography,
+      </if>
+      <if test="dailySmokingVolume != null">
+        daily_smoking_volume,
+      </if>
+      <if test="dailyAlcoholConsumption != null">
+        daily_alcohol_consumption,
+      </if>
+      <if test="motion != null">
+        motion,
+      </if>
+      <if test="motion1 != null">
+        motion1,
+      </if>
+      <if test="motion2 != null">
+        motion2,
+      </if>
+      <if test="motion3 != null">
+        motion3,
+      </if>
+      <if test="medicationCompliance != null">
+        medication_compliance,
+      </if>
+      <if test="specialTreatment != null">
+        special_treatment,
+      </if>
+      <if test="thisServiceClassification != null">
+        this_service_classification,
+      </if>
+      <if test="nonPharmacologicalTreatmentMeasures != null">
+        non_pharmacological_treatment_measures,
+      </if>
+      <if test="nonPharmacologicalTreatmentMeasures1 != null">
+        non_pharmacological_treatment_measures1,
+      </if>
+      <if test="medicationSituation != null">
+        medication_situation,
+      </if>
+      <if test="medicationSituation1 != null">
+        medication_situation1,
+      </if>
+      <if test="medicationSituation2 != null">
+        medication_situation2,
+      </if>
+      <if test="medicationSituation3 != null">
+        medication_situation3,
+      </if>
+      <if test="medicationSituation4 != null">
+        medication_situation4,
+      </if>
+      <if test="medicationSituation5 != null">
+        medication_situation5,
+      </if>
+      <if test="reason != null">
+        reason,
+      </if>
+      <if test="institutionDepartment != null">
+        institution_department,
+      </if>
+      <if test="nextServiceDate != null">
+        next_service_date,
+      </if>
+      <if test="healthManagementSpecialist != null">
+        health_management_specialist,
+      </if>
+      <if test="insertTime != null">
+        insert_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="regId != null">
+        #{regId,jdbcType=INTEGER},
+      </if>
+      <if test="serviceDate != null">
+        #{serviceDate,jdbcType=DATE},
+      </if>
+      <if test="serviceMode != null">
+        #{serviceMode,jdbcType=VARCHAR},
+      </if>
+      <if test="symptom != null">
+        #{symptom,jdbcType=VARCHAR},
+      </if>
+      <if test="symptom1 != null">
+        #{symptom1,jdbcType=VARCHAR},
+      </if>
+      <if test="height != null">
+        #{height,jdbcType=VARCHAR},
+      </if>
+      <if test="bodyMassIndex != null">
+        #{bodyMassIndex,jdbcType=VARCHAR},
+      </if>
+      <if test="weight != null">
+        #{weight,jdbcType=VARCHAR},
+      </if>
+      <if test="bloodPressure != null">
+        #{bloodPressure,jdbcType=VARCHAR},
+      </if>
+      <if test="heartRate != null">
+        #{heartRate,jdbcType=VARCHAR},
+      </if>
+      <if test="hdlc != null">
+        #{hdlc,jdbcType=VARCHAR},
+      </if>
+      <if test="fastingBloodGlucose != null">
+        #{fastingBloodGlucose,jdbcType=VARCHAR},
+      </if>
+      <if test="cholesterol != null">
+        #{cholesterol,jdbcType=VARCHAR},
+      </if>
+      <if test="triglyceride != null">
+        #{triglyceride,jdbcType=VARCHAR},
+      </if>
+      <if test="electrocardiogramExamination != null">
+        #{electrocardiogramExamination,jdbcType=VARCHAR},
+      </if>
+      <if test="exerciseLoadTest != null">
+        #{exerciseLoadTest,jdbcType=VARCHAR},
+      </if>
+      <if test="myocardialEnzyme != null">
+        #{myocardialEnzyme,jdbcType=VARCHAR},
+      </if>
+      <if test="coronaryAngiography != null">
+        #{coronaryAngiography,jdbcType=VARCHAR},
+      </if>
+      <if test="dailySmokingVolume != null">
+        #{dailySmokingVolume,jdbcType=VARCHAR},
+      </if>
+      <if test="dailyAlcoholConsumption != null">
+        #{dailyAlcoholConsumption,jdbcType=VARCHAR},
+      </if>
+      <if test="motion != null">
+        #{motion,jdbcType=VARCHAR},
+      </if>
+      <if test="motion1 != null">
+        #{motion1,jdbcType=VARCHAR},
+      </if>
+      <if test="motion2 != null">
+        #{motion2,jdbcType=VARCHAR},
+      </if>
+      <if test="motion3 != null">
+        #{motion3,jdbcType=VARCHAR},
+      </if>
+      <if test="medicationCompliance != null">
+        #{medicationCompliance,jdbcType=VARCHAR},
+      </if>
+      <if test="specialTreatment != null">
+        #{specialTreatment,jdbcType=VARCHAR},
+      </if>
+      <if test="thisServiceClassification != null">
+        #{thisServiceClassification,jdbcType=VARCHAR},
+      </if>
+      <if test="nonPharmacologicalTreatmentMeasures != null">
+        #{nonPharmacologicalTreatmentMeasures,jdbcType=VARCHAR},
+      </if>
+      <if test="nonPharmacologicalTreatmentMeasures1 != null">
+        #{nonPharmacologicalTreatmentMeasures1,jdbcType=VARCHAR},
+      </if>
+      <if test="medicationSituation != null">
+        #{medicationSituation,jdbcType=VARCHAR},
+      </if>
+      <if test="medicationSituation1 != null">
+        #{medicationSituation1,jdbcType=VARCHAR},
+      </if>
+      <if test="medicationSituation2 != null">
+        #{medicationSituation2,jdbcType=VARCHAR},
+      </if>
+      <if test="medicationSituation3 != null">
+        #{medicationSituation3,jdbcType=VARCHAR},
+      </if>
+      <if test="medicationSituation4 != null">
+        #{medicationSituation4,jdbcType=VARCHAR},
+      </if>
+      <if test="medicationSituation5 != null">
+        #{medicationSituation5,jdbcType=VARCHAR},
+      </if>
+      <if test="reason != null">
+        #{reason,jdbcType=VARCHAR},
+      </if>
+      <if test="institutionDepartment != null">
+        #{institutionDepartment,jdbcType=VARCHAR},
+      </if>
+      <if test="nextServiceDate != null">
+        #{nextServiceDate,jdbcType=DATE},
+      </if>
+      <if test="healthManagementSpecialist != null">
+        #{healthManagementSpecialist,jdbcType=VARCHAR},
+      </if>
+      <if test="insertTime != null">
+        #{insertTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.yihe.system.domain.NewCoronaryHeartDiseasePatients">
+    update new_coronary_heart_disease_patients
+    <set>
+      <if test="name != null">
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="regId != null">
+        reg_id = #{regId,jdbcType=INTEGER},
+      </if>
+      <if test="serviceDate != null">
+        service_date = #{serviceDate,jdbcType=DATE},
+      </if>
+      <if test="serviceMode != null">
+        service_mode = #{serviceMode,jdbcType=VARCHAR},
+      </if>
+      <if test="symptom != null">
+        symptom = #{symptom,jdbcType=VARCHAR},
+      </if>
+      <if test="symptom1 != null">
+        symptom1 = #{symptom1,jdbcType=VARCHAR},
+      </if>
+      <if test="height != null">
+        height = #{height,jdbcType=VARCHAR},
+      </if>
+      <if test="bodyMassIndex != null">
+        body_mass_index = #{bodyMassIndex,jdbcType=VARCHAR},
+      </if>
+      <if test="weight != null">
+        weight = #{weight,jdbcType=VARCHAR},
+      </if>
+      <if test="bloodPressure != null">
+        blood_pressure = #{bloodPressure,jdbcType=VARCHAR},
+      </if>
+      <if test="heartRate != null">
+        heart_rate = #{heartRate,jdbcType=VARCHAR},
+      </if>
+      <if test="hdlc != null">
+        HDLC = #{hdlc,jdbcType=VARCHAR},
+      </if>
+      <if test="fastingBloodGlucose != null">
+        fasting_blood_glucose = #{fastingBloodGlucose,jdbcType=VARCHAR},
+      </if>
+      <if test="cholesterol != null">
+        cholesterol = #{cholesterol,jdbcType=VARCHAR},
+      </if>
+      <if test="triglyceride != null">
+        triglyceride = #{triglyceride,jdbcType=VARCHAR},
+      </if>
+      <if test="electrocardiogramExamination != null">
+        electrocardiogram_examination = #{electrocardiogramExamination,jdbcType=VARCHAR},
+      </if>
+      <if test="exerciseLoadTest != null">
+        exercise_load_test = #{exerciseLoadTest,jdbcType=VARCHAR},
+      </if>
+      <if test="myocardialEnzyme != null">
+        myocardial_enzyme = #{myocardialEnzyme,jdbcType=VARCHAR},
+      </if>
+      <if test="coronaryAngiography != null">
+        coronary_angiography = #{coronaryAngiography,jdbcType=VARCHAR},
+      </if>
+      <if test="dailySmokingVolume != null">
+        daily_smoking_volume = #{dailySmokingVolume,jdbcType=VARCHAR},
+      </if>
+      <if test="dailyAlcoholConsumption != null">
+        daily_alcohol_consumption = #{dailyAlcoholConsumption,jdbcType=VARCHAR},
+      </if>
+      <if test="motion != null">
+        motion = #{motion,jdbcType=VARCHAR},
+      </if>
+      <if test="motion1 != null">
+        motion1 = #{motion1,jdbcType=VARCHAR},
+      </if>
+      <if test="motion2 != null">
+        motion2 = #{motion2,jdbcType=VARCHAR},
+      </if>
+      <if test="motion3 != null">
+        motion3 = #{motion3,jdbcType=VARCHAR},
+      </if>
+      <if test="medicationCompliance != null">
+        medication_compliance = #{medicationCompliance,jdbcType=VARCHAR},
+      </if>
+      <if test="specialTreatment != null">
+        special_treatment = #{specialTreatment,jdbcType=VARCHAR},
+      </if>
+      <if test="thisServiceClassification != null">
+        this_service_classification = #{thisServiceClassification,jdbcType=VARCHAR},
+      </if>
+      <if test="nonPharmacologicalTreatmentMeasures != null">
+        non_pharmacological_treatment_measures = #{nonPharmacologicalTreatmentMeasures,jdbcType=VARCHAR},
+      </if>
+      <if test="nonPharmacologicalTreatmentMeasures1 != null">
+        non_pharmacological_treatment_measures1 = #{nonPharmacologicalTreatmentMeasures1,jdbcType=VARCHAR},
+      </if>
+      <if test="medicationSituation != null">
+        medication_situation = #{medicationSituation,jdbcType=VARCHAR},
+      </if>
+      <if test="medicationSituation1 != null">
+        medication_situation1 = #{medicationSituation1,jdbcType=VARCHAR},
+      </if>
+      <if test="medicationSituation2 != null">
+        medication_situation2 = #{medicationSituation2,jdbcType=VARCHAR},
+      </if>
+      <if test="medicationSituation3 != null">
+        medication_situation3 = #{medicationSituation3,jdbcType=VARCHAR},
+      </if>
+      <if test="medicationSituation4 != null">
+        medication_situation4 = #{medicationSituation4,jdbcType=VARCHAR},
+      </if>
+      <if test="medicationSituation5 != null">
+        medication_situation5 = #{medicationSituation5,jdbcType=VARCHAR},
+      </if>
+      <if test="reason != null">
+        reason = #{reason,jdbcType=VARCHAR},
+      </if>
+      <if test="institutionDepartment != null">
+        institution_department = #{institutionDepartment,jdbcType=VARCHAR},
+      </if>
+      <if test="nextServiceDate != null">
+        next_service_date = #{nextServiceDate,jdbcType=DATE},
+      </if>
+      <if test="healthManagementSpecialist != null">
+        health_management_specialist = #{healthManagementSpecialist,jdbcType=VARCHAR},
+      </if>
+      <if test="insertTime != null">
+        insert_time = #{insertTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.yihe.system.domain.NewCoronaryHeartDiseasePatients">
+    update new_coronary_heart_disease_patients
+    set name = #{name,jdbcType=VARCHAR},
+      reg_id = #{regId,jdbcType=INTEGER},
+      service_date = #{serviceDate,jdbcType=DATE},
+      service_mode = #{serviceMode,jdbcType=VARCHAR},
+      symptom = #{symptom,jdbcType=VARCHAR},
+      symptom1 = #{symptom1,jdbcType=VARCHAR},
+      height = #{height,jdbcType=VARCHAR},
+      body_mass_index = #{bodyMassIndex,jdbcType=VARCHAR},
+      weight = #{weight,jdbcType=VARCHAR},
+      blood_pressure = #{bloodPressure,jdbcType=VARCHAR},
+      heart_rate = #{heartRate,jdbcType=VARCHAR},
+      HDLC = #{hdlc,jdbcType=VARCHAR},
+      fasting_blood_glucose = #{fastingBloodGlucose,jdbcType=VARCHAR},
+      cholesterol = #{cholesterol,jdbcType=VARCHAR},
+      triglyceride = #{triglyceride,jdbcType=VARCHAR},
+      electrocardiogram_examination = #{electrocardiogramExamination,jdbcType=VARCHAR},
+      exercise_load_test = #{exerciseLoadTest,jdbcType=VARCHAR},
+      myocardial_enzyme = #{myocardialEnzyme,jdbcType=VARCHAR},
+      coronary_angiography = #{coronaryAngiography,jdbcType=VARCHAR},
+      daily_smoking_volume = #{dailySmokingVolume,jdbcType=VARCHAR},
+      daily_alcohol_consumption = #{dailyAlcoholConsumption,jdbcType=VARCHAR},
+      motion = #{motion,jdbcType=VARCHAR},
+      motion1 = #{motion1,jdbcType=VARCHAR},
+      motion2 = #{motion2,jdbcType=VARCHAR},
+      motion3 = #{motion3,jdbcType=VARCHAR},
+      medication_compliance = #{medicationCompliance,jdbcType=VARCHAR},
+      special_treatment = #{specialTreatment,jdbcType=VARCHAR},
+      this_service_classification = #{thisServiceClassification,jdbcType=VARCHAR},
+      non_pharmacological_treatment_measures = #{nonPharmacologicalTreatmentMeasures,jdbcType=VARCHAR},
+      non_pharmacological_treatment_measures1 = #{nonPharmacologicalTreatmentMeasures1,jdbcType=VARCHAR},
+      medication_situation = #{medicationSituation,jdbcType=VARCHAR},
+      medication_situation1 = #{medicationSituation1,jdbcType=VARCHAR},
+      medication_situation2 = #{medicationSituation2,jdbcType=VARCHAR},
+      medication_situation3 = #{medicationSituation3,jdbcType=VARCHAR},
+      medication_situation4 = #{medicationSituation4,jdbcType=VARCHAR},
+      medication_situation5 = #{medicationSituation5,jdbcType=VARCHAR},
+      reason = #{reason,jdbcType=VARCHAR},
+      institution_department = #{institutionDepartment,jdbcType=VARCHAR},
+      next_service_date = #{nextServiceDate,jdbcType=DATE},
+      health_management_specialist = #{healthManagementSpecialist,jdbcType=VARCHAR},
+      insert_time = #{insertTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+  <select id="selectByPage" parameterType="com.yihe.system.domain.NewCoronaryHeartDiseasePatients" resultMap="BaseResultMap">
+    select * from new_coronary_heart_disease_patients
+    ni left join new_reg ur
+    on ni.reg_id=ur.id
+    LEFT JOIN `yh_user_make_card` AS c ON ur.`user_code` = c.`User_Code`
+    LEFT JOIN yh_user_admin_info AS ai ON c.doctor = ai.id
+    <where>
+      (ai.user_code = #{healthManagementSpecialist} or 1=1)
+      <if test="name!=null and name!=''">
+        and ni.name LIKE CONCAT('%', #{name}, '%')
+      </if>
+      <if test="workUnit!=null and workUnit!=''">
+        and ur.work_unit  LIKE CONCAT('%', #{workUnit}, '%')
+      </if>
+    </where>
+    LIMIT #{begin}, #{limit};
+  </select>
+
+  <select id="selectAll" resultMap="BaseResultMap">
+    select * from new_coronary_heart_disease_patients
+                    ni left join new_reg ur
+                                 on ni.reg_id=ur.id
+                       LEFT JOIN `yh_user_make_card` AS c ON ur.`user_code` = c.`User_Code`
+                       LEFT JOIN yh_user_admin_info AS ai ON c.doctor = ai.id
+  </select>
+
+  <select id="selectByPageCount" parameterType="com.yihe.system.domain.NewCoronaryHeartDiseasePatients" resultType="int">
+    select count(*) from new_coronary_heart_disease_patients
+    ni left join new_reg ur
+    on ni.reg_id=ur.id
+    LEFT JOIN `yh_user_make_card` AS c ON ur.`user_code` = c.`User_Code`
+    LEFT JOIN yh_user_admin_info AS ai ON c.doctor = ai.id
+    <where>
+      (ai.user_code = #{healthManagementSpecialist} or 1=1)
+      <if test="name!=null and name!=''">
+        and ni.name LIKE CONCAT('%', #{name}, '%')
+      </if>
+      <if test="workUnit!=null and workUnit!=''">
+        and ur.work_unit  LIKE CONCAT('%', #{workUnit}, '%')
+      </if>
+    </where>
+  </select>
+</mapper>

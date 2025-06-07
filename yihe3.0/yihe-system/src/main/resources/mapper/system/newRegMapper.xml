@@ -1,0 +1,717 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yihe.system.mapper.newRegMapper">
+  <resultMap id="BaseResultMap" type="com.yihe.system.domain.newReg">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="user_code" jdbcType="VARCHAR" property="userCode" />
+    <result column="sex" jdbcType="INTEGER" property="sex" />
+    <result column="birth" jdbcType="DATE" property="birth" />
+    <result column="work_unit" jdbcType="VARCHAR" property="workUnit" />
+    <result column="department" jdbcType="VARCHAR" property="department" />
+    <result column="rog_code" jdbcType="VARCHAR" property="rogCode" />
+    <result column="id_card" jdbcType="VARCHAR" property="idCard" />
+    <result column="phone" jdbcType="VARCHAR" property="phone" />
+    <result column="blood_type" jdbcType="VARCHAR" property="bloodType" />
+    <result column="marriage" jdbcType="VARCHAR" property="marriage" />
+    <result column="history_drug_allergies" jdbcType="VARCHAR" property="historyDrugAllergies" />
+    <result column="exposure_history" jdbcType="VARCHAR" property="exposureHistory" />
+    <result column="disability_situation" jdbcType="VARCHAR" property="disabilitySituation" />
+    <result column="kitchen_exhaust_facilities" jdbcType="VARCHAR" property="kitchenExhaustFacilities" />
+    <result column="fuel_type" jdbcType="VARCHAR" property="fuelType" />
+    <result column="drinking_water" jdbcType="VARCHAR" property="drinkingWater" />
+    <result column="toilet" jdbcType="VARCHAR" property="toilet" />
+    <result column="poultry_livestock_pens" jdbcType="VARCHAR" property="poultryLivestockPens" />
+    <result column="responsible_health_manager_code" jdbcType="VARCHAR" property="responsibleHealthManagerCode" />
+    <result column="archivist" jdbcType="VARCHAR" property="archivist" />
+    <result column="insert_date" jdbcType="TIMESTAMP" property="insertDate" />
+
+    <result column="age" jdbcType="VARCHAR" property="age" />
+    <result column="nation" jdbcType="VARCHAR" property="nation" />
+    <result column="culture" jdbcType="VARCHAR" property="culture" />
+
+    <result column="intervention_time" jdbcType="VARCHAR" property="interventionTime" />
+
+    <result column="v666" jdbcType="VARCHAR" property="v666" />
+    <result column="v777" jdbcType="VARCHAR" property="v777" />
+    <result column="dname" jdbcType="VARCHAR" property="dname" />
+    <result column="v888" property="v888" jdbcType="VARCHAR"/>
+    <result column="qtime" jdbcType="VARCHAR" property="qtime" />
+    <result column="df_names" jdbcType="VARCHAR" property="dfNames" />
+    <result column="sk_names" jdbcType="VARCHAR" property="skNames" />
+  </resultMap>
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.yihe.system.domain.newRegWithBLOBs">
+    <result column="medical_history" jdbcType="LONGVARCHAR" property="medicalHistory" />
+    <result column="surgical_history" jdbcType="LONGVARCHAR" property="surgicalHistory" />
+    <result column="medical_history_trauma" jdbcType="LONGVARCHAR" property="medicalHistoryTrauma" />
+    <result column="blood_transfusion_history" jdbcType="LONGVARCHAR" property="bloodTransfusionHistory" />
+    <result column="family_history" jdbcType="LONGVARCHAR" property="familyHistory" />
+    <result column="genetic_history" jdbcType="LONGVARCHAR" property="geneticHistory" />
+    <result column="numberPhysicalExaminations" jdbcType="LONGVARCHAR" property="numberPhysicalExaminations" />
+    <result column="evaluationTime" jdbcType="VARCHAR" property="evaluationTime" />
+    <result column="v1" jdbcType="VARCHAR" property="v1" />
+    <result column="v2" jdbcType="VARCHAR" property="v2" />
+    <result column="v3" jdbcType="VARCHAR" property="v3" />
+    <result column="v4" jdbcType="VARCHAR" property="v4" />
+  </resultMap>
+  <resultMap id="BaseResultMap2" type="com.yihe.system.vo.NewEdicalExaminationRecordsVO">
+    <id column="id" property="id" jdbcType="INTEGER"/>
+    <result column="reg_id" property="regId" jdbcType="INTEGER"/>
+    <result column="gender" property="gender" jdbcType="INTEGER"/>
+    <result column="age" property="age" jdbcType="INTEGER"/>
+    <result column="phone" property="phone" jdbcType="VARCHAR"/>
+    <result column="marriage" property="marriage" jdbcType="VARCHAR"/>
+    <result column="occupation" property="occupation" jdbcType="VARCHAR"/>
+    <result column="height" property="height" jdbcType="VARCHAR"/>
+    <result column="weight" property="weight" jdbcType="VARCHAR"/>
+    <result column="body_mass_index" property="bodyMassIndex" jdbcType="VARCHAR"/>
+    <result column="blood_pressure" property="bloodPressure" jdbcType="VARCHAR"/>
+    <result column="heart_rate" property="heartRate" jdbcType="VARCHAR"/>
+    <result column="blood_oxygen" property="bloodOxygen" jdbcType="VARCHAR"/>
+    <result column="personal_medical_examination_report" property="personalMedicalExaminationReport" jdbcType="LONGVARCHAR"/>
+    <result column="stage" property="stage" jdbcType="VARCHAR"/>
+    <result column="is_check" property="isCheck" jdbcType="INTEGER"/>
+    <result column="user_code" property="userCode" jdbcType="VARCHAR"/>
+    <result column="time" property="time" jdbcType="VARCHAR"/>
+    <result column="signature" property="signature" jdbcType="LONGVARCHAR"/>
+
+  </resultMap>
+
+  <sql id="Base_Column_List">
+    id, name, user_code, sex, birth, work_unit, department, rog_code, id_card, phone, 
+    blood_type, marriage, history_drug_allergies, exposure_history, disability_situation, 
+    kitchen_exhaust_facilities, fuel_type, drinking_water, toilet, poultry_livestock_pens, 
+    responsible_health_manager_code, archivist, insert_date,age,nation,culture,v666,v777,intervention_time,v888
+  </sql>
+  <sql id="Blob_Column_List">
+    medical_history, surgical_history, medical_history_trauma, blood_transfusion_history, 
+    family_history, genetic_history
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="ResultMapWithBLOBs">
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from new_reg
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from new_reg
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+
+  <select id="getOrderList" resultMap="ResultMapWithBLOBs">
+    select
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from new_reg order by insert_date DESC limit 15
+  </select>
+  
+  <select id="selectByUserCodeUnsignedCount"  parameterType="java.lang.String" resultType="int">
+    select count(*) from new_medical_examination_records where user_code=#{usercode} and is_check is null
+  </select>
+
+  <select id="selectByUserCodeUnsigned" resultMap="BaseResultMap2">
+    select * from new_medical_examination_records where user_code=#{usercode} order by time desc
+  </select>
+
+
+  <insert id="insert" parameterType="com.yihe.system.domain.newRegWithBLOBs">
+    insert into new_reg (id, name, user_code, 
+      sex, birth, work_unit, 
+      department, rog_code, id_card, 
+      phone, blood_type, marriage, 
+      history_drug_allergies, exposure_history, 
+      disability_situation, kitchen_exhaust_facilities, 
+      fuel_type, drinking_water, toilet, 
+      poultry_livestock_pens, responsible_health_manager_code, 
+      archivist, insert_date, medical_history, 
+      surgical_history, medical_history_trauma, 
+      blood_transfusion_history, family_history, 
+      genetic_history)
+    values (#{id,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{userCode,jdbcType=VARCHAR}, 
+      #{sex,jdbcType=INTEGER}, #{birth,jdbcType=DATE}, #{workUnit,jdbcType=VARCHAR}, 
+      #{department,jdbcType=VARCHAR}, #{rogCode,jdbcType=VARCHAR}, #{idCard,jdbcType=VARCHAR}, 
+      #{phone,jdbcType=VARCHAR}, #{bloodType,jdbcType=VARCHAR}, #{marriage,jdbcType=VARCHAR}, 
+      #{historyDrugAllergies,jdbcType=VARCHAR}, #{exposureHistory,jdbcType=VARCHAR}, 
+      #{disabilitySituation,jdbcType=VARCHAR}, #{kitchenExhaustFacilities,jdbcType=VARCHAR}, 
+      #{fuelType,jdbcType=VARCHAR}, #{drinkingWater,jdbcType=VARCHAR}, #{toilet,jdbcType=VARCHAR}, 
+      #{poultryLivestockPens,jdbcType=VARCHAR}, #{responsibleHealthManagerCode,jdbcType=VARCHAR}, 
+      #{archivist,jdbcType=VARCHAR}, #{insertDate,jdbcType=TIMESTAMP}, #{medicalHistory,jdbcType=LONGVARCHAR}, 
+      #{surgicalHistory,jdbcType=LONGVARCHAR}, #{medicalHistoryTrauma,jdbcType=LONGVARCHAR}, 
+      #{bloodTransfusionHistory,jdbcType=LONGVARCHAR}, #{familyHistory,jdbcType=LONGVARCHAR}, 
+      #{geneticHistory,jdbcType=LONGVARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.yihe.system.domain.newRegWithBLOBs">
+    insert into new_reg
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="name != null">
+        name,
+      </if>
+      <if test="userCode != null">
+        user_code,
+      </if>
+      <if test="sex != null">
+        sex,
+      </if>
+      <if test="birth != null">
+        birth,
+      </if>
+      <if test="workUnit != null">
+        work_unit,
+      </if>
+      <if test="department != null">
+        department,
+      </if>
+      <if test="rogCode != null">
+        rog_code,
+      </if>
+      <if test="idCard != null">
+        id_card,
+      </if>
+      <if test="phone != null">
+        phone,
+      </if>
+      <if test="bloodType != null">
+        blood_type,
+      </if>
+      <if test="marriage != null">
+        marriage,
+      </if>
+      <if test="historyDrugAllergies != null">
+        history_drug_allergies,
+      </if>
+      <if test="exposureHistory != null">
+        exposure_history,
+      </if>
+      <if test="disabilitySituation != null">
+        disability_situation,
+      </if>
+      <if test="kitchenExhaustFacilities != null">
+        kitchen_exhaust_facilities,
+      </if>
+      <if test="fuelType != null">
+        fuel_type,
+      </if>
+      <if test="drinkingWater != null">
+        drinking_water,
+      </if>
+      <if test="toilet != null">
+        toilet,
+      </if>
+      <if test="poultryLivestockPens != null">
+        poultry_livestock_pens,
+      </if>
+      <if test="responsibleHealthManagerCode != null">
+        responsible_health_manager_code,
+      </if>
+      <if test="archivist != null">
+        archivist,
+      </if>
+      <if test="insertDate != null">
+        insert_date,
+      </if>
+      <if test="medicalHistory != null">
+        medical_history,
+      </if>
+      <if test="surgicalHistory != null">
+        surgical_history,
+      </if>
+      <if test="medicalHistoryTrauma != null">
+        medical_history_trauma,
+      </if>
+      <if test="bloodTransfusionHistory != null">
+        blood_transfusion_history,
+      </if>
+      <if test="familyHistory != null">
+        family_history,
+      </if>
+      <if test="geneticHistory != null">
+        genetic_history,
+      </if>
+
+      <if test="age != null">
+        age,
+      </if>
+      <if test="nation != null">
+        nation,
+      </if>
+      <if test="culture != null">
+        culture,
+      </if>
+
+      <if test="v666 != null">
+        v666,
+      </if>
+      <if test="v777 != null">
+        v777,
+      </if>
+      <if test="v888 != null">
+        v888,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="userCode != null">
+        #{userCode,jdbcType=VARCHAR},
+      </if>
+      <if test="sex != null">
+        #{sex,jdbcType=INTEGER},
+      </if>
+      <if test="birth != null">
+        #{birth,jdbcType=DATE},
+      </if>
+      <if test="workUnit != null">
+        #{workUnit,jdbcType=VARCHAR},
+      </if>
+      <if test="department != null">
+        #{department,jdbcType=VARCHAR},
+      </if>
+      <if test="rogCode != null">
+        #{rogCode,jdbcType=VARCHAR},
+      </if>
+      <if test="idCard != null">
+        #{idCard,jdbcType=VARCHAR},
+      </if>
+      <if test="phone != null">
+        #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="bloodType != null">
+        #{bloodType,jdbcType=VARCHAR},
+      </if>
+      <if test="marriage != null">
+        #{marriage,jdbcType=VARCHAR},
+      </if>
+      <if test="historyDrugAllergies != null">
+        #{historyDrugAllergies,jdbcType=VARCHAR},
+      </if>
+      <if test="exposureHistory != null">
+        #{exposureHistory,jdbcType=VARCHAR},
+      </if>
+      <if test="disabilitySituation != null">
+        #{disabilitySituation,jdbcType=VARCHAR},
+      </if>
+      <if test="kitchenExhaustFacilities != null">
+        #{kitchenExhaustFacilities,jdbcType=VARCHAR},
+      </if>
+      <if test="fuelType != null">
+        #{fuelType,jdbcType=VARCHAR},
+      </if>
+      <if test="drinkingWater != null">
+        #{drinkingWater,jdbcType=VARCHAR},
+      </if>
+      <if test="toilet != null">
+        #{toilet,jdbcType=VARCHAR},
+      </if>
+      <if test="poultryLivestockPens != null">
+        #{poultryLivestockPens,jdbcType=VARCHAR},
+      </if>
+      <if test="responsibleHealthManagerCode != null">
+        #{responsibleHealthManagerCode,jdbcType=VARCHAR},
+      </if>
+      <if test="archivist != null">
+        #{archivist,jdbcType=VARCHAR},
+      </if>
+      <if test="insertDate != null">
+        #{insertDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="medicalHistory != null">
+        #{medicalHistory,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="surgicalHistory != null">
+        #{surgicalHistory,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="medicalHistoryTrauma != null">
+        #{medicalHistoryTrauma,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="bloodTransfusionHistory != null">
+        #{bloodTransfusionHistory,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="familyHistory != null">
+        #{familyHistory,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="geneticHistory != null">
+        #{geneticHistory,jdbcType=LONGVARCHAR},
+      </if>
+
+      <if test="age != null">
+        #{age},
+      </if>
+      <if test="nation != null">
+        #{nation},
+      </if>
+      <if test="culture != null">
+        #{culture},
+      </if>
+
+      <if test="v666 != null">
+        #{v666},
+      </if>
+      <if test="v777 != null">
+        #{v777},
+      </if>
+      <if test="v888 != null">
+        #{v888},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByNewMedical" parameterType="map">
+    UPDATE `new_medical_examination_records` SET  `is_check` = 1, `signature` = #{img} WHERE `id` = #{id}
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.yihe.system.domain.newRegWithBLOBs">
+    update new_reg
+    <set>
+      <if test="name != null">
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="userCode != null">
+        user_code = #{userCode,jdbcType=VARCHAR},
+      </if>
+      <if test="sex != null">
+        sex = #{sex,jdbcType=INTEGER},
+      </if>
+      <if test="birth != null">
+        birth = #{birth,jdbcType=DATE},
+      </if>
+      <if test="workUnit != null">
+        work_unit = #{workUnit,jdbcType=VARCHAR},
+      </if>
+      <if test="department != null">
+        department = #{department,jdbcType=VARCHAR},
+      </if>
+      <if test="rogCode != null">
+        rog_code = #{rogCode,jdbcType=VARCHAR},
+      </if>
+      <if test="idCard != null">
+        id_card = #{idCard,jdbcType=VARCHAR},
+      </if>
+      <if test="phone != null">
+        phone = #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="bloodType != null">
+        blood_type = #{bloodType,jdbcType=VARCHAR},
+      </if>
+      <if test="marriage != null">
+        marriage = #{marriage,jdbcType=VARCHAR},
+      </if>
+      <if test="historyDrugAllergies != null">
+        history_drug_allergies = #{historyDrugAllergies,jdbcType=VARCHAR},
+      </if>
+      <if test="exposureHistory != null">
+        exposure_history = #{exposureHistory,jdbcType=VARCHAR},
+      </if>
+      <if test="disabilitySituation != null">
+        disability_situation = #{disabilitySituation,jdbcType=VARCHAR},
+      </if>
+      <if test="kitchenExhaustFacilities != null">
+        kitchen_exhaust_facilities = #{kitchenExhaustFacilities,jdbcType=VARCHAR},
+      </if>
+      <if test="fuelType != null">
+        fuel_type = #{fuelType,jdbcType=VARCHAR},
+      </if>
+      <if test="drinkingWater != null">
+        drinking_water = #{drinkingWater,jdbcType=VARCHAR},
+      </if>
+      <if test="toilet != null">
+        toilet = #{toilet,jdbcType=VARCHAR},
+      </if>
+      <if test="poultryLivestockPens != null">
+        poultry_livestock_pens = #{poultryLivestockPens,jdbcType=VARCHAR},
+      </if>
+      <if test="responsibleHealthManagerCode != null">
+        responsible_health_manager_code = #{responsibleHealthManagerCode,jdbcType=VARCHAR},
+      </if>
+      <if test="archivist != null">
+        archivist = #{archivist,jdbcType=VARCHAR},
+      </if>
+      <if test="insertDate != null">
+        insert_date = #{insertDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="medicalHistory != null">
+        medical_history = #{medicalHistory,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="surgicalHistory != null">
+        surgical_history = #{surgicalHistory,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="medicalHistoryTrauma != null">
+        medical_history_trauma = #{medicalHistoryTrauma,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="bloodTransfusionHistory != null">
+        blood_transfusion_history = #{bloodTransfusionHistory,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="familyHistory != null">
+        family_history = #{familyHistory,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="geneticHistory != null">
+        genetic_history = #{geneticHistory,jdbcType=LONGVARCHAR},
+      </if>
+
+      <if test="age != null">
+        age = #{age},
+      </if>
+      <if test="nation != null">
+        nation = #{nation},
+      </if>
+      <if test="culture != null">
+        culture = #{culture},
+      </if>
+
+      <if test="v666 != null">
+        v666 = #{v666},
+      </if>
+      <if test="v777 != null">
+        v777 = #{v777},
+      </if>
+      <if test="v888 != null">
+        v888 = #{v888},
+      </if>
+      <if test="interventionTime != null">
+        intervention_time = #{interventionTime},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+  <select id="insertCount" parameterType="com.yihe.system.domain.newRegWithBLOBs" resultType="integer">
+    select count(*) from  new_reg where user_code=#{userCode}
+  </select>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.yihe.system.domain.newRegWithBLOBs">
+    update new_reg
+    set name = #{name,jdbcType=VARCHAR},
+      user_code = #{userCode,jdbcType=VARCHAR},
+      sex = #{sex,jdbcType=INTEGER},
+      birth = #{birth,jdbcType=DATE},
+      work_unit = #{workUnit,jdbcType=VARCHAR},
+      department = #{department,jdbcType=VARCHAR},
+      rog_code = #{rogCode,jdbcType=VARCHAR},
+      id_card = #{idCard,jdbcType=VARCHAR},
+      phone = #{phone,jdbcType=VARCHAR},
+      blood_type = #{bloodType,jdbcType=VARCHAR},
+      marriage = #{marriage,jdbcType=VARCHAR},
+      history_drug_allergies = #{historyDrugAllergies,jdbcType=VARCHAR},
+      exposure_history = #{exposureHistory,jdbcType=VARCHAR},
+      disability_situation = #{disabilitySituation,jdbcType=VARCHAR},
+      kitchen_exhaust_facilities = #{kitchenExhaustFacilities,jdbcType=VARCHAR},
+      fuel_type = #{fuelType,jdbcType=VARCHAR},
+      drinking_water = #{drinkingWater,jdbcType=VARCHAR},
+      toilet = #{toilet,jdbcType=VARCHAR},
+      poultry_livestock_pens = #{poultryLivestockPens,jdbcType=VARCHAR},
+      responsible_health_manager_code = #{responsibleHealthManagerCode,jdbcType=VARCHAR},
+      archivist = #{archivist,jdbcType=VARCHAR},
+      insert_date = #{insertDate,jdbcType=TIMESTAMP},
+      medical_history = #{medicalHistory,jdbcType=LONGVARCHAR},
+      surgical_history = #{surgicalHistory,jdbcType=LONGVARCHAR},
+      medical_history_trauma = #{medicalHistoryTrauma,jdbcType=LONGVARCHAR},
+      blood_transfusion_history = #{bloodTransfusionHistory,jdbcType=LONGVARCHAR},
+      family_history = #{familyHistory,jdbcType=LONGVARCHAR},
+      genetic_history = #{geneticHistory,jdbcType=LONGVARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.yihe.system.domain.newReg">
+    update new_reg
+    set name = #{name,jdbcType=VARCHAR},
+      user_code = #{userCode,jdbcType=VARCHAR},
+      sex = #{sex,jdbcType=INTEGER},
+      birth = #{birth,jdbcType=DATE},
+      work_unit = #{workUnit,jdbcType=VARCHAR},
+      department = #{department,jdbcType=VARCHAR},
+      rog_code = #{rogCode,jdbcType=VARCHAR},
+      id_card = #{idCard,jdbcType=VARCHAR},
+      phone = #{phone,jdbcType=VARCHAR},
+      blood_type = #{bloodType,jdbcType=VARCHAR},
+      marriage = #{marriage,jdbcType=VARCHAR},
+      history_drug_allergies = #{historyDrugAllergies,jdbcType=VARCHAR},
+      exposure_history = #{exposureHistory,jdbcType=VARCHAR},
+      disability_situation = #{disabilitySituation,jdbcType=VARCHAR},
+      kitchen_exhaust_facilities = #{kitchenExhaustFacilities,jdbcType=VARCHAR},
+      fuel_type = #{fuelType,jdbcType=VARCHAR},
+      drinking_water = #{drinkingWater,jdbcType=VARCHAR},
+      toilet = #{toilet,jdbcType=VARCHAR},
+      poultry_livestock_pens = #{poultryLivestockPens,jdbcType=VARCHAR},
+      responsible_health_manager_code = #{responsibleHealthManagerCode,jdbcType=VARCHAR},
+      archivist = #{archivist,jdbcType=VARCHAR},
+      insert_date = #{insertDate,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+  <select id="selectRegInfo" parameterType="com.yihe.system.domain.newReg" resultMap="ResultMapWithBLOBs">
+    SELECT nr.*,yur.name as dname,
+    (SELECT COUNT(*)
+    FROM new_medical_examination_records nme
+    WHERE nme.user_code = nr.user_code) AS numberPhysicalExaminations,
+    t2.evaluationTime,
+    assess.qtime,
+    nepi.occupational_health_examination1 as v1,
+    nepi.occupational_health_examination2 as v2,
+    nepi.occupational_health_examination3 as v3,
+    nepi.occupational_health_examination4 as v4,
+    CASE WHEN assess.df_names IS NOT NULL AND assess.df_names != '' THEN '是' ELSE '否' END AS df_names,
+    CASE WHEN assess.sk_names IS NOT NULL AND assess.sk_names != '' THEN '是' ELSE '否' END AS sk_names
+    FROM new_reg nr
+    LEFT JOIN new_employee_personal_information_card as nepi  on nr.id=nepi.reg_id
+
+    LEFT JOIN (
+    SELECT user_code, MAX(time) AS evaluationTime
+    FROM new_medical_examination_records
+    GROUP BY user_code
+    ) t2 ON nr.user_code = t2.user_code
+
+    LEFT JOIN `yh_user_make_card` AS c ON nr.user_code = c.User_Code
+    left join yh_user_reginfo as yur on nr.responsible_health_manager_code=yur.user_code
+    LEFT JOIN yh_user_admin_info AS ai ON c.doctor = ai.id
+    LEFT JOIN (
+    SELECT user_code, qtime, df_names, sk_names
+    FROM yh_disease_assess_total_report2
+    WHERE (user_code, qtime) IN (
+    SELECT user_code, MAX(qtime)
+    FROM yh_disease_assess_total_report2
+    GROUP BY user_code
+    )
+    ) assess ON nr.user_code = assess.user_code
+
+    <where>
+       (ai.user_code = #{doctor} or 1=1)
+      <if test="sex!=null and sex!=''">
+        and nr.sex=#{sex}
+      </if>
+      <if test="name!=null and name!=''">
+        and nr.name  LIKE CONCAT('%', #{name}, '%')
+      </if>
+      <if test="workUnit!=null and workUnit!=''">
+       and nr.work_unit  LIKE CONCAT('%', #{workUnit}, '%')
+      </if>
+      <if test="department!=null and department!=''">
+        and nr.department LIKE CONCAT('%', #{department}, '%')
+      </if>
+      <if test="phone!=null and phone!=''">
+        and nr.phone  LIKE CONCAT('%', #{phone}, '%')
+      </if>
+      <if test="responsibleHealthManagerCode!=null and responsibleHealthManagerCode!=''">
+        and nr.responsible_health_manager_code=#{responsibleHealthManagerCode}
+      </if>
+      <if test="beginTime!=null and beginTime!=''">
+        and nr.birth    &gt;=  #{beginTime}
+      </if>
+      <if test="endTime!=null and endTime!=''">
+        and nr.birth    &lt;=  #{endTime}
+      </if>
+    </where>
+    LIMIT #{begin}, #{limit};
+
+
+  </select>
+
+  <select id="queryLocallyManagedArchives" parameterType="com.yihe.system.domain.newReg" resultMap="ResultMapWithBLOBs">
+    select * from new_reg  nr left join  yh_user_reginfo  yu
+    on nr.user_code=yu.user_code
+    <where>
+      <if test="name!=null and name!=''">
+        and nr.name=#{name}
+      </if>
+      <if test="lists !=null">
+        and yu.Org_Code in
+        <foreach collection="lists" index="i" item="id" open="(" separator="," close=")">
+          #{id}
+        </foreach>
+      </if>
+    </where>
+    LIMIT #{begin}, #{limit};
+  </select>
+
+  <select id="queryLocallyManagedArchivesCount" parameterType="com.yihe.system.domain.newRegWithBLOBs" resultType="int">
+    select count(*) from new_reg  nr left join  yh_user_reginfo  yu
+    on nr.user_code=yu.user_code
+    <where>
+      <if test="name!=null and name!=''">
+        and nr.name=#{name}
+      </if>
+      <if test="lists !=null">
+        and yu.Org_Code in
+        <foreach collection="lists" index="i" item="id" open="(" separator="," close=")">
+          #{id}
+        </foreach>
+      </if>
+
+
+
+    </where>
+  </select>
+
+  <select id="selectRegCount" parameterType="com.yihe.system.domain.newReg" resultType="int">
+    SELECT count(*)  FROM new_reg nr
+
+    LEFT JOIN `yh_user_make_card` AS c ON nr.`user_code` = c.`User_Code`
+    LEFT JOIN yh_user_admin_info AS ai ON c.doctor = ai.id
+    <where>
+      ai.user_code = #{doctor}
+      <if test="sex!=null and sex!=''">
+        and nr.sex=#{sex}
+      </if>
+      <if test="name!=null and name!=''">
+        and nr.name  LIKE CONCAT('%', #{name}, '%')
+      </if>
+      <if test="workUnit!=null and workUnit!=''">
+        and nr.work_unit  LIKE CONCAT('%', #{workUnit}, '%')
+      </if>
+      <if test="department!=null and department!=''">
+        and nr.department LIKE CONCAT('%', #{department}, '%')
+      </if>
+      <if test="phone!=null and phone!=''">
+        and nr.phone  LIKE CONCAT('%', #{phone}, '%')
+      </if>
+      <if test="responsibleHealthManagerCode!=null and responsibleHealthManagerCode!=''">
+        and nr.responsible_health_manager_code=#{responsibleHealthManagerCode}
+      </if>
+      <if test="beginTime!=null and beginTime!=''">
+        and nr.birth    &gt;=  #{beginTime}
+      </if>
+      <if test="endTime!=null and endTime!=''">
+        and nr.birth    &lt;=  #{endTime}
+      </if>
+    </where>
+  </select>
+
+  <select id="selectByList" resultMap="ResultMapWithBLOBs" parameterType="list">
+    SELECT nr.*,yur.name as dname,
+    (SELECT COUNT(*)
+    FROM new_medical_examination_records nme
+    WHERE nme.user_code = nr.user_code) AS numberPhysicalExaminations,
+    t2.evaluationTime,
+    assess.qtime,
+    CASE WHEN assess.df_names IS NOT NULL AND assess.df_names != '' THEN '是' ELSE '否' END AS df_names,
+    CASE WHEN assess.sk_names IS NOT NULL AND assess.sk_names != '' THEN '是' ELSE '否' END AS sk_names
+    FROM new_reg nr
+    LEFT JOIN (
+    SELECT user_code, MAX(time) AS evaluationTime
+    FROM new_medical_examination_records
+    GROUP BY user_code
+    ) t2 ON nr.user_code = t2.user_code
+    LEFT JOIN `yh_user_make_card` AS c ON nr.user_code = c.User_Code
+    left join yh_user_reginfo as yur on nr.responsible_health_manager_code=yur.user_code
+    LEFT JOIN yh_user_admin_info AS ai ON c.doctor = ai.id
+    LEFT JOIN (
+    SELECT user_code, qtime, df_names, sk_names
+    FROM yh_disease_assess_total_report2
+    WHERE (user_code, qtime) IN (
+    SELECT user_code, MAX(qtime)
+    FROM yh_disease_assess_total_report2
+    GROUP BY user_code
+    )
+    ) assess ON nr.user_code = assess.user_code
+    WHERE nr.id IN
+    <foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+      #{item}
+    </foreach>
+  </select>
+
+
+</mapper>

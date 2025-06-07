@@ -1,0 +1,2162 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>职业卫生管理档案</title>
+    <link rel="stylesheet" th:href="@{/assets/js/layui-v2.9.16/layui/css/layui.css}"/>
+    <script type="text/javascript" th:src="@{/assets/js/layui-v2.9.16/layui/layui.js}"></script>
+    <style>
+        body{
+            background:#F1F1F1
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            table-layout: fixed;
+            border-color:rgb(144, 186, 221)
+        }
+        th, td {
+            border: 1px solid #ccc;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: rgb(231, 243, 252);
+            font-size: 10pt;
+            font-family: "Microsoft YaHei";
+            word-break: break-word;
+            overflow-wrap: break-word;
+            text-align: center;
+        }
+        .section-title {
+            text-align: center;
+            font-weight: bold;
+            background-color: #e6f7ff;
+        }
+        .input-full {
+            width: 100%;
+            box-sizing: border-box;
+        }
+        .radio-group {
+            display: flex;
+            align-items: center;
+        }
+        .radio-group label {
+            margin-right: 10px;
+        }
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        .checkbox-group label {
+            margin-right: 15px;
+        }
+        .heng{
+            text-align: center;
+            font-size: 10pt;
+            font-family: "Microsoft YaHei";
+            word-break: break-word;
+            overflow-wrap: break-word;
+        }
+        .datainput{
+            border-color: #eee !important;
+            border-width: 1px;
+        }
+
+        .layui-form-checked[lay-skin=primary] i{
+            border-color:#2d8cf0 !important;
+            background-color:#FFF !important;
+            color:#2d8cf0 !important;
+            font-weight: bold;
+        }
+
+        .layui-form-checkbox[lay-skin=primary]:hover i{
+            border-color:#2d8cf0 !important;
+        }
+        .layui-form-radio>i:hover, .layui-form-radioed>i{
+            color: #2d8cf0 !important;
+        }
+
+        /* 覆盖 layui 的默认主题颜色 */
+        .theme-colorful .layui-btn {
+            height: 36px;
+            line-height: 36px;
+            border-radius: 4px;
+            background-color: #2d8cf0;
+            box-shadow: 0 1px 0 rgba(0, 0, 0, .03);
+        }
+        .layui-form-radio:hover>*, .layui-form-radioed, .layui-form-radioed>i{
+            color: #2d8cf0 !important;
+        }
+
+        /*.layui-input {*/
+        /*    border-color: #597FC0 !important;*/
+        /*}*/
+
+        /* ...其他元素样式 */
+        /* 修改分页按钮的背景颜色和字体颜色 */
+        .layui-laypage a {
+            background-color: #f0f0f0; /* 设置按钮的背景颜色 */
+            color: #333; /* 设置按钮的字体颜色 */
+        }
+
+        /* 鼠标悬停时按钮的背景颜色 */
+        .layui-laypage a:hover {
+            background-color: #fff;
+            color: #2d8cf0;
+        }
+
+        /* 当前页的背景颜色和字体颜色 */
+        .layui-laypage .layui-laypage-curr .layui-laypage-em {
+            background-color: #2d8cf0; /* 当前页的背景颜色 */
+            color: white; /* 当前页的字体颜色 */
+        }
+
+        .file-row {
+            background-color: #e6f7ff;
+            padding: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-radius: 5px;
+            margin: 10px 0;
+            width: 98%;
+        }
+        .file-row .file-info {
+            display: flex;
+            align-items: center;
+        }
+        .file-row .file-info img {
+            width: 20px;
+            margin-right: 10px;
+        }
+        .file-row .file-info span {
+            font-size: 14px;
+        }
+        .file-row .actions {
+            display: flex;
+            align-items: center;
+        }
+        .file-row .actions button {
+            border: none;
+            background: none;
+            cursor: pointer;
+            margin-left: 10px;
+            font-size: 16px;
+        }
+
+        .layui-laydate-header {
+            background-color: #2d8cf0; /* 顶部背景颜色 */
+            color: #fff; /* 顶部文字颜色 */
+        }
+
+        .layui-laydate-list li:hover {
+            background-color: #2d8cf0; /* 鼠标悬停时的背景颜色 */
+            color: #fff; /* 鼠标悬停时的文字颜色 */
+        }
+
+        .layui-this, .layui-this:hover {
+            background-color: #fff !important; /* 选中的背景颜色 */
+            color: #2d8cf0 !important; /* 选中的文字颜色 */
+        }
+
+    </style>
+</head>
+<body>
+
+<div class="layui-form " style="width:70%;margin:auto;padding:0 5%;background:#FFF;margin-top:0">
+    <h2 style="text-align: center;">职业卫生管理档案</h2>
+    <input id="guishu" type="hidden" value="">
+    <input id="userCode" type="hidden" value="">
+    <input id="regId" type="hidden" value="">
+
+    <form class="layui-form" id="addfolder" lay-filter="folderForm" style="display: none;min-height: 300px">
+        <div id="search-header">
+
+
+            <div class="layui-inline" style="margin-left: 3px;">
+                <label class="layui-form-label w-auto">姓名:</label>
+                <div class="layui-input-inline">
+                    <input id="name" class="layui-input" placeholder="请输入" style="width: 124px;"/>
+                </div>
+            </div>
+
+            <div class="layui-inline" style="padding-left: 20px;">
+                <button class="layui-btn icon-btn sousuoDN " lay-submit="" lay-filter="regManageQueryBtn"><i class="layui-icon"></i>搜索</button>
+                <button id="btnempty" style="background-color: #fff;width: 69px;color: black;border: 1px solid #e5e5e5;" class="layui-btn icon-btn"></i>清除</button>
+            </div>
+        </div>
+        <div id="tables" class="text-center layui-text"  style="width: 100%;">
+
+        </div>
+    </form>
+
+
+
+    <form class="layui-form" id="myForm" lay-filter="myForm">
+<!--        <div class="layui-inline" style="margin-left: -59px;">-->
+<!--            <label class="layui-form-label">单位</label>-->
+<!--            <div class="layui-input-block" style="width: 270px;">-->
+<!--                <input type="text" id="tree" lay-filter="tree" class="layui-input">-->
+<!--            </div>-->
+<!--        </div>-->
+        <button style="float: right" type="submit" class="layui-btn" lay-submit lay-filter="myFormSave">保存</button>
+        <table>
+
+            <tr>
+<!--                <th colspan="2">-->
+<!--                    编制人员</th>-->
+<!--                <td colspan="4">-->
+<!--                    <input name="v1" type="text" class="input-full layui-input" >-->
+<!--                </td>-->
+
+                <th colspan="1">档案编号</th>
+                <td colspan="3"><input  type="text" class="input-full layui-input" name="v4" placeholder="档案编号、自动生成" readonly></td>
+
+                <th colspan="1">档案年度</th>
+                <td colspan="3"><input type="text" class="input-full layui-input" name="v5" id="yearPicker" placeholder="选择年份"></td>
+
+                <th colspan="1">归档时间</th>
+                <td colspan="3"><input type="date" class="input-full layui-input" name="v6" ></td>
+<!--                <th colspan="2">编制时间</th>-->
+<!--                <td colspan="4"><input  type="date" class="input-full layui-input" name="v2" ></td>-->
+
+            </tr>
+
+
+
+
+            <tr >
+                <th colspan="4">职业病防治法律、行政法规、规章、标准、文件</th>
+                <td colspan="8">
+                    <table id="file-table" border="1" width="100%">
+                    </table>
+                    <button type="button" class="layui-btn layui-btn-radius layui-btn-normal" id="test1">
+                        <i class="layui-icon">&#xe67c;</i>上传文件
+                    </button>
+                </td>
+            </tr>
+
+            <tr >
+                <th colspan="4">职业病防治领导机构及职业卫生管理机构成立文件</th>
+                <td colspan="8">
+                    <table id="file-table2" border="1" width="100%">
+                    </table>
+                    <button type="button" class="layui-btn layui-btn-radius layui-btn-normal" id="test2">
+                        <i class="layui-icon">&#xe67c;</i>上传文件
+                    </button>
+                </td>
+            </tr>
+
+            <tr >
+                <th colspan="4">职业病防治年度计划及实施方案</th>
+                <td colspan="8">
+                    <table id="file-table3" border="1" width="100%">
+                    </table>
+                    <button type="button" class="layui-btn layui-btn-radius layui-btn-normal" id="test3">
+                        <i class="layui-icon">&#xe67c;</i>上传文件
+                    </button>
+                </td>
+            </tr>
+
+            <tr >
+                <th colspan="4">职业卫生管理制度及重点商位职业卫生操作规程</th>
+                <td colspan="8">
+                    <table id="file-table4" border="1" width="100%">
+                    </table>
+                    <button type="button" class="layui-btn layui-btn-radius layui-btn-normal" id="test4">
+                        <i class="layui-icon">&#xe67c;</i>上传文件
+                    </button>
+                </td>
+            </tr>
+
+            <tr >
+                <th colspan="4">职业病危害项目申报表及回执</th>
+                <td colspan="8">
+                    <table id="file-table5" border="1" width="100%">
+                    </table>
+                    <button type="button" class="layui-btn layui-btn-radius layui-btn-normal" id="test5">
+                        <i class="layui-icon">&#xe67c;</i>上传文件
+                    </button>
+                </td>
+            </tr>
+
+            <tr >
+                <th colspan="4">职业病防治经费</th>
+                <td colspan="8">
+                    <table id="file-table6" border="1" width="100%">
+                    </table>
+                    <button type="button" class="layui-btn layui-btn-radius layui-btn-normal" id="test6">
+                        <i class="layui-icon">&#xe67c;</i>上传文件
+                    </button>
+                </td>
+            </tr>
+
+            <tr >
+                <th colspan="4">职业病防护设施一览表</th>
+                <td colspan="8">
+                    <table id="file-table7" border="1" width="100%">
+                    </table>
+                    <button type="button" class="layui-btn layui-btn-radius layui-btn-normal" id="test7">
+                        <i class="layui-icon">&#xe67c;</i>上传文件
+                    </button>
+                </td>
+            </tr>
+
+            <tr >
+                <th colspan="4">职业病防护设施维护和检修记录</th>
+                <td colspan="8">
+                    <table id="file-table8" border="1" width="100%">
+                    </table>
+                    <button type="button" class="layui-btn layui-btn-radius layui-btn-normal" id="test8">
+                        <i class="layui-icon">&#xe67c;</i>上传文件
+                    </button>
+                </td>
+            </tr>
+
+            <tr >
+                <th colspan="4">个人防护用品的购买、发放使用记录</th>
+                <td colspan="8">
+                    <table id="file-table9" border="1" width="100%">
+                    </table>
+                    <button type="button" class="layui-btn layui-btn-radius layui-btn-normal" id="test9">
+                        <i class="layui-icon">&#xe67c;</i>上传文件
+                    </button>
+                </td>
+            </tr>
+
+            <tr >
+                <th colspan="4">警示标识与职业病危害告知</th>
+                <td colspan="8">
+                    <table id="file-table10" border="1" width="100%">
+                    </table>
+                    <button type="button" class="layui-btn layui-btn-radius layui-btn-normal" id="test10">
+                        <i class="layui-icon">&#xe67c;</i>上传文件
+                    </button>
+                </td>
+            </tr>
+
+            <tr >
+                <th colspan="4">职业病危害事故应急救援预案</th>
+                <td colspan="8">
+                    <table id="file-table11" border="1" width="100%">
+                    </table>
+                    <button type="button" class="layui-btn layui-btn-radius layui-btn-normal" id="test11">
+                        <i class="layui-icon">&#xe67c;</i>上传文件
+                    </button>
+                </td>
+            </tr>
+
+            <tr >
+                <th colspan="4">用人单位职业卫生检查和处理记录</th>
+                <td colspan="8">
+                    <table id="file-table12" border="1" width="100%">
+                    </table>
+                    <button type="button" class="layui-btn layui-btn-radius layui-btn-normal" id="test12">
+                        <i class="layui-icon">&#xe67c;</i>上传文件
+                    </button>
+                </td>
+            </tr>
+
+            <tr >
+                <th colspan="4">职业卫生监管意见和落实情况资料</th>
+                <td colspan="8">
+                    <table id="file-table13" border="1" width="100%">
+                    </table>
+                    <button type="button" class="layui-btn layui-btn-radius layui-btn-normal" id="test13">
+                        <i class="layui-icon">&#xe67c;</i>上传文件
+                    </button>
+                </td>
+            </tr>
+
+
+
+
+
+
+
+        </table>
+    </form>
+</div>
+
+<script type="text/javascript" th:src="@{/assets/js/layui-v2.9.16/layui/layui.js}"></script>
+<script type="text/javascript" th:src="@{/assets/js/common.js}"></script>
+<script type="text/javascript" th:src="@{/assets/js/jquery-1.11.1.js}"></script>
+<script th:inline="javascript">
+    layui.use(['form',"table",'treeSelect','notice','upload',"laydate"], function(){
+        var form = layui.form;
+        var $ = layui.jquery;
+        var layer = layui.layer;
+        var table = layui.table;
+        var notice=layui.notice;
+        var upload = layui.upload;
+        var treeSelect= layui.treeSelect;
+        layui.config({
+            skin: 'blue'  // 设置主题为蓝色
+        });
+
+
+        var laydate = layui.laydate;
+
+        // 初始化年份选择器
+        laydate.render({
+            elem: '#yearPicker',
+            type: 'year',
+            theme: '#2d8cf0',
+            format: 'yyyy',
+            trigger: 'click'
+        });
+
+        var params = new URLSearchParams(window.location.search);
+        var paramValue = params.get('medicalExaminationInformation');
+        selectForm(paramValue);
+        form.on('submit(deleteRowBtn)', function(event){
+            var row = event.elem.closest('tr');
+            // 删除该行
+            row.parentNode.removeChild(row);
+            return false;
+        });
+        form.on('submit(preview)', function(data) {
+            // 获取文件的 URL
+            var url = data.elem.getAttribute('data-url');
+            if(isPdfUrl(url) || isImageUrl(url)){
+                window.open(url);
+            }else{
+                window.open("https://view.officeapps.live.com/op/view.aspx?src="+url, '_blank');
+            }
+            // 阻止表单默认提交行为
+            return false;
+        });
+
+        form.on('submit(down)', function(data) {
+            // 获取文件的 URL
+            var url = data.elem.getAttribute('data-url');
+            var name=data.elem.getAttribute("data-name");
+            if(isPdfUrl(url) || isImageUrl(url)){
+                fetchAndDownloadPDF(url,name);
+            }else{
+                window.open(url);
+            }
+            // 创建一个隐藏的 <a> 元素来触发下载
+
+
+            // 阻止表单默认提交行为
+            return false;
+        });
+
+        function isPdfUrl(url) {
+            return /\.pdf$/i.test(url);
+        }
+        function isImageUrl(url) {
+            return /\.(jpg|jpeg|png|gif|bmp|webp|svg)$/i.test(url);
+        }
+        let isDownloading = false;
+        async function fetchAndDownloadPDF(url,name) {
+            if (isDownloading) return;  // 如果正在下载，则不执行
+            isDownloading = true;
+            console.log('Function called');
+            try {
+                const response = await fetch(url);
+                const blob = await response.blob();
+                const blobUrl = window.URL.createObjectURL(blob);
+
+                const a = document.createElement('a');
+                a.href = blobUrl;
+                a.download = name; // 设置下载文件的名称
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+
+                // 释放 URL 对象
+                window.URL.revokeObjectURL(blobUrl);
+            } catch (error) {
+                console.error('下载文件失败:', error);
+            }finally {
+                isDownloading = false;
+            }
+        }
+
+        upload.render({
+            elem: '#test1'
+            ,url: '/YhUserFile/upload1' //必填项
+            ,size:104857600
+            ,accept:'file'
+            ,before: function () {
+                layer.msg('上传中', {
+                    icon: 16,
+                    shade: 0.01
+                }); //上传loading
+            }
+            ,done: function(res,index,upload){
+                console.log("上传返回",res)
+                filesUrl = res.files;
+                //上传完毕回调
+                layer.close(layer.index); //关闭loading
+                if (parseInt(res.code) === 0) {
+                    parent.layer.msg("上传成功！");
+                }
+                // 创建新的行元素
+                var newRow = document.createElement('tr');
+                var newCell = document.createElement('td');
+                newCell.innerHTML = `
+                    <div class="file-row">
+                        <div class="file-info">
+                            <span>${res.name}</span>
+                        </div>
+                        <div class="actions">
+                              <input type="text"  style="display: none" class="input-full layui-input" name="v9"  value="${res.files}">
+                              <input type="text"  style="display: none" class="input-full layui-input" name="v10"  value="${res.name}">
+                              <button title="修改" class="edit-btn" style="border: none; background: none; cursor: pointer;">
+                                    <i class="layui-icon layui-icon-edit"></i>
+                                </button>
+                                <button title="预览" lay-submit="" lay-filter="preview" data-url="${res.files}">&#128065;</button>
+                              <button title="下载" lay-submit=""  lay-filter="down"  data-name="${res.name}"  data-url="${res.files}"  >&#8681;</button>
+                              <button title="删除" lay-submit=""  lay-filter="deleteRowBtn"  >&#10006;</button>
+                        </div>
+                    </div>
+                `;
+                newRow.appendChild(newCell);
+                document.getElementById('file-table').appendChild(newRow);
+                newCell.querySelector('.edit-btn').onclick = function() {
+                    event.preventDefault();
+                    var currentName = res.name;
+                    layer.prompt({
+                        title: '修改文件名',
+                        value: currentName,
+                        formType: 0 // 输入框类型，0：单行文本
+                    }, function(value, index) {
+                        // 更新文件名逻辑
+                        newCell.querySelector('.file-info span').innerText = value; // 更新显示的文件名
+                        newCell.querySelector('input[name="v10"]').value = value; // 更新隐藏的文件名输入
+                        layer.close(index); // 关闭输入框
+                    });
+                };
+            }
+            ,error : function(index,upload){
+            }
+        });
+
+        upload.render({
+            elem: '#test2'
+            ,url: '/YhUserFile/upload1' //必填项
+            ,size:104857600
+            ,accept:'file'
+            ,before: function () {
+                layer.msg('上传中', {
+                    icon: 16,
+                    shade: 0.01
+                }); //上传loading
+            }
+            ,done: function(res,index,upload){
+                console.log("上传返回",res)
+                filesUrl = res.files;
+                //上传完毕回调
+                layer.close(layer.index); //关闭loading
+                if (parseInt(res.code) === 0) {
+                    parent.layer.msg("上传成功！");
+                }
+                // 创建新的行元素
+                var newRow = document.createElement('tr');
+                var newCell = document.createElement('td');
+                newCell.innerHTML = `
+                    <div class="file-row">
+                        <div class="file-info">
+                            <span>${res.name}</span>
+                        </div>
+                        <div class="actions">
+                              <input type="text"  style="display: none" class="input-full layui-input" name="v11"  value="${res.files}">
+                              <input type="text"  style="display: none" class="input-full layui-input" name="v12"  value="${res.name}">
+                              <button title="修改" class="edit-btn" style="border: none; background: none; cursor: pointer;">
+                                    <i class="layui-icon layui-icon-edit"></i>
+                                </button>
+                                <button title="预览" lay-submit="" lay-filter="preview" data-url="${res.files}">&#128065;</button>
+                              <button title="下载" lay-submit=""  lay-filter="down" data-name="${res.name}"  data-url="${res.files}"  >&#8681;</button>
+                              <button title="删除" lay-submit=""  lay-filter="deleteRowBtn"  >&#10006;</button>
+                        </div>
+                    </div>
+                `;
+                newRow.appendChild(newCell);
+                document.getElementById('file-table2').appendChild(newRow);
+                newCell.querySelector('.edit-btn').onclick = function() {
+                    event.preventDefault();
+                    var currentName = res.name;
+                    layer.prompt({
+                        title: '修改文件名',
+                        value: currentName,
+                        formType: 0 // 输入框类型，0：单行文本
+                    }, function(value, index) {
+                        // 更新文件名逻辑
+                        newCell.querySelector('.file-info span').innerText = value; // 更新显示的文件名
+                        newCell.querySelector('input[name="v12"]').value = value; // 更新隐藏的文件名输入
+                        layer.close(index); // 关闭输入框
+                    });
+                };
+            }
+            ,error : function(index,upload){
+            }
+        });
+
+        upload.render({
+            elem: '#test3'
+            ,url: '/YhUserFile/upload1' //必填项
+            ,size:104857600
+            ,accept:'file'
+            ,before: function () {
+                layer.msg('上传中', {
+                    icon: 16,
+                    shade: 0.01
+                }); //上传loading
+            }
+            ,done: function(res,index,upload){
+                console.log("上传返回",res)
+                filesUrl = res.files;
+                //上传完毕回调
+                layer.close(layer.index); //关闭loading
+                if (parseInt(res.code) === 0) {
+                    parent.layer.msg("上传成功！");
+                }
+                // 创建新的行元素
+                var newRow = document.createElement('tr');
+                var newCell = document.createElement('td');
+                newCell.innerHTML = `
+                    <div class="file-row">
+                        <div class="file-info">
+                            <span>${res.name}</span>
+                        </div>
+                        <div class="actions">
+                              <input type="text"  style="display: none" class="input-full layui-input" name="v13"  value="${res.files}">
+                              <input type="text"  style="display: none" class="input-full layui-input" name="v14"  value="${res.name}">
+                              <button title="修改" class="edit-btn" style="border: none; background: none; cursor: pointer;">
+                                    <i class="layui-icon layui-icon-edit"></i>
+                                </button>
+                                <button title="预览" lay-submit="" lay-filter="preview" data-url="${res.files}">&#128065;</button>
+                              <button title="下载" lay-submit=""  lay-filter="down"  data-name="${res.name}"  data-url="${res.files}"  >&#8681;</button>
+                              <button title="删除" lay-submit=""  lay-filter="deleteRowBtn"  >&#10006;</button>
+                        </div>
+                    </div>
+                `;
+                newRow.appendChild(newCell);
+                document.getElementById('file-table3').appendChild(newRow);
+                newCell.querySelector('.edit-btn').onclick = function() {
+                    event.preventDefault();
+                    var currentName = res.name;
+                    layer.prompt({
+                        title: '修改文件名',
+                        value: currentName,
+                        formType: 0 // 输入框类型，0：单行文本
+                    }, function(value, index) {
+                        // 更新文件名逻辑
+                        newCell.querySelector('.file-info span').innerText = value; // 更新显示的文件名
+                        newCell.querySelector('input[name="v14"]').value = value; // 更新隐藏的文件名输入
+                        layer.close(index); // 关闭输入框
+                    });
+                };
+            }
+            ,error : function(index,upload){
+            }
+        });
+
+        upload.render({
+            elem: '#test4'
+            ,url: '/YhUserFile/upload1' //必填项
+            ,size:104857600
+            ,accept:'file'
+            ,before: function () {
+                layer.msg('上传中', {
+                    icon: 16,
+                    shade: 0.01
+                }); //上传loading
+            }
+            ,done: function(res,index,upload){
+                console.log("上传返回",res)
+                filesUrl = res.files;
+                //上传完毕回调
+                layer.close(layer.index); //关闭loading
+                if (parseInt(res.code) === 0) {
+                    parent.layer.msg("上传成功！");
+                }
+                // 创建新的行元素
+                var newRow = document.createElement('tr');
+                var newCell = document.createElement('td');
+                newCell.innerHTML = `
+                    <div class="file-row">
+                        <div class="file-info">
+                            <span>${res.name}</span>
+                        </div>
+                        <div class="actions">
+                              <input type="text"  style="display: none" class="input-full layui-input" name="v15"  value="${res.files}">
+                              <input type="text"  style="display: none" class="input-full layui-input" name="v16"  value="${res.name}">
+                              <button title="修改" class="edit-btn" style="border: none; background: none; cursor: pointer;">
+                                    <i class="layui-icon layui-icon-edit"></i>
+                                </button>
+                                <button title="预览" lay-submit="" lay-filter="preview" data-url="${res.files}">&#128065;</button>
+                              <button title="下载" lay-submit=""  lay-filter="down"  data-name="${res.name}"  data-url="${res.files}"  >&#8681;</button>
+                              <button title="删除" lay-submit=""  lay-filter="deleteRowBtn"  >&#10006;</button>
+                        </div>
+                    </div>
+                `;
+                newRow.appendChild(newCell);
+                document.getElementById('file-table4').appendChild(newRow);
+                newCell.querySelector('.edit-btn').onclick = function() {
+                    event.preventDefault();
+                    var currentName = res.name;
+                    layer.prompt({
+                        title: '修改文件名',
+                        value: currentName,
+                        formType: 0 // 输入框类型，0：单行文本
+                    }, function(value, index) {
+                        // 更新文件名逻辑
+                        newCell.querySelector('.file-info span').innerText = value; // 更新显示的文件名
+                        newCell.querySelector('input[name="v16"]').value = value; // 更新隐藏的文件名输入
+                        layer.close(index); // 关闭输入框
+                    });
+                };
+            }
+            ,error : function(index,upload){
+            }
+        });
+
+        upload.render({
+            elem: '#test5'
+            ,url: '/YhUserFile/upload1' //必填项
+            ,size:104857600
+            ,accept:'file'
+            ,before: function () {
+                layer.msg('上传中', {
+                    icon: 16,
+                    shade: 0.01
+                }); //上传loading
+            }
+            ,done: function(res,index,upload){
+                console.log("上传返回",res)
+                filesUrl = res.files;
+                //上传完毕回调
+                layer.close(layer.index); //关闭loading
+                if (parseInt(res.code) === 0) {
+                    parent.layer.msg("上传成功！");
+                }
+                // 创建新的行元素
+                var newRow = document.createElement('tr');
+                var newCell = document.createElement('td');
+                newCell.innerHTML = `
+                    <div class="file-row">
+                        <div class="file-info">
+                            <span>${res.name}</span>
+                        </div>
+                        <div class="actions">
+                              <input type="text"  style="display: none" class="input-full layui-input" name="v17"  value="${res.files}">
+                              <input type="text"  style="display: none" class="input-full layui-input" name="v18"  value="${res.name}">
+                              <button title="修改" class="edit-btn" style="border: none; background: none; cursor: pointer;">
+                                    <i class="layui-icon layui-icon-edit"></i>
+                                </button>
+                                <button title="预览" lay-submit="" lay-filter="preview" data-url="${res.files}">&#128065;</button>
+                              <button title="下载" lay-submit=""  lay-filter="down" data-name="${res.name}"   data-url="${res.files}"  >&#8681;</button>
+                              <button title="删除" lay-submit=""  lay-filter="deleteRowBtn"  >&#10006;</button>
+                        </div>
+                    </div>
+                `;
+                newRow.appendChild(newCell);
+                document.getElementById('file-table5').appendChild(newRow);
+                newCell.querySelector('.edit-btn').onclick = function() {
+                    event.preventDefault();
+                    var currentName = res.name;
+                    layer.prompt({
+                        title: '修改文件名',
+                        value: currentName,
+                        formType: 0 // 输入框类型，0：单行文本
+                    }, function(value, index) {
+                        // 更新文件名逻辑
+                        newCell.querySelector('.file-info span').innerText = value; // 更新显示的文件名
+                        newCell.querySelector('input[name="v18"]').value = value; // 更新隐藏的文件名输入
+                        layer.close(index); // 关闭输入框
+                    });
+                };
+            }
+            ,error : function(index,upload){
+            }
+        });
+
+        upload.render({
+            elem: '#test6'
+            ,url: '/YhUserFile/upload1' //必填项
+            ,size:104857600
+            ,accept:'file'
+            ,before: function () {
+                layer.msg('上传中', {
+                    icon: 16,
+                    shade: 0.01
+                }); //上传loading
+            }
+            ,done: function(res,index,upload){
+                console.log("上传返回",res)
+                filesUrl = res.files;
+                //上传完毕回调
+                layer.close(layer.index); //关闭loading
+                if (parseInt(res.code) === 0) {
+                    parent.layer.msg("上传成功！");
+                }
+                // 创建新的行元素
+                var newRow = document.createElement('tr');
+                var newCell = document.createElement('td');
+                newCell.innerHTML = `
+                    <div class="file-row">
+                        <div class="file-info">
+                            <span>${res.name}</span>
+                        </div>
+                        <div class="actions">
+                              <input type="text"  style="display: none" class="input-full layui-input" name="v19"  value="${res.files}">
+                              <input type="text"  style="display: none" class="input-full layui-input" name="v20"  value="${res.name}">
+                              <button title="修改" class="edit-btn" style="border: none; background: none; cursor: pointer;">
+                                    <i class="layui-icon layui-icon-edit"></i>
+                                </button>
+                                <button title="预览" lay-submit="" lay-filter="preview" data-url="${res.files}">&#128065;</button>
+                              <button title="下载" lay-submit=""  lay-filter="down"  data-name="${res.name}"  data-url="${res.files}"  >&#8681;</button>
+                              <button title="删除" lay-submit=""  lay-filter="deleteRowBtn"  >&#10006;</button>
+                        </div>
+                    </div>
+                `;
+                newRow.appendChild(newCell);
+                document.getElementById('file-table6').appendChild(newRow);
+                newCell.querySelector('.edit-btn').onclick = function() {
+                    event.preventDefault();
+                    var currentName = res.name;
+                    layer.prompt({
+                        title: '修改文件名',
+                        value: currentName,
+                        formType: 0 // 输入框类型，0：单行文本
+                    }, function(value, index) {
+                        // 更新文件名逻辑
+                        newCell.querySelector('.file-info span').innerText = value; // 更新显示的文件名
+                        newCell.querySelector('input[name="v20"]').value = value; // 更新隐藏的文件名输入
+                        layer.close(index); // 关闭输入框
+                    });
+                };
+            }
+            ,error : function(index,upload){
+            }
+        });
+
+        upload.render({
+            elem: '#test7'
+            ,url: '/YhUserFile/upload1' //必填项
+            ,size:104857600
+            ,accept:'file'
+            ,before: function () {
+                layer.msg('上传中', {
+                    icon: 16,
+                    shade: 0.01
+                }); //上传loading
+            }
+            ,done: function(res,index,upload){
+                console.log("上传返回",res)
+                filesUrl = res.files;
+                //上传完毕回调
+                layer.close(layer.index); //关闭loading
+                if (parseInt(res.code) === 0) {
+                    parent.layer.msg("上传成功！");
+                }
+                // 创建新的行元素
+                var newRow = document.createElement('tr');
+                var newCell = document.createElement('td');
+                newCell.innerHTML = `
+                    <div class="file-row">
+                        <div class="file-info">
+                            <span>${res.name}</span>
+                        </div>
+                        <div class="actions">
+                              <input type="text"  style="display: none" class="input-full layui-input" name="v21"  value="${res.files}">
+                              <input type="text"  style="display: none" class="input-full layui-input" name="v22"  value="${res.name}">
+                              <button title="修改" class="edit-btn" style="border: none; background: none; cursor: pointer;">
+                                    <i class="layui-icon layui-icon-edit"></i>
+                                </button>
+                                <button title="预览" lay-submit="" lay-filter="preview" data-url="${res.files}">&#128065;</button>
+                              <button title="下载" lay-submit=""  lay-filter="down"  data-name="${res.name}"  data-url="${res.files}"  >&#8681;</button>
+                              <button title="删除" lay-submit=""  lay-filter="deleteRowBtn"  >&#10006;</button>
+                        </div>
+                    </div>
+                `;
+                newRow.appendChild(newCell);
+                document.getElementById('file-table7').appendChild(newRow);
+                newCell.querySelector('.edit-btn').onclick = function() {
+                    event.preventDefault();
+                    var currentName = res.name;
+                    layer.prompt({
+                        title: '修改文件名',
+                        value: currentName,
+                        formType: 0 // 输入框类型，0：单行文本
+                    }, function(value, index) {
+                        // 更新文件名逻辑
+                        newCell.querySelector('.file-info span').innerText = value; // 更新显示的文件名
+                        newCell.querySelector('input[name="v22"]').value = value; // 更新隐藏的文件名输入
+                        layer.close(index); // 关闭输入框
+                    });
+                };
+            }
+            ,error : function(index,upload){
+            }
+        });
+
+        upload.render({
+            elem: '#test8'
+            ,url: '/YhUserFile/upload1' //必填项
+            ,size:104857600
+            ,accept:'file'
+            ,before: function () {
+                layer.msg('上传中', {
+                    icon: 16,
+                    shade: 0.01
+                }); //上传loading
+            }
+            ,done: function(res,index,upload){
+                console.log("上传返回",res)
+                filesUrl = res.files;
+                //上传完毕回调
+                layer.close(layer.index); //关闭loading
+                if (parseInt(res.code) === 0) {
+                    parent.layer.msg("上传成功！");
+                }
+                // 创建新的行元素
+                var newRow = document.createElement('tr');
+                var newCell = document.createElement('td');
+                newCell.innerHTML = `
+                    <div class="file-row">
+                        <div class="file-info">
+                            <span>${res.name}</span>
+                        </div>
+                        <div class="actions">
+                              <input type="text"  style="display: none" class="input-full layui-input" name="v23"  value="${res.files}">
+                              <input type="text"  style="display: none" class="input-full layui-input" name="v24"  value="${res.name}">
+                              <button title="修改" class="edit-btn" style="border: none; background: none; cursor: pointer;">
+                                    <i class="layui-icon layui-icon-edit"></i>
+                                </button>
+                                <button title="预览" lay-submit="" lay-filter="preview" data-url="${res.files}">&#128065;</button>
+                              <button title="下载" lay-submit=""  lay-filter="down" data-name="${res.name}"   data-url="${res.files}"  >&#8681;</button>
+                              <button title="删除" lay-submit=""  lay-filter="deleteRowBtn"  >&#10006;</button>
+                        </div>
+                    </div>
+                `;
+                newRow.appendChild(newCell);
+                document.getElementById('file-table8').appendChild(newRow);
+                newCell.querySelector('.edit-btn').onclick = function() {
+                    event.preventDefault();
+                    var currentName = res.name;
+                    layer.prompt({
+                        title: '修改文件名',
+                        value: currentName,
+                        formType: 0 // 输入框类型，0：单行文本
+                    }, function(value, index) {
+                        // 更新文件名逻辑
+                        newCell.querySelector('.file-info span').innerText = value; // 更新显示的文件名
+                        newCell.querySelector('input[name="v24"]').value = value; // 更新隐藏的文件名输入
+                        layer.close(index); // 关闭输入框
+                    });
+                };
+            }
+            ,error : function(index,upload){
+            }
+        });
+
+        upload.render({
+            elem: '#test9'
+            ,url: '/YhUserFile/upload1' //必填项
+            ,size:104857600
+            ,accept:'file'
+            ,before: function () {
+                layer.msg('上传中', {
+                    icon: 16,
+                    shade: 0.01
+                }); //上传loading
+            }
+            ,done: function(res,index,upload){
+                console.log("上传返回",res)
+                filesUrl = res.files;
+                //上传完毕回调
+                layer.close(layer.index); //关闭loading
+                if (parseInt(res.code) === 0) {
+                    parent.layer.msg("上传成功！");
+                }
+                // 创建新的行元素
+                var newRow = document.createElement('tr');
+                var newCell = document.createElement('td');
+                newCell.innerHTML = `
+                    <div class="file-row">
+                        <div class="file-info">
+                            <span>${res.name}</span>
+                        </div>
+                        <div class="actions">
+                              <input type="text"  style="display: none" class="input-full layui-input" name="v25"  value="${res.files}">
+                              <input type="text"  style="display: none" class="input-full layui-input" name="v26"  value="${res.name}">
+                              <button title="修改" class="edit-btn" style="border: none; background: none; cursor: pointer;">
+                                    <i class="layui-icon layui-icon-edit"></i>
+                                </button>
+                                <button title="预览" lay-submit="" lay-filter="preview" data-url="${res.files}">&#128065;</button>
+                              <button title="下载" lay-submit=""  lay-filter="down"  data-name="${res.name}"  data-url="${res.files}"  >&#8681;</button>
+                              <button title="删除" lay-submit=""  lay-filter="deleteRowBtn"  >&#10006;</button>
+                        </div>
+                    </div>
+                `;
+                newRow.appendChild(newCell);
+                document.getElementById('file-table9').appendChild(newRow);
+                newCell.querySelector('.edit-btn').onclick = function() {
+                    event.preventDefault();
+                    var currentName = res.name;
+                    layer.prompt({
+                        title: '修改文件名',
+                        value: currentName,
+                        formType: 0 // 输入框类型，0：单行文本
+                    }, function(value, index) {
+                        // 更新文件名逻辑
+                        newCell.querySelector('.file-info span').innerText = value; // 更新显示的文件名
+                        newCell.querySelector('input[name="v26"]').value = value; // 更新隐藏的文件名输入
+                        layer.close(index); // 关闭输入框
+                    });
+                };
+            }
+            ,error : function(index,upload){
+            }
+        });
+
+        upload.render({
+            elem: '#test10'
+            ,url: '/YhUserFile/upload1' //必填项
+            ,size:104857600
+            ,accept:'file'
+            ,before: function () {
+                layer.msg('上传中', {
+                    icon: 16,
+                    shade: 0.01
+                }); //上传loading
+            }
+            ,done: function(res,index,upload){
+                console.log("上传返回",res)
+                filesUrl = res.files;
+                //上传完毕回调
+                layer.close(layer.index); //关闭loading
+                if (parseInt(res.code) === 0) {
+                    parent.layer.msg("上传成功！");
+                }
+                // 创建新的行元素
+                var newRow = document.createElement('tr');
+                var newCell = document.createElement('td');
+                newCell.innerHTML = `
+                    <div class="file-row">
+                        <div class="file-info">
+                            <span>${res.name}</span>
+                        </div>
+                        <div class="actions">
+                              <input type="text"  style="display: none" class="input-full layui-input" name="v27"  value="${res.files}">
+                              <input type="text"  style="display: none" class="input-full layui-input" name="v28"  value="${res.name}">
+                              <button title="修改" class="edit-btn" style="border: none; background: none; cursor: pointer;">
+                                    <i class="layui-icon layui-icon-edit"></i>
+                                </button>
+                                <button title="预览" lay-submit="" lay-filter="preview" data-url="${res.files}">&#128065;</button>
+                              <button title="下载" lay-submit=""  lay-filter="down"  data-name="${res.name}"  data-url="${res.files}"  >&#8681;</button>
+                              <button title="删除" lay-submit=""  lay-filter="deleteRowBtn"  >&#10006;</button>
+                        </div>
+                    </div>
+                `;
+                newRow.appendChild(newCell);
+                document.getElementById('file-table10').appendChild(newRow);
+                newCell.querySelector('.edit-btn').onclick = function() {
+                    event.preventDefault();
+                    var currentName = res.name;
+                    layer.prompt({
+                        title: '修改文件名',
+                        value: currentName,
+                        formType: 0 // 输入框类型，0：单行文本
+                    }, function(value, index) {
+                        // 更新文件名逻辑
+                        newCell.querySelector('.file-info span').innerText = value; // 更新显示的文件名
+                        newCell.querySelector('input[name="v28"]').value = value; // 更新隐藏的文件名输入
+                        layer.close(index); // 关闭输入框
+                    });
+                };
+            }
+            ,error : function(index,upload){
+            }
+        });
+
+        upload.render({
+            elem: '#test11'
+            ,url: '/YhUserFile/upload1' //必填项
+            ,size:104857600
+            ,accept:'file'
+            ,before: function () {
+                layer.msg('上传中', {
+                    icon: 16,
+                    shade: 0.01
+                }); //上传loading
+            }
+            ,done: function(res,index,upload){
+                console.log("上传返回",res)
+                filesUrl = res.files;
+                //上传完毕回调
+                layer.close(layer.index); //关闭loading
+                if (parseInt(res.code) === 0) {
+                    parent.layer.msg("上传成功！");
+                }
+                // 创建新的行元素
+                var newRow = document.createElement('tr');
+                var newCell = document.createElement('td');
+                newCell.innerHTML = `
+                    <div class="file-row">
+                        <div class="file-info">
+                            <span>${res.name}</span>
+                        </div>
+                        <div class="actions">
+                              <input type="text"  style="display: none" class="input-full layui-input" name="v29"  value="${res.files}">
+                              <input type="text"  style="display: none" class="input-full layui-input" name="v30"  value="${res.name}">
+                              <button title="修改" class="edit-btn" style="border: none; background: none; cursor: pointer;">
+                                    <i class="layui-icon layui-icon-edit"></i>
+                                </button>
+                                <button title="预览" lay-submit="" lay-filter="preview" data-url="${res.files}">&#128065;</button>
+                              <button title="下载" lay-submit=""  lay-filter="down" data-name="${res.name}"   data-url="${res.files}"  >&#8681;</button>
+                              <button title="删除" lay-submit=""  lay-filter="deleteRowBtn"  >&#10006;</button>
+                        </div>
+                    </div>
+                `;
+                newRow.appendChild(newCell);
+                document.getElementById('file-table11').appendChild(newRow);
+                newCell.querySelector('.edit-btn').onclick = function() {
+                    event.preventDefault();
+                    var currentName = res.name;
+                    layer.prompt({
+                        title: '修改文件名',
+                        value: currentName,
+                        formType: 0 // 输入框类型，0：单行文本
+                    }, function(value, index) {
+                        // 更新文件名逻辑
+                        newCell.querySelector('.file-info span').innerText = value; // 更新显示的文件名
+                        newCell.querySelector('input[name="v30"]').value = value; // 更新隐藏的文件名输入
+                        layer.close(index); // 关闭输入框
+                    });
+                };
+            }
+            ,error : function(index,upload){
+            }
+        });
+
+        upload.render({
+            elem: '#test12'
+            ,url: '/YhUserFile/upload1' //必填项
+            ,size:104857600
+            ,accept:'file'
+            ,before: function () {
+                layer.msg('上传中', {
+                    icon: 16,
+                    shade: 0.01
+                }); //上传loading
+            }
+            ,done: function(res,index,upload){
+                console.log("上传返回",res)
+                filesUrl = res.files;
+                //上传完毕回调
+                layer.close(layer.index); //关闭loading
+                if (parseInt(res.code) === 0) {
+                    parent.layer.msg("上传成功！");
+                }
+                // 创建新的行元素
+                var newRow = document.createElement('tr');
+                var newCell = document.createElement('td');
+                newCell.innerHTML = `
+                    <div class="file-row">
+                        <div class="file-info">
+                            <span>${res.name}</span>
+                        </div>
+                        <div class="actions">
+                              <input type="text"  style="display: none" class="input-full layui-input" name="v31"  value="${res.files}">
+                              <input type="text"  style="display: none" class="input-full layui-input" name="v32"  value="${res.name}">
+                              <button title="修改" class="edit-btn" style="border: none; background: none; cursor: pointer;">
+                                    <i class="layui-icon layui-icon-edit"></i>
+                                </button>
+                                <button title="预览" lay-submit="" lay-filter="preview" data-url="${res.files}">&#128065;</button>
+                              <button title="下载" lay-submit=""  lay-filter="down"  data-name="${res.name}"  data-url="${res.files}"  >&#8681;</button>
+                              <button title="删除" lay-submit=""  lay-filter="deleteRowBtn"  >&#10006;</button>
+                        </div>
+                    </div>
+                `;
+                newRow.appendChild(newCell);
+                document.getElementById('file-table12').appendChild(newRow);
+                newCell.querySelector('.edit-btn').onclick = function() {
+                    event.preventDefault();
+                    var currentName = res.name;
+                    layer.prompt({
+                        title: '修改文件名',
+                        value: currentName,
+                        formType: 0 // 输入框类型，0：单行文本
+                    }, function(value, index) {
+                        // 更新文件名逻辑
+                        newCell.querySelector('.file-info span').innerText = value; // 更新显示的文件名
+                        newCell.querySelector('input[name="v32"]').value = value; // 更新隐藏的文件名输入
+                        layer.close(index); // 关闭输入框
+                    });
+                };
+            }
+            ,error : function(index,upload){
+            }
+        });
+
+        upload.render({
+            elem: '#test13'
+            ,url: '/YhUserFile/upload1' //必填项
+            ,size:104857600
+            ,accept:'file'
+            ,before: function () {
+                layer.msg('上传中', {
+                    icon: 16,
+                    shade: 0.01
+                }); //上传loading
+            }
+            ,done: function(res,index,upload){
+                console.log("上传返回",res)
+                filesUrl = res.files;
+                //上传完毕回调
+                layer.close(layer.index); //关闭loading
+                if (parseInt(res.code) === 0) {
+                    parent.layer.msg("上传成功！");
+                }
+                // 创建新的行元素
+                var newRow = document.createElement('tr');
+                var newCell = document.createElement('td');
+                newCell.innerHTML = `
+                    <div class="file-row">
+                        <div class="file-info">
+                            <span>${res.name}</span>
+                        </div>
+                        <div class="actions">
+                              <input type="text"  style="display: none" class="input-full layui-input" name="v33"  value="${res.files}">
+                              <input type="text"  style="display: none" class="input-full layui-input" name="v34"  value="${res.name}">
+                              <button title="修改" class="edit-btn" style="border: none; background: none; cursor: pointer;">
+                                    <i class="layui-icon layui-icon-edit"></i>
+                                </button>
+                                <button title="预览" lay-submit="" lay-filter="preview" data-url="${res.files}">&#128065;</button>
+                              <button title="下载" lay-submit=""  lay-filter="down"  data-name="${res.name}"  data-url="${res.files}"  >&#8681;</button>
+                              <button title="删除" lay-submit=""  lay-filter="deleteRowBtn"  >&#10006;</button>
+                        </div>
+                    </div>
+                `;
+                newRow.appendChild(newCell);
+                document.getElementById('file-table13').appendChild(newRow);
+                newCell.querySelector('.edit-btn').onclick = function() {
+                    event.preventDefault();
+                    var currentName = res.name;
+                    layer.prompt({
+                        title: '修改文件名',
+                        value: currentName,
+                        formType: 0 // 输入框类型，0：单行文本
+                    }, function(value, index) {
+                        // 更新文件名逻辑
+                        newCell.querySelector('.file-info span').innerText = value; // 更新显示的文件名
+                        newCell.querySelector('input[name="v34"]').value = value; // 更新隐藏的文件名输入
+                        layer.close(index); // 关闭输入框
+                    });
+                };
+            }
+            ,error : function(index,upload){
+            }
+        });
+
+
+
+
+
+        form.on('submit(myFormSave)', function(data){
+            console.log(data,"dddddddddddddddddddddddddddddddd")
+
+
+
+            var v9Elements = document.querySelectorAll('input[name="v9"]');
+            var v10Elements = document.querySelectorAll('input[name="v10"]');
+            var pairs1 = [];
+            var length1 = Math.min(v9Elements.length, v10Elements.length);
+            for (var i = 0; i < length1; i++) {
+                // 获取 v13 和 v14 的值，并将它们存储成对的形式
+                var v13Value = v9Elements[i].value;
+                var v14Value = v10Elements[i].value;
+                pairs1.push({ v13: v13Value, v14: v14Value });
+            }
+
+            var v11Elements = document.querySelectorAll('input[name="v11"]');
+            var v12Elements = document.querySelectorAll('input[name="v12"]');
+            var pairs2 = [];
+            var length2 = Math.min(v11Elements.length, v12Elements.length);
+            for (var i = 0; i < length2; i++) {
+                // 获取 v13 和 v14 的值，并将它们存储成对的形式
+                var v13Value = v11Elements[i].value;
+                var v14Value = v12Elements[i].value;
+                pairs2.push({ v13: v13Value, v14: v14Value });
+            }
+
+            var v13Elements = document.querySelectorAll('input[name="v13"]');
+            var v14Elements = document.querySelectorAll('input[name="v14"]');
+            var pairs3 = [];
+            var length3 = Math.min(v13Elements.length, v14Elements.length);
+            for (var i = 0; i < length3; i++) {
+                // 获取 v13 和 v14 的值，并将它们存储成对的形式
+                var v13Value = v13Elements[i].value;
+                var v14Value = v14Elements[i].value;
+                pairs3.push({ v13: v13Value, v14: v14Value });
+            }
+
+
+            var v15Elements = document.querySelectorAll('input[name="v15"]');
+            var v16Elements = document.querySelectorAll('input[name="v16"]');
+            var pairs4 = [];
+            var length4 = Math.min(v15Elements.length, v16Elements.length);
+            for (var i = 0; i < length4; i++) {
+                // 获取 v13 和 v14 的值，并将它们存储成对的形式
+                var v15Value = v15Elements[i].value;
+                var v16Value = v16Elements[i].value;
+                pairs4.push({ v13: v15Value, v14: v16Value });
+            }
+
+            var v17Elements = document.querySelectorAll('input[name="v17"]');
+            var v18Elements = document.querySelectorAll('input[name="v18"]');
+            var pairs5 = [];
+            var length5 = Math.min(v17Elements.length, v18Elements.length);
+            for (var i = 0; i < length5; i++) {
+                // 获取 v13 和 v14 的值，并将它们存储成对的形式
+                var v17Value = v17Elements[i].value;
+                var v18Value = v18Elements[i].value;
+                pairs5.push({ v13: v17Value, v14: v18Value });
+            }
+
+            var v19Elements = document.querySelectorAll('input[name="v19"]');
+            var v20Elements = document.querySelectorAll('input[name="v20"]');
+            var pairs6 = [];
+            var length6 = Math.min(v19Elements.length, v20Elements.length);
+            for (var i = 0; i < length6; i++) {
+                // 获取 v13 和 v14 的值，并将它们存储成对的形式
+                var v19Value = v19Elements[i].value;
+                var v20Value = v20Elements[i].value;
+                pairs6.push({ v13: v19Value, v14: v20Value });
+            }
+
+            var v21Elements = document.querySelectorAll('input[name="v21"]');
+            var v22Elements = document.querySelectorAll('input[name="v22"]');
+            var pairs7 = [];
+            var length7 = Math.min(v21Elements.length, v22Elements.length);
+            for (var i = 0; i < length7; i++) {
+                // 获取 v13 和 v14 的值，并将它们存储成对的形式
+                var v21Value = v21Elements[i].value;
+                var v22Value = v22Elements[i].value;
+                pairs7.push({ v13: v21Value, v14: v22Value });
+            }
+
+
+            var v23Elements = document.querySelectorAll('input[name="v23"]');
+            var v24Elements = document.querySelectorAll('input[name="v24"]');
+            var pairs8 = [];
+            var length8 = Math.min(v23Elements.length, v24Elements.length);
+            for (var i = 0; i < length8; i++) {
+                // 获取 v13 和 v14 的值，并将它们存储成对的形式
+                var v23Value = v23Elements[i].value;
+                var v24Value = v24Elements[i].value;
+                pairs8.push({ v13: v23Value, v14: v24Value });
+            }
+
+            var v25Elements = document.querySelectorAll('input[name="v25"]');
+            var v26Elements = document.querySelectorAll('input[name="v26"]');
+            var pairs9 = [];
+            var length9 = Math.min(v25Elements.length, v26Elements.length);
+            for (var i = 0; i < length9; i++) {
+                // 获取 v13 和 v14 的值，并将它们存储成对的形式
+                var v23Value = v25Elements[i].value;
+                var v24Value = v26Elements[i].value;
+                pairs9.push({ v13: v23Value, v14: v24Value });
+            }
+
+            var v27Elements = document.querySelectorAll('input[name="v27"]');
+            var v28Elements = document.querySelectorAll('input[name="v28"]');
+            var pairs10 = [];
+            var length10 = Math.min(v27Elements.length, v28Elements.length);
+            for (var i = 0; i < length10; i++) {
+                // 获取 v13 和 v14 的值，并将它们存储成对的形式
+                var v27Value = v27Elements[i].value;
+                var v28Value = v28Elements[i].value;
+                pairs10.push({ v13: v27Value, v14: v28Value });
+            }
+
+            var v29Elements = document.querySelectorAll('input[name="v29"]');
+            var v30Elements = document.querySelectorAll('input[name="v30"]');
+            var pairs11 = [];
+            var length11 = Math.min(v29Elements.length, v30Elements.length);
+            for (var i = 0; i < length11; i++) {
+                // 获取 v13 和 v14 的值，并将它们存储成对的形式
+                var v29Value = v29Elements[i].value;
+                var v30Value = v30Elements[i].value;
+                pairs11.push({ v13: v29Value, v14: v30Value });
+            }
+
+            var v31Elements = document.querySelectorAll('input[name="v31"]');
+            var v32Elements = document.querySelectorAll('input[name="v32"]');
+            var pairs12 = [];
+            var length12 = Math.min(v31Elements.length, v32Elements.length);
+            for (var i = 0; i < length12; i++) {
+                // 获取 v13 和 v14 的值，并将它们存储成对的形式
+                var v31Value = v31Elements[i].value;
+                var v32Value = v32Elements[i].value;
+                pairs12.push({ v13: v31Value, v14: v32Value });
+            }
+
+            var v33Elements = document.querySelectorAll('input[name="v33"]');
+            var v34Elements = document.querySelectorAll('input[name="v34"]');
+            var pairs13 = [];
+            var length13 = Math.min(v33Elements.length, v34Elements.length);
+            for (var i = 0; i < length13; i++) {
+                // 获取 v13 和 v14 的值，并将它们存储成对的形式
+                var v33Value = v33Elements[i].value;
+                var v34Value = v34Elements[i].value;
+                pairs13.push({ v13: v33Value, v14: v34Value });
+            }
+
+
+
+
+            if ($(this).data('submitted') === true) {
+                return false; // 阻止重复提交
+            }
+            $(this).data('submitted', true);
+
+            if(paramValue){
+                $.ajax({
+                    type : 'post',
+                    url : '/NewOccupationalHealthManagementArchivesController/updateNew',
+                    data : {
+                        id:paramValue,
+                        staffingPersonnel:data.field.v1,
+                        preparationTime:data.field.v2,
+                        fileNames:data.field.v3,
+                        archiveNumber:data.field.v4,
+                        archiveYear:data.field.v5,
+                        archiveTime:data.field.v6,
+                        file1:JSON.stringify(pairs1),
+                        file2:JSON.stringify(pairs2),
+                        file3:JSON.stringify(pairs3),
+
+                        file4:JSON.stringify(pairs4),
+                        file5:JSON.stringify(pairs5),
+                        file6:JSON.stringify(pairs6),
+
+                        file7:JSON.stringify(pairs7),
+                        file8:JSON.stringify(pairs8),
+                        file9:JSON.stringify(pairs9),
+                        file10:JSON.stringify(pairs10),
+
+                        file11:JSON.stringify(pairs11),
+                        file12:JSON.stringify(pairs12),
+                        file13:JSON.stringify(pairs13),
+                    },
+
+                    success : function(data) {
+                        if (data.code == 20000) {
+
+                            notice.success({
+                                title : '消息通知',
+                                message : '操作成功!'
+                            });
+
+                            setTimeout(function() {
+                                window.close();
+                            }, 2000);
+                        } else {
+                            notice.error({
+                                title : '消息通知',
+                                message : '操作失败!'
+                            });
+                            setTimeout(function() {
+                                window.close();
+                            }, 2000);
+                        }
+                    }
+                })
+            }else{
+                $.ajax({
+                    type : 'post',
+                    url : '/NewOccupationalHealthManagementArchivesController/insetNew',
+                    data : {
+                        orgCode:$("#guishu").val(),
+                        staffingPersonnel:data.field.v1,
+                        preparationTime:data.field.v2,
+                        fileNames:data.field.v3,
+                        archiveNumber:data.field.v4,
+                        archiveYear:data.field.v5,
+                        archiveTime:data.field.v6,
+                        file1:JSON.stringify(pairs1),
+                        file2:JSON.stringify(pairs2),
+                        file3:JSON.stringify(pairs3),
+                        file4:JSON.stringify(pairs4),
+                        file5:JSON.stringify(pairs5),
+                        file6:JSON.stringify(pairs6),
+                        file7:JSON.stringify(pairs7),
+                        file8:JSON.stringify(pairs8),
+                        file9:JSON.stringify(pairs9),
+                        file10:JSON.stringify(pairs10),
+                        file11:JSON.stringify(pairs11),
+                        file12:JSON.stringify(pairs12),
+                        file13:JSON.stringify(pairs13),
+                    },
+
+                    success : function(data) {
+                        if (data.code == 20000) {
+
+                            notice.success({
+                                title : '消息通知',
+                                message : '操作成功!'
+                            });
+
+                            setTimeout(function() {
+                                window.close();
+                            }, 2000);
+                        } else {
+                            notice.error({
+                                title : '消息通知',
+                                message : '操作失败!'
+                            });
+                            setTimeout(function() {
+                                window.close();
+                            }, 2000);
+                        }
+                    }
+                })
+            }
+            return false; // 阻止默认 form 跳转
+        });
+
+
+        function selectForm(paramValue){
+            if(paramValue){
+                $.ajax({
+                    type:'get',
+                    url:'/NewOccupationalHealthManagementArchivesController/selectById',
+                    data:{id:paramValue},
+                    success : function(data){
+                        console.log("这里是查询出来的数据",data);
+                        if(data.code==20000){
+                            form.val("myForm", {
+                                "v1": data.data.staffingPersonnel,
+                                // "v2":data.data.preparationTime.substring(0, 10),
+                                "v3":data.data.fileNames,
+                                "v4":data.data.archiveNumber,
+                                "v5":data.data.archiveYear?.substring(0, 4),
+                                "v6":data.data.archiveTime?.substring(0, 10),
+
+                            });
+                            // if (treeInstance) {
+                            //     treeInstance.checkNode('tree', data.data.orgCode); // 选中节点
+                            //     $('#guishu').val(data.data.orgCode); // 更新表单输入值
+                            // } else {
+                            //     console.error("树形选择器尚未初始化完毕！");
+                            // }
+
+                            const pairsArr = JSON.parse(data.data.file1);
+                            const pairsArr1 = JSON.parse(data.data.file2);
+                            const pairsArr2 = JSON.parse(data.data.file3);
+                            const pairsArr3 = JSON.parse(data.data.file4);
+                            const pairsArr4 = JSON.parse(data.data.file5);
+                            const pairsArr5 = JSON.parse(data.data.file6);
+                            const pairsArr6 = JSON.parse(data.data.file7);
+                            const pairsArr7 = JSON.parse(data.data.file8);
+                            const pairsArr8 = JSON.parse(data.data.file9);
+                            const pairsArr9 = JSON.parse(data.data.file10);
+                            const pairsArr10 = JSON.parse(data.data.file11);
+                            const pairsArr11 = JSON.parse(data.data.file12);
+                            const pairsArr12 = JSON.parse(data.data.file13);
+                            var fileTable = document.getElementById('file-table');
+                            var fileTable2 = document.getElementById('file-table2');
+                            var fileTable3 = document.getElementById('file-table3');
+
+                            var fileTable4 = document.getElementById('file-table4');
+                            var fileTable5 = document.getElementById('file-table5');
+                            var fileTable6 = document.getElementById('file-table6');
+                            var fileTable7 = document.getElementById('file-table7');
+                            var fileTable8 = document.getElementById('file-table8');
+                            var fileTable9 = document.getElementById('file-table9');
+                            var fileTable10 = document.getElementById('file-table10');
+                            var fileTable11 = document.getElementById('file-table11');
+                            var fileTable12 = document.getElementById('file-table12');
+                            var fileTable13 = document.getElementById('file-table13');
+
+                            pairsArr?.forEach(function(res) {
+                                // 创建新的行元素
+                                var newRow = document.createElement('tr');
+
+                                // 创建新的单元格元素
+                                var newCell = document.createElement('td');
+
+                                // 设置单元格的 HTML 内容，包含文件名、隐藏的输入框、下载按钮和删除按钮
+                                newCell.innerHTML = `
+                                    <div class="file-row">
+                                        <div class="file-info">
+                                            <span>${res.v14}</span>
+                                        </div>
+                                        <div class="actions">
+                                            <input type="text" style="display: none" class="input-full layui-input" name="v9" value="${res.v13}">
+                                            <input type="text" style="display: none" class="input-full layui-input" name="v10" value="${res.v14}">
+                                             <button title="修改" class="edit-btn" style="border: none; background: none; cursor: pointer;">
+                                                <i class="layui-icon layui-icon-edit"></i>
+                                            </button>
+                                            <button title="预览" lay-submit="" lay-filter="preview" data-url="${res.v13}">&#128065;</button>
+                                            <button title="下载" lay-submit=""  lay-filter="down" data-name="${res.v14}"   data-url="${res.v13}"  >&#8681;</button>
+                                           <button title="删除" lay-submit=""  lay-filter="deleteRowBtn"  >&#10006;</button>
+                                        </div>
+                                    </div>
+                                `;
+                                newRow.appendChild(newCell);
+                                fileTable.appendChild(newRow);
+                                newCell.querySelector('.edit-btn').onclick = function() {
+                                    event.preventDefault();
+                                    var currentName = res.name;
+                                    layer.prompt({
+                                        title: '修改文件名',
+                                        value: currentName,
+                                        formType: 0 // 输入框类型，0：单行文本
+                                    }, function(value, index) {
+                                        // 更新文件名逻辑
+                                        newCell.querySelector('.file-info span').innerText = value; // 更新显示的文件名
+                                        newCell.querySelector('input[name="v10"]').value = value; // 更新隐藏的文件名输入
+                                        layer.close(index); // 关闭输入框
+                                    });
+                                };
+                            });
+
+
+                            pairsArr1?.forEach(function(res) {
+                                // 创建新的行元素
+                                var newRow = document.createElement('tr');
+
+                                // 创建新的单元格元素
+                                var newCell = document.createElement('td');
+
+                                // 设置单元格的 HTML 内容，包含文件名、隐藏的输入框、下载按钮和删除按钮
+                                newCell.innerHTML = `
+                                    <div class="file-row">
+                                        <div class="file-info">
+                                            <span>${res.v14}</span>
+                                        </div>
+                                        <div class="actions">
+                                            <input type="text" style="display: none" class="input-full layui-input" name="v11" value="${res.v13}">
+                                            <input type="text" style="display: none" class="input-full layui-input" name="v12" value="${res.v14}">
+                                               <button title="修改" class="edit-btn" style="border: none; background: none; cursor: pointer;">
+                                    <i class="layui-icon layui-icon-edit"></i>
+                                </button>
+                                <button title="预览" lay-submit="" lay-filter="preview" data-url="${res.v13}">&#128065;</button>
+                                            <button title="下载" lay-submit=""  lay-filter="down" data-name="${res.v14}"  data-url="${res.v13}"  >&#8681;</button>
+                                           <button title="删除" lay-submit=""  lay-filter="deleteRowBtn"  >&#10006;</button>
+                                        </div>
+                                    </div>
+                                `;
+                                newRow.appendChild(newCell);
+                                newCell.querySelector('.edit-btn').onclick = function() {
+                                    event.preventDefault();
+                                    var currentName = res.name;
+                                    layer.prompt({
+                                        title: '修改文件名',
+                                        value: currentName,
+                                        formType: 0 // 输入框类型，0：单行文本
+                                    }, function(value, index) {
+                                        // 更新文件名逻辑
+                                        newCell.querySelector('.file-info span').innerText = value; // 更新显示的文件名
+                                        newCell.querySelector('input[name="v12"]').value = value; // 更新隐藏的文件名输入
+                                        layer.close(index); // 关闭输入框
+                                    });
+                                };
+                                fileTable2.appendChild(newRow);
+                            });
+
+                            pairsArr2?.forEach(function(res) {
+                                // 创建新的行元素
+                                var newRow = document.createElement('tr');
+
+                                // 创建新的单元格元素
+                                var newCell = document.createElement('td');
+
+                                // 设置单元格的 HTML 内容，包含文件名、隐藏的输入框、下载按钮和删除按钮
+                                newCell.innerHTML = `
+                                    <div class="file-row">
+                                        <div class="file-info">
+                                            <span>${res.v14}</span>
+                                        </div>
+                                        <div class="actions">
+                                            <input type="text" style="display: none" class="input-full layui-input" name="v13" value="${res.v13}">
+                                            <input type="text" style="display: none" class="input-full layui-input" name="v14" value="${res.v14}">
+                                                    <button title="修改" class="edit-btn" style="border: none; background: none; cursor: pointer;">
+                                    <i class="layui-icon layui-icon-edit"></i>
+                                </button>
+                                <button title="预览" lay-submit="" lay-filter="preview" data-url="${res.v13}">&#128065;</button>
+                                            <button title="下载" lay-submit=""  lay-filter="down" data-name="${res.v14}"   data-url="${res.v13}"  >&#8681;</button>
+                                           <button title="删除" lay-submit=""  lay-filter="deleteRowBtn"  >&#10006;</button>
+                                        </div>
+                                    </div>
+                                `;
+                                newRow.appendChild(newCell);
+                                newCell.querySelector('.edit-btn').onclick = function() {
+                                    event.preventDefault();
+                                    var currentName = res.name;
+                                    layer.prompt({
+                                        title: '修改文件名',
+                                        value: currentName,
+                                        formType: 0 // 输入框类型，0：单行文本
+                                    }, function(value, index) {
+                                        // 更新文件名逻辑
+                                        newCell.querySelector('.file-info span').innerText = value; // 更新显示的文件名
+                                        newCell.querySelector('input[name="v14"]').value = value; // 更新隐藏的文件名输入
+                                        layer.close(index); // 关闭输入框
+                                    });
+                                };
+                                fileTable3.appendChild(newRow);
+                            });
+
+                            pairsArr3?.forEach(function(res) {
+                                // 创建新的行元素
+                                var newRow = document.createElement('tr');
+
+                                // 创建新的单元格元素
+                                var newCell = document.createElement('td');
+
+                                // 设置单元格的 HTML 内容，包含文件名、隐藏的输入框、下载按钮和删除按钮
+                                newCell.innerHTML = `
+                                    <div class="file-row">
+                                        <div class="file-info">
+                                            <span>${res.v14}</span>
+                                        </div>
+                                        <div class="actions">
+                                            <input type="text" style="display: none" class="input-full layui-input" name="v15" value="${res.v13}">
+                                            <input type="text" style="display: none" class="input-full layui-input" name="v16" value="${res.v14}">
+                                                    <button title="修改" class="edit-btn" style="border: none; background: none; cursor: pointer;">
+                                    <i class="layui-icon layui-icon-edit"></i>
+                                </button>
+                                <button title="预览" lay-submit="" lay-filter="preview" data-url="${res.v13}">&#128065;</button>
+                                            <button title="下载" lay-submit=""  lay-filter="down" data-name="${res.v14}"   data-url="${res.v13}"  >&#8681;</button>
+                                           <button title="删除" lay-submit=""  lay-filter="deleteRowBtn"  >&#10006;</button>
+                                        </div>
+                                    </div>
+                                `;
+                                newRow.appendChild(newCell);
+                                newCell.querySelector('.edit-btn').onclick = function() {
+                                    event.preventDefault();
+                                    var currentName = res.name;
+                                    layer.prompt({
+                                        title: '修改文件名',
+                                        value: currentName,
+                                        formType: 0 // 输入框类型，0：单行文本
+                                    }, function(value, index) {
+                                        // 更新文件名逻辑
+                                        newCell.querySelector('.file-info span').innerText = value; // 更新显示的文件名
+                                        newCell.querySelector('input[name="v16"]').value = value; // 更新隐藏的文件名输入
+                                        layer.close(index); // 关闭输入框
+                                    });
+                                };
+                                fileTable4.appendChild(newRow);
+                            });
+
+                            pairsArr4?.forEach(function(res) {
+                                // 创建新的行元素
+                                var newRow = document.createElement('tr');
+
+                                // 创建新的单元格元素
+                                var newCell = document.createElement('td');
+
+                                // 设置单元格的 HTML 内容，包含文件名、隐藏的输入框、下载按钮和删除按钮
+                                newCell.innerHTML = `
+                                    <div class="file-row">
+                                        <div class="file-info">
+                                            <span>${res.v14}</span>
+                                        </div>
+                                        <div class="actions">
+                                            <input type="text" style="display: none" class="input-full layui-input" name="v17" value="${res.v13}">
+                                            <input type="text" style="display: none" class="input-full layui-input" name="v18" value="${res.v14}">
+                                                    <button title="修改" class="edit-btn" style="border: none; background: none; cursor: pointer;">
+                                    <i class="layui-icon layui-icon-edit"></i>
+                                </button>
+                                <button title="预览" lay-submit="" lay-filter="preview" data-url="${res.v13}">&#128065;</button>
+                                            <button title="下载" lay-submit=""  lay-filter="down"  data-name="${res.v14}"  data-url="${res.v13}"  >&#8681;</button>
+                                           <button title="删除" lay-submit=""  lay-filter="deleteRowBtn"  >&#10006;</button>
+                                        </div>
+                                    </div>
+                                `;
+                                newRow.appendChild(newCell);
+                                newCell.querySelector('.edit-btn').onclick = function() {
+                                    event.preventDefault();
+                                    var currentName = res.name;
+                                    layer.prompt({
+                                        title: '修改文件名',
+                                        value: currentName,
+                                        formType: 0 // 输入框类型，0：单行文本
+                                    }, function(value, index) {
+                                        // 更新文件名逻辑
+                                        newCell.querySelector('.file-info span').innerText = value; // 更新显示的文件名
+                                        newCell.querySelector('input[name="v18"]').value = value; // 更新隐藏的文件名输入
+                                        layer.close(index); // 关闭输入框
+                                    });
+                                };
+                                fileTable5.appendChild(newRow);
+                            });
+
+                            pairsArr5?.forEach(function(res) {
+                                // 创建新的行元素
+                                var newRow = document.createElement('tr');
+
+                                // 创建新的单元格元素
+                                var newCell = document.createElement('td');
+
+                                // 设置单元格的 HTML 内容，包含文件名、隐藏的输入框、下载按钮和删除按钮
+                                newCell.innerHTML = `
+                                    <div class="file-row">
+                                        <div class="file-info">
+                                            <span>${res.v14}</span>
+                                        </div>
+                                        <div class="actions">
+                                            <input type="text" style="display: none" class="input-full layui-input" name="v19" value="${res.v13}">
+                                            <input type="text" style="display: none" class="input-full layui-input" name="v20" value="${res.v14}">
+                                                    <button title="修改" class="edit-btn" style="border: none; background: none; cursor: pointer;">
+                                    <i class="layui-icon layui-icon-edit"></i>
+                                </button>
+                                <button title="预览" lay-submit="" lay-filter="preview" data-url="${res.v13}">&#128065;</button>
+                                            <button title="下载" lay-submit=""  lay-filter="down"  data-name="${res.v14}"  data-url="${res.v13}"  >&#8681;</button>
+                                           <button title="删除" lay-submit=""  lay-filter="deleteRowBtn"  >&#10006;</button>
+                                        </div>
+                                    </div>
+                                `;
+                                newRow.appendChild(newCell);
+                                newCell.querySelector('.edit-btn').onclick = function() {
+                                    event.preventDefault();
+                                    var currentName = res.name;
+                                    layer.prompt({
+                                        title: '修改文件名',
+                                        value: currentName,
+                                        formType: 0 // 输入框类型，0：单行文本
+                                    }, function(value, index) {
+                                        // 更新文件名逻辑
+                                        newCell.querySelector('.file-info span').innerText = value; // 更新显示的文件名
+                                        newCell.querySelector('input[name="v20"]').value = value; // 更新隐藏的文件名输入
+                                        layer.close(index); // 关闭输入框
+                                    });
+                                };
+                                fileTable6.appendChild(newRow);
+                            });
+
+                            pairsArr6?.forEach(function(res) {
+                                // 创建新的行元素
+                                var newRow = document.createElement('tr');
+
+                                // 创建新的单元格元素
+                                var newCell = document.createElement('td');
+
+                                // 设置单元格的 HTML 内容，包含文件名、隐藏的输入框、下载按钮和删除按钮
+                                newCell.innerHTML = `
+                                    <div class="file-row">
+                                        <div class="file-info">
+                                            <span>${res.v14}</span>
+                                        </div>
+                                        <div class="actions">
+                                            <input type="text" style="display: none" class="input-full layui-input" name="v21" value="${res.v13}">
+                                            <input type="text" style="display: none" class="input-full layui-input" name="v22" value="${res.v14}">
+                                                    <button title="修改" class="edit-btn" style="border: none; background: none; cursor: pointer;">
+                                    <i class="layui-icon layui-icon-edit"></i>
+                                </button>
+                                <button title="预览" lay-submit="" lay-filter="preview" data-url="${res.v13}">&#128065;</button>
+                                            <button title="下载" lay-submit=""  lay-filter="down" data-name="${res.v14}"   data-url="${res.v13}"  >&#8681;</button>
+                                           <button title="删除" lay-submit=""  lay-filter="deleteRowBtn"  >&#10006;</button>
+                                        </div>
+                                    </div>
+                                `;
+                                newRow.appendChild(newCell);
+                                newCell.querySelector('.edit-btn').onclick = function() {
+                                    event.preventDefault();
+                                    var currentName = res.name;
+                                    layer.prompt({
+                                        title: '修改文件名',
+                                        value: currentName,
+                                        formType: 0 // 输入框类型，0：单行文本
+                                    }, function(value, index) {
+                                        // 更新文件名逻辑
+                                        newCell.querySelector('.file-info span').innerText = value; // 更新显示的文件名
+                                        newCell.querySelector('input[name="v22"]').value = value; // 更新隐藏的文件名输入
+                                        layer.close(index); // 关闭输入框
+                                    });
+                                };
+                                fileTable7.appendChild(newRow);
+                            });
+
+                            pairsArr7?.forEach(function(res) {
+                                // 创建新的行元素
+                                var newRow = document.createElement('tr');
+
+                                // 创建新的单元格元素
+                                var newCell = document.createElement('td');
+
+                                // 设置单元格的 HTML 内容，包含文件名、隐藏的输入框、下载按钮和删除按钮
+                                newCell.innerHTML = `
+                                    <div class="file-row">
+                                        <div class="file-info">
+                                            <span>${res.v14}</span>
+                                        </div>
+                                        <div class="actions">
+                                            <input type="text" style="display: none" class="input-full layui-input" name="v23" value="${res.v13}">
+                                            <input type="text" style="display: none" class="input-full layui-input" name="v24" value="${res.v14}">
+                                                    <button title="修改" class="edit-btn" style="border: none; background: none; cursor: pointer;">
+                                    <i class="layui-icon layui-icon-edit"></i>
+                                </button>
+                                <button title="预览" lay-submit="" lay-filter="preview" data-url="${res.v13}">&#128065;</button>
+                                            <button title="下载" lay-submit=""  lay-filter="down" data-name="${res.v14}"   data-url="${res.v13}"  >&#8681;</button>
+                                           <button title="删除" lay-submit=""  lay-filter="deleteRowBtn"  >&#10006;</button>
+                                        </div>
+                                    </div>
+                                `;
+                                newRow.appendChild(newCell);
+                                newCell.querySelector('.edit-btn').onclick = function() {
+                                    event.preventDefault();
+                                    var currentName = res.name;
+                                    layer.prompt({
+                                        title: '修改文件名',
+                                        value: currentName,
+                                        formType: 0 // 输入框类型，0：单行文本
+                                    }, function(value, index) {
+                                        // 更新文件名逻辑
+                                        newCell.querySelector('.file-info span').innerText = value; // 更新显示的文件名
+                                        newCell.querySelector('input[name="v24"]').value = value; // 更新隐藏的文件名输入
+                                        layer.close(index); // 关闭输入框
+                                    });
+                                };
+                                fileTable8.appendChild(newRow);
+                            });
+
+                            pairsArr8?.forEach(function(res) {
+                                // 创建新的行元素
+                                var newRow = document.createElement('tr');
+
+                                // 创建新的单元格元素
+                                var newCell = document.createElement('td');
+
+                                // 设置单元格的 HTML 内容，包含文件名、隐藏的输入框、下载按钮和删除按钮
+                                newCell.innerHTML = `
+                                    <div class="file-row">
+                                        <div class="file-info">
+                                            <span>${res.v14}</span>
+                                        </div>
+                                        <div class="actions">
+                                            <input type="text" style="display: none" class="input-full layui-input" name="v25" value="${res.v13}">
+                                            <input type="text" style="display: none" class="input-full layui-input" name="v26" value="${res.v14}">
+                                                    <button title="修改" class="edit-btn" style="border: none; background: none; cursor: pointer;">
+                                    <i class="layui-icon layui-icon-edit"></i>
+                                </button>
+                                <button title="预览" lay-submit="" lay-filter="preview" data-url="${res.v13}">&#128065;</button>
+                                            <button title="下载" lay-submit=""  lay-filter="down" data-name="${res.v14}"   data-url="${res.v13}"  >&#8681;</button>
+                                           <button title="删除" lay-submit=""  lay-filter="deleteRowBtn"  >&#10006;</button>
+                                        </div>
+                                    </div>
+                                `;
+                                newRow.appendChild(newCell);
+                                newCell.querySelector('.edit-btn').onclick = function() {
+                                    event.preventDefault();
+                                    var currentName = res.name;
+                                    layer.prompt({
+                                        title: '修改文件名',
+                                        value: currentName,
+                                        formType: 0 // 输入框类型，0：单行文本
+                                    }, function(value, index) {
+                                        // 更新文件名逻辑
+                                        newCell.querySelector('.file-info span').innerText = value; // 更新显示的文件名
+                                        newCell.querySelector('input[name="v26"]').value = value; // 更新隐藏的文件名输入
+                                        layer.close(index); // 关闭输入框
+                                    });
+                                };
+                                fileTable9.appendChild(newRow);
+                            });
+
+                            pairsArr9?.forEach(function(res) {
+                                // 创建新的行元素
+                                var newRow = document.createElement('tr');
+
+                                // 创建新的单元格元素
+                                var newCell = document.createElement('td');
+
+                                // 设置单元格的 HTML 内容，包含文件名、隐藏的输入框、下载按钮和删除按钮
+                                newCell.innerHTML = `
+                                    <div class="file-row">
+                                        <div class="file-info">
+                                            <span>${res.v14}</span>
+                                        </div>
+                                        <div class="actions">
+                                            <input type="text" style="display: none" class="input-full layui-input" name="v27" value="${res.v13}">
+                                            <input type="text" style="display: none" class="input-full layui-input" name="v28" value="${res.v14}">
+                                                    <button title="修改" class="edit-btn" style="border: none; background: none; cursor: pointer;">
+                                    <i class="layui-icon layui-icon-edit"></i>
+                                </button>
+                                <button title="预览" lay-submit="" lay-filter="preview" data-url="${res.v13}">&#128065;</button>
+                                            <button title="下载" lay-submit=""  lay-filter="down"  data-name="${res.v14}" data-url="${res.v13}"  >&#8681;</button>
+                                           <button title="删除" lay-submit=""  lay-filter="deleteRowBtn"  >&#10006;</button>
+                                        </div>
+                                    </div>
+                                `;
+                                newRow.appendChild(newCell);
+                                newCell.querySelector('.edit-btn').onclick = function() {
+                                    event.preventDefault();
+                                    var currentName = res.name;
+                                    layer.prompt({
+                                        title: '修改文件名',
+                                        value: currentName,
+                                        formType: 0 // 输入框类型，0：单行文本
+                                    }, function(value, index) {
+                                        // 更新文件名逻辑
+                                        newCell.querySelector('.file-info span').innerText = value; // 更新显示的文件名
+                                        newCell.querySelector('input[name="v28"]').value = value; // 更新隐藏的文件名输入
+                                        layer.close(index); // 关闭输入框
+                                    });
+                                };
+                                fileTable10.appendChild(newRow);
+                            });
+
+                            pairsArr10?.forEach(function(res) {
+                                // 创建新的行元素
+                                var newRow = document.createElement('tr');
+
+                                // 创建新的单元格元素
+                                var newCell = document.createElement('td');
+
+                                // 设置单元格的 HTML 内容，包含文件名、隐藏的输入框、下载按钮和删除按钮
+                                newCell.innerHTML = `
+                                    <div class="file-row">
+                                        <div class="file-info">
+                                            <span>${res.v14}</span>
+                                        </div>
+                                        <div class="actions">
+                                            <input type="text" style="display: none" class="input-full layui-input" name="v29" value="${res.v13}">
+                                            <input type="text" style="display: none" class="input-full layui-input" name="v30" value="${res.v14}">
+                                                    <button title="修改" class="edit-btn" style="border: none; background: none; cursor: pointer;">
+                                    <i class="layui-icon layui-icon-edit"></i>
+                                </button>
+                                <button title="预览" lay-submit="" lay-filter="preview" data-url="${res.v13}">&#128065;</button>
+                                            <button title="下载" lay-submit=""  lay-filter="down" data-name="${res.v14}"   data-url="${res.v13}"  >&#8681;</button>
+                                           <button title="删除" lay-submit=""  lay-filter="deleteRowBtn"  >&#10006;</button>
+                                        </div>
+                                    </div>
+                                `;
+                                newRow.appendChild(newCell);
+                                newCell.querySelector('.edit-btn').onclick = function() {
+                                    event.preventDefault();
+                                    var currentName = res.name;
+                                    layer.prompt({
+                                        title: '修改文件名',
+                                        value: currentName,
+                                        formType: 0 // 输入框类型，0：单行文本
+                                    }, function(value, index) {
+                                        // 更新文件名逻辑
+                                        newCell.querySelector('.file-info span').innerText = value; // 更新显示的文件名
+                                        newCell.querySelector('input[name="v30"]').value = value; // 更新隐藏的文件名输入
+                                        layer.close(index); // 关闭输入框
+                                    });
+                                };
+                                fileTable11.appendChild(newRow);
+                            });
+
+                            pairsArr11?.forEach(function(res) {
+                                // 创建新的行元素
+                                var newRow = document.createElement('tr');
+
+                                // 创建新的单元格元素
+                                var newCell = document.createElement('td');
+
+                                // 设置单元格的 HTML 内容，包含文件名、隐藏的输入框、下载按钮和删除按钮
+                                newCell.innerHTML = `
+                                    <div class="file-row">
+                                        <div class="file-info">
+                                            <span>${res.v14}</span>
+                                        </div>
+                                        <div class="actions">
+                                            <input type="text" style="display: none" class="input-full layui-input" name="v31" value="${res.v13}">
+                                            <input type="text" style="display: none" class="input-full layui-input" name="v32" value="${res.v14}">
+                                                    <button title="修改" class="edit-btn" style="border: none; background: none; cursor: pointer;">
+                                    <i class="layui-icon layui-icon-edit"></i>
+                                </button>
+                                <button title="预览" lay-submit="" lay-filter="preview" data-url="${res.v13}">&#128065;</button>
+                                            <button title="下载" lay-submit=""  lay-filter="down" data-name="${res.v14}"   data-url="${res.v13}"  >&#8681;</button>
+                                           <button title="删除" lay-submit=""  lay-filter="deleteRowBtn"  >&#10006;</button>
+                                        </div>
+                                    </div>
+                                `;
+                                newRow.appendChild(newCell);
+                                newCell.querySelector('.edit-btn').onclick = function() {
+                                    event.preventDefault();
+                                    var currentName = res.name;
+                                    layer.prompt({
+                                        title: '修改文件名',
+                                        value: currentName,
+                                        formType: 0 // 输入框类型，0：单行文本
+                                    }, function(value, index) {
+                                        // 更新文件名逻辑
+                                        newCell.querySelector('.file-info span').innerText = value; // 更新显示的文件名
+                                        newCell.querySelector('input[name="v32"]').value = value; // 更新隐藏的文件名输入
+                                        layer.close(index); // 关闭输入框
+                                    });
+                                };
+                                fileTable12.appendChild(newRow);
+                            });
+
+                            pairsArr12?.forEach(function(res) {
+                                // 创建新的行元素
+                                var newRow = document.createElement('tr');
+
+                                // 创建新的单元格元素
+                                var newCell = document.createElement('td');
+
+                                // 设置单元格的 HTML 内容，包含文件名、隐藏的输入框、下载按钮和删除按钮
+                                newCell.innerHTML = `
+                                    <div class="file-row">
+                                        <div class="file-info">
+                                            <span>${res.v14}</span>
+                                        </div>
+                                        <div class="actions">
+                                            <input type="text" style="display: none" class="input-full layui-input" name="v33" value="${res.v13}">
+                                            <input type="text" style="display: none" class="input-full layui-input" name="v34" value="${res.v14}">
+                                                    <button title="修改" class="edit-btn" style="border: none; background: none; cursor: pointer;">
+                                    <i class="layui-icon layui-icon-edit"></i>
+                                </button>
+                                <button title="预览" lay-submit="" lay-filter="preview" data-url="${res.v13}">&#128065;</button>
+                                            <button title="下载" lay-submit=""  lay-filter="down" data-name="${res.v14}"   data-url="${res.v13}"  >&#8681;</button>
+                                           <button title="删除" lay-submit=""  lay-filter="deleteRowBtn"  >&#10006;</button>
+                                        </div>
+                                    </div>
+                                `;
+                                newRow.appendChild(newCell);
+                                newCell.querySelector('.edit-btn').onclick = function() {
+                                    event.preventDefault();
+                                    var currentName = res.name;
+                                    layer.prompt({
+                                        title: '修改文件名',
+                                        value: currentName,
+                                        formType: 0 // 输入框类型，0：单行文本
+                                    }, function(value, index) {
+                                        // 更新文件名逻辑
+                                        newCell.querySelector('.file-info span').innerText = value; // 更新显示的文件名
+                                        newCell.querySelector('input[name="v34"]').value = value; // 更新隐藏的文件名输入
+                                        layer.close(index); // 关闭输入框
+                                    });
+                                };
+                                fileTable13.appendChild(newRow);
+                            });
+
+                            $("#userCode").val(data.data.userCode);
+
+                            form.render();
+                        }
+
+                    }
+                })
+            }
+
+
+        }
+
+
+
+        // 初始化表单
+        form.render();
+    });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>个人基本信息</title>
+    <style>
+        body {
+            display: flex;
+            height: 100vh;
+            margin: 0;
+        }
+        .sidebar {
+            width: 220px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 20px 0;
+        }
+        .sidebar div {
+            padding: 15px;
+            margin: 10px 0;
+            cursor: pointer;
+            border-radius: 5px;
+            text-align: center;
+            transition: background-color 0.3s;
+        }
+        .sidebar div:hover {
+            background-color: #e6f7ff;
+        }
+        .sidebar div.active {
+            background-color: #2d8cf0;
+            color: white;
+        }
+        .content {
+            flex-grow: 1;
+            overflow: hidden; /* 防止内容溢出 */
+        }
+        iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+    </style>
+</head>
+<body>
+<div class="sidebar">
+    <div class="active" onclick="showContent('个人基本信息', event)">个人基本信息</div>
+    <div onclick="showContent('体检档案', event)">体检档案</div>
+    <div onclick="showContent('健康风险评估报告', event)">健康风险评估报告</div>
+    <div onclick="showContent('心理健康风险评估报告', event)">心理健康风险评估报告</div>
+    <div onclick="showContent('职业健康监护档案', event)">职业健康监护档案</div>
+</div>
+<div class="content" id="content">
+    <iframe id="contentFrame" src=""></iframe>
+</div>
+<script type="text/javascript" th:src="@{/assets/libs/layui/layui.js}"></script>
+<script type="text/javascript" th:src="@{/assets/js/common.js}"></script>
+<script>
+    // 在这里定义 showContent 函数
+    var userCode = null;
+    const params = new URLSearchParams(window.location.search);
+    const paramValue = params.get('personalBasicInformation');
+    var goId=null;
+    function showContent(title, event) {
+        const frame = document.getElementById('contentFrame');
+        console.log(userCode,"----------------------")
+        // 更新选中样式
+
+        // 根据选择的标题更新 iframe 源
+        if (title === '个人基本信息' || title === '1') {
+            frame.src = `/manage/newpage/personalBasicInformationFormF?personalBasicInformation=${paramValue}`;
+            if(title != '1'){
+                const sidebarItems = document.querySelectorAll('.sidebar div');
+                sidebarItems.forEach(item => {
+                    item.classList.remove('active');
+                });
+                if (event) {
+                    event.target.classList.add('active');
+                }
+            }
+        } else if (title === '体检档案') {
+            frame.src = `/manage/newpage/beforeEmploymentAll?personalBasicInformation=${paramValue}`;
+            if(title != '1'){
+                const sidebarItems = document.querySelectorAll('.sidebar div');
+                sidebarItems.forEach(item => {
+                    item.classList.remove('active');
+                });
+                if (event) {
+                    event.target.classList.add('active');
+                }
+            }
+        } else if (title === '健康风险评估报告') {
+            frame.src = `/manage/newpage/assessment2?personalBasicInformation=${paramValue}&page=healthAssessment&userCode=${userCode}`;
+            if(title != '1'){
+                const sidebarItems = document.querySelectorAll('.sidebar div');
+                sidebarItems.forEach(item => {
+                    item.classList.remove('active');
+                });
+                if (event) {
+                    event.target.classList.add('active');
+                }
+            }
+        }else if (title === '心理健康风险评估报告') {
+            frame.src = `/manage/newpage/psychological?personalBasicInformation=${paramValue}&page=healthAssessment&userCode=${userCode}`;
+            if(title != '1'){
+                const sidebarItems = document.querySelectorAll('.sidebar div');
+                sidebarItems.forEach(item => {
+                    item.classList.remove('active');
+                });
+                if (event) {
+                    event.target.classList.add('active');
+                }
+            }
+        }else{
+            console.log(goId,"---------------------------------")
+            if(goId){
+                frame.src = `/manage/newpage/individualOccupationalHealthMonitoringRecordsWorkers?medicalExaminationInformation=${goId}`;
+                if(title != '1'){
+                    const sidebarItems = document.querySelectorAll('.sidebar div');
+                    sidebarItems.forEach(item => {
+                        item.classList.remove('active');
+                    });
+                    if (event) {
+                        event.target.classList.add('active');
+                    }
+                }
+            }else{
+
+            }
+        }
+
+    }
+
+    layui.use(['layer', 'form', 'step', 'element', 'table', 'laydate', 'treeSelect', 'notice', 'admin', 'layedit'], function() {
+        var $ = layui.jquery,
+            element = layui.element;
+
+        if (!userCode) {
+            $.ajax({
+                type: 'get',
+                url: '/newRegController/selectNewReg',
+                data: { id: paramValue },
+                success: function(data) {
+                    console.log("这里是查询出来的数据", data);
+                    userCode = data.data.userCode;
+                    $.ajax({
+                        type: 'get',
+                        url: '/NewEmployeePersonalInformationCardController/selectId',
+                        data: { userCode: userCode },
+                        success: function(data) {
+                            console.log("这里是查询出来的数据", data);
+                            goId = data.data;
+                        }
+                    });
+
+                }
+            });
+
+
+        }
+
+        // 默认显示个人基本信息
+        showContent('1', null);
+    });
+</script>
+</body>
+</html>

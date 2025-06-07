@@ -1,0 +1,376 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yihe.system.mapper.NewMedicalExaminationRecordsMapper">
+  <resultMap id="BaseResultMap" type="com.yihe.system.domain.NewMedicalExaminationRecords">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="reg_id" jdbcType="INTEGER" property="regId" />
+    <result column="gender" jdbcType="INTEGER" property="gender" />
+    <result column="age" jdbcType="INTEGER" property="age" />
+    <result column="phone" jdbcType="VARCHAR" property="phone" />
+    <result column="marriage" jdbcType="VARCHAR" property="marriage" />
+    <result column="occupation" jdbcType="VARCHAR" property="occupation" />
+    <result column="height" jdbcType="VARCHAR" property="height" />
+    <result column="weight" jdbcType="VARCHAR" property="weight" />
+    <result column="body_mass_index" jdbcType="VARCHAR" property="bodyMassIndex" />
+    <result column="blood_pressure" jdbcType="VARCHAR" property="bloodPressure" />
+    <result column="heart_rate" jdbcType="VARCHAR" property="heartRate" />
+    <result column="blood_oxygen" jdbcType="VARCHAR" property="bloodOxygen" />
+    <result column="personal_medical_examination_report" jdbcType="VARCHAR" property="personalMedicalExaminationReport" />
+    <result column="stage" jdbcType="VARCHAR" property="stage" />
+    <result column="is_check" jdbcType="INTEGER" property="isCheck" />
+    <result column="user_code" jdbcType="VARCHAR" property="userCode" />
+    <result column="time" jdbcType="VARCHAR" property="time" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+
+    <result column="v16" jdbcType="VARCHAR" property="v16" />
+    <result column="v17" jdbcType="VARCHAR" property="v17" />
+    <result column="v18" jdbcType="VARCHAR" property="v18" />
+    <result column="dname" jdbcType="VARCHAR" property="dname" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, reg_id, gender, age, phone, marriage, occupation, height, weight, body_mass_index, 
+    blood_pressure, heart_rate, blood_oxygen, personal_medical_examination_report, stage, 
+    is_check, user_code,`time`,v16,v17,v18
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from new_medical_examination_records
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+
+
+  <select id="selectByPrimaryKeyId" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select nm.*,nr.* from new_medical_examination_records nm left join new_reg nr on nm.reg_id=nr.id
+    where nm.id = #{id,jdbcType=INTEGER}
+  </select>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from new_medical_examination_records
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.yihe.system.domain.NewMedicalExaminationRecords">
+    insert into new_medical_examination_records (id, reg_id, gender, 
+      age, phone, marriage, 
+      occupation, height, weight, 
+      body_mass_index, blood_pressure, heart_rate, 
+      blood_oxygen, personal_medical_examination_report, 
+      stage, is_check, user_code
+      )
+    values (#{id,jdbcType=INTEGER}, #{regId,jdbcType=INTEGER}, #{gender,jdbcType=INTEGER}, 
+      #{age,jdbcType=INTEGER}, #{phone,jdbcType=VARCHAR}, #{marriage,jdbcType=VARCHAR}, 
+      #{occupation,jdbcType=VARCHAR}, #{height,jdbcType=VARCHAR}, #{weight,jdbcType=DOUBLE}, 
+      #{bodyMassIndex,jdbcType=VARCHAR}, #{bloodPressure,jdbcType=VARCHAR}, #{heartRate,jdbcType=VARCHAR}, 
+      #{bloodOxygen,jdbcType=VARCHAR}, #{personalMedicalExaminationReport,jdbcType=VARCHAR}, 
+      #{stage,jdbcType=VARCHAR}, #{isCheck,jdbcType=INTEGER}, #{userCode,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.yihe.system.domain.NewMedicalExaminationRecords">
+    insert into new_medical_examination_records
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="regId != null">
+        reg_id,
+      </if>
+      <if test="gender != null">
+        gender,
+      </if>
+      <if test="age != null">
+        age,
+      </if>
+      <if test="phone != null">
+        phone,
+      </if>
+      <if test="marriage != null">
+        marriage,
+      </if>
+      <if test="occupation != null">
+        occupation,
+      </if>
+      <if test="height != null">
+        height,
+      </if>
+      <if test="weight != null">
+        weight,
+      </if>
+      <if test="bodyMassIndex != null">
+        body_mass_index,
+      </if>
+      <if test="bloodPressure != null">
+        blood_pressure,
+      </if>
+      <if test="heartRate != null">
+        heart_rate,
+      </if>
+      <if test="bloodOxygen != null">
+        blood_oxygen,
+      </if>
+      <if test="personalMedicalExaminationReport != null">
+        personal_medical_examination_report,
+      </if>
+      <if test="stage != null">
+        stage,
+      </if>
+      <if test="isCheck != null">
+        is_check,
+      </if>
+      <if test="userCode != null">
+        user_code,
+      </if>
+      <if test="time != null">
+        `time`,
+      </if>
+
+      <if test="v16 != null">
+        v16,
+      </if>
+      <if test="v17 != null">
+        v17,
+      </if>
+      <if test="v18 != null">
+        v18,
+      </if>
+
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="regId != null">
+        #{regId,jdbcType=INTEGER},
+      </if>
+      <if test="gender != null">
+        #{gender,jdbcType=INTEGER},
+      </if>
+      <if test="age != null">
+        #{age,jdbcType=INTEGER},
+      </if>
+      <if test="phone != null">
+        #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="marriage != null">
+        #{marriage,jdbcType=VARCHAR},
+      </if>
+      <if test="occupation != null">
+        #{occupation,jdbcType=VARCHAR},
+      </if>
+      <if test="height != null">
+        #{height,jdbcType=VARCHAR},
+      </if>
+      <if test="weight != null">
+        #{weight,jdbcType=DOUBLE},
+      </if>
+      <if test="bodyMassIndex != null">
+        #{bodyMassIndex,jdbcType=VARCHAR},
+      </if>
+      <if test="bloodPressure != null">
+        #{bloodPressure,jdbcType=VARCHAR},
+      </if>
+      <if test="heartRate != null">
+        #{heartRate,jdbcType=VARCHAR},
+      </if>
+      <if test="bloodOxygen != null">
+        #{bloodOxygen,jdbcType=VARCHAR},
+      </if>
+      <if test="personalMedicalExaminationReport != null">
+        #{personalMedicalExaminationReport,jdbcType=VARCHAR},
+      </if>
+      <if test="stage != null">
+        #{stage,jdbcType=VARCHAR},
+      </if>
+      <if test="isCheck != null">
+        #{isCheck,jdbcType=INTEGER},
+      </if>
+      <if test="userCode != null">
+        #{userCode,jdbcType=VARCHAR},
+      </if>
+      <if test="time != null">
+        #{time},
+      </if>
+
+      <if test="v16 != null">
+        #{v16},
+      </if>
+      <if test="v17 != null">
+        #{v17},
+      </if>
+      <if test="v18 != null">
+        #{v18},
+      </if>
+
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.yihe.system.domain.NewMedicalExaminationRecords">
+    update new_medical_examination_records
+    <set>
+      <if test="regId != null">
+        reg_id = #{regId,jdbcType=INTEGER},
+      </if>
+      <if test="gender != null">
+        gender = #{gender,jdbcType=INTEGER},
+      </if>
+      <if test="age != null">
+        age = #{age,jdbcType=INTEGER},
+      </if>
+      <if test="phone != null">
+        phone = #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="marriage != null">
+        marriage = #{marriage,jdbcType=VARCHAR},
+      </if>
+      <if test="occupation != null">
+        occupation = #{occupation,jdbcType=VARCHAR},
+      </if>
+      <if test="height != null">
+        height = #{height,jdbcType=VARCHAR},
+      </if>
+      <if test="weight != null">
+        weight = #{weight,jdbcType=DOUBLE},
+      </if>
+      <if test="bodyMassIndex != null">
+        body_mass_index = #{bodyMassIndex,jdbcType=VARCHAR},
+      </if>
+      <if test="bloodPressure != null">
+        blood_pressure = #{bloodPressure,jdbcType=VARCHAR},
+      </if>
+      <if test="heartRate != null">
+        heart_rate = #{heartRate,jdbcType=VARCHAR},
+      </if>
+      <if test="bloodOxygen != null">
+        blood_oxygen = #{bloodOxygen,jdbcType=VARCHAR},
+      </if>
+      <if test="personalMedicalExaminationReport != null">
+        personal_medical_examination_report = #{personalMedicalExaminationReport,jdbcType=VARCHAR},
+      </if>
+      <if test="stage != null">
+        stage = #{stage,jdbcType=VARCHAR},
+      </if>
+      <if test="isCheck != null">
+        is_check = #{isCheck,jdbcType=INTEGER},
+      </if>
+      <if test="userCode != null">
+        user_code = #{userCode,jdbcType=VARCHAR},
+      </if>
+
+      <if test="v16 != null">
+        v16 = #{v16},
+      </if>
+      <if test="v17 != null">
+        v17 = #{v17},
+      </if>
+      <if test="v18 != null">
+        v18 = #{v18},
+      </if>
+
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.yihe.system.domain.NewMedicalExaminationRecords">
+    update new_medical_examination_records
+    set reg_id = #{regId,jdbcType=INTEGER},
+      gender = #{gender,jdbcType=INTEGER},
+      age = #{age,jdbcType=INTEGER},
+      phone = #{phone,jdbcType=VARCHAR},
+      marriage = #{marriage,jdbcType=VARCHAR},
+      occupation = #{occupation,jdbcType=VARCHAR},
+      height = #{height,jdbcType=VARCHAR},
+      weight = #{weight,jdbcType=DOUBLE},
+      body_mass_index = #{bodyMassIndex,jdbcType=VARCHAR},
+      blood_pressure = #{bloodPressure,jdbcType=VARCHAR},
+      heart_rate = #{heartRate,jdbcType=VARCHAR},
+      blood_oxygen = #{bloodOxygen,jdbcType=VARCHAR},
+      personal_medical_examination_report = #{personalMedicalExaminationReport,jdbcType=VARCHAR},
+      stage = #{stage,jdbcType=VARCHAR},
+      is_check = #{isCheck,jdbcType=INTEGER},
+      user_code = #{userCode,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+  <select id="selectByPage"  parameterType="com.yihe.system.domain.NewMedicalExaminationRecords" resultMap="BaseResultMap">
+    select nm.*,nr.*,ai.user_name as dname from new_medical_examination_records nm left join new_reg nr on nm.reg_id=nr.id
+    LEFT JOIN `yh_user_make_card` AS c ON nr.`user_code` = c.`User_Code`
+    LEFT JOIN yh_user_admin_info AS ai ON c.doctor = ai.id
+
+    <where>
+
+      <if test="name!=null and name!=''">
+       and  nr.name LIKE CONCAT('%', #{name}, '%')
+      </if>
+      <if test="workUnit!=null and workUnit!=''">
+        and  nr.work_unit =#{workUnit}
+      </if>
+      <if test="stage!=null and stage!=''">
+        and  nm.stage =#{stage}
+      </if>
+      <if test="regId!=null and regId!=''">
+        and  nm.reg_id =#{regId}
+      </if>
+
+      <if test="marriage!=null and marriage!=''">
+        and  nm.marriage =#{marriage}
+      </if>
+      <if test="occupation!=null and occupation!=''">
+        and  nm.occupation =#{occupation}
+      </if>
+
+      <if test="gender!=null and gender!=''">
+        and  nm.gender =#{gender}
+      </if>
+      <if test="v16!=null and v16!=''">
+        and  DATE_FORMAT(nm.v16, '%Y') =#{v16}
+      </if>
+
+      <if test="v18!=null and v18!=''">
+        and  nm.v18 =#{v18}
+      </if>
+    </where>
+    LIMIT #{begin}, #{limit};
+  </select>
+
+  <select id="selectByPageCount" parameterType="com.yihe.system.domain.NewMedicalExaminationRecords" resultType="int">
+    select count(*) from new_medical_examination_records nm left join new_reg nr on nm.reg_id=nr.id
+    LEFT JOIN `yh_user_make_card` AS c ON nr.`user_code` = c.`User_Code`
+    LEFT JOIN yh_user_admin_info AS ai ON c.doctor = ai.id
+    <where>
+      <if test="name!=null and name!=''">
+        and  nr.name LIKE CONCAT('%', #{name}, '%')
+      </if>
+      <if test="workUnit!=null and workUnit!=''">
+        and  nr.work_unit =#{workUnit}
+      </if>
+      <if test="stage!=null and stage!=''">
+        and  nm.stage =#{stage}
+      </if>
+      <if test="regId!=null and regId!=''">
+        and  nm.reg_id =#{regId}
+      </if>
+
+      <if test="marriage!=null and marriage!=''">
+        and  nm.marriage =#{marriage}
+      </if>
+      <if test="occupation!=null and occupation!=''">
+        and  nm.occupation =#{occupation}
+      </if>
+
+      <if test="gender!=null and gender!=''">
+        and  nm.gender =#{gender}
+      </if>
+      <if test="v16!=null and v16!=''">
+        and  DATE_FORMAT(nm.v16, '%Y') =#{v16}
+      </if>
+
+      <if test="v18!=null and v18!=''">
+        and  nm.v18 =#{v18}
+      </if>
+    </where>
+  </select>
+
+  <select id="selectArchives" resultMap="BaseResultMap">
+    select nm.*,nr.*,nr.name as dname from new_medical_examination_records nm left join new_reg nr on nm.reg_id=nr.id
+                                                                                   LEFT JOIN `yh_user_make_card` AS c ON nr.`user_code` = c.`User_Code`
+                                                                                   LEFT JOIN yh_user_admin_info AS ai ON c.doctor = ai.id
+                                           ORDER BY nm.time DESC LIMIT 20
+  </select>
+</mapper>

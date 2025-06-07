@@ -1,0 +1,18 @@
+package com.yihe.system.service;
+
+import com.yihe.system.domain.NewEmployeePsychologicalCounselingRecordForm;
+import com.yihe.system.domain.NewGoutPatientServiceRecordForm;
+
+import java.util.List;
+
+public interface NewEmployeePsychologicalCounselingRecordFormService {
+    int insetNew(NewEmployeePsychologicalCounselingRecordForm newEmployeePsychologicalCounselingRecordForm);
+
+    int updateNew(NewEmployeePsychologicalCounselingRecordForm newEmployeePsychologicalCounselingRecordForm);
+
+    NewEmployeePsychologicalCounselingRecordForm selectById(NewEmployeePsychologicalCounselingRecordForm newEmployeePsychologicalCounselingRecordForm);
+
+    List<NewEmployeePsychologicalCounselingRecordForm> selectByPage(NewEmployeePsychologicalCounselingRecordForm newEmployeePsychologicalCounselingRecordForm);
+
+    int selectByPageCount(NewEmployeePsychologicalCounselingRecordForm newEmployeePsychologicalCounselingRecordForm);
+}

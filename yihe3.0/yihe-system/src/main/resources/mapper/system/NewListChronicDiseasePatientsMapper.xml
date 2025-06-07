@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yihe.system.mapper.NewListChronicDiseasePatientsMapper">
+  <resultMap id="BaseResultMap" type="com.yihe.system.domain.NewListChronicDiseasePatients">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="json_data" jdbcType="VARCHAR" property="jsonData" />
+    <result column="isnert_time" jdbcType="TIMESTAMP" property="isnertTime" />
+    <result column="doctor" jdbcType="VARCHAR" property="doctor" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, json_data, isnert_time,doctor
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from new_list_chronic_disease_patients
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from new_list_chronic_disease_patients
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.yihe.system.domain.NewListChronicDiseasePatients">
+    insert into new_list_chronic_disease_patients (id, json_data, isnert_time
+      )
+    values (#{id,jdbcType=INTEGER}, #{jsonData,jdbcType=VARCHAR}, #{isnertTime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.yihe.system.domain.NewListChronicDiseasePatients">
+    insert into new_list_chronic_disease_patients
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="jsonData != null">
+        json_data,
+      </if>
+      <if test="isnertTime != null">
+        isnert_time,
+      </if>
+      <if test="doctor != null">
+        doctor,
+      </if>
+
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="jsonData != null">
+        #{jsonData,jdbcType=VARCHAR},
+      </if>
+      <if test="isnertTime != null">
+        #{isnertTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="doctor != null">
+        #{doctor,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.yihe.system.domain.NewListChronicDiseasePatients">
+    update new_list_chronic_disease_patients
+    <set>
+      <if test="jsonData != null">
+        json_data = #{jsonData,jdbcType=VARCHAR},
+      </if>
+      <if test="isnertTime != null">
+        isnert_time = #{isnertTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="doctor != null">
+        doctor = #{doctor},
+      </if>
+
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.yihe.system.domain.NewListChronicDiseasePatients">
+    update new_list_chronic_disease_patients
+    set json_data = #{jsonData,jdbcType=VARCHAR},
+      isnert_time = #{isnertTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+  <select id="selectByPage" parameterType="com.yihe.system.domain.NewListChronicDiseasePatients" resultMap="BaseResultMap">
+    select * from new_list_chronic_disease_patients
+    <where>
+      doctor=#{doctor}
+      <!-- 查询 name 不为空的条件 -->
+      <if test="name != null and name != ''">
+        and json_data LIKE CONCAT('%', #{name}, '%')
+      </if>
+
+      <!-- 查询 listSelect 不为空的条件 -->
+      <if test="listSelect != null and listSelect.size > 0">
+        and (
+        <foreach collection="listSelect" item="id" open="" separator=" or " close="">
+          json_data LIKE CONCAT('%', #{id}, '%')
+        </foreach>
+        )
+      </if>
+    </where>
+    LIMIT #{begin}, #{limit};
+  </select>
+
+  <select id="selectByPageCount" parameterType="com.yihe.system.domain.NewListChronicDiseasePatients" resultType="int">
+    select count(*) from new_list_chronic_disease_patients
+    <where>
+      doctor=#{doctor}
+      <!-- 查询 name 不为空的条件 -->
+      <if test="name != null and name != ''">
+        and json_data LIKE CONCAT('%', #{name}, '%')
+      </if>
+
+      <!-- 查询 listSelect 不为空的条件 -->
+      <if test="listSelect != null and listSelect.size > 0">
+        and (
+        <foreach collection="listSelect" item="id" open="" separator=" or " close="">
+          json_data LIKE CONCAT('%', #{id}, '%')
+        </foreach>
+        )
+      </if>
+    </where>
+  </select>
+
+</mapper>

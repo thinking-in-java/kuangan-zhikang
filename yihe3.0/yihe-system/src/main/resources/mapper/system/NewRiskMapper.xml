@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yihe.system.mapper.NewRiskMapper">
+  <resultMap id="BaseResultMap" type="com.yihe.system.domain.NewRisk">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="gender" jdbcType="VARCHAR" property="gender" />
+    <result column="risk_frequency" jdbcType="VARCHAR" property="riskFrequency" />
+    <result column="risk_time" jdbcType="DATE" property="riskTime" />
+    <result column="highrisk" jdbcType="VARCHAR" property="highrisk" />
+    <result column="be_ill" jdbcType="VARCHAR" property="beIll" />
+    <result column="inser_time" jdbcType="TIMESTAMP" property="inserTime" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="user_code" jdbcType="VARCHAR" property="userCode" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, gender, risk_frequency, risk_time, highrisk, be_ill, inser_time,name,user_code
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from new_risk
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from new_risk
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.yihe.system.domain.NewRisk">
+    insert into new_risk (id, gender, risk_frequency, 
+      risk_time, highrisk, be_ill, 
+      inser_time)
+    values (#{id,jdbcType=INTEGER}, #{gender,jdbcType=VARCHAR}, #{riskFrequency,jdbcType=VARCHAR}, 
+      #{riskTime,jdbcType=DATE}, #{highrisk,jdbcType=VARCHAR}, #{beIll,jdbcType=VARCHAR}, 
+      #{inserTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.yihe.system.domain.NewRisk">
+    insert into new_risk
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="gender != null">
+        gender,
+      </if>
+      <if test="riskFrequency != null">
+        risk_frequency,
+      </if>
+      <if test="riskTime != null">
+        risk_time,
+      </if>
+      <if test="highrisk != null">
+        highrisk,
+      </if>
+      <if test="beIll != null">
+        be_ill,
+      </if>
+      <if test="inserTime != null">
+        inser_time,
+      </if>
+      <if test="name != null">
+        name,
+      </if>
+      <if test="userCode != null">
+        user_code,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="gender != null">
+        #{gender,jdbcType=VARCHAR},
+      </if>
+      <if test="riskFrequency != null">
+        #{riskFrequency,jdbcType=VARCHAR},
+      </if>
+      <if test="riskTime != null">
+        #{riskTime,jdbcType=DATE},
+      </if>
+      <if test="highrisk != null">
+        #{highrisk,jdbcType=VARCHAR},
+      </if>
+      <if test="beIll != null">
+        #{beIll,jdbcType=VARCHAR},
+      </if>
+      <if test="inserTime != null">
+        #{inserTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="name != null">
+        #{name},
+      </if>
+      <if test="userCode != null">
+        #{userCode},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.yihe.system.domain.NewRisk">
+    update new_risk
+    <set>
+      <if test="gender != null">
+        gender = #{gender,jdbcType=VARCHAR},
+      </if>
+      <if test="riskFrequency != null">
+        risk_frequency = #{riskFrequency,jdbcType=VARCHAR},
+      </if>
+      <if test="riskTime != null">
+        risk_time = #{riskTime,jdbcType=DATE},
+      </if>
+      <if test="highrisk != null">
+        highrisk = #{highrisk,jdbcType=VARCHAR},
+      </if>
+      <if test="beIll != null">
+        be_ill = #{beIll,jdbcType=VARCHAR},
+      </if>
+      <if test="inserTime != null">
+        inser_time = #{inserTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="name != null">
+        name = #{name},
+      </if>
+      <if test="userCode != null">
+        user_code=#{userCode},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.yihe.system.domain.NewRisk">
+    update new_risk
+    set gender = #{gender,jdbcType=VARCHAR},
+      risk_frequency = #{riskFrequency,jdbcType=VARCHAR},
+      risk_time = #{riskTime,jdbcType=DATE},
+      highrisk = #{highrisk,jdbcType=VARCHAR},
+      be_ill = #{beIll,jdbcType=VARCHAR},
+      inser_time = #{inserTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+  <select id="selectByPage" parameterType="com.yihe.system.domain.NewRisk" resultMap="BaseResultMap">
+    SELECT nr.*, ur.*, c.*, ai.*
+    FROM new_risk nr
+    LEFT JOIN new_reg ur ON ur.user_code = nr.user_code
+    LEFT JOIN `yh_user_make_card` AS c ON nr.user_code = c.User_Code
+    LEFT JOIN yh_user_admin_info AS ai ON c.doctor = ai.id
+    INNER JOIN (
+    SELECT user_code, MAX(inser_time) AS latest_created_at
+    FROM new_risk
+    GROUP BY user_code
+    ) AS latest
+    ON nr.user_code = latest.user_code AND nr.inser_time = latest.latest_created_at
+    <where>
+      (ai.user_code = #{doctor} OR 1=1)
+      <if test="name != null and name != ''">
+        AND nr.name LIKE CONCAT('%', #{name}, '%')
+      </if>
+      <if test="workUnit != null and workUnit != ''">
+        AND ur.work_unit LIKE CONCAT('%', #{workUnit}, '%')
+      </if>
+    </where>
+    LIMIT #{begin}, #{limit};
+
+
+  </select>
+
+  <select id="selectByPageCount" parameterType="com.yihe.system.domain.NewRisk" resultType="int">
+    SELECT count(*)
+    FROM new_risk nr
+    LEFT JOIN new_reg ur ON ur.user_code = nr.user_code
+    LEFT JOIN `yh_user_make_card` AS c ON nr.user_code = c.User_Code
+    LEFT JOIN yh_user_admin_info AS ai ON c.doctor = ai.id
+    INNER JOIN (
+    SELECT user_code, MAX(inser_time) AS latest_created_at
+    FROM new_risk
+    GROUP BY user_code
+    ) AS latest
+    ON nr.user_code = latest.user_code AND nr.inser_time = latest.latest_created_at
+    <where>
+      (ai.user_code = #{doctor} OR 1=1)
+      <if test="name != null and name != ''">
+        AND nr.name LIKE CONCAT('%', #{name}, '%')
+      </if>
+      <if test="workUnit != null and workUnit != ''">
+        AND ur.work_unit LIKE CONCAT('%', #{workUnit}, '%')
+      </if>
+    </where>
+    LIMIT #{begin}, #{limit};
+
+  </select>
+</mapper>

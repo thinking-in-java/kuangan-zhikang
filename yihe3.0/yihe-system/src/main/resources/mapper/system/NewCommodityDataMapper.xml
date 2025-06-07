@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yihe.system.mapper.NewCommodityDataMapper">
+    <resultMap id="BaseResultMap" type="com.yihe.system.domain.NewCommodityData">
+        <id column="id" jdbcType="INTEGER" property="id" />
+        <result column="merchandise_id" jdbcType="INTEGER" property="merchandiseId" />
+        <result column="inventory" jdbcType="INTEGER" property="inventory" />
+        <result column="org_code" jdbcType="VARCHAR" property="orgCode" />
+    </resultMap>
+    <sql id="Base_Column_List">
+        id, merchandise_id, inventory, org_code
+    </sql>
+
+    <select id="selectInvent" parameterType="com.yihe.system.domain.NewCommodityData" resultMap="BaseResultMap">
+        select * from new_commodity_data where  merchandise_id=#{merchandiseId} and org_code=#{orgCode} limit 1
+    </select>
+
+    <insert id="insert"  parameterType="com.yihe.system.domain.NewCommodityData">
+        insert into new_commodity_data
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="merchandiseId != null" >
+                merchandise_id,
+            </if>
+            <if test="inventory != null" >
+                inventory,
+            </if>
+            <if test="orgCode != null" >
+                org_code,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="merchandiseId != null" >
+                #{merchandiseId},
+            </if>
+            <if test="inventory != null" >
+                #{inventory},
+            </if>
+            <if test="orgCode != null" >
+                #{orgCode},
+            </if>
+        </trim>
+    </insert>
+
+
+    <update id="update" parameterType="com.yihe.system.domain.NewCommodityData" >
+        update new_commodity_data
+        <set >
+            <if test="merchandiseId != null" >
+                merchandise_id = #{merchandiseId},
+            </if>
+            <if test="inventory != null" >
+                inventory = #{inventory},
+            </if>
+            <if test="orgCode != null" >
+                org_code = #{orgCode},
+            </if>
+
+        </set>
+        where id = #{id}
+    </update>
+
+
+    <delete id="deletByIdAndCode">
+        delete from new_commodity_data where  merchandise_id = #{id} and org_code like  CONCAT(#{orgCode},'%')
+    </delete>
+
+    <select id="selectByIdAndCode" parameterType="com.yihe.system.domain.NewCommodityData" resultMap="BaseResultMap">
+        select  * from new_commodity_data where  merchandise_id = #{merchandiseId} and org_code like  CONCAT(#{orgCode},'%')
+    </select>
+
+</mapper>

@@ -1,0 +1,1141 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>尘肺病服务记录表</title>
+    <link rel="stylesheet" th:href="@{/assets/js/layui-v2.9.16/layui/css/layui.css}"/>
+    <script type="text/javascript" th:src="@{/assets/js/layui-v2.9.16/layui/layui.js}"></script>
+    <style>
+        body{
+            background:#F1F1F1
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            table-layout: fixed;
+            border-color:rgb(144, 186, 221)
+        }
+        th, td {
+            border: 1px solid #ccc;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: rgb(231, 243, 252);
+            font-size: 10pt;
+            font-family: "Microsoft YaHei";
+            word-break: break-word;
+            overflow-wrap: break-word;
+            text-align: center;
+        }
+        .section-title {
+            text-align: center;
+            font-weight: bold;
+            background-color: #e6f7ff;
+        }
+        .input-full {
+            width: 100%;
+            box-sizing: border-box;
+        }
+        .radio-group {
+            display: flex;
+            align-items: center;
+        }
+        .radio-group label {
+            margin-right: 10px;
+        }
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        .checkbox-group label {
+            margin-right: 15px;
+        }
+        .heng{
+            text-align: center;
+            font-size: 10pt;
+            font-family: "Microsoft YaHei";
+            word-break: break-word;
+            overflow-wrap: break-word;
+        }
+        .datainput{
+            border-color: #eee !important;
+            border-width: 1px;
+        }
+
+        .layui-form-checked[lay-skin=primary] i{
+            border-color:#2d8cf0 !important;
+            background-color:#FFF !important;
+            color:#2d8cf0 !important;
+            font-weight: bold;
+        }
+
+        .layui-form-checkbox[lay-skin=primary]:hover i{
+            border-color:#2d8cf0 !important;
+        }
+        .layui-form-radio>i:hover, .layui-form-radioed>i{
+            color: #2d8cf0 !important;
+        }
+
+        /* 覆盖 layui 的默认主题颜色 */
+        .theme-colorful .layui-btn {
+            height: 36px;
+            line-height: 36px;
+            border-radius: 4px;
+            background-color: #2d8cf0;
+            box-shadow: 0 1px 0 rgba(0, 0, 0, .03);
+        }
+        .layui-form-radio:hover>*, .layui-form-radioed, .layui-form-radioed>i{
+            color: #2d8cf0 !important;
+        }
+
+        /*.layui-input {*/
+        /*    border-color: #597FC0 !important;*/
+        /*}*/
+
+        /* ...其他元素样式 */
+        /* 修改分页按钮的背景颜色和字体颜色 */
+        .layui-laypage a {
+            background-color: #f0f0f0; /* 设置按钮的背景颜色 */
+            color: #333; /* 设置按钮的字体颜色 */
+        }
+
+        /* 鼠标悬停时按钮的背景颜色 */
+        .layui-laypage a:hover {
+            background-color: #fff;
+            color: #2d8cf0;
+        }
+
+        /* 当前页的背景颜色和字体颜色 */
+        .layui-laypage .layui-laypage-curr .layui-laypage-em {
+            background-color: #2d8cf0; /* 当前页的背景颜色 */
+            color: white; /* 当前页的字体颜色 */
+        }
+
+        .file-row {
+            background-color: #e6f7ff;
+            padding: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-radius: 5px;
+            margin: 10px 0;
+            width: 98%;
+        }
+        .file-row .file-info {
+            display: flex;
+            align-items: center;
+        }
+        .file-row .file-info img {
+            width: 20px;
+            margin-right: 10px;
+        }
+        .file-row .file-info span {
+            font-size: 14px;
+        }
+        .file-row .actions {
+            display: flex;
+            align-items: center;
+        }
+        .file-row .actions button {
+            border: none;
+            background: none;
+            cursor: pointer;
+            margin-left: 10px;
+            font-size: 16px;
+        }
+
+        .layui-laydate-header {
+            background-color: #2d8cf0; /* 顶部背景颜色 */
+            color: #fff; /* 顶部文字颜色 */
+        }
+
+        .layui-laydate-list li:hover {
+            background-color: #2d8cf0; /* 鼠标悬停时的背景颜色 */
+            color: #fff; /* 鼠标悬停时的文字颜色 */
+        }
+
+        .layui-this, .layui-this:hover {
+            background-color: #fff !important; /* 选中的背景颜色 */
+            color: #2d8cf0 !important; /* 选中的文字颜色 */
+        }
+        @media print {
+            .no-print {
+                display: none !important;
+            }
+            @page {
+                size: A4; /* 或者你可以指定其他页面大小 */
+                margin: 1cm; /* 调整打印边距 */
+            }
+            body {
+                width: 100%;
+                height: 100%;
+                zoom: 0.8; /* 缩小页面内容 */
+            }
+        }
+        @page {
+            /* 尝试去除默认的页眉和页脚 */
+            margin: 0;
+        }
+    </style>
+</head>
+<body>
+
+<div class="layui-form " style="width:70%;margin:auto;padding:0 5%;background:#FFF;margin-top:0">
+    <h2 style="text-align: center;">尘肺病服务记录表</h2>
+    <input id="guishu" type="hidden" value="">
+    <input id="userCode" type="hidden" value="">
+    <input id="regId" type="hidden" value="">
+
+    <form class="layui-form" id="addfolder" lay-filter="folderForm" style="display: none;min-height: 300px">
+        <div id="search-header">
+
+
+            <div class="layui-inline" style="margin-left: 3px;">
+                <label class="layui-form-label w-auto">姓名:</label>
+                <div class="layui-input-inline">
+                    <input id="name" class="layui-input" placeholder="请输入" style="width: 124px;"/>
+                </div>
+            </div>
+
+            <div class="layui-inline" style="padding-left: 20px;">
+                <button class="layui-btn icon-btn sousuoDN " lay-submit="" lay-filter="regManageQueryBtn"><i class="layui-icon"></i>搜索</button>
+                <button id="btnempty" style="background-color: #fff;width: 69px;color: black;border: 1px solid #e5e5e5;" class="layui-btn icon-btn"></i>清除</button>
+            </div>
+        </div>
+        <div id="tables" class="text-center layui-text"  style="width: 100%;">
+
+        </div>
+    </form>
+
+
+
+    <form class="layui-form" id="myForm" lay-filter="myForm">
+
+        <button style="float: right" type="submit" class="layui-btn" lay-submit lay-filter="myFormSave">保存</button>
+        <button style="float: right;margin-right: 30px" type="submit" class="layui-btn no-print" lay-submit lay-filter="generatePDF">打印</button>
+        <table>
+            <tr >
+                <th colspan="4">姓名</th>
+                <td colspan="20">
+                    <div class="layui-input-group">
+                        <input name="v1" type="text" class="input-full layui-input" readonly>
+                        <div class="layui-input-split layui-input-suffix chooseName" style="cursor: pointer;">
+                            <i class="layui-icon layui-icon-search"></i>
+                        </div>
+                    </div>
+                </td>
+
+
+                    <input style="display: none" name="v2" type="text" class="input-full layui-input" readonly>
+
+
+            </tr>
+
+
+            <tr>
+                <th colspan="4">服务日期</th>
+                <td colspan="20"><input type="date" class="input-full layui-input" name="v3" placeholder=""></td>
+            </tr>
+
+
+            <tr >
+                <th colspan="4">服务方式</th>
+                <td colspan="20">
+                    <input type="radio" name="v4" value="健康小屋" title="健康小屋">
+                    <input type="radio" name="v4" value="小程序" title="小程序" >
+                    <input type="radio" name="v4" value="电话" title="电话" >
+                    <input type="radio" name="v4" value="微信" title="微信" >
+                </td>
+
+
+            </tr>
+
+            <tr >
+                <th colspan="4">症状</th>
+                <td colspan="20">
+                    <table border="1" width="100%">
+                        <tr >
+                            <td colspan="20">
+                                <div class="checkbox-group">
+                                    <input name="v5" type="checkbox"  value="无症状"  title="无症状">
+                                    <input name="v5" type="checkbox"  value="咳嗽"  title="咳嗽">
+                                    <input name="v5" type="checkbox"  value="咳痰"  title="咳痰">
+                                    <input name="v5" type="checkbox"  value="呼吸困难"  title="呼吸困难">
+
+                                    <input name="v5" type="checkbox"  value="胸痛"  title="胸痛">
+                                    <input name="v5" type="checkbox"  value="咯血"  title="咯血">
+                                </div>
+                            </td>
+                        </tr>
+                        <tr >
+                            <td colspan="20"><div style="line-height: 40px;width: 5%;float: left">其他：</div><input style="width: 95%;float: right"  type="text" class="input-full layui-input" name="v6" ></td>
+                        </tr>
+
+                    </table>
+
+                </td>
+
+            </tr>
+
+
+
+            <tr >
+                <th colspan="4">体征</th>
+                <td colspan="20" style="padding: 0">
+                    <table border="1" width="100%">
+                        <tr >
+                            <th colspan="4">血压（mmHg）</th>
+                            <td colspan="20">
+                                <div style="line-height: 40px;width: 5%;float: left">测量</div><input style="width: 30%;float: left"  type="text" class="input-full layui-input" name="v7" >
+
+                                <div style="line-height: 40px;width: 5%;float: left">目标</div><input style="width: 30%;float: left"  type="text" class="input-full layui-input" name="v8" >
+                            </td>
+                        </tr>
+
+                        <tr >
+                            <th colspan="4">体  重（kg)</th>
+                            <td colspan="20">
+                                <div style="line-height: 40px;width: 5%;float: left">测量</div><input style="width: 30%;float: left"  type="text" class="input-full layui-input" name="v9" >
+
+                                <div style="line-height: 40px;width: 5%;float: left">目标</div><input style="width: 30%;float: left"  type="text" class="input-full layui-input" name="v10" >
+                            </td>
+                        </tr>
+
+                        <tr >
+                            <th colspan="4">体质指数</th>
+                            <td colspan="20">
+                                <div style="line-height: 40px;width: 5%;float: left">测量</div><input style="width: 30%;float: left"  type="text" class="input-full layui-input" name="v11" >
+
+                                <div style="line-height: 40px;width: 5%;float: left">目标</div><input style="width: 30%;float: left"  type="text" class="input-full layui-input" name="v12" >
+                            </td>
+                        </tr>
+
+                        <tr >
+                            <th colspan="4">心率（次/分钟）</th>
+                            <td colspan="20"><input type="text" class="input-full layui-input" name="v13" ></td>
+                        </tr>
+
+                        <tr >
+                            <th colspan="4">其他</th>
+                            <td colspan="20"><input type="text" class="input-full layui-input" name="v14" ></td>
+                        </tr>
+
+                    </table>
+
+                </td>
+
+            </tr>
+
+
+
+
+
+            <tr >
+                <th colspan="4">生活方式指导</th>
+                <td colspan="20" style="padding: 0">
+                    <table border="1" width="100%">
+                        <tr >
+                            <th colspan="4">日吸烟量（支）</th>
+                            <td colspan="20"><input type="text" class="input-full layui-input" name="v15" ></td>
+                        </tr>
+
+                        <tr >
+                            <th colspan="4">日饮酒量（两）</th>
+                            <td colspan="20"><input type="text" class="input-full layui-input" name="v16" ></td>
+                        </tr>
+
+                        <tr >
+                            <th colspan="4">运动</th>
+                            <td colspan="20">
+                                <div style="line-height: 40px; width: 5%; float: left;">测量</div>
+                                <input style="width: 44%; float: left;" type="text" class="input-full layui-input" name="v17">
+
+                                <div style="line-height: 40px; width: 4%; float: left;">次/周</div>
+                                <input style="width: 38%; float: left;" type="text" class="input-full layui-input" name="v18">
+                                <div style="line-height: 40px; width: 6%; float: left;">分钟/次</div>
+                                <div style="clear: both;"></div> <!-- 清除浮动 -->
+
+                                <div style="line-height: 40px; width: 5%; float: left;">测量</div>
+                                <input style="width: 44%; float: left;" type="text" class="input-full layui-input" name="v19">
+
+                                <div style="line-height: 40px; width: 4%; float: left;">次/周</div>
+                                <input style="width: 38%; float: left;" type="text" class="input-full layui-input" name="v20">
+                                <div style="line-height: 40px; width: 6%; float: left;">分钟/次</div>
+                                <div style="clear: both;"></div>
+
+                            </td>
+                        </tr>
+
+                        <tr >
+                            <th colspan="4">摄盐情况（咸淡）</th>
+                            <td colspan="20">
+                                <div  >
+                                    <input type="radio" name="v21" value="轻" title="轻">
+                                    <input type="radio" name="v21" value="中" title="中" >
+                                    <input type="radio" name="v21" value="重" title="重" >
+                                </div>
+
+                            </td>
+                        </tr>
+
+                        <tr >
+                            <th colspan="4">心理调整</th>
+                            <td colspan="20">
+                                    <input type="radio" name="v22" value="良好" title="良好">
+                                    <input type="radio" name="v22" value="一般" title="一般" >
+                                    <input type="radio" name="v22" value="差" title="差" >
+                            </td>
+                        </tr>
+
+                        <tr >
+                            <th colspan="4">遵医行为</th>
+                            <td colspan="20">
+                                <input type="radio" name="v23" value="良好" title="良好">
+                                <input type="radio" name="v23" value="一般" title="一般" >
+                                <input type="radio" name="v23" value="差" title="差" >
+                            </td>
+                        </tr>
+
+                    </table>
+
+                </td>
+
+            </tr>
+
+            <tr >
+                <th colspan="4">辅助检查</th>
+                <td colspan="20"><input type="text" class="input-full layui-input" name="v24" style="width: 90%"></td>
+            </tr>
+
+            <tr >
+                <th colspan="4">服药依从性</th>
+                <td colspan="20">
+                    <input type="radio" name="v25" value="规律" title="规律">
+                    <input type="radio" name="v25" value="间断" title="间断" >
+                    <input type="radio" name="v25" value="不服药" title="不服药" >
+                </td>
+            </tr>
+
+            <tr >
+                <th colspan="4">药物不良反应</th>
+                <td colspan="20">
+                    <input type="radio" name="v26" value="无" title="无">
+                    <input type="radio" name="v26" value="有" title="有" >
+                </td>
+            </tr>
+
+            <tr >
+                <th colspan="4">此次服务分类</th>
+                <td colspan="20">
+                    <input type="radio" name="v27" value="控制满意" title="控制满意">
+                    <input type="radio" name="v27" value="控制不满意" title="控制不满意" >
+                    <input type="radio" name="v27" value="不良反应" title="不良反应" >
+                    <input type="radio" name="v27" value="并发症" title="并发症" >
+                </td>
+            </tr>
+
+
+
+
+
+            <tr >
+                <th colspan="4">用药情况</th>
+                <td colspan="20" style="padding: 0">
+                    <table border="1" width="100%">
+                        <tr >
+                            <th colspan="4">药物名称 1</th>
+                            <td colspan="20"><input type="text" class="input-full layui-input" name="28" ></td>
+                        </tr>
+
+                        <tr >
+                            <th colspan="4">用法用量</th>
+                            <td colspan="20">
+                                <div style="line-height: 40px;width: 5%;float: left">每日</div><input style="width: 30%;float: left"  type="text" class="input-full layui-input" name="29" ><div style="line-height: 40px;width: 5%;float: left">次</div>
+
+                                <div style="line-height: 40px;width: 5%;float: left">每次</div><input style="width: 30%;float: left"  type="text" class="input-full layui-input" name="30" ><div style="line-height: 40px;width: 5%;float: left">mg</div>
+                            </td>
+                        </tr>
+
+                        <tr >
+                            <th colspan="4">药物名称 2</th>
+                            <td colspan="20"><input type="text" class="input-full layui-input" name="31" ></td>
+                        </tr>
+
+                        <tr >
+                            <th colspan="4">用法用量</th>
+                            <td colspan="20">
+                                <div style="line-height: 40px;width: 5%;float: left">每日</div><input style="width: 30%;float: left"  type="text" class="input-full layui-input" name="v32" ><div style="line-height: 40px;width: 5%;float: left">次</div>
+
+                                <div style="line-height: 40px;width: 5%;float: left">每次</div><input style="width: 30%;float: left"  type="text" class="input-full layui-input" name="v33" ><div style="line-height: 40px;width: 5%;float: left">mg</div>
+                            </td>
+                        </tr>
+
+                        <tr >
+                            <th colspan="4">药物名称 3</th>
+                            <td colspan="20"><input type="text" class="input-full layui-input" name="v34" ></td>
+                        </tr>
+
+                        <tr >
+                            <th colspan="4">用法用量</th>
+                            <td colspan="20">
+                                <div style="line-height: 40px;width: 5%;float: left">每日</div><input style="width: 30%;float: left"  type="text" class="input-full layui-input" name="v35" ><div style="line-height: 40px;width: 5%;float: left">次</div>
+
+                                <div style="line-height: 40px;width: 5%;float: left">每次</div><input style="width: 30%;float: left"  type="text" class="input-full layui-input" name="v36" ><div style="line-height: 40px;width: 5%;float: left">mg</div>
+                            </td>
+                        </tr>
+
+                        <tr >
+                            <th colspan="4">其他药物</th>
+                            <td colspan="20"><input type="text" class="input-full layui-input" name="v37" ></td>
+                        </tr>
+
+                        <tr >
+                            <th colspan="4">用法用量</th>
+                            <td colspan="20">
+                                <div style="line-height: 40px;width: 5%;float: left">每日</div><input style="width: 30%;float: left"  type="text" class="input-full layui-input" name="v38" ><div style="line-height: 40px;width: 5%;float: left">次</div>
+
+                                <div style="line-height: 40px;width: 5%;float: left">每次</div><input style="width: 30%;float: left"  type="text" class="input-full layui-input" name="v39" ><div style="line-height: 40px;width: 5%;float: left">mg</div>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+
+            </tr>
+
+
+
+
+            <tr >
+                <th colspan="4">转诊</th>
+                <td colspan="20" style="padding: 0">
+                    <table border="1" width="100%">
+                        <tr >
+                            <th colspan="4">原 因</th>
+                            <td colspan="20"><input type="text" class="input-full layui-input" name="v40" ></td>
+                        </tr>
+
+                        <tr >
+                            <th colspan="4">机构及科别</th>
+                            <td colspan="20"><input type="text" class="input-full layui-input" name="v41" ></td>
+                        </tr>
+
+                    </table>
+                </td>
+
+            </tr>
+
+
+            <tr >
+                <th colspan="4">健康指导意见</th>
+                <td colspan="20"><textarea  type="textarea" class="input-full layui-textarea" name="v42" placeholder=""></textarea></td>
+            </tr>
+
+            <tr >
+                <th colspan="4">下次服务日期</th>
+                <td colspan="20"><input type="date" class="input-full layui-input" name="v43"></td>
+            </tr>
+
+            <tr >
+                <th colspan="4">
+                    [[${roleName == '心理咨询师' ? '心理咨询师' : '健管师'}]]
+                </th>
+                <td colspan="20">
+                    <input type="text" class="input-full layui-input" name="v44" ></td>
+                </td>
+            </tr>
+
+
+
+
+
+        </table>
+    </form>
+</div>
+
+<script type="text/javascript" th:src="@{/assets/js/layui-v2.9.16/layui/layui.js}"></script>
+<script type="text/javascript" th:src="@{/assets/js/common.js}"></script>
+<script type="text/javascript" th:src="@{/assets/js/jquery-1.11.1.js}"></script>
+<script th:inline="javascript">
+    layui.use(['form',"table",'treeSelect','notice','upload',"laydate"], function(){
+        var form = layui.form;
+        var $ = layui.jquery;
+        var layer = layui.layer;
+        var table = layui.table;
+        var notice=layui.notice;
+        var upload = layui.upload;
+        var treeSelect= layui.treeSelect;
+        layui.config({
+            skin: 'blue'  // 设置主题为蓝色
+        });
+        form.on('submit(generatePDF)', function(data){
+            window.print();
+            return false;
+        });
+        $(".chooseName").on("click",function (){
+            var closeIndex = layer.open({
+                type: 1, // page 层类型
+                area: ['800px', '600px'],
+                title: '选择名字',
+                shade: 0.6, // 遮罩透明度
+                anim: 0, // 0-6 的动画形式，-1 不开启
+                content: $("#addfolder"),
+                success: function(layero, index){
+                    // 在弹出层初始化完成后渲染表格
+                    var regManageTb=table.render({
+                        elem: '#tables',
+                        url: '/newRegController/queryLocallyManagedArchives',
+                        page: true,
+                        limit : 10,
+                        where : {regTime:""},
+                        cols: [[
+                            // {type: 'radio', fixed: 'left'},
+                            {field:'userCode', title:'用户编号', fixed: 'center'},
+                            {field: 'name', title: '姓名', align: 'center'},
+                            {field: 'phone', align: 'center', title: '电话'} ,
+                        ]],
+                        parseData: function(res) {
+                            if (res.code === 20000) {
+                                return {
+                                    "code": 0,
+                                    "msg": res.msg || "",
+                                    "count": res.count || 0,
+                                    "data": res.data.data || []
+                                };
+                            } else {
+                                return {
+                                    "code": 1,
+                                    "msg": res.msg || "获取数据失败",
+                                    "count": 0,
+                                    "data": []
+                                };
+                            }
+                        },
+                        done: function() {
+                            $('#tables').css('visibility', 'visible');
+                        }
+                    });
+                    $('#tables').css('visibility', 'hidden');
+
+
+                    // 行单击事件( 双击事件为: rowDouble )
+                    table.on('row(tables)', function(obj){
+                        var data = obj.data; // 获取当前行数据
+                        console.log(data,"这里是点击事件啊啊啊")
+                        // 显示 - 仅用于演示
+
+                        form.val("myForm", {
+                            "v1": data.name,
+                            "v2":data.id,
+                        });
+
+                        form.render();
+                        layer.close(closeIndex);
+
+                    });
+
+
+
+                    form.on('submit(regManageQueryBtn)', function(data){
+                        regManageTb.reload({
+                            where : {
+                                //这里注意一定要跟Bean 里面的属性对应
+                                name:$('#name').val(),
+                                regTime:"",
+                            },
+                            page : {
+                                curr : 1
+                            }
+
+                        });
+                        // 阻止表单跳转。如果需要表单跳转，去掉这段即可。
+                        return false;
+                    });
+
+
+                },
+                end: function () {
+                    // 关闭弹出层时隐藏 addfolder
+                    $("#addfolder").hide();
+                }
+            });
+        });
+
+
+        var laydate = layui.laydate;
+
+        // 初始化年份选择器
+        laydate.render({
+            elem: '#yearPicker',
+            type: 'year',
+            theme: '#2d8cf0',
+            format: 'yyyy',
+            trigger: 'click'
+        });
+
+        var params = new URLSearchParams(window.location.search);
+        var paramValue = params.get('medicalExaminationInformation');
+
+
+
+
+
+        form.on('submit(myFormSave)', function(data){
+            console.log(data,"dddddddddddddddddddddddddddddddd")
+
+            var v5Values = [];
+            $("input[name='v5']:checked").each(function() {
+                v5Values.push($(this).val());
+            });
+            data.field.v5 = v5Values.join(',');
+
+            var field = data.field;  // 获取表单字段值
+
+            // if (!field.v1) {
+            //     layer.msg('请补充完整');
+            //     $("input[name='v1']").focus();
+            //     return false;  // 阻止提交
+            // }
+            // if (!field.v2) {
+            //     layer.msg('请补充完整');
+            //     $("input[name='v2']").focus();
+            //     return false;  // 阻止提交
+            // }
+            // if (!field.v3) {
+            //     layer.msg('请补充完整');
+            //     $("input[name='v3']").focus();
+            //     return false;
+            // }
+            // if (!field.v4) {
+            //     layer.msg('请补充完整');
+            //     $("input[name='v4']").focus();
+            //     return false;
+            // }
+            // if (!field.v5) {
+            //     layer.msg('请补充完整');
+            //     $("input[name='v5']").focus();
+            //     return false;
+            // }
+            // if (!field.v6) {
+            //     layer.msg('请补充完整');
+            //     $("input[name='v6']").focus();
+            //     return false;
+            // }
+            // if (!field.v7) {
+            //     layer.msg('请补充完整');
+            //     $("input[name='v7']").focus();
+            //     return false;
+            // }
+            // if (!field.v8) {
+            //     layer.msg('请补充完整');
+            //     $("input[name='v8']").focus();
+            //     return false;
+            // }
+            // if (!field.v9) {
+            //     layer.msg('请补充完整');
+            //     $("input[name='v9']").focus();
+            //     return false;
+            // }
+            // if (!field.v10) {
+            //     layer.msg('请补充完整');
+            //     $("input[name='v10']").focus();
+            //     return false;
+            // }
+            // if (!field.v11) {
+            //     layer.msg('请补充完整');
+            //     $("input[name='v11']").focus();
+            //     return false;
+            // }
+            // if (!field.v12) {
+            //     layer.msg('请补充完整');
+            //     $("input[name='v12']").focus();
+            //     return false;
+            // }
+            // if (!field.v13) {
+            //     layer.msg('请补充完整');
+            //     $("input[name='v13']").focus();
+            //     return false;
+            // }
+            // if (!field.v14) {
+            //     layer.msg('请补充完整');
+            //     $("input[name='v14']").focus();
+            //     return false;
+            // }
+            // if (!field.v15) {
+            //     layer.msg('请补充完整');
+            //     $("input[name='v15']").focus();
+            //     return false;
+            // }
+            // if (!field.v16) {
+            //     layer.msg('请补充完整');
+            //     $("input[name='v16']").focus();
+            //     return false;
+            // }
+            // if (!field.v17) {
+            //     layer.msg('请补充完整');
+            //     $("input[name='v17']").focus();
+            //     return false;
+            // }
+            // if (!field.v18) {
+            //     layer.msg('请补充完整');
+            //     $("input[name='v18']").focus();
+            //     return false;
+            // }
+            // if (!field.v19) {
+            //     layer.msg('请补充完整');
+            //     $("input[name='v19']").focus();
+            //     return false;
+            // }
+            // if (!field.v20) {
+            //     layer.msg('请补充完整');
+            //     $("input[name='v20']").focus();
+            //     return false;
+            // }
+            // if (!field.v21) {
+            //     layer.msg('请补充完整');
+            //     $("input[name='v21']").focus();
+            //     return false;
+            // }
+            // if (!field.v22) {
+            //     layer.msg('请补充完整');
+            //     $("input[name='v22']").focus();
+            //     return false;
+            // }
+            // if (!field.v23) {
+            //     layer.msg('请补充完整');
+            //     $("input[name='v23']").focus();
+            //     return false;
+            // }
+            // if (!field.v24) {
+            //     layer.msg('请补充完整');
+            //     $("input[name='v24']").focus();
+            //     return false;
+            // }
+            // if (!field.v25) {
+            //     layer.msg('请补充完整');
+            //     $("input[name='v25']").focus();
+            //     return false;
+            // }
+            // if (!field.v26) {
+            //     layer.msg('请补充完整');
+            //     $("input[name='v26']").focus();
+            //     return false;
+            // }
+            // if (!field.v27) {
+            //     layer.msg('请补充完整');
+            //     $("input[name='v27']").focus();
+            //     return false;
+            // }
+            // if (!field.v28) {
+            //     layer.msg('请补充完整');
+            //     $("input[name='v28']").focus();
+            //     return false;
+            // }
+            // if (!field.v29) {
+            //     layer.msg('请补充完整');
+            //     $("input[name='v29']").focus();
+            //     return false;
+            // }
+            // if (!field.v30) {
+            //     layer.msg('请补充完整');
+            //     $("input[name='v30']").focus();
+            //     return false;
+            // }
+            // if (!field.v31) {
+            //     layer.msg('请补充完整');
+            //     $("input[name='v31']").focus();
+            //     return false;
+            // }
+            // if (!field.v32) {
+            //     layer.msg('请补充完整');
+            //     $("input[name='v32']").focus();
+            //     return false;
+            // }
+            // if (!field.v33) {
+            //     layer.msg('请补充完整');
+            //     $("input[name='v33']").focus();
+            //     return false;
+            // }
+            // if (!field.v34) {
+            //     layer.msg('请补充完整');
+            //     $("input[name='v34']").focus();
+            //     return false;
+            // }
+            // if (!field.v35) {
+            //     layer.msg('请补充完整');
+            //     $("input[name='v35']").focus();
+            //     return false;
+            // }
+            // if (!field.v36) {
+            //     layer.msg('请补充完整');
+            //     $("input[name='v36']").focus();
+            //     return false;
+            // }
+            // if (!field.v37) {
+            //     layer.msg('请补充完整');
+            //     $("input[name='v37']").focus();
+            //     return false;
+            // }
+            // if (!field.v38) {
+            //     layer.msg('请补充完整');
+            //     $("input[name='v38']").focus();
+            //     return false;
+            // }
+            // if (!field.v39) {
+            //     layer.msg('请补充完整');
+            //     $("input[name='v39']").focus();
+            //     return false;
+            // }
+            // if (!field.v40) {
+            //     layer.msg('请补充完整');
+            //     $("input[name='v40']").focus();
+            //     return false;
+            // }
+            // if (!field.v41) {
+            //     layer.msg('请补充完整');
+            //     $("input[name='v41']").focus();
+            //     return false;
+            // }
+            // if (!field.v42) {
+            //     layer.msg('请补充完整');
+            //     $("input[name='v42']").focus();
+            //     return false;
+            // }
+            // if (!field.v43) {
+            //     layer.msg('请补充完整');
+            //     $("input[name='v43']").focus();
+            //     return false;
+            // }
+            if ($(this).data('submitted') === true) {
+                return false; // 阻止重复提交
+            }
+            $(this).data('submitted', true);
+            if(paramValue){
+                $.ajax({
+                    type : 'post',
+                    url : '/NewPneumoconiosisServiceRecordFormController/updateNew',
+                    data : {
+                        id:paramValue,
+                        name:data.field.v1,
+                        regId: data.field.v2,
+                        serviceDate: data.field.v3,
+                        serviceMode: data.field.v4,
+                        symptom: data.field.v5,
+                        symptom1: data.field.v6,
+                        bloodPressure: data.field.v7,
+                        bloodPressure1: data.field.v8,
+                        weight: data.field.v9,
+                        weight1: data.field.v10,
+                        bodyMassIndex: data.field.v11,
+                        bodyMassIndex1: data.field.v12,
+                        heartRate: data.field.v13,
+                        other: data.field.v14,
+                        dailySmokingVolume: data.field.v15,
+                        dailyAlcoholConsumption: data.field.v16,
+                        motion: data.field.v17,
+                        motion1: data.field.v18,
+                        motion2: data.field.v19,
+                        motion3: data.field.v20,
+                        saltIntakeSituation: data.field.v21,
+                        psychologicalAdjustment: data.field.v22,
+                        complianceBehavior: data.field.v23,
+                        supplementaryExamination: data.field.v24,
+                        medicationCompliance: data.field.v25,
+                        adverseDrugReactions: data.field.v26,
+                        thisServiceClassification: data.field.v27,
+                        medicationSituation: data.field.v28,
+                        medicationSituation1: data.field.v29,
+                        medicationSituation2: data.field.v30,
+                        medicationSituation3: data.field.v31,
+                        medicationSituation4: data.field.v32,
+                        medicationSituation5: data.field.v33,
+                        medicationSituation6: data.field.v34,
+                        medicationSituation7: data.field.v35,
+                        medicationSituation8: data.field.v36,
+                        medicationSituation9: data.field.v37,
+                        medicationSituation10: data.field.v38,
+                        medicationSituation11: data.field.v39,
+                        reason: data.field.v40,
+                        institutionDepartment: data.field.v41,
+                        healthGuidanceOpinions: data.field.v42,
+                        nextServiceDate: data.field.v43
+                    },
+                    success : function(data) {
+                        if (data.code == 20000) {
+
+                            notice.success({
+                                title : '消息通知',
+                                message : '操作成功!'
+                            });
+
+                            setTimeout(function() {
+                                window.close();
+                            }, 2000);
+                        } else {
+                            notice.error({
+                                title : '消息通知',
+                                message : '操作失败!'
+                            });
+                            setTimeout(function() {
+                                window.close();
+                            }, 2000);
+                        }
+                    }
+                })
+            }else{
+                $.ajax({
+                    type : 'post',
+                    url : '/NewPneumoconiosisServiceRecordFormController/insetNew',
+                    data : {
+                        name:data.field.v1,
+                        regId: data.field.v2,
+                        serviceDate: data.field.v3,
+                        serviceMode: data.field.v4,
+                        symptom: data.field.v5,
+                        symptom1: data.field.v6,
+                        bloodPressure: data.field.v7,
+                        bloodPressure1: data.field.v8,
+                        weight: data.field.v9,
+                        weight1: data.field.v10,
+                        bodyMassIndex: data.field.v11,
+                        bodyMassIndex1: data.field.v12,
+                        heartRate: data.field.v13,
+                        other: data.field.v14,
+                        dailySmokingVolume: data.field.v15,
+                        dailyAlcoholConsumption: data.field.v16,
+                        motion: data.field.v17,
+                        motion1: data.field.v18,
+                        motion2: data.field.v19,
+                        motion3: data.field.v20,
+                        saltIntakeSituation: data.field.v21,
+                        psychologicalAdjustment: data.field.v22,
+                        complianceBehavior: data.field.v23,
+                        supplementaryExamination: data.field.v24,
+                        medicationCompliance: data.field.v25,
+                        adverseDrugReactions: data.field.v26,
+                        thisServiceClassification: data.field.v27,
+                        medicationSituation: data.field.v28,
+                        medicationSituation1: data.field.v29,
+                        medicationSituation2: data.field.v30,
+                        medicationSituation3: data.field.v31,
+                        medicationSituation4: data.field.v32,
+                        medicationSituation5: data.field.v33,
+                        medicationSituation6: data.field.v34,
+                        medicationSituation7: data.field.v35,
+                        medicationSituation8: data.field.v36,
+                        medicationSituation9: data.field.v37,
+                        medicationSituation10: data.field.v38,
+                        medicationSituation11: data.field.v39,
+                        reason: data.field.v40,
+                        institutionDepartment: data.field.v41,
+                        healthGuidanceOpinions: data.field.v42,
+                        nextServiceDate: data.field.v43
+                    },
+
+                    success : function(data) {
+                        if (data.code == 20000) {
+
+                            notice.success({
+                                title : '消息通知',
+                                message : '操作成功!'
+                            });
+
+                            setTimeout(function() {
+                                window.close();
+                            }, 2000);
+                        } else {
+                            notice.error({
+                                title : '消息通知',
+                                message : '操作失败!'
+                            });
+                            setTimeout(function() {
+                                window.close();
+                            }, 2000);
+                        }
+                    }
+                })
+            }
+            return false; // 阻止默认 form 跳转
+        });
+
+
+        function selectForm(paramValue){
+            if(paramValue){
+                $.ajax({
+                    type:'get',
+                    url:'/NewPneumoconiosisServiceRecordFormController/selectById',
+                    data:{id:paramValue},
+                    success : function(data){
+                        console.log("这里是查询出来的数据",data);
+                        if(data.code==20000){
+                            form.val("myForm", {
+                                "v1": data.data.name, // 对应 name
+                                "v2": data.data.regId, // 对应 regId
+                                "v3": data.data.serviceDate?.substring(0, 10), // 对应 serviceDate (截取日期部分)
+                                "v4": data.data.serviceMode, // 对应 serviceMode
+                                "v6": data.data.symptom1, // 对应 symptom1
+                                "v7": data.data.bloodPressure, // 对应 bloodPressure
+                                "v8": data.data.bloodPressure1, // 对应 bloodPressure1
+                                "v9": data.data.weight, // 对应 weight
+                                "v10": data.data.weight1, // 对应 weight1
+                                "v11": data.data.bodyMassIndex, // 对应 bodyMassIndex
+                                "v12": data.data.bodyMassIndex1, // 对应 bodyMassIndex1
+                                "v13": data.data.heartRate, // 对应 heartRate
+                                "v14": data.data.other, // 对应 other
+                                "v15": data.data.dailySmokingVolume, // 对应 dailySmokingVolume
+                                "v16": data.data.dailyAlcoholConsumption, // 对应 dailyAlcoholConsumption
+                                "v17": data.data.motion, // 对应 motion
+                                "v18": data.data.motion1, // 对应 motion1
+                                "v19": data.data.motion2, // 对应 motion2
+                                "v20": data.data.motion3, // 对应 motion3
+                                "v21": data.data.saltIntakeSituation, // 对应 saltIntakeSituation
+                                "v22": data.data.psychologicalAdjustment, // 对应 psychologicalAdjustment
+                                "v23": data.data.complianceBehavior, // 对应 complianceBehavior
+                                "v24": data.data.supplementaryExamination, // 对应 supplementaryExamination
+                                "v25": data.data.medicationCompliance, // 对应 medicationCompliance
+                                "v26": data.data.adverseDrugReactions, // 对应 adverseDrugReactions
+                                "v27": data.data.thisServiceClassification, // 对应 thisServiceClassification
+                                "v28": data.data.medicationSituation, // 对应 medicationSituation
+                                "v29": data.data.medicationSituation1, // 对应 medicationSituation1
+                                "v30": data.data.medicationSituation2, // 对应 medicationSituation2
+                                "v31": data.data.medicationSituation3, // 对应 medicationSituation3
+                                "v32": data.data.medicationSituation4, // 对应 medicationSituation4
+                                "v33": data.data.medicationSituation5, // 对应 medicationSituation5
+                                "v34": data.data.medicationSituation6, // 对应 medicationSituation6
+                                "v35": data.data.medicationSituation7, // 对应 medicationSituation7
+                                "v36": data.data.medicationSituation8, // 对应 medicationSituation8
+                                "v37": data.data.medicationSituation9, // 对应 medicationSituation9
+                                "v38": data.data.medicationSituation10, // 对应 medicationSituation10
+                                "v39": data.data.medicationSituation11, // 对应 medicationSituation11
+                                "v40": data.data.reason, // 对应 reason
+                                "v41": data.data.institutionDepartment, // 对应 institutionDepartment
+                                "v42": data.data.healthGuidanceOpinions, // 对应 healthGuidanceOpinions
+                                "v43": data.data.nextServiceDate?.substring(0, 10), // 对应 nextServiceDate (截取日期部分)
+                                "v44": data.data.dname // 对应 dname
+                            });
+                            $("input[name='v5']").prop('checked', false);
+                            const historyDrugAllergies = data.data.symptom.split(",").map(item => item.trim());
+                            historyDrugAllergies.forEach(value => {
+                                $("input[name='v5'][value='" + value + "']").prop('checked', true);
+                            });
+                            form.render();
+                        }
+
+                    }
+                })
+            }
+
+
+        }
+
+        selectForm(paramValue);
+
+        // 初始化表单
+        form.render();
+    });
+</script>
+
+</body>
+</html>

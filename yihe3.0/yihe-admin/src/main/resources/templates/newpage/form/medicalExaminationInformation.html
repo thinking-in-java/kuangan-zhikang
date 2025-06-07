@@ -1,0 +1,819 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>个人基本信息表</title>
+    <link rel="stylesheet" th:href="@{/assets/js/layui-v2.9.16/layui/css/layui.css}"/>
+    <script type="text/javascript" th:src="@{/assets/js/layui-v2.9.16/layui/layui.js}"></script>
+    <style>
+        body{
+            background:#F1F1F1
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            table-layout: fixed;
+            border-color:rgb(144, 186, 221)
+        }
+        th, td {
+            border: 1px solid #ccc;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: rgb(231, 243, 252);
+            font-size: 10pt;
+            font-family: "Microsoft YaHei";
+            word-break: break-word;
+            overflow-wrap: break-word;
+            text-align: center;
+        }
+        .section-title {
+            text-align: center;
+            font-weight: bold;
+            background-color: #e6f7ff;
+        }
+        .input-full {
+            width: 100%;
+            box-sizing: border-box;
+        }
+        .radio-group {
+            display: flex;
+            align-items: center;
+        }
+        .radio-group label {
+            margin-right: 10px;
+        }
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        .checkbox-group label {
+            margin-right: 15px;
+        }
+        .heng{
+            text-align: center;
+            font-size: 10pt;
+            font-family: "Microsoft YaHei";
+            word-break: break-word;
+            overflow-wrap: break-word;
+        }
+        .datainput{
+            border-color: #eee !important;
+            border-width: 1px;
+        }
+
+        .layui-form-checked[lay-skin=primary] i{
+            border-color:#2d8cf0 !important;
+            background-color:#FFF !important;
+            color:#2d8cf0 !important;
+            font-weight: bold;
+        }
+
+        .layui-form-checkbox[lay-skin=primary]:hover i{
+            border-color:#2d8cf0 !important;
+        }
+        .layui-form-radio>i:hover, .layui-form-radioed>i{
+            color: #2d8cf0 !important;
+        }
+
+        /* 覆盖 layui 的默认主题颜色 */
+        .theme-colorful .layui-btn {
+            height: 36px;
+            line-height: 36px;
+            border-radius: 4px;
+            background-color: #2d8cf0;
+            box-shadow: 0 1px 0 rgba(0, 0, 0, .03);
+        }
+        .layui-form-radio:hover>*, .layui-form-radioed, .layui-form-radioed>i{
+            color: #2d8cf0 !important;
+        }
+
+        /*.layui-input {*/
+        /*    border-color: #597FC0 !important;*/
+        /*}*/
+
+        /* ...其他元素样式 */
+        /* 修改分页按钮的背景颜色和字体颜色 */
+        .layui-laypage a {
+            background-color: #f0f0f0; /* 设置按钮的背景颜色 */
+            color: #333; /* 设置按钮的字体颜色 */
+        }
+
+        /* 鼠标悬停时按钮的背景颜色 */
+        .layui-laypage a:hover {
+            background-color: #fff;
+            color: #2d8cf0;
+        }
+
+        /* 当前页的背景颜色和字体颜色 */
+        .layui-laypage .layui-laypage-curr .layui-laypage-em {
+            background-color: #2d8cf0; /* 当前页的背景颜色 */
+            color: white; /* 当前页的字体颜色 */
+        }
+
+        .file-row {
+            background-color: #e6f7ff;
+            padding: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-radius: 5px;
+            margin: 10px 0;
+            width: 98%;
+        }
+        .file-row .file-info {
+            display: flex;
+            align-items: center;
+        }
+        .file-row .file-info img {
+            width: 20px;
+            margin-right: 10px;
+        }
+        .file-row .file-info span {
+            font-size: 14px;
+        }
+        .file-row .actions {
+            display: flex;
+            align-items: center;
+        }
+        .file-row .actions button {
+            border: none;
+            background: none;
+            cursor: pointer;
+            margin-left: 10px;
+            font-size: 16px;
+        }
+
+        @media print {
+            .no-print {
+                display: none !important;
+            }
+            @page {
+                size: A4; /* 或者你可以指定其他页面大小 */
+                margin: 1cm; /* 调整打印边距 */
+            }
+            body {
+                width: 100%;
+                height: 100%;
+                zoom: 0.8; /* 缩小页面内容 */
+            }
+        }
+        @page {
+            /* 尝试去除默认的页眉和页脚 */
+            margin: 0;
+        }
+
+    </style>
+</head>
+<body>
+
+<div class="layui-form " style="width:70%;margin:auto;padding:0 5%;background:#FFF;margin-top:0">
+    <h2 style="text-align: center;">体检档案</h2>
+    <input id="userCode" type="hidden" value="">
+    <input id="regId" type="hidden" value="">
+
+    <form class="layui-form" id="addfolder" lay-filter="folderForm" style="display: none;min-height: 300px">
+        <div id="search-header">
+
+
+            <div class="layui-inline" style="margin-left: 3px;">
+                <label class="layui-form-label w-auto">姓名:</label>
+                <div class="layui-input-inline">
+                    <input id="name" class="layui-input" placeholder="请输入" style="width: 124px;"/>
+                </div>
+            </div>
+
+            <div class="layui-inline" style="padding-left: 20px;">
+                <button class="layui-btn icon-btn sousuoDN " lay-submit="" lay-filter="regManageQueryBtn"><i class="layui-icon"></i>搜索</button>
+                <button id="btnempty" style="background-color: #fff;width: 69px;color: black;border: 1px solid #e5e5e5;" class="layui-btn icon-btn"></i>清除</button>
+            </div>
+        </div>
+        <div id="tables" class="text-center layui-text"  style="width: 100%;">
+
+        </div>
+    </form>
+
+
+
+    <form class="layui-form" id="myForm" lay-filter="myForm">
+        <button style="float: right" type="submit" class="layui-btn no-print" lay-submit lay-filter="myFormSave">保存</button>
+        <button style="float: right;margin-right: 30px" type="submit" class="layui-btn no-print" lay-submit lay-filter="generatePDF">打印</button>
+        <table>
+            <tr >
+                <th colspan="2">姓名</th>
+                <td colspan="2">
+                    <div class="layui-input-group">
+                        <input name="v1" type="text" class="input-full layui-input" placeholder="请输入姓名" readonly>
+                        <div class="layui-input-split layui-input-suffix chooseName" style="cursor: pointer;">
+                            <i class="layui-icon layui-icon-search"></i>
+                        </div>
+                    </div>
+                </td>
+                <th colspan="2">性别</th>
+                <td colspan="2" >
+                    <input type="radio" name="v2" value="1" title="男">
+                    <input type="radio" name="v2" value="2" title="女" >
+                </td >
+                <th colspan="2">年龄</th>
+                <td colspan="2"><input type="number" lay-affix="number" class="input-full layui-input" name="v3"  placeholder="请输入年龄"></td>
+            </tr>
+
+
+            <tr>
+                <th colspan="2">部门</th>
+                <td colspan="2">
+                    <input  type="text" class="input-full layui-input" name="v5" placeholder="部门">
+                </td>
+
+
+                <th colspan="2">班组</th>
+                <td colspan="2"><input  type="text" class="input-full layui-input" name="v6" placeholder="班组"></td>
+
+                <th colspan="2">本人电话</th>
+                <td colspan="2"><input type="text" class="input-full layui-input" name="v4" placeholder="请输入本人电话"></td>
+
+
+
+            </tr>
+
+
+            <tr >
+                <th colspan="2">身高</th>
+                <td colspan="2"><input type="text" class="input-full layui-input" name="v7" placeholder="身高"></td>
+
+                <th colspan="2">体重</th>
+                <td colspan="2"><input type="text" class="input-full layui-input" name="v8" placeholder="体重"></td>
+
+                <th colspan="2">体重指数</th>
+                <td colspan="2"><input type="text" class="input-full layui-input" name="v9" placeholder="体重指数"></td>
+            </tr>
+
+            <tr >
+                <th colspan="2">血压</th>
+                <td colspan="2"><input type="text" class="input-full layui-input" name="v10" placeholder="血压"></td>
+
+                <th colspan="2">心率</th>
+                <td colspan="2"><input type="text" class="input-full layui-input" name="v11" placeholder="心率"></td>
+
+                <th colspan="2">血氧</th>
+                <td colspan="2"><input type="text" class="input-full layui-input" name="v12" placeholder="血氧"></td>
+            </tr>
+
+
+            <tr >
+                <th colspan="2">个人体检报告</th>
+                <td colspan="10">
+
+                    <table id="file-table" border="1" width="100%">
+
+
+
+<!--                        <tr>-->
+<!--                            <td>行2，列1</td>-->
+<!--                        </tr>-->
+                    </table>
+                    <button type="button" class="layui-btn layui-btn-radius layui-btn-normal" id="test1">
+                        <i class="layui-icon">&#xe67c;</i>上传文件
+                    </button>
+                </td>
+            </tr>
+
+
+
+            <tr>
+                <th colspan="2">阶段</th>
+                <td colspan="10">
+                    <select name="v15"  class="input-full">
+                        <option value="上岗前">上岗前</option>
+                        <option value="在岗期间">在岗期间</option>
+                        <option value="离岗后">离岗后</option>
+                        <!-- 其他选项 -->
+                    </select>
+                </td>
+            </tr>
+
+
+
+            <tr>
+
+                <th colspan="2">体检时间</th>
+                <td colspan="2"><input type="date" name="v16" class="input-full datainput layui-input"></td>
+
+                <!--      <th colspan="2">建档人</th>-->
+
+                <!--      <td colspan="2"><input type="text" name="v23" class="input-full layui-input" placeholder="建档人" readonly></td>-->
+
+                <th colspan="2">入库时间</th>
+                <td colspan="2"><input type="input" name="v17" class="input-full datainput layui-input" readonly></td>
+
+                <th colspan="2">责任健管师</th>
+                <td colspan="2">
+                    <select name="v18" id="responsibleHealthManager">
+                        <option value=" "></option>
+                    </select>
+                </td>
+            </tr>
+
+
+
+
+
+        </table>
+    </form>
+</div>
+
+<script type="text/javascript" th:src="@{/assets/js/layui-v2.9.16/layui/layui.js}"></script>
+<script type="text/javascript" th:src="@{/assets/js/common.js}"></script>
+<script type="text/javascript" th:src="@{/assets/js/jquery-1.11.1.js}"></script>
+<script th:inline="javascript">
+    layui.use(['form',"table",'treeSelect','notice','upload'], function(){
+        var form = layui.form;
+        var $ = layui.jquery;
+        var layer = layui.layer;
+        var table = layui.table;
+        var notice=layui.notice;
+        var upload = layui.upload;
+        layui.config({
+            skin: 'blue'  // 设置主题为蓝色
+        });
+
+        $.ajax({
+            type: "get",
+            url: "/newRegController/searchForDoctors",
+            dataType:"json",
+            success: function(res){
+                console.log(res,"------------------ddddddddddddddd------------------------");
+                var option = "";
+                for (var i = 0; i < res.data.length; i++) {
+                    option += '<option value="' + res.data[i].userCode + '">'
+                        + res.data[i].userName + '</option>';
+                }
+                $(option).appendTo("#responsibleHealthManager");
+                form.render("select");
+            }
+
+        });
+
+        form.on('submit(generatePDF)', function(data){
+            window.print();
+            return false;
+        });
+
+        var params = new URLSearchParams(window.location.search);
+        var paramValue = params.get('medicalExaminationInformation');
+
+        form.on('submit(deleteRowBtn)', function(event){
+            var row = event.elem.closest('tr');
+            // 删除该行
+            row.parentNode.removeChild(row);
+            return false;
+        });
+
+
+        form.on('submit(preview)', function(data) {
+            // 获取文件的 URL
+            var url = data.elem.getAttribute('data-url');
+            if(isPdfUrl(url) || isImageUrl(url)){
+                window.open(url);
+            }else{
+                window.open("https://view.officeapps.live.com/op/view.aspx?src="+url, '_blank');
+            }
+            // 阻止表单默认提交行为
+            return false;
+        });
+
+        form.on('submit(down)', function(data) {
+            // 获取文件的 URL
+            var url = data.elem.getAttribute('data-url');
+            var name=data.elem.getAttribute("data-name");
+            if(isPdfUrl(url) || isImageUrl(url)){
+                fetchAndDownloadPDF(url,name);
+            }else{
+                window.open(url);
+            }
+            // 创建一个隐藏的 <a> 元素来触发下载
+
+
+            // 阻止表单默认提交行为
+            return false;
+        });
+
+        function isPdfUrl(url) {
+            return /\.pdf$/i.test(url);
+        }
+        function isImageUrl(url) {
+            return /\.(jpg|jpeg|png|gif|bmp|webp|svg)$/i.test(url);
+        }
+        let isDownloading = false;
+        async function fetchAndDownloadPDF(url,name) {
+            if (isDownloading) return;  // 如果正在下载，则不执行
+            isDownloading = true;
+            console.log('Function called');
+            try {
+                const response = await fetch(url);
+                const blob = await response.blob();
+                const blobUrl = window.URL.createObjectURL(blob);
+
+                const a = document.createElement('a');
+                a.href = blobUrl;
+                a.download = name; // 设置下载文件的名称
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+
+                // 释放 URL 对象
+                window.URL.revokeObjectURL(blobUrl);
+            } catch (error) {
+                console.error('下载文件失败:', error);
+            }finally {
+                isDownloading = false;
+            }
+        }
+
+
+
+        upload.render({
+            elem: '#test1'
+            ,url: '/YhUserFile/upload1' //必填项
+            ,size:104857600
+            ,accept:'file'
+            ,before: function () {
+                layer.msg('上传中', {
+                    icon: 16,
+                    shade: 0.01
+                }); //上传loading
+            }
+            ,done: function(res,index,upload){
+                console.log("上传返回",res)
+                filesUrl = res.files;
+                //上传完毕回调
+                layer.close(layer.index); //关闭loading
+                if (parseInt(res.code) === 0) {
+                    parent.layer.msg("上传成功！");
+                }
+
+                // 创建新的行元素
+                var newRow = document.createElement('tr');
+                var newCell = document.createElement('td');
+
+                newCell.innerHTML = `
+                    <div class="file-row">
+                        <div class="file-info">
+                            <span>${res.name}</span>
+                        </div>
+                        <div class="actions">
+                              <input type="text"  style="display: none" class="input-full layui-input" name="v13"  value="${res.files}">
+                              <input type="text"  style="display: none" class="input-full layui-input" name="v14"  value="${res.name}">
+                              <button title="预览" lay-submit="" lay-filter="preview" data-url="${res.files}">&#128065;</button>
+                              <button title="下载" lay-submit=""  lay-filter="down" data-name="${res.name}"   data-url="${res.files}"  >&#8681;</button>
+                              <button title="删除" lay-submit=""  lay-filter="deleteRowBtn"  >&#10006;</button>
+                        </div>
+                    </div>
+                `;
+
+                newRow.appendChild(newCell);
+                document.getElementById('file-table').appendChild(newRow);
+            }
+
+
+            ,error : function(index,upload){
+
+            }
+        });
+
+        // 添加行功能
+
+
+
+
+
+        function calculateAge(birthDate) {
+            // 将传入的日期字符串转换为Date对象
+            var birth = new Date(birthDate);
+            var today = new Date();
+
+            // 计算年份差
+            var age = today.getFullYear() - birth.getFullYear();
+
+            // 如果当前日期还没有到达出生月份和日期，则年龄减一
+            var monthDifference = today.getMonth() - birth.getMonth();
+            if (monthDifference < 0 || (monthDifference === 0 && today.getDate() < birth.getDate())) {
+                age--;
+            }
+            return age;
+        }
+
+        $(".chooseName").on("click",function (){
+            var closeIndex = layer.open({
+                type: 1, // page 层类型
+                area: ['800px', '600px'],
+                title: '选择名字',
+                shade: 0.6, // 遮罩透明度
+                anim: 0, // 0-6 的动画形式，-1 不开启
+                content: $("#addfolder"),
+                success: function(layero, index){
+                    // 在弹出层初始化完成后渲染表格
+                    var regManageTb=table.render({
+                        elem: '#tables',
+                        url: '/newRegController/queryLocallyManagedArchives', // 此处为静态模拟数据，实际使用时需换成真实接口
+                        page: true,
+                        limit : 10,
+                        where : {regTime:""},
+                        cols: [[
+                            // {type: 'radio', fixed: 'left'},
+                            {field:'userCode', title:'用户编号', fixed: 'center'},
+                            {field: 'name', title: '姓名', align: 'center'},
+                            {field: 'phone', align: 'center', title: '电话'} ,
+                        ]],
+                        parseData: function(res) {
+                            if (res.code === 20000) {
+                                return {
+                                    "code": 0,
+                                    "msg": res.msg || "",
+                                    "count": res.count || 0,
+                                    "data": res.data.data || []
+                                };
+                            } else {
+                                return {
+                                    "code": 1,
+                                    "msg": res.msg || "获取数据失败",
+                                    "count": 0,
+                                    "data": []
+                                };
+                            }
+                        },
+                        done: function() {
+                            $('#tables').css('visibility', 'visible');
+                        }
+                    });
+                    $('#tables').css('visibility', 'hidden');
+
+
+                    // 行单击事件( 双击事件为: rowDouble )
+                    table.on('row(tables)', function(obj){
+                        var data = obj.data; // 获取当前行数据
+                        console.log(data,"这里是点击事件啊啊啊")
+                        // 显示 - 仅用于演示
+
+                        form.val("myForm", {
+                            "v1": data.name,
+                            "v2":data.sex,
+                            "v3":data.age,
+                            "v4":data.phone,
+                            "v5":data.department,
+                        });
+                        $("#userCode").val(data.userCode);
+                        $("#regId").val(data.id);
+
+                        form.render();
+                        layer.close(closeIndex);
+                        // 标注当前点击行的选中状态
+                        obj.setRowChecked({
+                            type: 'radio' // radio 单选模式；checkbox 复选模式
+                        });
+                    });
+
+                    form.on('submit(regManageQueryBtn)', function(data){
+                        regManageTb.reload({
+                            where : {
+                                //这里注意一定要跟Bean 里面的属性对应
+                                name:$('#name').val(),
+                                regTime:"",
+                            },
+                            page : {
+                                curr : 1
+                            }
+
+                        });
+                        // 阻止表单跳转。如果需要表单跳转，去掉这段即可。
+                        return false;
+                    });
+
+
+                },
+                end: function () {
+                    // 关闭弹出层时隐藏 addfolder
+                    $("#addfolder").hide();
+                }
+            });
+        });
+
+
+
+
+
+
+        form.on('submit(myFormSave)', function(data){
+            console.log(data,"dddddddddddddddddddddddddddddddd")
+
+
+            var v13Elements = document.querySelectorAll('input[name="v13"]');
+            var v14Elements = document.querySelectorAll('input[name="v14"]');
+            var pairs = [];
+            var length = Math.min(v13Elements.length, v14Elements.length);
+            for (var i = 0; i < length; i++) {
+                // 获取 v13 和 v14 的值，并将它们存储成对的形式
+                var v13Value = v13Elements[i].value;
+                var v14Value = v14Elements[i].value;
+
+                pairs.push({ v13: v13Value, v14: v14Value });
+            }
+            var field = data.field;
+
+            if ($(this).data('submitted') === true) {
+                return false; // 阻止重复提交
+            }
+            $(this).data('submitted', true);
+
+            console.log(pairs);
+            if(paramValue){
+                $.ajax({
+                    type : 'post',
+                    url : '/NewMedicalExaminationRecordsController/updateById',
+                    data : {
+                        id:paramValue,
+                        name:data.field.v1,
+                        gender:data.field.v2,
+                        age:data.field.v3,
+                        phone:data.field.v4,
+                        marriage:data.field.v5,
+                        occupation:data.field.v6,
+                        height:data.field.v7,
+                        weight:data.field.v8,
+                        bodyMassIndex:data.field.v9,
+                        bloodPressure:data.field.v10,
+                        heartRate:data.field.v11,
+                        bloodOxygen:data.field.v12,
+                        stage:data.field.v15,
+                        personalMedicalExaminationReport:JSON.stringify(pairs),
+
+                        v16:data.field.v16,
+                        v17:data.field.v17,
+                        v18:data.field.v18,
+                    },
+
+                    success : function(data) {
+                        if (data.code == 20000) {
+
+                            notice.success({
+                                title : '消息通知',
+                                message : '操作成功!'
+                            });
+
+                            setTimeout(function() {
+                                window.close();
+                            }, 2000);
+                        } else {
+                            notice.error({
+                                title : '消息通知',
+                                message : '操作失败!'
+                            });
+                            setTimeout(function() {
+                                window.close();
+                            }, 2000);
+                        }
+                    }
+                })
+            }else{
+                $.ajax({
+                    type : 'post',
+                    url : '/NewMedicalExaminationRecordsController/insert',
+                    data : {
+                        userCode :$("#userCode").val(),
+                        regId:$("#regId").val(),
+                        name:data.field.v1,
+                        gender:data.field.v2,
+                        age:data.field.v3,
+                        phone:data.field.v4,
+                        marriage:data.field.v5,
+                        occupation:data.field.v6,
+                        height:data.field.v7,
+                        weight:data.field.v8,
+                        bodyMassIndex:data.field.v9,
+                        bloodPressure:data.field.v10,
+                        heartRate:data.field.v11,
+                        bloodOxygen:data.field.v12,
+                        stage:data.field.v15,
+                        personalMedicalExaminationReport:JSON.stringify(pairs),
+
+                        v16:data.field.v16,
+                        v17:data.field.v17,
+                        v18:data.field.v18,
+                    },
+
+                    success : function(data) {
+                        if (data.code == 20000) {
+
+                            notice.success({
+                                title : '消息通知',
+                                message : '操作成功!'
+                            });
+
+                            setTimeout(function() {
+                                window.close();
+                            }, 2000);
+                        } else {
+                            notice.error({
+                                title : '消息通知',
+                                message : '操作失败!'
+                            });
+                            setTimeout(function() {
+                                window.close();
+                            }, 2000);
+                        }
+                    }
+                })
+            }
+            return false; // 阻止默认 form 跳转
+        });
+
+
+        function selectForm(paramValue){
+            if(paramValue){
+                $.ajax({
+                    type:'get',
+                    url:'/NewMedicalExaminationRecordsController/selectById',
+                    data:{id:paramValue},
+                    success : function(data){
+                        console.log("这里是查询出来的数据",data);
+                        if(data.code==20000){
+
+                            form.val("myForm", {
+                                "v1": data.data.name,
+                                "v2":data.data.gender,
+                                "v3":data.data.age,
+                                "v4":data.data.phone,
+                                "v5":data.data.marriage,
+                                "v6":data.data.occupation,
+                                "v7":data.data.height,
+                                "v8":data.data.weight,
+                                "v9":data.data.bodyMassIndex,
+                                "v10":data.data.bloodPressure,
+                                "v11":data.data.heartRate,
+                                "v12":data.data.bloodOxygen,
+                                "v15":data.data.stage,
+
+                                "v16":data.data.v16,
+
+                                "v17":data.data.v17,
+                                "v18":data.data.v18,
+                            });
+                            const pairsArr = JSON.parse(data.data.personalMedicalExaminationReport);
+                            var fileTable = document.getElementById('file-table');
+
+                            // 遍历数组
+                            pairsArr.forEach(function(res) {
+                                // 创建新的行元素
+                                var newRow = document.createElement('tr');
+
+                                // 创建新的单元格元素
+                                var newCell = document.createElement('td');
+
+                                // 设置单元格的 HTML 内容，包含文件名、隐藏的输入框、下载按钮和删除按钮
+                                newCell.innerHTML = `
+                                    <div class="file-row">
+                                        <div class="file-info">
+                                            <span>${res.v14}</span>
+                                        </div>
+                                        <div class="actions">
+                                            <input type="text" style="display: none" class="input-full layui-input" name="v13" value="${res.v13}">
+                                            <input type="text" style="display: none" class="input-full layui-input" name="v14" value="${res.v14}">
+                                            <button title="预览" lay-submit="" lay-filter="preview" data-url="${res.v13}">&#128065;</button>
+                                            <button title="下载" lay-submit=""  lay-filter="down" data-name="${res.v14}"   data-url="${res.v13}"  >&#8681;</button>
+                                           <button title="删除" lay-submit=""  lay-filter="deleteRowBtn"  >&#10006;</button>
+                                        </div>
+                                    </div>
+                                `;
+
+                                // 将单元格加入到行中
+                                newRow.appendChild(newCell);
+
+                                // 将新行插入到表格的最后一行
+                                fileTable.appendChild(newRow);
+
+
+                            });
+                            $("#userCode").val(data.data.userCode);
+
+                            form.render();
+                        }
+
+                    }
+                })
+            }
+
+
+        }
+        selectForm(paramValue);
+
+
+        // 初始化表单
+        form.render();
+    });
+</script>
+
+</body>
+</html>

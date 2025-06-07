@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>心理评估报告</title>
+    <link rel="stylesheet" th:href="@{/assets/js/layui-v2.9.16/layui/css/layui.css}"/>
+    <script type="text/javascript" th:src="@{/assets/js/layui-v2.9.16/layui/layui.js}"></script>
+    <style>
+        body{
+            background:#F1F1F1
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            table-layout: fixed;
+            border-color:rgb(144, 186, 221)
+        }
+        th, td {
+            border: 1px solid #ccc;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: rgb(231, 243, 252);
+            font-size: 10pt;
+            font-family: "Microsoft YaHei";
+            word-break: break-word;
+            overflow-wrap: break-word;
+            text-align: center;
+        }
+        .section-title {
+            text-align: center;
+            font-weight: bold;
+            background-color: #e6f7ff;
+        }
+        .input-full {
+            width: 100%;
+            box-sizing: border-box;
+        }
+        .radio-group {
+            display: flex;
+            align-items: center;
+        }
+        .radio-group label {
+            margin-right: 10px;
+        }
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        .checkbox-group label {
+            margin-right: 15px;
+        }
+        .heng{
+            text-align: center;
+            font-size: 10pt;
+            font-family: "Microsoft YaHei";
+            word-break: break-word;
+            overflow-wrap: break-word;
+        }
+        .datainput{
+            border-color: #eee !important;
+            border-width: 1px;
+        }
+
+        .layui-form-checked[lay-skin=primary] i{
+            border-color:#2d8cf0 !important;
+            background-color:#FFF !important;
+            color:#2d8cf0 !important;
+            font-weight: bold;
+        }
+
+        .layui-form-checkbox[lay-skin=primary]:hover i{
+            border-color:#2d8cf0 !important;
+        }
+        .layui-form-radio>i:hover, .layui-form-radioed>i{
+            color: #2d8cf0 !important;
+        }
+
+        /* 覆盖 layui 的默认主题颜色 */
+        .theme-colorful .layui-btn {
+            height: 36px;
+            line-height: 36px;
+            border-radius: 4px;
+            background-color: #2d8cf0;
+            box-shadow: 0 1px 0 rgba(0, 0, 0, .03);
+        }
+        .layui-form-radio:hover>*, .layui-form-radioed, .layui-form-radioed>i{
+            color: #2d8cf0 !important;
+        }
+
+        /*.layui-input {*/
+        /*    border-color: #597FC0 !important;*/
+        /*}*/
+
+        /* ...其他元素样式 */
+        /* 修改分页按钮的背景颜色和字体颜色 */
+        .layui-laypage a {
+            background-color: #f0f0f0; /* 设置按钮的背景颜色 */
+            color: #333; /* 设置按钮的字体颜色 */
+        }
+
+        /* 鼠标悬停时按钮的背景颜色 */
+        .layui-laypage a:hover {
+            background-color: #fff;
+            color: #2d8cf0;
+        }
+
+        /* 当前页的背景颜色和字体颜色 */
+        .layui-laypage .layui-laypage-curr .layui-laypage-em {
+            background-color: #2d8cf0; /* 当前页的背景颜色 */
+            color: white; /* 当前页的字体颜色 */
+        }
+
+        .file-row {
+            background-color: #e6f7ff;
+            padding: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-radius: 5px;
+            margin: 10px 0;
+            width: 98%;
+        }
+        .file-row .file-info {
+            display: flex;
+            align-items: center;
+        }
+        .file-row .file-info img {
+            width: 20px;
+            margin-right: 10px;
+        }
+        .file-row .file-info span {
+            font-size: 14px;
+        }
+        .file-row .actions {
+            display: flex;
+            align-items: center;
+        }
+        .file-row .actions button {
+            border: none;
+            background: none;
+            cursor: pointer;
+            margin-left: 10px;
+            font-size: 16px;
+        }
+
+        .layui-laydate-header {
+            background-color: #2d8cf0; /* 顶部背景颜色 */
+            color: #fff; /* 顶部文字颜色 */
+        }
+
+        .layui-laydate-list li:hover {
+            background-color: #2d8cf0; /* 鼠标悬停时的背景颜色 */
+            color: #fff; /* 鼠标悬停时的文字颜色 */
+        }
+
+        .layui-this, .layui-this:hover {
+            background-color: #fff !important; /* 选中的背景颜色 */
+            color: #2d8cf0 !important; /* 选中的文字颜色 */
+        }
+
+    </style>
+</head>
+<body>
+
+<div class="layui-form " style="width:70%;margin:auto;padding:0 5%;background:#FFF;margin-top:0">
+    <h2 style="text-align: center;">心理评估报告</h2>
+    <input id="guishu" type="hidden" value="">
+    <input id="userCode" type="hidden" value="">
+    <input id="regId" type="hidden" value="">
+
+    <form class="layui-form" id="addfolder" lay-filter="folderForm" style="display: none;min-height: 300px">
+        <div id="search-header">
+
+
+            <div class="layui-inline" style="margin-left: 3px;">
+                <label class="layui-form-label w-auto">姓名:</label>
+                <div class="layui-input-inline">
+                    <input id="name" class="layui-input" placeholder="请输入" style="width: 124px;"/>
+                </div>
+            </div>
+
+            <div class="layui-inline" style="padding-left: 20px;">
+                <button class="layui-btn icon-btn sousuoDN " lay-submit="" lay-filter="regManageQueryBtn"><i class="layui-icon"></i>搜索</button>
+                <button id="btnempty" style="background-color: #fff;width: 69px;color: black;border: 1px solid #e5e5e5;" class="layui-btn icon-btn"></i>清除</button>
+            </div>
+        </div>
+        <div id="tables" class="text-center layui-text"  style="width: 100%;">
+
+        </div>
+    </form>
+
+
+
+    <form class="layui-form" id="myForm" lay-filter="myForm">
+
+        <button style="float: right" type="submit" class="layui-btn" lay-submit lay-filter="myFormSave">保存</button>
+
+        <table>
+            <tr >
+                <th colspan="2">姓名</th>
+                <td colspan="4">
+                    <div class="layui-input-group">
+                        <input name="v1" type="text" class="input-full layui-input" placeholder="请输入姓名">
+                        <div class="layui-input-split layui-input-suffix chooseName" style="cursor: pointer;">
+                            <i class="layui-icon layui-icon-search"></i>
+                        </div>
+
+                        <input name="v9" type="text" class="input-full layui-input" style="display: none">
+                    </div>
+                </td>
+
+
+                <th colspan="2">
+                    手机号</th>
+                <td colspan="4">
+                    <input name="v2" type="text" class="input-full layui-input" >
+                </td>
+
+
+            </tr>
+
+
+            <tr>
+                <th colspan="2">评估次数</th>
+                <td colspan="4"><input type="text" class="input-full layui-input" name="v3" placeholder="评估次数"></td>
+
+
+
+
+                <th colspan="2">最新评估日期</th>
+                <td colspan="4"><input  type="date" class="input-full layui-input " name="v4" ></td>
+
+            </tr>
+
+
+            <tr id="disease-history-table" class="section-title">
+                <td class="heng" colspan="11"></td>
+                <td class="operation-btn" style="text-align: center"><i id="add-disease-row" style="font-size: 20px;color: #2d8cf0" class="layui-icon layui-icon-add-circle add-btn"></i></td>
+            </tr>
+        </table>
+    </form>
+</div>
+
+<script type="text/javascript" th:src="@{/assets/js/layui-v2.9.16/layui/layui.js}"></script>
+<script type="text/javascript" th:src="@{/assets/js/common.js}"></script>
+<script type="text/javascript" th:src="@{/assets/js/jquery-1.11.1.js}"></script>
+<script th:inline="javascript">
+    layui.use(['form',"table",'treeSelect','notice','upload',"laydate"], function(){
+        var form = layui.form;
+        var $ = layui.jquery;
+        var layer = layui.layer;
+        var table = layui.table;
+        var notice=layui.notice;
+        var upload = layui.upload;
+        layui.config({
+            skin: 'blue'  // 设置主题为蓝色
+        });
+
+
+
+        var params = new URLSearchParams(window.location.search);
+        var paramValue = params.get('medicalExaminationInformation');
+
+        form.on('submit(deleteRowBtn)', function(event){
+            var row = event.elem.closest('tr');
+            // 删除该行
+            row.parentNode.removeChild(row);
+            return false;
+        });
+
+
+        $(".chooseName").on("click",function (){
+            var closeIndex = layer.open({
+                type: 1, // page 层类型
+                area: ['800px', '600px'],
+                title: '选择名字',
+                shade: 0.6, // 遮罩透明度
+                anim: 0, // 0-6 的动画形式，-1 不开启
+                content: $("#addfolder"),
+                success: function(layero, index){
+                    // 在弹出层初始化完成后渲染表格
+                    var regManageTb=table.render({
+                        elem: '#tables',
+                        url: '/newRegController/queryLocallyManagedArchives', // 此处为静态模拟数据，实际使用时需换成真实接口
+                        page: true,
+                        limit : 10,
+                        where : {regTime:""},
+                        cols: [[
+                            // {type: 'radio', fixed: 'left'},
+                            {field:'userCode', title:'用户编号', fixed: 'center'},
+                            {field: 'name', title: '姓名', align: 'center'},
+                            {field: 'phone', align: 'center', title: '电话'} ,
+                        ]],
+                        parseData: function(res) {
+                            if (res.code === 20000) {
+                                return {
+                                    "code": 0,
+                                    "msg": res.msg || "",
+                                    "count": res.count || 0,
+                                    "data": res.data.data || []
+                                };
+                            } else {
+                                return {
+                                    "code": 1,
+                                    "msg": res.msg || "获取数据失败",
+                                    "count": 0,
+                                    "data": []
+                                };
+                            }
+                        },
+                        done: function() {
+                            $('#tables').css('visibility', 'visible');
+                        }
+                    });
+                    $('#tables').css('visibility', 'hidden');
+                    // 行单击事件( 双击事件为: rowDouble )
+                    table.on('row(tables)', function(obj){
+                        var xx = obj.data; // 获取当前行数据
+                        // 显示 - 仅用于演示
+                        $.ajax({
+                            type:'get',
+                            url:'/system/evaluate/findPGByUserCode',
+                            data:{userCode:xx.userCode},
+                            success : function(data){
+                                console.log(data,"--------------------------------------")
+                                if(data.data.data!=null){
+                                    form.val("myForm", {
+                                        "v1": xx.name,
+                                        "v2":data.data.data.mobile,
+                                        "v3":data.data.data.times,
+                                        "v9":xx.id,
+                                    });
+                                    document.querySelector('input[name="v4"]').value =data.data.data.evaluateDate?.substring(0, 10);
+                                }else{
+                                    form.val("myForm", {
+                                        "v1": xx.name,
+                                        "v2":"",
+                                        "v3":"",
+                                        "v9":xx.id,
+                                    });
+                                }
+
+                                // 刷新表单，让Layui重新渲染
+                                form.render();
+                                layer.close(closeIndex);
+                            }
+                        })
+
+
+                        // 标注当前点击行的选中状态
+                        obj.setRowChecked({
+                            type: 'radio' // radio 单选模式；checkbox 复选模式
+                        });
+                    });
+
+                    form.on('submit(regManageQueryBtn)', function(data){
+                        regManageTb.reload({
+                            where : {
+                                //这里注意一定要跟Bean 里面的属性对应
+                                orgCode:$('#guishu').val(),
+                                name:$('#name').val(),
+                                regTime:"",
+                            },
+                            page : {
+                                curr : 1
+                            }
+
+                        });
+                        // 阻止表单跳转。如果需要表单跳转，去掉这段即可。
+                        return false;
+                    });
+
+
+                },
+                end: function () {
+                    // 关闭弹出层时隐藏 addfolder
+                    $("#addfolder").hide();
+                }
+            });
+        });
+
+
+
+        $('#add-disease-row').on('click', function() {
+            var $lastRow = $('#disease-history-table').siblings('.disease-row').last();
+            var rowCount = $('#disease-history-table').siblings('.disease-row').length;
+            var $newRow = $('<tr class="disease-row"></tr>');
+
+            $newRow.html(`
+                <th colspan="1">序号</th>
+                <td colspan="1">${rowCount + 1}</td>
+                <th colspan="1">名称</th>
+                <td colspan="2"><input type="text" name="add1" class="input-full layui-input" ></td>
+                 <th colspan="1">评估结果</th>
+                <td colspan="2"><input type="text" name="add3" class="input-full layui-input"></td>
+                <th colspan="1">评估时间</th>
+                <td colspan="2"><input type="date" name="add2" class="input-full datainput layui-input"></td>
+                <td colspan="1"  style="text-align: center;" class="operation-btn"><i style="color: red;font-size: 30px;" class="layui-icon layui-icon-delete delete-btn"></i></td>
+            `);
+
+
+            if ($lastRow.length > 0) {
+                $lastRow.after($newRow);
+            } else {
+                $('#disease-history-table').after($newRow);
+            }
+
+            bindDeleteEvents(); // 绑定删除事件
+        });
+
+        function bindDeleteEvents() {
+            var deleteBtns = document.querySelectorAll('.delete-btn');
+            deleteBtns.forEach(function(btn, index) {
+                btn.addEventListener('click', function() {
+                    var row = this.parentElement.parentElement;
+                    row.parentElement.removeChild(row);
+                    updateRowNumbers(); // 更新序号
+                });
+            });
+
+
+        }
+
+        function updateRowNumbers() {
+            var rows = document.querySelectorAll('.disease-row');
+            rows.forEach(function(row, index) {
+                row.querySelector('td[colspan="1"]').textContent = index + 1;
+            });
+
+
+        }
+
+
+
+        form.on('submit(myFormSave)', function(data){
+            console.log(data,"dddddddddddddddddddddddddddddddd")
+
+
+
+            var allRowsData = [];
+
+            $("tr").each(function() {
+                var row = $(this); // 当前行
+                // 检查当前行是否包含你需要的 input 元素
+                var add1Input = row.find('input[name="add1"]');
+                var add2Input = row.find('input[name="add2"]');
+                var add3Input = row.find('input[name="add3"]');
+
+
+
+                if (add1Input.length > 0 && add2Input.length > 0 && add3Input.length > 0) {
+                    var add1Value = add1Input.val(); // 获取疾病名称的值
+                    var add2Value = add2Input.val(); // 获取确诊时间的值
+                    var add3Value = add3Input.val(); // 获取其它的值
+                    var rowData = {
+                        "add1": add1Value,
+                        "add2": add2Value,
+                        "add3": add3Value
+                    };
+                    // 将该行的数据对象添加到数组中
+                    allRowsData.push(rowData);
+                }
+
+
+
+            });
+            var field = data.field;  // 获取表单字段值
+
+            if (!field.v1) {
+                layer.msg('请补充完整');
+                $("input[name='v1']").focus();
+                return false;  // 阻止提交
+            }
+            if (!field.v2) {
+                layer.msg('请补充完整');
+                $("input[name='v2']").focus();
+                return false;  // 阻止提交
+            }
+            if (!field.v3) {
+                layer.msg('请补充完整');
+                $("input[name='v3']").focus();
+                return false;
+            }
+            if (!field.v4) {
+                layer.msg('请补充完整');
+                $("input[name='v4']").focus();
+                return false;
+            }
+
+
+
+            if ($(this).data('submitted') === true) {
+                return false; // 阻止重复提交
+            }
+
+
+            $(this).data('submitted', true);
+
+            if(paramValue){
+                $.ajax({
+                    type : 'post',
+                    url : '/NewPsychologicalAssessmentReportController/updateNew',
+                    data : {
+                        id:paramValue,
+                        name:data.field.v1,
+                        phone:data.field.v2,
+                        numberEvaluations:data.field.v3,
+                        latestEvaluationDate:data.field.v4,
+                        evaluationResults:JSON.stringify(allRowsData),
+                        regId:data.field.v9,
+                    },
+
+                    success : function(data) {
+                        if (data.code == 20000) {
+
+                            notice.success({
+                                title : '消息通知',
+                                message : '操作成功!'
+                            });
+
+                            setTimeout(function() {
+                                window.close();
+                            }, 2000);
+                        } else {
+                            notice.error({
+                                title : '消息通知',
+                                message : '操作失败!'
+                            });
+                            setTimeout(function() {
+                                window.close();
+                            }, 2000);
+                        }
+                    }
+                })
+            }else{
+                $.ajax({
+                    type : 'post',
+                    url : '/NewPsychologicalAssessmentReportController/insetNew',
+                    data : {
+                        name:data.field.v1,
+                        phone:data.field.v2,
+                        numberEvaluations:data.field.v3,
+                        latestEvaluationDate:data.field.v4,
+                        evaluationResults:JSON.stringify(allRowsData),
+                        regId:data.field.v9,
+                    },
+
+                    success : function(data) {
+                        if (data.code == 20000) {
+
+                            notice.success({
+                                title : '消息通知',
+                                message : '操作成功!'
+                            });
+
+                            setTimeout(function() {
+                                window.close();
+                            }, 2000);
+                        } else {
+                            notice.error({
+                                title : '消息通知',
+                                message : '操作失败!'
+                            });
+                            setTimeout(function() {
+                                window.close();
+                            }, 2000);
+                        }
+                    }
+                })
+            }
+            return false; // 阻止默认 form 跳转
+        });
+
+        function selectForm(paramValue){
+            if(paramValue){
+                $.ajax({
+                    type:'get',
+                    url:'/NewPsychologicalAssessmentReportController/selectById',
+                    data:{id:paramValue},
+                    success : function(data){
+                        console.log("这里是查询出来的数据",data);
+                        if(data.code==20000){
+                            form.val("myForm", {
+                                "v1": data.data.name,
+                                "v2":data.data.phone,
+                                "v3":data.data.numberEvaluations,
+                                "v4":data.data.latestEvaluationDate?.substring(0, 10),
+                                "v9":data.data.regId,
+                            });
+                            form.render();
+                        }
+                        const medicalHistory = JSON.parse(data.data.evaluationResults);
+                        medicalHistory.forEach((item, index) => {
+                            console.log(item,"sssssssssssss",)
+                            var $lastRow = $('#disease-history-table').siblings('.disease-row').last();
+                            const $newRow = $('<tr class="disease-row"></tr>');
+                            $newRow.html(`
+                                        <th colspan="1">序号</th>
+                                        <td colspan="1">${index + 1}</td>
+                                        <th colspan="1">名称</th>
+                                        <td colspan="2"><input type="text" value="${item.add1}" name="add1" class="input-full layui-input" placeholder="请输入疾病名称"></td>
+                                         <th colspan="1">评估结果</th>
+                                        <td colspan="2"><input type="text" value="${item.add3}" name="add3" class="input-full layui-input"></td>
+                                        <th colspan="1">评估时间</th>
+                                        <td colspan="2"><input type="date" value="${item.add2}" name="add2" class="input-full datainput layui-input"></td>
+
+                                        <td colspan="1" class="operation-btn" style="text-align: center;"><i style="color: red;font-size: 30px;" class="layui-icon layui-icon-delete delete-btn"></i></td>
+                                    `);
+                            console.log($newRow.innerHTML)
+                            if ($lastRow.length > 0) {
+                                $lastRow.after($newRow);
+                            } else {
+                                $('#disease-history-table').after($newRow);
+                            }
+
+                            bindDeleteEvents();
+                        });
+                    }
+                })
+            }
+
+
+        }
+
+        selectForm(paramValue);
+
+        // 初始化表单
+        form.render();
+    });
+</script>
+
+</body>
+</html>

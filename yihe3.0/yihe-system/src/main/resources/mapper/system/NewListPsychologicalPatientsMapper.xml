@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yihe.system.mapper.NewListPsychologicalPatientsMapper">
+  <resultMap id="BaseResultMap" type="com.yihe.system.domain.NewListPsychologicalPatients">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="customer_affiliation" jdbcType="VARCHAR" property="customerAffiliation" />
+    <result column="customer_contact" jdbcType="VARCHAR" property="customerContact" />
+    <result column="reg_id" jdbcType="INTEGER" property="regId" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="sex" jdbcType="VARCHAR" property="sex" />
+    <result column="age" jdbcType="VARCHAR" property="age" />
+    <result column="company" jdbcType="VARCHAR" property="company" />
+    <result column="departments" jdbcType="VARCHAR" property="departments" />
+    <result column="service_date" jdbcType="VARCHAR" property="serviceDate" />
+    <result column="chief_complaint" jdbcType="VARCHAR" property="chiefComplaint" />
+    <result column="insert_time" jdbcType="TIMESTAMP" property="insertTime" />
+    <result column="dname" jdbcType="VARCHAR" property="dname" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, customer_affiliation, customer_contact, reg_id, name, sex, age, company, departments, 
+    service_date, chief_complaint, insert_time
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select ni.*,yur.name as dname from new_list_psychological_patients ni left join yh_user_reginfo yur on ni.customer_contact=yur.user_code
+    where ni.id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from new_list_psychological_patients
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.yihe.system.domain.NewListPsychologicalPatients">
+    insert into new_list_psychological_patients (id, customer_affiliation, customer_contact, 
+      reg_id, name, sex, age, 
+      company, departments, service_date, 
+      chief_complaint, insert_time)
+    values (#{id,jdbcType=INTEGER}, #{customerAffiliation,jdbcType=VARCHAR}, #{customerContact,jdbcType=VARCHAR}, 
+      #{regId,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{sex,jdbcType=VARCHAR}, #{age,jdbcType=VARCHAR}, 
+      #{company,jdbcType=VARCHAR}, #{departments,jdbcType=VARCHAR}, #{serviceDate,jdbcType=VARCHAR}, 
+      #{chiefComplaint,jdbcType=VARCHAR}, #{insertTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.yihe.system.domain.NewListPsychologicalPatients">
+    insert into new_list_psychological_patients
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="customerAffiliation != null">
+        customer_affiliation,
+      </if>
+      <if test="customerContact != null">
+        customer_contact,
+      </if>
+      <if test="regId != null">
+        reg_id,
+      </if>
+      <if test="name != null">
+        name,
+      </if>
+      <if test="sex != null">
+        sex,
+      </if>
+      <if test="age != null">
+        age,
+      </if>
+      <if test="company != null">
+        company,
+      </if>
+      <if test="departments != null">
+        departments,
+      </if>
+      <if test="serviceDate != null">
+        service_date,
+      </if>
+      <if test="chiefComplaint != null">
+        chief_complaint,
+      </if>
+      <if test="insertTime != null">
+        insert_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="customerAffiliation != null">
+        #{customerAffiliation,jdbcType=VARCHAR},
+      </if>
+      <if test="customerContact != null">
+        #{customerContact,jdbcType=VARCHAR},
+      </if>
+      <if test="regId != null">
+        #{regId,jdbcType=INTEGER},
+      </if>
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="sex != null">
+        #{sex,jdbcType=VARCHAR},
+      </if>
+      <if test="age != null">
+        #{age,jdbcType=VARCHAR},
+      </if>
+      <if test="company != null">
+        #{company,jdbcType=VARCHAR},
+      </if>
+      <if test="departments != null">
+        #{departments,jdbcType=VARCHAR},
+      </if>
+      <if test="serviceDate != null">
+        #{serviceDate,jdbcType=VARCHAR},
+      </if>
+      <if test="chiefComplaint != null">
+        #{chiefComplaint,jdbcType=VARCHAR},
+      </if>
+      <if test="insertTime != null">
+        #{insertTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.yihe.system.domain.NewListPsychologicalPatients">
+    update new_list_psychological_patients
+    <set>
+      <if test="customerAffiliation != null">
+        customer_affiliation = #{customerAffiliation,jdbcType=VARCHAR},
+      </if>
+      <if test="customerContact != null">
+        customer_contact = #{customerContact,jdbcType=VARCHAR},
+      </if>
+      <if test="regId != null">
+        reg_id = #{regId,jdbcType=INTEGER},
+      </if>
+      <if test="name != null">
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="sex != null">
+        sex = #{sex,jdbcType=VARCHAR},
+      </if>
+      <if test="age != null">
+        age = #{age,jdbcType=VARCHAR},
+      </if>
+      <if test="company != null">
+        company = #{company,jdbcType=VARCHAR},
+      </if>
+      <if test="departments != null">
+        departments = #{departments,jdbcType=VARCHAR},
+      </if>
+      <if test="serviceDate != null">
+        service_date = #{serviceDate,jdbcType=VARCHAR},
+      </if>
+      <if test="chiefComplaint != null">
+        chief_complaint = #{chiefComplaint,jdbcType=VARCHAR},
+      </if>
+      <if test="insertTime != null">
+        insert_time = #{insertTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.yihe.system.domain.NewListPsychologicalPatients">
+    update new_list_psychological_patients
+    set customer_affiliation = #{customerAffiliation,jdbcType=VARCHAR},
+      customer_contact = #{customerContact,jdbcType=VARCHAR},
+      reg_id = #{regId,jdbcType=INTEGER},
+      name = #{name,jdbcType=VARCHAR},
+      sex = #{sex,jdbcType=VARCHAR},
+      age = #{age,jdbcType=VARCHAR},
+      company = #{company,jdbcType=VARCHAR},
+      departments = #{departments,jdbcType=VARCHAR},
+      service_date = #{serviceDate,jdbcType=VARCHAR},
+      chief_complaint = #{chiefComplaint,jdbcType=VARCHAR},
+      insert_time = #{insertTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+  <select id="selectByPage" parameterType="com.yihe.system.domain.NewListPsychologicalPatients" resultMap="BaseResultMap">
+    select * from new_list_psychological_patients
+    ni left join new_reg ur
+    on ni.reg_id=ur.id
+    LEFT JOIN `yh_user_make_card` AS c ON ur.`user_code` = c.`User_Code`
+    LEFT JOIN yh_user_admin_info AS ai ON c.doctor = ai.id
+    <where>
+      ( ai.user_code = #{customerContact} or 1=1)
+      <if test="name!=null and name!=''">
+        and ni.name LIKE CONCAT('%', #{name}, '%')
+      </if>
+      <if test="workUnit!=null and workUnit!=''">
+        and ur.work_unit  LIKE CONCAT('%', #{workUnit}, '%')
+      </if>
+    </where>
+    LIMIT #{begin}, #{limit};
+  </select>
+
+  <select id="selectByPageCount" parameterType="com.yihe.system.domain.NewListPsychologicalPatients" resultType="int">
+    select count(*) from new_list_psychological_patients
+    ni left join new_reg ur
+    on ni.reg_id=ur.id
+    LEFT JOIN `yh_user_make_card` AS c ON ur.`user_code` = c.`User_Code`
+    LEFT JOIN yh_user_admin_info AS ai ON c.doctor = ai.id
+    <where>
+      ( ai.user_code = #{customerContact} or 1=1)
+      <if test="name!=null and name!=''">
+        and ni.name LIKE CONCAT('%', #{name}, '%')
+      </if>
+      <if test="workUnit!=null and workUnit!=''">
+        and ur.work_unit  LIKE CONCAT('%', #{workUnit}, '%')
+      </if>
+    </where>
+  </select>
+</mapper>

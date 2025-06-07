@@ -1,0 +1,1068 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>高风险人群干预记录表</title>
+    <link rel="stylesheet" th:href="@{/assets/js/layui-v2.9.16/layui/css/layui.css}"/>
+    <script type="text/javascript" th:src="@{/assets/js/layui-v2.9.16/layui/layui.js}"></script>
+    <style>
+            body{
+                background:#F1F1F1
+            }
+            table {
+                width: 100%;
+                border-collapse: collapse;
+                table-layout: fixed;
+                border-color:rgb(144, 186, 221)
+            }
+            th, td {
+                border: 1px solid #ccc;
+                padding: 8px;
+                text-align: left;
+            }
+            th {
+                background-color: rgb(231, 243, 252);
+                font-size: 10pt;
+                font-family: "Microsoft YaHei";
+                word-break: break-word;
+                overflow-wrap: break-word;
+                text-align: center;
+            }
+            .section-title {
+                text-align: center;
+                font-weight: bold;
+                background-color: #e6f7ff;
+            }
+            .input-full {
+                width: 100%;
+                box-sizing: border-box;
+            }
+            .radio-group {
+                display: flex;
+                align-items: center;
+            }
+            .radio-group label {
+                margin-right: 10px;
+            }
+            .checkbox-group {
+                display: flex;
+                align-items: center;
+                flex-wrap: wrap;
+            }
+            .checkbox-group label {
+                margin-right: 15px;
+            }
+            .heng{
+                text-align: center;
+                font-size: 10pt;
+                font-family: "Microsoft YaHei";
+                word-break: break-word;
+                overflow-wrap: break-word;
+            }
+            .datainput{
+                border-color: #eee !important;
+                border-width: 1px;
+            }
+
+            .layui-form-checked[lay-skin=primary] i{
+                border-color:#2d8cf0 !important;
+                background-color:#FFF !important;
+                color:#2d8cf0 !important;
+                font-weight: bold;
+            }
+
+            .layui-form-checkbox[lay-skin=primary]:hover i{
+                border-color:#2d8cf0 !important;
+            }
+            .layui-form-radio>i:hover, .layui-form-radioed>i{
+                color: #2d8cf0 !important;
+            }
+
+            /* 覆盖 layui 的默认主题颜色 */
+            .theme-colorful .layui-btn {
+                height: 36px;
+                line-height: 36px;
+                border-radius: 4px;
+                background-color: #2d8cf0;
+                box-shadow: 0 1px 0 rgba(0, 0, 0, .03);
+            }
+            .layui-form-radio:hover>*, .layui-form-radioed, .layui-form-radioed>i{
+                color: #2d8cf0 !important;
+            }
+
+            /*.layui-input {*/
+            /*    border-color: #597FC0 !important;*/
+            /*}*/
+
+            /* ...其他元素样式 */
+            /* 修改分页按钮的背景颜色和字体颜色 */
+            .layui-laypage a {
+                background-color: #f0f0f0; /* 设置按钮的背景颜色 */
+                color: #333; /* 设置按钮的字体颜色 */
+            }
+
+            /* 鼠标悬停时按钮的背景颜色 */
+            .layui-laypage a:hover {
+                background-color: #fff;
+                color: #2d8cf0;
+            }
+
+            /* 当前页的背景颜色和字体颜色 */
+            .layui-laypage .layui-laypage-curr .layui-laypage-em {
+                background-color: #2d8cf0; /* 当前页的背景颜色 */
+                color: white; /* 当前页的字体颜色 */
+            }
+
+            .file-row {
+                background-color: #e6f7ff;
+                padding: 10px;
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                border-radius: 5px;
+                margin: 10px 0;
+                width: 98%;
+            }
+            .file-row .file-info {
+                display: flex;
+                align-items: center;
+            }
+            .file-row .file-info img {
+                width: 20px;
+                margin-right: 10px;
+            }
+            .file-row .file-info span {
+                font-size: 14px;
+            }
+            .file-row .actions {
+                display: flex;
+                align-items: center;
+            }
+            .file-row .actions button {
+                border: none;
+                background: none;
+                cursor: pointer;
+                margin-left: 10px;
+                font-size: 16px;
+            }
+
+            .layui-laydate-header {
+                background-color: #2d8cf0; /* 顶部背景颜色 */
+                color: #fff; /* 顶部文字颜色 */
+            }
+
+            .layui-laydate-list li:hover {
+                background-color: #2d8cf0; /* 鼠标悬停时的背景颜色 */
+                color: #fff; /* 鼠标悬停时的文字颜色 */
+            }
+
+            .layui-this, .layui-this:hover {
+                background-color: #fff !important; /* 选中的背景颜色 */
+                color: #2d8cf0 !important; /* 选中的文字颜色 */
+            }
+            @media print {
+            .no-print {
+                display: none !important;
+            }
+                body{
+                    background:#F1F1F1
+                }
+                table {
+                    width: 100%;
+                    border-collapse: collapse;
+                    table-layout: fixed;
+                    border-color:rgb(144, 186, 221)
+                }
+                th, td {
+                    border: 1px solid #ccc;
+                    padding: 8px;
+                    text-align: left;
+                }
+                th {
+                    background-color: rgb(231, 243, 252) !important;
+                    font-size: 10pt;
+                    font-family: "Microsoft YaHei";
+                    word-break: break-word;
+                    overflow-wrap: break-word;
+                    text-align: center;
+                }
+                .section-title {
+                    text-align: center;
+                    font-weight: bold;
+                    background-color: #e6f7ff;
+                }
+                .input-full {
+                    width: 100%;
+                    box-sizing: border-box;
+                }
+                .radio-group {
+                    display: flex;
+                    align-items: center;
+                }
+                .radio-group label {
+                    margin-right: 10px;
+                }
+                .checkbox-group {
+                    display: flex;
+                    align-items: center;
+                    flex-wrap: wrap;
+                }
+                .checkbox-group label {
+                    margin-right: 15px;
+                }
+                .heng{
+                    text-align: center;
+                    font-size: 10pt;
+                    font-family: "Microsoft YaHei";
+                    word-break: break-word;
+                    overflow-wrap: break-word;
+                }
+                .datainput{
+                    border-color: #eee !important;
+                    border-width: 1px;
+                }
+
+                .layui-form-checked[lay-skin=primary] i{
+                    border-color:#2d8cf0 !important;
+                    background-color:#FFF !important;
+                    color:#2d8cf0 !important;
+                    font-weight: bold;
+                }
+
+                .layui-form-checkbox[lay-skin=primary]:hover i{
+                    border-color:#2d8cf0 !important;
+                }
+                .layui-form-radio>i:hover, .layui-form-radioed>i{
+                    color: #2d8cf0 !important;
+                }
+
+                /* 覆盖 layui 的默认主题颜色 */
+                .theme-colorful .layui-btn {
+                    height: 36px;
+                    line-height: 36px;
+                    border-radius: 4px;
+                    background-color: #2d8cf0;
+                    box-shadow: 0 1px 0 rgba(0, 0, 0, .03);
+                }
+                .layui-form-radio:hover>*, .layui-form-radioed, .layui-form-radioed>i{
+                    color: #2d8cf0 !important;
+                }
+
+                /*.layui-input {*/
+                /*    border-color: #597FC0 !important;*/
+                /*}*/
+
+                /* ...其他元素样式 */
+                /* 修改分页按钮的背景颜色和字体颜色 */
+                .layui-laypage a {
+                    background-color: #f0f0f0; /* 设置按钮的背景颜色 */
+                    color: #333; /* 设置按钮的字体颜色 */
+                }
+
+                /* 鼠标悬停时按钮的背景颜色 */
+                .layui-laypage a:hover {
+                    background-color: #fff;
+                    color: #2d8cf0;
+                }
+
+                /* 当前页的背景颜色和字体颜色 */
+                .layui-laypage .layui-laypage-curr .layui-laypage-em {
+                    background-color: #2d8cf0; /* 当前页的背景颜色 */
+                    color: white; /* 当前页的字体颜色 */
+                }
+
+                .file-row {
+                    background-color: #e6f7ff;
+                    padding: 10px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: space-between;
+                    border-radius: 5px;
+                    margin: 10px 0;
+                    width: 98%;
+                }
+                .file-row .file-info {
+                    display: flex;
+                    align-items: center;
+                }
+                .file-row .file-info img {
+                    width: 20px;
+                    margin-right: 10px;
+                }
+                .file-row .file-info span {
+                    font-size: 14px;
+                }
+                .file-row .actions {
+                    display: flex;
+                    align-items: center;
+                }
+                .file-row .actions button {
+                    border: none;
+                    background: none;
+                    cursor: pointer;
+                    margin-left: 10px;
+                    font-size: 16px;
+                }
+
+                .layui-laydate-header {
+                    background-color: #2d8cf0; /* 顶部背景颜色 */
+                    color: #fff; /* 顶部文字颜色 */
+                }
+
+                .layui-laydate-list li:hover {
+                    background-color: #2d8cf0; /* 鼠标悬停时的背景颜色 */
+                    color: #fff; /* 鼠标悬停时的文字颜色 */
+                }
+
+                .layui-this, .layui-this:hover {
+                    background-color: #fff !important; /* 选中的背景颜色 */
+                    color: #2d8cf0 !important; /* 选中的文字颜色 */
+                }
+            }
+            @page {
+                /* 尝试去除默认的页眉和页脚 */
+                margin: 0;
+            }
+    </style>
+</head>
+<body>
+
+<div class="layui-form " style="width:70%;margin:auto;padding:0 5%;background:#FFF;margin-top:0">
+    <h2 style="text-align: center;">高风险人群干预记录表</h2>
+    <input id="guishu" type="hidden" value="">
+    <input id="userCode" type="hidden" value="">
+    <input id="regId" type="hidden" value="">
+
+    <form class="layui-form" id="addfolder" lay-filter="folderForm" style="display: none;min-height: 300px">
+        <div id="search-header">
+
+
+            <div class="layui-inline" style="margin-left: 3px;">
+                <label class="layui-form-label w-auto">姓名:</label>
+                <div class="layui-input-inline">
+                    <input id="name" class="layui-input" placeholder="请输入" style="width: 124px;"/>
+                </div>
+            </div>
+
+            <div class="layui-inline" style="padding-left: 20px;">
+                <button class="layui-btn icon-btn sousuoDN " lay-submit="" lay-filter="regManageQueryBtn"><i class="layui-icon"></i>搜索</button>
+                <button id="btnempty" style="background-color: #fff;width: 69px;color: black;border: 1px solid #e5e5e5;" class="layui-btn icon-btn"></i>清除</button>
+            </div>
+        </div>
+        <div id="tables" class="text-center layui-text"  style="width: 100%;">
+
+        </div>
+    </form>
+
+
+
+    <form class="layui-form" id="myForm" lay-filter="myForm">
+
+        <button style="float: right" type="submit" class="layui-btn no-print" lay-submit lay-filter="myFormSave">保存</button>
+        <button style="float: right;margin-right: 30px" type="submit" class="layui-btn no-print" lay-submit lay-filter="generatePDF">打印</button>
+
+
+        <table>
+            <tr >
+                <th colspan="4">姓名</th>
+                <td colspan="8">
+                    <div class="layui-input-group">
+                        <input name="v1" type="text" class="input-full layui-input" readonly>
+                        <div class="layui-input-split layui-input-suffix chooseName" style="cursor: pointer;">
+                            <i class="layui-icon layui-icon-search"></i>
+                        </div>
+                    </div>
+                </td>
+
+
+                <th colspan="4">编号</th>
+                <td colspan="8">
+                    <input name="v2" type="text" class="input-full layui-input" readonly>
+                </td>
+
+
+            </tr>
+
+
+            <tr>
+                <th colspan="4">随访日期</th>
+                <td colspan="20"><input type="date" class="input-full layui-input" name="v3" placeholder=""></td>
+            </tr>
+
+
+            <tr >
+                <th colspan="4">随访方式</th>
+                <td colspan="20">
+                    <input type="radio" name="v4" value="健康小屋" title="健康小屋">
+                    <input type="radio" name="v4" value="小程序" title="小程序" >
+                    <input type="radio" name="v4" value="电话" title="电话" >
+                    <input type="radio" name="v4" value="微信" title="微信" >
+                </td>
+
+
+            </tr>
+
+            <tr >
+                <th colspan="4">干预项目</th>
+                <td colspan="20">
+                    <table border="1" width="100%">
+                        <tr >
+                            <td colspan="20"><textarea  type="textarea" class="input-full layui-textarea" name="v5" placeholder=""></textarea></td>
+                        </tr>
+                        <tr >
+                            <td colspan="20"><div style="line-height: 40px;width: 5%;float: left">其他：</div><input style="width: 95%;float: right"  type="text" class="input-full layui-input" name="v6" ></td>
+                        </tr>
+
+                    </table>
+
+                </td>
+
+            </tr>
+
+
+
+            <tr >
+                <th colspan="4">体征</th>
+                <td colspan="20" style="padding: 0">
+                    <table border="1" width="100%">
+                        <tr >
+                            <th colspan="4">血压（mmHg）</th>
+                            <td colspan="20"><input type="text" class="input-full layui-input" name="v7" ></td>
+                        </tr>
+
+                        <tr >
+                            <th colspan="4">体  重（kg)</th>
+                            <td colspan="20"><input type="text" class="input-full layui-input" name="v8" ></td>
+                        </tr>
+
+                        <tr >
+                            <th colspan="4">体质指数</th>
+                            <td colspan="20">
+                                <div style="line-height: 40px;width: 5%;float: left">测量</div><input style="width: 30%;float: left"  type="text" class="input-full layui-input" name="v9" >
+
+                                <div style="line-height: 40px;width: 5%;float: left">/目标</div><input style="width: 30%;float: left"  type="text" class="input-full layui-input" name="v10" >
+                            </td>
+                        </tr>
+
+                        <tr >
+                            <th colspan="4">心率（次/分钟）</th>
+                            <td colspan="20"><input type="text" class="input-full layui-input" name="v11" ></td>
+                        </tr>
+
+                        <tr >
+                            <th colspan="4">其他</th>
+                            <td colspan="20"><input type="text" class="input-full layui-input" name="v12" ></td>
+                        </tr>
+
+                    </table>
+
+                </td>
+
+            </tr>
+
+
+
+
+
+            <tr >
+                <th colspan="4">生活方式指导</th>
+                <td colspan="20" style="padding: 0">
+                    <table border="1" width="100%">
+                        <tr >
+                            <th colspan="4">日吸烟量（支）</th>
+                            <td colspan="20">
+                                <div style="line-height: 40px;width: 5%;float: left">测量</div><input style="width: 30%;float: left"  type="text" class="input-full layui-input" name="v13" >
+
+                                <div style="line-height: 40px;width: 5%;float: left">/目标</div><input style="width: 30%;float: left"  type="text" class="input-full layui-input" name="v14">
+                            </td>
+                        </tr>
+
+                        <tr >
+                            <th colspan="4">日饮酒量（两）</th>
+                            <td colspan="20">
+                                <div style="line-height: 40px;width: 5%;float: left">测量</div><input style="width: 30%;float: left"  type="text" class="input-full layui-input" name="v15" >
+
+                                <div style="line-height: 40px;width: 5%;float: left">/目标</div><input style="width: 30%;float: left"  type="text" class="input-full layui-input" name="v16" >
+                            </td>
+                        </tr>
+
+                        <tr >
+                            <th colspan="4">运动</th>
+                            <td colspan="20">
+                                <div style="line-height: 40px; width: 5%; float: left;">测量</div>
+                                <input style="width: 44%; float: left;" type="text" class="input-full layui-input" name="v17">
+
+                                <div style="line-height: 40px; width: 4%; float: left;">/目标</div>
+                                <input style="width: 44%; float: left;" type="text" class="input-full layui-input" name="v18">
+
+                                <div style="clear: both;"></div> <!-- 清除浮动 -->
+
+                                <div style="line-height: 40px; width: 5%; float: left;">测量</div>
+                                <input style="width: 44%; float: left;" type="text" class="input-full layui-input" name="v19">
+
+                                <div style="line-height: 40px; width: 4%; float: left;">/目标</div>
+                                <input style="width: 44%; float: left;" type="text" class="input-full layui-input" name="v20">
+
+                                <div style="clear: both;"></div>
+
+                            </td>
+                        </tr>
+
+                        <tr >
+                            <th colspan="4">日饮酒量（两）</th>
+                            <td colspan="20">
+                                <div style="line-height: 40px;width: 5%;float: left">测量</div>
+                                <div style="width: 35%;float: left"  >
+                                    <input type="radio" name="v21" value="轻" title="轻">
+                                    <input type="radio" name="v21" value="中" title="中" >
+                                    <input type="radio" name="v21" value="重" title="重" >
+                                </div>
+
+                                <div style="line-height: 40px;width: 5%;float: left">/目标</div>
+                                <div style="width: 35%;float: left"  >
+                                    <input type="radio" name="v22" value="轻" title="轻">
+                                    <input type="radio" name="v22" value="中" title="中" >
+                                    <input type="radio" name="v22" value="重" title="重" >
+                                </div>
+                            </td>
+                        </tr>
+
+                        <tr >
+                            <th colspan="4">心理调整</th>
+                            <td colspan="20">
+                                    <input type="radio" name="v23" value="良好" title="良好">
+                                    <input type="radio" name="v23" value="一般" title="一般" >
+                                    <input type="radio" name="v23" value="差" title="差" >
+                            </td>
+                        </tr>
+
+                        <tr >
+                            <th colspan="4">遵医行为</th>
+                            <td colspan="20">
+                                <input type="radio" name="v24" value="良好" title="良好">
+                                <input type="radio" name="v24" value="一般" title="一般" >
+                                <input type="radio" name="v24" value="差" title="差" >
+                            </td>
+                        </tr>
+
+                    </table>
+
+                </td>
+
+            </tr>
+
+            <tr >
+                <th colspan="4">辅助检查</th>
+                <td colspan="20"><input type="text" class="input-full layui-input" name="v25" style="width: 90%"></td>
+            </tr>
+
+            <tr >
+                <th colspan="4">服药依从性</th>
+                <td colspan="20">
+                    <input type="radio" name="v26" value="规律" title="规律">
+                    <input type="radio" name="v26" value="间断" title="间断" >
+                    <input type="radio" name="v26" value="不服药" title="不服药" >
+                </td>
+            </tr>
+
+            <tr >
+                <th colspan="4">药物不良反应</th>
+                <td colspan="20">
+                    <input type="radio" name="v27" value="无" title="无">
+                    <input type="radio" name="v27" value="有" title="有" >
+                    <input type="text" class="input-full layui-input" name="v28" >
+                </td>
+            </tr>
+
+            <tr >
+                <th colspan="4">此次服务分类</th>
+                <td colspan="20">
+                    <input type="radio" name="v29" value="控制满意" title="控制满意">
+                    <input type="radio" name="v29" value="控制不满意" title="控制不满意" >
+                    <input type="radio" name="v29" value="不良反应" title="不良反应" >
+                    <input type="radio" name="v29" value="并发症" title="并发症" >
+                </td>
+            </tr>
+
+
+
+
+
+            <tr >
+                <th colspan="4">用药情况</th>
+                <td colspan="20" style="padding: 0">
+                    <table border="1" width="100%">
+                        <tr >
+                            <th colspan="4">药物名称 1</th>
+                            <td colspan="20"><input type="text" class="input-full layui-input" name="v30" placeholder="辅助检查"></td>
+                        </tr>
+
+                        <tr >
+                            <th colspan="4">用法用量</th>
+                            <td colspan="20">
+                                <div style="line-height: 40px;width: 5%;float: left">每日</div><input style="width: 30%;float: left"  type="text" class="input-full layui-input" name="v31" placeholder="测量"><div style="line-height: 40px;width: 5%;float: left">次</div>
+
+                                <div style="line-height: 40px;width: 5%;float: left">每次</div><input style="width: 30%;float: left"  type="text" class="input-full layui-input" name="v32" placeholder="测量">
+                            </td>
+                        </tr>
+
+                        <tr >
+                            <th colspan="4">药物名称 2</th>
+                            <td colspan="20"><input type="text" class="input-full layui-input" name="v33" ></td>
+                        </tr>
+
+                        <tr >
+                            <th colspan="4">用法用量</th>
+                            <td colspan="20">
+                                <div style="line-height: 40px;width: 5%;float: left">每日</div><input style="width: 30%;float: left"  type="text" class="input-full layui-input" name="v34" ><div style="line-height: 40px;width: 5%;float: left">次</div>
+
+                                <div style="line-height: 40px;width: 5%;float: left">每次</div><input style="width: 30%;float: left"  type="text" class="input-full layui-input" name="v35" >
+                            </td>
+                        </tr>
+
+                        <tr >
+                            <th colspan="4">药物名称 3</th>
+                            <td colspan="20"><input type="text" class="input-full layui-input" name="v36" ></td>
+                        </tr>
+
+                        <tr >
+                            <th colspan="4">用法用量</th>
+                            <td colspan="20">
+                                <div style="line-height: 40px;width: 5%;float: left">每日</div><input style="width: 30%;float: left"  type="text" class="input-full layui-input" name="v37" ><div style="line-height: 40px;width: 5%;float: left">次</div>
+
+                                <div style="line-height: 40px;width: 5%;float: left">每次</div><input style="width: 30%;float: left"  type="text" class="input-full layui-input" name="v38" >
+                            </td>
+                        </tr>
+
+                        <tr >
+                            <th colspan="4">其他药物</th>
+                            <td colspan="20"><input type="text" class="input-full layui-input" name="v39" ></td>
+                        </tr>
+
+                        <tr >
+                            <th colspan="4">用法用量</th>
+                            <td colspan="20">
+                                <div style="line-height: 40px;width: 5%;float: left">每日</div><input style="width: 30%;float: left"  type="text" class="input-full layui-input" name="v40" ><div style="line-height: 40px;width: 5%;float: left">次</div>
+
+                                <div style="line-height: 40px;width: 5%;float: left">每次</div><input style="width: 30%;float: left"  type="text" class="input-full layui-input" name="v41" >
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+
+            </tr>
+
+
+
+
+            <tr >
+                <th colspan="4">转诊</th>
+                <td colspan="20" style="padding: 0">
+                    <table border="1" width="100%">
+                        <tr >
+                            <th colspan="4">原 因</th>
+                            <td colspan="20"><input type="text" class="input-full layui-input" name="v42" ></td>
+                        </tr>
+
+                        <tr >
+                            <th colspan="4">机构及科别</th>
+                            <td colspan="20"><input type="text" class="input-full layui-input" name="v43" ></td>
+                        </tr>
+
+                    </table>
+                </td>
+
+            </tr>
+
+
+            <tr >
+                <th colspan="4">健康指导意见</th>
+                <td colspan="20"><textarea  type="textarea" class="input-full layui-textarea" name="v44" placeholder=""></textarea></td>
+            </tr>
+
+            <tr >
+                <th colspan="4">下次随访日期</th>
+                <td colspan="20"><input type="date" class="input-full layui-input" name="v45"></td>
+            </tr>
+
+            <tr >
+                <th colspan="4">
+                    [[${roleName == '心理咨询师' ? '心理咨询师' : '健管师'}]]
+                </th>
+                <td colspan="20">
+                    <input type="text" class="input-full layui-input" name="v46" ></td>
+                </td>
+            </tr>
+
+
+
+
+
+        </table>
+    </form>
+</div>
+
+<script type="text/javascript" th:src="@{/assets/js/layui-v2.9.16/layui/layui.js}"></script>
+<script type="text/javascript" th:src="@{/assets/js/common.js}"></script>
+<script type="text/javascript" th:src="@{/assets/js/jquery-1.11.1.js}"></script>
+<script th:inline="javascript">
+    layui.use(['form',"table",'treeSelect','notice','upload',"laydate"], function(){
+        var form = layui.form;
+        var $ = layui.jquery;
+        var layer = layui.layer;
+        var table = layui.table;
+        var notice=layui.notice;
+        var upload = layui.upload;
+        var treeSelect= layui.treeSelect;
+        layui.config({
+            skin: 'blue'  // 设置主题为蓝色
+        });
+
+        $(".chooseName").on("click",function (){
+            var closeIndex = layer.open({
+                type: 1, // page 层类型
+                area: ['800px', '600px'],
+                title: '选择名字',
+                shade: 0.6, // 遮罩透明度
+                anim: 0, // 0-6 的动画形式，-1 不开启
+                content: $("#addfolder"),
+                success: function(layero, index){
+                    // 在弹出层初始化完成后渲染表格
+                    var regManageTb=table.render({
+                        elem: '#tables',
+                        url: '/newRegController/queryLocallyManagedArchives',
+                        page: true,
+                        limit : 10,
+                        where : {regTime:""},
+                        cols: [[
+                            // {type: 'radio', fixed: 'left'},
+                            {field:'userCode', title:'用户编号', fixed: 'center'},
+                            {field: 'name', title: '姓名', align: 'center'},
+                            {field: 'phone', align: 'center', title: '电话'} ,
+                        ]],
+                        parseData: function(res) {
+                            if (res.code === 20000) {
+                                return {
+                                    "code": 0,
+                                    "msg": res.msg || "",
+                                    "count": res.count || 0,
+                                    "data": res.data.data || []
+                                };
+                            } else {
+                                return {
+                                    "code": 1,
+                                    "msg": res.msg || "获取数据失败",
+                                    "count": 0,
+                                    "data": []
+                                };
+                            }
+                        },
+                        done: function() {
+                            $('#tables').css('visibility', 'visible');
+                        }
+                    });
+                    $('#tables').css('visibility', 'hidden');
+
+
+                    // 行单击事件( 双击事件为: rowDouble )
+                    table.on('row(tables)', function(obj){
+                        var data = obj.data; // 获取当前行数据
+                        console.log(data,"这里是点击事件啊啊啊")
+                        // 显示 - 仅用于演示
+
+                        form.val("myForm", {
+                            "v1": data.name,
+                            "v2":data.id,
+                        });
+
+                        form.render();
+                        layer.close(closeIndex);
+
+                    });
+
+                    form.on('submit(regManageQueryBtn)', function(data){
+                        regManageTb.reload({
+                            where : {
+                                //这里注意一定要跟Bean 里面的属性对应
+                                name:$('#name').val(),
+                                regTime:"",
+                            },
+                            page : {
+                                curr : 1
+                            }
+
+                        });
+                        // 阻止表单跳转。如果需要表单跳转，去掉这段即可。
+                        return false;
+                    });
+
+
+                },
+                end: function () {
+                    // 关闭弹出层时隐藏 addfolder
+                    $("#addfolder").hide();
+                }
+            });
+        });
+
+
+        var laydate = layui.laydate;
+
+        // 初始化年份选择器
+        laydate.render({
+            elem: '#yearPicker',
+            type: 'year',
+            theme: '#2d8cf0',
+            format: 'yyyy',
+            trigger: 'click'
+        });
+
+        var params = new URLSearchParams(window.location.search);
+        var paramValue = params.get('medicalExaminationInformation');
+
+
+
+        form.on('submit(generatePDF)', function(data){
+            window.print();
+            return false;
+        });
+        form.on('submit(myFormSave)', function(data){
+            console.log(data,"dddddddddddddddddddddddddddddddd")
+
+            var field = data.field;  // 获取表单字段值
+
+            if ($(this).data('submitted') === true) {
+                return false; // 阻止重复提交
+            }
+            $(this).data('submitted', true);
+            if(paramValue){
+                $.ajax({
+                    type : 'post',
+                    url : '/NewInterventionRecordFormForHighRiskPopulationController/updateNew',
+                    data : {
+                        id:paramValue,
+                        name:data.field.v1,
+                        regId:data.field.v2,
+                        followupDate:data.field.v3,
+                        followUpMethod:data.field.v4,
+                        disease:data.field.v5,
+                        disease1:data.field.v6,
+                        bloodPressure:data.field.v7,
+                        weight:data.field.v8,
+                        bodyMassIndex:data.field.v9,
+                        bodyMassIndex1:data.field.v10,
+                        heartRate:data.field.v11,
+                        other:data.field.v12,
+                        dailySmokingVolume:data.field.v13,
+                        dailySmokingVolume1:data.field.v14,
+                        dailyAlcoholConsumption:data.field.v15,
+                        dailyAlcoholConsumption1:data.field.v16,
+                        motion:data.field.v17,
+                        motion1:data.field.v18,
+                        motion2:data.field.v19,
+                        motion3:data.field.v20,
+                        dailyAlcoholConsumption2:data.field.v21,
+                        dailyAlcoholConsumption3:data.field.v22,
+                        psychologicalAdjustment:data.field.v23,
+                        complianceBehavior:data.field.v24,
+                        auxiliaryDetection:data.field.v25,
+                        medicationComplianceNature:data.field.v26,
+                        adverseDrugReactions:data.field.v27,
+                        adverseDrugReactions1:data.field.v28,
+                        thisServiceClassification:data.field.v29,
+                        medicationSituation:data.field.v30,
+                        medicationSituation1:data.field.v31,
+                        medicationSituation2:data.field.v32,
+                        medicationSituation3:data.field.v33,
+                        medicationSituation4:data.field.v34,
+                        medicationSituation5:data.field.v35,
+                        medicationSituation6:data.field.v36,
+                        medicationSituation7:data.field.v37,
+                        medicationSituation8:data.field.v38,
+                        medicationSituation9:data.field.v39,
+                        medicationSituation10:data.field.v40,
+                        medicationSituation11:data.field.v41,
+                        reason:data.field.v42,
+                        institutionDepartment:data.field.v43,
+                        healthGuidanceOpinions:data.field.v44,
+                        nextFollowupDate:data.field.v45
+                    },
+                    success : function(data) {
+                        if (data.code == 20000) {
+
+                            notice.success({
+                                title : '消息通知',
+                                message : '操作成功!'
+                            });
+
+                            setTimeout(function() {
+                                window.close();
+                            }, 2000);
+                        } else {
+                            notice.error({
+                                title : '消息通知',
+                                message : '操作失败!'
+                            });
+                            setTimeout(function() {
+                                window.close();
+                            }, 2000);
+                        }
+                    }
+                })
+            }else{
+                $.ajax({
+                    type : 'post',
+                    url : '/NewInterventionRecordFormForHighRiskPopulationController/insetNew',
+                    data : {
+                        name:data.field.v1,
+                        regId:data.field.v2,
+                        followupDate:data.field.v3,
+                        followUpMethod:data.field.v4,
+                        disease:data.field.v5,
+                        disease1:data.field.v6,
+                        bloodPressure:data.field.v7,
+                        weight:data.field.v8,
+                        bodyMassIndex:data.field.v9,
+                        bodyMassIndex1:data.field.v10,
+                        heartRate:data.field.v11,
+                        other:data.field.v12,
+                        dailySmokingVolume:data.field.v13,
+                        dailySmokingVolume1:data.field.v14,
+                        dailyAlcoholConsumption:data.field.v15,
+                        dailyAlcoholConsumption1:data.field.v16,
+                        motion:data.field.v17,
+                        motion1:data.field.v18,
+                        motion2:data.field.v19,
+                        motion3:data.field.v20,
+                        dailyAlcoholConsumption2:data.field.v21,
+                        dailyAlcoholConsumption3:data.field.v22,
+                        psychologicalAdjustment:data.field.v23,
+                        complianceBehavior:data.field.v24,
+                        auxiliaryDetection:data.field.v25,
+                        medicationComplianceNature:data.field.v26,
+                        adverseDrugReactions:data.field.v27,
+                        adverseDrugReactions1:data.field.v28,
+                        thisServiceClassification:data.field.v29,
+                        medicationSituation:data.field.v30,
+                        medicationSituation1:data.field.v31,
+                        medicationSituation2:data.field.v32,
+                        medicationSituation3:data.field.v33,
+                        medicationSituation4:data.field.v34,
+                        medicationSituation5:data.field.v35,
+                        medicationSituation6:data.field.v36,
+                        medicationSituation7:data.field.v37,
+                        medicationSituation8:data.field.v38,
+                        medicationSituation9:data.field.v39,
+                        medicationSituation10:data.field.v40,
+                        medicationSituation11:data.field.v41,
+                        reason:data.field.v42,
+                        institutionDepartment:data.field.v43,
+                        healthGuidanceOpinions:data.field.v44,
+                        nextFollowupDate:data.field.v45
+                    },
+
+                    success : function(data) {
+                        if (data.code == 20000) {
+
+                            notice.success({
+                                title : '消息通知',
+                                message : '操作成功!'
+                            });
+
+                            setTimeout(function() {
+                                window.close();
+                            }, 2000);
+                        } else {
+                            notice.error({
+                                title : '消息通知',
+                                message : '操作失败!'
+                            });
+                            setTimeout(function() {
+                                window.close();
+                            }, 2000);
+                        }
+                    }
+                })
+            }
+            return false; // 阻止默认 form 跳转
+        });
+
+
+        function selectForm(paramValue){
+            if(paramValue){
+                $.ajax({
+                    type:'get',
+                    url:'/NewInterventionRecordFormForHighRiskPopulationController/selectById',
+                    data:{id:paramValue},
+                    success : function(data){
+                        console.log("这里是查询出来的数据",data);
+                        if(data.code==20000){
+                            form.val("myForm", {
+                                "v1": data.data.name, // 对应上面调整后的 name
+                                "v2": data.data.regId, // 对应上面调整后的 regId
+                                "v3": data.data.followupDate?.substring(0, 10), // 对应上面调整后的 followupDate (截取日期部分)
+                                "v4": data.data.followUpMethod, // 对应上面调整后的 followUpMethod
+                                "v5": data.data.disease, // 对应上面调整后的 disease
+                                "v6": data.data.disease1, // 对应上面调整后的 disease1
+                                "v7": data.data.bloodPressure, // 对应上面调整后的 bloodPressure
+                                "v8": data.data.weight, // 对应上面调整后的 weight
+                                "v9": data.data.bodyMassIndex, // 对应上面调整后的 bodyMassIndex
+                                "v10": data.data.bodyMassIndex1, // 对应上面调整后的 bodyMassIndex1
+                                "v11": data.data.heartRate, // 对应上面调整后的 heartRate
+                                "v12": data.data.other, // 对应上面调整后的 other
+                                "v13": data.data.dailySmokingVolume, // 对应上面调整后的 dailySmokingVolume
+                                "v14": data.data.dailySmokingVolume1, // 对应上面调整后的 dailySmokingVolume1
+                                "v15": data.data.dailyAlcoholConsumption, // 对应上面调整后的 dailyAlcoholConsumption
+                                "v16": data.data.dailyAlcoholConsumption1, // 对应上面调整后的 dailyAlcoholConsumption1
+                                "v17": data.data.motion, // 对应上面调整后的 motion
+                                "v18": data.data.motion1, // 对应上面调整后的 motion1
+                                "v19": data.data.motion2, // 对应上面调整后的 motion2
+                                "v20": data.data.motion3, // 对应上面调整后的 motion3
+                                "v21": data.data.dailyAlcoholConsumption2, // 对应上面调整后的 dailyAlcoholConsumption2
+                                "v22": data.data.dailyAlcoholConsumption3, // 对应上面调整后的 dailyAlcoholConsumption3
+                                "v23": data.data.psychologicalAdjustment, // 对应上面调整后的 psychologicalAdjustment
+                                "v24": data.data.complianceBehavior, // 对应上面调整后的 complianceBehavior
+                                "v25": data.data.auxiliaryDetection, // 对应上面调整后的 auxiliaryDetection
+                                "v26": data.data.medicationComplianceNature, // 对应上面调整后的 medicationComplianceNature
+                                "v27": data.data.adverseDrugReactions, // 对应上面调整后的 adverseDrugReactions
+                                "v28": data.data.adverseDrugReactions1, // 对应上面调整后的 adverseDrugReactions1
+                                "v29": data.data.thisServiceClassification, // 对应上面调整后的 thisServiceClassification
+                                "v30": data.data.medicationSituation, // 对应上面调整后的 medicationSituation
+                                "v31": data.data.medicationSituation1, // 对应上面调整后的 medicationSituation1
+                                "v32": data.data.medicationSituation2, // 对应上面调整后的 medicationSituation2
+                                "v33": data.data.medicationSituation3, // 对应上面调整后的 medicationSituation3
+                                "v34": data.data.medicationSituation4, // 对应上面调整后的 medicationSituation4
+                                "v35": data.data.medicationSituation5, // 对应上面调整后的 medicationSituation5
+                                "v36": data.data.medicationSituation6, // 对应上面调整后的 medicationSituation6
+                                "v37": data.data.medicationSituation7, // 对应上面调整后的 medicationSituation7
+                                "v38": data.data.medicationSituation8, // 对应上面调整后的 medicationSituation8
+                                "v39": data.data.medicationSituation9, // 对应上面调整后的 medicationSituation9
+                                "v40": data.data.medicationSituation10, // 对应上面调整后的 medicationSituation10
+                                "v41": data.data.medicationSituation11, // 对应上面调整后的 medicationSituation11
+                                "v42": data.data.reason, // 对应上面调整后的 reason
+                                "v43": data.data.institutionDepartment, // 对应上面调整后的 institutionDepartment
+                                "v44": data.data.healthGuidanceOpinions, // 对应上面调整后的 healthGuidanceOpinions
+                                "v45": data.data.nextFollowupDate?.substring(0, 10), // 对应上面调整后的 nextFollowupDate (截取日期部分)
+                                "v46": data.data.dname,
+                            });
+
+                            form.render();
+                        }
+
+                    }
+                })
+            }
+
+
+        }
+
+        selectForm(paramValue);
+
+        // 初始化表单
+        form.render();
+    });
+</script>
+
+</body>
+</html>

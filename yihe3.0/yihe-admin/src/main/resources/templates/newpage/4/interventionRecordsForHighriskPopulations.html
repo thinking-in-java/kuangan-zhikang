@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1, maximum-scale=1">
+  <title></title>
+  <link rel="stylesheet" th:href="@{/assets/libs/layui/css/layui.css}" />
+  <link rel="stylesheet" th:href="@{/assets/module/admin.css}" />
+  <!-- js部分 -->
+
+  <style type="text/css">
+    .layui-form-label {
+      float: left;
+      display: block;
+      padding: 9px 15px;
+      padding-top: 9px;
+      padding-bottom: 9px;
+      width: 43px;
+      font-weight: 400;
+      line-height: 20px;
+      text-align: right;
+    }
+
+    .layui-form-item .layui-inline {
+      margin-bottom: 1px;
+      margin-right: 10px;
+    }
+
+    .layui-form-item {
+      margin-bottom: 1px;
+      clear: both;
+      *zoom: 1;
+    }
+
+    .layui-table-box {
+      min-height: 500px;
+    }
+  </style>
+
+</head>
+<body style="overflow-x: hidden; overflow-y: scroll">
+<!-- 加载动画 -->
+<div class="page-loading">
+  <div class="ball-loader">
+    <span></span><span></span><span></span><span></span>
+  </div>
+</div>
+
+
+<div class="layui-row layui-col-space15" style="padding: 20px;">
+  <div class="layui-card">
+
+    <div class="layui-tab layui-tab-brief" lay-filter="indexTab">
+      <div class="layui-tab-content">
+        <input id="guishu" type="hidden" value="">
+        <!-- 注册卡头部搜索 -->
+        <div id="search-header">
+          <form id="regForm" lay-filter="regForm" class="layui-form queryForm">
+            <div class="layui-form-item">
+
+
+
+              <div class="layui-inline" style="margin-left: -3px;">
+                <label class="layui-form-label w-auto">姓名:</label>
+                <div class="layui-input-inline">
+                  <input id="name" class="layui-input" name="name" placeholder="姓名"
+                         style="width: 150px;" />
+                </div>
+              </div>
+
+              <div class="layui-inline">
+                <label class="layui-form-label" style="padding:9px 0px;text-align: left;">单位：</label>
+                <div class="layui-input-inline" style="width: 270px;">
+                  <input type="text" id="tree" lay-filter="tree"
+                         class="layui-input">
+                </div>
+              </div>
+
+
+
+
+
+
+
+              <div class="layui-inline" style="width: 0px;margin-top: -16px;/*! margin-right: 5px; */margin-right: 1px;">
+                <label class="layui-form-label"></label>
+                <div style="width: 300px" class="layui-input-inline">
+                  <button class="layui-btn icon-btn sousuoDN" lay-submit=""
+                          lay-filter="regManageQueryBtn">
+                    <i class="layui-icon"></i>搜索
+                  </button>
+                  <button class="layui-btn layui-btn-primary" id="symptoms" type="button">清除</button>
+                  <button  class="layui-btn icon-btn"  lay-submit=""  lay-filter="addregManageQueryBtn">
+                    <i class="layui-icon">&#xe654;</i>添加
+                  </button>
+
+                  <button  class="layui-btn icon-btn"  lay-submit=""  lay-filter="excelPort">
+                    导出
+                  </button>
+
+                </div>
+
+
+              </div>
+
+
+
+            </div>
+
+
+          </form>
+
+        </div>
+
+        <div class="layui-tab-item layui-show">
+          <table id="demo" lay-filter="demo"></table>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+</body>
+
+<script type="text/javascript" th:src="@{/assets/libs/layui/layui.js}"></script>
+<script type="text/javascript" th:src="@{/assets/js/common.js}"></script>
+<script type="text/javascript">
+
+
+  layui.use(['laypage', 'layer','element', 'treeTable','table','form','treeSelect','laydate','util','upload'], function(){
+    var laypage = layui.laypage;
+    var layer = layui.layer;
+    var element = layui.element;
+    var table = layui.table;
+    var form = layui.form;
+    var $ = layui.jquery;
+    var laydate = layui.laydate;
+    var util = layui.util;
+    var treeSelect= layui.treeSelect;
+    var upload = layui.upload;
+    //初始化
+    var treeSelect = layui.treeSelect;
+
+
+    var regManageTb =null;
+    randtreesone();
+    function randtreesone(){
+      treeSelect.render({
+        // 选择器
+        elem : '#tree',
+        // 数据
+        data : '/YhOrgTree/showPullDownTree',
+        // 异步加载方式：get/post，默认get
+        type : 'get',
+        // 占位符
+        // placeholder : '全部',
+        // 是否开启搜索功能：true/false，默认false
+        search : true,
+        // 点击回调
+        click : function(d) {
+          console.log(d,"---------------")
+          console.log($('#tree').val(d.current.name));
+        },
+        // 加载完成后的回调函数
+        success : function(d) {
+          console.log(d);
+          treeSelect.checkNode('tree', d.data[0].id);
+          $('#tree').val(d.data[0].name)
+
+          regManageTb=table.render({
+            id : 'demo',
+            elem: '#demo'
+            ,url: '/NewInterventionRecordFormForHighRiskPopulationController/selectPage'//数据接口
+            ,method : 'get'
+            ,where : {  'name':$("#name").val(),
+              'workUnit':$("#tree").val(),} // 你额外要携带数据，以键值对的方式存入
+            ,page: true //开启分页
+            ,limit : 20// 每页显示的条数
+            ,limits : [ 5, 10, 20, 50, 100 ] // 每页条数的选择项
+            ,loading : true // 是否显示加载条(切换分页的时候显示）
+            ,cellMinWidth : 80 // 全局定义所有常规单元格的最小宽度（默认：60）
+            ,sort:true
+            ,cols: [ //表头
+              [
+                {type:'numbers', title:'序号', align: 'center'}
+                ,{field: 'name', title: '姓名', align: 'center'}
+                // ,{field: 'regId', title: '编号', align: 'center'}
+
+                ,{field: 'followupDate', title: '随访日期', align: 'center'}
+
+                ,{field: 'followUpMethod', title: '随访方式', align: 'center'}
+                ,{field: 'disease', title: '症状', align: 'center'}
+
+                ,{ title: '操作', toolbar : '#tableBar',align: 'center'}
+              ]
+            ],
+            response : {
+
+              statusCode : 0
+              //规定成功的状态码，默认：0
+
+            },
+            parseData : function(res) { //将原始数据解析成 table 组件所规定的数据
+              console.log(res,"sssssssssssssssssssssssssssssssssssssss")
+              return {
+                "code" : res.data.code, //解析接口状态
+                "msg" : res.data.msg, //解析提示文本
+                "count" : res.data.count, //解析数据长度
+                "data" : res.data.data
+                //解析数据列表
+              }
+
+            },
+            done: function(res, curr, count){
+              if(count > 20) {
+                $(".layui-table-page").show();
+              }else {
+                $(".layui-table-page").hide();
+              }
+            }
+          });
+
+
+
+
+
+        }
+      });
+    }
+
+
+
+
+    //清除按钮
+    //清除按钮
+    $("#symptoms").click(function(){
+      window.location.reload()
+
+    })
+
+
+    form.on('submit(excelPort)',function (){
+      const queryString = `/NewInterventionRecordFormForHighRiskPopulationController/exportXls`;
+      window.location.href=queryString;
+
+      return false;
+    });
+
+
+    //头部搜素表单提交
+    form.on('submit(regManageQueryBtn)', function(data){
+      // console.log(data.elem, "1");//被执行事件的元素DOM对象，一般为button对象
+      // console.log(data.form, "2"); //被执行提交的form对象，一般在存在form标签时才会返回
+      console.log(data.field, "3"); //当前容器的全部表单字段，名值对形式：{name: value}
+      console.log($("#tree").val(), "3"); //当前容器的全部表单字段，名值对形式：{name: value}
+
+
+      regManageTb.reload({
+        where : {
+          //这里注意一定要跟Bean 里面的属性对应
+          'name':$("#name").val(),
+          'workUnit':$("#tree").val(),
+        },
+        page : {
+          curr : 1
+        }
+      });
+
+
+      // 阻止表单跳转。如果需要表单跳转，去掉这段即可。
+      return false;
+    });
+
+    form.on('submit(addregManageQueryBtn)', function(data){
+      // console.log(data.elem, "1");//被执行事件的元素DOM对象，一般为button对象
+      window.open("/manage/newpage/interventionRecordFormForHighRiskPopulationFrom");
+
+      // 阻止表单跳转。如果需要表单跳转，去掉这段即可。
+      return false;
+    });
+
+
+
+
+    //查看跳转
+    table.on('tool(demo)', function(obj) { //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
+      var data = obj.data;
+      console.log(data)
+      var layEvent = obj.event;
+      if (layEvent === 'look') { //查看
+        window.open("/manage/newpage/interventionRecordFormForHighRiskPopulationFrom?medicalExaminationInformation="+data.id+"");
+      }
+    });
+  });
+</script>
+<script type="text/html" id="tableBar">
+  <a href="#" style="color:#36A4FF" lay-event="look">查看</a>
+</script>
+</html>

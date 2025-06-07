@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>心理评估</title>
+    <link rel="stylesheet" th:href="@{/assets/libs/layui/css/layui.css}" />
+    <link rel="stylesheet" th:href="@{/assets/module/admin.css}" />
+    <link rel="stylesheet" th:href="@{/cascader/cascader.css}"/>
+    <style type="text/css">
+        .leftresult{
+            margin-left: 30px;
+            margin-top: 10px;
+        }
+        .titleLeft{
+            line-height: 37.5px;
+            text-indent: 1em;
+            font-size: 18px;
+            font-weight: bold;
+            background-color: #F2F2F2;
+            border: #E6E6E6 1px solid;
+        }
+        #rightconcent{
+            float: right;
+            font-size: 12px;
+            color: #A6A6A6;
+            margin-right: 15px;
+        }
+        .assesstxt{
+            font-size: 16px;
+            border-left: #ff8d1a 4px solid;
+            padding-left: 4px;
+            margin: 10px 0;
+            width: 50%;
+            display: inline-block;
+        }
+        .assesstimes{
+            float: right;
+            margin: 9px 10px 9px 0;
+            padding: 2px 5px;
+            color: #2d8cf0;
+            background-color: #e8f4ff;
+        }
+        .assresult{
+            width: 60px;
+            height: 60px;
+            margin-left: 20px;
+            border-radius: 3px;
+            text-align: center;
+        }
+        .assresult div:nth-child(1){
+            padding-top: 11px;
+            overflow:hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            -o-text-overflow:ellipsis;
+        }
+        .listUser span{
+            display: inline-block;
+            margin: 10px 0 10px 10px;
+            font-size: 14px;
+        }
+        .listUser span:nth-child(1){
+            color: #bababa;
+        }
+        .select{
+            background-color: #dff0d8;
+        }
+    </style>
+</head>
+<body>
+<!-- 加载动画 -->
+<div class="page-loading">
+    <div class="ball-loader">
+        <span></span><span></span><span></span><span></span>
+    </div>
+</div>
+<div class="layui-row layui-col-space15" style="padding: 20px;margin: 0px;">
+    <div class="layui-card">
+        <div class="layui-row">
+            <div class="layui-col-md12">
+                <div class="layui-row">
+                    <div class="layui-col-md11 leftresult">
+                        <div class="titleLeft">
+                            <span>评估结果和记录</span>
+                            <span id="rightconcent">评估记录()&gt;</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-row">
+                    <div class="layui-col-md11" style="margin-left: 30px;">
+                        <div class="layui-row" id="assessResultList">
+                        </div>
+                    </div>
+                </div>
+            </div>
+<!--            <div class="layui-col-md6">-->
+<!--                <table class="layui-hide" id="assessList" lay-filter="assessList"></table>-->
+<!--            </div>-->
+        </div>
+    </div>
+    <div id="drawer" style="display: none">
+        <div style="padding: 0 20px">
+            <div class="listUser">
+                <span>100065</span><span>宋艳艳</span><span>17665437199</span>
+            </div>
+            <table class="layui-hide" id="listUserAss" lay-filter="listUserAss"></table>
+        </div>
+    </div>
+</div>
+<script type="text/javascript" th:src="@{/assets/libs/layui/layui.js}"></script>
+<script type="text/javascript" th:src="@{/assets/js/common.js}"></script>
+<script type="text/javascript" th:src="@{/cascader/cascader.js}"></script>
+<script type="text/javascript" th:inline="none">
+    layui.use(['layer', 'table', 'treeSelect', 'laydate', 'layCascader'],function(){
+        var $ = layui.jquery;
+        var laydate = layui.laydate;
+        var table = layui.table;
+        var treeSelect = layui.treeSelect;
+        var layCascader = layui.layCascader;
+        var userId = 0;
+        var assdemo;
+        $.ajax({
+            type : "get",
+            url : "/assessResult/findAssRes",
+            success : function(res) {
+                console.log(res)
+                if(res.code == 200){
+                    assdemo = layCascader({
+                        elem: '#assdemo',
+                        options: res.data,
+                        clearable: true,
+                        collapseTags: true,
+                        minCollapseTagsNumber: 1,
+                        filterable: true,
+                        props: {
+                            expandTrigger: 'hover',
+                            multiple: true,
+                            strictMode: true,
+                        }
+                    });
+                }
+            }
+        });
+        //执行一个laydate实例
+        laydate.render({
+            elem: '#assesstime', //指定元素
+            range: '~',
+        });
+        treeSelect.render({
+            // 选择器
+            elem : '#section',
+            // 数据
+            data : '/YhOrgTree/showPullDownTree',
+            // 异步加载方式：get/post，默认get
+            type : 'get',
+            // 占位符
+            placeholder : '全部',
+            // 是否开启搜索功能：true/false，默认false
+            search : true,
+            // 点击回调
+            click : function(d) {
+                console.log($('#section').val(d.current.id));
+            },
+            // 加载完成后的回调函数
+            success : function(d) {
+                console.log(d);
+
+            }
+        });
+        //这是Layui 给 后台添加的映射  映射controller 的实体类
+        var $ = layui.$, active = {
+            reload : function() {
+                //获取 上面input 值
+                var section = $('#section').val();
+                var userCode = $('#userCode').val();
+                var time = $('#assesstime').val();
+                var assvalue = assdemo.getCheckedValues();
+                var integral = "";
+                for (var i = 0; i < assvalue.length; i++){
+                    integral += assvalue[i][0]+","+assvalue[i][1];
+                    if(i < assvalue.length-1){
+                        integral+=";"
+                    }
+                }
+                console.log("assvalue", integral)
+                console.log(assvalue)
+                var state = null;
+                var assess = null;
+                console.log(section,userCode,time)
+                //执行重载
+                table.reload('assessList', {
+                    page : {
+                        curr : 1
+                        //重新从第 1 页开始
+                    },
+                    where : {
+                        //这里注意一定要跟Bean 里面的属性对应
+                        treeOrg : section,
+                        userCode: userCode,
+                        timeMin: time.split("~")[0],
+                        timeMax: time.split("~")[1],
+                        integral: integral,
+                    }
+                });
+            }
+        };
+        //这个是搜索按钮事件， 找到你的搜索按钮 获取搜索按钮点击事件。只需要把$(’’)这里面的内容修改了就可以了。
+        $('.sousuoDN').on('click', function() {
+            var type = $(this).data('type');
+            active[type] ? active[type].call(this) : '';
+
+        });
+        table.render({
+            elem: '#assessList' ,
+            url: '/assessResult/assByList', //数据接口
+            page: true, //开启分页
+            cols: [[
+                {type : 'numbers',title : '序号'},
+                {field: 'userCode', title: '用户编号'},
+                {field: 'name', title: '姓名'},
+                {field: 'mobile', title: '手机号'},
+                {field: 'count', title: '评估次数'},
+                {field: 'qtime', title: '最新评估时间', sort: true}
+            ]],
+            parseData : function(res) { //将原始数据解析成 table 组件所规定的数据
+                console.log(res)
+                var list = [];
+                res.data.list.forEach(function(item){
+                    var concent={
+                        userCode: item.userCode,
+                        name: item.name,
+                        mobile: item.mobile,
+                        count: item.count == null ? 0 : item.count,
+                        qtime: item.qtime == null ? '--' : item.qtime,
+                    }
+                    list.push(concent);
+                })
+                return {
+                    "code" : 20000, //解析接口状态
+                    "msg" : res.message, //解析提示文本
+                    "count" : res.data.total, //解析数据长度
+                    "data" : list
+                }
+
+            },
+            done: function(res, curr, count){
+                console.log(res,curr,count)
+                if(count > 0){
+                    //表格加载完成后，默认选中第一行
+                    $('.layui-table-view[lay-id="assessList"]').children('.layui-table-box').children('.layui-table-body').find('table tbody tr[data-index="0"]').click();
+                }else{
+                    $("#rightconcent").text("评估记录(0)>")
+                    $("#assessResultList").html("");
+                    userId = null;
+                }
+            }
+        });
+        //清除按钮
+        $("#btnempty").click(function(){
+            window.location.reload()
+        })
+        //触发行单击事件
+        const params = new URLSearchParams(window.location.search);
+        const paramValue = params.get('userCode');
+        userId=paramValue
+        $.ajax({
+            type:'get',
+            url:'/assessResult/getUserAssess',
+            data:{userCode: paramValue},
+            success : function(res){
+                console.log("评估记录",res)
+                $("#assessResultList").html("");
+                res.data.forEach(function(item){
+                    var html = '';
+                    if(item.score == '--'){
+                        html = '<div class="layui-col-md6">' +
+                            '<div>' +
+                            '<div class="assesstxt">' +item.name +'</div>' +
+                            '<div class="assesstimes">' + item.time + '</div>' +
+                            '</div>' +
+                            '<div class="assresult" style="color: #a6a6a6;background-color: '+item.color+';">' +
+                            '<div>'+item.state+'</div>' +
+                            '<div>'+item.score+'</div>' +
+                            '</div></div>';
+                    }else{
+                        html = '<div class="layui-col-md6">' +
+                            '<div>' +
+                            '<div class="assesstxt">' +item.name +'</div>' +
+                            '<div class="assesstimes">' + item.time + '</div>' +
+                            '</div>' +
+                            '<div class="assresult" style="color: white;background-color: '+item.color+';">' +
+                            '<div>'+item.state+'</div>' +
+                            '<div>'+item.score+'</div>' +
+                            '</div></div>';
+                    }
+                    $("#assessResultList").append(html)
+                })
+            }
+        });
+
+        $('#rightconcent').on('click', function() {
+            if(userId == null){
+                return
+            }
+            listUserAss();
+            layer.open({
+                type: 1,
+                // r表示right,b表示bottom
+                offset: 'rb',
+                // 标题
+                title: '评估记录',
+                //
+                // anim 特效 0-平滑放大 1-从上掉落 2-从底部往上滑入 3-从左滑入 4-从左翻转 5-渐显 6-抖动
+                anim: 3,
+                // 第一个参数宽度，第二个参数高度
+                area: ['50%', '100%'],
+                // 内容区 在body中写入<div id="draw">。。。。</div>代码，即弹窗内容
+                content: $("#drawer"),
+            })
+        });
+        function listUserAss() {
+            table.render({
+                elem: '#listUserAss' ,
+                url: '/assessResult/getUserAssList', //数据接口
+                where: {userCode:userId},
+                page: true, //开启分页
+                cols: [[
+                    {type : 'numbers',title : '序号'},
+                    {field: 'id', title: 'ID', hide: true},
+                    {field: 'userCode', title: '名称'},
+                    {field: 'state', title: '评估结果'},
+                    {field: 'qtime', title: '评估时间', sort: true},
+                    {title : '操作', align: 'center',templet: function (d) {
+                            var id = d.id;
+                            if (d.assess<1000)return '<a href="/assessResult/getAssessXls?id='+id+'" style="color:#36A4FF;margin-right: 10px">下载问卷</a><a href="/assessResult/exportPdf?id='+id+'" style="color:#36A4FF">下载报告</a>';
+                            else return '<a href="/assessResult/exportPdf?id='+id+'" style="color:#36A4FF">下载报告</a>';
+                        }}
+                ]],
+                parseData : function(res) { //将原始数据解析成 table 组件所规定的数据
+                    console.log(res)
+                    return {
+                        "code" : 20000, //解析接口状态
+                        "msg" : res.message, //解析提示文本
+                        "count" : res.data.total, //解析数据长度
+                        "data" : res.data.list
+                    }
+
+                }
+            });
+        }
+    });
+</script>
+</body>
+</html>

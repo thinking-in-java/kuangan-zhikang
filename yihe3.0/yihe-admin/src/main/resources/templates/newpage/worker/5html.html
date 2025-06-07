@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>职业健康体检报告、职业病诊疗等健康资料
+    </title>
+    <link rel="stylesheet" th:href="@{/assets/js/layui-v2.9.16/layui/css/layui.css}"/>
+    <script type="text/javascript" th:src="@{/assets/js/layui-v2.9.16/layui/layui.js}"></script>
+    <style>
+        body{
+            background:#F1F1F1
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            table-layout: fixed;
+            border-color:rgb(144, 186, 221)
+        }
+        th, td {
+            border: 1px solid #ccc;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: rgb(231, 243, 252);
+            font-size: 10pt;
+            font-family: "Microsoft YaHei";
+            word-break: break-word;
+            overflow-wrap: break-word;
+            text-align: center;
+        }
+        .section-title {
+            text-align: center;
+            font-weight: bold;
+            background-color: #e6f7ff;
+        }
+        .input-full {
+            width: 100%;
+            box-sizing: border-box;
+        }
+        .radio-group {
+            display: flex;
+            align-items: center;
+        }
+        .radio-group label {
+            margin-right: 10px;
+        }
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        .checkbox-group label {
+            margin-right: 15px;
+        }
+        .heng{
+            text-align: center;
+            font-size: 10pt;
+            font-family: "Microsoft YaHei";
+            word-break: break-word;
+            overflow-wrap: break-word;
+        }
+        .datainput{
+            border-color: #eee !important;
+            border-width: 1px;
+        }
+
+        .layui-form-checked[lay-skin=primary] i{
+            border-color:#2d8cf0 !important;
+            background-color:#FFF !important;
+            color:#2d8cf0 !important;
+            font-weight: bold;
+        }
+
+        .layui-form-checkbox[lay-skin=primary]:hover i{
+            border-color:#2d8cf0 !important;
+        }
+        .layui-form-radio>i:hover, .layui-form-radioed>i{
+            color: #2d8cf0 !important;
+        }
+
+        /* 覆盖 layui 的默认主题颜色 */
+        .theme-colorful .layui-btn {
+            height: 36px;
+            line-height: 36px;
+            border-radius: 4px;
+            background-color: #2d8cf0;
+            box-shadow: 0 1px 0 rgba(0, 0, 0, .03);
+        }
+        .layui-form-radio:hover>*, .layui-form-radioed, .layui-form-radioed>i{
+            color: #2d8cf0 !important;
+        }
+
+        /*.layui-input {*/
+        /*    border-color: #597FC0 !important;*/
+        /*}*/
+
+        /* ...其他元素样式 */
+        /* 修改分页按钮的背景颜色和字体颜色 */
+        .layui-laypage a {
+            background-color: #f0f0f0; /* 设置按钮的背景颜色 */
+            color: #333; /* 设置按钮的字体颜色 */
+        }
+
+        /* 鼠标悬停时按钮的背景颜色 */
+        .layui-laypage a:hover {
+            background-color: #fff;
+            color: #2d8cf0;
+        }
+
+        /* 当前页的背景颜色和字体颜色 */
+        .layui-laypage .layui-laypage-curr .layui-laypage-em {
+            background-color: #2d8cf0; /* 当前页的背景颜色 */
+            color: white; /* 当前页的字体颜色 */
+        }
+
+        .file-row {
+            background-color: #e6f7ff;
+            padding: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-radius: 5px;
+            margin: 10px 0;
+            width: 98%;
+        }
+        .file-row .file-info {
+            display: flex;
+            align-items: center;
+        }
+        .file-row .file-info img {
+            width: 20px;
+            margin-right: 10px;
+        }
+        .file-row .file-info span {
+            font-size: 14px;
+        }
+        .file-row .actions {
+            display: flex;
+            align-items: center;
+        }
+        .file-row .actions button {
+            border: none;
+            background: none;
+            cursor: pointer;
+            margin-left: 10px;
+            font-size: 16px;
+        }
+
+
+
+    </style>
+</head>
+<body>
+
+<div class="layui-form " style="margin:auto;background:#FFF;margin-top:0">
+    <h2 style="text-align: center;">职业健康体检报告、职业病诊疗等健康资料
+    </h2>
+    <input id="userCode" type="hidden" value="">
+    <input id="regId" type="hidden" value="">
+
+    <form class="layui-form" id="addfolder" lay-filter="folderForm" style="display: none;min-height: 300px">
+        <div id="search-header">
+
+
+            <div class="layui-inline" style="margin-left: 3px;">
+                <label class="layui-form-label w-auto">姓名:</label>
+                <div class="layui-input-inline">
+                    <input id="name" class="layui-input" placeholder="请输入" style="width: 124px;"/>
+                </div>
+            </div>
+
+            <div class="layui-inline" style="padding-left: 20px;">
+                <button class="layui-btn icon-btn sousuoDN " lay-submit="" lay-filter="regManageQueryBtn"><i class="layui-icon"></i>搜索</button>
+                <button id="btnempty" style="background-color: #fff;width: 69px;color: black;border: 1px solid #e5e5e5;" class="layui-btn icon-btn"></i>清除</button>
+            </div>
+        </div>
+        <div id="tables" class="text-center layui-text"  style="width: 100%;">
+
+        </div>
+    </form>
+
+
+
+    <form class="layui-form" id="myForm" lay-filter="myForm">
+        <table>
+            <tr >
+                <th colspan="12">职业健康体检报告</th>
+            </tr>
+
+
+
+
+            <tr >
+                <th colspan="2">上岗前</th>
+                <td colspan="10">
+
+                    <table id="file-table" border="1" width="100%">
+                        <tr th:each="res : ${occupationalHealthExamination1}">
+                            <td>
+                                <div class="file-row">
+                                    <div class="file-info">
+                                        <span th:text="${res.v14}"></span>
+                                    </div>
+                                    <div class="actions">
+                                        <input type="text" style="display: none" class="input-full layui-input" name="v11" th:value="${res.v13}">
+                                        <input type="text" style="display: none" class="input-full layui-input" name="v12" th:value="${res.v14}">
+
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+
+                </td>
+            </tr>
+
+            <tr >
+                <th colspan="2">在岗期间</th>
+                <td colspan="10">
+
+                    <table id="file-table1" border="1" width="100%">
+                        <tr th:each="res : ${occupationalHealthExamination2}">
+                            <td>
+                                <div class="file-row">
+                                    <div class="file-info">
+                                        <span th:text="${res.v14}"></span>
+                                    </div>
+                                    <div class="actions">
+                                        <input type="text" style="display: none" class="input-full layui-input" name="v11" th:value="${res.v13}">
+                                        <input type="text" style="display: none" class="input-full layui-input" name="v12" th:value="${res.v14}">
+
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+
+                </td>
+            </tr>
+
+            <tr >
+                <th colspan="2">离岗后</th>
+                <td colspan="10">
+
+                    <table id="file-table2" border="1" width="100%">
+                        <tr th:each="res : ${occupationalHealthExamination3}">
+                            <td>
+                                <div class="file-row">
+                                    <div class="file-info">
+                                        <span th:text="${res.v14}"></span>
+                                    </div>
+                                    <div class="actions">
+                                        <input type="text" style="display: none" class="input-full layui-input" name="v11" th:value="${res.v13}">
+                                        <input type="text" style="display: none" class="input-full layui-input" name="v12" th:value="${res.v14}">
+
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+
+                </td>
+            </tr>
+
+
+
+            <tr >
+                <th colspan="12">职业病诊疗等健康资料</th>
+            </tr>
+
+            <tr >
+                <td colspan="12">
+
+                    <table id="file-table3" border="1" width="100%">
+                        <tr th:each="res : ${occupationalHealthExamination4}">
+                            <td>
+                                <div class="file-row">
+                                    <div class="file-info">
+                                        <span th:text="${res.v14}"></span>
+                                    </div>
+                                    <div class="actions">
+                                        <input type="text" style="display: none" class="input-full layui-input" name="v11" th:value="${res.v13}">
+                                        <input type="text" style="display: none" class="input-full layui-input" name="v12" th:value="${res.v14}">
+
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+
+                </td>
+            </tr>
+
+
+
+
+        </table>
+    </form>
+</div>
+
+<script type="text/javascript" th:src="@{/assets/js/layui-v2.9.16/layui/layui.js}"></script>
+<script type="text/javascript" th:src="@{/assets/js/common.js}"></script>
+<script type="text/javascript" th:src="@{/assets/js/jquery-1.11.1.js}"></script>
+<script th:inline="javascript">
+    layui.use(['form',"table",'treeSelect','notice','upload'], function(){
+        var form = layui.form;
+        var $ = layui.jquery;
+        var layer = layui.layer;
+        var table = layui.table;
+        var notice=layui.notice;
+        var upload = layui.upload;
+        layui.config({
+            skin: 'blue'  // 设置主题为蓝色
+        });
+
+
+        var params = new URLSearchParams(window.location.search);
+        var paramValue = params.get('personalBasicInformation');
+
+        form.on('submit(deleteRowBtn)', function(event){
+            var row = event.elem.closest('tr');
+            // 删除该行
+            row.parentNode.removeChild(row);
+            return false;
+        });
+
+        form.on('submit(down)', function(data) {
+            // 获取文件的 URL
+            var url = data.elem.getAttribute('data-url');
+            window.open(url);
+
+            // 阻止表单默认提交行为
+            return false;
+        });
+
+
+
+
+
+
+
+
+
+
+
+        form.on('submit(myFormSave)', function(data){
+            var v13Elements = document.querySelectorAll('input[name="v13"]');
+            var v14Elements = document.querySelectorAll('input[name="v14"]');
+            var pairs = [];
+            var length = Math.min(v13Elements.length, v14Elements.length);
+            for (var i = 0; i < length; i++) {
+                var v13Value = v13Elements[i].value;
+                var v14Value = v14Elements[i].value;
+                pairs.push({ v13: v13Value, v14: v14Value });
+            }
+
+            var v11Elements = document.querySelectorAll('input[name="v11"]');
+            var v12Elements = document.querySelectorAll('input[name="v12"]');
+            var pairs1 = [];
+            var length = Math.min(v11Elements.length, v12Elements.length);
+            for (var i = 0; i < length; i++) {
+                var v13Value = v11Elements[i].value;
+                var v14Value = v12Elements[i].value;
+                pairs1.push({ v13: v13Value, v14: v14Value });
+            }
+
+            var v15Elements = document.querySelectorAll('input[name="v15"]');
+            var v16Elements = document.querySelectorAll('input[name="v16"]');
+            var pairs2 = [];
+            var length = Math.min(v15Elements.length, v16Elements.length);
+            for (var i = 0; i < length; i++) {
+                var v13Value = v15Elements[i].value;
+                var v14Value = v16Elements[i].value;
+                pairs2.push({ v13: v13Value, v14: v14Value });
+            }
+
+            var v17Elements = document.querySelectorAll('input[name="v17"]');
+            var v18Elements = document.querySelectorAll('input[name="v18"]');
+            var pairs3 = [];
+            var length = Math.min(v17Elements.length, v18Elements.length);
+            for (var i = 0; i < length; i++) {
+                var v13Value = v17Elements[i].value;
+                var v14Value = v18Elements[i].value;
+                pairs3.push({ v13: v13Value, v14: v14Value });
+            }
+
+
+            var field = data.field;
+
+            if ($(this).data('submitted') === true) {
+                return false; // 阻止重复提交
+            }
+            $(this).data('submitted', true);
+
+            console.log(pairs);
+
+            return false; // 阻止默认 form 跳转
+        });
+
+
+
+
+
+        // 初始化表单
+        form.render();
+    });
+</script>
+
+</body>
+</html>

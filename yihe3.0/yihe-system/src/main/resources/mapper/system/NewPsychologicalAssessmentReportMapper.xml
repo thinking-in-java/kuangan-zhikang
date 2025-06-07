@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yihe.system.mapper.NewPsychologicalAssessmentReportMapper">
+  <resultMap id="BaseResultMap" type="com.yihe.system.domain.NewPsychologicalAssessmentReport">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="reg_id" jdbcType="VARCHAR" property="regId" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="phone" jdbcType="VARCHAR" property="phone" />
+    <result column="number_evaluations" jdbcType="INTEGER" property="numberEvaluations" />
+    <result column="latest_evaluation_date" jdbcType="TIMESTAMP" property="latestEvaluationDate" />
+    <result column="evaluation_results" jdbcType="VARCHAR" property="evaluationResults" />
+    <result column="insert_time" jdbcType="TIMESTAMP" property="insertTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, reg_id, name, phone, number_evaluations, latest_evaluation_date, evaluation_results, 
+    insert_time
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from new_psychological_assessment_report
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from new_psychological_assessment_report
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.yihe.system.domain.NewPsychologicalAssessmentReport">
+    insert into new_psychological_assessment_report (id, reg_id, name, 
+      phone, number_evaluations, latest_evaluation_date, 
+      evaluation_results, insert_time)
+    values (#{id,jdbcType=INTEGER}, #{regId,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, 
+      #{phone,jdbcType=VARCHAR}, #{numberEvaluations,jdbcType=INTEGER}, #{latestEvaluationDate,jdbcType=TIMESTAMP}, 
+      #{evaluationResults,jdbcType=VARCHAR}, #{insertTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.yihe.system.domain.NewPsychologicalAssessmentReport">
+    insert into new_psychological_assessment_report
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="regId != null">
+        reg_id,
+      </if>
+      <if test="name != null">
+        name,
+      </if>
+      <if test="phone != null">
+        phone,
+      </if>
+      <if test="numberEvaluations != null">
+        number_evaluations,
+      </if>
+      <if test="latestEvaluationDate != null">
+        latest_evaluation_date,
+      </if>
+      <if test="evaluationResults != null">
+        evaluation_results,
+      </if>
+      <if test="insertTime != null">
+        insert_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="regId != null">
+        #{regId,jdbcType=INTEGER},
+      </if>
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="phone != null">
+        #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="numberEvaluations != null">
+        #{numberEvaluations,jdbcType=INTEGER},
+      </if>
+      <if test="latestEvaluationDate != null">
+        #{latestEvaluationDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="evaluationResults != null">
+        #{evaluationResults,jdbcType=VARCHAR},
+      </if>
+      <if test="insertTime != null">
+        #{insertTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.yihe.system.domain.NewPsychologicalAssessmentReport">
+    update new_psychological_assessment_report
+    <set>
+      <if test="regId != null">
+        reg_id = #{regId},
+      </if>
+      <if test="name != null">
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="phone != null">
+        phone = #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="numberEvaluations != null">
+        number_evaluations = #{numberEvaluations,jdbcType=INTEGER},
+      </if>
+      <if test="latestEvaluationDate != null">
+        latest_evaluation_date = #{latestEvaluationDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="evaluationResults != null">
+        evaluation_results = #{evaluationResults,jdbcType=VARCHAR},
+      </if>
+      <if test="insertTime != null">
+        insert_time = #{insertTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.yihe.system.domain.NewPsychologicalAssessmentReport">
+    update new_psychological_assessment_report
+    set reg_id = #{regId},
+      name = #{name,jdbcType=VARCHAR},
+      phone = #{phone,jdbcType=VARCHAR},
+      number_evaluations = #{numberEvaluations,jdbcType=INTEGER},
+      latest_evaluation_date = #{latestEvaluationDate,jdbcType=TIMESTAMP},
+      evaluation_results = #{evaluationResults,jdbcType=VARCHAR},
+      insert_time = #{insertTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+  <select id="selectByPage" parameterType="com.yihe.system.domain.NewPsychologicalAssessmentReport" resultMap="BaseResultMap">
+    select * from new_psychological_assessment_report
+    ni left join new_reg ur
+    on ni.reg_id=ur.id
+    LEFT JOIN `yh_user_make_card` AS c ON ur.`user_code` = c.`User_Code`
+    LEFT JOIN yh_user_admin_info AS ai ON c.doctor = ai.id
+    <where>
+      ai.user_code = #{healthManagementSpecialist}
+      <if test="name!=null and name!=''">
+        and ni.name LIKE CONCAT('%', #{name}, '%')
+      </if>
+
+    </where>
+    LIMIT #{begin}, #{limit};
+  </select>
+
+  <select id="selectByPageCount" parameterType="com.yihe.system.domain.NewPsychologicalAssessmentReport" resultType="int">
+    select count(*) from new_psychological_assessment_report
+    ni left join new_reg ur
+    on ni.reg_id=ur.id
+    LEFT JOIN `yh_user_make_card` AS c ON ur.`user_code` = c.`User_Code`
+    LEFT JOIN yh_user_admin_info AS ai ON c.doctor = ai.id
+    <where>
+      ai.user_code = #{healthManagementSpecialist}
+      <if test="name!=null and name!=''">
+        and ni.name LIKE CONCAT('%', #{name}, '%')
+      </if>
+
+    </where>
+  </select>
+</mapper>

@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>工作场所职业病危害因素检测结果
+    </title>
+    <link rel="stylesheet" th:href="@{/assets/js/layui-v2.9.16/layui/css/layui.css}"/>
+    <script type="text/javascript" th:src="@{/assets/libs/layui/layui.js}"></script>
+    <style>
+        body{
+            background:#F1F1F1
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            table-layout: fixed;
+            border-color:rgb(144, 186, 221)
+        }
+        th, td {
+            border: 1px solid #ccc;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: rgb(231, 243, 252);
+            font-size: 10pt;
+            font-family: "Microsoft YaHei";
+            word-break: break-word;
+            overflow-wrap: break-word;
+            text-align: center;
+        }
+        .section-title {
+            text-align: center;
+            font-weight: bold;
+            background-color: #e6f7ff;
+        }
+        .input-full {
+            width: 100%;
+            box-sizing: border-box;
+        }
+        .radio-group {
+            display: flex;
+            align-items: center;
+        }
+        .radio-group label {
+            margin-right: 10px;
+        }
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        .checkbox-group label {
+            margin-right: 15px;
+        }
+        .heng{
+            text-align: center;
+            font-size: 10pt;
+            font-family: "Microsoft YaHei";
+            word-break: break-word;
+            overflow-wrap: break-word;
+        }
+        .datainput{
+            border-color: #eee !important;
+            border-width: 1px;
+        }
+
+        .layui-form-checked[lay-skin=primary] i{
+            border-color:#2d8cf0 !important;
+            background-color:#FFF !important;
+            color:#2d8cf0 !important;
+            font-weight: bold;
+        }
+
+        .layui-form-checkbox[lay-skin=primary]:hover i{
+            border-color:#2d8cf0 !important;
+        }
+        .layui-form-radio>i:hover, .layui-form-radioed>i{
+            color: #2d8cf0 !important;
+        }
+
+        /* 覆盖 layui 的默认主题颜色 */
+        .theme-colorful .layui-btn {
+            height: 36px;
+            line-height: 36px;
+            border-radius: 4px;
+            background-color: #2d8cf0;
+            box-shadow: 0 1px 0 rgba(0, 0, 0, .03);
+        }
+        .layui-form-radio:hover>*, .layui-form-radioed, .layui-form-radioed>i{
+            color: #2d8cf0 !important;
+        }
+
+        /*.layui-input {*/
+        /*    border-color: #597FC0 !important;*/
+        /*}*/
+
+        /* ...其他元素样式 */
+        /* 修改分页按钮的背景颜色和字体颜色 */
+        .layui-laypage a {
+            background-color: #f0f0f0; /* 设置按钮的背景颜色 */
+            color: #333; /* 设置按钮的字体颜色 */
+        }
+
+        /* 鼠标悬停时按钮的背景颜色 */
+        .layui-laypage a:hover {
+            background-color: #fff;
+            color: #2d8cf0;
+        }
+
+        /* 当前页的背景颜色和字体颜色 */
+        .layui-laypage .layui-laypage-curr .layui-laypage-em {
+            background-color: #2d8cf0; /* 当前页的背景颜色 */
+            color: white; /* 当前页的字体颜色 */
+        }
+
+
+
+    </style>
+</head>
+<body>
+
+<div class="layui-form " style="width:70%;margin:auto;padding:0 5%;background:#FFF;margin-top:0">
+    <h2 style="text-align: center;">工作场所职业病危害因素检测结果
+    </h2>
+    <input id="userCode" type="hidden" value="">
+
+    <form class="layui-form" id="addfolder" lay-filter="folderForm" style="display: none;min-height: 300px">
+        <div id="search-header">
+            <input id="guishu" type="hidden" value="">
+            <div class="layui-inline" style="margin-left: -59px;display: none">
+                <label class="layui-form-label">单位</label>
+                <div class="layui-input-block" style="width: 270px;">
+                    <input type="text" id="tree" lay-filter="tree" class="layui-input">
+                </div>
+            </div>
+
+            <div class="layui-inline" style="margin-left: 3px;">
+                <label class="layui-form-label w-auto">姓名:</label>
+                <div class="layui-input-inline">
+                    <input id="name" class="layui-input" placeholder="请输入" style="width: 124px;"/>
+                </div>
+            </div>
+
+            <div class="layui-inline" style="padding-left: 20px;">
+                <button class="layui-btn icon-btn sousuoDN " lay-submit="" lay-filter="regManageQueryBtn"><i class="layui-icon"></i>搜索</button>
+                <button id="btnempty" style="background-color: #fff;width: 69px;color: black;border: 1px solid #e5e5e5;" class="layui-btn icon-btn"></i>清除</button>
+            </div>
+        </div>
+        <div id="tables" class="text-center layui-text"  style="width: 100%;">
+
+        </div>
+    </form>
+
+
+
+    <form class="layui-form" id="myForm" lay-filter="myForm">
+        <button style="float: right" type="submit" class="layui-btn" lay-submit lay-filter="myFormSave">保存</button>
+        <table>
+
+
+
+
+
+            <tr class="disease-rowb">
+                <th colspan="2">序号</th>
+                <th colspan="3">岗位</th>
+                <th colspan="4">检测时间</th>
+
+                <th colspan="4">检测机构
+                </th>
+                <th colspan="5">危害因素名称
+                </th>
+                <th colspan="4">危害因素检测结果
+                </th>
+                <th colspan="4">防护措施
+
+                </th>
+                <th colspan="4">备注
+                </th>
+                <th colspan="1">操作</th>
+            </tr>
+            <tr id="disease-history-table" class="section-title">
+
+            </tr>
+            <tr class="section-title">
+                <td colspan="31" class="operation-btn" style="text-align: center"><i id="add-disease-row2" style="font-size: 20px;color: #2d8cf0" class="layui-icon layui-icon-add-circle add-btn"></i></td>
+            </tr>
+
+
+
+
+
+
+
+
+            <tr>
+                <td colspan="31">
+                    <!--          <input type="text" name="v22" class="input-full layui-input" placeholder="责任健管师" >-->
+                    <textarea name="remark" placeholder="请输入内容" class="layui-textarea"  readonly>
+                          注：1）本表记录用人单位劳动者所在工作场所(岗位)历年由具有职业卫生检测资质的检测机构进行的职业病危害因素检测结果，包括放射工作人员个人剂量监测结果；2）防护措施是指劳动者所在工作场所设置的职业病防护设施和为劳动者配备的个人防护用品及佩戴情况。
+                        </textarea>
+                </td>
+            </tr>
+
+        </table>
+    </form>
+</div>
+
+<script type="text/javascript" th:src="@{/assets/js/common.js}"></script>
+<script th:inline="javascript">
+    layui.use(['form',"table",'treeSelect','notice'], function(){
+        var form = layui.form;
+        var $ = layui.jquery;
+        var layer = layui.layer;
+        var table = layui.table;
+        var treeSelect= layui.treeSelect;
+        var notice=layui.notice;
+        layui.config({
+            skin: 'blue'  // 设置主题为蓝色
+        });
+        var nations = [ "汉族", "蒙古族", "回族", "藏族", "维吾尔族", "苗族",
+            "彝族", "壮族", "布依族", "朝鲜族", "满族", "侗族", "瑶族",
+            "白族", "土家族", "哈尼族", "哈萨克族", "傣族", "黎族", "傈僳族",
+            "佤族", "畲族", "高山族", "拉祜族", "水族", "东乡族", "纳西族",
+            "景颇族", "柯尔克孜族", "土族", "达斡尔族", "仫佬族", "羌族",
+            "布朗族", "撒拉族", "毛南族", "仡佬族", "锡伯族", "阿昌族",
+            "普米族", "塔吉克族", "怒族", "乌孜别克族", "俄罗斯族", "鄂温克族",
+            "德昂族", "保安族", "裕固族", "京族", "塔塔尔族", "独龙族",
+            "鄂伦春族", "赫哲族", "门巴族", "珞巴族", "基诺族" ];
+
+        var option = "";
+        for (var i = 0; i < nations.length; i++) {
+            option += '<option value="' + nations[i] + '">'
+                + nations[i] + '</option>';
+        }
+        /*  console.log(option+"-----------");  */
+        $(option).appendTo("#nation");
+
+
+        //下拉框回显
+        form.render("select");
+        var params = new URLSearchParams(window.location.search);
+        var paramValue = params.get('personalBasicInformation');
+
+        $.ajax({
+            type: "get",
+            url: "/newRegController/searchForDoctors",
+            dataType:"json",
+            success: function(res){
+                console.log(res,"------------------ddddddddddddddd------------------------");
+                var option = "";
+                for (var i = 0; i < res.data.length; i++) {
+                    option += '<option value="' + res.data[i].userCode + '">'
+                        + res.data[i].userName + '</option>';
+                }
+                $(option).appendTo("#responsibleHealthManager");
+                form.render("select");
+                selectForm(paramValue);
+            }
+
+        });
+        // 添加行功能
+        treeSelect.render({
+            // 选择器
+            elem: '#tree',
+            // 数据
+            data: '/YhUserMakeCard/showPullDownTree',
+            // 异步加载方式：get/post，默认get
+            type: 'get',
+            // 占位符
+            placeholder: '全部',
+            // 是否开启搜索功能：true/false，默认false
+            search: true,
+            // 点击回调
+            click: function(d){
+                console.log($('#guishu').val(d.current.id));
+            },
+            // 加载完成后的回调函数
+            success: function (d) {
+                console.log(d);
+            }
+
+        });
+
+
+
+        $('#add-disease-row2').on('click', function() {
+            var $lastRow = $('#disease-history-table').siblings('.disease-row').last();
+            var rowCount = $('#disease-history-table').siblings('.disease-row').length;
+            var $newRow = $('<tr class="disease-row"></tr>');
+
+            $newRow.html(`
+            <td style="text-align: center;" colSpan="2">${rowCount + 1}</td>
+            <td colSpan="3"><input type="text" name="addb1" class="input-full layui-input" placeholder="岗位"></td>
+            <td colSpan="4"><input type="date" name="addb2" class="input-full datainput layui-input"></td>
+            <td colSpan="4"><input type="text" name="addb3" class="input-full layui-input" placeholder="检测机构"></td>
+            <td colSpan="5"><input type="text" name="addb4" class="input-full layui-input" placeholder="危害因素名称"></td>
+            <td colSpan="4"><input type="text" name="addb5" class="input-full layui-input" placeholder="危害因素检测结果"></td>
+             <td colSpan="4"><input type="text" name="addb6" class="input-full layui-input" placeholder="防护措施"></td>
+              <td colSpan="4"><input type="text" name="addb7" class="input-full layui-input" placeholder="备注"></td>
+                <td colspan="1" class="operation-btn" style="text-align: center;"><i style="color: red;font-size: 30px;" class="layui-icon layui-icon-delete delete-btn"></i></td>
+            `);
+
+            if ($lastRow.length > 0) {
+                $lastRow.after($newRow);
+            } else {
+                $('.disease-rowb').after($newRow);
+            }
+            bindDeleteEvents(); // 绑定删除事件
+        });
+
+
+
+
+        // 删除行功能
+        function bindDeleteEvents() {
+            var deleteBtns = document.querySelectorAll('.delete-btn');
+            deleteBtns.forEach(function(btn, index) {
+                btn.addEventListener('click', function() {
+                    var row = this.parentElement.parentElement;
+                    row.parentElement.removeChild(row);
+                    updateRowNumbers(); // 更新序号
+                });
+            });
+        }
+
+        // 更新序号
+        function updateRowNumbers() {
+            var rows = document.querySelectorAll('.disease-row');
+            rows.forEach(function(row, index) {
+                row.querySelector('td[colspan="1"]').textContent = index + 1;
+            });
+            var rows1 = document.querySelectorAll('.disease-row1');
+            rows1.forEach(function(row, index) {
+                rows1.querySelector('td[colspan="1"]').textContent = index + 1;
+            });
+            var rows2 = document.querySelectorAll('.disease-row2');
+            rows2.forEach(function(row, index) {
+                rows2.querySelector('td[colspan="1"]').textContent = index + 1;
+            });
+            var rows3 = document.querySelectorAll('.disease-row3');
+            rows3.forEach(function(row, index) {
+                rows3.querySelector('td[colspan="1"]').textContent = index + 1;
+            });
+            var rows4 = document.querySelectorAll('.disease-row4');
+            rows4.forEach(function(row, index) {
+                rows4.querySelector('td[colspan="1"]').textContent = index + 1;
+            });
+
+        }
+        form.on('submit(myFormSave)', function(data){
+            console.log(data,"dddddddddddddddddddddddddddddddd")
+
+
+
+
+            var allRowsData = [];
+            var allRowsaData = [];
+            var allRowsbData = [];
+            var allRowscData = [];
+            var allRowsdData = [];
+            $("tr").each(function() {
+                var row = $(this); // 当前行
+                // 检查当前行是否包含你需要的 input 元素
+
+                var addb1Input = row.find('input[name="addb1"]');
+                var addb2Input = row.find('input[name="addb2"]');
+                var addb3Input = row.find('input[name="addb3"]');
+                var addb4Input = row.find('input[name="addb4"]');
+                var addb5Input = row.find('input[name="addb5"]');
+                var addb6Input = row.find('input[name="addb6"]');
+                var addb7Input = row.find('input[name="addb7"]');
+
+
+
+                if (addb1Input.length > 0 && addb2Input.length > 0 && addb3Input.length > 0 && addb4Input.length > 0 && addb5Input.length > 0 && addb6Input.length > 0 && addb7Input.length > 0  ) {
+                    var add1Value = addb1Input.val(); // 获取疾病名称的值
+                    var add2Value = addb2Input.val(); // 获取确诊时间的值
+                    var add3Value = addb3Input.val(); // 获取疾病名称的值
+                    var add4Value = addb4Input.val(); // 获取确诊时间的值
+                    var add5Value = addb5Input.val(); // 获取疾病名称的值
+                    var add6Value = addb6Input.val(); // 获取确诊时间的值
+                    var add7Value = addb7Input.val(); // 获取疾病名称的值
+                    var rowData = {
+                        "add1": add1Value,
+                        "add2": add2Value,
+                        "add3": add3Value,
+                        "add4": add4Value,
+                        "add5": add5Value,
+                        "add6": add6Value,
+                        "add7": add7Value,
+                    };
+                    // 将该行的数据对象添加到数组中
+                    allRowsbData.push(rowData);
+                }
+
+
+
+
+            });
+
+            var field = data.field;
+
+            if ($(this).data('submitted') === true) {
+                return false; // 阻止重复提交
+            }
+            $(this).data('submitted', true);
+
+            if(paramValue){
+                $.ajax({
+                    type : 'post',
+                    url : '/NewEmployeePersonalInformationCardController/updateById',
+                    data : {
+                        id:paramValue,
+                        testingResultsOccupationalHazardsInWorkplace:JSON.stringify(allRowsbData),
+
+                    },
+                    success : function(data) {
+                        if (data.code == 20000) {
+
+                            notice.success({
+                                title : '消息通知',
+                                message : '操作成功!'
+                            });
+
+
+                        } else {
+                            notice.error({
+                                title : '消息通知',
+                                message : '操作失败!'
+                            });
+                        }
+                    }
+                })
+            }else{
+
+            }
+            return false; // 阻止默认 form 跳转
+        });
+
+        function selectForm(paramValue){
+            if(paramValue){
+                $.ajax({
+                    type:'get',
+                    url:'/NewEmployeePersonalInformationCardController/selectById',
+                    data:{id:paramValue},
+                    success : function(data){
+                        console.log("这里是查询出来的数据",data);
+                        if(data.code==20000){
+
+
+
+                            const medicalHistory = JSON.parse(data.data.testingResultsOccupationalHazardsInWorkplace);
+
+                            medicalHistory.forEach((item, index) => {
+                                console.log(item,"sssssssssssss",)
+                                var $lastRow = $('#disease-history-table').siblings('.disease-row').last();
+                                const $newRow = $('<tr class="disease-row"></tr>');
+                                $newRow.html(`
+                                <td style="text-align: center;" colSpan="2">${index + 1}</td>
+                                <td colSpan="3"><input type="text" name="addb1" value="${item.add1}" class="input-full layui-input" placeholder="岗位"></td>
+                                <td colSpan="4"><input type="date" name="addb2" value="${item.add2}" class="input-full datainput layui-input"></td>
+                                <td colSpan="4"><input type="text" name="addb3" value="${item.add3}" class="input-full layui-input" placeholder="检测机构"></td>
+                                <td colSpan="5"><input type="text" name="addb4" value="${item.add4}" class="input-full layui-input" placeholder="危害因素名称"></td>
+                                <td colSpan="4"><input type="text" name="addb5" value="${item.add5}" class="input-full layui-input" placeholder="危害因素检测结果"></td>
+                                 <td colSpan="4"><input type="text" name="addb6" value="${item.add6}" class="input-full layui-input" placeholder="防护措施"></td>
+                                  <td colSpan="4"><input type="text" name="addb7" value="${item.add7}" class="input-full layui-input" placeholder="备注"></td>
+                                    <td colspan="1" class="operation-btn" style="text-align: center;"><i style="color: red;font-size: 30px;" class="layui-icon layui-icon-delete delete-btn"></i></td>
+                                `);
+                                if ($lastRow.length > 0) {
+                                    $lastRow.after($newRow);
+                                } else {
+                                    $('#disease-history-table').after($newRow);
+                                }
+                            });
+
+
+
+                            form.render();
+                        }
+
+                    }
+                })
+            }
+
+
+        }
+
+
+
+        // 初始化表单
+        form.render();
+        bindDeleteEvents(); // 初次绑定删除事件
+    });
+</script>
+
+</body>
+</html>

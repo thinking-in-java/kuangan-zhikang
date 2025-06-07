@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>心理患者一览表</title>
+    <link rel="stylesheet" th:href="@{/assets/js/layui-v2.9.16/layui/css/layui.css}"/>
+    <script type="text/javascript" th:src="@{/assets/js/layui-v2.9.16/layui/layui.js}"></script>
+    <style>
+        body{
+            background:#F1F1F1
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            table-layout: fixed;
+            border-color:rgb(144, 186, 221)
+        }
+        th, td {
+            border: 1px solid #ccc;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: rgb(231, 243, 252);
+            font-size: 10pt;
+            font-family: "Microsoft YaHei";
+            word-break: break-word;
+            overflow-wrap: break-word;
+            text-align: center;
+        }
+        .section-title {
+            text-align: center;
+            font-weight: bold;
+            background-color: #e6f7ff;
+        }
+        .input-full {
+            width: 100%;
+            box-sizing: border-box;
+        }
+        .radio-group {
+            display: flex;
+            align-items: center;
+        }
+        .radio-group label {
+            margin-right: 10px;
+        }
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        .checkbox-group label {
+            margin-right: 15px;
+        }
+        .heng{
+            text-align: center;
+            font-size: 10pt;
+            font-family: "Microsoft YaHei";
+            word-break: break-word;
+            overflow-wrap: break-word;
+        }
+        .datainput{
+            border-color: #eee !important;
+            border-width: 1px;
+        }
+
+        .layui-form-checked[lay-skin=primary] i{
+            border-color:#2d8cf0 !important;
+            background-color:#FFF !important;
+            color:#2d8cf0 !important;
+            font-weight: bold;
+        }
+
+        .layui-form-checkbox[lay-skin=primary]:hover i{
+            border-color:#2d8cf0 !important;
+        }
+        .layui-form-radio>i:hover, .layui-form-radioed>i{
+            color: #2d8cf0 !important;
+        }
+
+        /* 覆盖 layui 的默认主题颜色 */
+        .theme-colorful .layui-btn {
+            height: 36px;
+            line-height: 36px;
+            border-radius: 4px;
+            background-color: #2d8cf0;
+            box-shadow: 0 1px 0 rgba(0, 0, 0, .03);
+        }
+        .layui-form-radio:hover>*, .layui-form-radioed, .layui-form-radioed>i{
+            color: #2d8cf0 !important;
+        }
+
+        /*.layui-input {*/
+        /*    border-color: #597FC0 !important;*/
+        /*}*/
+
+        /* ...其他元素样式 */
+        /* 修改分页按钮的背景颜色和字体颜色 */
+        .layui-laypage a {
+            background-color: #f0f0f0; /* 设置按钮的背景颜色 */
+            color: #333; /* 设置按钮的字体颜色 */
+        }
+
+        /* 鼠标悬停时按钮的背景颜色 */
+        .layui-laypage a:hover {
+            background-color: #fff;
+            color: #2d8cf0;
+        }
+
+        /* 当前页的背景颜色和字体颜色 */
+        .layui-laypage .layui-laypage-curr .layui-laypage-em {
+            background-color: #2d8cf0; /* 当前页的背景颜色 */
+            color: white; /* 当前页的字体颜色 */
+        }
+
+        .file-row {
+            background-color: #e6f7ff;
+            padding: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-radius: 5px;
+            margin: 10px 0;
+            width: 98%;
+        }
+        .file-row .file-info {
+            display: flex;
+            align-items: center;
+        }
+        .file-row .file-info img {
+            width: 20px;
+            margin-right: 10px;
+        }
+        .file-row .file-info span {
+            font-size: 14px;
+        }
+        .file-row .actions {
+            display: flex;
+            align-items: center;
+        }
+        .file-row .actions button {
+            border: none;
+            background: none;
+            cursor: pointer;
+            margin-left: 10px;
+            font-size: 16px;
+        }
+
+        .layui-laydate-header {
+            background-color: #2d8cf0; /* 顶部背景颜色 */
+            color: #fff; /* 顶部文字颜色 */
+        }
+
+        .layui-laydate-list li:hover {
+            background-color: #2d8cf0; /* 鼠标悬停时的背景颜色 */
+            color: #fff; /* 鼠标悬停时的文字颜色 */
+        }
+
+        .layui-this, .layui-this:hover {
+            background-color: #fff !important; /* 选中的背景颜色 */
+            color: #2d8cf0 !important; /* 选中的文字颜色 */
+        }
+
+    </style>
+</head>
+<body>
+
+<div class="layui-form " style="width:70%;margin:auto;padding:0 5%;background:#FFF;margin-top:0">
+    <h2 style="text-align: center;">心理患者一览表</h2>
+    <input id="guishu" type="hidden" value="">
+    <input id="userCode" type="hidden" value="">
+    <input id="regId" type="hidden" value="">
+
+    <form class="layui-form" id="addfolder" lay-filter="folderForm" style="display: none;min-height: 300px">
+        <div id="search-header">
+
+
+            <div class="layui-inline" style="margin-left: 3px;">
+                <label class="layui-form-label w-auto">姓名:</label>
+                <div class="layui-input-inline">
+                    <input id="name" class="layui-input" placeholder="请输入" style="width: 124px;"/>
+                </div>
+            </div>
+
+            <div class="layui-inline" style="padding-left: 20px;">
+                <button class="layui-btn icon-btn sousuoDN " lay-submit="" lay-filter="regManageQueryBtn"><i class="layui-icon"></i>搜索</button>
+                <button id="btnempty" style="background-color: #fff;width: 69px;color: black;border: 1px solid #e5e5e5;" class="layui-btn icon-btn"></i>清除</button>
+            </div>
+        </div>
+        <div id="tables" class="text-center layui-text"  style="width: 100%;">
+
+        </div>
+    </form>
+
+
+
+    <form class="layui-form" id="myForm" lay-filter="myForm">
+
+        <button style="float: right" type="submit" class="layui-btn" lay-submit lay-filter="myFormSave">保存</button>
+        <table>
+            <tr >
+                <th colspan="3">所属客户</th>
+                <td colspan="9">
+                            <input type="text" id="tree" lay-filter="tree" class="layui-input">
+                </td>
+
+
+                <th colspan="3">客户联系人</th>
+                <td colspan="9">
+                        <input name="v1" type="text" class="input-full layui-input" >
+                </td>
+
+            </tr>
+
+
+            <tr >
+                <th colspan="3">姓名</th>
+                <td colspan="9">
+                    <div class="layui-input-group">
+                        <input name="v2" type="text" class="input-full layui-input" readonly>
+                        <div class="layui-input-split layui-input-suffix chooseName" style="cursor: pointer;">
+                            <i class="layui-icon layui-icon-search"></i>
+                        </div>
+                    </div>
+                </td>
+
+
+                <input style="display: none" name="v0" type="text" class="input-full layui-input" readonly>
+
+                <th colspan="3">性别</th>
+                <td colspan="9">
+                    <input name="v3" type="text" class="input-full layui-input" >
+                </td>
+
+
+
+
+
+            </tr>
+
+
+            <tr >
+                <th colspan="3">年龄</th>
+                <td colspan="9">
+                    <input name="v4" type="text" class="input-full layui-input" >
+                </td>
+
+                <th colspan="3">单位</th>
+                <td colspan="9">
+                    <input name="v5" type="text" class="input-full layui-input" >
+                </td>
+
+
+
+
+
+
+
+            </tr>
+
+            <tr>
+                <th colspan="3">部门</th>
+                <td colspan="9">
+                    <input name="v6" type="text" class="input-full layui-input" >
+                </td>
+
+                <th colspan="3">病症</th>
+                <td colspan="9">
+                    <input type="text" class="input-full layui-input" name="v7" placeholder="">
+                </td>
+            </tr>
+
+
+            <tr >
+                <th colspan="4">治疗情况</th>
+                <td colspan="20"><textarea  type="textarea" class="input-full layui-textarea" name="v8" placeholder=""></textarea></td>
+            </tr>
+
+
+        </table>
+    </form>
+</div>
+
+<script type="text/javascript" th:src="@{/assets/js/layui-v2.9.16/layui/layui.js}"></script>
+<script type="text/javascript" th:src="@{/assets/js/common.js}"></script>
+<script type="text/javascript" th:src="@{/assets/js/jquery-1.11.1.js}"></script>
+<script th:inline="javascript">
+    layui.use(['form',"table",'treeSelect','notice','upload',"laydate"], function(){
+        var form = layui.form;
+        var $ = layui.jquery;
+        var layer = layui.layer;
+        var table = layui.table;
+        var notice=layui.notice;
+        var upload = layui.upload;
+        var treeSelect= layui.treeSelect;
+        layui.config({
+            skin: 'blue'  // 设置主题为蓝色
+        });
+        var treeInstance;
+        var params = new URLSearchParams(window.location.search);
+        var paramValue = params.get('medicalExaminationInformation');
+        treeSelect.render({
+            // 选择器
+            elem: '#tree',
+            // 数据
+            data: '/YhUserMakeCard/showPullDownTree',
+            // 异步加载方式：get/post，默认get
+            type: 'get',
+            // 占位符
+            placeholder: '全部',
+            // 是否开启搜索功能：true/false，默认false
+            search: true,
+            // 点击回调
+            click: function(d){
+                console.log($('#guishu').val(d.current.id));
+            },
+            // 加载完成后的回调函数
+            success: function (d) {
+                treeInstance = treeSelect;
+                console.log(d);
+                selectForm(paramValue);
+            }
+
+        });
+
+        $(".chooseName").on("click",function (){
+            var closeIndex = layer.open({
+                type: 1, // page 层类型
+                area: ['800px', '600px'],
+                title: '选择名字',
+                shade: 0.6, // 遮罩透明度
+                anim: 0, // 0-6 的动画形式，-1 不开启
+                content: $("#addfolder"),
+                success: function(layero, index){
+                    // 在弹出层初始化完成后渲染表格
+                    var regManageTb=table.render({
+                        elem: '#tables',
+                        url: '/newRegController/queryLocallyManagedArchives',
+                        page: true,
+                        limit : 10,
+                        where : {regTime:""},
+                        cols: [[
+                            // {type: 'radio', fixed: 'left'},
+                            {field:'userCode', title:'用户编号', fixed: 'center'},
+                            {field: 'name', title: '姓名', align: 'center'},
+                            {field: 'phone', align: 'center', title: '电话'} ,
+                        ]],
+                        parseData: function(res) {
+                            if (res.code === 20000) {
+                                return {
+                                    "code": 0,
+                                    "msg": res.msg || "",
+                                    "count": res.count || 0,
+                                    "data": res.data.data || []
+                                };
+                            } else {
+                                return {
+                                    "code": 1,
+                                    "msg": res.msg || "获取数据失败",
+                                    "count": 0,
+                                    "data": []
+                                };
+                            }
+                        },
+                        done: function() {
+                            $('#tables').css('visibility', 'visible');
+                        }
+                    });
+                    $('#tables').css('visibility', 'hidden');
+
+
+                    // 行单击事件( 双击事件为: rowDouble )
+                    table.on('row(tables)', function(obj){
+                        var data = obj.data; // 获取当前行数据
+                        console.log(data,"这里是点击事件啊啊啊")
+                        // 显示 - 仅用于演示
+
+                        form.val("myForm", {
+                            "v2": data.name,
+                            "v0":data.id,
+                            "v3":data.sex==1?"男":"女",
+                            "v4":data.age,
+                            "v5":data.workUnit,
+                            "v6":data.department,
+                        });
+
+                        form.render();
+                        layer.close(closeIndex);
+
+                    });
+
+                    form.on('submit(regManageQueryBtn)', function(data){
+                        regManageTb.reload({
+                            where : {
+                                //这里注意一定要跟Bean 里面的属性对应
+                                name:$('#name').val(),
+                                regTime:"",
+                            },
+                            page : {
+                                curr : 1
+                            }
+
+                        });
+                        // 阻止表单跳转。如果需要表单跳转，去掉这段即可。
+                        return false;
+                    });
+
+
+                },
+                end: function () {
+                    // 关闭弹出层时隐藏 addfolder
+                    $("#addfolder").hide();
+                }
+            });
+        });
+
+
+        var laydate = layui.laydate;
+
+        // 初始化年份选择器
+        laydate.render({
+            elem: '#yearPicker',
+            type: 'year',
+            theme: '#2d8cf0',
+            format: 'yyyy',
+            trigger: 'click'
+        });
+
+
+
+
+
+
+
+        form.on('submit(myFormSave)', function(data){
+            console.log(data,"dddddddddddddddddddddddddddddddd")
+
+            var field = data.field;
+            if (!field.v1) {
+                layer.msg('请补充完整表单');
+                $("input[name='v1']").focus();
+                return false;  // 阻止提交
+            }
+            if (!field.v2) {
+                layer.msg('请补充完整表单');
+                $("input[name='v2']").focus();
+                return false;  // 阻止提交
+            }
+
+            if (!field.v3) {
+                layer.msg('请补充完整表单');
+                $("input[name='v3']").focus();
+                return false;
+            }
+            if (!field.v4) {
+                layer.msg('请补充完整表单');
+                $("input[name='v4']").focus();
+                return false;
+            }
+
+            if (!field.v5) {
+                layer.msg('请补充完整表单');
+                $("input[name='v5']").focus();
+                return false;
+            }
+            if (!field.v6) {
+                layer.msg('请补充完整表单');
+                $("input[name='v6']").focus();
+                return false;
+            }
+
+            if (!field.v7) {
+                layer.msg('请补充完整表单');
+                $("input[name='v7']").focus();
+                return false;
+            }
+            if (!field.v8) {
+                layer.msg('请补充完整表单');
+                $("input[name='v8']").focus();
+                return false;
+            }
+            if ($(this).data('submitted') === true) {
+                return false; // 阻止重复提交
+            }
+            $(this).data('submitted', true);
+            if(paramValue){
+                $.ajax({
+                    type : 'post',
+                    url : '/NewListPsychologicalPatientsController/updateNew',
+                    data : {
+                        id:paramValue,
+                        customerAffiliation: $('#guishu').val(), // 对应 name
+                        regId: data.field.v0, // 对应 regId
+                        name: data.field.v2, // 对应 serviceDate (截取日期部分)
+                        sex: data.field.v3, // 对应 serviceMode
+                        age: data.field.v4, // 对应 symptom
+                        company: data.field.v5, // 对应 symptom1
+                        departments: data.field.v6, // 对应 height
+                        serviceDate: data.field.v7, // 对应 bodyMassIndex
+                        chiefComplaint: data.field.v8, // 对应 weight
+
+
+                    },
+                    success : function(data) {
+                        if (data.code == 20000) {
+
+                            notice.success({
+                                title : '消息通知',
+                                message : '操作成功!'
+                            });
+
+                            setTimeout(function() {
+                                window.close();
+                            }, 2000);
+                        } else {
+                            notice.error({
+                                title : '消息通知',
+                                message : '操作失败!'
+                            });
+                            setTimeout(function() {
+                                window.close();
+                            }, 2000);
+                        }
+                    }
+                })
+            }else{
+                $.ajax({
+                    type : 'post',
+                    url : '/NewListPsychologicalPatientsController/insetNew',
+                    data : {
+                        customerAffiliation: $('#guishu').val(), // 对应 name
+                        regId: data.field.v0, // 对应 regId
+                        name: data.field.v2, // 对应 serviceDate (截取日期部分)
+                        sex: data.field.v3, // 对应 serviceMode
+                        age: data.field.v4, // 对应 symptom
+                        company: data.field.v5, // 对应 symptom1
+                        departments: data.field.v6, // 对应 height
+                        serviceDate: data.field.v7, // 对应 bodyMassIndex
+                        chiefComplaint: data.field.v8, // 对应 weight
+                    },
+
+                    success : function(data) {
+                        if (data.code == 20000) {
+
+                            notice.success({
+                                title : '消息通知',
+                                message : '操作成功!'
+                            });
+
+                            setTimeout(function() {
+                                window.close();
+                            }, 2000);
+                        } else {
+                            notice.error({
+                                title : '消息通知',
+                                message : '操作失败!'
+                            });
+                            setTimeout(function() {
+                                window.close();
+                            }, 2000);
+                        }
+                    }
+                })
+            }
+            return false; // 阻止默认 form 跳转
+        });
+
+
+        function selectForm(paramValue){
+            if(paramValue){
+                $.ajax({
+                    type:'get',
+                    url:'/NewListPsychologicalPatientsController/selectById',
+                    data:{id:paramValue},
+                    success : function(data){
+                        console.log("这里是查询出来的数据",data);
+                        if(data.code==20000){
+                            form.val("myForm", {
+                                "v0": data.data.regId, // 对应 name
+                                "v2": data.data.name, // 对应 regId
+                                "v3": data.data.sex==1?"男":"女", // 对应 serviceDate (截取日期部分)
+                                "v4": data.data.age, // 对应 serviceMode
+                                "v5": data.data.company, // 对应 symptom
+                                "v6": data.data.departments, // 对应 symptom1
+                                "v7": data.data.serviceDate, // 对应 height
+                                "v8": data.data.chiefComplaint, // 对应 bodyMassIndex
+                                "v1": data.data.dname,
+                            });
+                            if (treeInstance) {
+                                treeInstance.checkNode('tree', data.data.customerAffiliation); // 选中节点
+                                $('#guishu').val(data.data.customerAffiliation); // 更新表单输入值
+                            } else {
+                                console.error("树形选择器尚未初始化完毕！");
+                            }
+                            form.render();
+                        }
+
+                    }
+                })
+            }
+
+
+        }
+
+
+        // 初始化表单
+        form.render();
+    });
+</script>
+
+</body>
+</html>

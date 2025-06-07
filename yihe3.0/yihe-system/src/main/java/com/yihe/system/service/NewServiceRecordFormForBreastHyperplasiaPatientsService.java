@@ -1,0 +1,20 @@
+package com.yihe.system.service;
+
+import com.yihe.system.domain.NewRecordFormForChronicGastritisPatients;
+import com.yihe.system.domain.NewServiceRecordFormForBreastHyperplasiaPatients;
+
+import java.util.List;
+
+public interface NewServiceRecordFormForBreastHyperplasiaPatientsService {
+    int insetNew(NewServiceRecordFormForBreastHyperplasiaPatients newServiceRecordFormForBreastHyperplasiaPatients);
+
+    int updateNew(NewServiceRecordFormForBreastHyperplasiaPatients newServiceRecordFormForBreastHyperplasiaPatients);
+
+    NewServiceRecordFormForBreastHyperplasiaPatients selectById(NewServiceRecordFormForBreastHyperplasiaPatients newServiceRecordFormForBreastHyperplasiaPatients);
+
+    List<NewServiceRecordFormForBreastHyperplasiaPatients> selectByPage(NewServiceRecordFormForBreastHyperplasiaPatients newServiceRecordFormForBreastHyperplasiaPatients);
+
+    List<NewServiceRecordFormForBreastHyperplasiaPatients> selectAll();
+
+    int selectByPageCount(NewServiceRecordFormForBreastHyperplasiaPatients newServiceRecordFormForBreastHyperplasiaPatients);
+}
