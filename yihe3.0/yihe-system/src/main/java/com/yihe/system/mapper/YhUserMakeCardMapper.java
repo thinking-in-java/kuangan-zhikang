@@ -113,6 +113,13 @@ public interface YhUserMakeCardMapper {
 	
 	//该医生下用户今天健康评估人数
 	int findAssessTotalByToDayNum(@Param("usercode")String usercode);
+
+	int findAssessTotalByWeek(@Param("usercode")String usercode);
+
+	int findAssessTotalByMouth(@Param("usercode")String usercode);
+	int findAssessTotalByYear(@Param("usercode")String usercode);
+
+
 	
 	//医生已经注册的用户
 	List<doctorConsoleVOJO> findUserInfoByDoctor(@Param("usercode")String usercode);
@@ -197,4 +204,9 @@ public interface YhUserMakeCardMapper {
 	int showCountDoctor(@Param("doctor") String doctor,@Param("orgCode") String orgCode);
 	
 	YhUserMakeCard selectUnspentRegCard();
+
+	public List<Map<String, Object>> selectYhUserMakeCardPageByParamByDocTor(Map<String, Object> regMap);
+
+	int cardIsuse(String card);
+
 }

@@ -17,6 +17,7 @@ import java.util.List;
 public class YhManageTaskServiceImpl implements YhManageTaskService{
 	@Autowired
 	YhManageTaskMapper Yhmanagetaskmapper;
+
 	@Override
 	public List<YhManageTotalTask> selectlist(YhServicePage Yhservicepage) {
 		// TODO Auto-generated method stub
@@ -75,6 +76,18 @@ public class YhManageTaskServiceImpl implements YhManageTaskService{
 		// TODO Auto-generated method stub
 		return Yhmanagetaskmapper.selectunread(Yhservicepage);
 	}
+
+	@Override
+	public List<Integer> selectAll(YhServicePage Yhservicepage) {
+		Yhservicepage.setBeginpage((Yhservicepage.getPage()-1)*20);
+		if(Yhservicepage.getTime()!="" && Yhservicepage.getTime()!=null) {
+			Yhservicepage.setBegintime(Yhservicepage.getTime().subSequence(0, 10).toString());
+			Yhservicepage.setEndtime(Yhservicepage.getTime().subSequence(13,23)+" 23:59:59");
+		}
+		List<Integer> managetask=Yhmanagetaskmapper.selectAll(Yhservicepage);
+		return managetask;
+	}
+
 	@Override
 	public YhManageTotalTask selectservicecount(YhServicePage Yhservicepage) {
 		// TODO Auto-generated method stub

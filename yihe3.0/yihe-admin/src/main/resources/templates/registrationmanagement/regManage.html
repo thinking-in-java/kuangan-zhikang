@@ -182,7 +182,7 @@
 			<img alt="" src="">
 			<span  id="xuanze">已选择**项</span>
 			<span id="clickxuan" style="color: #1890ff;margin-left: 15px;">清空</span>
-			<button id="zhucema" style="width: 120px;float: right;margin-right: 16px;text-align: center;margin-top: 7px;"   class="layui-btn layui-btn-primary";lay-filter="fenpeiyishi">生成激活码</button>
+<!--			<button id="zhucema" style="width: 120px;float: right;margin-right: 16px;text-align: center;margin-top: 7px;"   class="layui-btn layui-btn-primary";lay-filter="fenpeiyishi">生成激活码</button>-->
 		</div>
 		<!-- <button type="button" class="layui-btn" id="uploadData" style="display:none">
 		<i class="layui-icon"></i>上传文件
@@ -630,7 +630,7 @@ layui.use(['laypage', 'layer','element', 'treeTable','table','form','treeSelect'
 		  });
 		  return;
 	  }
-	  window.location.href="/YhUserReginfo/exportXls?shuzu="+shuz;
+	  exportData(shuz);
 	  xuanzhong=0;
 	  $("#piliang").css("display","none");
 	  console.log(fenyeshuju);
@@ -651,6 +651,38 @@ layui.use(['laypage', 'layer','element', 'treeTable','table','form','treeSelect'
 	  });
 	 //window.open('/YhUserReginfo/exportXls','_self');
   		})
+
+	function exportData(shuz) {
+		fetch('/YhUserReginfo/exportXls', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify({ shuzu: shuz }), // JSON 格式
+		})
+				.then(response => {
+					if (!response.ok) {
+						throw new Error('Network response was not ok');
+					}
+					return response.blob(); // 将响应数据转换为 Blob 类型
+				})
+				.then(blob => {
+					// 创建一个下载链接
+					const url = window.URL.createObjectURL(blob);
+					const a = document.createElement('a');
+					a.href = url;
+					a.download = '注册卡导出.xls'; // 设置文件名
+					document.body.appendChild(a);
+					a.click();
+					document.body.removeChild(a);
+					window.URL.revokeObjectURL(url); // 释放 URL 对象
+				})
+				.catch(error => {
+					console.error('Error:', error);
+				});
+	}
+
+
   			$("#cancel").on('click',function(){
   				
 				$("#orgSurplusCard").hide();

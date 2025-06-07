@@ -68,6 +68,14 @@ background-color: white;
 				      <input type="text" id="priceMax" placeholder="" autocomplete="off" class="layui-input">
 				    </div>
 				  </div>
+
+				<div class="layui-inline" style="">
+					<label class="layui-form-label">统计范围</label>
+					<div class="layui-input-block" style="width: 270px;">
+						<input name="times" type="text"
+							   class="layui-input" id="test6" placeholder=" - ">
+					</div>
+				</div>
 				
 				
 		 <div class="layui-inline" style="padding-left: 20px;">
@@ -117,7 +125,20 @@ background-color: white;
 		  var util = layui.util;
 		  var treeSelect= layui.treeSelect;
 		  var upload = layui.upload;
-		  
+		//定义接收本月的第一天和最后一天
+		var startDate1=new Date(new Date().setDate(1));
+		var endDate1=new Date(new Date(new Date().setMonth(new Date().getMonth()+1)).setDate(0));
+		//定义接收上个月的第一天和最后一天
+		var startDate2=new Date(new Date(new Date().setMonth(new Date().getMonth()-1)).setDate(1));
+		var endDate2=new Date(new Date().setDate(0));
+		function formatDate(date) {
+			var date = new Date(date);
+			var YY = date.getFullYear() + '-';
+			var MM = (date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1) + '-';
+			var DD = (date.getDate() < 10 ? '0' + (date.getDate()) : date.getDate());
+
+			return YY + MM + DD;
+		}
 		  
 		  treeSelect.render({
 		      // 选择器
@@ -139,8 +160,27 @@ background-color: white;
 		          console.log("机构",d);
 		      }
 		      
-		  }); 
-		
+		  });
+		laydate.render({
+			elem : '#test6',
+			max:"date",
+			range : true,
+			trigger: 'click',
+			extrabtns: [
+				{id:'today', text:'今天', range:[new Date(), new Date()]},
+				{id:'lastday-7', text:'过去7天', range:[new Date(new Date().setDate(new Date().getDate()-7)),
+						new Date(new Date().setDate(new Date().getDate()-1))]},
+				{id:'lastday-30', text:'过去30天', range:[new Date(new Date().setDate(new Date().getDate()-30)),
+						new Date(new Date().setDate(new Date().getDate()-1))]},
+				{id:'yesterday', text:'昨天', range:[new Date(new Date().setDate(new Date().getDate()-1)),
+						new Date(new Date().setDate(new Date().getDate()-1))]},
+				{id:'thismonth', text:'本月', range:[startDate1,endDate1]},
+				{id:'lastmonth', text:'上个月', range:[startDate2,endDate2]}],
+			done: function(val, stdate, ovdate){
+				timer=val;
+
+			}
+		});
 
 			
 		 
@@ -193,15 +233,21 @@ background-color: white;
 		  });
 		    
 		  $("#exportIntegralData").click(function(){
-				 window.location.href="/YhHealthStarweb/exportIntegralData";
-			  })
-		    
+			  const params = new URLSearchParams();
+			  params.append("orgCode", $('#guishu').val());
+			  params.append("name", $('#name').val());
+			  params.append("priceMin", $('#priceMin').val());
+			  params.append("priceMax", $('#priceMax').val());
+			  params.append("times", $("#test6").val());
+			  const url = "/YhHealthStarweb/exportIntegralData?" + params.toString();
+			  window.location.href = url;
+
+			})
 		  table.on('tool(demo)', function(obj) { //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
 			  var data = obj.data;
 	          var layEvent = obj.event;
 	          var userCode = obj.data.userCode;
 	           if(layEvent === 'lookOver'){
-	        	    
 	        	   window.open("/manage/register/userIndex?page=IntegralRecord&userCode="+userCode+"");
 	           }
 	     });
@@ -210,13 +256,15 @@ background-color: white;
 			 /*   console.log(data.elem);//被执行事件的元素DOM对象，一般为button对象
 			  console.log(data.form); //被执行提交的form对象，一般在存在form标签时才会返回
 			 console.log(data.field); //当前容器的全部表单字段，名值对形式：{name: value} */
+
 			 YhUserFolderTab.reload({
 				  where : {
 						//这里注意一定要跟Bean 里面的属性对应
 					 orgCode:$('#guishu').val(),
 					 name:$('#name').val(), 
 					 priceMin:$('#priceMin').val(),
-					 priceMax:$('#priceMax').val()
+					 priceMax:$('#priceMax').val(),
+					 times:$("#test6").val()
 					},
 				  page : {
 					  curr : 1

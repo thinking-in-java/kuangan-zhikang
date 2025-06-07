@@ -1,6 +1,7 @@
 package com.yihe.system.domain;
 
 import java.io.Serializable;
+import java.util.List;
 
 public class YhUserPermission implements Serializable {
     /**
@@ -90,8 +91,18 @@ public class YhUserPermission implements Serializable {
      */
     private Boolean havechild;
 
+    private List<YhUserPermission> children;
 
-	private static final long serialVersionUID = 1L;
+
+    public List<YhUserPermission> getChildren() {
+        return children;
+    }
+
+    public void setChildren(List<YhUserPermission> children) {
+        this.children = children;
+    }
+
+    private static final long serialVersionUID = 1L;
     public Boolean getHavechild() {
 		return havechild;
 	}

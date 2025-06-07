@@ -1,6 +1,7 @@
 package com.yihe.system.service.impl;
 
 import com.yihe.system.domain.*;
+import com.yihe.system.mapper.YhUserReginfoMapper;
 import com.yihe.system.mapper.YhUserSettingMapper;
 import com.yihe.system.service.YhUserSettingService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +21,8 @@ import java.util.List;
 public class YhUserSettingServiceImpl  implements YhUserSettingService{
 	@Autowired
 	YhUserSettingMapper yhusersettingmapper;
-	
+	@Autowired
+	YhUserReginfoMapper yhUserReginfoMapper;
 	
 	
 	
@@ -235,6 +237,26 @@ public class YhUserSettingServiceImpl  implements YhUserSettingService{
 		return yhusersettingmapper.updateOrgName(orgCode, orgName);
 	}
 
+	@Override
+	public String cardIdActivationByDoctor(String enrolCardId) {
+		boolean flag = true;
+		char[] a={'A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z',
+				'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z'};
+		String key="";
+		while (flag){
+			key=""+a[(int)(Math.random()*52)]+(int)(Math.random()*9000+1000)+a[(int)(Math.random()*52)];
+			YhUserMakeCard yhUserMakeCard = yhUserReginfoMapper.selectActivationCardId(key);
+			if(null==yhUserMakeCard){
+				flag = false;
+			}
+		}
+
+		int i = yhusersettingmapper.cardIdActivation(key, enrolCardId);
+		if(i>0){
+			return  key;
+		}
+		return  "";
+	}
 
 
 }

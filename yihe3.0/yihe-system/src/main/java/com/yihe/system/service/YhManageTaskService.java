@@ -9,6 +9,8 @@ public interface YhManageTaskService {
 	List<YhManageTotalTask> selectlist(YhServicePage Yhservicepage);
 	int updatestate(YhServicePage Yhservicepage);
 	List<YhManageTotalTask> selectunread(YhServicePage Yhservicepage);
+
+	List<Integer> selectAll(YhServicePage Yhservicepage);
 	YhManageTotalTask selectservicecount(YhServicePage Yhservicepage);
 	int selectcountpage(YhServicePage Yhservicepage);
 	YhManageTotalTask selectditailbyid(YhServicePage Yhservicepage);

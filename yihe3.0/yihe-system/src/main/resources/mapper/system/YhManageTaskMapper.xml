@@ -267,6 +267,72 @@
 		LIMIT #{beginpage},20
 	</select>
 
+
+	<select id="selectAll"  parameterType="com.yihe.system.domain.YhServicePage" resultType="integer">
+		SELECT sp.id
+		FROM  yh_jz_service_total_person  tp LEFT JOIN  yh_jz_service_person sp	ON tp.user_code=sp.user_code
+		INNER JOIN yh_user_reginfo re on tp.user_code=re.user_code
+		LEFT JOIN yh_user_enrolinfo enro
+		ON enro.user_code=re.user_code
+		LEFT JOIN yh_jz_service_type setype
+		ON sp.service_type=setype.id
+		LEFT JOIN yh_jz_service_assessment_switch sas
+		ON sas.id=sp.childnodes
+		LEFT JOIN yh_jz_service_bodydata_switch sbs
+		ON sp.childnodes=sbs.id
+		LEFT JOIN yh_jz_service_plan plan
+		ON sp.childnodes=plan.id
+		LEFT JOIN yh_threshold_dic thdic
+		ON sp.childnodes=thdic.dic_id
+		<where>
+			sp.service_state=#{state}
+			<if test="usercode!=null and usercode!='' and (state==1 or state==0)">
+				AND tp.doctor_code=#{usercode}
+			</if>
+			<if test="usercode!=null and usercode!='' and (state==2 or state==3)">
+				AND sp.finishi_doctor=#{usercode}
+			</if>
+			<if test="tree!=null and tree!=''">
+				AND re.Org_Code=#{tree}
+			</if>
+			<if test="typeson!=null and typeson!='' and typeson&lt;100">
+				and sbs.id=#{typeson} and  sp.childtag=1
+			</if>
+			<if test="typeson!=null and typeson!='' and typeson&gt;100 and typeson&lt;200">
+				and sas.id=(#{typeson}-100) and  sp.childtag=2
+			</if>
+			<if test="typeson!=null and typeson!='' and typeson&gt;200 ">
+				and thdic.dic_id=(#{typeson}-200) and  sp.childtag=4
+			</if>
+			<if test="servicetype!=null and servicetype!=''">
+				AND sp.service_type=#{servicetype}
+			</if>
+			<if test="name!=null and name!=''">
+				AND re.name  like concat('%', #{name},'%')
+			</if>
+			<if test="healthstate!=null  and healthstate!=''">
+				AND re.gender = #{healthstate}
+			</if>
+			<if test="returnvisit!=null and returnvisit!=''">
+				AND sp.returnvisit = #{returnvisit}
+			</if>
+			<if test="groupid!=null and groupid!=''">
+				AND enro.Flag_Dgroup like concat('%','f'+#{groupid}+'_',"%")
+			</if>
+			<if	test="time!=null and time!=''">
+				<!-- 时间 -->
+				AND sp.insert_time BETWEEN	#{begintime} AND #{endtime}
+			</if>
+			<if test="totaltype!=null and totaltype!=''">
+				and sp.totaltype=#{totaltype}
+			</if>
+			<if test="planname!=null and planname!=''">
+				and sp.service_subtitle=#{planname}
+			</if>
+		</where>
+		ORDER BY re.`name`,sp.insert_time DESC
+	</select>
+
 	<update id="updatestate" parameterType="com.yihe.system.domain.YhServicePage" >
 		UPDATE yh_jz_service_person
 		<set>

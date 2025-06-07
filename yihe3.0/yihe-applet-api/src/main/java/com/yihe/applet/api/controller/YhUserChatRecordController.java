@@ -17,9 +17,11 @@ import com.qiniu.storage.Configuration;
 import com.qiniu.storage.UploadManager;
 import com.qiniu.storage.model.DefaultPutRet;
 import com.qiniu.util.Auth;
+import com.yihe.applet.api.service.YhUserChatRecordService;
 import com.yihe.common.config.Global;
 import com.yihe.system.domain.YhSysConfig;
 import com.yihe.system.service.YhSysConfigService;
+import com.yihe.system.service.YhUserDialogueListService;
 import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -45,11 +47,41 @@ import javax.servlet.http.HttpServletRequest;
 public class YhUserChatRecordController {
 	@Autowired
 	private YhUserDialogueListMapper YhUserDialogueListMapper;
-	
+	@Autowired
+	private YhUserDialogueListService yhUserDialogueListService;
 	@Autowired
 	private YhUserChatRecordMapper  YhUserChatRecordMapper;
 	@Autowired
 	private YhSysConfigService yhSysConfigService;
+	@Autowired
+	YhUserChatRecordService yhUserChatRecordService;
+
+	/**
+	 * 健管师端首页列表
+	 */
+	@RequestMapping(value = "/doctorHomePage")
+	@ResponseBody
+	public Result doctorHomePage(String doctor,@RequestParam(defaultValue="3") int pagenum){
+		if(StringUtil.isEmpty(doctor)){
+			return Result.error();
+		}
+		Map<String,Object> map =new HashMap<>();
+		map.put("list",yhUserChatRecordService.latestChat(doctor, pagenum));
+		map.put("unread",yhUserChatRecordService.doctorUnreadNum(doctor));
+
+		return Result.ok(map);
+	}
+
+	/**
+	 * 根据用户查询他的会话列表
+	 */
+	@RequestMapping(value = "/findChatList")
+	@ResponseBody
+	public Result findChatList(String usercode) {
+
+		return Result.ok(yhUserDialogueListService.findSessionList(usercode));
+	}
+
 	/**
 	 * 获取对话列表YhUserDialogueListMapper
 	 */
@@ -65,7 +97,7 @@ public class YhUserChatRecordController {
 	@RequestMapping(value = "/readInfo")
 	@ResponseBody
 	public Result readInfo(String usercode,String tousercode) {
-		int modifyRead1 = YhUserChatRecordMapper.modifyRead1(usercode, tousercode);
+		int modifyRead1 = YhUserChatRecordMapper.modifyRead1(usercode.replace(Global.getName(), ""), tousercode.replace(Global.getName(), ""));
 		return Result.ok(modifyRead1);
 	}
 
@@ -74,10 +106,10 @@ public class YhUserChatRecordController {
 	 */
 	@RequestMapping(value = "/findInfoList")
 	@ResponseBody
-	public Result findInfoList(String roomid,String usercode,String doctor) {
-	List<String> list=new ArrayList<String>();
-		
-		String groupByInfo=YhUserChatRecordMapper.findUserGroupByInfo(usercode);
+	public Result findInfoList(String roomid,String usercode,String doctor,Integer pagenum,Integer pagesize) {
+		List<String> list=new ArrayList<String>();
+
+		String groupByInfo=YhUserChatRecordMapper.findUserGroupByInfo(usercode.replace(Global.getName(), ""));
 		if(StringUtil.isNotEmpty(groupByInfo)) {
 			String[] split = groupByInfo.split(";");
 			if(split.length>0) {
@@ -86,14 +118,14 @@ public class YhUserChatRecordController {
 						String[] split2 = string.split("_");
 						String group=split2[0];
 						group = group.substring(1);
-						list.add(doctor+group);
+						list.add(doctor.replace(Global.getName(), "")+group);
 					}
 				}
 			}
 		}
-		list.add(roomid);
-		list.add(usercode+doctor);
-		return Result.ok(YhUserChatRecordMapper.findInfoList(list));
+		list.add(roomid.replace(Global.getName(), ""));
+		list.add(usercode.replace(Global.getName(), "")+doctor.replace(Global.getName(), ""));
+		return Result.ok(yhUserChatRecordService.getChatInfo(list,pagenum,pagesize));
 	}
 	
 	/**
@@ -105,12 +137,10 @@ public class YhUserChatRecordController {
 		if(null==record){
 			return Result.error("参数错误");
 		}
-		if(StringUtil.isEmpty(record.getUserCode())||StringUtil.isEmpty(record.getToUserCode())||StringUtil.isEmpty(record.getMessage())){
+		if(StringUtil.isEmpty(record.getUserCode())||StringUtil.isEmpty(record.getToUserCode())||null==record.getMessage()||null==record.getMessageType()){
 			return Result.error("参数错误");
 		}
-		record.setMtype(1);
-		record.setRoomid(record.getToUserCode()+record.getUserCode());
-		int insertSelective = YhUserChatRecordMapper.insertSelective(record);
+		int insertSelective = yhUserChatRecordService.addChatMessage(record);
 		if(insertSelective>0){
 			return Result.ok();
 		}

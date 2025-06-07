@@ -31,4 +31,7 @@ public interface YhUserChatRecordWedMapper {
     int updateByPrimaryKeySelective(YhUserChatRecordWed record);
 
     int updateByPrimaryKey(YhUserChatRecordWed record);
+
+    YhUserChatRecordWed findChatInfoByUserCodeByOne(@Param("usercode") String usercode, @Param("tousercode") String tousercode);
+
 }

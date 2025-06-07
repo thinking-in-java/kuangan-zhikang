@@ -17,8 +17,50 @@
   <sql id="Base_Column_List" >
     id, user_code, to_user_code, message, addTimeInfo, `read`,roomid,mtype,messageType,filename,filesize
   </sql>
-  
-   
+  <select id="doctorUnreadNum" resultType="int">
+        select  count(1) from yh_user_chat_record where 	to_user_code = #{doctor}  AND mtype = 1 AND `read` = 0
+  </select>
+  <select id="latestChat" resultType="com.yihe.applet.api.domain.DoctorXcxHomePageChat">
+     SELECT
+            tab.*
+        FROM
+            (
+                SELECT
+                    a.user_code AS senderId,
+                    b.`name`,
+                    b.post_code AS avatar,
+                    a.messageType,
+                    a.message,
+                    addTimeInfo,
+                    a.`read`
+                FROM
+                    (
+                        SELECT
+                            tab1.*
+                        FROM
+                            (
+                                SELECT
+                                    *
+                                FROM
+                                    yh_user_chat_record
+                                ORDER BY
+                                    addTimeInfo DESC
+                            ) tab1
+                        GROUP BY
+                            user_code
+                    ) AS a
+                INNER JOIN yh_user_reginfo AS b ON a.user_code = b.user_code
+                WHERE
+                    to_user_code = #{doctor}
+                AND mtype = 1
+                GROUP BY
+                    a.user_code
+            ) AS tab
+        ORDER BY
+            `read` ASC,
+            addTimeInfo DESC
+        LIMIT ${limit}
+   </select>
   <select id="findUserGroupByInfo" resultType="java.lang.String">
    SELECT Flag_Dgroup FROM yh_user_enrolinfo WHERE user_code=#{usercode} limit 1
     
@@ -32,13 +74,27 @@
     from yh_user_chat_record
     where id = #{id,jdbcType=INTEGER}
   </select>
-   <select id="findInfoList" resultMap="BaseResultMap">
-  SELECT <include refid="Base_Column_List" /> FROM `yh_user_chat_record` WHERE roomid in
-   <foreach collection="list" item="id" index="index" open="(" close=")" separator=",">
-            #{id}
-        </foreach>
-   ORDER BY addTimeinfo 
-  </select>
+    <select id="findInfoList" resultMap="BaseResultMap">
+        SELECT
+        tab.*
+        FROM
+        (
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM
+        `yh_user_chat_record`
+        <where>
+            roomid in
+            <foreach collection="list" item="id" index="index" open="(" close=")" separator=",">
+                #{id}
+            </foreach>
+        </where>
+        ORDER BY
+        addTimeInfo DESC
+        LIMIT #{pagenum},#{pagesize}
+        ) tab
+        ORDER BY tab.addTimeInfo
+    </select>
   <!-- 修改记录为已读 -->
   <update id="modifyRead1" parameterType="java.lang.String" >
   UPDATE 

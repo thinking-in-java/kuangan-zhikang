@@ -1,5 +1,6 @@
 package com.yihe.system.mapper;
 
+import com.yihe.system.domain.DoctorChatGroupVOJO;
 import com.yihe.system.domain.YHDocGroup;
 import org.apache.ibatis.annotations.Param;
 
@@ -36,4 +37,8 @@ public interface YHDocGroupMapper {
 	int updateByPrimaryKeyByUserCountUp(YHDocGroup record);
 
 	List<YHDocGroup> selectAllInfo(String userCode);
+
+	List<DoctorChatGroupVOJO> findGroupInfoByDoctor(@Param("usercode") String usercode, @Param("gname") String gname);
+
+	DoctorChatGroupVOJO findAllUserGroupInfo(String usercode);;
 }

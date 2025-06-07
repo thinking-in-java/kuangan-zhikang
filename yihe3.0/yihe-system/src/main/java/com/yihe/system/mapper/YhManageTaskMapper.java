@@ -7,6 +7,8 @@ import java.util.List;
 
 public interface YhManageTaskMapper {
 	List<YhManageTotalTask> selectlist(YhServicePage Yhservicepage);
+
+	List<Integer> selectAll(YhServicePage Yhservicepage);
 	int updatestate(YhServicePage Yhservicepage);
 	int updatestates(YhServicePage Yhservicepage);
 	List<YhManageTotalTask> selectunread(YhServicePage Yhservicepage);

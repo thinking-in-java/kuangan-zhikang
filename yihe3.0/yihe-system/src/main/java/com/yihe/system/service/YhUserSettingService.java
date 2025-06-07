@@ -23,4 +23,6 @@ public interface YhUserSettingService{
 	String selectorgname();
 	YhOrgTree selectorgname2();
 	int updateOrgName(String orgCode,String orgName);
+
+	String cardIdActivationByDoctor(String enrolCardId);
 }

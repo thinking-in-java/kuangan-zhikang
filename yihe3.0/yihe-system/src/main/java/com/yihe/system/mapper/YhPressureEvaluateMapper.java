@@ -56,6 +56,8 @@ public interface YhPressureEvaluateMapper
      */
     public int insertYhPressureEvaluate(YhPressureEvaluate yhPressureEvaluate);
 
+    YhPressureEvaluate selectByUserCodeAndType(String userCode);
+
     /**
      * 修改压力管理三大评估问卷数据
      * 

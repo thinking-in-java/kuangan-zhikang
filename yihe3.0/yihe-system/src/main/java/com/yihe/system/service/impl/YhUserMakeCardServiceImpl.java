@@ -4,9 +4,14 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.yihe.common.utils.StringUtils;
 import com.yihe.system.domain.*;
+import com.yihe.system.mapper.YHUserBmiMapper;
 import com.yihe.system.mapper.YhUserMakeCardMapper;
-import com.yihe.system.service.YhUserMakeCardService;
+import com.yihe.system.service.*;
+import com.yihe.system.utils.Data;
+import com.yihe.system.utils.StringUtil;
+import com.yihe.system.utils.SysPasswordSystemService;
 import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.crypto.hash.Md5Hash;
 import org.apache.shiro.subject.Subject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,11 +19,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.sql.SQLException;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * YhUserMakeCardService实现 Created by dyb on 2020/3/19.
@@ -32,7 +35,18 @@ public class YhUserMakeCardServiceImpl implements YhUserMakeCardService {
 
 	@Autowired
 	YhUserMakeCardMapper yhUserMakeCardMapper;
-
+	@Autowired
+	YhOrgTreeService yhOrgTreeService;
+	@Autowired
+	YhUserReginfoService yhUserReginfoService;
+	@Autowired
+	YhUserEnrolinfoService yhUserEnrolinfoService;
+	@Autowired
+	YhUserRoleService yhUserRoleService;
+	@Autowired
+	YhUserRolePowerService yhUserRolePowerService;
+	@Autowired
+	YHUserBmiMapper yHUserBmiMapper;
 	@Override
 	public List<YhUserMakeCard> selectByPrimaryKeyByuserCode(String usercode) {
 		// TODO Auto-generated method stub
@@ -718,6 +732,178 @@ public class YhUserMakeCardServiceImpl implements YhUserMakeCardService {
 	public YhUserMakeCard selectOrgIdbyParam(String usercode) {
 		// TODO Auto-generated method stub
 		return yhUserMakeCardMapper.selectOrgIdbyParam(usercode);
+	}
+
+	@Override
+	public PageInfo<Map<String, Object>> queryYhUserMakeCardByCriteriaWithPageByDoctorXcx(Map<String, Object> regMap, int page, int limit) {
+		if (null == regMap) {
+			return new PageInfo<Map<String, Object>>(new ArrayList<>());
+		}
+
+		if (StringUtil.isEmpty((String) regMap.get("value")) && "-1".equals((String) regMap.get("notExpired")) && "-1".equals((String) regMap.get("expired"))
+				&& "-1".equals((String) regMap.get("unused"))
+				&& "-1".equals((String) regMap.get("activated"))
+				&& "-1".equals((String) regMap.get("used"))) {
+			return new PageInfo<Map<String, Object>>(new ArrayList<>());
+		}
+
+		// 设置分页参数
+		PageHelper.startPage(page, limit);
+		List<Map<String, Object>> list = yhUserMakeCardMapper.selectYhUserMakeCardPageByParamByDocTor(regMap);
+		for (int i = 0; i < list.size(); i++) {
+			if (StringUtil.isNotEmpty((String) list.get(i).get("Org_Id"))) {
+				String org_name = yhOrgTreeService.selectFullOrgName(list.get(i).get("Org_Id").toString(), new String());
+				list.get(i).put("Org_Name", org_name);
+
+
+			}
+		}
+
+		return new PageInfo<Map<String, Object>>(list);
+	}
+
+	@Override
+	@Transactional(rollbackFor = Exception.class)
+	public Map<String, Object> registrationByCard(YhUserReginfo yhUserReginfo) throws Exception {
+		Map<String, Object> map = new HashMap<String, Object>();
+		if (null == yhUserReginfo || StringUtil.isEmpty(yhUserReginfo.getBirthtime())) {
+			map.put("code", 500);
+			map.put("msg", "参数异常");
+			return map;
+		}
+		//设置出生
+		yhUserReginfo.setBirthDate(Data.Str2Date(yhUserReginfo.getBirthtime()));
+		//昵称非空
+		if (StringUtil.isEmpty(yhUserReginfo.getNickname())) {
+			map.put("code", 500);
+			map.put("msg", "昵称非空");
+			return map;
+		}
+		//身高非空
+		if (null == yhUserReginfo.getHeight()) {
+			map.put("code", 500);
+			map.put("msg", "身高非空");
+			return map;
+		}
+		//体重非空
+		if (null == yhUserReginfo.getWeight()) {
+			map.put("code", 500);
+			map.put("msg", "体重非空");
+			return map;
+		}
+		//注册卡id非空
+		if (StringUtil.isEmpty(yhUserReginfo.getEnrolCardId())) {
+			map.put("code", 500);
+			map.put("msg", "注册卡id非空");
+			return map;
+		}
+		//该注册码已被其他用户使用，请重新注册
+		int i = yhUserMakeCardMapper.cardIsuse(yhUserReginfo.getEnrolCardId());
+		if (i > 0) {
+			map.put("code", 500);
+			map.put("msg", "注册卡已被使用");
+			return map;
+		}
+
+		//手机号非空
+		if (StringUtil.isEmpty(yhUserReginfo.getMobile())) {
+			map.put("code", 500);
+			map.put("msg", "手机号非空");
+			return map;
+		}
+
+		YhUserReginfo yhUserReginfoMobile = yhUserReginfoService.selectMobileAndName3(yhUserReginfo.getMobile(), 5);
+		if (yhUserReginfoMobile != null) {
+			map.put("code", 500);
+			map.put("msg", "手机号码已被其他用户使用");
+			return map;
+		}
+
+		//账号非空
+		if (StringUtil.isEmpty(yhUserReginfo.getUserName())) {
+			map.put("code", 500);
+			map.put("msg", "账号非空");
+			return map;
+		}
+		YhUserReginfo yhUserName = yhUserReginfoService.selectMobileAndName(yhUserReginfo.getUserName());
+		if (yhUserName != null) {
+			map.put("code", 500);
+			map.put("msg", "登录账号已存在，不能重名创建");
+			return map;
+		}
+		String userCode = "";
+		synchronized (this) {
+			userCode = yhUserReginfoService.selectMaxUserCode(yhUserReginfo.getUserType());
+		}
+		if (StringUtil.isEmpty(userCode)) {
+			map.put("code", 500);
+			map.put("msg", "usercode参数错误");
+			return map;
+		}
+
+		String userName = yhUserReginfo.getUserName();
+		String userPwd = yhUserReginfo.getUserPwd();
+		SysPasswordSystemService sysPasswordService = new SysPasswordSystemService();
+		sysPasswordService.encryptPassword(userName, userPwd);
+		String nameAndPwd = new Md5Hash(userName + userPwd).toHex();
+		yhUserReginfo.setUserPwd(nameAndPwd);
+
+		String userCode1 = String.valueOf(Integer.valueOf(userCode) + 1);
+		yhUserReginfo.setUserCode(userCode1);
+		if (yhUserReginfo.getGender() == 1) {
+			yhUserReginfo.setPostCode("http://xcxqny.yhy.ren/xiaochengxu/toxiangnan.png");
+		}
+		if (yhUserReginfo.getGender() == 2) {
+			yhUserReginfo.setPostCode("http://xcxqny.yhy.ren/xiaochengxu/toxiangnv.png");
+		}
+
+		yhUserReginfo.setUserType(yhUserReginfo.getUserType());
+
+		int addReg = yhUserReginfoService.insertSelective(yhUserReginfo);
+
+		// 添加注册卡表的userCode
+		YhUserMakeCard record = new YhUserMakeCard();
+		record.setEnrolCardId(yhUserReginfo.getEnrolCardId());
+		record.setUserCode(yhUserReginfo.getUserCode());
+		updateByPrimaryKeySelective(record);
+		// 往用户信息扩展表插入一条数据 userCode Evaluateflag
+		int addEnr = 0;
+		YhUserEnrolinfo enrolinfo = yhUserEnrolinfoService.selectByPrimaryKeyByUsercode(yhUserReginfo.getUserCode());
+		if (enrolinfo == null) {
+			YhUserEnrolinfo yhUserEnrolinfo = new YhUserEnrolinfo();
+			yhUserEnrolinfo.setUserCode(yhUserReginfo.getUserCode());
+			yhUserEnrolinfo.setEvaluateflag(0);
+			addEnr = yhUserEnrolinfoService.insertSelective(yhUserEnrolinfo);
+		} else {
+			addEnr = 1;
+		}
+		// 查询角色表
+		Integer roleId = yhUserRoleService.selectRoleId("用户");
+		// 用户角色关联表插入id和code
+		YhUserRolePower yhUserRolePower = new YhUserRolePower();
+		yhUserRolePower.setRoleid(roleId);
+		yhUserRolePower.setUserid(yhUserReginfo.getUserCode());
+		int addRole = yhUserRolePowerService.inssert(yhUserRolePower);
+
+
+		//保存身高体重
+		YHUserBmi recordBmi = new YHUserBmi();
+		recordBmi.setEntryTime(Data.Date2Str(new Date()));
+		recordBmi.setuHeight(yhUserReginfo.getHeight());
+		recordBmi.setuWeight(yhUserReginfo.getWeight());
+		recordBmi.seteUserId(Integer.valueOf(userCode1));
+		recordBmi.setEnv("常规测量");
+		recordBmi.setDataSource("注册初始");
+		int addBmi = yHUserBmiMapper.insertSelective(recordBmi);
+
+
+		if (addReg > 0 && addEnr > 0 && addRole > 0 && addBmi > 0) {
+			map.put("code", 200);
+			map.put("msg", "注册成功");
+			return map;
+		} else {
+			throw new SQLException("发生异常了..");
+		}
 	}
 
 	@Override

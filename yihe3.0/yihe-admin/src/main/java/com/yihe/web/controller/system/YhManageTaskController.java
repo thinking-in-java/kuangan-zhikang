@@ -53,6 +53,24 @@ public class YhManageTaskController {
 			List<YhManageTotalTask> list=yhmanagetaskservice.selectlist(Yhservicepage);
 			return Result.ok(list);
 		}
+
+
+	@ApiOperation(value = "查询等待服务的人")
+	@RequestMapping(value = "/selectAll", method = RequestMethod.POST)
+	@ResponseBody
+	public Result selectAll(YhServicePage Yhservicepage) {
+		Subject subject = SecurityUtils.getSubject();
+		YhUserReginfo reginfo =  (YhUserReginfo)subject.getPrincipal();
+		Yhservicepage.setUsercode(reginfo.getUserCode());
+		if(hasChineseByRange(Yhservicepage.getTypeson())){
+			Yhservicepage.setPlanname(Yhservicepage.getTypeson());
+			Yhservicepage.setTypeson(null);
+		}
+		List<Integer> list=yhmanagetaskservice.selectAll(Yhservicepage);
+		return Result.ok(list);
+	}
+
+
 		
 		@ApiOperation(value = "分页查询个数")
 	    @RequestMapping(value = "/selectpagecount", method = RequestMethod.POST)

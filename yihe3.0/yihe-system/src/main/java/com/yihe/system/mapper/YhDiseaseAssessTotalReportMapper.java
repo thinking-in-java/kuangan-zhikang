@@ -48,6 +48,8 @@ public interface YhDiseaseAssessTotalReportMapper {
 			@Param("name") String name, @Param("username") String username, @Param("strtime") String strtime,
 			@Param("endtime") String endtime);
 
+	List<YhDiseaseAssessReportVOJO> findPGByUserCode(@Param("userCode") String userCode);
+
 	List<YhDiseaseAssessReportVOJO> selectByPrimaryKeyByusercodeCount(@Param("usercode") String usercode,
 			@Param("name") String name, @Param("username") String username, @Param("strtime") String strtime,
 			@Param("endtime") String endtime);

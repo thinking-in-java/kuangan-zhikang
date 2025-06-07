@@ -31,4 +31,6 @@ public interface YHUserBmiMapper {
 	
 	int selectByBmiCount();
 	  public int importYHUserBmi(@Param("Onlist")List<YHUserBmi> Onlist);
+
+	Map getBmiPercentages();
 }

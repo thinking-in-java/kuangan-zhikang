@@ -59,6 +59,8 @@ public interface YhDiseaseAssessTotalReportService {
 	PageInfo<YhDiseaseAssessReportVOJO> selectByPrimaryKeyByusercode(String usercode, String name, String username,
 			String strtime, String endtime, int pageNum, int pageSize);
 
+	List<YhDiseaseAssessReportVOJO> findPGByUserCode(String userCode);
+
 	List<YhDiseaseAssessReportVOJO> selectByPrimaryKeyByusercodeCount(String usercode, String name, String username,
 			String strtime, String endtime);
 

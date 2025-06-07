@@ -231,4 +231,13 @@ WHERE user_code=#{usercode} AND to_user_code=#{tousercode}
       `read` = #{read,jdbcType=INTEGER}
     where id = #{id,jdbcType=INTEGER}
   </update>
+  <select id="findChatInfoByUserCodeByOne" resultMap="BaseResultMap">
+    SELECT
+    <include refid="Base_Column_List"/>
+    ,(select count(1) from yh_user_chat_record where `read`=0 and user_code=#{tousercode} AND
+    to_user_code=#{usercode}) as num
+
+    FROM `yh_user_chat_record` WHERE (user_code=#{usercode} AND to_user_code=#{tousercode}) OR
+    (user_code=#{tousercode} AND to_user_code=#{usercode}) ORDER BY addTimeinfo desc limit 1
+  </select>
 </mapper>

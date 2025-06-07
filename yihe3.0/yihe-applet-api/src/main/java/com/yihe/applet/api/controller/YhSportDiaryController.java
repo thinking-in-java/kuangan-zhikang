@@ -5,6 +5,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.yihe.applet.api.domain.*;
 import com.yihe.applet.api.mapper.*;
+import com.yihe.applet.api.service.YhScoreEventCategoryAppService;
 import com.yihe.applet.api.service.YhWxSettingService;
 import com.yihe.applet.api.util.common.util.HttpRequestor;
 import com.yihe.applet.api.util.common.util.Result;
@@ -100,7 +101,12 @@ public class YhSportDiaryController {
 
 	@Resource
 	private YhUserSportChallengeAppController yhUserSportChallengeAppController;
-	
+
+	@Autowired
+	YhScoreEventCategoryAppService yhScoreEventCategoryAppService;
+
+
+
 	/**
 	 * 查询运动学堂
 	 * @param userCode
@@ -748,8 +754,8 @@ public Result decrypt(String encryptedData, String sessionKey, String iv,String 
     		  }
     		 YhSportDiaryService.updateByPrimaryKeySelective(diar);
     	  }
-    	  
-        return Result.ok(message);
+		yhScoreEventCategoryAppService.stepPoints(userCode,message);
+		return Result.ok(message);
         
     } catch (Exception ex) {
         return null;
@@ -807,6 +813,7 @@ public Result nowdecrypt(String encryptedData, String sessionKey, String iv,Stri
         String url = "https://api.weixin.qq.com/sns/jscode2session?appid=" + selectByPrimaryKey.getAppid() + "&secret=" + selectByPrimaryKey.getAppsecret() + "&js_code=";
         String url0 = "&grant_type=authorization_code";
         try {
+			System.out.println(url+code+url0);
            oppid = new HttpRequestor().doGet(url+code+url0);    //url+code+url0
             jsonObject = JSONObject.parseObject(oppid);  
            System.out.println(jsonObject);

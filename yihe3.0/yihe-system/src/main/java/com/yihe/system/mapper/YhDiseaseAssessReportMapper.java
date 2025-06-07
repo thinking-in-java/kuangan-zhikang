@@ -21,6 +21,8 @@ public interface YhDiseaseAssessReportMapper {
 	List<YHDiseaseRiskOptimal> findYhDiseaseRiskOptimal(@Param("did") String did,@Param("isRadar") int isRadar,@Param("sex")String sex);
 	
 	List<YHDiseaseRiskOptimal> findYhDiseaseRiskOptimal2(@Param("did") String did,@Param("isRadar") int isRadar,@Param("sex")String sex);
+
+	List<YHDiseaseRiskOptimal> findCSDiseaseRiskOptimal(@Param("did") String did, @Param("isRadar") int isRadar, @Param("sex")String sex);
 	
 	YhDiseaseRiskResultAppVOJO findDiseaseRiskResultByRsForRs(YhDiseaseRiskResultAppVOJO vojo);
 	

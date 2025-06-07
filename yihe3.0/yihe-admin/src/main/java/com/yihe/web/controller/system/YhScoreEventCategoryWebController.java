@@ -31,9 +31,9 @@ public class YhScoreEventCategoryWebController {
 	@ApiOperation(value = "分页查询积分设置")
     @ResponseBody
     @RequestMapping(value="/YhScoreEventCategoryPage",method=RequestMethod.GET)
-    public Map<String,Object> queryYhScoreEventCategoryPage(Integer type,Integer putaway,String eventName,int page,int limit){
+    public Map<String,Object> queryYhScoreEventCategoryPage(Integer type,Integer putaway,String eventName,int page,int limit,String orgCode){
        //查询集合
-       PageInfo<YhScoreEventCategoryWeb> data = yhScoreEventCategoryWebService.queryUserByCriteriaWithPage(type,putaway,eventName,page, limit);
+       PageInfo<YhScoreEventCategoryWeb> data = yhScoreEventCategoryWebService.queryUserByCriteriaWithPage(type,putaway,eventName,page, limit,orgCode);
        Map<String,Object> result = new HashMap<String, Object>();
        result.put("data",data.getList());
        result .put("count", data.getTotal());

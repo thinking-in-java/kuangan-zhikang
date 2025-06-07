@@ -10,4 +10,8 @@ public interface YhUserStepWebService {
 	  YhUserStepWeb selectByPrimaryKey(Integer stepId);
 	    int updateByPrimaryKeySelective(YhUserStepWeb record);
 	    YhUserStepWeb selectUserIntegral(@Param("userCode") String userCode);
+
+	YhUserStepWeb selectAggregate(String userCode);
+
+	int updateByPrimaryKey(YhUserStepWeb yhUserStep);
 }

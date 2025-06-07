@@ -8,10 +8,15 @@ import com.yihe.applet.api.service.YhScoreEventCategoryAppService;
 import com.yihe.applet.api.service.YhUserStepAppService;
 import com.yihe.applet.api.util.common.util.HttpRequestor;
 import com.yihe.applet.api.util.common.util.RedisUtils;
+import com.yihe.system.mapper.YhOrgTreeMapper;
 import com.yihe.system.mapper.YhUserReginfoMapper;
+import com.yihe.system.mapper.YhUserRoleManageMapper;
+import com.yihe.system.service.YhOrgTreeService;
+import com.yihe.system.service.YhScoreEventCategoryWebService;
 import com.yihe.system.utils.Result;
 import com.yihe.system.utils.StringUtil;
 import io.swagger.annotations.Api;
+import org.apache.shiro.crypto.hash.Md5Hash;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,11 +25,9 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.annotation.Resource;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * YhScoreEventCategorycontroller Created by yx on 2020/5/12.
@@ -47,6 +50,8 @@ public class YhScoreEventCategoryController  {
 	YhHealthStarAppService yhHealthStarService;
 	@Autowired
 	YhUserReginfoMapper yhUserReginfoMapper;
+
+
 
 	/**
 	 * 查询积分类型名
@@ -94,15 +99,102 @@ public class YhScoreEventCategoryController  {
 	@ResponseBody
 	public Result selectIntegralStatus(String userCode, String eventType,Integer type) {
 		Map<String, Object> map = new HashMap<String, Object>();
-		
+
 		map.put("eventType", eventType);
 		map.put("userCode", userCode);
 		map.put("type", type);
-	 List<Map<String, Object>> selectIntegralStatus = yhScoreEventCategoryService.selectIntegralStatus(map);
+		List<Map<String, Object>> selectIntegralStatus = yhScoreEventCategoryService.selectIntegralStatus(map);
+		for (int i = 0; i < selectIntegralStatus.size(); i++) {
+			Map<String, Object> stringObjectMap = selectIntegralStatus.get(i);
+			String etype= (String) stringObjectMap.get("event_type");
+			String to="";
+			if(Objects.equals(etype, "food_log")){
+
+				to="../../../dietaryManagement/pages/diet/record/record";
+
+			}
+			if(Objects.equals(etype, "sport_log")){
+
+				to="../../../motionManagement/pages/record/record";
+			}
+			if(Objects.equals(etype, "sport_step_6000")){
+
+				to="/motionManagement/pages/index/homepage";
+			}
+			if(Objects.equals(etype, "sport_step_8000")){
+
+				to="/motionManagement/pages/index/homepage";
+			}
+			if(Objects.equals(etype, "sport_step_10000")){
+
+				to="/motionManagement/pages/index/homepage";
+			}
+			if(Objects.equals(etype, "record_sleep")){
+				to= "../../../healthManagement/pages/sleepModule/index/index";
+			}
+			if(Objects.equals(etype, "record_habits")){
+				to= "../../../pages/healthHabits/homepage";
+			}
+			if(Objects.equals(etype, "publish_classroom")){
+				to= "../../../healthManagement/pages/classroom/classroom";
+			}
+			if(Objects.equals(etype, "publish_habit")){
+				to= "../../../pages/healthHabits/homepage";
+			}
+
+			if(Objects.equals(etype, "health_assess")){
+				to= "/healthyHManagement/pages/riskAssessment/basic/basic?title=健康风险评估&type=3&num=7375";
+			}
+
+			if(Objects.equals(etype, "habit_assess")){
+				to= "../../../pages/healthHabits/homepage";
+			}
+
+			if(Objects.equals(etype, "sleep_assess")){
+				to=  "../../../healthManagement/pages/sleepModule/sleepQuestion/sleepQuestion";
+			}
+
+			if(Objects.equals(etype, "pressure_assess")){
+				to=   "/healthManagement/pages/stressManagementQuestionnaire/stressManagementQuestionnaire?tabcur=1";
+			}
+
+			if(Objects.equals(etype, "symptom_assess")){
+				to=   "/subhealthAssessMent/pages/subhealthassess/subhealthassess";
+			}
+			if(Objects.equals(etype, "psychology_assess")){
+				to=   "/healthManagement/pages/stressManagementQuestionnaire/stressManagementQuestionnaire?tabcur=2";
+			}
+
+			if (Objects.equals(etype, "blood_pressure")) {
+				to = "/subhealthAssessMent/ec-canvas/pages/healthManagement/statistics/statistics";
+			}
+
+			if (Objects.equals(etype, "blood_sugar")) {
+				to = "/subhealthAssessMent/ec-canvas/pages/healthManagement/bloodSugarStatistics/bloodSugarStatistics";
+			}
+
+			if (Objects.equals(etype, "blood_fat")) {
+				to = "/healthManagement/pages/lipidsFourDetails/lipidsFourDetails";
+			}
+
+			if (Objects.equals(etype, "uric_acid")) {
+				to = "/healthManagement/pages/renalFunctionDetails/renalFunctionDetails";
+			}
+
+			if (Objects.equals(etype, "weight_log")) {
+				to = "/subhealthAssessMent/ec-canvas/pages/healthManagement/weightStatistics/weightStatistics";
+			}
+
+			if (Objects.equals(etype, "heart_rate")) {
+				to = "/subhealthAssessMent/ec-canvas/pages/healthManagement/heartRateStatistics/heartRateStatistics";
+			}
+
+			selectIntegralStatus.get(i).put("to",to);
+		}
 		System.out.println(selectIntegralStatus+"----------");
 		return Result.ok(selectIntegralStatus);
-		
-		
+
+
 	}
 
 	/**
@@ -227,6 +319,13 @@ public class YhScoreEventCategoryController  {
 	}
 	
 
+	@Resource
+	YhOrgTreeService yhOrgTreeService;
+	@Resource
+	YhUserRoleManageMapper yhUserRoleManageMapper;
+	@Autowired
+	YhScoreEventCategoryWebService scoreEventCategoryWebService;
+
 	/**
 	 * 积分任务完成接口
 	 * 
@@ -239,107 +338,8 @@ public class YhScoreEventCategoryController  {
 	@Transactional
 	public Result integralCompletioStatus(String eventType,String userCode,Integer type) {
 
-		try {
-			// 根据event_type查询积分事件规则表
-			YhScoreEventCategoryApp yhScoreEventCategory = yhScoreEventCategoryService.selectEventType(eventType);
-			if (yhScoreEventCategory == null) {
-				return Result.error("参数错误，event_type不存在");
-				
-			}
-			Map<String, Object> map = new HashMap<String, Object>();
-			map.put("eventType", eventType);
-			map.put("userCode", userCode);
-			//根据积分类型查询是否下架和是否开启连续积分奖励
-			if(yhScoreEventCategory.getPutaway() == 2) {
-				return Result.error("此奖励积分已下架");
-			}
-			String healthStar = yhHealthStarService.selectRecordtypeAndTime(map);
-			
-			String recordtypeAndTime2 = yhHealthStarService.selectRecordtypeAndTime2(map);
-			
-			if(healthStar != null || recordtypeAndTime2 != null) {
-				return Result.error("当前用户已存在该积分记录");
-			}
-
-			if(yhScoreEventCategory.getPutaway() == 1) {
-				// 添加一条积分记录
-				YhHealthStarApp yhHealthStar = new YhHealthStarApp();
-				int insertRecord = 0;
-				//奖励积分
-				int award = 0;
-				//没有开启连续奖励
-				if(yhScoreEventCategory.getContinuousStatus() == 2) {
-					yhHealthStar.setUserCode(userCode);
-					yhHealthStar.setUserType(5);
-					yhHealthStar.setHealthstars(yhScoreEventCategory.getScore());
-					award = yhScoreEventCategory.getScore();
-					yhHealthStar.setHealthstarsEvents(yhScoreEventCategory.getEventName());
-					yhHealthStar.setEventsTime(new Date());
-					insertRecord = yhHealthStarService.insertSelective(yhHealthStar);
-				}
-				//开启连续奖励
-				if(yhScoreEventCategory.getContinuousStatus() == 1) {
-					//查询用户昨天 是否有记录数据
-					YhHealthStarApp healthStarApp = yhHealthStarService.selectNewestStar(userCode, yhScoreEventCategory.getEventName());
-					if(healthStarApp == null) {
-						yhHealthStar.setHealthstars(yhScoreEventCategory.getScore());
-						award = yhScoreEventCategory.getScore();
-
-					}
-					//用户连续记录的天数上限为7天
-					int continuousRecord = yhHealthStarService.selectUserContinuousRecord(userCode, yhScoreEventCategory.getEventName());
-					if(continuousRecord<7) {
-						if(healthStarApp != null) {
-							yhHealthStar.setHealthstars(yhScoreEventCategory.getScore() + continuousRecord);
-							award = yhScoreEventCategory.getScore() + continuousRecord;
-						}
-					}else if(continuousRecord>=7) {
-						yhHealthStar.setHealthstars(yhScoreEventCategory.getScore() + 7);
-						award = yhScoreEventCategory.getScore() + 7;
-					}
-					yhHealthStar.setUserCode(userCode);
-					yhHealthStar.setUserType(5);
-					yhHealthStar.setEventsTime(new Date());
-					yhHealthStar.setHealthstarsEvents(yhScoreEventCategory.getEventName());
-					
-					insertRecord = yhHealthStarService.insertSelective(yhHealthStar);
-				}
-			
-				//查询总积分
-				YhUserStepApp YhUserStep = yhUserStepService.selectAggregate(userCode);
-				YhUserStepApp UserStep = new YhUserStepApp();
-				if (insertRecord > 0) {
-					//没有总积分数据进行添加 反之修改
-					if (YhUserStep == null) {
-						UserStep.setUserCode(userCode);
-						UserStep.setUserType(5);
-						UserStep.setHealthlevelstars(award);
-						UserStep.setHealthstars(award);
-						int insertSelective = yhUserStepService.insertSelective(UserStep);
-						if (insertSelective > 0) {
-							return Result.ok(insertSelective);
-						}
-					}
-
-				}
-				Integer healthstars=YhUserStep.getHealthstars()==null? 0:YhUserStep.getHealthstars();
-				Integer healthlevelstars=YhUserStep.getHealthlevelstars()==null? 0:YhUserStep.getHealthlevelstars();
-				// 修改总积分
-				YhUserStep.setHealthstars( healthstars+ award);
-				YhUserStep.setHealthlevelstars(healthlevelstars + award);
-				int updateAggregateScore = yhUserStepService.updateByPrimaryKey(YhUserStep);
-				if (updateAggregateScore > 0) {
-					return Result.ok(updateAggregateScore);
-				}
-			}
-			
-			
-			
-
-		} catch (Exception e) {
-			LOGGER.error("调用积分任务完成接口异常，原因是：{} ", e.getMessage(), e);
-		}
-		return Result.error();
+		scoreEventCategoryWebService.saveMark(eventType, userCode);
+		return Result.ok();
 	}
 	
 

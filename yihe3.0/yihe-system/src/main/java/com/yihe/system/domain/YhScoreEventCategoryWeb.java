@@ -1,5 +1,6 @@
 package com.yihe.system.domain;
 
+import java.sql.Timestamp;
 import java.util.Date;
 
 public class YhScoreEventCategoryWeb {
@@ -24,6 +25,47 @@ public class YhScoreEventCategoryWeb {
     private String standby;
 
     private String standby2;
+
+    private String orgCode;
+
+    public String getOrgCode() {
+        return orgCode;
+    }
+
+    public void setOrgCode(String orgCode) {
+        this.orgCode = orgCode;
+    }
+    public YhScoreEventCategoryWeb() {
+    }
+
+    public YhScoreEventCategoryWeb(String eventName, Integer score, String eventType, Integer type, Integer continuousStatus, Integer putaway, Date updateDate, String creator, String standby, String standby2, String orgCode) {
+        this.eventName = eventName;
+        this.score = score;
+        this.eventType = eventType;
+        this.type = type;
+        this.continuousStatus = continuousStatus;
+        this.putaway = putaway;
+        this.updateDate = updateDate;
+        this.creator = creator;
+        this.standby = standby;
+        this.standby2 = standby2;
+        this.orgCode = orgCode;
+    }
+    public YhScoreEventCategoryWeb(Integer scoreeventId, String eventName, Integer score, String eventType, Integer type, Integer continuousStatus, Integer putaway, Timestamp updateDate, String creator, String standby, String standby2, String orgCode) {
+        this.scoreeventId = scoreeventId;
+        this.eventName = eventName;
+        this.score = score;
+        this.eventType = eventType;
+        this.type = type;
+        this.continuousStatus = continuousStatus;
+        this.putaway = putaway;
+        this.updateDate = new Date(updateDate.getTime());
+        this.creator = creator;
+        this.standby = standby;
+        this.standby2 = standby2;
+        this.orgCode = orgCode;
+    }
+
 
     public Integer getScoreeventId() {
         return scoreeventId;

@@ -9,6 +9,7 @@ import java.util.Map;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -40,7 +41,7 @@ public class YhUserCommodityDataController {
 
 	@RequestMapping(value = "/compileCommodity")
 	@ResponseBody
-	public Result compileCommodity(YhUserCommodityData yhUserCommodityData) {
+	public Result compileCommodity(@RequestBody YhUserCommodityData yhUserCommodityData) {
 		int row = 0;
 		YhUserReginfo yhUserReginfo = (YhUserReginfo) SecurityUtils.getSubject().getPrincipal();
 		if (yhUserCommodityData.getPutaway() == null) {

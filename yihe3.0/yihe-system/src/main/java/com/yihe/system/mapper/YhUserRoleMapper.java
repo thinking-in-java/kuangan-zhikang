@@ -20,6 +20,8 @@ public interface YhUserRoleMapper {
 
     List<YhUserRole> selectByExample(YhUserRoleExample example);
 
+    String selectRoleName(@Param("userCode")String userCode);
+
     YhUserRole selectByPrimaryKey(Integer roleId);
 
     int updateByExampleSelective(@Param("record") YhUserRole record, @Param("example") YhUserRoleExample example);

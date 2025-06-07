@@ -13,24 +13,150 @@
   <sql id="Base_Column_List" >
     rid, heart_rate, Entry_Time, Is_Del, Env, Data_Source, E_User_Id
   </sql>
+  <select id="queryTheNewMonitoringLogs" resultType="com.yihe.system.vo.AddNewLogDTO">
+    SELECT
+      m.time,
+      CONCAT( '用户**', '上传了', m.`type` ) NAME
+    FROM
+      ( SELECT type, MAX( id ) AS max_time FROM monitor_insert_log GROUP BY type ) AS latest_times
+        JOIN monitor_insert_log m ON m.type = latest_times.type
+        AND m.id = latest_times.max_time
+        INNER JOIN yh_user_reginfo AS yur ON yur.user_code = m.usercode
+    where
+      yur.User_Type = 5
+      and yur.Org_Code like concat(#{orgId}, '%')
+    ORDER BY
+      m.time DESC
+  </select>
+  <select id="checkHeartRateStatisticsByOrg" resultType="map">
+    select
+      ifnull(count(*),0) heart_num,
+      ifnull(ROUND(avg(yuhr.heart_rate),1),0) heart_avg
+    from
+      yh_user_reginfo reg
+        left join
+      yh_user_heart_rate yuhr
+      on
+        reg.user_code = yuhr.E_User_Id
+    where
+      reg.User_Type = 5
+      and reg.Org_Code like concat(#{orgId},'%')
+  </select>
+
+
+  <select id="checkOxygenStatisticsByOrg" resultType="map">
+    select
+      ifnull(count(*),0) oxygen_num,
+      ifnull(ROUND(avg(yuo.oxygen),1),0) oxygen_avg
+    from
+      yh_user_reginfo reg
+        left join
+      yh_user_oxygen   yuo
+      on
+        reg.user_code = yuo.E_User_Id
+    where
+      reg.User_Type = 5
+      and reg.Org_Code like concat(#{orgId},'%') and yuo.oxygen>0
+  </select>
+
+
+  <select id="checkBloodGateStatisticsByOrg" resultType="map">
+    select
+      ifnull(count(*),0) numBloodGate,
+      ifnull(ROUND(avg(yub.Sbp),1),0) sbp_avg,
+      ifnull(ROUND(avg(yub.Dbp),1),0) dbp_avg
+    from
+      yh_user_reginfo reg
+        left join
+      yh_user_bloodpressure yub
+      on
+        reg.user_code = yub.E_User_Id
+    where
+      reg.User_Type = 5
+      and reg.Org_Code like concat(#{orgId},'%')
+  </select>
+
+
+  <select id="checkBloodSugarStatisticsByOrg" resultType="map">
+
+    select
+      ifnull(count(*),0) numBloodSugar,
+      ifnull(ROUND(AVG(yub.Bs),1),0) AS postprandialAverage
+    from
+      yh_user_reginfo reg
+        left join
+      yh_user_bloodsuger yub
+      on
+        reg.user_code = yub.E_User_Id
+    where
+      reg.User_Type = 5
+      and reg.Org_Code like concat(#{orgId}, '%')
+      and yub.Bs>0
+  </select>
+  <select id="checkBodyFatStatisticsByOrg" resultType="map">
+    SELECT
+      IFNULL(COUNT(*), 0) AS num,
+      IFNULL(ROUND(AVG(yubf.bodyAge), 1), 0) AS bodyAge,
+      IFNULL(ROUND(AVG(yubf.fat_rate), 1), 0) AS fat_rate,
+      IFNULL(ROUND(AVG(yubf.muscle), 1), 0) AS muscle,
+      IFNULL(ROUND(AVG(CAST(SUBSTRING_INDEX(SUBSTRING_INDEX(yubfs.json_data, '$.visfat', -1), ',', 1) AS DECIMAL(10,2))), 1), 0) AS visfat,
+      IFNULL(ROUND(AVG(CAST(SUBSTRING_INDEX(SUBSTRING_INDEX(yubfs.json_data, '$.bmi', -1), ',', 1) AS DECIMAL(10,2))), 1), 0) AS bmi
+    FROM
+      yh_user_reginfo reg
+        LEFT JOIN yh_user_body_fat yubf ON reg.user_code = yubf.E_User_Id
+        LEFT JOIN yh_user_body_fat_scale AS yubfs ON yubfs.wubf_id = yubf.wubf_id
+    WHERE
+      reg.User_Type = 5
+      AND reg.Org_Code LIKE CONCAT(#{orgId}, '%')
+
+  </select>
+  <select id="checkSleepStatisticsByOrg" resultType="map">
+
+    select
+      IFNULL(ROUND(SUM(TIMESTAMPDIFF(HOUR, ysud.sleep_time, ysud.wake_time)), 1), 0) sleep_total
+    from
+      yh_user_reginfo reg
+        left join
+      yh_sleep_user_diary ysud
+      on
+        reg.user_code = ysud.user_code
+    where
+      reg.User_Type = 5
+      and reg.Org_Code like concat(#{orgId}, '%')
+
+  </select>
+
+  <select id="checkExerciseStatistics" resultType="string">
+    SELECT
+      ysd.number
+    FROM
+      yh_user_reginfo reg
+        LEFT JOIN yh_sport_diary ysd ON reg.user_code = ysd.user_code
+    WHERE
+      reg.User_Type = 5
+      AND reg.Org_Code LIKE concat( #{orgId}, '%' )
+      AND ysd.number IS NOT NULL
+  </select>
+
+
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
-    select 
+    select
     <include refid="Base_Column_List" />
     from yh_user_heart_rate
     where rid = #{rid,jdbcType=INTEGER}
   </select>
-  
+
   <select id="selectHeartRate" resultType="map" parameterType="java.lang.String">
-  select 
-(select count(*) from yh_user_heart_rate where E_User_Id=#{eUserId,jdbcType=INTEGER} and Is_Del = 2) as num,
-	xy.Data_Source,xy.Entry_Time,xy.heart_rate
-	from yh_user_reginfo as reg 
-	left join yh_user_heart_rate xy
-	on reg.user_code = xy.E_User_Id
-	where xy.rid = (select rid from yh_user_heart_rate where E_User_Id=#{eUserId,jdbcType=INTEGER} and Is_Del = 2 order by Entry_Time desc limit 1);
+    select
+      (select count(*) from yh_user_heart_rate where E_User_Id=#{eUserId,jdbcType=INTEGER} and Is_Del = 2) as num,
+      xy.Data_Source,xy.Entry_Time,xy.heart_rate
+    from yh_user_reginfo as reg
+           left join yh_user_heart_rate xy
+                     on reg.user_code = xy.E_User_Id
+    where xy.rid = (select rid from yh_user_heart_rate where E_User_Id=#{eUserId,jdbcType=INTEGER} and Is_Del = 2 order by Entry_Time desc limit 1);
   </select>
-  
-  
+
+
   <select id="selectByPrimaryKeyByUsercodeLimit" resultMap="BaseResultMap" parameterType="java.lang.String" >
     SELECT   <include refid="Base_Column_List" /> FROM yh_user_heart_rate WHERE E_user_id=#{usercode} and is_Del=2  ORDER BY Entry_Time DESC LIMIT 1
   </select>
@@ -39,12 +165,12 @@
     where rid = #{rid,jdbcType=INTEGER}
   </delete>
   <insert id="insert" parameterType="com.yihe.system.domain.YHUserHeartRate" >
-    insert into yh_user_heart_rate (rid, heart_rate, Entry_Time, 
-      Is_Del, Env, Data_Source, 
-      E_User_Id)
-    values (#{rid,jdbcType=INTEGER}, #{heartRate,jdbcType=INTEGER}, #{entryTime,jdbcType=VARCHAR}, 
-      #{isDel,jdbcType=INTEGER}, #{env,jdbcType=VARCHAR}, #{dataSource,jdbcType=VARCHAR}, 
-      #{eUserId,jdbcType=INTEGER})
+    insert into yh_user_heart_rate (rid, heart_rate, Entry_Time,
+                                    Is_Del, Env, Data_Source,
+                                    E_User_Id)
+    values (#{rid,jdbcType=INTEGER}, #{heartRate,jdbcType=INTEGER}, #{entryTime,jdbcType=VARCHAR},
+            #{isDel,jdbcType=INTEGER}, #{env,jdbcType=VARCHAR}, #{dataSource,jdbcType=VARCHAR},
+            #{eUserId,jdbcType=INTEGER})
   </insert>
   <insert id="insertSelective" parameterType="com.yihe.system.domain.YHUserHeartRate" >
     insert into yh_user_heart_rate
@@ -122,11 +248,11 @@
   <update id="updateByPrimaryKey" parameterType="com.yihe.system.domain.YHUserHeartRate" >
     update yh_user_heart_rate
     set heart_rate = #{heartRate,jdbcType=INTEGER},
-      Entry_Time = #{entryTime,jdbcType=VARCHAR},
-      Is_Del = #{isDel,jdbcType=INTEGER},
-      Env = #{env,jdbcType=VARCHAR},
-      Data_Source = #{dataSource,jdbcType=VARCHAR},
-      E_User_Id = #{eUserId,jdbcType=INTEGER}
+        Entry_Time = #{entryTime,jdbcType=VARCHAR},
+        Is_Del = #{isDel,jdbcType=INTEGER},
+        Env = #{env,jdbcType=VARCHAR},
+        Data_Source = #{dataSource,jdbcType=VARCHAR},
+        E_User_Id = #{eUserId,jdbcType=INTEGER}
     where rid = #{rid,jdbcType=INTEGER}
   </update>
 </mapper>

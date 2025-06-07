@@ -19,5 +19,7 @@ public interface YhScoreEventCategoryWebMapper {
 
     int updateByPrimaryKey(YhScoreEventCategoryWeb record);
     
-    List<YhScoreEventCategoryWeb> selectYhScoreEventCategoryPage(@Param("type") Integer type,@Param("putaway") Integer putaway,@Param("eventName") String eventName);
+    List<YhScoreEventCategoryWeb> selectYhScoreEventCategoryPage(@Param("type") Integer type,@Param("putaway") Integer putaway,@Param("eventName") String eventName,@Param("orgCode") String orgCode);
+
+    YhScoreEventCategoryWeb selectEventType(@Param("eventType")String eventType,@Param("orgCode") String orgCode);
 }

@@ -1,12 +1,19 @@
 package com.yihe.system.service;
 
 import com.github.pagehelper.PageInfo;
+import com.yihe.system.domain.DoctorChatGroupVOJO;
 import com.yihe.system.domain.YHDocGroup;
 
 import java.util.List;
 
 public interface YHDocGroupService {
-
+	/**
+	 * 查询健管师名下所有分组 分组聊天列表
+	 * @param usercode 医生id
+	 * @param gname 搜索分组名
+	 * @return
+	 */
+	PageInfo<DoctorChatGroupVOJO> findGroupInfoByDoctor(String usercode, String gname, int pagenum, int pagesize);
 	List<YHDocGroup> findGroupListByName(String gname);
 	
 	Integer findGroupInfoByDisCode( String code);

@@ -160,7 +160,90 @@
 	 <select id="selectOrgIdbyParam" resultMap="BaseResultMap"  parameterType="java.lang.String">
   	select * from yh_user_make_card a where user_code=#{usercode};
   </select>
-	
+	<select id="selectYhUserMakeCardPageByParamByDocTor" parameterType="map"
+			resultType="map">
+		SELECT
+		TIMESTAMPDIFF(YEAR,b.birth_date, CURDATE()) as `age`,
+		a.Org_Id,
+		a.Enrol_Card_Id,
+		CASE
+		WHEN ( ( a.User_Code IS NULL OR a.User_Code = '' ) AND (a.`key` IS NULL OR a.`key` = '') ) THEN
+		'未用'
+		WHEN ( ( a.User_Code IS NULL OR a.User_Code = '' ) AND (a.`key` IS NOT NULL AND a.`key` != '') ) THEN
+		'待激活'
+		ELSE
+		'已用'
+		END AS 'state',
+		a.User_Code,
+		a.`key`,
+		b.`name`,
+		CASE
+		WHEN b.gender=1 THEN '男'
+		ELSE
+		'女'
+		END as 'sex',
+		b.mobile,
+		IFNULL(c.realname,"") as 'realname',
+		b.lock_flag
+		FROM
+		`yh_user_make_card` as a
+		left join yh_user_reginfo  as b
+		on a.User_Code=b.user_code
+		left join yh_wx_user as c
+		on a.User_Code=c.user_id
+
+
+
+		<where>
+			<if test="value != null and value != ''">
+				and (a.Enrol_Card_Id like concat('%',#{value},'%') or b.`name` like concat('%',#{value},'%') or b.mobile like concat('%',#{value},'%'))
+			</if>
+			and ( 1=1
+
+			<if test="used>=0">
+				and  (a.User_Code is not null and a.User_Code !=''
+				and a.user_code NOT IN(select userId from yh_user_role_power where roleId = 1))
+			</if>
+			<if test="used>=0 and activated>=0">
+				or
+			</if>
+			<if test="used==-1 and activated>=0">
+				and
+			</if>
+			<if test="activated>=0">
+				((a.User_Code is null or a.User_Code='')
+				and a.key !='')
+			</if>
+			<if test="activated>=0 and unused>=0">
+				or
+			</if>
+			<if test="activated==-1 and unused>=0">
+				and
+			</if>
+			<if test="unused>=0">
+				((a.User_Code is null or a.User_Code='')
+				and (a.key is null or a.key =''))
+			</if>
+			)
+			and ( 1=1
+
+			<if test="notExpired>=0">
+				and  (a.End_Time &gt; current_date or a.End_Time is null)
+			</if>
+			<if test="notExpired>=0 and expired>=0">
+				or
+			</if>
+			<if test="notExpired==-1 and expired>=0">
+				and
+			</if>
+			<if test="expired>=0">
+				a.End_Time &lt; current_date
+			</if>
+			)
+		</where>
+		order by  a.User_Code desc
+
+	</select>
   <select id="selectUnspentRegCard" resultMap="BaseResultMap">
   		select card.*
         from yh_user_make_card as card
@@ -423,6 +506,9 @@
 		)
 		AND DATE_FORMAT(sleep_diarytime,'%Y-%m-%d')  &lt;=
 		DATE_FORMAT(#{time},'%Y-%m-%d')
+	</select>
+	<select id="cardIsuse" resultType="int">
+		select count(1) from yh_user_make_card where Enrol_Card_Id=#{card} and User_Code is not null and User_Code != ''
 	</select>
 	<!-- 睡眠日记按月-->
 	<select id="findSleepDiaryByMonthAndDoctor"  resultType="java.lang.Integer">
@@ -853,6 +939,58 @@ ON a.`user_code`=b.`user_code`
 		AND user_code IS NOT
 		NULL
 		)
+	</select>
+
+		<select id="findAssessTotalByWeek" resultType="java.lang.Integer">
+						SELECT COUNT(1)
+				FROM `yh_disease_assess_total_report2`
+				WHERE YEARWEEK(qtime, 1) = YEARWEEK(NOW(), 1)
+				AND user_code IN (
+					SELECT user_code
+					FROM `yh_user_make_card`
+					WHERE doctor = (
+						SELECT id
+						FROM `yh_user_admin_info`
+						WHERE user_code = #{usercode}
+					)
+					AND user_code != ''
+					AND user_code IS NOT NULL
+				);
+	</select>
+
+	<select id="findAssessTotalByMouth" resultType="java.lang.Integer">
+						SELECT COUNT(1)
+				FROM `yh_disease_assess_total_report2`
+				WHERE MONTH(qtime) = MONTH(NOW())
+				AND YEAR(qtime) = YEAR(NOW())
+				AND user_code IN (
+					SELECT user_code
+					FROM `yh_user_make_card`
+					WHERE doctor = (
+						SELECT id
+						FROM `yh_user_admin_info`
+						WHERE user_code = #{usercode}
+					)
+					AND user_code != ''
+					AND user_code IS NOT NULL
+				);
+	</select>
+
+	<select id="findAssessTotalByYear" resultType="java.lang.Integer">
+						SELECT COUNT(1)
+				FROM `yh_disease_assess_total_report2`
+				WHERE YEAR(qtime) = YEAR(NOW())
+				AND user_code IN (
+					SELECT user_code
+					FROM `yh_user_make_card`
+					WHERE doctor = (
+						SELECT id
+						FROM `yh_user_admin_info`
+						WHERE user_code = #{usercode}
+					)
+					AND user_code != ''
+					AND user_code IS NOT NULL
+				);
 	</select>
 
 	<!-- 医生所属用户数据监测今日新增数 -->

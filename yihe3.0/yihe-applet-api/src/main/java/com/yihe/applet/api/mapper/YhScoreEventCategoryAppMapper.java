@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.yihe.applet.api.domain.YhScoreEventCategoryApp;
+import org.apache.ibatis.annotations.Param;
 
 public interface YhScoreEventCategoryAppMapper {
     int deleteByPrimaryKey(Integer scoreeventId);
@@ -18,7 +19,7 @@ public interface YhScoreEventCategoryAppMapper {
 
     int updateByPrimaryKey(YhScoreEventCategoryApp record);
     
-    YhScoreEventCategoryApp selectEventType(String eventType);
+    YhScoreEventCategoryApp selectEventType(@Param("eventType") String eventType,@Param("orgCode")  String orgCode);
 
 	List<Map<String, Object>> selectIntegralStatus(Map<String, Object> map);
 

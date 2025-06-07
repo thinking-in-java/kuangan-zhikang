@@ -300,6 +300,10 @@
                         </button>
                         <button class="layui-btn layui-btn-primary" lay-submit=""
                                 lay-filter="resets" id="qingchu">清除</button>
+
+                        <button class="layui-btn icon-btn" lay-filter="quanxaun" lay-submit>
+                            <i class="layui-icon"></i>全选
+                        </button>
                     </div>
                 </div>
             </div>
@@ -1375,6 +1379,39 @@
             selectdate(sta,1,data.field.type,data.field.intervention,data.field.nickName,data.field.returnvisit);
             // insTb.reload({where: data.field}, 'data');
         });
+
+        form.on('submit(quanxaun)',function (data){
+            var time=timss;
+            document.querySelectorAll("input[type='checkbox']").forEach(checkbox => {
+                checkbox.checked = true;
+            });
+            form.render('checkbox');
+
+
+            $.ajax({
+                type:"POST",
+                url:"/yhmanagetaskcontroller/selectAll",
+                dataType:"json",
+                data:{state:sta,page:1,servicetype:servicecount,healthstate:healthstate,name:name,returnvisit:returnvisite,time:time,groupid:groupid,typeson:typeson,tree:tree,totaltype:2},
+                success:function(res){
+                    console.log("这里是data",res.data);
+                    checked = res.data.map(item => JSON.stringify(item));
+                    console.log(checked);
+                    $("#checkcount").html(checked.length);
+                    // 重新渲染
+                    if(checked.length!=0){
+                        $("#checkcount").html(checked.length);
+                        $("#piliang").css("display","block")
+                    }else{
+                        $("#piliang").css("display","none")
+                    }
+
+                }
+            });
+
+            return false;
+        });
+
         $(document).on('click','.details',function(){
             window.open("../register/userIndex?page=service&userCode="+this.getAttribute('data-code')+"");
         })

@@ -4,6 +4,7 @@ import com.yihe.system.domain.*;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
+import java.util.Map;
 
 public interface YhUserAdminInfoMapper {
 	long countByExample(YhUserAdminInfoExample example);
@@ -64,4 +65,23 @@ public interface YhUserAdminInfoMapper {
 	int selecttyper(Integer roleid);
 
 	Integer changeusermanager(@Param("roleid")Integer roleid, @Param("usercode")String usercode);
+
+	List<YhUserAdminInfo> selectAll(String orgCode);
+
+
+
+	Integer selectAllCount();
+
+	Integer selectAllCountToday();
+
+	Integer selectAllCountMo();
+
+
+
+	Integer selectAllCountNM();
+
+	Integer selectAllCountTodayNM();
+
+	Integer selectAllCountMoNM();
+
 }

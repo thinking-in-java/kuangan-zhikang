@@ -8,7 +8,11 @@ import java.util.Map;
 
 public interface YhUserReginfoMapper {
 
+    List<YhUserReginfo> queryDoctorList();
+
     List<YhUserReginfo> selectAllUserinfoByuserCode(String userCode);
+
+    YhUserReginfo selectDoctorCode(String userCode);
 
     String selectOrgName(String usercode);
 
@@ -70,6 +74,8 @@ public interface YhUserReginfoMapper {
     YhUserReginfo selectMobileAndName(String userName);
 
     YhUserReginfo selectUserPwd(@Param("userCode") String userCode, @Param("userPwd") String userPwd);
+
+    List<YhUserReginfo> selectLastInfo(@Param("usercode") String usercode);
 
     YhUserReginfo selectMobileAndName2(String mobile);
 
@@ -205,4 +211,6 @@ public interface YhUserReginfoMapper {
     YhUserReginfo finddoctorHderer1(String userCode);
 
     YhUserReginfo selectUserCodeByIdCard(String cardidentity);
+
+    YhUserReginfo showmobile2(@Param("mobile") String mobile, @Param("userType") Integer userType);
 }

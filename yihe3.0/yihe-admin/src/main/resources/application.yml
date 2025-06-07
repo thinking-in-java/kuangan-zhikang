@@ -13,7 +13,7 @@ yihe:
   # 获取ip地址开关
   addressEnabled: true
   # 谷宜oa地址
-  oaIPAddress: 1.94.103.50
+  oaIPAddress: 113.88.54.3
 
 # 开发环境配置
 server:
@@ -74,9 +74,9 @@ spring:
   redis:
   # Redis数据库索引（默认为0）
     database: 0
-    host: 127.0.0.1
     port: 6379
     password: guyi2021@0324
+    host: guyi.yhy.ren
     timeout: 1000
     jedis: 
       pool: 

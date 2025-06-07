@@ -14,6 +14,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="doDate"    column="Do_Date"    />
         <result property="isDel"    column="Is_Del"    />
         <result property="evaluateSelect"    column="Evaluate_select"    />
+        <result property="mobile"    column="mobile"    />
+        <result property="times"    column="times"    />
+        <result property="name"    column="name"    />
     </resultMap>
 
     <sql id="selectYhPressureEvaluateVo">
@@ -191,6 +194,25 @@ LEFT  JOIN  `yh_user_reginfo` AS ue
         </trim>
         where Id = #{id}
     </update>
+
+    <select id="selectByUserCodeAndType" resultMap="YhPressureEvaluateResult">
+        SELECT yur.`user_code`,
+               ype.*,
+               yur.`mobile`,
+               yur.`name`,
+               (SELECT COUNT(*)
+                FROM yh_pressure_evaluate
+                WHERE user_code = yur.`user_code`) AS times
+        FROM yh_user_reginfo yur
+                 LEFT JOIN yh_pressure_evaluate ype
+                           ON ype.User_Code = yur.user_code
+        WHERE ype.Evaluate_Type = 3
+          AND ype.User_Code = #{userCode}
+        ORDER BY ype.`Evaluate_Date` DESC
+            LIMIT 1;
+
+    </select>
+
 
     <delete id="deleteYhPressureEvaluateById" parameterType="Long">
         delete from yh_pressure_evaluate where Id = #{id}

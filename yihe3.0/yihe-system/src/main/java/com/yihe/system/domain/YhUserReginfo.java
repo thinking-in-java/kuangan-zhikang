@@ -275,6 +275,23 @@ public class YhUserReginfo implements Serializable {
      * @mbg.generated
      */
     private String allergyName;
+
+    /**
+     * 昵称
+     */
+    private String nickname;
+    /**
+     * 身高
+     */
+    private Float height;
+    /**
+     * 体重
+     */
+    private Float weight;
+    /**
+     * 角色
+     */
+    private YhUserRole yhuserrole;
     private String ber;
     private Integer roleId;
     private Integer page;
@@ -312,6 +329,43 @@ public class YhUserReginfo implements Serializable {
     private String strIs;
     private String tendencyIs;
 
+    /**
+     * 修改密码时间
+     */
+    private Date changePwdLastTime;
+
+
+    public String getNickname() {
+        return nickname;
+    }
+
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
+    }
+
+    public Float getHeight() {
+        return height;
+    }
+
+    public void setHeight(Float height) {
+        this.height = height;
+    }
+
+    public Float getWeight() {
+        return weight;
+    }
+
+    public void setWeight(Float weight) {
+        this.weight = weight;
+    }
+
+    public Date getChangePwdLastTime() {
+        return changePwdLastTime;
+    }
+
+    public void setChangePwdLastTime(Date changePwdLastTime) {
+        this.changePwdLastTime = changePwdLastTime;
+    }
 
     public String getStrIs() {
         return strIs;
@@ -545,10 +599,7 @@ public class YhUserReginfo implements Serializable {
     public void setBer(String ber) {
         this.ber = ber;
     }
-    /**
-     * 角色
-     */
-    private YhUserRole yhuserrole;
+
 
     private List<YhUserRole> yhuserroles;
 

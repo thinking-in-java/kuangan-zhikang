@@ -1,6 +1,7 @@
 package com.yihe.system.domain;
 
 import java.util.Date;
+import java.util.List;
 
 public class YhUserCommodityData {
     private Integer merchandiseId;
@@ -42,8 +43,26 @@ public class YhUserCommodityData {
     private String orgCode;
 
     private String imageText;
-    
-    
+
+    private List<String> orgCodes;
+
+    private List<Integer> integrals;
+
+    public List<String> getOrgCodes() {
+        return orgCodes;
+    }
+
+    public void setOrgCodes(List<String> orgCodes) {
+        this.orgCodes = orgCodes;
+    }
+
+    public List<Integer> getIntegrals() {
+        return integrals;
+    }
+
+    public void setIntegrals(List<Integer> integrals) {
+        this.integrals = integrals;
+    }
 
     public Integer getMerchandiseId() {
         return merchandiseId;

@@ -84,7 +84,12 @@ public class YhPressureEvaluateServiceImpl implements IYhPressureEvaluateService
         return yhPressureEvaluateMapper.deleteYhPressureEvaluateByIds(Convert.toStrArray(ids));
     }
 
-    /**
+	@Override
+	public YhPressureEvaluate selectByUserCodeAndType(String userCode) {
+		return yhPressureEvaluateMapper.selectByUserCodeAndType(userCode);
+	}
+
+	/**
      * 删除压力管理三大评估问卷数据信息
      * 
      * @param id 压力管理三大评估问卷数据ID

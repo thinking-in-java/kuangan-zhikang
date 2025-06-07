@@ -28,6 +28,6 @@ public interface YhWxUserAppMapper {
     
     YhWxUser selectHeadImgbyParam(String userId);
     
-    List<YhUserReginfoApp> selectRandomheandImg(@Param("num") int num);
+    List<String> selectRandomheandImg(@Param("type") String type);
     
 }

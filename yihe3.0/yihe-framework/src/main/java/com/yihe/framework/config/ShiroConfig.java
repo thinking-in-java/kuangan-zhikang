@@ -284,6 +284,19 @@ public class ShiroConfig
         filterChainDefinitionMap.put("/bloodsugerInterface_no", "anon,captchaValidate");
         filterChainDefinitionMap.put("/manage/YhJasperController/test", "anon,captchaValidate");
         filterChainDefinitionMap.put("/manage/assessmentReport/info2", "anon,captchaValidate");
+
+        filterChainDefinitionMap.put("/manage/newpage/**", "anon,captchaValidate");
+
+        filterChainDefinitionMap.put("/NewEmployeePersonalInformationCardController/**", "anon,captchaValidate");
+        filterChainDefinitionMap.put("/NewAnnualOccupationalHealthPromotionTrainingListController/**", "anon,captchaValidate");
+        filterChainDefinitionMap.put("/NewMedicalExaminationRecordsController/**", "anon,captchaValidate");
+        filterChainDefinitionMap.put("/NewMonitoringOccupationalHazardFactorsController/**", "anon,captchaValidate");
+        filterChainDefinitionMap.put("/NewOccupationalHealthManagementArchivesController/**", "anon,captchaValidate");
+        filterChainDefinitionMap.put("/NewOccupationalHealthPromotionTrainingArchiveController/**", "anon,captchaValidate");
+        filterChainDefinitionMap.put("/newRegController/**", "anon,captchaValidate");
+        filterChainDefinitionMap.put("/NewThreeSimultaneousController/**", "anon,captchaValidate");
+        filterChainDefinitionMap.put("/unitOccupationalHealthSurveillanceManagementArchivesFormController/**", "anon,captchaValidate");
+
         filterChainDefinitionMap.put("/TOnemachineData/**", "anon,captchaValidate");
         filterChainDefinitionMap.put("/SmartWatchJiAi/health", "anon,captchaValidate");
         filterChainDefinitionMap.put("/SmartWatchJiAi/warning", "anon,captchaValidate");

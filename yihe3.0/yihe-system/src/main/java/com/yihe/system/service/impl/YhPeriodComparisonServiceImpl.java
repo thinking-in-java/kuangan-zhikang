@@ -26,7 +26,7 @@ public class YhPeriodComparisonServiceImpl implements YhPeriodComparisonService 
         if(model.getSex()==0){
             model.setSex(null);
         }
-        int ismin=Integer.MAX_VALUE;
+        Long ismin= Long.valueOf(Integer.MAX_VALUE);
         String[] arr1=model.getSelect1().split(",");
         List<YhDiseaseAssessTotalReport3web> check = new ArrayList<YhDiseaseAssessTotalReport3web>();
         List<YhDiseaseAssessTotalReport3web> addcheck = new ArrayList<YhDiseaseAssessTotalReport3web>();
@@ -39,8 +39,8 @@ public class YhPeriodComparisonServiceImpl implements YhPeriodComparisonService 
         Integer[] yhArr = {0,0,0,0,0,0,0,0,0,0};
         if(model.getSelect1()!=null) {
             for (int i = 0; i < arr1.length; i++) {
-                if(ismin>Integer.valueOf(arr1[i])) {
-                    ismin=Integer.valueOf(arr1[i]);
+                if(ismin>Long.valueOf(arr1[i])) {
+                    ismin= Long.valueOf(arr1[i]);
                 }
             }
             if((ismin+"").equals(model.getNoworgcode())) {

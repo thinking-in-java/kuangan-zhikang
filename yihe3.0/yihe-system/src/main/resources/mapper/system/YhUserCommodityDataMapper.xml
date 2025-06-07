@@ -117,7 +117,7 @@
       #{updateDate,jdbcType=TIMESTAMP}, #{orgCode,jdbcType=VARCHAR}, #{imageText,jdbcType=LONGVARCHAR}
       )
   </insert>
-  <insert id="insertSelective" parameterType="com.yihe.system.domain.YhUserCommodityData" >
+  <insert id="insertSelective" parameterType="com.yihe.system.domain.YhUserCommodityData"  useGeneratedKeys="true" keyProperty="merchandiseId">
     insert into yh_user_commodity_data
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="merchandiseId != null" >

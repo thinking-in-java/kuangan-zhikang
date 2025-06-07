@@ -1,6 +1,5 @@
 package com.yihe.web.controller.system;
 
-import com.alibaba.fastjson.JSON;
 import com.github.pagehelper.PageInfo;
 import com.yihe.system.domain.YhHealthStarweb;
 import com.yihe.system.domain.YhUserReginfo;
@@ -47,12 +46,12 @@ public class YhHealthStarwebController {
 	YhLifeHabitImprovementDictMapper yhLifeHabitImprovementDictMapper;
 	@ResponseBody
     @RequestMapping(value="/YhHealthStarPage",method=RequestMethod.GET)
-	public Map<String,Object> queryUserYhHealthStar(String orgCode,String name,String priceMin,String priceMax,int page,int limit){
+	public Map<String,Object> queryUserYhHealthStar(String orgCode,String name,String priceMin,String priceMax,int page,int limit,String times){
 		YhUserReginfo userReginfo = (YhUserReginfo)SecurityUtils.getSubject().getPrincipal();
 		if(StringUtil.isEmpty(orgCode)){
 			orgCode=userReginfo.getOrgCode();
 		}
-		PageInfo<YhHealthStarweb> data  = YhHealthStarwebService.queryUserByCriteriaWithPage2(userReginfo.getUserType(),userReginfo.getUserCode(),orgCode, name, priceMin, priceMax, page, limit);
+		PageInfo<YhHealthStarweb> data  = YhHealthStarwebService.queryUserByCriteriaWithPage2(userReginfo.getUserType(),userReginfo.getUserCode(),orgCode, name, priceMin, priceMax, page, limit,times);
 
 	       Map<String,Object> result = new HashMap<String, Object>();
 	       result.put("data",data.getList());
@@ -66,7 +65,7 @@ public class YhHealthStarwebController {
 	
 	@RequestMapping(value = "/exportIntegralData", method = RequestMethod.GET)
 	@ResponseBody
-	public void exportXls(HttpServletResponse response)
+	public void exportXls(HttpServletResponse response,String orgCode,String name,String priceMin,String priceMax,String times)
 			throws Exception {
 		
 		HSSFWorkbook workbook = new HSSFWorkbook();
@@ -123,11 +122,17 @@ public class YhHealthStarwebController {
 		
 		YhUserReginfo userReginfo = (YhUserReginfo)SecurityUtils.getSubject().getPrincipal();
 		// 在表中存放查询到的数据放入对应的列
-		 List<YhHealthStarweb> selectUserAllIntegral = YhHealthStarwebMapper.selectUserAllIntegral(userReginfo.getOrgCode(), null, null, null);
-		
+		 //List<YhHealthStarweb> selectUserAllIntegral = YhHealthStarwebMapper.selectUserAllIntegral(userReginfo.getOrgCode(), null, null, null);
+		List<YhHealthStarweb> selectUserAllIntegral =null;
 		String time =  new SimpleDateFormat("yyyyMMddHHmmss").format(new Date().getTime());
 		String fileName = "用户积分-" + time + ".xls";// 设置要导出的文件的名字
-		
+		if(StringUtil.isEmpty(orgCode)){
+			orgCode=userReginfo.getOrgCode();
+		}
+		int page=1;
+		int limit=Integer.MAX_VALUE;
+		PageInfo<YhHealthStarweb> data  = YhHealthStarwebService.queryUserByCriteriaWithPage2(userReginfo.getUserType(),userReginfo.getUserCode(),orgCode, name, priceMin, priceMax, page, limit,times);
+		selectUserAllIntegral=data.getList();
 		// 在表中存放查询到的数据放入对应的列
 		for (int i = 0; i < selectUserAllIntegral.size(); i++) {
 		    	   //积分支出
@@ -135,7 +140,7 @@ public class YhHealthStarwebController {
 			     //积分收入 
 			       Integer income = 0;
 		    	   String userCode = selectUserAllIntegral.get(i).getUserCode();
-		    	   List<YhHealthStarweb> userRecord = YhHealthStarwebService.selectAllUserRecord(userCode);
+		    	   List<YhHealthStarweb> userRecord = YhHealthStarwebService.selectAllUserRecord(userCode,times);
 		    	   for (int j = 0; j < userRecord.size(); j++) {
 		    		   Integer userType = userRecord.get(j).getUserType();
 		    		   if(userType == 4) {

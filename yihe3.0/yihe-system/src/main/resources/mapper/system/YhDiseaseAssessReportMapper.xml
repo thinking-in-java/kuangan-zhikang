@@ -278,6 +278,13 @@
 	FROM `yh_disease_risk_optimal` WHERE diseaseId=#{did}    and sex IN (#{sex},0) 
 	
 	</select>
+
+	<select id="findCSDiseaseRiskOptimal"  resultMap="BaseResultMapOptimal">
+		SELECT
+		<include refid="Base_Column_Listoptimal"/>
+		FROM `yh_disease_risk_optimal` WHERE diseaseId=#{did} AND isRadar=#{isRadar} and sex IN (#{sex},0)
+		order by sno
+	</select>
 	
 	<!--  -->
 	<select id="findYhDiseaseRiskOptimalByStr" resultType="java.lang.String">

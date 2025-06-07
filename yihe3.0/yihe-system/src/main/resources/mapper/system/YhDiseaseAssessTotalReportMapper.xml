@@ -1101,6 +1101,35 @@ ON a.diseasId=b.disease_code
 		</if>
 		 order by a.qtime desc
 	</select>
+
+	<select id="findPGByUserCode" resultType="com.yihe.system.domain.YhDiseaseAssessReportVOJO">
+		SELECT
+			b.`user_code` AS usercode,
+			b.`name`,
+			b.`user_name` AS username,
+			CASE
+				WHEN b.gender = 1 THEN '男'
+				ELSE '女'
+				END AS sex,
+			a.qtime AS newestAssessTime,
+			a.df_names AS bfnames,
+			a.sk_names AS sknames,
+			(SELECT COUNT(*) FROM yh_disease_assess_total_report2 WHERE user_code = a.`user_code`) AS times
+		FROM
+			yh_disease_assess_total_report2 AS a
+				INNER JOIN
+			`yh_user_reginfo` AS b ON a.`user_code` = b.`user_code`
+				INNER JOIN
+			`yh_user_make_card` AS c ON c.user_code = a.`user_code`
+		WHERE
+			c.user_code = #{userCode}
+		ORDER BY
+			a.qtime DESC;
+
+	</select>
+
+
+
 	<select id="selectByPrimaryKeyByusercodeCount"  
 		resultType="int">
 		SELECT count(1) FROM `yh_disease_assess_total_report`

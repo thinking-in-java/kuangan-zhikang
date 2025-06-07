@@ -40,7 +40,89 @@
     from yh_doc_group
     where U_Docgroup_Id = #{uDocgroupId,jdbcType=INTEGER}
   </select>
-  
+  <select id="findAllUserGroupInfo" resultType="com.yihe.system.domain.DoctorChatGroupVOJO">
+    SELECT
+    concat(#{usercode},'all') AS uuid,
+    '全部用户' AS `name`,
+    count(User_Code) AS groupMembers,
+    IFNULL(
+    (
+    SELECT
+    addTimeInfo
+    FROM
+
+    yh_user_chat_record
+    WHERE
+    mtype = 2
+    AND to_user_code = concat(#{usercode},'all')
+    ORDER BY
+    addTimeInfo DESC
+    LIMIT 1
+    ),
+    ""
+    ) AS newest
+    FROM
+    `yh_user_make_card`
+    WHERE
+    doctor = (
+    SELECT
+    id
+    FROM
+    yh_user_admin_info
+    WHERE
+    user_code = #{usercode}
+    )
+  </select>
+
+  <select id="findGroupInfoByDoctor" resultType="com.yihe.system.domain.DoctorChatGroupVOJO">
+    SELECT
+    U_Docgroup_Id AS uuid,
+    Gname AS `name`,
+    (
+    SELECT
+    count(E_User_id)
+    FROM
+    yh_user_enrolinfo
+    WHERE
+    Flag_Dgroup LIKE concat('%', U_Docgroup_Id, '_g%')
+    ) AS `groupMembers`,
+    IFNULL(
+    (
+    SELECT
+    addTimeInfo
+    FROM
+    yh_user_chat_record
+    WHERE
+    mtype = 2
+    AND to_user_code = U_Docgroup_Id
+    ORDER BY
+    addTimeInfo DESC
+    LIMIT 1
+    ),
+    ""
+    ) AS newest
+    FROM
+    yh_doc_group
+    <where>
+      Docid = (
+      SELECT
+      id
+      FROM
+      yh_user_admin_info
+      WHERE
+      user_code = #{usercode}
+      )
+      <if test="gname != '' and gname != null">
+        AND Gname LIKE concat('%', #{gname}, '%')
+      </if>
+    </where>
+
+    GROUP BY
+    U_Docgroup_Id
+    ORDER BY
+    newest,
+    `groupMembers` DESC
+  </select>
   <select id="selectAllInfo" resultMap="BaseResultMap" parameterType="java.lang.String" >
     select 
     <include refid="Base_Column_List" />

@@ -13,9 +13,9 @@
         <link rel="stylesheet" th:href="@{/assets/slider/style.css}">
         <script type="text/javascript" th:src="@{/assets/slider/style.js}"></script>
         <script>
-            if (window != top) {
-                top.location.replace(location.href);
-            }
+            // if (window != top) {
+            //     top.location.replace(location.href);
+            // }
         </script>
         <style type="text/css">
 
@@ -51,9 +51,9 @@
     <body>
         <input id="prompt" type="hidden" th:value="${prompt}">
         <div class="login-wrapper">
-            <div class="login-header">
-                <img th:src="${leftimg}"/>
-            </div>
+<!--            <div class="login-header">-->
+<!--                <img th:src="${leftimg}"/>-->
+<!--            </div>-->
             <div class="login-body">
                 <div class="layui-card">
                     <div class="layui-card-header">

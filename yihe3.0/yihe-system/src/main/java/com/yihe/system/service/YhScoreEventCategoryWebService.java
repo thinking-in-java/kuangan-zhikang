@@ -6,6 +6,8 @@ import com.yihe.system.domain.YhScoreEventCategoryWeb;
 
 
 public interface YhScoreEventCategoryWebService {
-	 public PageInfo<YhScoreEventCategoryWeb> queryUserByCriteriaWithPage(Integer type,Integer putaway,String eventName,int page,int limit);
+	 public PageInfo<YhScoreEventCategoryWeb> queryUserByCriteriaWithPage(Integer type,Integer putaway,String eventName,int page,int limit,String orgCode);
 	 int updateByPrimaryKeySelective(YhScoreEventCategoryWeb record);
+	Integer saveMark(String eventType,String userCode);
+
 }

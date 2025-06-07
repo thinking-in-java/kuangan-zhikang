@@ -347,6 +347,19 @@ public class YhPressureEvaluateController  extends BaseController
 		return toAjax(yhPressureEvaluateService.updateYhPressureEvaluate(yhPressureEvaluate));
 	}
 
+	@RequestMapping(value = "/findPGByUserCode", method = RequestMethod.GET)
+	@ResponseBody
+	public Result findPGByUserCode(@RequestParam(required = false) String userCode) {
+		Map<String, Object> rsMap = new HashMap<String, Object>();
+		rsMap.put("msg", "ok");
+		YhPressureEvaluate selectByPrimaryKey = yhPressureEvaluateService.selectByUserCodeAndType(userCode);
+
+		rsMap.put("data", selectByPrimaryKey);
+
+		return Result.ok(rsMap);
+
+	}
+
 	/**
 	 * 删除压力管理三大评估问卷数据
 	 */

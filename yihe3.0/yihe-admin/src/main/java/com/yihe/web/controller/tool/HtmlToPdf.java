@@ -12,7 +12,7 @@ public class HtmlToPdf {
     //private static final String toPdfTool = "E:\\wk\\wkhtmltopdf\\bin\\wkhtmltopdf.exe";
     //private static String toPdfTool = "D:\\Program Files\\wkhtmltopdf\\bin\\wkhtmltopdf.exe";
 	//wkhtmltopdf在linux系统中的路径
-    private static String toPdfTool ="//usr//bin//wkhtmltopdf";
+    private static String toPdfTool ="wkhtmltopdf";
 
     /**
      * html转pdf
@@ -32,12 +32,15 @@ public class HtmlToPdf {
         StringBuilder cmd = new StringBuilder();
         if(System.getProperty("os.name").indexOf("Windows") == -1){
         //非windows 系统
-            toPdfTool ="wkhtmltopdf";
+
+        }else{
+            toPdfTool ="D:\\tool\\html\\wkhtmltopdf\\bin\\wkhtmltopdf";
         }
 
         cmd.append(toPdfTool);
         cmd.append(" ");
-        cmd.append("--page-size A4") ;
+        cmd.append("--page-size A4 ") ;
+        cmd.append(" --javascript-delay 2000") ;
         cmd.append("");//页眉下面的线
         cmd.append(" ");//页眉中间内容
         //cmd.append("  --margin-top 30mm ");//设置页面上边距 (default 10mm)
@@ -48,6 +51,7 @@ public class HtmlToPdf {
 
         boolean result = true;
         try{
+            System.out.println(cmd.toString());
             Process proc = Runtime.getRuntime().exec(cmd.toString());
             HtmlToPdfInterceptor error = new HtmlToPdfInterceptor(proc.getErrorStream());
             HtmlToPdfInterceptor output = new HtmlToPdfInterceptor(proc.getInputStream());

@@ -23,6 +23,27 @@
 	      #{item.env,jdbcType=VARCHAR}, #{item.dataSource,jdbcType=VARCHAR})
            </foreach>
      </insert>
+
+  <select id="getBmiPercentages" resultType="map">
+    SELECT
+      SUM(CASE WHEN BMI &lt; 18.5 THEN 1 ELSE 0 END) AS Underweight_Percentage,
+      SUM(CASE WHEN BMI &gt;= 18.5 AND BMI &lt; 24 THEN 1 ELSE 0 END) AS Normal_Percentage,
+      SUM(CASE WHEN BMI &gt;= 24 AND BMI &lt; 28 THEN 1 ELSE 0 END) AS Overweight_Percentage,
+      SUM(CASE WHEN BMI &gt;= 28 THEN 1 ELSE 0 END) AS Obesity_Percentage
+    FROM (
+           SELECT
+             E_User_Id,
+             U_Weight / ((U_Height / 100) * (U_Height / 100)) AS BMI
+           FROM
+             yh_user_bmi a
+           WHERE
+               Entry_Time = (
+               SELECT MAX(Entry_Time)
+               FROM yh_user_bmi b
+               WHERE a.E_User_Id = b.E_User_Id
+             )
+         ) AS LatestBMI;
+  </select>
   
    <!-- 体重检测总数 -->
    <select id="selectByBmiCount" resultType="int" >

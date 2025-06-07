@@ -2,6 +2,7 @@ package com.yihe.applet.api.mapper;
 
 import java.util.List;
 
+import com.yihe.applet.api.domain.DoctorXcxHomePageChat;
 import org.apache.ibatis.annotations.Param;
 
 import com.yihe.applet.api.domain.YhUserChatRecord;
@@ -9,7 +10,7 @@ import com.yihe.applet.api.domain.YhUserChatRecord;
 public interface YhUserChatRecordMapper {
 	String findDoctorIdByUserCode(String usercode);
 	
-	List<YhUserChatRecord> findInfoList(List<String> id);
+	List<YhUserChatRecord> findInfoList(@Param("list") List<String> id,@Param("pagenum")int pagenum,@Param("pagesize")int pagesize);
 	
     int deleteByPrimaryKey(Integer id);
 
@@ -26,4 +27,9 @@ public interface YhUserChatRecordMapper {
     int updateByPrimaryKey(YhUserChatRecord record);
     
     String findUserGroupByInfo(String usercode);
+
+    List<DoctorXcxHomePageChat> latestChat(@Param("doctor")String doctor,@Param("limit") int limit);
+
+    int doctorUnreadNum(String doctor);
+
 }

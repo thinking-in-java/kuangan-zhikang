@@ -18,13 +18,14 @@
     from integral_shopping_grouping
     where grouping_id = #{groupingId,jdbcType=INTEGER}
   </select>
-      <select id="selectGroupingName" resultMap="BaseResultMap">
+   <select id="selectGroupingName" resultMap="BaseResultMap">
     select * from integral_shopping_grouping
    	where name = #{name,jdbcType=VARCHAR}
   </select>
     
    <select id="selectAllGrouping" resultMap="BaseResultMap">
-    select * from integral_shopping_grouping where org_code like concat('%',#{orgCode},'%') order by add_time desc
+    select * from integral_shopping_grouping where org_code =#{orgCode}
+      order by add_time desc
   </select>
   
    <select id="selectGrouping" resultMap="BaseResultMap">

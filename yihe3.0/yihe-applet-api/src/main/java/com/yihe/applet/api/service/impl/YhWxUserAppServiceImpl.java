@@ -62,9 +62,9 @@ public class YhWxUserAppServiceImpl implements YhWxUserAppService {
 	}
 
 	@Override
-	public List<YhUserReginfoApp> selectRandomheandImg(int num) {
+	public List<String> selectRandomheandImg(String type) {
 		// TODO Auto-generated method stub
-		return YhWxUserAppMapper.selectRandomheandImg(num);
+		return YhWxUserAppMapper.selectRandomheandImg(type);
 	}
 
 	@Override

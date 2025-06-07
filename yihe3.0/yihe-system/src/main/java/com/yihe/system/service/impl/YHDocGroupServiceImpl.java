@@ -2,12 +2,16 @@ package com.yihe.system.service.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.yihe.system.domain.DoctorChatGroupVOJO;
 import com.yihe.system.domain.YHDocGroup;
 import com.yihe.system.mapper.YHDocGroupMapper;
 import com.yihe.system.service.YHDocGroupService;
+import com.yihe.system.utils.Data;
+import com.yihe.system.utils.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 @Service
 public class YHDocGroupServiceImpl implements YHDocGroupService {
@@ -102,6 +106,32 @@ public class YHDocGroupServiceImpl implements YHDocGroupService {
 	public List<YHDocGroup> selectAllInfo(String userCode) {
 		// TODO Auto-generated method stub
 		return YHDocGroupMapper.selectAllInfo(userCode);
+	}
+
+	@Override
+	public PageInfo<DoctorChatGroupVOJO> findGroupInfoByDoctor(String usercode, String gname, int pagenum, int pagesize) {
+		PageHelper.startPage(pagenum,pagesize);
+		List<DoctorChatGroupVOJO> list = YHDocGroupMapper.findGroupInfoByDoctor(usercode, gname);
+		if(null!=list){
+			for (int i = 0; i < list.size(); i++) {
+				if(StringUtil.isNotEmpty(list.get(i).getNewest())){
+					list.get(i).setNewest(Data.CalculateTime(list.get(i).getNewest()));
+
+				}
+
+			}
+		}else{
+			list=new ArrayList<>();
+		}
+		if(pagenum==1){
+			DoctorChatGroupVOJO allUserGroupInfo = YHDocGroupMapper.findAllUserGroupInfo(usercode);
+			if(StringUtil.isNotEmpty(allUserGroupInfo.getNewest())) {
+				allUserGroupInfo.setNewest(Data.CalculateTime(allUserGroupInfo.getNewest()));
+
+			}
+			list.add(0,allUserGroupInfo);
+		}
+		return new PageInfo<DoctorChatGroupVOJO>(list);
 	}
 
 	@Override

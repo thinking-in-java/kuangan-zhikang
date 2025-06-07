@@ -439,7 +439,111 @@ public class YhUserFileController {
 //        result.setAppenddata(picurl);
         return map;
     }
-    
+
+
+	@RequestMapping(value = "/upload1", method = RequestMethod.POST)
+	@ResponseBody
+	public Map<String,Object> upload1(@RequestParam("file") MultipartFile files,HttpServletRequest request,YhUserFile yhUserFile) throws IOException {
+		Map<String, Object> map=new HashMap<String, Object>();
+		YhSysConfig conf=yhSysConfigService.showConfig();
+		String picurl="";
+		//获取文件类型
+		String type = null;
+		String newFileName=files.getOriginalFilename();
+		type = newFileName.indexOf(".") != -1 ? newFileName.substring(newFileName.lastIndexOf("."), newFileName.length()) : null;
+		if(conf==null) {//等于0调用本地上传图片
+			String dicName="UpFile";//服务器上传文件夹名称
+			newFileName=newFileName.substring(0,newFileName.lastIndexOf("."));
+			picurl = saveFile(files,newFileName,dicName, request);
+			yhUserFile.setFileUrl(picurl);
+			map.put("files", picurl);
+		}else {
+			//先把String对象转换成json对象
+			JSONObject object=JSONObject.fromObject(conf.getValue());
+
+			//MultipartFile转换File完整版
+			InputStream ins = files.getInputStream();
+
+			//构造一个带指定Zone对象的配置类
+			Configuration cfg = new Configuration(Zone.autoZone());
+			//...其他参数参考类注释
+			UploadManager uploadManager = new UploadManager(cfg);
+			//...生成上传凭证，然后准备上传
+			String accessKey = (String) object.get("qiniuAccessKey");
+			String secretKey = (String) object.get("qiniuSecretKey");
+			String bucket = (String) object.get("qiniuBucketName");
+//		//默认不指定key的情况下，以文件内容的hash值作为文件名
+			String key = UUID.randomUUID().toString().replaceAll("\\-", "")+ type;
+			try {
+				Auth auth = Auth.create(accessKey, secretKey);
+				String upToken = auth.uploadToken(bucket);
+				try {
+					Response response = uploadManager.put(ins,key,upToken,null, null);
+					//解析上传成功的结果
+					DefaultPutRet putRet = new Gson().fromJson(response.bodyString(), DefaultPutRet.class);
+
+					SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//设置日期格式
+					if(files.getSize()==0){
+						//news.setImg("");
+					}else{
+						String img=(String) object.get("qiniuDomain")+"/"+putRet.key;
+						map.put("files", img);
+						yhUserFile.setFileUrl(img);
+						System.out.println((String) object.get("qiniuDomain")+"/"+putRet.key);
+					}
+
+				} catch (QiniuException ex) {
+					Response r = ex.response;
+					System.err.println(r.toString());
+				}
+				//sysuser=1;
+			} catch (Exception ex) {
+				//sysuser=0;
+				//ignore
+				map.put("files", "");
+			}
+
+		}
+		//创建文件名
+		String fileName = files.getOriginalFilename();
+		type = fileName.indexOf(".") != -1 ? fileName.substring(fileName.lastIndexOf(".") + 1, fileName.length()) : null;
+		String fileSizeString = "";
+
+		DecimalFormat df = new DecimalFormat("#.00");
+		//获取文件大小
+		long size = files.getSize();
+		LOGGER.info("获取文件大小"+size);
+		if (size != 0) {
+			if (size < 1024) {
+				fileSizeString = df.format((double) size) + "B";
+			} else if (size < 1048576) {
+				fileSizeString = df.format((double) size / 1024) + "KB";
+			} else if (size < 1073741824) {
+				fileSizeString = df.format((double) size / 1048576) + "MB";
+			} else {
+				fileSizeString = df.format((double) size / 1073741824) + "GB";
+			}
+		}
+		System.out.println("文件大小"+fileSizeString);
+		//保存数据到数据库
+		yhUserFile.setFileCreateDate(new Date());
+		if("jpg".equals(type) || "png".equals(type) || "JPG".equals(type)) {
+			yhUserFile.setFileType(2);
+		}else if("mp4".equals(type) || "mp3".equals(type)){
+			yhUserFile.setFileType(3);
+		}else {
+			yhUserFile.setFileType(1);
+		}
+		yhUserFile.setFileName(fileName);
+		yhUserFile.setFileSize(fileSizeString);
+		map.put("name",fileName);
+		map.put("msg","ok");
+		map.put("code",0);
+//        result.setResulttype(OperationResultTypeEnum.SUCCESS);
+//        result.setMsg("上传成功");
+//        result.setAppenddata(picurl);
+		return map;
+	}
     
     public static String saveFile(MultipartFile filedata,String newFileName,String dicName, HttpServletRequest request) {
         // TODO Auto-generated method stub

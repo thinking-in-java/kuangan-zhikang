@@ -19,6 +19,12 @@
     step_ID, user_code, user_type, healthstars, healthlevelstars, gold_coins, silver_star, 
     gold_star, gold_crown, step_time, Long_time, Stay_time
   </sql>
+
+  <select id="selectAggregate" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select *
+    from yh_user_step
+    where user_code = #{userCode,jdbcType=VARCHAR}
+  </select>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
     select 
     <include refid="Base_Column_List" />

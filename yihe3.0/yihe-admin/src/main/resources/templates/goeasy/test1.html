@@ -1,119 +1,127 @@
 <!DOCTYPE html>
 <html lang="zh" xmlns:th="http://www.thymeleaf.org">
 <head>
-<meta charset="utf-8">
-<meta name="viewport"
-	content="width=device-width, initial-scale=1, maximum-scale=1">
+	<meta charset="utf-8">
+	<meta name="viewport"
+		  content="width=device-width, initial-scale=1, maximum-scale=1">
 	<link th:href="${topimg}"  rel="icon">
-<title>谷宜健康咨询平台</title>
-<style>
-html {
-	background-color: #333;
-}
-body .layui-layim-chat{
-	z-index: 19891017;
-}
-body .layui-layim{
-	z-index:9999;
-}
-.layim-tool-video input{
-	position: absolute;
-	font-size: 0;
-	left: 0;
-	top: 0;
-	width: 100%;
-	height: 100%;
-	opacity: .01;
-	filter: Alpha(opacity=1);
-	cursor: pointer;
-}
-.layui-layim-photos{
-	width: 100px;
-	height: 100%;
-}
-.layim-chat-Read{
-	margin-top: 25px;
-	padding: 8px 15px;
-	background-color: #e2e2e2;
-	color: red;
-	font-size: 14px;
-	position: relative;
-	display: inline-block;
-}
-</style>
-<link rel="stylesheet" th:href="@{/assets/js/layui/css/layui.css}" />
-<script type="text/javascript" th:src="@{/assets/js/layui/layui.js}"></script>
-<script type="text/javascript"
-	th:src="@{/assets/js/GoEasyDemo-IM-Chat/goeasy-im-1.4.0.js}"></script>
+	<title>甲由科技咨询平台</title>
+	<style>
+		html {
+			background-color: #333;
+		}
+		body .layui-layim-chat{
+			z-index: 19891017;
+		}
+		body .layui-layim{
+			z-index:9999;
+		}
+		.layim-tool-video input{
+			position: absolute;
+			font-size: 0;
+			left: 0;
+			top: 0;
+			width: 100%;
+			height: 100%;
+			opacity: .01;
+			filter: Alpha(opacity=1);
+			cursor: pointer;
+		}
+		.layui-layim-photos{
+			width: 100px;
+			height: 100%;
+		}
+		.layim-chat-Read{
+			margin-top: 25px;
+			padding: 8px 15px;
+			background-color: #e2e2e2;
+			color: red;
+			font-size: 14px;
+			position: relative;
+			display: inline-block;
+		}
+	</style>
+	<link rel="stylesheet" th:href="@{/assets/js/layui/css/layui.css}" />
+	<script type="text/javascript" th:src="@{/assets/js/layui/layui.js}"></script>
+	<script type="text/javascript"
+			th:src="@{/assets/js/GoEasyDemo-IM-Chat/goeasy.min.js}"></script>
 </head>
 <body>
 
-	<script type="text/javascript" th:inline="javascript">
+<script type="text/javascript" th:inline="javascript">
 
-	 layui.extend({
-	        'req':'/assets/js/mods/req'
-	    });
-    var options = {
-            host:"hangzhou.goeasy.io", //应用所在的区域地址: [hangzhou.goeasy.io, 新加坡暂不支持IM，敬请期待]
-            appkey:"BC-263ee595e9cf42d1a74c8ef3148a91c5"
-    };
+	layui.extend({
+		'req':'/assets/js/mods/req'
+	});
+	var options = {
+		host:"hangzhou.goeasy.io", //应用所在的区域地址: [hangzhou.goeasy.io, 新加坡暂不支持IM，敬请期待]
+		appkey:"BC-b81f78e64733485897d22cabc849c07c",
+		modules:['im']
+	};
 
-     //初始化
-    var im  = GoEasyIM.getInstance(options);
-     
-   
-    layui.use(['layim','req','upload'], function(layim,req){
+	//初始化
+	var goeasy  = GoEasy.getInstance(options);
 
-    	var $ = layui.jquery;
+	var im = goeasy.im;
+
+	layui.use(['layim','req','upload'], function(layim,req){
+
+		var $ = layui.jquery;
 		var upload = layui.upload;
-           var liaotype='friend';
+		var liaotype='friend';
 
-    	 var usercode= [[${doctor}]];
-    	 var userInfo= [[${findUserNameAndImg}]];
+		var usercode= [[${doctor}]];
+		var userInfo= [[${findUserNameAndImg}]];
 		var globalName = [[${globalName}]];
 		var goeasyUsercode = globalName + usercode;
-      		console.log("usercode",usercode)
-        var user = {
-                id:goeasyUsercode
-            }
-   
- 
+		console.log("usercode",usercode)
+		var user = {
+			id:goeasyUsercode,
+			data:{"nickname":userInfo.username,"avatar":userInfo.avatar}
+		}
 
-      //连接GoEasy
-        var promise =  im.connect(user);
 
-        promise.then(function() {
-            console.log("Connection successful.");
-        }).catch(function(error) {
-            console.log("Failed to connect GoEasy, code:"+error.code+ ",error:"+error.content);
-        });
-        
-        
-        
-     	function modifyRead(sendUsercode){
-					    		var data={usercode:sendUsercode}
-					    		console.log(data)
-					    		  $.ajax({
-										type:"post",
-										url:"/instantChat/readInfo",
-										data:{usercode:sendUsercode},
-										success:function(data){
-											 	console.log(data)
-										} 
-									});  
-					    	}
-    
-    
-        var onPrivateMessageReceived = function(message) {
-    		console.log("接收message",message)
-    		if(message.senderId!=globalName+usercode){
-    		modifyRead(message.senderId.replace(globalName,""));
-    			$.ajax({
+
+		//连接GoEasy
+	goeasy.connect({
+        id:goeasyUsercode, //im必填，最大长度60字符
+        data:{"nickname":userInfo.username,"avatar":userInfo.avatar}, //必须是一个对象，im必填，最大长度300字符，显示在会话列表中
+        onSuccess: function () {  //连接成功
+          console.log("GoEasy connect successfully.") //连接成功
+        },
+        onFailed: function (error) { //连接失败
+          console.log("Failed to connect GoEasy, code:"+error.code+ ",error:"+error.content);
+        },
+        onProgress:function(attempts) { //连接或自动重连中
+          console.log("GoEasy is connecting", attempts);
+        }
+    });
+
+
+		function modifyRead(sendUsercode){
+			var data={usercode:sendUsercode}
+			console.log(data)
+			$.ajax({
+				type:"post",
+				url:"/instantChat/readInfo",
+				data:{usercode:sendUsercode},
+				success:function(data){
+					console.log(data)
+				}
+			});
+		}
+
+
+		var onPrivateMessageReceived = function(message) {
+			console.log("接收message",message)
+			if(message.senderId!=globalName+usercode){
+				modifyRead(message.senderId.replace(globalName,""));
+				$.ajax({
 					type:"post",
 					url:"/instantChat/userInfo",
 					data:{usercode:message.senderId.replace(globalName,"")},
 					success:function(data){
-						 	 console.log("用户信息",data)
+						console.log("用户信息",data)
 						if(message.type==2){
 							layim.getMessage({
 								username:  data.data.username //消息来源用户名
@@ -166,42 +174,41 @@ body .layui-layim{
 							});
 						}
 
-					} 
-				});  
-    		 
-    				
-    			
-    		}
-    	
-            //文字消息
-            // {
-            //     "messageId": "8f0e27a0c7e111eab347b726da4416bd",
-            //     "timestamp": 1594958217087,
-            //     "type": "text",
-            //     "senderId": "3bb179af-bcc5-4fe0-9dac-c05688484649",
-            //     "payload": {
-            //         "text": "Hello, GoEasyIM"
-            //     },
-            //     "receiverId": "fdee46b0-4b01-4590-bdba-6586d7617f95"
-            // }
-        };
-        //监听和接收单聊消息
-        im.on(GoEasyIM.EVENT.PRIVATE_MESSAGE_RECEIVED, onPrivateMessageReceived);
-        
-         
-        //基础配置
-        layim.config({
-            init: {
-                url: '/layim/init'
-            }
-            ,members: {
-                url: '/layim/member'
-            }
-             ,uploadImage: {
-                url: '/layim/image' //（返回的数据格式见下文）
-                ,type: 'post' //默认post
+					}
+				});
 
-            }
+
+
+			}
+
+			//文字消息
+			// {
+			//     "messageId": "8f0e27a0c7e111eab347b726da4416bd",
+			//     "timestamp": 1594958217087,
+			//     "type": "text",
+			//     "senderId": "3bb179af-bcc5-4fe0-9dac-c05688484649",
+			//     "payload": {
+			//         "text": "Hello, GoEasyIM"
+			//     },
+			//     "receiverId": "fdee46b0-4b01-4590-bdba-6586d7617f95"
+			// }
+		};
+		//监听和接收单聊消息
+		im.on(GoEasy.IM_EVENT.PRIVATE_MESSAGE_RECEIVED, onPrivateMessageReceived);
+
+		//基础配置
+		layim.config({
+			init: {
+				url: '/layim/init'
+			}
+			,members: {
+				url: '/layim/member'
+			}
+			,uploadImage: {
+				url: '/layim/image' //（返回的数据格式见下文）
+				,type: 'post' //默认post
+
+			}
 			,uploadFile: {
 				url: '/layim/file'
 			}
@@ -211,35 +218,35 @@ body .layui-layim{
                 url: '/upload/file' //（返回的数据格式见下文）
                 ,type: '' //默认post
             } */
-            //,isAudio: true //开启聊天工具栏音频
-            ,isVideo: true //开启聊天工具栏视频
+			//,isAudio: true //开启聊天工具栏音频
+			,isVideo: true //开启聊天工具栏视频
 
-            ,initSkin: '5.jpg' //1-5 设置初始背景
-            ,notice: true //是否开启桌面消息提醒，默认false
-            ,voice:'default.mp3'
-           // ,msgbox: layui.cache.dir + 'css/modules/layim/html/msgbox.html' //消息盒子页面地址，若不开启，剔除该项即可
-            //,find: layui.cache.dir + 'css/modules/layim/html/find.html' //发现页面地址，若不开启，剔除该项即可
-            ,chatLog: '/manage/goeasy/chatlog' //聊天记录页面地址，若不开启，剔除该项即可
+			,initSkin: '5.jpg' //1-5 设置初始背景
+			,notice: true //是否开启桌面消息提醒，默认false
+			,voice:'default.mp3'
+			// ,msgbox: layui.cache.dir + 'css/modules/layim/html/msgbox.html' //消息盒子页面地址，若不开启，剔除该项即可
+			//,find: layui.cache.dir + 'css/modules/layim/html/find.html' //发现页面地址，若不开启，剔除该项即可
+			,chatLog: '/manage/goeasy/chatlog' //聊天记录页面地址，若不开启，剔除该项即可
 
-        });
+		});
 
 
 
-			imInfo(userInfo.id,userInfo.username,userInfo.avatar, "friend");
-        
-        
-        
-        function imInfo(id,username,avatar, type)
+		imInfo(userInfo.id,userInfo.username,userInfo.avatar, "friend");
+
+
+
+		function imInfo(id,username,avatar, type)
 		{
 
 			layui.use(['layim', 'jquery'], function() {
 
 				var layim = layui.layim
 
-					,
-					$ = layui.jquery;
+						,
+						$ = layui.jquery;
 
-				
+
 
 				// 清空所有本地缓存消息
 				localStorage.clear()
@@ -249,95 +256,95 @@ body .layui-layim{
 				layim.chat({
 
 					name: username //名称
-						,
+					,
 					type: type //聊天类型
-						,
+					,
 					avatar: avatar //头像
-						,
+					,
 					id: id //好友id
 
 				});
 				modifyRead(id);
 				// 获取历史消息
-		 $.ajax({
+				$.ajax({
 					type:"get",
 					url:"/layim/chat/history2",
 					contentType:'application/json;charset=UTF-8',	//发送信息至服务器时内容编码类型
 					traditional:true,	//传统的方式来序列化数据
 					data:{"id" : id,"type":type,"lastId":99999},
 					success:function(data){
-					console.log("datadatadata",data.data)
+						console.log("datadatadata",data.data)
 						if (data.data.length > 0) {
-											for (var i in data.data) {
-												var bool = true;
-												if (id == data.data[i].usercode) {
-													layim.getMessage({
-														 play:true,
-														username: data.data[i].username, //消息来源用户名
-						
-															
-														avatar: data.data[i].avatar,
-						
-															
-														id: data.data[i].usercode, //消息的来源ID（如果是私聊，则是用户id，如果是群聊，则是群组id）
-						
-													 
-														 
-														type: type, //聊天窗口来源类型，从发送消息传递的to里面获取
+							for (var i in data.data) {
+								var bool = true;
+								if (id == data.data[i].usercode) {
+									layim.getMessage({
+										play:true,
+										username: data.data[i].username, //消息来源用户名
 
 
-														content:  data.data[i].content //消息内容
-						
-														,
-														mine: false //是否我发送的消息，如果为true，则会显示在右方
-						
-															,
-														fromid: data.data[i].roomid //消息的发送者id（比如群组中的某个消息发送者），可用于自动解决浏览器多窗口时的一些问题
-						
-															,
-														timestamp: data.data[i].timestamp //服务端时间戳毫秒数。注意：如果你返回的是标准的 unix 时间戳，记得要 *1000
-						
-													 
-													});
-												}else{
-														layim.getMessage({
-															play:true,
-														username: data.data[i].username, //消息来源用户名
-						
-															
-														avatar: data.data[i].avatar,
-						
-															
-														id: data.data[i].tousercode, //消息的来源ID（如果是私聊，则是用户id，如果是群聊，则是群组id）
-						
-													 
-														 
-														type: type, //聊天窗口来源类型，从发送消息传递的to里面获取
+										avatar: data.data[i].avatar,
 
 
-															content:  data.data[i].content //消息内容
-						
-														,
-														mine: true //是否我发送的消息，如果为true，则会显示在右方
-						
-															,
-														fromid: data.data[i].roomid //消息的发送者id（比如群组中的某个消息发送者），可用于自动解决浏览器多窗口时的一些问题
-						
-															,
-														timestamp: data.data[i].timestamp //服务端时间戳毫秒数。注意：如果你返回的是标准的 unix 时间戳，记得要 *1000
-						
-													 
-													});
-												}
-												 
-												
-					
-					
-											}
-										}
-					
-				}
-			})
+										id: data.data[i].usercode, //消息的来源ID（如果是私聊，则是用户id，如果是群聊，则是群组id）
+
+
+
+										type: type, //聊天窗口来源类型，从发送消息传递的to里面获取
+
+
+										content:  data.data[i].content //消息内容
+
+										,
+										mine: false //是否我发送的消息，如果为true，则会显示在右方
+
+										,
+										fromid: data.data[i].roomid //消息的发送者id（比如群组中的某个消息发送者），可用于自动解决浏览器多窗口时的一些问题
+
+										,
+										timestamp: data.data[i].timestamp //服务端时间戳毫秒数。注意：如果你返回的是标准的 unix 时间戳，记得要 *1000
+
+
+									});
+								}else{
+									layim.getMessage({
+										play:true,
+										username: data.data[i].username, //消息来源用户名
+
+
+										avatar: data.data[i].avatar,
+
+
+										id: data.data[i].tousercode, //消息的来源ID（如果是私聊，则是用户id，如果是群聊，则是群组id）
+
+
+
+										type: type, //聊天窗口来源类型，从发送消息传递的to里面获取
+
+
+										content:  data.data[i].content //消息内容
+
+										,
+										mine: true //是否我发送的消息，如果为true，则会显示在右方
+
+										,
+										fromid: data.data[i].roomid //消息的发送者id（比如群组中的某个消息发送者），可用于自动解决浏览器多窗口时的一些问题
+
+										,
+										timestamp: data.data[i].timestamp //服务端时间戳毫秒数。注意：如果你返回的是标准的 unix 时间戳，记得要 *1000
+
+
+									});
+								}
+
+
+
+
+							}
+						}
+
+					}
+				})
 
 
 
@@ -345,12 +352,12 @@ body .layui-layim{
 			});
 
 		}
-        
-        
-        var chatlogInfo=[];
+
+
+		var chatlogInfo=[];
 		var chatlogInfofriend=[];
 
-        function imInfo2(id,username,avatar, type)
+		function imInfo2(id,username,avatar, type)
 		{
 			if(id==userInfo.id){
 				return;
@@ -363,12 +370,12 @@ body .layui-layim{
 
 				var layim = layui.layim
 
-					,
-					$ = layui.jquery;
+						,
+						$ = layui.jquery;
 
 
 				// 获取历史消息
-		 $.ajax({
+				$.ajax({
 					type:"get",
 					url:"/layim/chat/history2",
 					contentType:'application/json;charset=UTF-8',	//发送信息至服务器时内容编码类型
@@ -391,78 +398,78 @@ body .layui-layim{
 							}
 						}
 
-					console.log("datadatadata",data.data)
+						console.log("datadatadata",data.data)
 						if (data.data.length > 0) {
-											for (var i in data.data) {
-												var bool = true;
-												if (id == data.data[i].usercode) {
-													layim.getMessage({
-														play:true,
-														username: data.data[i].username, //消息来源用户名
-						
-															
-														avatar: data.data[i].avatar,
-						
-															
-														id: data.data[i].usercode, //消息的来源ID（如果是私聊，则是用户id，如果是群聊，则是群组id）
-						
-													 
-														 
-														type: type, //聊天窗口来源类型，从发送消息传递的to里面获取
+							for (var i in data.data) {
+								var bool = true;
+								if (id == data.data[i].usercode) {
+									layim.getMessage({
+										play:true,
+										username: data.data[i].username, //消息来源用户名
 
 
-														content:  data.data[i].content //消息内容
-						
-														,
-														mine: false //是否我发送的消息，如果为true，则会显示在右方
-						
-															,
-														fromid: data.data[i].roomid //消息的发送者id（比如群组中的某个消息发送者），可用于自动解决浏览器多窗口时的一些问题
-						
-															,
-														timestamp: data.data[i].timestamp //服务端时间戳毫秒数。注意：如果你返回的是标准的 unix 时间戳，记得要 *1000
-						
-													 
-													});
-												}else{
-														layim.getMessage({
-															play:true,
-														username: data.data[i].username, //消息来源用户名
-						
-															
-														avatar: data.data[i].avatar,
-						
-															
-														id: data.data[i].tousercode, //消息的来源ID（如果是私聊，则是用户id，如果是群聊，则是群组id）
-						
-													 
-														 
-														type: type, //聊天窗口来源类型，从发送消息传递的to里面获取
+										avatar: data.data[i].avatar,
 
 
-															content:  data.data[i].content //消息内容
-						
-														,
-														mine: true //是否我发送的消息，如果为true，则会显示在右方
-						
-															,
-														fromid: data.data[i].roomid //消息的发送者id（比如群组中的某个消息发送者），可用于自动解决浏览器多窗口时的一些问题
-						
-															,
-														timestamp: data.data[i].timestamp //服务端时间戳毫秒数。注意：如果你返回的是标准的 unix 时间戳，记得要 *1000
-						
-													 
-													});
-												}
-												 
-												
-					
-					
-											}
-										}
-					
-				}
-			})
+										id: data.data[i].usercode, //消息的来源ID（如果是私聊，则是用户id，如果是群聊，则是群组id）
+
+
+
+										type: type, //聊天窗口来源类型，从发送消息传递的to里面获取
+
+
+										content:  data.data[i].content //消息内容
+
+										,
+										mine: false //是否我发送的消息，如果为true，则会显示在右方
+
+										,
+										fromid: data.data[i].roomid //消息的发送者id（比如群组中的某个消息发送者），可用于自动解决浏览器多窗口时的一些问题
+
+										,
+										timestamp: data.data[i].timestamp //服务端时间戳毫秒数。注意：如果你返回的是标准的 unix 时间戳，记得要 *1000
+
+
+									});
+								}else{
+									layim.getMessage({
+										play:true,
+										username: data.data[i].username, //消息来源用户名
+
+
+										avatar: data.data[i].avatar,
+
+
+										id: data.data[i].tousercode, //消息的来源ID（如果是私聊，则是用户id，如果是群聊，则是群组id）
+
+
+
+										type: type, //聊天窗口来源类型，从发送消息传递的to里面获取
+
+
+										content:  data.data[i].content //消息内容
+
+										,
+										mine: true //是否我发送的消息，如果为true，则会显示在右方
+
+										,
+										fromid: data.data[i].roomid //消息的发送者id（比如群组中的某个消息发送者），可用于自动解决浏览器多窗口时的一些问题
+
+										,
+										timestamp: data.data[i].timestamp //服务端时间戳毫秒数。注意：如果你返回的是标准的 unix 时间戳，记得要 *1000
+
+
+									});
+								}
+
+
+
+
+							}
+						}
+
+					}
+				})
 
 
 
@@ -470,28 +477,28 @@ body .layui-layim{
 			});
 
 		}
-        
-        
-        //监听在线状态的切换事件
-        layim.on('online', function(data){
-            //console.log(data);
-        });
-        //监听签名修改
-        layim.on('sign', function(value){
-            //console.log(value);
-        });
 
-        //监听layim建立就绪
-        layim.on('ready', function(res){
-        
-        });
-        //监听发送消息
-        layim.on('sendMessage', function(data){
-        	console.log("发送",data)
-        	console.log("发送",liaotype)
-        		var mine = data.mine; //包含我发送的消息及我的信息
-        		var to = data.to; //对方的信息
-        		//创建消息, 内容最长不超过3K，可以发送字符串，对象和json格式字符串
+
+		//监听在线状态的切换事件
+		layim.on('online', function(data){
+			//console.log(data);
+		});
+		//监听签名修改
+		layim.on('sign', function(value){
+			//console.log(value);
+		});
+
+		//监听layim建立就绪
+		layim.on('ready', function(res){
+
+		});
+		//监听发送消息
+		layim.on('sendMessage', function(data){
+			console.log("发送",data)
+			console.log("发送",liaotype)
+			var mine = data.mine; //包含我发送的消息及我的信息
+			var to = data.to; //对方的信息
+			//创建消息, 内容最长不超过3K，可以发送字符串，对象和json格式字符串
 			var prefix = mine.content.substring(0,4);
 			var prefix2 = mine.content.substring(0,5);
 			var prefix3 = mine.content.substring(0,6);
@@ -500,14 +507,14 @@ body .layui-layim{
 			var videoStr="video[";
 
 			var contentInfo=mine.content;
-            
-        	if("group"==liaotype){
-        	
-         
 
-   	 var groupId = globalName+usercode+to.id;
-	console.log("发送群消息",groupId)
-   	 //发送群消息
+			if("group"==liaotype){
+
+
+
+				var groupId = globalName+usercode+to.id;
+				console.log("发送群消息",groupId)
+				//发送群消息
 
 				var  typeInfo='';
 				if(imgStr==prefix){
@@ -535,27 +542,29 @@ body .layui-layim{
 					payload: order,
 					to: {
 						id: groupId,
-						type: GoEasyIM.SCENE.GROUP
+						type: GoEasy.IM_SCENE.GROUP,
+						data: {"avatar": "/www/xxx.png", "nickname": "Neo"}
 
 					}
 				});
 
 
-				//发送单聊消息
-				var promise = im.sendMessage(customMessage);
 
-    promise.then(function () {
-        console.log("Send group message successfully.");
-        sendQunGZH(to.id);
-         addQunChatMessage(usercode+to.id,to.id, contentInfo,liaotype,typeInfo);
-    }).catch(function (error) {
-        console.log("Failed to send Message, code:" + error.code + " content:" + error.content);
-    });
-        	
-        	}else{
-        		var  typeInfo='';
+				    //发送消息
+				im.sendMessage({
+					message: customMessage,
+					onSuccess: function (message) {  //发送成功
+						console.log('Message sent successfully.', message);
+					},
+					onFailed: function (error) { //发送失败
+						console.log('Failed to send message，code:' + error.code + ',error' + error.content);
+					}
+				});
 
-        		if(imgStr==prefix){
+			}else{
+				var  typeInfo='';
+
+				if(imgStr==prefix){
 					typeInfo='2';
 					debugger
 					contentInfo=contentInfo.slice(4);
@@ -578,163 +587,166 @@ body .layui-layim{
 					text: contentInfo
 				};
 
-					let customMessage = im.createCustomMessage({
-						type: typeInfo,
-						payload: order,
-						to: {
-							id: globalName+to.id,
-							type: GoEasyIM.SCENE.PRIVATE
+				let customMessage = im.createCustomMessage({
+					type: typeInfo,
+					payload: order,
+					to: {
+						id: globalName+to.id,
+						type: GoEasy.IM_SCENE.PRIVATE,
+						data: {"avatar": "/www/xxx.png", "nickname": "Neo"}
+					}
+				});
 
+
+					//发送消息
+				im.sendMessage({
+					message: customMessage,
+					onSuccess: function (message) {  //发送成功
+						console.log('Message sent successfully.', message);
+						var textGzh="";
+					if(typeInfo=='1'){
+						textGzh=mine.content;
+						if(textGzh.length>7){
+							textGzh=textGzh.substring(0, 7);
+							textGzh=textGzh+"...";
 						}
-					});
+					}else{
+						textGzh="文件";
+					}
+					$.ajax({
+						type:"post",
+						url:"/instantChat/statusWXUser",
+						data:{usercode:to.id},
+						success:function(data){
+							console.log("查询在线状态返回",data)
+							if(data.data!=1){
 
-
-            //发送单聊消息
-            var promise = im.sendMessage(customMessage);
-
-            promise.then(function() {
-               console.log("Private message sent successfully.");
-               var textGzh="";
-               if(typeInfo=='1'){
-				   textGzh=mine.content;
-				   if(textGzh.length>7){
-					   textGzh=textGzh.substring(0, 7);
-					   textGzh=textGzh+"...";
-				   }
-			   }else{
-				   textGzh="文件";
-			   }
-               $.ajax({
-					type:"post",
-					url:"/instantChat/statusWXUser",
-					data:{usercode:to.id},
-					success:function(data){
-						 	 console.log("查询在线状态返回",data)
-						 	if(data.data!=1){
-						 		
-						 		$.ajax({
+								$.ajax({
 									type:"post",
 									url:"/instantChat/sendGongzhonghao",
 									data:{usercode:to.id,textInfo:textGzh},
 									success:function(data){
-										 	 console.log("发送公众号",data)
-										 	if("ok"!=data.data){
-										 		console.log("发送公众号失败")
-										 		sendDingYue(to.id,contentInfo);
-									    	}
-									} 
-								}); 
-					    	}
-					} 
-				}); 
-               addChatMessage(to.id, contentInfo,liaotype,typeInfo);
-            }).catch(function(error) {
-                console.log("Failed to send private message，code:" + error.code +",error"+error.content);
-            });
-        
-      	  }
-      	  	
-        	
-        	
-            
-        });
-        
-        //发送订阅消息
-	    function sendDingYue(usercode,publishMessage){
-        	
-    		  $.ajax({
-					type:"post",
-					url:"/instantChat/sendMessage",
-					data:{usercode:usercode,message:publishMessage},
-					success:function(data){
-						console.log("发送订阅",data)
-						 	if("success"==data.data){
-						 		
-						 	}
-					} 
-				});  
-    }
-        //发送群订阅消息
-	    function sendQunDingYue(groupid){ 
-    		  $.ajax({
-					type:"post",
-					url:"/instantChat/sendQunMessage",
-					data:{groupid:groupid},
-					success:function(data){
-						console.log("发送订阅",data)
-						 	if("success"==data.data){
-						 		
-						 	}
-					} 
-				});  
-    }
-        //发送群公众号信息
-	    function sendQunGZH(groupId){
-    		  $.ajax({
-					type:"post",
-					url:"/instantChat/sendQunGongzhonghao",
-					data:{groupId:groupId},
-					success:function(data){
-						 	console.log("群公众号信息",data)
-						 	 
-					} 
-				});  
-    }
-	    
-	 
-        
-        
-      //添加聊天记录
-    	function addChatMessage(toid,value,type,typeInfo){
-    		  $.ajax({
-					type:"post",
-					url:"/instantChat/addChatListInfo",
-					contentType:'application/json;charset=UTF-8',	//发送信息至服务器时内容编码类型
-					data:JSON.stringify({"toUserCode":toid,"message":value,"mtypestr":type,"messageType":typeInfo}),
-					success:function(data){
-						 	console.log(data)
-					} 
-				});  
-    	}
-    	//添加群聊聊天记录
-    	function addQunChatMessage(roomid,toid,value,type,typeInfo){
-    		  $.ajax({
-					type:"post",
-					url:"/instantChat/addQunChatListInfo",
-					contentType:'application/json;charset=UTF-8',	//发送信息至服务器时内容编码类型
-					data:JSON.stringify({"toUserCode":toid,"message":value,"mtypestr":type,"roomid":roomid,"messageType":typeInfo}),
-					success:function(data){
-						 	console.log(data)
-					} 
-				});  
-    	}
-    	
-        //监听查看群员
-        layim.on('members', function(data){
-            //console.log(data);
-        });
-         
-        
-       
-        //监听聊天窗口的切换
-        layim.on('chatChange', function(res){
-        	console.log("res.datares.datares.data",res)
-        	
-            var type = res.data.type;
-            liaotype=type;
-             console.log(res.data)
-            
-             if(type === 'friend'){
-               modifyRead(res.data.id);
-             }
-            
-             layer.closeAll('iframe'); //关闭所有的iframe层
-             imInfo2(res.data.id,res.data.username,res.data.avatar,type);
-            
-        });
+										console.log("发送公众号",data)
+										if("ok"!=data.data){
+											console.log("发送公众号失败")
+											sendDingYue(to.id,contentInfo);
+										}
+									}
+								});
+							}
+						}
+					});
+					addChatMessage(to.id, contentInfo,liaotype,typeInfo);
+					},
+					onFailed: function (error) { //发送失败
+						console.log('Failed to send message，code:' + error.code + ',error' + error.content);
+					}
+				});
 
 
-    });
+			}
+
+
+
+
+		});
+
+		//发送订阅消息
+		function sendDingYue(usercode,publishMessage){
+
+			$.ajax({
+				type:"post",
+				url:"/instantChat/sendMessage",
+				data:{usercode:usercode,message:publishMessage},
+				success:function(data){
+					console.log("发送订阅",data)
+					if("success"==data.data){
+
+					}
+				}
+			});
+		}
+		//发送群订阅消息
+		function sendQunDingYue(groupid){
+			$.ajax({
+				type:"post",
+				url:"/instantChat/sendQunMessage",
+				data:{groupid:groupid},
+				success:function(data){
+					console.log("发送订阅",data)
+					if("success"==data.data){
+
+					}
+				}
+			});
+		}
+		//发送群公众号信息
+		function sendQunGZH(groupId){
+			$.ajax({
+				type:"post",
+				url:"/instantChat/sendQunGongzhonghao",
+				data:{groupId:groupId},
+				success:function(data){
+					console.log("群公众号信息",data)
+
+				}
+			});
+		}
+
+
+
+
+		//添加聊天记录
+		function addChatMessage(toid,value,type,typeInfo){
+			$.ajax({
+				type:"post",
+				url:"/instantChat/addChatListInfo",
+				contentType:'application/json;charset=UTF-8',	//发送信息至服务器时内容编码类型
+				data:JSON.stringify({"toUserCode":toid,"message":value,"mtypestr":type,"messageType":typeInfo}),
+				success:function(data){
+					console.log(data)
+				}
+			});
+		}
+		//添加群聊聊天记录
+		function addQunChatMessage(roomid,toid,value,type,typeInfo){
+			$.ajax({
+				type:"post",
+				url:"/instantChat/addQunChatListInfo",
+				contentType:'application/json;charset=UTF-8',	//发送信息至服务器时内容编码类型
+				data:JSON.stringify({"toUserCode":toid,"message":value,"mtypestr":type,"roomid":roomid,"messageType":typeInfo}),
+				success:function(data){
+					console.log(data)
+				}
+			});
+		}
+
+		//监听查看群员
+		layim.on('members', function(data){
+			//console.log(data);
+		});
+
+
+
+		//监听聊天窗口的切换
+		layim.on('chatChange', function(res){
+			console.log("res.datares.datares.data",res)
+
+			var type = res.data.type;
+			liaotype=type;
+			console.log(res.data)
+
+			if(type === 'friend'){
+				modifyRead(res.data.id);
+			}
+
+			layer.closeAll('iframe'); //关闭所有的iframe层
+			imInfo2(res.data.id,res.data.username,res.data.avatar,type);
+
+		});
+
+
+	});
 </script>
 
 </body>

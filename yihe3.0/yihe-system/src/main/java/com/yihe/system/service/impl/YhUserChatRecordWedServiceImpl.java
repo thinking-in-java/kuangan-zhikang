@@ -135,7 +135,12 @@ public int modifyRead1(String usercode, String tousercode) {
 	return YhUserChatRecordWedMapper.modifyRead1(usercode, tousercode);
 }
 
-@Override
+	@Override
+	public YhUserChatRecordWed findChatInfoByUserCodeByOne(String usercode, String tousercode) {
+		return YhUserChatRecordWedMapper.findChatInfoByUserCodeByOne(usercode, tousercode);
+	}
+
+	@Override
 public Integer findWXuserStatus(String usercode) {
 	// TODO Auto-generated method stub 
 	return YhUserChatRecordWedMapper.findWXuserStatus(usercode);

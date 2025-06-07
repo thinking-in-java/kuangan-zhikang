@@ -105,6 +105,69 @@
             margin-bottom: 25px;
         }
 
+
+
+
+
+        .layui-menu{position: relative; margin: 5px 0; background-color: #fff; box-sizing: border-box;}
+        .layui-menu *{box-sizing: border-box;}
+        .layui-menu li,
+        .layui-menu-body-title,
+        .layui-menu-body-title a{padding: 5px 15px; color: initial}
+        .layui-menu li{position: relative; margin: 0 0 1px; line-height: 26px; color: rgba(0,0,0,.8); font-size: 14px; white-space: nowrap; cursor: pointer; transition: all .3s;}
+        .layui-menu li:hover{background-color: #f8f8f8; }
+        .layui-menu li.layui-disabled,
+        .layui-menu li.layui-disabled *{background: none !important; color: #d2d2d2 !important; cursor: not-allowed !important;}
+
+        .layui-menu-item-parent:hover>.layui-menu-body-panel{display: block; animation-name: layui-fadein; animation-duration: 0.3s; animation-fill-mode: both; animation-delay:.2s;}
+        .layui-menu-item-parent>.layui-menu-body-title,
+        .layui-menu-item-group>.layui-menu-body-title{padding-right: 38px;}
+
+        .layui-menu .layui-menu-item-group:hover,
+        .layui-menu .layui-menu-item-none:hover,
+        .layui-menu .layui-menu-item-divider:hover{background: none; cursor: default;}
+        .layui-menu .layui-menu-item-group>ul{margin: 5px 0 -5px;}
+        .layui-menu .layui-menu-item-group>.layui-menu-body-title{color: rgba(0,0,0,.35); user-select: none;}
+        .layui-menu .layui-menu-item-none{color: rgba(0,0,0,.35); cursor: default;}
+
+        .layui-menu .layui-menu-item-none{text-align: center;}
+        .layui-menu .layui-menu-item-divider{margin: 5px 0; padding: 0; height: 0; line-height: 0; border-bottom: 1px solid #eee; overflow: hidden;}
+
+        .layui-menu .layui-menu-item-up:hover,
+        .layui-menu .layui-menu-item-down:hover{cursor: pointer;}
+        .layui-menu .layui-menu-item-up>.layui-menu-body-title{ color: rgba(0,0,0,.8);}
+        .layui-menu .layui-menu-item-up>ul{visibility: hidden; height: 0; overflow: hidden;}
+        .layui-menu .layui-menu-item-down>.layui-menu-body-title>.layui-icon-down{transform: rotate(180deg);}
+        .layui-menu .layui-menu-item-up>.layui-menu-body-title>.layui-icon-up{transform: rotate(-180deg);}
+        .layui-menu .layui-menu-item-up>.layui-menu-body-title:hover>.layui-icon,
+        .layui-menu .layui-menu-item-down:hover>.layui-menu-body-title>.layui-icon{color: rgba(0,0,0,1);}
+        .layui-menu .layui-menu-item-down>ul{visibility: visible; height: auto;}
+
+        .layui-menu .layui-menu-item-checked,
+        .layui-menu .layui-menu-item-checked2{background-color: #f8f8f8!important; color: #16b777;}
+        .layui-menu .layui-menu-item-checked a,
+        .layui-menu .layui-menu-item-checked2 a{color: #16b777;}
+        .layui-menu .layui-menu-item-checked:after{position: absolute; right: -1px; top: 0; bottom: 0; border-right: 3px solid #16b777; content: "";}
+
+        .layui-menu-body-title{position: relative; margin: -5px -15px; overflow: hidden; text-overflow: ellipsis;}
+        .layui-menu-body-title a{display: block; margin: -5px -15px; color: rgba(0,0,0,.8);}
+        .layui-menu-body-title a:hover{transition: all .3s;}
+        .layui-menu-body-title>.layui-icon{position: absolute; right: 15px; top: 50%; margin-top: -6px; line-height: normal; font-size: 14px; transition: all .2s; -webkit-transition: all .2s;}
+        .layui-menu-body-title>.layui-icon:hover{transition: all .3s;}
+        .layui-menu-body-title>.layui-icon-right{right: 14px;}
+        .layui-menu-body-panel{display: none; position: absolute; top: -7px; left: 100%; z-index: 1000; margin-left: 13px; padding: 5px 0;background: #FFFFFF;color: black}
+        .layui-menu-body-panel:before{content: ""; position: absolute; width: 20px; left: -16px; top: 0; bottom: 0;color: black}
+        .layui-menu-body-panel-left{left: auto; right: 100%; margin: 0 13px 0;}
+        .layui-menu-body-panel-left:before{left: auto; right: -16px;}
+
+        .layui-menu-lg li{line-height: 32px;}
+        .layui-menu-lg li:hover,
+        .layui-menu-lg .layui-menu-body-title a:hover{background: none; color: #16b777;}
+        .layui-menu-lg li .layui-menu-body-panel{margin-left: 14px}
+        .layui-menu-lg li .layui-menu-body-panel-left{margin: 0 15px 0;}
+
+
+
     </style>
 </head>
 <body class="layui-layout-body">
@@ -159,27 +222,36 @@
         </ul>
     </div>
     <!-- 侧边栏 -->
-    <div class="layui-side">
-        <div class="layui-side-scroll">
-            <ul class="layui-nav layui-nav-tree arrow2" lay-filter="admin-side-nav" lay-shrink="all">
-                <span th:each="item:${upmsPermissions}">
-                    <li class="layui-nav-item layui-nav-itemed" th:if="${item.type eq 1 && item.permissionValue eq 'cmd:single:signon'}">
-                        <a th:id="${item.permissionId}" onclick="signonClick()">
-                            <i class="layui-icon " th:classappend='${item.icon} '></i>&emsp;
-                            <cite><span th:text="${item.name}"/></cite>
-                        </a>
-                    </li>
-                    <li class="layui-nav-item layui-nav-itemed" th:if="${item.type eq 1 && item.permissionValue ne 'cmd:single:signon'}">
-                        <input class="zijidian" type="hidden" th:id="${item.uri}"/>
-                        <a th:id="${item.permissionId}" lay-href="${item.uri}">
-                            <i class="layui-icon " th:classappend='${item.icon} '></i>&emsp;
-                            <cite><span th:text="${item.name}"/></cite>
-                        </a>
-                    </li>
-                </span>
+<!--    <div class="layui-side">-->
+<!--        <div class="layui-side-scroll">-->
+<!--            <ul class="layui-nav layui-nav-tree arrow2" lay-filter="admin-side-nav" lay-shrink="all">-->
+<!--                <span th:each="item:${upmsPermissions}">-->
+<!--                    <li class="layui-nav-item layui-nav-itemed" th:if="${item.type eq 1 && item.permissionValue eq 'cmd:single:signon'}">-->
+<!--                        <a th:id="${item.permissionId}" onclick="signonClick()">-->
+<!--                            <i class="layui-icon " th:classappend='${item.icon} '></i>&emsp;-->
+<!--                            <cite><span th:text="${item.name}"/></cite>-->
+<!--                        </a>-->
+<!--                    </li>-->
+<!--                    <li class="layui-nav-item layui-nav-itemed" th:if="${item.type eq 1 && item.permissionValue ne 'cmd:single:signon'}">-->
+<!--                        <input class="zijidian" type="hidden" th:id="${item.uri}"/>-->
+<!--                        <a th:id="${item.permissionId}" lay-href="${item.uri}">-->
+<!--                            <i class="layui-icon " th:classappend='${item.icon} '></i>&emsp;-->
+<!--                            <cite><span th:text="${item.name}"/></cite>-->
+<!--                        </a>-->
+<!--                    </li>-->
+<!--                </span>-->
+<!--            </ul>-->
+<!--        </div>-->
+<!--    </div>-->
+
+    <div style="overflow-x: unset !important;" class="layui-side">
+        <div style="overflow-x: unset  !important;" class="layui-side-scroll">
+            <ul class="layui-nav layui-nav-tree arrow2" lay-filter="admin-side-nav" id="side-menu">
+                <!-- 菜单项将在这里动态生成 -->
             </ul>
         </div>
     </div>
+
     <!-- 主体部分 -->
     <div class="layui-body"></div>
     <!-- 底部 -->
@@ -216,10 +288,15 @@
 <script type="text/javascript" th:src="@{/assets/libs/layui/layui.js}"></script>
 <script type="text/javascript" th:src="@{/assets/js/common.js}"></script>
 <script th:src="@{/assets/js/socket.io.min.js}"></script>
-<script type="text/javascript" th:src="@{/assets/js/GoEasyDemo-IM-Chat/goeasy-im-1.4.0.js}"></script>
+<script type="text/javascript" th:src="@{/assets/js/GoEasyDemo-IM-Chat/goeasy.min.js}"></script>
 <script th:inline="javascript">
+    var upmsPermissions = [[${upmsPermissions}]]
+    console.log(upmsPermissions,"upmsPermissionsupmsPermissionsupmsPermissionsupmsPermissionsupmsPermissionsupmsPermissionsupmsPermissionsupmsPermissions");
+
+    console.log(upmsPermissions,"upmsPermissionsupmsPermissionsupmsPermissionsupmsPermissionsupmsPermissionsupmsPermissionsupmsPermissionsupmsPermissions");
     var ctx = [[@{/}]];
     var userCode = [[${yh.userCode}]];
+
 
     layui.use(['index', 'admin', 'notice', 'upload', 'admin', 'form'], function () {
         var index = layui.index;
@@ -228,6 +305,9 @@
         var $ = layui.jquery;
         var admin = layui.admin;
         var form = layui.form;
+
+
+
 
         signonClick = function(){
             $.ajax({
@@ -247,44 +327,143 @@
             });
         }
 
+        function createMenuItem(item) {
+            // 创建菜单项的 HTML 结构
+            let menuItem = `<li class="layui-nav-item  layui-menu-item-parent">`;
+
+            // 检查是否有子菜单
+            if (item.children && item.children.length > 0) {
+                menuItem += `
+               <a href="javascript:;" lay-href="${item.uri}" onclick="signonClick('${item.uri}')">
+                    <input class="zijidian" type="hidden" th:id="${item.uri}"/>`;
+
+                if (item.pid == -1) {
+                    menuItem += `<i class="layui-icon ${item.icon}"></i>`;
+                }
+
+                menuItem += ` &emsp;<cite>${item.name}</cite>
+                <i style="float: right;background: transparent;color: black;line-height: 45px;" class="layui-icon layui-icon-right"></i> <!-- 子菜单展开图标 -->
+                </a>
+
+
+            <div class="layui-panel layui-menu-body-panel">
+                <ul>`;
+
+                // 递归生成子菜单
+                item.children.forEach(subItem => {
+                    menuItem += createMenuItem(subItem);
+                });
+
+                menuItem += `</ul>
+            </div>`;
+            } else {
+                // 没有子菜单的普通项
+                menuItem += `
+                   <a href="javascript:;" lay-href="${item.uri}" onclick="signonClick('${item.uri}')">
+                        <input class="zijidian" type="hidden" th:id="${item.uri}"/>`;
+
+                    if (item.pid == -1) {
+                        menuItem += `<i class="layui-icon ${item.icon}"></i>`;
+                    }
+
+                    menuItem += ` &emsp;<cite>${item.name}</cite>
+                    </a>`;
+            }
+
+            menuItem += `</li>`;
+            return menuItem;
+        }
+
+
+        // function createMenuItem(item) {
+        //     // 创建菜单项的 HTML 结构
+        //     let menuItem = `<li class="layui-nav-item">`;
+        //
+        //     // 检查是否有子菜单
+        //     if (item.children && item.children.length > 0) {
+        //         menuItem += `
+        //
+        //             <a href="javascript:;"  onclick="signonClick('${item.uri}')">
+        //              <input class="zijidian" type="hidden" th:id="${item.uri}"/>`;
+        //             if(item.pid==-1){
+        //                 menuItem += `<i class="layui-icon ${item.icon}"></i>`
+        //             }
+        //
+        //
+        //         menuItem += ` &emsp;<cite>${item.name}</cite>
+        //             </a>
+        //             <dl class="layui-nav-child">`;
+        //         // 递归生成子菜单
+        //         item.children.forEach(subItem => {
+        //             menuItem += createMenuItem(subItem);
+        //         });
+        //         menuItem += `</dl>`;
+        //     } else {
+        //         menuItem += `
+        //
+        //         <a href="javascript:;" lay-href="${item.uri}" onclick="signonClick('${item.uri}')">
+        //          <input class="zijidian" type="hidden" th:id="${item.uri}"/>`
+        //
+        //             if(item.pid==-1){
+        //                 menuItem += `<i class="layui-icon ${item.icon}"></i>`
+        //                 }
+        //             menuItem += `
+        //             &emsp;<cite>${item.name}</cite>
+        //         </a>`;
+        //     }
+        //     menuItem += `</li>`;
+        //     return menuItem;
+        // }
+        function renderMenu(menuData) {
+            const menuContainer = document.getElementById('side-menu');
+            let menuHtml = '';
+            menuData.forEach(item => {
+                menuHtml += createMenuItem(item);
+            });
+            menuContainer.innerHTML = menuHtml;
+            layui.element.init(); // 初始化Layui的元素
+        }
+        renderMenu(upmsPermissions);
+
         //连接GoEasy 2020-12-18
         loginGoeasy();
 
         function loginGoeasy() {
             var options = {
-                host: "hangzhou.goeasy.io", //应用所在的区域地址: [hangzhou.goeasy.io, 新加坡暂不支持IM，敬请期待]
-                appkey: "BC-263ee595e9cf42d1a74c8ef3148a91c5"
+                host:"hangzhou.goeasy.io", //应用所在的区域地址: [hangzhou.goeasy.io, 新加坡暂不支持IM，敬请期待]
+                appkey:"BC-b81f78e64733485897d22cabc849c07c",
+                modules:['im']
             };
             //初始化
-            var im = GoEasyIM.getInstance(options);
+            var im  = GoEasy.getInstance(options);
             //登录聊天功能
-            var usercode = [[${doctor}]];
+            var usercode= [[${doctor}]];
             var globalName = [[${globalName}]];
             var goeasyUsercode = globalName + usercode;
-            console.log("usercode", usercode)
+            console.log("usercode",usercode)
             var user = {
-                id: goeasyUsercode
+                id:goeasyUsercode
             }
             //连接GoEasy
-            var promise = im.connect(user);
-            promise.then(function () {
+            var promise =  im.connect(user);
+            promise.then(function() {
                 console.log("Connection successful.");
-            }).catch(function (error) {
-                console.log("Failed to connect GoEasy, code:" + error.code + ",error:" + error.content);
+            }).catch(function(error) {
+                console.log("Failed to connect GoEasy, code:"+error.code+ ",error:"+error.content);
             });
-            var onPrivateMessageReceived = function (message) {
-                if (message.senderId != globalName + usercode) {
-                    console.log("接收message1111", message)
+            var onPrivateMessageReceived = function(message) {
+                if(message.senderId!=globalName+usercode){
+                    console.log("接收message1111",message)
                     var promise = im.markPrivateMessageAsRead(message.senderId);
-                    promise.then(function (result) {
-                    }).catch(function (error) {
+                    promise.then(function(result) {
+                    }).catch(function(error) {
                         console.log("Failed to mark as read, code:" + error.code + " content:" + error.content);
                     });
                     sendServiceInfo(usercode);
                 }
             };
             //监听和接收单聊消息
-            im.on(GoEasyIM.EVENT.PRIVATE_MESSAGE_RECEIVED, onPrivateMessageReceived);
+            im.on(GoEasy.EVENT.PRIVATE_MESSAGE_RECEIVED, onPrivateMessageReceived);
         }
 
         $.ajax({

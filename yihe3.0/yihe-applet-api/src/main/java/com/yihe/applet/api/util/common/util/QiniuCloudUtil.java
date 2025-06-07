@@ -12,13 +12,13 @@ import com.qiniu.util.Auth;
 
 public class QiniuCloudUtil {
 	  //accessKey
-    private static String accessKey = "nrUqYAKlixX71I3EwMZ14EzcgYcRZDD3yOD2TB_S";//用钥匙 刮 屏幕得字符串
+    private static String accessKey = "f8crv4u97BOtUYQJ6i2o0q4Mq25pwND6KW75eujx";//用钥匙 刮 屏幕得字符串
     //secretKey
-    private static String secretKey ="4dOXiUFHu7uUlnndD0QBFfm2w97FeCJK2wAVi_eU";
+    private static String secretKey ="gXaQqobz09_z9cf3FjlT-OogTU7mQT77YmUFd4ms";
     //储存空间名
     private static String bucket ="shayuxcx";
     //外链URL前缀
-    private static String fronturl = "xcxqny.yhy.ren";
+    private static String fronturl = "gyjkqny.yhy.ren";
 
 
     /**

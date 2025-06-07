@@ -26,6 +26,7 @@ public interface YhDiseaseAssessReportService {
 	String findQuestionCheckForCheckAnswerByrs(String rs);
 
 	YhDiseaseAssessReport findUserAssessReportInfoByTimeDesc(String usercode);
+	List<YhDiseaseAssessReport> findDiseaseNameAndRiskLevelByRs(String rs, String sex) throws InvocationTargetException;
 
 	List<YhReportDetailsVOJO> findDiseaseNameAndRiskLevelByRs(String rs, String sex, Model model,Object document,Object lastdocument) throws InvocationTargetException;
 

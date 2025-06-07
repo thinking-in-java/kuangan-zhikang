@@ -27,9 +27,10 @@ function CurrentUser(uuid, name, avatar) {
 }
 
 function IMService() {
-    this.im = GoEasyIM.getInstance({
-        appkey: 'BC-263ee595e9cf42d1a74c8ef3148a91c5',
+    this.im = GoEasy.getInstance({
+        appkey: 'BC-b81f78e64733485897d22cabc849c07c',
         host: 'hangzhou.goeasy.io',
+        modules:['im']
     });
     //当前“我”
     this.currentUser = null;
@@ -162,16 +163,16 @@ IMService.prototype.connectIM = function () {
 
 //IM监听
 IMService.prototype.initialIMListeners = function () {
-    this.im.on(GoEasyIM.EVENT.CONNECTED, () => {
+    this.im.on(GoEasy.EVENT.CONNECTED, () => {
         console.log('连接成功.')
     });
 
-    this.im.on(GoEasyIM.EVENT.DISCONNECTED, () => {
+    this.im.on(GoEasy.EVENT.DISCONNECTED, () => {
         console.log('连接断开.')
     });
 
     //监听好友上下线
-    this.im.on(GoEasyIM.EVENT.USER_PRESENCE, (user) => {
+    this.im.on(GoEasy.EVENT.USER_PRESENCE, (user) => {
         //更新好友在线状态
         let onlineStatus = user.action == 'online' ? true : false;
         let friend = this.friends[user.userId];
@@ -182,7 +183,7 @@ IMService.prototype.initialIMListeners = function () {
     });
 
     //监听私聊消息
-    this.im.on(GoEasyIM.EVENT.PRIVATE_MESSAGE_RECEIVED, (message) => {
+    this.im.on(GoEasy.EVENT.PRIVATE_MESSAGE_RECEIVED, (message) => {
         //如果不是自己发的，朋友未读消息数 +1
         if (message.senderId != this.currentUser.uuid) {
             let friend = this.friends[message.senderId];
@@ -206,7 +207,7 @@ IMService.prototype.initialIMListeners = function () {
     });
 
     //监听群聊消息
-    this.im.on(GoEasyIM.EVENT.GROUP_MESSAGE_RECEIVED, (message) => {
+    this.im.on(GoEasy.EVENT.GROUP_MESSAGE_RECEIVED, (message) => {
         //群未读消息+1
         let groupId = message.groupId;
         let group = this.groups[groupId];

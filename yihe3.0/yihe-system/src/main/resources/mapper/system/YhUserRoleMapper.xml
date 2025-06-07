@@ -98,6 +98,11 @@
       order by ${orderByClause}
     </if>
   </select>
+
+  <select id="selectRoleName" parameterType="String" resultType="string">
+    select role_name from yh_user_role where  role_id=(select roleId from yh_user_role_power where userId=#{userCode})
+
+  </select>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />

@@ -88,4 +88,22 @@ public class Constants
      * 资源映射路径 前缀
      */
     public static final String RESOURCE_PREFIX = "/profile";
+
+    public final static String XCX_LOGIN_TOKEN = "sy_xcx_login_token:";
+
+    /**
+     * 缓存刷新时间，默认1天
+     */
+    public final static long ONE_DAY_TIME = 24*60*60;
+
+    /**
+     * 小程序当天登录状态缓存前缀
+     */
+    public final static String XCX_LOGIN_FALG = "xcx_login_falg:";
+
+    /**
+     * 登录过期时间，默认15天
+     */
+    public final static long LOGIN_OVERDUE_TIME = 24*60*60*15;
+
 }

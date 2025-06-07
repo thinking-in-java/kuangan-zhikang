@@ -31,15 +31,15 @@
 	}
 </style>
 </head>
-<body>
+<body style="height: 100%">
 <!-- 页面加载loading -->
 	<div class="page-loading">
 		<div class="ball-loader">
 			<span></span><span></span><span></span><span></span>
 		</div>
 	</div>
-	
-			<div style="width: 100%; height: 100%; background-color: #FFF; position: relative;">
+	<input id="user" type="hidden" value="">
+			<div style="width: 100%;  background-color: #FFF; position: relative;">
 				<div style="font-size: 20px; font-weight: bold; margin-left: 20px; padding-top: 12px;" id="publish">发布商品</div>
 				<div style="background-color:#F5F5F5; line-height: 50px;margin: 17px;">
 					<span style="margin-left: 10px;">商品类型</span>
@@ -73,7 +73,7 @@
 				      <input type="text" name="merchandiseName" required  lay-verify="required" placeholder="输入内容" autocomplete="off" class="layui-input">
 				    </div>
 				  </div>
-					
+					<input type="text" style="display: none" id="jifen">
 					<div class="layui-form-item">
 						<label style="width: 83px;"
 							class="layui-form-label layui-form-required">商品分组： </label>
@@ -134,13 +134,40 @@
 				<div style="background-color:#F5F5F5; line-height: 50px;margin: 17px;">
 					<span style="margin-left: 10px;">更多设置</span>
 				</div>
-			
-				  <div class="layui-form-item"  style="margin-left: -24px;">
-				    <label class="layui-form-label layui-form-required">积分：</label>
-				    <div class="layui-input-block" style="width: 110px;">
-				      <input min="1" type="number" oninput="value=value.replace(/^\D|^0(\d*(?:\.\d{0,2})?).*$/g, '$1')"  name="pzkIntegral" required  lay-verify="required" placeholder="输入内容" autocomplete="off" class="layui-input">
-				    </div>
-				  </div>
+<!--					<div class="layui-form-item"  style="margin-left: -24px;">-->
+<!--						<label class="layui-form-label layui-form-required">单位：</label>-->
+<!--						<div class="layui-input-block" style="width: 210px;">-->
+<!--						<input  type="text" id="tree" lay-filter="tree" style="width: 100%" class="layui-input">-->
+<!--						</div>-->
+<!--					</div>-->
+<!--				  <div class="layui-form-item"  style="margin-left: -24px;">-->
+<!--				    <label class="layui-form-label layui-form-required">单位兑换积分：</label>-->
+<!--				    <div class="layui-input-block" style="width: 110px;">-->
+<!--				      <input min="1" type="number" oninput="value=value.replace(/^\D|^0(\d*(?:\.\d{0,2})?).*$/g, '$1')"  name="pzkIntegral" id="pzkIntegralInput" required  lay-verify="required" placeholder="输入内容" autocomplete="off" class="layui-input">-->
+<!--				    </div>-->
+<!--				  </div>-->
+
+
+						<table id="form-create"  lay-filter="test" style="width: 45%;" class="layui-table">
+							<thead>
+							<tr>
+								<th style="width: 50px;">序号</th>
+								<th>单位</th>
+								<th>积分</th>
+								<th style="width: 150px;">操作</th>
+							</tr>
+							</thead>
+							<tbody>
+							<tr>
+								<td colspan="3"><span>点击添加按钮，设置其它单位的商品积分</span></td>
+								<td colspan="1">
+									<div class="layui-btn-group">
+										<button type="button" class="layui-btn add" onclick="add(0)">添加</button>
+									</div>
+								</td>
+							</tr>
+							</tbody>
+						</table>
 				  
 				  <div class="layui-form-item"  style="margin-left: -24px;">
 				    <label class="layui-form-label layui-form-required">库存：</label>
@@ -238,12 +265,14 @@ $(function () {
     });
 });
 
-layui.use(['layer','form','upload','laydate'], function(){
+layui.use(['layer','form','upload','laydate','treeSelect'], function(){
 	 var $ = layui.jquery
 	 ,upload = layui.upload;
      var layer = layui.layer;
      var form = layui.form;
+	var treeSelect= layui.treeSelect;
      var laydate = layui.laydate;
+	var index = 1;
      var name='';
      if (typeof(merchandiseId) == "undefined"){
     	 selectAllGrouping();
@@ -269,13 +298,169 @@ layui.use(['layer','form','upload','laydate'], function(){
                layui.form.render("select");
   			}
   		});
-     }
-     
+
+		//查询当前机构的所有积分信息
+		 $.ajax({
+			 type: 'get',
+			 data: { merchandiseId: merchandiseId },
+			 url: '/NewCommodityDataController/selectByIdAndCode',
+			 success: function (data) {
+				 console.log("分组", data);
+
+				 // 在循环外部定义 add 函数
+				 window.add1 = function(val,inventory) {
+					 var element = $([
+						 '<tr>',
+						 '<td>' + index + '<input id="input' + index + '" type="text" name="orgCode1" style="display:none"></td>',
+						 '<td><input id="select' + index + '"></td>',
+						 '<td style="width: 25%;"><input type="number" step="0.1" name="gift_price" placeholder="请填写" autocomplete="off" class="layui-input numinput" required lay-verify="required" value="' + inventory + '"></td>',
+						 '<td class="handler">',
+						 '<button type="button" class="layui-btn layui-btn-danger del">删除</button>',
+						 '</td>',
+						 '</tr>',
+					 ].join(''));
+
+					 $('#form-create tbody').append(element);
+
+					 var nowin = '#input' + index;
+					 var instanceName = 'treeSelect_' + index;
+					 var id = 'select' + index;
+					 var uniqueFilter = 'treeFilter_' + index;
+					 $(`#${id}`).attr('lay-filter', uniqueFilter);
+					 window[instanceName] = treeSelect.render({
+						 elem: `#${id}`,
+						 data: '/YhOrgTree/showPullDownTree',
+						 type: 'get',
+						 placeholder: '全部',
+						 search: true,
+						 click: function(d) {
+							 $(nowin).val(d.current.id);
+						 },
+						 success: function (d) {
+							 $(nowin).val(val);
+							 console.log(uniqueFilter, val,window[instanceName]);
+							 window[instanceName].checkNode(uniqueFilter,val);
+						 }
+					 });
+
+
+					 // 删除按钮事件
+					 element.find('.del').on('click', function() {
+						 $(this).parents('tr').remove();
+						 index--;
+					 });
+					 index++;
+				 };
+
+				 // 遍历数据，调用 add 函数
+				 for (var i = 0; i < data.data.length; i++) {
+					 console.log("--------------------------------");
+					 add1(data.data[i].orgCode,data.data[i].inventory); // 将 value 和 index 传递给 add 函数
+				 }
+			 }
+		 });
+
+
+	 }
+
+	window.add= function(val){
+		var element = $([
+			'<tr>',
+			'<td>'+ index +'<input id="input'+ index +'" type="text" name="orgCode1" style="display:none"></td>',
+			'<td ><input id="select'+ index +'"></td> ',
+			'<td style="width: 25%;"><input type="number"  step="0.1" name="gift_price" placeholder="请填写" autocomplete="off" class="layui-input numinput" required lay-verify="required" value="'+val+'"></td>',
+			'<td class="handler">',
+			'<button type="button" class="layui-btn layui-btn-danger del">删除</button>',
+			'</td>',
+			'</tr>',
+		].join(''))
+		$('#form-create tbody').append(element)
+		var hobby = "#select"+index;
+		var nowin='#input'+index;
+		var hobbySelect=treeSelect.render({
+			// 选择器
+			elem: hobby,
+			// 数据
+			data: '/YhOrgTree/showPullDownTree',
+			// 异步加载方式：get/post，默认get
+			type: 'get',
+			// 占位符
+			placeholder: '全部',
+			// 是否开启搜索功能：true/false，默认false
+			search: true,
+			// 点击回调
+			click: function(d){
+				$(nowin).val(d.current.id);
+				console.log($(nowin).val());
+				selectIntegral(d.data[0].id);
+			},
+			// 加载完成后的回调函数
+			success: function (d) {
+				console.log(d);
+//                选中节点，根据id筛选
+				treeSelect.checkNode('tree', d.data[0].id);
+				// $('#user').val(d.data[0].id);
+				selectIntegral(d.data[0].id);
+
+
+			}
+		});
+
+
+
+		element.find('.get').on('click', function(){
+
+
+
+			alert('value: ' + this.getValue('value'));
+		}.bind(hobbySelect))
+
+		element.find('.del').on('click', function(){
+			$(this).parents('tr').remove();
+			index--;
+		})
+
+		index++;
+		return hobby;
+
+	};
+
+	function randtreesone(){
+		treeSelect.render({
+			// 选择器
+			elem: '#tree',
+			// 数据
+			data: '/YhOrgTree/showPullDownTree',
+			// 异步加载方式：get/post，默认get
+			type: 'get',
+			// 占位符
+			placeholder: '全部',
+			// 是否开启搜索功能：true/false，默认false
+			search: true,
+			// 点击回调
+			click: function(d){
+				//$('#user').val(d.current.id);
+				selectIntegral(d.data[0].id);
+			},
+			// 加载完成后的回调函数
+			success: function (d) {
+				console.log(d);
+//                选中节点，根据id筛选
+				treeSelect.checkNode('tree', d.data[0].id);
+				//$('#user').val(d.data[0].id);
+				selectIntegral(d.data[0].id);
+
+
+			}
+		});
+	}
+
+
+	randtreesone();
      function selectAllGrouping(){
        	 $.ajax({
  			type: 'get',
  			url: '/IntegralShoppingGrouping/selectAllGrouping',
-       
  			success: function (data) {
  				console.log("分组",data)
  				if(name==''){
@@ -289,8 +474,43 @@ layui.use(['layer','form','upload','laydate'], function(){
  			}
  		});
      }
+
+	// document.getElementById("pzkIntegralInput").addEventListener("blur", function() {
+	// 	// 这里编写失去焦点时触发的方法
+	// 	console.log("Input has lost focus");
+	// 	$.ajax({
+	// 		type:'get',
+	// 		url:'/NewCommodityDataController/insertOrUpdate',
+	// 		data:{merchandiseId:merchandiseId,orgCode:$("#user").val(),id:$("#jifen").val(),inventory:$("#pzkIntegralInput").val()},
+	// 		success : function(data){
+	// 			console.info(data,"查询商品")
+	// 		}
+	// 	});
+	// 	// 其他自定义操作
+	// });
+
+
  
-   	 
+   	 function selectIntegral(orgCode){
+		if(typeof(merchandiseId) != "undefined"){
+			$.ajax({
+				type:'get',
+				url:'/NewCommodityDataController/selectInvent',
+				data:{merchandiseId:merchandiseId,orgCode:orgCode},
+				success : function(data){
+					console.info(data,"查询商品")
+					form.val('regForm', {
+						"pzkIntegral" : data.data.inventory,
+					});
+
+					$("#jifen").val(data.data.id);
+				}
+			});
+			//根据id查询数据
+
+		}
+	 }
+
 	    $.ajax({
 	 		type:'get', 
 	 		url:'/YhUserCommodityData/selectCommodity',
@@ -313,7 +533,6 @@ layui.use(['layer','form','upload','laydate'], function(){
 		   					"merchandiseType" : data.data.merchandiseType,
 		   					"merchandiseName" : data.data.merchandiseName,
 		   					"groupingId" : data.data.groupingId,
-		   					 "pzkIntegral" : data.data.pzkIntegral,
 		   					"inventory" : data.data.inventory
 		   					
 		   					
@@ -495,11 +714,51 @@ layui.use(['layer','form','upload','laydate'], function(){
   	var content = HEADER.getHTML();
     dataYh.field.imageText=content;
     dataYh.field.coverImg=imgs;//将数组合并成字符串;
+	  const elements = document.getElementsByName('gift_price');
+	  const values = [];
+	  elements.forEach(element => {
+		  if (!element.value) {
+			  layer.msg('请填写积分')
+			  return;  // 退出当前遍历
+		  }
+		  values.push(element.value);  // 添加有效的值到数组中
+	  });
+
+	  const elements1 = document.getElementsByName('orgCode1');
+	  let values1 = [];
+	  let uniqueValues = new Set(); // 用于检测唯一性
+
+// 遍历每个元素，检查值是否为空以及是否重复
+	  elements1.forEach(element => {
+		  const value = element.value;
+
+		  // 检查是否为空
+		  if (!value) {
+			  layer.msg('积分设置请选择单位')
+			  return;  // 退出当前遍历
+		  }
+
+		  // 检查是否重复
+		  if (uniqueValues.has(value)) {
+			  layer.msg('积分设置单位不能相同')
+			  return;  // 退出当前遍历
+		  }
+
+		  // 如果通过了检查，将值添加到数组和 Set 中
+		  values1.push(value);
+		  uniqueValues.add(value);
+	  });
+	  console.log(values1);
+	  dataYh.field.integrals=values;
+	  dataYh.field.orgCodes=values1;
     console.log("表单数据",JSON.stringify(dataYh.field))
     	    $.ajax({
-	 		type:'get', 
+	 		type:'post',
+			headers: {
+				'Content-Type': 'application/json'
+			},
 	 		url:'/YhUserCommodityData/compileCommodity',
-	 		data:dataYh.field,
+	 		data:JSON.stringify(dataYh.field),
 	 		success : function(data){
 	 			console.log(data,"添加商品")
 				if(data.code==20000){

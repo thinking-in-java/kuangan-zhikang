@@ -21,8 +21,16 @@ public class YhPressureEvaluateApp {
     private String xgtype;
 	private Integer l_score;
 	private Integer s_score;
-	
-	
+
+    private String mobile;
+
+    public String getMobile() {
+        return mobile;
+    }
+
+    public void setMobile(String mobile) {
+        this.mobile = mobile;
+    }
 
     public String getXgtype() {
 		return xgtype;

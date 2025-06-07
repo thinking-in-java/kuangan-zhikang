@@ -43,4 +43,16 @@ public class YhUserStepWebServiceImpl implements YhUserStepWebService{
 		// TODO Auto-generated method stub
 		return yhUserStepWebMapper.selectUserIntegral(userCode);
 	}
+
+	@Override
+	public YhUserStepWeb selectAggregate(String userCode) {
+		// TODO Auto-generated method stub
+		return yhUserStepWebMapper.selectAggregate(userCode);
+	}
+
+	@Override
+	public int updateByPrimaryKey(YhUserStepWeb record) {
+		// TODO Auto-generated method stub
+		return yhUserStepWebMapper.updateByPrimaryKeySelective(record);
+	}
 }

@@ -18,9 +18,13 @@ import com.yihe.applet.api.service.YhUserPersonageConditionAppService;
 import com.yihe.applet.api.service.YhUserReginfoAppService;
 import com.yihe.applet.api.service.YhWxUserAppService;
 import com.yihe.common.config.Global;
+import com.yihe.common.constant.Constants;
+import com.yihe.common.redis.RedisService;
 import com.yihe.common.utils.DateUtils;
 import com.yihe.common.utils.RestfulDemo;
 import com.yihe.common.utils.StringUtils;
+import com.yihe.framework.manager.AsyncManager;
+import com.yihe.framework.manager.factory.AsyncFactory;
 import com.yihe.framework.shiro.service.SysPasswordService;
 import com.yihe.system.domain.YhUserEnrolinfo;
 import com.yihe.system.domain.YhUserMakeCard;
@@ -79,6 +83,9 @@ public class YhUserReginfoController{
 
 	@Autowired
 	YhUserPersonageConditionAppService yhUserPersonageConditionService;
+
+	@Autowired
+	public RedisService redisService;
 	// 以下为测试代码，随机生成验证码
 	private static int newcode;
 
@@ -214,26 +221,26 @@ public class YhUserReginfoController{
 	@ResponseBody
 	@Transactional
 	public Result activationUser(String code,String user,String phone,String pwd,String pwd2,String msgCode,String msgCode2,String cardidentity) {
-		if(StringUtil.isEmpty(code)||
-				StringUtil.isEmpty(user)||
-				StringUtil.isEmpty(phone)||
-				StringUtil.isEmpty(pwd)||
-				StringUtil.isEmpty(pwd2)||
-				StringUtil.isEmpty(msgCode)||
-				StringUtil.isEmpty(msgCode2)||
-				StringUtil.isEmpty(cardidentity)
-		){
-			return Result.error();
-		}
+//		if(StringUtil.isEmpty(code)||
+//				StringUtil.isEmpty(user)||
+//				StringUtil.isEmpty(phone)||
+//				StringUtil.isEmpty(pwd)||
+//				StringUtil.isEmpty(pwd2)||
+//				StringUtil.isEmpty(msgCode)||
+//				StringUtil.isEmpty(msgCode2)||
+//				StringUtil.isEmpty(cardidentity)
+//		){
+//			return Result.error();
+//		}
 
 
 		if(!pwd.equals(pwd2)){
 			return Result.error("两次密码不相等");
 		}
 
-		if(!msgCode.equals(msgCode2)){
-			return Result.error("验证码错误");
-		}
+//		if(!msgCode.equals(msgCode2)){
+//			return Result.error("验证码错误");
+//		}
 		if(phone.length()!=11){
 			return Result.error("手机号格式不对");
 		}
@@ -551,29 +558,46 @@ public class YhUserReginfoController{
 	 */
 	@RequestMapping(value = "/login")
 	@ResponseBody
-	public Result login(String userName, String userPwd) {
+	public Result login(String userName, String userPwd, Integer state) {
 		int findUserNameExist = YhUserReginfoService.findUserNameExist(userName);
-		if(findUserNameExist==0){
+		if (findUserNameExist == 0) {
+			AsyncManager.me().execute(AsyncFactory.recordLogininfor(userName, Constants.LOGIN_SUCCESS, "账号被锁定"));
 			return Result.error("账号不存在");
 		}
 
+		String nameAndPwd = "";
+		if (null != state && 1 == state) {
+			nameAndPwd = userPwd;
+		} else {
+			nameAndPwd = new Md5Hash(userName + userPwd).toHex();
+		}
 
-		
-		String nameAndPwd = new Md5Hash(userName + userPwd).toHex();
-		 
 		YhUserReginfoApp selectByExample = YhUserReginfoService.selectByUserNameAndUserPwd(userName, nameAndPwd);
 
 		if (null != selectByExample) {
+			String userCode = selectByExample.getUserCode();
+
+			if (2 != selectByExample.getLockFlag()) {
+				AsyncManager.me().execute(AsyncFactory.recordLogininfor(selectByExample.getUserName(), Constants.LOGIN_SUCCESS, "账号被锁定"));
+				return Result.error("账号被锁定");
+			}
+
+
 			int findUserCodeByOrgIsExist = YhUserReginfoService.findUserCodeByOrgIsExist(selectByExample.getUserCode());
-			if(findUserCodeByOrgIsExist>0){
+			if (findUserCodeByOrgIsExist > 0) {
+				AsyncManager.me().execute(AsyncFactory.recordLogininfor(selectByExample.getUserName(), Constants.LOGIN_SUCCESS, "账号已过期"));
 				return Result.error("账号已过期");
 			}
 			Integer userRole = YhUserReginfoService.findUserRole(selectByExample.getUserCode());
-			if(null==userRole){
+			if (null == userRole) {
+				AsyncManager.me().execute(AsyncFactory.recordLogininfor(selectByExample.getUserName(), Constants.LOGIN_SUCCESS, "登录权限错误"));
 				return Result.error("登录权限错误");
 			}
-			if(17!=userRole){
-				return Result.error("请使用个人端账号登录");
+			Integer userType = selectByExample.getUserType();
+
+			if (5 != userType && 4 != userType) {
+				AsyncManager.me().execute(AsyncFactory.recordLogininfor(selectByExample.getUserName(), Constants.LOGIN_SUCCESS, "请使用个人或健管师账号登录"));
+				return Result.error("请使用个人或健管师账号登录");
 			}
 			YhUserReginfoApp record = new YhUserReginfoApp();
 			record.setLoginTime(new Date());
@@ -586,10 +610,18 @@ public class YhUserReginfoController{
 			YhUserReginfoService.updateByUsercodeAndLoginTime(record);
 			YhWxUser yhWxUser = YhWxUserService.selectHeadImgbyParam(selectByExample.getUserCode());
 			selectByExample.setYhWxUser(yhWxUser);
+
+			AsyncManager.me().execute(AsyncFactory.recordLogininfor(selectByExample.getUserName(), Constants.LOGIN_SUCCESS, "登录成功"));
+
+			//将token存入到缓存中
+			String redisKey = Constants.XCX_LOGIN_TOKEN + userCode;
+			redisService.setCacheObject(redisKey, userCode);
+			redisService.expire(redisKey,Constants.LOGIN_OVERDUE_TIME);
+
 			return Result.ok(selectByExample);
 		}
-		 
-		
+
+
 		return Result.error("账号密码错误");
 	}
 
@@ -633,7 +665,7 @@ public class YhUserReginfoController{
 	 */
 	@RequestMapping(value = "/sendVerificationCode")
 	@ResponseBody
-	public Result sendVerificationCode(    String shouji) throws ClientException {
+	public Result sendVerificationCode(String shouji) throws ClientException {
 		setNewcode();
 
 		String code = Integer.toString(getNewcode());

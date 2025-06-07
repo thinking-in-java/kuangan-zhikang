@@ -7,9 +7,11 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.yihe.system.domain.*;
 import com.yihe.system.mapper.*;
+import com.yihe.system.service.OrganizationIndexService;
 import com.yihe.system.service.YhAuditCheckService;
 import com.yihe.system.service.YhOrgTreeService;
 import com.yihe.system.utils.StringUtil;
+import com.yihe.system.vo.AddNewLogDTO;
 import io.swagger.annotations.ApiOperation;
 import net.sf.json.JSONArray;
 import org.apache.commons.io.FileUtils;
@@ -121,6 +123,8 @@ public class OrganizationIndexController {
     @Autowired
     private YhOrgTreeService YhOrgTreeService;
 
+    @Autowired
+    OrganizationIndexService organizationIndexService;
     /**
      * @Title: unicodeEncode
      * @Description: unicode编码
@@ -191,6 +195,18 @@ public class OrganizationIndexController {
     }
 
     @ApiOperation(value = "用户数据统计")
+    @RequestMapping(value = "/getBmiPercentages", method = RequestMethod.POST)
+    @ResponseBody
+    public Map<String, Object> getBmiPercentages() {
+
+        //map1.put("orgCode", "reg.Org_Code like '%" + orgCode + "%'");
+        //int tre = yhUserReginfoMapper.indexnum(map1);//总人数
+
+        Map<String, Object> map = new HashMap<String, Object>();
+        return yHUserBmiMapper.getBmiPercentages();
+    }
+
+    @ApiOperation(value = "用户数据统计")
     @RequestMapping(value = "/Userdatastatistics", method = RequestMethod.POST)
     @ResponseBody
     public Map<String, Object> Userdatastatistics(String orgCode) {
@@ -210,6 +226,37 @@ public class OrganizationIndexController {
         map.put("highrisk", upmsPermissions.getHighrisk());
         map.put("health", upmsPermissions.getHealth());
         return map;
+    }
+
+    @RequestMapping(value = "/bigDataCenterTop", method = RequestMethod.POST)
+    @ResponseBody
+    public List<AddNewLogDTO> bigDataCenterTop(String orgCode) {
+        if(StringUtil.isEmpty(orgCode)){
+            Subject subject = SecurityUtils.getSubject();
+            YhUserReginfo yh = (YhUserReginfo) subject.getPrincipal();
+            if(yh!=null){
+                orgCode = yh.getOrgCode();//取到当前用户orgcode
+            }else{
+                orgCode="10000";
+            }
+        }
+        return  organizationIndexService.queryTheNewMonitoringLogs(orgCode);
+    }
+
+    @RequestMapping(value = "/bigDataCenterRight", method = RequestMethod.POST)
+    @ResponseBody
+    public Map<String, Object> bigDataCenterRight(String orgCode) {
+        if(StringUtil.isEmpty(orgCode)){
+            Subject subject = SecurityUtils.getSubject();
+            YhUserReginfo yh = (YhUserReginfo) subject.getPrincipal();
+            if(yh!=null){
+                orgCode = yh.getOrgCode();//取到当前用户orgcode
+            }else{
+                orgCode="10000";
+            }
+        }
+        Map<String, Object> stringObjectMap = organizationIndexService.bigDataCenterRightNew(orgCode);
+        return stringObjectMap;
     }
 
     @ApiOperation(value = "用户数据统计")

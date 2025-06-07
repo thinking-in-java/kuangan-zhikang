@@ -12,6 +12,83 @@
   <sql id="Base_Column_List" >
     healthstar_ID, user_code, user_type, healthstars, healthstars_events, events_time
   </sql>
+    <select id="selectUserContinuousRecord" resultType="java.lang.Integer">
+  		 SELECT
+        count(1)
+    FROM
+        (
+            SELECT
+                date_sub(a.events_time, INTERVAL 1 DAY) signDate,
+                (
+                    @i := DATE_ADD(@i, INTERVAL - 1 DAY)
+                ) today
+            FROM
+                (
+                    SELECT
+                        events_time
+                    FROM
+                        yh_health_star
+                    WHERE
+                        user_code = #{userCode} and healthstars_events = #{eventName}
+                    ORDER BY
+                        events_time DESC
+                ) a
+            INNER JOIN (
+                SELECT
+                    @i := max(events_time) AS signMax
+                FROM
+                    yh_health_star
+                WHERE
+                    user_code = #{userCode} and healthstars_events = #{eventName}
+                AND (
+                    TO_DAYS(events_time) = TO_DAYS(curdate())
+                    OR TO_DAYS(events_time) = TO_DAYS(
+                        DATE_ADD(curdate(), INTERVAL - 1 DAY)
+                    )
+                )
+            ) b ON b.signMax IS NOT NULL
+            AND TO_DAYS(DATE_ADD(@i, INTERVAL - 1 DAY)) = TO_DAYS(
+                date_sub(a.events_time, INTERVAL 1 DAY)
+            )
+        ) c
+
+    </select>
+
+    <select id="selectNewestStar" resultMap="BaseResultMap">
+  		select * from yh_health_star as star where star.user_code = #{userCode} and star.healthstars_events=#{eventName}
+		and TO_DAYS( NOW( ) ) - TO_DAYS(star.events_time) &lt;= 1;
+  </select>
+    <select id="selectRecordtypeAndTime2" parameterType="map" resultType="java.lang.String">
+   select t1.event_type
+		from yh_score_event_category t1
+		left join yh_health_star t2 on t1.event_name=t2.healthstars_events
+		and t2.user_code=#{userCode,jdbcType=VARCHAR}
+		where t1.event_type=#{eventType,jdbcType=VARCHAR}
+	    and DATE_FORMAT( events_time, '%Y%m' ) = DATE_FORMAT( CURDATE( ) ,'%Y%m' )
+		and `type` = 2
+  </select>
+
+    <select id="selectRecordtypeAndTime3" parameterType="map" resultType="java.lang.String">
+        select t1.event_type
+        from yh_score_event_category t1
+        left join yh_health_star t2 on t1.event_name=t2.healthstars_events
+        and t2.user_code=#{userCode,jdbcType=VARCHAR}
+        where t1.event_type=#{eventType,jdbcType=VARCHAR}
+        AND WEEK(events_time, 1) = WEEK(CURDATE(), 1)
+        AND YEAR(events_time) = YEAR(CURDATE())
+        and `type` = 3
+    </select>
+
+    <select id="selectRecordtypeAndTime" parameterType="map" resultType="java.lang.String">
+   select t1.event_type
+		from yh_score_event_category t1
+		left join yh_health_star t2 on t1.event_name=t2.healthstars_events
+		and t2.user_code=#{userCode,jdbcType=VARCHAR}
+		where t1.event_type=#{eventType,jdbcType=VARCHAR}
+		and DATE_FORMAT(t2.events_time,'%Y-%m-%d')=DATE_FORMAT(now(),'%Y-%m-%d')
+		and `type` = 1
+  </select>
+
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
     select 
     <include refid="Base_Column_List" />
@@ -20,7 +97,12 @@
   </select>
   
     <select id="selectAllUserRecord" resultMap="BaseResultMap" parameterType="java.lang.String" >
-    select user_code, user_type, healthstars, healthstars_events from yh_health_star  where user_code = #{userCode} order by events_time desc
+    select user_code, user_type, healthstars, healthstars_events from yh_health_star  where user_code = #{userCode}
+        <if test="startTime != null and endTime != null">
+            AND events_time BETWEEN #{startTime} AND DATE_ADD(#{endTime}, INTERVAL 1 DAY)
+        </if>
+
+                                                                                      order by events_time desc
   </select>
   
      <select id="selectAllUserRecordPage" resultMap="BaseResultMap">
@@ -112,6 +194,9 @@
          <if test="name !=null and name !=''">
             AND reg.name like CONCAT('%',#{name},'%')
         </if>
+        <if test="startTime != null and endTime != null">
+            AND str.events_time BETWEEN #{startTime} AND DATE_ADD(#{endTime}, INTERVAL 1 DAY)
+        </if>
        </where>
 
        GROUP BY
@@ -126,6 +211,7 @@
        <if test="priceMin !=null and priceMin !=''">
            AND healthstarsEvents &gt; #{priceMin}
        </if>
+
        ORDER BY
        healthstarsEvents DESC
   </select>

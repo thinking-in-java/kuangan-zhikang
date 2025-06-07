@@ -17,5 +17,6 @@ public interface YhUserStepWebMapper {
 
     int updateByPrimaryKey(YhUserStepWeb record);
     YhUserStepWeb selectUserIntegral(@Param("userCode") String userCode);
-    
+
+    YhUserStepWeb selectAggregate(String userCode);
 }

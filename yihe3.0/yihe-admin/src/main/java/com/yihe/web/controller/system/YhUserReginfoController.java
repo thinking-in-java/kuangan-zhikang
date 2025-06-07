@@ -469,9 +469,10 @@ public class YhUserReginfoController extends BaseController {
         return 1;
     }
 
-    @RequestMapping(value = "/exportXls", method = RequestMethod.GET)
+    @RequestMapping(value = "/exportXls")
     @ResponseBody
-    public void exportXls(String[] shuzu, HttpServletResponse response) throws Exception {
+    public void exportXls(@RequestBody Map<String, String[]> data, HttpServletResponse response) throws Exception {
+        String[] shuzu = data.get("shuzu");
         HSSFWorkbook workbook = new HSSFWorkbook();
         HSSFSheet sheet = workbook.createSheet("注册卡列表");
         YhUserReginfo userReginfo = (YhUserReginfo) SecurityUtils.getSubject().getPrincipal();

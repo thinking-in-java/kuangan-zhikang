@@ -127,14 +127,17 @@
     where user_id = #{userId,jdbcType=VARCHAR}
       and oppen_id = #{oppenId,jdbcType=VARCHAR}
   </select>
-  
-  <select id="selectRandomheandImg"  resultMap="BaseResultMap2">
-     select * from yh_user_reginfo as t1
-	 inner join yh_instrument_record t2
-	 on t1.user_code = t2.user_code
-	 order by t2.record_id desc limit #{num};
-  </select>
-  
+
+  <select id="selectRandomheandImg" resultType="string">
+        select post_code
+        from yh_user_reginfo as yur
+                 inner join yh_instrument_record yir
+                            on yir.user_code = yur.user_code
+        where type = #{type}
+        group by yir.user_code
+        order by yir.record_id desc
+        limit 5;
+    </select>
   
   <update id="modifyWXuserStatusInfo">
   UPDATE 

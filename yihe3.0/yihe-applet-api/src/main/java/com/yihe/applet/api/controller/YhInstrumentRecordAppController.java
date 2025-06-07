@@ -58,14 +58,8 @@ public class YhInstrumentRecordAppController {
 	@ApiOperation(value = "随机查询4个用户的头像")
 	@RequestMapping(value = "/selectRandomheandImg", method = RequestMethod.POST)
 	@ResponseBody
-	public List<YhUserReginfoApp> selectRandomheandImg( String type) {
-		int countData = 0;
-		 countData = yhInstrumentRecordAppService.countData(type);
-		 if(countData>4) {
-			 countData = 4;
-		 }
-		List<YhUserReginfoApp> list = yhWxUserAppService.selectRandomheandImg(countData);
-		
+	public List<String> selectRandomheandImg( String type) {
+		List<String> list = yhWxUserAppService.selectRandomheandImg(type);
 		return list;
 	}
 	

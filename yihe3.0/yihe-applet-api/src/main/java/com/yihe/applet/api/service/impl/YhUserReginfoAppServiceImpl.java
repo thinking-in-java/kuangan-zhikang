@@ -7,6 +7,7 @@ import com.yihe.applet.api.service.YhUserReginfoAppService;
 
 import java.util.*;
 
+import com.yihe.common.utils.StringUtils;
 import org.apache.shiro.crypto.hash.Md5Hash;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -54,7 +55,11 @@ public class YhUserReginfoAppServiceImpl  implements YhUserReginfoAppService {
 	@Override
 	public YhUserReginfoApp findYhUserReginfo(String userCode) {
 		// TODO Auto-generated method stub
-		return yhUserReginfoAppMapper.findYhUserReginfo(userCode);
+		YhUserReginfoApp yhUserReginfo = yhUserReginfoAppMapper.findYhUserReginfo(userCode);
+		if(null!=yhUserReginfo && StringUtils.isEmpty(yhUserReginfo.getPostCode())){
+			yhUserReginfo.setPostCode(1==yhUserReginfo.getGender()?"https://yjyqny.yhy.ren/new/maleDoctor.png":"https://yjyqny.yhy.ren/new/femaleDoctor.png");
+		}
+		return yhUserReginfo;
 	}
 
 	@Override

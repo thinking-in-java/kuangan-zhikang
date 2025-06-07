@@ -65,6 +65,9 @@ public interface IYhPressureEvaluateService
      */
     public int deleteYhPressureEvaluateByIds(String ids);
 
+
+    YhPressureEvaluate selectByUserCodeAndType(String userCode);
+
     /**
      * 删除压力管理三大评估问卷数据信息
      * 

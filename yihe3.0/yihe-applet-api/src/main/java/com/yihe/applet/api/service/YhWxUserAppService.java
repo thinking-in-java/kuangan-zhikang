@@ -30,7 +30,7 @@ public interface YhWxUserAppService {
     
     YhWxUser selectHeadImgbyParam(String userId);
     
-    List<YhUserReginfoApp> selectRandomheandImg(int num);
+    List<String> selectRandomheandImg(String type);
     
     
 }

@@ -165,8 +165,8 @@
     where scoreEvent_ID = #{scoreeventId,jdbcType=INTEGER}
   </update>
       <!-- 查询积分类型 -->
-   <select id="selectEventType" parameterType="java.lang.String" resultMap="BaseResultMap">
-  select * from yh_score_event_category where event_type=#{eventType,jdbcType=VARCHAR}
+   <select id="selectEventType"  resultMap="BaseResultMap">
+  select * from yh_score_event_category where event_type=#{eventType,jdbcType=VARCHAR} and org_code=#{orgCode}
   </select>
      <!--查询记录积分完成状态 -->
    <select id="selectIntegralStatus" parameterType="map" resultType="map">
@@ -176,14 +176,20 @@
 		left join yh_health_star t2 on t1.event_name=t2.healthstars_events 
 			and DATE_FORMAT(t2.events_time,'%Y-%m-%d')=DATE_FORMAT(now(),'%Y-%m-%d')
 			and t2.user_code= #{userCode,jdbcType=VARCHAR}
-	where t1.event_type in  ('user_signin','sport_log','food_log','record_sleep','record_habits','publish_classroom','publish_habit')
+     LEFT JOIN yh_user_reginfo AS ur ON ur.Org_Code = t1.org_code
+     where t1.event_type in  ('user_signin','sport_log','food_log','record_sleep','record_habits','publish_classroom','publish_habit','sport_step_6000'
+     ,'sport_step_8000'
+     ,'sport_step_10000')
 	      <if test="type != null and type == 0" >
         		and t1.`type` = 1
      	 </if>
      	 <if test="type != null and type == 1" >
-        		and t1.`type` = 2
+        		and t1.`type` = 3
      	 </if>
-	
+     <if test="type != null and type == 2" >
+       and t1.`type` = 2
+     </if>
+     AND ur.user_code = #{userCode,jdbcType=VARCHAR}
 union all 
 		select t1.*,
 			case WHEN t2.healthstar_ID is null then '0' else '1' end as status
@@ -191,12 +197,42 @@ union all
 		left join yh_health_star t2 on t1.event_name=t2.healthstars_events 
 			and DATE_FORMAT(t2.events_time,'%Y-%m')=DATE_FORMAT(now() , '%Y-%m' )  
 			and t2.user_code=#{userCode,jdbcType=VARCHAR}
-		where t1.event_type in ('health_assess','habit_assess','sleep_assess','pressure_assess','symptom_assess')
+     LEFT JOIN yh_user_reginfo AS ur ON ur.Org_Code = t1.org_code
+     where t1.event_type in ('health_assess','habit_assess','sleep_assess','pressure_assess','symptom_assess','psychology_assess')
 		<if test="type != null and type == 0" >
         		and t1.`type` = 1
      	 </if>
      	 <if test="type != null and type == 1" >
-        		and t1.`type` = 2
+        		and t1.`type` = 3
      	 </if>
+     <if test="type != null and type == 2" >
+       and t1.`type` = 2
+     </if>
+     AND ur.user_code = #{userCode,jdbcType=VARCHAR}
+
+     union all
+     select t1.*,
+     case WHEN t2.healthstar_ID is null then '0' else '1' end as status
+     from yh_score_event_category t1
+     left join yh_health_star t2 on t1.event_name=t2.healthstars_events
+     and DATE_FORMAT(t2.events_time,'%Y-%m')=DATE_FORMAT(now() , '%Y-%m' )
+     and t2.user_code=#{userCode,jdbcType=VARCHAR}
+     LEFT JOIN yh_user_reginfo AS ur ON ur.Org_Code = t1.org_code
+     where t1.event_type in ('blood_pressure',
+     'blood_sugar',
+     'blood_fat',
+     'uric_acid',
+     'weight_log',
+     'heart_rate')
+     <if test="type != null and type == 0" >
+       and t1.`type` = 1
+     </if>
+     <if test="type != null and type == 1" >
+       and t1.`type` = 3
+     </if>
+     <if test="type != null and type == 2" >
+       and t1.`type` = 2
+     </if>
+     AND ur.user_code = #{userCode,jdbcType=VARCHAR}
   </select>
 </mapper>

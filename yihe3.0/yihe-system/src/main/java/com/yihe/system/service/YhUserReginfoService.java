@@ -17,6 +17,7 @@ import java.util.Map;
  */
 public interface YhUserReginfoService {
 
+    List<YhUserReginfo> queryDoctorList();
     List<YhUserReginfo> selectAllUserinfoByuserCode(String userCode);
 
     String selectOrgName(String usercode);
@@ -48,6 +49,7 @@ public interface YhUserReginfoService {
     YhUserReginfo selectMobileAndName(String userName);
 
     YhUserReginfo selectMobileAndName2(String mobile);
+    YhUserReginfo selectMobileAndName3(String mobile,Integer userType);
 
     PageInfo<YhUserReginfo> selectByPrimaryKeyBydoctor(String userCode, int pageNum, int pageSize);
 

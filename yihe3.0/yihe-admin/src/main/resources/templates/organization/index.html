@@ -11,10 +11,11 @@
     <!-- 全国344个市、区、州对应的数字编号 -->
     <script type="text/javascript" th:src="@{/assets/static/js/citymap.js}"></script>
 
-    <script type="text/javascript" th:src="@{/organization/index.js}"></script>
+    <script type="text/javascript" th:src="@{/assets/js/index.js}"></script>
 
     <link rel="stylesheet" th:href="@{/assets/libs/layui/css/layui.css}"/>
 </head>
+<!--本月新增数据的滚动js-->
 <script type="text/javascript">
     $(document).ready(function () {
         var html = $(".wrap ul").html()
@@ -51,461 +52,648 @@
 
     })
 </script>
+<style>
+    body {
+        width: 100vw;
+        height: 100vh;
+        overflow: hidden;
+        color: #fff;
+    }
+    .contioner {
+        margin: 0 0 30px;
+        width: 100%;
+        height: 100%;
+        display: flex;
+    }
+    .web-left {
+        position: relative;
+        margin-top: 4vh;
+        z-index: 2;
+        height: calc(100% - 4vh);
+        width: 20.26vw;
+        background-color: rgba(14, 162, 243, 0.1);
+        padding: 2.88vh 0.84vw 0 1.44vw;
+    }
+    .web-center {
+        width: 59.48vw;
+        height: 100%;
+        position: relative;
+        margin-top: 4vh;
+    }
+    .body-cerebrumFive {
+        background: rgba(255,255,255,.04);
+        border: 1px solid rgba(25,186,139,.17);
+        overflow: hidden;
+        padding: 0.1rem 0 0.3rem 0;
+        width: 100%;
+        height: 2rem;
+        margin-bottom: 20px;
+    }
+    .body-cerebrum {
+        position: absolute;
+        left: 2vw;
+        top: 10vh;
+    }
+    .leftLineImg{
+        position: absolute;
+        top: 0.16rem;
+        right: -1.66rem;
+        transform: rotateX(180deg);
+        width: 9vw;
+        height: 4vh;
+    }
+    .sleepGif{
+        width: 2.33vw;
+        height: 2.33vw;
+        position: absolute;
+        top: 0.36rem;
+        right: -1.88rem;
+    }
+
+    .body-cerebrumTwo {
+        position: absolute;
+        left: 2vw;
+        top: 26.5vh;
+    }
+    .leftLine{
+        position: absolute;
+        top: 0.2rem;
+        right: -1.26rem;
+        width: 7vw;
+        height: 4vh;
+    }
+    .heartGif{
+        width: 2.33vw;
+        height: 2.33vw;
+        position: absolute;
+        top: -0.06rem;
+        right: -1.5rem;
+    }
+
+    .body-cerebrumThree {
+        position: absolute;
+        left: 2vw;
+        top: 44.5vh;
+    }
+    .leftLineOxy{
+        position: absolute;
+        top: -0.26rem;
+        right: -0.2rem;
+        transform: rotate(180deg);
+        width: 9vw;
+        height: 4vh;
+    }
+    .oxyGif{
+        width: 2.33vw;
+        height: 2.33vw;
+        position: absolute;
+        top: -0.5rem;
+        right: -0.46rem;
+    }
+
+    .body-cerebrumFour {
+        position: absolute;
+        left: 2vw;
+        top: 64.5vh;
+    }
+    .leftLine1{
+        position: absolute;
+        top: -2.5rem;
+        right: -1.26rem;
+        width: 7vw;
+        height: 32vh;
+    }
+    .sugarGif{
+        width: 2.33vw;
+        height: 2.33vw;
+        position: absolute;
+        top: -2.7rem;
+        right: -1.5rem;
+    }
+
+    .body-cerebrumSix {
+        position: absolute;
+        right: 2vw;
+        top: 8vh;
+    }
+    .rightLineSix{
+        position: absolute;
+        top: 0.68rem;
+        left: -1.62rem;
+        transform: rotateX(180deg);
+        width: 9vw;
+        height: 12vh;
+    }
+    .fatGif{
+        width: 2.33vw;
+        height: 2.33vw;
+        position: absolute;
+        top: 1.58rem;
+        left: -1.88rem;
+    }
+
+    .cerebrum-infoSix {
+        padding: 0 0.4rem;
+        width: 3.8rem;
+        height: 3rem;
+        background: url("https://beichiqny.yhy.ren/bigData/msg-6.gif");
+        background-size: auto;
+        background-size: 100% 100%;
+    }
+
+    .body-cerebrumSeven {
+        position: absolute;
+        right: 2vw;
+        top: 44vh;
+    }
+    .rightLineSeven{
+        position: absolute;
+        top: 0.4rem;
+        left: -1.22rem;
+        transform: rotateY(180deg);
+        width: 7vw;
+        height: 8vh;
+    }
+    .stepGif{
+        width: 2.33vw;
+        height: 2.33vw;
+        position: absolute;
+        top: 0.9rem;
+        left: -1.5rem;
+    }
+    .body-cerebrumEight{
+        position: absolute;
+        right: 2vw;
+        top: 64vh;
+    }
+
+    .cerebrum-info {
+        padding: 0 0.4rem;
+        width: 3.8rem;
+        height: 1rem;
+        background: url("https://beichiqny.yhy.ren/bigData/msg-3.gif");
+        background-size: auto;
+        background-size: 100% 100%;
+    }
+
+    .flex-between {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .titleColor {
+        font-size: 0.16rem;
+        line-height: 1;
+        color: #89bdea;
+        width: 8vh;
+        letter-spacing: 0;
+        display: inline-block;
+        text-align: right;
+        font-family: "AlibabaPuHuiTi-Bold";
+    }
+    .twoWidth{
+        width: 2vw;
+    }
+
+    .fontColor {
+        font-weight: bold;
+        line-height: 1;
+        letter-spacing: 0.09vw;
+        color: #01e4ff;
+        font-size: 2.2vh !important;
+        font-family: "LcdD";
+    }
+
+    .titleCi {
+        font-size: 1.5vh !important;
+        line-height: 1;
+        letter-spacing: 0.02vw;
+        color: #ffffff;
+        font-family: "AlibabaPuHuiTi-Bold";
+        font-weight: bold;
+    }
+    .bg-video {
+        position: relative;
+    }
+    .titleRate{
+        height: 0.5rem;
+    }
+    .flex-end{
+        display: flex;
+        align-items: flex-end;
+    }
+    .topTitle{
+        font-family: "ZhenyanGB-Regular";
+        width: 100%;
+        height: 6.7vh;
+        font-size: 3.05vh;
+        color: #fffefe;
+        letter-spacing: 0.23vw;
+        text-align: center;
+        padding-top: 1.2vh;
+        background: url("https://beichiqny.yhy.ren/bigData/topBg.png");
+        background-size: auto;
+        background-size: 100% 100%;
+    }
+    .videoClass{
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        position: absolute;
+        z-index: -1;
+        top: 6.7vh;
+    }
+    .flex-align{
+        display: flex;
+        align-items: center;
+        flex-direction: row;
+        height: 2.46vh;
+        box-sizing: border-box;
+        margin: 2.88vh 0 1.44vh 0;
+    }
+    .iconImg{
+        height: 2.03vh;
+        margin: 0 0.1vw 0 0;
+    }
+    .titlePostion{
+        flex: 1;
+        font-weight: bolder;
+        height: 2.66vh;
+        font-size: 0.95vw;
+        letter-spacing: 0.03vw;
+        line-height: 2.66vh;
+        box-sizing: border-box;
+        padding-left: 1.09vw;
+        color: rgba(255, 255, 255, 1);
+        background: url("https://beichiqny.yhy.ren/bigData/title-bg.png") no-repeat;
+        background-size: auto;
+        background-size: 100% 100%;
+    }
+    .logoImg{
+        width: 0.8rem;
+        height: 0.4rem;
+    }
+</style>
 <body>
 <div class="loading">
     <div class="loadbox"><img th:src="@{/assets/images/loading.gif}"> 页面加载中...</div>
 </div>
-<div class="mainbox">
-    <ul class="clearfix">
-        <li>
-            <div class="boxall" style="height: 3.0rem">
-                <div class="alltitle">本月新增数据</div>
-                <div class="addnew">
-                    <div class="adduser" style="height: 2.0rem">
-                        <ul>
-                            <li class="clearfix"><span class="pulll_left">新增用户</span> <span class="pulll_right"
-                                                                                            id="count"></span></li>
-
-                            <li class="clearfix"><span class="pulll_left">新增风险评估</span> <span class="pulll_right"
-                                                                                              id="assesspresentDisease"></span>
-                            </li>
-
-                            <li class="clearfix"><span class="pulll_left">新增压力评估</span> <span class="pulll_right"
-                                                                                              id="evaluateCount"></span>
-                            </li>
-
-                            <li class="clearfix"><span class="pulll_left">新增睡眠评估</span> <span class="pulll_right"
-                                                                                              id="assesspresentSleep"> </span>
-                            </li>
-
-
-                            <li class="clearfix"><span class="pulll_left">新增健康计划日记</span> <span class="pulll_right"
-                                                                                                id="planCount"></span>
-                            </li>
-
-                            <li class="clearfix"><span class="pulll_left">新增饮食日记</span> <span class="pulll_right"
-                                                                                              id="presentfood"></span>
-                            </li>
-
-                            <li class="clearfix"><span class="pulll_left">新增运动日记</span> <span class="pulll_right"
-                                                                                              id="presentSport"></span>
-                            </li>
-
-                            <li class="clearfix"><span class="pulll_left">新增睡眠日记</span> <span class="pulll_right"
-                                                                                              id="presentSleep"></span>
-                            </li>
-
-                            <li class="clearfix"><span class="pulll_left">新增服务任务</span> <span class="pulll_right"
-                                                                                              id="perso"></span></li>
-
-
-                            <!-- <li class="clearfix"> <span class="pulll_left">新增食物申请</span> <span class="pulll_right" id="food"></span> </li>
-
-                            <li class="clearfix"> <span class="pulll_left">新增运动申请</span> <span class="pulll_right" id="exercise"></span> </li>
-                             -->
-
-                        </ul>
+<video autoplay="autoplay" loop="loop" muted src="https://beichiqny.yhy.ren/bigData/personBg.mp4" class="videoClass"></video>
+<div class="topTitle"><img src="https://beichiqny.yhy.ren/logo/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20240507111649.png" class="logoImg">智能健康管理可视化平台</div>
+<div class="contioner">
+    <div class="web-left">
+        <div class="bg-video flex-align">
+            <img src="https://beichiqny.yhy.ren/bigData/icon.png" class="iconImg">
+            <div class="titlePostion">本月新增数据</div>
+        </div>
+        <div class="boxall oneBg" style="height: 2.6rem">
+            <div class="addnew">
+                <div class="adduser" style="height: 2.0rem">
+                    <ul>
+                        <li class="clearfix">
+                            <span class="pulll_left">新增用户</span>
+                            <span class="pulll_right" id="count"></span>
+                        </li>
+                        <li class="clearfix">
+                            <span class="pulll_left">新增风险评估</span>
+                            <span class="pulll_right" id="assesspresentDisease"></span>
+                        </li>
+                        <li class="clearfix">
+                            <span class="pulll_left">新增压力评估</span>
+                            <span class="pulll_right" id="evaluateCount"></span>
+                        </li>
+                        <li class="clearfix">
+                            <span class="pulll_left">新增睡眠评估</span>
+                            <span class="pulll_right" id="assesspresentSleep"> </span>
+                        </li>
+                        <li class="clearfix">
+                            <span class="pulll_left">新增健康计划日记</span>
+                            <span class="pulll_right" id="planCount"></span>
+                        </li>
+                        <li class="clearfix">
+                            <span class="pulll_left">新增饮食日记</span>
+                            <span class="pulll_right" id="presentfood"></span>
+                        </li>
+                        <li class="clearfix">
+                            <span class="pulll_left">新增运动日记</span>
+                            <span class="pulll_right" id="presentSport"></span>
+                        </li>
+                        <li class="clearfix">
+                            <span class="pulll_left">新增睡眠日记</span>
+                            <span class="pulll_right" id="presentSleep"></span>
+                        </li>
+                        <li class="clearfix">
+                            <span class="pulll_left">新增服务任务</span>
+                            <span class="pulll_right" id="perso"></span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="bg-video flex-align">
+            <img src="https://beichiqny.yhy.ren/bigData/icon.png" class="iconImg">
+            <div class="titlePostion">用户年龄</div>
+        </div>
+        <div class="addnew">
+            <div class="allnav" style="height: 3rem" id="userage"></div>
+        </div>
+    </div>
+    <div class="web-center">
+        <div class="body-cerebrum">
+            <div class="cerebrum-info bg-video">
+                <div class="flex-between titleRate">
+                    <div class="titleCi">心率监测次数</div>
+                    <div class="flex-end">
+                        <span class="fontColor" id="heartRate"></span>
+                        <span class="titleColor">次</span>
                     </div>
                 </div>
-                <div class="boxfoot"></div>
-
-            </div>
-
-            <div class="boxall" style="height: 3.0rem">
-                <div class="alltitle">用户服务统计</div>
-
-                <div class="addnew">
-                    <div class="allnav" style="height: 2.0rem" id="wwbzl"></div>
-
-                </div>
-                <div class="boxfoot"></div>
-            </div>
-
-            <div class="boxall" style="height: 3.4rem">
-                <div class="alltitle">用户年龄</div>
-
-                <div class="addnew">
-                    <div class="allnav" style="height: 2.4rem" id="userage"></div>
-                </div>
-                <div class="boxfoot"></div>
-            </div>
-
-        </li>
-        <li>
-
-            <div class="bar">
-                <div class="barbox">
-                    <ul class="clearfix">
-                        <li class="pulll_left" id="nohasnum" style="text-align: right;">0</li>
-                        <li class="pulll_left">&nbsp;</li>
-                        <li class="pulll_left" id="hasnum" style="text-align: revert;">0</li>
-                    </ul>
-                </div>
-                <div class="barbox2">
-                    <ul class="clearfix">
-                        <li class="pulll_left" style="text-align: right;">未评估人群</li>
-                        <li class="pulll_left">&nbsp;</li>
-                        <li class="pulll_left" style="text-align: revert;">已评估人群</li>
-                    </ul>
-                </div>
-            </div>
-
-
-            <div class="bar">
-                <div class="barbox">
-                    <ul class="clearfix">
-                        <li class="pulll_left" id="health">0</li>
-                        <li class="pulll_left" id="hasdise">0</li>
-                        <li class="pulll_left" id="highrisk">0</li>
-                    </ul>
-                </div>
-                <div class="barbox2">
-                    <ul class="clearfix">
-                        <li class="pulll_left">健康人群</li>
-                        <li class="pulll_left">慢病人群</li>
-                        <li class="pulll_left">高风险人群<i class="layui-icon layui-icon-tips" id="icon"
-                                                       style="color: #fff;    padding-left: 10px;"></i></li>
-                    </ul>
-                </div>
-            </div>
-
-            <div class="map">
-
-                <div id="showxs" style="width:100%;">
-                    <div class="layui-input-block" id="blok"
-                         style="margin-left: 40%;margin-top: 20px;margin-right: 40%;">
-                        <button type="button" style="color: #04baf3;border-color: #04baf3;" id="butt" value="2"
-                                class="layui-input layui-unselect">组织模式
-                        </button>
+                <div class="flex-between titleRate">
+                    <div class="titleCi">平均心率值</div>
+                    <div class="flex-end">
+                        <span class="fontColor" id="heartRateAvg"></span>
+                        <span class="titleColor">Bpm</span>
                     </div>
-
-                    <div id="tissue" style="height:600px;"></div>
                 </div>
-
-
-                <div id="showxs1">
-                    <div class="layui-input-block" id="blokdelete"
-                         style="margin-left: 40%;margin-top: 20px;margin-right: 40%;">
-                        <button type="button" style="color: #04baf3;border-color: #04baf3;" id="butt" value="2"
-                                class="layui-input layui-unselect">地图模式
-                        </button>
+                <img src="https://beichiqny.yhy.ren/bigData/leftLine.png" class="leftLineImg">
+                <img src="https://beichiqny.yhy.ren/bigData/sleep.gif" class="sleepGif">
+            </div>
+        </div>
+        <div class="body-cerebrumTwo">
+            <div class="cerebrum-info bg-video">
+                <div class="flex-between titleRate">
+                    <div class="titleCi">血氧监测次数</div>
+                    <div class="flex-end">
+                        <span class="fontColor" id="bloodOxygen"></span>
+                        <span class="titleColor">次</span>
                     </div>
-                    <div id="main" style="width: 100%;height:600px;"></div>
                 </div>
-
-
-            </div>
-
-        </li>
-        <li>
-            <div class="boxall" style="height:3.0rem">
-                <div class="boxfoot"></div>
-                <div class="alltitle">高风险和慢病人群</div>
-                <div class="addnew">
-                    <div class="allnav" style="height: 2.1rem" id="wxyg"></div>
+                <div class="flex-between titleRate">
+                    <div class="titleCi">平均血氧值</div>
+                    <div class="flex-end">
+                        <span class="fontColor" id="bloodOxygenAvg"></span>
+                        <span class="titleColor">%</span>
+                    </div>
                 </div>
-                <div class="boxfoot"></div>
+                <img src="https://beichiqny.yhy.ren/bigData/leftLine.png" class="leftLine">
+                <img src="https://beichiqny.yhy.ren/bigData/heart.gif" class="heartGif">
             </div>
-            <div class="boxall" style="height: 6.4rem">
-                <div class="alltitle">危险因素改善分析</div>
-                <div class="addnew">
-                    <div class="allnav" style="height: 6.0rem" id="changedis"></div>
+        </div>
+        <div class="body-cerebrumThree">
+            <div class="cerebrum-info bg-video" style="height: 1.5rem">
+                <div class="flex-between titleRate">
+                    <div class="titleCi">平均收缩血压</div>
+                    <div class="flex-end">
+                        <span class="fontColor" id="shrink"></span>
+                        <span class="titleColor">mmHg</span>
+                    </div>
                 </div>
-                <div class="boxfoot"></div>
+                <div class="flex-between titleRate">
+                    <div class="titleCi">平均舒张血压</div>
+                    <div class="flex-end">
+                        <span class="fontColor" id="diastole"></span>
+                        <span class="titleColor">mmHg</span>
+                    </div>
+                </div>
+                <div class="flex-between titleRate">
+                    <div class="titleCi">血压监测次数</div>
+                    <div class="flex-end">
+                        <span class="fontColor" id="numBloodGate"></span>
+                        <span class="titleColor">次</span>
+                    </div>
+                </div>
+                <img src="https://beichiqny.yhy.ren/bigData/leftLine.png" class="leftLineOxy">
+                <img src="https://beichiqny.yhy.ren/bigData/oxy.gif" class="oxyGif">
             </div>
-
-        </li>
-    </ul>
-
+        </div>
+        <div class="body-cerebrumFour">
+            <div class="cerebrum-info bg-video">
+                <div class="flex-between titleRate">
+                    <div class="titleCi">平均血糖值</div>
+                    <div class="flex-end">
+                        <span class="fontColor" id="fasting"></span>
+                        <span class="titleColor">mmol/L</span>
+                    </div>
+                </div>
+                <div class="flex-between titleRate">
+                    <div class="titleCi">血糖监测次数</div>
+                    <div class="flex-end">
+                        <span class="fontColor" id="numBloodSugar"></span>
+                        <span class="titleColor">次</span>
+                    </div>
+                </div>
+                <img src="https://beichiqny.yhy.ren/bigData/leftLine1.png" class="leftLine1">
+                <img src="https://beichiqny.yhy.ren/bigData/sugar.gif" class="sugarGif">
+            </div>
+        </div>
+        <div class="body-cerebrumSix">
+            <div class="cerebrum-infoSix bg-video">
+                <div class="flex-between titleRate">
+                    <div class="titleCi">累计监测次数</div>
+                    <div class="flex-end">
+                        <span class="fontColor" id="cumulative"></span>
+                        <span class="titleColor twoWidth">次</span>
+                    </div>
+                </div>
+                <div class="flex-between titleRate">
+                    <div class="titleCi">平均身体年龄</div>
+                    <div class="flex-end">
+                        <span class="fontColor" id="age"></span>
+                        <span class="titleColor twoWidth">岁</span>
+                    </div>
+                </div>
+                <div class="flex-between titleRate">
+                    <div class="titleCi">平均体脂率</div>
+                    <div class="flex-end">
+                        <span class="fontColor" id="fat"></span>
+                        <span class="titleColor twoWidth">%</span>
+                    </div>
+                </div>
+                <div class="flex-between titleRate">
+                    <div class="titleCi">平均肌肉率</div>
+                    <div class="flex-end">
+                        <span class="fontColor" id="muscle"></span>
+                        <span class="titleColor twoWidth">%</span>
+                    </div>
+                </div>
+                <div class="flex-between titleRate">
+                    <div class="titleCi">平均内脏脂肪指数</div>
+                    <div class="flex-end">
+                        <span class="fontColor" id="visfat"></span>
+                    </div>
+                </div>
+                <div class="flex-between titleRate">
+                    <div class="titleCi">平均BMI值</div>
+                    <div class="flex-end">
+                        <span class="fontColor" id="bmi"></span>
+                    </div>
+                </div>
+                <img src="https://beichiqny.yhy.ren/bigData/rightLine.png" class="rightLineSix">
+                <img src="https://beichiqny.yhy.ren/bigData/fat.gif" class="fatGif">
+            </div>
+        </div>
+        <div class="body-cerebrumSeven">
+            <div class="cerebrum-info bg-video" style="height: 1.5rem">
+                <div class="flex-between titleRate">
+                    <div class="titleCi">睡眠时长（总）</div>
+                    <div class="flex-end">
+                        <span class="fontColor" id="sleepTotal"></span>
+                        <span class="titleColor twoWidth">h</span>
+                    </div>
+                </div>
+                <div class="flex-between titleRate">
+                    <div class="titleCi">深度睡眠（总）</div>
+                    <div class="flex-end">
+                        <span class="fontColor" id="depth"></span>
+                        <span class="titleColor twoWidth">h</span>
+                    </div>
+                </div>
+                <div class="flex-between titleRate">
+                    <div class="titleCi">浅度睡眠（总）</div>
+                    <div class="flex-end">
+                        <span class="fontColor" id="shallow"></span>
+                        <span class="titleColor twoWidth">h</span>
+                    </div>
+                </div>
+                <img src="https://beichiqny.yhy.ren/bigData/rightLine.png" class="rightLineSeven">
+                <img src="https://beichiqny.yhy.ren/bigData/step.gif" class="stepGif">
+            </div>
+        </div>
+        <div class="body-cerebrumEight">
+            <div class="cerebrum-info bg-video">
+                <div class="flex-between titleRate">
+                    <div class="titleCi">步数</div>
+                    <div class="flex-end">
+                        <span class="fontColor" id="step"></span>
+                        <span class="titleColor twoWidth">步</span>
+                    </div>
+                </div>
+                <div class="flex-between titleRate">
+                    <div class="titleCi">消耗热量</div>
+                    <div class="flex-end">
+                        <span class="fontColor" id="heat"></span>
+                        <span class="titleColor twoWidth">kcal</span>
+                    </div>
+                </div>
+                <img src="https://beichiqny.yhy.ren/bigData/rightLine.png" class="rightLineSeven">
+                <img src="https://beichiqny.yhy.ren/bigData/step.gif" class="stepGif">
+            </div>
+        </div>
+    </div>
+    <div class="web-left">
+        <div class="bg-video flex-align">
+            <img  class="iconImg">
+            <div style="height: 2.66vh"></div>
+        </div>
+        <!-- 滚动数据 -->
+        <div class="boxall body-cerebrumFive">
+            <div style="height: 100%;" id="list"></div>
+        </div>
+        <div style="margin-top:5vh " class="bg-video flex-align">
+            <img src="https://beichiqny.yhy.ren/bigData/icon.png" class="iconImg">
+            <div class="titlePostion">身体质量指数BMI</div>
+        </div>
+        <div class="addnew">
+            <div class="allnav" style="height: 3rem" id="wxyg"></div>
+        </div>
+    </div>
 </div>
-<div class="back"></div>
 <script type="text/javascript" th:src="@{/assets/js/echarts.min.js}"></script>
-<script th:src="@{/assets/static/lib/vue.2.6.10.js}"></script>
-<script type="text/javascript" th:src="@{/assets/static/js/common.js}"></script>
-<script type="text/javascript" th:src="@{/assets/static/js/app.js}"></script>
-<script type="text/javascript" th:src="@{/assets/js/echarts-gl.min.js}"></script>
 <script language="JavaScript" th:src="@{/assets/js/echarts-tool.js}"></script>
-<script type="text/javascript" th:src="@{/assets/js/area_echarts.js}"></script>
-<script type="text/javascript" th:src="@{/assets/js/jquery.waypoints.min.js}"></script>
-<script type="text/javascript" th:src="@{/assets/js/jquery.countup.min.js}"></script>
 <script type="text/javascript" th:src="@{/assets/libs/layui/layui.js}"></script>
 <script type="text/javascript">
-    layui.use(['form', 'layedit', 'laydate'], function () {
-        var form = layui.form
-            , $ = layui.jquery
-            , layer = layui.layer;
-
-        var tip_index1;
-        //当鼠标移入|移出id为icon的元素时触发
-        $("#icon").hover(function () {
-            //layer.tips显示的弹窗会在鼠标所在位置显示
-            tip_index1 = layer.tips('健康人群：没有"已患"、"高风险"、"异常"和"肥胖"<br />慢病人群：至少1个"已患"、"异常"或"肥胖"<br />高风险人群：不是慢病人群范围，且至少1个"高风险"', this, {
-                tips: [2, 'rgba(0, 0, 0, 1)'],
-                time: 0
-            });
-        }, function () {
-            //关闭弹窗
-            layer.close(tip_index1);
-        });
-    });
-
-    window.onload = function () {
-        $('.counter').countUp();
-
-    }
-    //默认组织模式隐藏
-    $("#showxs").hide();
-
-    // 添加按钮点击事件
-    $('#blok').click(function () {
-        $("#butt").val("1");
-        $("#showxs").hide();
-        $("#showxs1").show();
-        if (tiqu_name != '') {
-            Userdatastatistics(tiqu_name);
-            selectByImprovability(tiqu_name);
-            selectCurrentSituation(tiqu_name);
-            showFoodExercise(tiqu_name);
-        } else {
-            Userdatastatistics();
-            selectByImprovability();
-            selectCurrentSituation();
-            showFoodExercise();
-        }
-    });
-
-    let g_org_code = '';
-
-    $('#blokdelete').click(function () {
-        $("#butt").val("2");
-        $("#showxs").show();
-        $("#showxs1").hide();
-        if (g_org_code != '') {
-            Userdatastatistics1(g_org_code);
-            selectByImprovability1(g_org_code);
-            selectCurrentSituation1(g_org_code);
-            showFoodExercise1(g_org_code);
-        } else {
-            Userdatastatistics();
-            selectByImprovability();
-            selectCurrentSituation();
-            showFoodExercise();
-        }
-    });
-
-
-    show();
-
-    //加载矩形树图所需要的数据
-    function show() {
-        var url = "/YhOrgTree/showtissue";
-        var data2 = "";
-        $.post(url, data2, function (e) {
-            showtissue(e.data);
-        })
-    }
-
-
-    function showtissue(info2) {
-        //暂时没用到
-        var struct_colors = [
-            '#ed6f6d', '#f3765d', '#f77a57', '#f98866', '#f99579',
-            '#ff9f3b', '#f0a732', '#e6a840', '#e9b253', '#ebbb66',
-            '#78b7e8', '#59b1f3', '#66bbf5', '#6ec3f2', '#75cae2',
-            '#70cccc', '#5dc4c4', '#4dbebd', '#4cc1a7', '#4fca96',
-            '#4cc686'
-        ];
-        //echars支持的富文本样式
-        RICH = {
-            name: {
-                color: '#fff',
-                fontSize: 24
-            },
-            basic: {
-                color: '#fff',
-                fontSize: 16,
-                lineHeight: 16
-
+    var container = document.getElementById('list'); // 获取你的HTML容器
+    var data = [] // 假设这是你要循环赋值的数据
+    var number = 0; // 初始化数字
+    var timer;
+    // 查询列表数据 第一次先查询
+    function getList(){
+        $.ajax({
+            type:'post',
+            url:'/OrganizationIndexController/bigDataCenterRight',
+            data:{},
+            success : function(data){
+                document.getElementById('heartRate').innerHTML = data.heart_num; //心率监测次数
+                document.getElementById('heartRateAvg').innerHTML = data.heart_avg; // 平均心率值
+                document.getElementById('bloodOxygen').innerHTML = data.oxygen_num; //血氧监测次数
+                document.getElementById('bloodOxygenAvg').innerHTML = data.oxygen_avg; //平均血氧值
+                document.getElementById('shrink').innerHTML = data.sbp_avg; //平均收缩血压
+                document.getElementById('diastole').innerHTML = data.dbp_avg; // 平均舒张血压
+                document.getElementById('fasting').innerHTML = data.postprandialAverage; //平均血糖值
+                document.getElementById('cumulative').innerHTML = data.num; //累计监测次数
+                document.getElementById('age').innerHTML = data.bodyAge; // 平均身体年龄
+                document.getElementById('fat').innerHTML = data.fat_rate; //平均体脂率
+                document.getElementById('muscle').innerHTML = data.muscle; // 平均肌肉率
+                document.getElementById('sleepTotal').innerHTML = data.sleep_total; // 睡眠时长（总）
+                document.getElementById('depth').innerHTML ="--"; //深度睡眠
+                document.getElementById('shallow').innerHTML = "--"; // 浅度睡眠
+                document.getElementById('numBloodSugar').innerHTML = data.numBloodSugar; // 血糖监测次数
+                document.getElementById('numBloodGate').innerHTML = data.numBloodGate; //血压监测次数
+                document.getElementById('step').innerHTML = data.step; // 步数
+                document.getElementById('heat').innerHTML = data.heat; // 热量
+                document.getElementById('visfat').innerHTML = data.visfat; //内脏脂肪
+                document.getElementById('bmi').innerHTML = data.bmi; // bmi
             }
-        };
-        //记录当前机构下所有子机构的信息，树形结构
-        var structs_datas = [];
-        format_struct_data(info2.children, structs_datas);
-
-        //参数一：当前机构下的所有子机构
-        function format_struct_data(children, structs_datas) {
-            // 添加每个单位的颜色
-            for (var prop in children) {
-                //随机一个数*20向下取整
-                var index = Math.floor(Math.random() * 20);
-                //第一个元素记录每个机构用户人数，默认为1，目的是每个树节点的值，对应到面积大小。可以是number，也可以是数组，如 [2323, 43, 55]，则数组第一项对应到面积大小。
-                //第二个元素记录每个机构的机构编号，目的是点击事件可以从面包屑中的得到点击的机构对应的机构编号
-                var value = [];
-                //如果此子机构下用户不为0
-                if (children[prop].asset_num !== 0) {
-                    value[0] = children[prop].asset_num;
-                } else {
-                    value[0] = 1;
-                }
-                value[1] = children[prop].orgCode;
-
-                var tmp = {
-                    itemStyle: {
-                        //矩形树图的背景色
-                        normal: {
-                            color: '#3F74B9'
-                        }
-                    },
-                    name: children[prop].name,          //机构名
-                    value: value,
-                    manage: children[prop].manage,      //管理员名
-                    children: [],                       //子机构信息
-                    asset_num: children[prop].asset_num,//此机构的用户人数
-                    hasnum: children[prop].hasnum,      //已评估人数
-                    health: children[prop].health,      //健康人数
-                    hasdise: children[prop].hasdise,    //异患人数
-                    highrisk: children[prop].highrisk,  //高风险人数
-                    orgCode: children[prop].orgCode,
-                    text1: '{name|' + children[prop].name + '}' + "\n\n" + '{basic|管理员 ： ' + children[prop].manage + '}'
-                }
-                //如果此子机构下还存在子机构,设置不同深度的颜色
-                if (children[prop].children) {
-                    tmp.itemStyle.normal.color = '#3F74B9';
-                    //递归每一项子机构，将子机构的信息按树形结构添加
-                    format_struct_data(children[prop].children, tmp.children);
-                } else {
-                    tmp.itemStyle.normal.color = '#14488B';
-                }
-                //如果不存在子信息，则删除tmp对象的children属性
-                if (tmp.children.length === 0) {
-                    delete tmp.children;
-                }
-                //将子机构的信息按树形结构添加
-                structs_datas.push(tmp);
-            }
-        }
-
-        var chartmain2width = $("#showxs").width();
-        //给图设置固定宽度
-        $("#tissue").css('width', $("#showxs").width());
-        //将id为tissue的作为矩形树图的载体
-        var myChart = echarts.init(document.getElementById('tissue'));
-
-        myChart.setOption(option = {
-            //悬浮框
-            tooltip: {
-                //格式化内容  此处info是series的属性data值
-                //鼠标在哪一项info就是那一项对应的值
-                formatter: function (info) {
-                    var asset_num = info.data.asset_num;
-                    var name = info.name;
-                    //返回悬浮框需要显示的数据
-                    return '{' + name + '}' + "<br>" + '{用户数量：' + asset_num + '}'
-                },
-                //悬浮框中文字的样式
-                textStyle: {
-                    color: "#fff",
-                    fontWeight: 'bold'
-                }
-            },
-            series: [{
-                name: '组织',
-                type: 'treemap',
-                //如果某个节点的矩形的面积，小于这个数值（单位：px平方），这个节点就不显示。
-                visibleMin: 300,
-                //需要的数据
-                data: structs_datas,
-                //深度为1，相当于一级一级展示，不会跨级展示
-                leafDepth: 1,
-                label: {
-                    normal: {
-                        show: true,
-                        position: 'inside',
-                        formatter: function (a) {
-                            return a.data.text1;
-                        },
-                        textStyle: {
-                            color: '#fff',  //label的字体颜色
-                            fontSize: '18',
-                            fontWeight: 'bold'
-                        },
-                        //富文本样式，具体可以参考echars的rich配置
-                        rich: RICH,
-
-                    },
-                },
-                //深度，每一层级的矩形树图显示样式
-                levels: [{
-                    itemStyle: {
-                        normal: {
-                            borderWidth: 0,
-                            gapWidth: 2
-                        }
-                    }
-                }, {
-                    itemStyle: {
-                        normal: {
-                            gapWidth: 2
-                        }
-                    }
-                }, {
-                    itemStyle: {
-                        normal: {
-                            gapWidth: 2,
-                        }
-                    }
-                }],
-                //面包屑相关样式
-                breadcrumb: {
-                    show: true,
-                    "height": 35,
-                    left: "10%",
-                    top: "0%",
-                    emptyItemWidth: 25,
-                    itemStyle: {
-                        normal: {
-                            color: "#fff",
-                            borderColor: "rgba(255,255,255,0.7)",
-                            borderWidth: 1,
-                            shadowColor: "rgba(150,150,150,1)",
-                            shadowBlur: 3,
-                            shadowOffsetX: 0,
-                            shadowOffsetY: 0,
-                            textStyle: {
-                                color: "#000",
-                                fontWeight: 'bold'
-                            }
-                        },
-                        emphasis: {
-                            textStyle: {}
-                        }
-                    }
-                },
-            }]
         });
-
-        myChart.on('click', function (params) {
-
-            let bread = params.treePathInfo;
-            //如果面包屑长度为1，则查询当前登录机构及包含的子机构信息
-            //否则就查询指定机构及包含的子机构信息
-            if (bread.length <= 1) {
-                g_org_code = '';
-                Userdatastatistics();
-                selectByImprovability();
-                selectCurrentSituation();
-                showFoodExercise();
-            } else {
-                let data = bread[bread.length - 1];
-                let org_code = data.value[1];
-                g_org_code = org_code;
-                selectCurrentSituation1(org_code);
-                selectByImprovability1(org_code);
-                Userdatastatistics1(org_code);
-                showFoodExercise1(org_code);
+        $.ajax({
+            type:'post',
+            url:'/OrganizationIndexController/bigDataCenterTop',
+            data:{},
+            success : function(datas){
+                data=datas
+                getFuzhi()//列表赋值
             }
         });
     }
+    // 查询列表数据 每10秒查询一次
+    function getListSecondary(){
+        $.ajax({
+            type:'post',
+            url:'/OrganizationIndexController/bigDataCenterTop',
+            data:{},
+            success : function(datas){
+                data=datas
+                getFuzhi()//列表赋值
+            }
+        });
+    }
+    getList()
+    //每10秒查询最新数据
+    setTimeout(function() {
+        setInterval(getListSecondary, 10000); // 每10秒查询最新数据
+    }, 2000);
+    //列表赋值
+    function getFuzhi(){
+        clearInterval(timer)
+        container.innerHTML=[]
+        // 给新的div元素赋值
+        for (var i = 0; i < data.length; i++) {
+            container.innerHTML+='<div style="display:flex;justify-content: space-between;width:100%;height: .5rem;">' +
+                '<div style="font-size: 0.12rem;letter-spacing: 0.02vh;color: #00ffff;">' + data[i].time + '</div>' +
+                '<div style="font-size: 0.12rem;letter-spacing: 0.02vh;color: #fff;">' + data[i].name + '</div>' +
+                '</div>'
+        }
+        if (data.length > 4) {
+            timer = setInterval(incrementNumber, 100); // 设置定时器
+        }else{
+            number=1000000
+            incrementNumber()
+        }
+    }
+    // 滚动
+    function incrementNumber() {
+        console.log(data.length,'sss')
+        number++; // 数字累加
+        if (number >= (data.length - 3) * 20) {
+            // 当数字达到最大值时重置
+            number = 0;
+        }
+        // 更新显示的数字
+        var a = '-' + number + 'px 0 0'
+        container.style.margin = a;
+    }
+
 </script>
 </body>
 </html>

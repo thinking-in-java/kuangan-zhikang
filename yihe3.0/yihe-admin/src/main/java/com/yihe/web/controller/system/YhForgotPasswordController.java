@@ -5,6 +5,7 @@ import java.util.concurrent.TimeUnit;
 
 import javax.annotation.Resource;
 
+import org.apache.shiro.crypto.hash.Md5Hash;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
@@ -113,4 +114,8 @@ public class YhForgotPasswordController {
         }
         return str.toString();
     }
+
+	public static void main(String[] args) {
+		System.out.println(new Md5Hash("机构" + "12345678").toHex());
+	}
 }

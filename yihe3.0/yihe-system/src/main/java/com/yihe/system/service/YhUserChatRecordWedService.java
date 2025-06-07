@@ -8,14 +8,24 @@ import com.github.pagehelper.PageInfo;
 import com.yihe.system.domain.YhUserChatRecordWed;
 
 public interface YhUserChatRecordWedService {
-	
-	Integer findWXuserStatus(String usercode); 
+
+	Integer findWXuserStatus(String usercode);
 	PageInfo<YhUserChatRecordWed> findChatInfo(String usercode,Integer read,String name,Integer pageNum,Integer pageSize);
-	
+
 	List<YhUserChatRecordWed> findChatInfoByUserCode(String usercode,String tousercode);
-	
-	 int insertSelective(YhUserChatRecordWed record);
-	 
-	 
-	 int modifyRead1(String usercode,String tousercode);
+
+	int insertSelective(YhUserChatRecordWed record);
+
+
+	int modifyRead1(String usercode,String tousercode);
+
+
+	/**
+	 * 查询最新一条聊天
+	 * @param usercode
+	 * @param tousercode
+	 * @return
+	 */
+	YhUserChatRecordWed findChatInfoByUserCodeByOne(@Param("usercode")String usercode,@Param("tousercode")String tousercode);
+
 }

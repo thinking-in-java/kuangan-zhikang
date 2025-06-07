@@ -7,15 +7,16 @@ import com.yihe.applet.api.mapper.YhHealthStarAppMapper;
 import com.yihe.applet.api.mapper.YhScoreEventCategoryAppMapper;
 import com.yihe.applet.api.mapper.YhUserStepAppMapper;
 import com.yihe.applet.api.service.YhHealthStarAppService;
+import com.yihe.system.mapper.YhUserRoleManageMapper;
+import com.yihe.system.service.YhOrgTreeService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import javax.annotation.Resource;
+import java.util.*;
+
 @Service
 public class YhHealthStarAppServiceImpl implements YhHealthStarAppService{
 	
@@ -39,13 +40,27 @@ public class YhHealthStarAppServiceImpl implements YhHealthStarAppService{
 		// TODO Auto-generated method stub
 		return yhHealthStarAppMapper.insertSelective(record);
 	}
-	
 
+	@Resource
+	YhOrgTreeService yhOrgTreeService;
+	@Resource
+	YhUserRoleManageMapper yhUserRoleManageMapper;
 	@Override
 	public int integralCompletioStatus(String eventType,String userCode) {
 		try {
+			String orgCode=yhUserRoleManageMapper.selectorgcode(userCode);
+			List<String> orgs=new ArrayList<String>();
+			List<String> orgCodes=yhOrgTreeService.selectparentOrg(orgs,orgCode);
 			// 根据event_type查询积分事件规则表
-			YhScoreEventCategoryApp yhScoreEventCategory = yhScoreEventCategoryMapper.selectEventType(eventType);
+			YhScoreEventCategoryApp yhScoreEventCategory =null;
+
+			// 根据event_type查询积分事件规则表
+			for (String item:orgCodes){
+				if(yhScoreEventCategory!=null){
+					yhScoreEventCategory=yhScoreEventCategoryMapper.selectEventType(eventType,item);
+				}
+
+			}
 			if (yhScoreEventCategory == null) {
 				return 0;
 			}

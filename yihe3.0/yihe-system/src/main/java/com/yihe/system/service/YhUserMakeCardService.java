@@ -1,10 +1,7 @@
 package com.yihe.system.service;
 
 import com.github.pagehelper.PageInfo;
-import com.yihe.system.domain.HealthPlanVOJO;
-import com.yihe.system.domain.YhUserMakeCard;
-import com.yihe.system.domain.YhUserMakeCardExample;
-import com.yihe.system.domain.doctorConsoleVOJO;
+import com.yihe.system.domain.*;
 
 import java.util.List;
 import java.util.Map;
@@ -67,4 +64,11 @@ public interface YhUserMakeCardService {
 	PageInfo<HealthPlanVOJO> findUserInfoBydoctorForPlanByjilv(String usercode,String nameLike,String usernameLike,String planName,String strTime,String endTime,int pageNum,int pageSize);
 	
 	public YhUserMakeCard selectOrgIdbyParam(String usercode);
+
+	public PageInfo<Map<String, Object>> queryYhUserMakeCardByCriteriaWithPageByDoctorXcx(Map<String, Object> regMap,int page,int limit);
+
+	/**
+	 * 注册卡注册
+	 */
+	Map<String, Object> registrationByCard(YhUserReginfo yhUserReginfo) throws Exception;
 }

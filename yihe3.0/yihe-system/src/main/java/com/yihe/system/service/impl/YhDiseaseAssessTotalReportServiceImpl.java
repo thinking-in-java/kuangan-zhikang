@@ -151,6 +151,48 @@ public class YhDiseaseAssessTotalReportServiceImpl implements YhDiseaseAssessTot
 	}
 
 	@Override
+	public List<YhDiseaseAssessReportVOJO> findPGByUserCode(String userCode) {
+		List<YhDiseaseAssessReportVOJO> list = yhDiseaseAssessTotalReportMapper
+				.findPGByUserCode(userCode);
+		for (YhDiseaseAssessReportVOJO vojo : list) {
+			//高风险疾病
+			String bfnames = vojo.getBfnames();
+			if(StringUtil.isNotEmpty(bfnames)){
+				String[] bfSplit = bfnames.split(";");
+				vojo.setHighRiskNum(bfSplit.length);
+				String bfinfo="";
+				for (String string : bfSplit) {
+					if(StringUtil.isNotEmpty(string)){
+						String bfName = yhDiseaseAssessTotalReportMapper.findCategoryByCode(string);
+						bfinfo=bfinfo+bfName+";";
+					}
+				}
+				vojo.setHighRiskInfo(bfinfo);
+			}
+
+
+			//患或异常疾病
+			String sknames = vojo.getSknames();
+			if(StringUtil.isNotEmpty(sknames)){
+				String[] skSplit = sknames.split(";");
+				vojo.setAbnormalNum(skSplit.length);
+				String skinfo="";
+				for (String string : skSplit) {
+					if(StringUtil.isNotEmpty(string)){
+						String skName = yhDiseaseAssessTotalReportMapper.findCategoryByCode(string);
+						skinfo=skinfo+skName+";";
+					}
+				}
+				vojo.setAbnormalInfo(skinfo);
+			}
+
+
+
+		}
+		return list;
+	}
+
+	@Override
 	public List<YhDiseaseAssessReportVOJO> selectByPrimaryKeyByusercodeCount(String usercode, String name,
 			String username, String strtime, String endtime) {
 		// TODO Auto-generated method stub

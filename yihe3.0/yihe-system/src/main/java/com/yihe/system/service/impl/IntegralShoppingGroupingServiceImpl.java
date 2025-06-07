@@ -1,7 +1,9 @@
 package com.yihe.system.service.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import com.yihe.system.service.YhOrgTreeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -11,10 +13,14 @@ import com.yihe.system.domain.IntegralShoppingGrouping;
 import com.yihe.system.mapper.IntegralShoppingGroupingMapper;
 import com.yihe.system.service.IntegralShoppingGroupingService;
 
+import javax.annotation.Resource;
+
 @Service
 public class IntegralShoppingGroupingServiceImpl implements IntegralShoppingGroupingService{
 	@Autowired
 	IntegralShoppingGroupingMapper IntegralShoppingGroupingMapper;
+	@Resource
+	YhOrgTreeService yhOrgTreeService;
 
 	@Override
 	public int deleteByPrimaryKey(Integer groupingId) {

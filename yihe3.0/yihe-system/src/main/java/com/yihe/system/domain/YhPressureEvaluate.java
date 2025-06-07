@@ -55,8 +55,36 @@ public class YhPressureEvaluate extends BaseEntity
 	private Integer l_score;
 	private Integer s_score;
 
-	
-	
+    private String mobile;
+
+    private String times;
+
+    private String name;
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getTimes() {
+        return times;
+    }
+
+    public void setTimes(String times) {
+        this.times = times;
+    }
+
+    public String getMobile() {
+        return mobile;
+    }
+
+    public void setMobile(String mobile) {
+        this.mobile = mobile;
+    }
+
     public String getXgtype() {
 		return xgtype;
 	}

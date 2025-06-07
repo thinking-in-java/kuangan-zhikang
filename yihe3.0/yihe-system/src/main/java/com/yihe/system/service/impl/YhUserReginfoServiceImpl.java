@@ -135,6 +135,11 @@ public class YhUserReginfoServiceImpl implements YhUserReginfoService {
     }
 
     @Override
+    public YhUserReginfo selectMobileAndName3(String mobile, Integer userType) {
+        return yhUserReginfoMapper.showmobile2( mobile,userType);
+    }
+
+    @Override
     public PageInfo<YhUserReginfo> selectByPrimaryKeyBydoctor(String userCode, int pageNum, int pageSize) {
         // TODO Auto-generated method stub
         PageHelper.startPage(pageNum, pageSize);
@@ -1597,6 +1602,11 @@ public class YhUserReginfoServiceImpl implements YhUserReginfoService {
     public InterveneVOJO findinterveneByUserCode(String usercode) {
         // TODO Auto-generated method stub
         return yhUserReginfoMapper.findinterveneByUserCode(usercode);
+    }
+
+    @Override
+    public List<YhUserReginfo> queryDoctorList() {
+        return yhUserReginfoMapper.queryDoctorList();
     }
 
     @Override

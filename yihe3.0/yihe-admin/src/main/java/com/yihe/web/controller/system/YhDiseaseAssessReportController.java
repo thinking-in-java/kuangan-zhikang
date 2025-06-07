@@ -1310,6 +1310,22 @@ public class YhDiseaseAssessReportController extends BaseController {
 
     }
 
+    @RequestMapping(value = "/findPGByUserCode", method = RequestMethod.GET)
+    @ResponseBody
+    public Result findPGByUserCode(@RequestParam(required = false) String userCode) {
+        Map<String, Object> rsMap = new HashMap<String, Object>();
+        rsMap.put("msg", "ok");
+        List<YhDiseaseAssessReportVOJO> list=yhDiseaseAssessTotalReportService.findPGByUserCode(userCode);
+        if(list.size()>0){
+            rsMap.put("data", list.get(0));
+        }else{
+            rsMap.put("data", null);
+        }
+
+        return Result.ok(rsMap);
+
+    }
+
 
     @RequestMapping(value = "/findHealthAssessmentByuser", method = RequestMethod.GET)
     @ResponseBody

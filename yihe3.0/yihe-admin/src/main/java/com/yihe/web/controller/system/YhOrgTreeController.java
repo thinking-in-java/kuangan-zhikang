@@ -215,41 +215,53 @@ public class YhOrgTreeController extends BaseController {
 
             tree.setOrgCode(orgCode);
             tree.setUserCode("OR" + String.valueOf(Integer.parseInt(userCode.substring(2)) + 1));
+            ser= YhOrgTreeService.insertSelective(tree);
         } else {
             if (code == null || code.equals("")) {
                 orgCode = tree.getSuperOrgCode() + "" + 10000;
             } else {
-                orgCode = String.valueOf(Long.valueOf(code) + 1);
+                String newCode = code.substring(code.length()-2);
+                String addCode = String.valueOf(Integer.parseInt(newCode)+1);
+                String fritsCode;
+                if(Integer.parseInt(addCode)>9){
+                    fritsCode = code.substring(0, code.length() - 2);
+                }else {
+                    fritsCode = code.substring(0, code.length() - 1);
+                }
+                orgCode= fritsCode +addCode;
             }
             tree.setOrgCode(orgCode);
+            ser= YhOrgTreeService.insertSelective(tree);
         }
-        JSONArray jsonArray = new JSONArray();
-        JSONObject map = new JSONObject();
-
-        JSONObject operationinfo = new JSONObject();
-        operationinfo.put("operator", "1");
-        map.put("operationinfo",operationinfo);
-
-        JSONObject mainTable = new JSONObject();
-        mainTable.put("khmcwb", tree.getOrgName());
-        if(StringUtils.isNotEmpty(tree.getName())){
-            mainTable.put("khlxr", tree.getName());
-        }
-        if(StringUtils.isNotEmpty(tree.getNumber())){
-            mainTable.put("lxdh", tree.getNumber());
-        }
-        mainTable.put("gzdw", orgCode);
-        map.put("mainTable", mainTable);
-        jsonArray.add(map);
-        String s = RestfulDemo.doAction("http://" + Global.getOaIPAddress() + "/api/cube/restful/interface/saveOrUpdateModeData/syncCustomer", jsonArray);
-        JSONObject jsonObject = JSONObject.parseObject(s);
-        if(jsonObject.getInteger("status").equals(1)){
-            tree.setOaTreeId(jsonObject.getJSONObject("datajson").getJSONArray("data").getJSONObject(0).getString("billid"));
-            ser = YhOrgTreeService.insertSelective(tree);
-            return Result.ok(ser);
-        }else{
-            return Result.error("保存异常");
-        }
+//        JSONArray jsonArray = new JSONArray();
+//        JSONObject map = new JSONObject();
+//
+//        JSONObject operationinfo = new JSONObject();
+//        operationinfo.put("operator", "1");
+//        map.put("operationinfo",operationinfo);
+//
+//        JSONObject mainTable = new JSONObject();
+//        mainTable.put("khmcwb", tree.getOrgName());
+//        if(StringUtils.isNotEmpty(tree.getName())){
+//            mainTable.put("khlxr", tree.getName());
+//        }
+//        if(StringUtils.isNotEmpty(tree.getNumber())){
+//            mainTable.put("lxdh", tree.getNumber());
+//        }
+//        mainTable.put("gzdw", orgCode);
+//        map.put("mainTable", mainTable);
+//        jsonArray.add(map);
+//        System.out.println("http://" + Global.getOaIPAddress() + "/api/cube/restful/interface/saveOrUpdateModeData/syncCustomer"+"-----------");
+//        String s = RestfulDemo.doAction("http://" + Global.getOaIPAddress() + "/api/cube/restful/interface/saveOrUpdateModeData/syncCustomer", jsonArray);
+//        JSONObject jsonObject = JSONObject.parseObject(s);
+//        if(jsonObject.getInteger("status").equals(1)){
+//            tree.setOaTreeId(jsonObject.getJSONObject("datajson").getJSONArray("data").getJSONObject(0).getString("billid"));
+//            ser = YhOrgTreeService.insertSelective(tree);
+//            return Result.ok(ser);
+//        }else{
+//            return Result.error("保存异常");
+//        }
+        return Result.ok(ser);
     }
 
 

@@ -475,6 +475,662 @@ public class YhDiseaseAssessReportServiceImpl implements YhDiseaseAssessReportSe
     }
 
 
+
+    @Override
+    public List<YhDiseaseAssessReport> findDiseaseNameAndRiskLevelByRs(String rs, String sex)
+            throws InvocationTargetException {
+        // TODO Auto-generated method stub
+        if (StringUtils.isEmpty(rs) || StringUtils.isEmpty(sex)) {
+            return null;
+        }
+        //查询本次评估每个疾病信息
+        List<YhDiseaseAssessReport> list = yhDiseaseAssessReportMapper.findDiseaseNameAndRiskLevelByRs(rs);
+        //遍历每个疾病信息
+        for (YhDiseaseAssessReport CSDiseaseAssessReport : list) {
+            // 疾病id
+            Integer diseasid = CSDiseaseAssessReport.getDiseasid();
+            //查询每个疾病改善指南
+            List<YHDiseaseAssessResolve> findAssessResolveInfoByrs = yhDiseaseAssessReportMapper
+                    .findAssessResolveInfoByrs(rs, diseasid);
+            // 改善指南
+            CSDiseaseAssessReport.setGlist(findAssessResolveInfoByrs);
+            if (diseasid == 11) {
+                continue;
+            }
+            List<YHDiseaseRiskOptimal> goodList = new ArrayList<>();
+
+            List<YHDiseaseRiskOptimal> nogoodList = new ArrayList<>();
+
+            //查询每个疾病雷达图
+            List<YHDiseaseRiskOptimal> findCSDiseaseRiskOptimal = yhDiseaseAssessReportMapper
+                    .findCSDiseaseRiskOptimal(String.valueOf(diseasid), 1, sex);
+            //查询每个疾病相关危险因素
+            List<YHDiseaseRiskOptimal> CSDiseaseRiskOptimalMoreList = yhDiseaseAssessReportMapper
+                    .findCSDiseaseRiskOptimal(String.valueOf(diseasid), 3, sex);
+            //查询每个疾病雷达图结果大小
+            int YiBoDiseaseRiskOptimalSize = findCSDiseaseRiskOptimal.size();
+            //查询每个疾病相关危险因素结果大小
+            int YiBoDiseaseRiskOptimalMoreSize = CSDiseaseRiskOptimalMoreList.size();
+
+            //每个相关危险因素
+            List<RiskFactorsVOJO> rlist = new ArrayList<RiskFactorsVOJO>();
+
+            //创建雷达图数组
+            YhDiseaseRiskFactorGroupsVOJO[] CSDiseaseRiskFactorGroupsVOJOlist = new YhDiseaseRiskFactorGroupsVOJO[YiBoDiseaseRiskOptimalSize];
+            //创建危险因素数组
+            YhDiseaseRiskFactorGroups[] CSDiseaseRiskFactorGroups = new YhDiseaseRiskFactorGroups[YiBoDiseaseRiskOptimalMoreSize];
+
+            YhDiseaseRiskFactorGroups YiBoDiseaseRiskOptimalRiskFactors = null;
+
+            //理想风险比值数组
+            Integer[] lixiang = new Integer[YiBoDiseaseRiskOptimalSize];
+            //当前风险比值数组
+            Integer[] dangqian = new Integer[YiBoDiseaseRiskOptimalSize];
+
+            //查询答案json
+            String findQuestionCheckForCheckAnswerByrs = findQuestionCheckForCheckAnswerByrs(rs);
+            if (StringUtils.isEmpty(findQuestionCheckForCheckAnswerByrs)) {
+                continue;
+            }
+
+            // 将json字符串解析成document
+            Object document = null;
+            document = Configuration.defaultConfiguration().jsonProvider().parse(findQuestionCheckForCheckAnswerByrs);
+
+            YhQuestionCheckJson2Web selectByRsLimit1 = YhQuestionCheckJson2WebMapper.selectByRsLimit1(rs);
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            //获取String类型的时间
+            String timeInfo = sdf.format(selectByRsLimit1.getUserCheckTime());
+            //健康指标具体变化 查询上次
+            YhDiseaseAssessTotalReport2web lastRsInfo = YhDiseaseAssessTotalReport2Mapper
+                    .findAssessTotalReportLastInfo(selectByRsLimit1.getUserCode(), timeInfo);
+            Object lastdocument = null;
+            if (null != lastRsInfo) {
+                YhQuestionCheckJson2Web selectByRsLimit2 = YhQuestionCheckJson2WebMapper.selectByRsLimit1(lastRsInfo.getRequestSerialnum());
+                String findQuestionCheckForCheckAnswerByrs2 = selectByRsLimit2.getUserCheckAnswer();
+
+                lastdocument = Configuration.defaultConfiguration().jsonProvider()
+                        .parse(findQuestionCheckForCheckAnswerByrs2);
+                List<RiskFactorsVOJO> rlistInfo = getRlistInfo(sex, diseasid, lastdocument, document);
+                rlist.addAll(rlistInfo);
+
+            } else {
+                List<RiskFactorsVOJO> rlistInfo = getRlistInfo(sex, diseasid, null, document);
+                rlist.addAll(rlistInfo);
+            }
+
+            CSDiseaseAssessReport.setRlist(rlist);
+
+            CSDiseaseAssessReport.setFxlist(CSDiseaseRiskFactorGroups);
+
+
+            //评估返回数据
+            YhDiseaseRiskResult2 YiBoDiseaseRiskOptimalRiskResult = YhDiseaseRiskResultMapper.selectRiskResulByRequestNum(rs);
+            if (YiBoDiseaseRiskOptimalMoreSize > 0) {
+                // 查询评估相关危险因素
+
+                for (int j = 0; j < YiBoDiseaseRiskOptimalMoreSize; j++) {
+                    YHDiseaseRiskOptimal CSDiseaseRiskOptimal = CSDiseaseRiskOptimalMoreList.get(j);
+                    YiBoDiseaseRiskOptimalRiskFactors = new YhDiseaseRiskFactorGroups();
+                    YiBoDiseaseRiskOptimalRiskFactors.setDiseaseRiskFactorName(CSDiseaseRiskOptimal.getQname());
+                    // 调用计算雷达图以及风险因素
+                    doDiseaseRiskResult2(CSDiseaseRiskOptimal, YiBoDiseaseRiskOptimalRiskResult, YiBoDiseaseRiskOptimalRiskFactors);
+                    CSDiseaseRiskFactorGroups[j] = YiBoDiseaseRiskOptimalRiskFactors;
+                    String xpath = CSDiseaseRiskOptimal.getXpath();
+                    String qname = CSDiseaseRiskOptimal.getQname();
+
+
+                    if (null != YiBoDiseaseRiskOptimalRiskFactors.getDiseaseRiskFactorBadge()
+                            && null != YiBoDiseaseRiskOptimalRiskFactors.getDiseaseRiskFactorSegment()) {
+                        if (YiBoDiseaseRiskOptimalRiskFactors.getDiseaseRiskFactorBadge() <= YiBoDiseaseRiskOptimalRiskFactors
+                                .getDiseaseRiskFactorSegment()) {
+                            goodList.add(CSDiseaseRiskOptimal);
+                        } else {
+                            nogoodList.add(CSDiseaseRiskOptimal);
+                        }
+                    }
+
+                    YhDiseaseRiskResultAppVOJO vojo = new YhDiseaseRiskResultAppVOJO();
+                    vojo.setColumnName(xpath);
+                    vojo.setDid(String.valueOf(0));
+                    vojo.setRs(rs);
+                    String returnStr = yhDiseaseAssessReportMapper.findDiseaseRiskResultByRsForResultString(vojo);
+
+                    if (StringUtils.isNotEmpty(returnStr)) {
+                        RiskFactorsVOJO rv = new RiskFactorsVOJO();
+                        JSONObject jsonObject = JSONObject.parseObject(returnStr);
+                        rv.setRiskFactors(qname);
+                        rv.setThisTimeColor(exceedingTheStandard(xpath, jsonObject.getString("now_value"), sex,
+                                diseasid.toString()));
+                        rv.setLastTimeColor(exceedingTheStandard(xpath, jsonObject.getString("last_value"), sex,
+                                diseasid.toString()));
+                        rv.setThisTime(jsonObject.getString("now_value"));
+                        rv.setLastTime(jsonObject.getString("last_value"));
+                        rv.setChanges(jsonObject.getString("change_value"));
+
+                        rv.setIdealLevel(jsonObject.getString("Ideal_value"));
+                        if ("高密度脂蛋白胆固醇".equals(qname)) {
+                            rv.setIdealLevel("≥1.04 mmol/L");
+                        }
+                        if ("血尿酸".equals(qname)) {
+                            //血尿酸
+                            String bua = JsonPath.read(document, "$.bua") + "";
+                            if (StringUtils.isEmpty(bua)) {
+                                rv.setThisTime("--");
+
+                            }
+                            if (null != lastRsInfo) {
+                                String bualast = JsonPath.read(lastdocument, "$.bua") + "";
+                                if (StringUtils.isEmpty(bualast)) {
+                                    rv.setLastTime("--");
+
+                                }
+                            }
+                        }
+
+                        if ("收缩压".equals(qname)) {
+                            if (4 != diseasid) {
+                                rv.setIdealLevel("＜120 mmHg");
+                            } else {
+                                rv.setIdealLevel("＜140 mmHg");
+                            }
+                        }
+                        if ("舒张压".equals(qname)) {
+                            if (4 != diseasid) {
+                                rv.setIdealLevel("＜80 mmHg");
+                            } else {
+                                rv.setIdealLevel("＜90 mmHg");
+                            }
+                        }
+
+                        if ("左心室肥大".equals(qname)) {
+                            rv.setThisTime(jsonObject.getString("now_value").equals("1") ? "有" : "无");
+
+
+                            if (jsonObject.getString("last_value").equals("-") || jsonObject.getString("last_value").equals("")) {
+                                rv.setLastTime("-");
+                            } else {
+                                rv.setLastTime(jsonObject.getString("last_value").equals("1") ? "有" : "无");
+                            }
+                        }
+                        if ("饮茶情况".equals(qname)) {
+                            rv.setThisTime(jsonObject.getString("now_value").equals("0") ? "几乎不饮茶" : "饮茶");
+
+
+                            if (jsonObject.getString("last_value").equals("-") || jsonObject.getString("last_value").equals("")) {
+                                rv.setLastTime("-");
+                            } else {
+                                rv.setLastTime(jsonObject.getString("last_value").equals("0") ? "几乎不饮茶" : "饮茶");
+                            }
+                        }
+                        if ("反式脂肪酸".equals(qname)) {
+                            rv.setThisTime(jsonObject.getString("now_value").equals("0") ? "适量" : "过量");
+
+
+                            if (jsonObject.getString("last_value").equals("-") || jsonObject.getString("last_value").equals("")) {
+                                rv.setLastTime("-");
+                            } else {
+                                rv.setLastTime(jsonObject.getString("last_value").equals("0") ? "适量" : "过量");
+                            }
+                        }
+                        if ("油烟接触史".equals(qname)) {
+                            rv.setThisTime(jsonObject.getString("now_value").equals("2") ? "无" : "有");
+
+
+                            if (jsonObject.getString("last_value").equals("-") || jsonObject.getString("last_value").equals("")) {
+                                rv.setLastTime("-");
+                            } else {
+                                rv.setLastTime(jsonObject.getString("last_value").equals("0") ? "无" : "有");
+                            }
+                        }
+                        if ("慢性支气管炎病史".equals(qname)) {
+                            rv.setThisTime(jsonObject.getString("now_value").equals("1") ? "有" : "无");
+
+
+                            if (jsonObject.getString("last_value").equals("-") || jsonObject.getString("last_value").equals("")) {
+                                rv.setLastTime("-");
+                            } else {
+                                rv.setLastTime(jsonObject.getString("last_value").equals("1") ? "有" : "无");
+                            }
+                        }
+                        if ("精神压力".equals(qname)) {
+                            /**
+                             * 1,没有
+                             * 2,偶尔
+                             * 3,经常
+                             */
+                            if (jsonObject.getString("now_value").equals("1")) {
+                                rv.setThisTime("没有");
+                            } else if (jsonObject.getString("now_value").equals("2")) {
+                                rv.setThisTime("偶尔");
+                            } else if (jsonObject.getString("now_value").equals("3")) {
+                                rv.setThisTime("经常");
+                            }
+
+
+                            if (jsonObject.getString("last_value").equals("-") || jsonObject.getString("last_value").equals("")) {
+                                rv.setLastTime("-");
+                            } else {
+
+                                if (jsonObject.getString("last_value").equals("1")) {
+                                    rv.setLastTime("没有");
+                                } else if (jsonObject.getString("last_value").equals("2")) {
+                                    rv.setLastTime("偶尔");
+                                } else if (jsonObject.getString("last_value").equals("3")) {
+                                    rv.setLastTime("经常");
+                                }
+                            }
+                        }
+                        if ("肺气肿病史".equals(qname)) {
+                            rv.setThisTime(jsonObject.getString("now_value").equals("0") ? "无" : "有");
+
+
+                            if (jsonObject.getString("last_value").equals("-") || jsonObject.getString("last_value").equals("")) {
+                                rv.setLastTime("-");
+                            } else {
+                                rv.setLastTime(jsonObject.getString("last_value").equals("0") ? "无" : "有");
+                            }
+                        }
+                        if ("近两年是否新房装修".equals(qname)) {
+                            rv.setThisTime(jsonObject.getString("now_value").equals("2") ? "否" : "是");
+
+
+                            if (jsonObject.getString("last_value").equals("-") || jsonObject.getString("last_value").equals("")) {
+                                rv.setLastTime("-");
+                            } else {
+                                rv.setLastTime(jsonObject.getString("last_value").equals("0") ? "否" : "是");
+                            }
+                        }
+                        if ("初产年龄".equals(qname)) {
+                            rv.setThisTime(jsonObject.getString("now_value").equals("0") ? "≥30岁" : "＜30岁");
+
+
+                            if (jsonObject.getString("last_value").equals("-") || jsonObject.getString("last_value").equals("")) {
+                                rv.setLastTime("-");
+                            } else {
+                                rv.setLastTime(jsonObject.getString("last_value").equals("0") ? "≥30岁" : "＜30岁");
+                            }
+                        }
+                        if ("乳腺癌家族史".equals(qname)) {
+                            rv.setThisTime(jsonObject.getString("now_value").equals("0") ? "无" : "有");
+
+
+                            if (jsonObject.getString("last_value").equals("-") || jsonObject.getString("last_value").equals("")) {
+                                rv.setLastTime("-");
+                            } else {
+                                rv.setLastTime(jsonObject.getString("last_value").equals("0") ? "无" : "有");
+                            }
+                        }
+                        if ("痛风家族史".equals(qname)) {
+                            rv.setThisTime(jsonObject.getString("now_value").equals("0") ? "无" : "有");
+
+
+                            if (jsonObject.getString("last_value").equals("-") || jsonObject.getString("last_value").equals("")) {
+                                rv.setLastTime("-");
+                            } else {
+                                rv.setLastTime(jsonObject.getString("last_value").equals("0") ? "无" : "有");
+                            }
+                        }
+                        if ("长期服用肾上腺皮质激素".equals(qname)) {
+                            rv.setThisTime(jsonObject.getString("now_value").equals("0") ? "无" : "有");
+
+
+                            if (jsonObject.getString("last_value").equals("-") || jsonObject.getString("last_value").equals("")) {
+                                rv.setLastTime("-");
+                            } else {
+                                rv.setLastTime(jsonObject.getString("last_value").equals("0") ? "无" : "有");
+                            }
+                        }
+                        if ("冠心病史".equals(qname)) {
+                            rv.setThisTime(jsonObject.getString("now_value").equals("0") ? "无" : "有");
+
+
+                            if (jsonObject.getString("last_value").equals("-") || jsonObject.getString("last_value").equals("")) {
+                                rv.setLastTime("-");
+                            } else {
+                                rv.setLastTime(jsonObject.getString("last_value").equals("0") ? "无" : "有");
+                            }
+                        }
+                        if ("高血压病史".equals(qname)) {
+                            rv.setThisTime(jsonObject.getString("now_value").equals("0") ? "无" : "有");
+
+
+                            if (jsonObject.getString("last_value").equals("-") || jsonObject.getString("last_value").equals("")) {
+                                rv.setLastTime("-");
+                            } else {
+                                rv.setLastTime(jsonObject.getString("last_value").equals("0") ? "无" : "有");
+                            }
+                        }
+                        if ("糖尿病家族史".equals(qname)) {
+                            rv.setThisTime(jsonObject.getString("now_value").equals("0") ? "无" : "有");
+
+
+                            if (jsonObject.getString("last_value").equals("-") || jsonObject.getString("last_value").equals("")) {
+                                rv.setLastTime("-");
+                            } else {
+                                rv.setLastTime(jsonObject.getString("last_value").equals("0") ? "无" : "有");
+                            }
+                        }
+                        if ("冠心病家族史".equals(qname)) {
+                            rv.setThisTime(jsonObject.getString("now_value").equals("0") ? "无" : "有");
+
+
+                            if (jsonObject.getString("last_value").equals("-") || jsonObject.getString("last_value").equals("")) {
+                                rv.setLastTime("-");
+                            } else {
+                                rv.setLastTime(jsonObject.getString("last_value").equals("0") ? "无" : "有");
+                            }
+                        }
+                        if ("高脂饮食".equals(qname)) {
+                            rv.setThisTime(jsonObject.getString("now_value").equals("0") ? "避免高脂饮食" : "高脂饮食");
+
+
+                            if (jsonObject.getString("last_value").equals("-") || jsonObject.getString("last_value").equals("")) {
+                                rv.setLastTime("-");
+                            } else {
+                                rv.setLastTime(jsonObject.getString("last_value").equals("0") ? "避免高脂饮食" : "高脂饮食");
+                            }
+                        }
+                        if ("吸烟情况".equals(qname)) {
+                            rv.setThisTime(jsonObject.getString("now_value").equals("1") ? "吸烟" : "不吸烟");
+
+
+                            if (jsonObject.getString("last_value").equals("-") || jsonObject.getString("last_value").equals("")) {
+                                rv.setLastTime("-");
+                            } else {
+                                rv.setLastTime(jsonObject.getString("last_value").equals("1") ? "吸烟" : "不吸烟");
+                            }
+                        }
+                        if ("被动吸烟".equals(qname)) {
+                            rv.setThisTime(jsonObject.getString("now_value").equals("1") ? "是" : "否");
+                            if (jsonObject.getString("last_value").equals("-") || jsonObject.getString("last_value").equals("")) {
+                                rv.setLastTime("-");
+                            } else {
+                                rv.setLastTime(jsonObject.getString("last_value").equals("1") ? "是" : "否");
+                            }
+
+                        }
+                        if ("尿路感染".equals(qname)) {
+                            rv.setThisTime(jsonObject.getString("now_value").equals("1") ? "是" : "否");
+                            if (jsonObject.getString("last_value").equals("-") || jsonObject.getString("last_value").equals("")) {
+                                rv.setLastTime("-");
+                            } else {
+                                rv.setLastTime(jsonObject.getString("last_value").equals("1") ? "是" : "否");
+                            }
+
+                        }
+                        if ("粉尘接触史".equals(qname)) {
+                            rv.setThisTime(jsonObject.getString("now_value").equals("0") ? "无" : "有");
+                            if (jsonObject.getString("last_value").equals("-") || jsonObject.getString("last_value").equals("")) {
+                                rv.setLastTime("-");
+                            } else {
+                                rv.setLastTime(jsonObject.getString("last_value").equals("0") ? "无" : "有");
+                            }
+
+                        }
+                        if ("蔬菜水果摄入".equals(qname)) {
+                            rv.setThisTime(jsonObject.getString("now_value").equals("1") ? "不足" : "充足");
+                            if (jsonObject.getString("last_value").equals("-") || jsonObject.getString("last_value").equals("")) {
+                                rv.setLastTime("-");
+                            } else {
+                                rv.setLastTime(jsonObject.getString("last_value").equals("1") ? "不足" : "充足");
+                            }
+
+                        }
+                        if ("蔬菜水果".equals(qname)) {
+                            rv.setThisTime(jsonObject.getString("now_value").equals("1") ? "不足" : "充足");
+                            if (jsonObject.getString("last_value").equals("-") || jsonObject.getString("last_value").equals("")) {
+                                rv.setLastTime("-");
+                            } else {
+                                rv.setLastTime(jsonObject.getString("last_value").equals("1") ? "不足" : "充足");
+                            }
+
+
+                        }
+                        if ("居住环境".equals(qname)) {
+                            rv.setThisTime(jsonObject.getString("now_value").equals("0") ? "不寒冷" : "寒冷");
+                            if (jsonObject.getString("last_value").equals("-") || jsonObject.getString("last_value").equals("")) {
+                                rv.setLastTime("-");
+                            } else {
+                                rv.setLastTime(jsonObject.getString("last_value").equals("0") ? "不寒冷" : "寒冷");
+                            }
+                        }
+                        if ("牛奶摄入".equals(qname)) {
+                            rv.setThisTime(jsonObject.getString("now_value").equals("1") ? "充足" : "不足");
+                            if (jsonObject.getString("last_value").equals("-") || jsonObject.getString("last_value").equals("")) {
+                                rv.setLastTime("-");
+                            } else {
+                                rv.setLastTime(jsonObject.getString("last_value").equals("1") ? "充足" : "不足");
+                            }
+                        }
+                        if ("初潮年龄".equals(qname)) {
+                            rv.setThisTime(jsonObject.getString("now_value").equals("1") ? "不良" : "正常");
+                            if (jsonObject.getString("last_value").equals("-") || jsonObject.getString("last_value").equals("")) {
+                                rv.setLastTime("-");
+                            } else {
+                                rv.setLastTime(jsonObject.getString("last_value").equals("1") ? "不良" : "正常");
+                            }
+
+                        }
+                        if ("哺乳喂养时间".equals(qname)) {
+                            rv.setThisTime(jsonObject.getString("now_value").equals("0") ? "不良" : "正常");
+                            if (jsonObject.getString("last_value").equals("-") || jsonObject.getString("last_value").equals("")) {
+                                rv.setLastTime("-");
+                            } else {
+                                rv.setLastTime(jsonObject.getString("last_value").equals("0") ? "不良" : "正常");
+                            }
+
+                        }
+                        if ("饮酒情况".equals(qname)) {
+                            if (jsonObject.getString("now_value").equals("0")) {
+                                rv.setThisTime("不喝");
+                            } else if (jsonObject.getString("now_value").equals("1")) {
+                                rv.setThisTime("饮酒");
+                            }
+                            if (jsonObject.getString("last_value").equals("-") || jsonObject.getString("last_value").equals("")) {
+                                rv.setLastTime("-");
+                            } else {
+                                if (jsonObject.getString("last_value").equals("0")) {
+                                    rv.setLastTime("不喝");
+                                } else if (jsonObject.getString("last_value").equals("1")) {
+                                    rv.setLastTime("饮酒");
+                                }
+                            }
+                            if (7 != diseasid && 10 != diseasid) {
+                                rv.setIdealLevel("不喝酒");
+                            }
+
+
+                        }
+                        if ("啤酒摄入".equals(qname)) {
+                            if (jsonObject.getString("now_value").equals("2")) {
+                                rv.setThisTime("过量");
+                            }
+                            if (jsonObject.getString("now_value").equals("1")) {
+                                rv.setThisTime("适量");
+                            }
+                            if (jsonObject.getString("now_value").equals("0")) {
+                                rv.setThisTime("几乎不喝");
+                            }
+                            if (jsonObject.getString("last_value").equals("-") || jsonObject.getString("last_value").equals("")) {
+                                rv.setLastTime("-");
+                            } else {
+                                if (jsonObject.getString("last_value").equals("2")) {
+                                    rv.setLastTime("过量");
+                                }
+                                if (jsonObject.getString("last_value").equals("1")) {
+                                    rv.setLastTime("适量");
+                                }
+                                if (jsonObject.getString("last_value").equals("0")) {
+                                    rv.setLastTime("几乎不喝");
+                                }
+                            }
+
+                        }
+
+                        if ("高血脂".equals(qname)) {
+                            rv.setThisTime(jsonObject.getString("now_value").equals("1") ? "异常" : "正常");
+                            if (jsonObject.getString("last_value").equals("-") || jsonObject.getString("last_value").equals("")) {
+                                rv.setLastTime("-");
+                            } else {
+                                rv.setLastTime(jsonObject.getString("last_value").equals("1") ? "异常" : "正常");
+                            }
+
+                        }
+                        if ("血脂异常".equals(qname)) {
+                            rv.setThisTime(jsonObject.getString("now_value").equals("1") ? "异常" : "正常");
+                            if (jsonObject.getString("last_value").equals("-") || jsonObject.getString("last_value").equals("")) {
+                                rv.setLastTime("-");
+                            } else {
+                                rv.setLastTime(jsonObject.getString("last_value").equals("1") ? "异常" : "正常");
+                            }
+
+                        }
+                        if ("糖尿病史".equals(qname)) {
+                            rv.setThisTime(jsonObject.getString("now_value").equals("1") ? "有" : "无");
+                            if (jsonObject.getString("last_value").equals("-") || jsonObject.getString("last_value").equals("")) {
+                                rv.setLastTime("-");
+                            } else {
+                                rv.setLastTime(jsonObject.getString("last_value").equals("1") ? "有" : "无");
+                            }
+                        }
+                        if ("脑卒中家族史".equals(qname)) {
+                            rv.setThisTime(jsonObject.getString("now_value").equals("1") ? "有" : "无");
+                            if (jsonObject.getString("last_value").equals("-") || jsonObject.getString("last_value").equals("")) {
+                                rv.setLastTime("-");
+                            } else {
+                                rv.setLastTime(jsonObject.getString("last_value").equals("1") ? "有" : "无");
+                            }
+                        }
+                        if ("心血管病史".equals(qname)) {
+                            rv.setThisTime(jsonObject.getString("now_value").equals("1") ? "有" : "无");
+                            if (jsonObject.getString("last_value").equals("-") || jsonObject.getString("last_value").equals("")) {
+                                rv.setLastTime("-");
+                            } else {
+                                rv.setLastTime(jsonObject.getString("last_value").equals("1") ? "有" : "无");
+                            }
+                        }
+                        if ("高血压家族史".equals(qname)) {
+                            rv.setThisTime(jsonObject.getString("now_value").equals("1") ? "有" : "无");
+                            if (jsonObject.getString("last_value").equals("-") || jsonObject.getString("last_value").equals("")) {
+                                rv.setLastTime("-");
+                            } else {
+                                rv.setLastTime(jsonObject.getString("last_value").equals("1") ? "有" : "无");
+                            }
+                        }
+                        if ("体力活动水平".equals(qname)) {
+                            rv.setThisTime(jsonObject.getString("now_value").equals("1") ? "充足" : "不足");
+                            if (jsonObject.getString("last_value").equals("-") || jsonObject.getString("last_value").equals("")) {
+                                rv.setLastTime("-");
+                            } else {
+                                rv.setLastTime(jsonObject.getString("last_value").equals("1") ? "充足" : "不足");
+                            }
+                        }
+                        if ("体力活动".equals(qname)) {
+                            rv.setThisTime(jsonObject.getString("now_value").equals("1") ? "充足" : "不足");
+                            if (jsonObject.getString("last_value").equals("-") || jsonObject.getString("last_value").equals("")) {
+                                rv.setLastTime("-");
+                            } else {
+                                rv.setLastTime(jsonObject.getString("last_value").equals("1") ? "充足" : "不足");
+                            }
+                        }
+                        if ("血脂".equals(qname)) {
+                            rv.setThisTime(jsonObject.getString("now_value").equals("0") ? "正常" : "异常");
+                            if (jsonObject.getString("last_value").equals("-") || jsonObject.getString("last_value").equals("")) {
+                                rv.setLastTime("-");
+                            } else {
+                                rv.setLastTime(jsonObject.getString("last_value").equals("0") ? "正常" : "异常");
+                            }
+                        }
+                        if ("高嘌呤饮食".equals(qname)) {
+                            rv.setThisTime(jsonObject.getString("now_value").equals("1") ? "是" : "否");
+                            if (jsonObject.getString("last_value").equals("-") || jsonObject.getString("last_value").equals("")) {
+                                rv.setLastTime("-");
+                            } else {
+                                rv.setLastTime(jsonObject.getString("last_value").equals("1") ? "是" : "否");
+                            }
+                        }
+                        if ("个人既往骨折史".equals(qname)) {
+                            rv.setThisTime(jsonObject.getString("now_value").equals("1") ? "有" : "无");
+                            if (jsonObject.getString("last_value").equals("-") || jsonObject.getString("last_value").equals("")) {
+                                rv.setLastTime("-");
+                            } else {
+                                rv.setLastTime(jsonObject.getString("last_value").equals("1") ? "有" : "无");
+                            }
+                        }
+                        if ("父母髋部骨折史".equals(qname)) {
+                            rv.setThisTime(jsonObject.getString("now_value").equals("1") ? "有" : "无");
+                            if (jsonObject.getString("last_value").equals("-") || jsonObject.getString("last_value").equals("")) {
+                                rv.setLastTime("-");
+                            } else {
+                                rv.setLastTime(jsonObject.getString("last_value").equals("1") ? "有" : "无");
+                            }
+                        }
+
+                        if ("肺癌家族史".equals(qname)) {
+                            rv.setThisTime(jsonObject.getString("now_value").equals("1") ? "有" : "无");
+                            if (jsonObject.getString("last_value").equals("-") || jsonObject.getString("last_value").equals("")) {
+                                rv.setLastTime("-");
+                            } else {
+                                rv.setLastTime(jsonObject.getString("last_value").equals("1") ? "有" : "无");
+                            }
+                        }
+                        if ("前列腺癌家族史".equals(qname)) {
+                            rv.setThisTime(jsonObject.getString("now_value").equals("1") ? "有" : "无");
+                            if (jsonObject.getString("last_value").equals("-") || jsonObject.getString("last_value").equals("")) {
+                                rv.setLastTime("-");
+                            } else {
+                                rv.setLastTime(jsonObject.getString("last_value").equals("1") ? "有" : "无");
+                            }
+                        }
+                        if (diseasid == 6 && "甘油三酯".equals(qname)) {
+
+                            rv.setIdealLevel("<1.70mmol/L");
+                        }
+                        rlist.add(rv);
+                    }
+                }
+            }
+
+            //雷达图
+            if (null != findCSDiseaseRiskOptimal && YiBoDiseaseRiskOptimalSize != 0) {
+                // 查询评估相关危险因素selectRiskResulByRequestNum
+                int j = 0;
+                for (YHDiseaseRiskOptimal CSDiseaseRiskOptimal : findCSDiseaseRiskOptimal) {
+
+                    YiBoDiseaseRiskOptimalRiskFactors = new YhDiseaseRiskFactorGroups();
+                    YiBoDiseaseRiskOptimalRiskFactors.setDiseaseRiskFactorName(CSDiseaseRiskOptimal.getQname());
+                    // 调用计算雷达图以及风险因素
+                    doDiseaseRiskResult2(CSDiseaseRiskOptimal, YiBoDiseaseRiskOptimalRiskResult, YiBoDiseaseRiskOptimalRiskFactors);
+
+                    YhDiseaseRiskFactorGroupsVOJO GroupsVOJO = new YhDiseaseRiskFactorGroupsVOJO();
+
+                    String qname = CSDiseaseRiskOptimal.getQname();
+                    GroupsVOJO.setName(qname);
+                    GroupsVOJO.setMax(100);
+                    CSDiseaseRiskFactorGroupsVOJOlist[j] = GroupsVOJO;
+
+                    // 题目层级
+                    YiBoDiseaseRiskOptimalRiskFactors.setDiseaseRiskFactorName(YiBoDiseaseRiskOptimalRiskFactors.getName());
+                    //理想风险比值
+                    lixiang[j] = YiBoDiseaseRiskOptimalRiskFactors.getDiseaseRiskFactorSegment();
+                    //当前风险比值
+                    dangqian[j] = YiBoDiseaseRiskOptimalRiskFactors.getDiseaseRiskFactorBadge();
+
+                    j++;
+                }
+                CSDiseaseAssessReport.setGvojolist(CSDiseaseRiskFactorGroupsVOJOlist);
+                CSDiseaseAssessReport.setLixiangList(lixiang);
+                CSDiseaseAssessReport.setDangqianList(dangqian);
+                CSDiseaseAssessReport.setGoodList(goodList);
+                CSDiseaseAssessReport.setNogoodList(nogoodList);
+                CSDiseaseAssessReport.setFlist(CSDiseaseRiskFactorGroups);
+            }
+
+        }
+        return list;
+    }
+
     //雷达图
     private YhReportDetailsVOJO setYhReportDetailsVOJO(YhDiseaseRiskResult2 yhDiseaseRiskResult, YhReportDetailsVOJO yhDiseaseAssessReport, List<YHDiseaseRiskOptimal> findYhDiseaseRiskOptimal, int yhDiseaseRiskOptimalSize) {
         YhDiseaseRiskFactorGroups yhDiseaseRiskFactors = null;
@@ -3996,6 +4652,945 @@ public class YhDiseaseAssessReportServiceImpl implements YhDiseaseAssessReportSe
         }
     }
 
+    public List<RiskFactorsVOJO> getLifeRiskInfo(String rs, Object document,
+                                                 YhDiseaseAssessTotalReport2web findAssessTotalReportLastInfo) {
+        if (null != findAssessTotalReportLastInfo) {
+
+            int thisNum = 0;
+            int lastNum = 0;
+            String lastRs = findAssessTotalReportLastInfo.getRequestSerialnum();
+            YhQuestionCheckJson2Web selectByRsLimit1 = YhQuestionCheckJson2WebMapper.selectByRsLimit1(lastRs);
+            String findQuestionCheckForCheckAnswerByrs = selectByRsLimit1.getUserCheckAnswer();
+            Object lastdocument = null;
+            lastdocument = Configuration.defaultConfiguration().jsonProvider()
+                    .parse(findQuestionCheckForCheckAnswerByrs);
+            List<RiskFactorsVOJO> rlist = new ArrayList<RiskFactorsVOJO>();
+            YhDiseaseRiskResultAppVOJO vojo = new YhDiseaseRiskResultAppVOJO();
+            vojo.setColumnName("BMI");
+            vojo.setDid(String.valueOf(0));
+            vojo.setRs(rs);
+            String returnStr = yhDiseaseAssessReportMapper.findDiseaseRiskResultByRsForResultString(vojo);
+            RiskFactorsVOJO rv = new RiskFactorsVOJO();
+            JSONObject jsonObject = JSONObject.parseObject(returnStr);
+            rv.setRiskFactors("体重指数(BMI)");
+            rv.setChanges(jsonObject.getString("change_value"));
+            rv.setIdealLevel("18.5≤BMI<24");
+            String now_value = jsonObject.getString("now_value");
+            rv.setThisTime(now_value);
+            // 颜色表示
+            if (!(Double.valueOf(now_value) >= 18.5 && Double.valueOf(now_value) < 24)) {
+                rv.setThisTimeColor("1");
+            }
+            // 本次得分
+            if (Double.valueOf(now_value) < 18.5) {
+                rv.setThisScore(5);
+            } else if (Double.valueOf(now_value) >= 18.5 && Double.valueOf(now_value) < 24) {
+                rv.setThisScore(10);
+            } else if (Double.valueOf(now_value) >= 24 && Double.valueOf(now_value) < 28) {
+                rv.setThisScore(3);
+            } else {
+                rv.setThisScore(0);
+            }
+            String last_value = jsonObject.getString("last_value");
+            if (StringUtils.isEmpty(last_value) || "-".equals(last_value)) {
+                rv.setLastScore(0);
+            } else {
+                if (Double.valueOf(last_value) < 18.5) {
+                    rv.setLastScore(5);
+                } else if (Double.valueOf(last_value) >= 18.5 && Double.valueOf(last_value) < 24) {
+                    rv.setLastScore(10);
+                } else if (Double.valueOf(last_value) >= 24 && Double.valueOf(last_value) < 28) {
+                    rv.setLastScore(3);
+                } else {
+                    rv.setLastScore(0);
+                }
+            }
+
+
+            rlist.add(rv);
+
+            vojo.setColumnName("sport");
+            vojo.setDid(String.valueOf(0));
+            vojo.setRs(rs);
+            returnStr = yhDiseaseAssessReportMapper.findDiseaseRiskResultByRsForResultString(vojo);
+            rv = new RiskFactorsVOJO();
+            jsonObject = JSONObject.parseObject(returnStr);
+            rv.setRiskFactors("体力活动水平");
+            rv.setChanges(jsonObject.getString("change_value"));
+
+            String sport_in = JsonPath.read(document, "$.sport_in") + "";
+            String sport_inlast = JsonPath.read(lastdocument, "$.sport_in") + "";
+            if (sport_in.equals("1")) {
+                // 参加过
+                String sport_freq = JsonPath.read(document, "$.sport_freq") + "";
+                if (sport_freq.equals("1") || sport_freq.equals("2")) {
+                    rv.setThisTime("不足");
+                    rv.setThisScore(0);
+                    rv.setThisTimeColor("1");
+                }
+
+                if (sport_freq.equals("3")) {
+                    rv.setThisTime("不足");
+                    rv.setThisScore(5);
+                    rv.setThisTimeColor("1");
+                }
+                if (sport_freq.equals("4")) {
+                    rv.setThisTime("不足");
+                    rv.setThisScore(10);
+                    rv.setThisTimeColor("1");
+                }
+                if (sport_freq.equals("5")) {
+                    rv.setThisTime("充足");
+                    rv.setThisScore(20);
+                }
+            } else {
+                // 没参加过
+                rv.setThisTime("不足");
+                rv.setThisScore(0);
+                rv.setThisTimeColor("1");
+            }
+
+            if (sport_inlast.equals("1")) {
+                // 参加过
+                String sport_freq = JsonPath.read(lastdocument, "$.sport_freq") + "";
+                if (sport_freq.equals("1") || sport_freq.equals("2")) {
+                    rv.setLastScore(0);
+                }
+
+                if (sport_freq.equals("3")) {
+                    rv.setLastScore(5);
+                }
+                if (sport_freq.equals("4")) {
+                    rv.setLastScore(10);
+                }
+                if (sport_freq.equals("5")) {
+                    rv.setLastScore(20);
+                }
+            } else {
+                // 没参加过
+                rv.setLastScore(0);
+            }
+            rv.setIdealLevel("每周5次以上运动，每次不少于30分钟");
+            rlist.add(rv);
+
+            vojo.setColumnName("smoke");
+            vojo.setDid(String.valueOf(0));
+            vojo.setRs(rs);
+            returnStr = yhDiseaseAssessReportMapper.findDiseaseRiskResultByRsForResultString(vojo);
+            rv = new RiskFactorsVOJO();
+            jsonObject = JSONObject.parseObject(returnStr);
+            rv.setRiskFactors("吸烟状况");
+            rv.setChanges(jsonObject.getString("change_value"));
+
+            rv.setIdealLevel("不吸烟/戒烟");
+            String smoke_status = JsonPath.read(document, "$.smoke_status") + "";
+            if (smoke_status.equals("1")) {
+                // 吸烟
+                rv.setThisTime("吸烟");
+                rv.setThisTimeColor("1");
+                String smoke_amount = JsonPath.read(document, "$.smoke_amount") + "";
+                if (Integer.valueOf(smoke_amount) < 10) {
+                    rv.setThisScore(3);
+                }
+                if (Integer.valueOf(smoke_amount) >= 10 && Integer.valueOf(smoke_amount) <= 40) {
+                    rv.setThisScore(1);
+                }
+                if (Integer.valueOf(smoke_amount) > 40) {
+                    rv.setThisScore(0);
+                }
+
+            } else if (smoke_status.equals("2")) {
+                // 不吸烟
+                rv.setThisTime("您不吸烟");
+                rv.setThisScore(10);
+            } else {
+                rv.setThisTime("已戒烟");
+                String smoke_end_age = JsonPath.read(document, "$.smoke_end_age") + "";
+                String age = JsonPath.read(document, "$.person.age") + "";
+                if (StringUtils.isNotEmpty(smoke_end_age)) {
+                    if (Integer.valueOf(age) - Integer.valueOf(smoke_end_age) > 1) {
+                        rv.setThisScore(10);
+                    } else {
+                        rv.setThisScore(3);
+                    }
+                } else {
+                    rv.setThisScore(10);
+                }
+
+            }
+
+            String smoke_statuslast = JsonPath.read(lastdocument, "$.smoke_status") + "";
+            if (smoke_statuslast.equals("1")) {
+                // 吸烟
+                rv.setLastTime("吸烟");
+                String smoke_amount = JsonPath.read(lastdocument, "$.smoke_amount") + "";
+                if (Integer.valueOf(smoke_amount) < 10) {
+                    rv.setLastScore(3);
+                }
+                if (Integer.valueOf(smoke_amount) >= 10 && Integer.valueOf(smoke_amount) <= 40) {
+                    rv.setLastScore(1);
+                }
+                if (Integer.valueOf(smoke_amount) > 40) {
+                    rv.setLastScore(0);
+                }
+
+            } else if (smoke_statuslast.equals("2")) {
+                // 不吸烟
+                rv.setLastTime("您不吸烟");
+                rv.setLastScore(10);
+            } else if (smoke_statuslast.equals("3")) {
+                rv.setLastTime("您已戒烟");
+                String smoke_end_age = JsonPath.read(lastdocument, "$.smoke_end_age") + "";
+                String age = JsonPath.read(lastdocument, "$.person.age") + "";
+                if (StringUtils.isNotEmpty(smoke_end_age)) {
+                    if (Integer.valueOf(age) - Integer.valueOf(smoke_end_age) > 1) {
+                        rv.setLastScore(10);
+                    } else {
+                        rv.setLastScore(3);
+                    }
+                } else {
+                    rv.setLastScore(10);
+                }
+
+
+            }
+
+            rlist.add(rv);
+
+            vojo.setColumnName("drink");
+            vojo.setDid(String.valueOf(0));
+            vojo.setRs(rs);
+            returnStr = yhDiseaseAssessReportMapper.findDiseaseRiskResultByRsForResultString(vojo);
+            rv = new RiskFactorsVOJO();
+            jsonObject = JSONObject.parseObject(returnStr);
+            rv.setRiskFactors("饮酒状况");
+            rv.setChanges(jsonObject.getString("change_value"));
+
+            String food_drink = JsonPath.read(document, "$.food_drink") + "";
+            rv.setIdealLevel("不饮酒");
+            //1喝2不喝
+            if (food_drink.equals("1")) {
+                // 喝酒
+
+                String food_drink_times = JsonPath.read(document, "$.food_drink_times") + "";
+                String food_drink_beer = JsonPath.read(document, "$.food_drink_beer") + "";
+                if (food_drink_times.equals("1") && (food_drink_beer.equals("1") || food_drink_beer.equals("2"))) {
+                    rv.setThisTime("您饮酒适量");
+                    rv.setThisScore(2);
+                } else {
+                    rv.setThisTime("您饮酒过量");
+                    rv.setThisScore(0);
+                    rv.setThisTimeColor("1");
+                }
+            } else {
+                // 不喝酒
+                rv.setThisTime("您不喝酒");
+                rv.setThisScore(5);
+            }
+
+            String food_drinklast = JsonPath.read(lastdocument, "$.food_drink") + "";
+            rv.setIdealLevel("不饮酒");
+            if (food_drinklast.equals("1")) {
+                // 喝酒
+                rv.setLastTime("您不喝酒");
+                rv.setLastScore(5);
+            } else {
+                // 不喝酒
+                String food_drink_times = JsonPath.read(lastdocument, "$.food_drink_times") + "";
+                String food_drink_beer = JsonPath.read(lastdocument, "$.food_drink_beer") + "";
+                if (food_drink_times.equals("1") && (food_drink_beer.equals("1") || food_drink_beer.equals("2"))) {
+                    rv.setLastTime("您饮酒适量");
+                    rv.setLastScore(2);
+                } else {
+                    rv.setLastTime("您饮酒过量");
+                    rv.setLastScore(0);
+                }
+            }
+            rlist.add(rv);
+
+            rv = new RiskFactorsVOJO();
+            rv.setRiskFactors("蔬菜摄入状况");
+            rv.setIdealLevel("适量(300～500克/天)");
+            String food_vegetables = JsonPath.read(document, "$.food_vegetables") + "";
+            if ("1".equals(food_vegetables)) {
+                rv.setThisTime("不足");
+                rv.setThisTimeColor("1");
+                rv.setThisScore(0);
+            } else if ("2".equals(food_vegetables)) {
+                rv.setThisTime("不足");
+                rv.setThisTimeColor("1");
+                rv.setThisScore(0);
+            } else if ("3".equals(food_vegetables)) {
+                rv.setThisTime("不足");
+                rv.setThisTimeColor("1");
+                rv.setThisScore(2);
+            } else if ("4".equals(food_vegetables)) {
+                rv.setThisTime("不足");
+                rv.setThisTimeColor("1");
+                rv.setThisScore(5);
+            } else if ("5".equals(food_vegetables)) {
+                rv.setThisTime("充足");
+
+                rv.setThisScore(10);
+            }
+
+            String food_vegetableslast = JsonPath.read(lastdocument, "$.food_vegetables") + "";
+            if ("1".equals(food_vegetableslast)) {
+                rv.setLastTime("不足");
+
+                rv.setLastScore(0);
+            } else if ("2".equals(food_vegetableslast)) {
+                rv.setLastTime("不足");
+                rv.setLastScore(0);
+            } else if ("3".equals(food_vegetableslast)) {
+                rv.setLastTime("不足");
+                rv.setLastScore(2);
+            } else if ("4".equals(food_vegetableslast)) {
+                rv.setLastTime("不足");
+                rv.setLastScore(5);
+            } else if ("5".equals(food_vegetableslast)) {
+                rv.setLastTime("充足");
+                rv.setLastScore(10);
+            }
+            if (Integer.valueOf(food_vegetables) == Integer.valueOf(food_vegetableslast)) {
+                rv.setChanges("无改善");
+            } else if (Integer.valueOf(food_vegetables) > Integer.valueOf(food_vegetableslast)) {
+                rv.setChanges("好转");
+            } else {
+                rv.setChanges("恶化");
+            }
+            rlist.add(rv);
+
+            rv = new RiskFactorsVOJO();
+            rv.setRiskFactors("水果摄入状况");
+            rv.setIdealLevel("适量(200～350克/天)");
+            String food_fruits = JsonPath.read(document, "$.food_fruits") + "";
+            if ("1".equals(food_fruits)) {
+                rv.setThisTime("不足");
+                rv.setThisTimeColor("1");
+                rv.setThisScore(0);
+            } else if ("2".equals(food_fruits)) {
+                rv.setThisTime("不足");
+                rv.setThisTimeColor("1");
+                rv.setThisScore(0);
+            } else if ("3".equals(food_fruits)) {
+                rv.setThisTime("不足");
+                rv.setThisTimeColor("1");
+                rv.setThisScore(2);
+            } else if ("4".equals(food_fruits)) {
+                rv.setThisTime("不足");
+                rv.setThisTimeColor("1");
+                rv.setThisScore(5);
+            } else if ("5".equals(food_fruits)) {
+                rv.setThisTime("充足");
+                rv.setThisScore(10);
+            }
+
+            String food_fruitslast = JsonPath.read(lastdocument, "$.food_fruits") + "";
+            if ("1".equals(food_fruitslast)) {
+                rv.setLastTime("不足");
+                rv.setLastScore(0);
+            } else if ("2".equals(food_fruitslast)) {
+                rv.setLastTime("不足");
+                rv.setLastScore(0);
+            } else if ("3".equals(food_fruitslast)) {
+                rv.setLastTime("不足");
+                rv.setLastScore(2);
+            } else if ("4".equals(food_fruitslast)) {
+                rv.setLastTime("不足");
+                rv.setLastScore(5);
+            } else if ("5".equals(food_fruitslast)) {
+                rv.setLastTime("充足");
+                rv.setLastScore(10);
+            }
+
+            if (Integer.valueOf(food_fruits) == Integer.valueOf(food_fruitslast)) {
+                rv.setChanges("无改善");
+            } else if (Integer.valueOf(food_fruits) > Integer.valueOf(food_fruitslast)) {
+                rv.setChanges("好转");
+            } else {
+                rv.setChanges("恶化");
+            }
+            rlist.add(rv);
+
+            vojo.setColumnName("milk");
+            vojo.setDid(String.valueOf(0));
+            vojo.setRs(rs);
+            returnStr = yhDiseaseAssessReportMapper.findDiseaseRiskResultByRsForResultString(vojo);
+            rv = new RiskFactorsVOJO();
+            jsonObject = JSONObject.parseObject(returnStr);
+            rv.setRiskFactors("乳制品摄入状况");
+            rv.setChanges(jsonObject.getString("change_value"));
+
+            rv.setIdealLevel("适量(300克/天)");
+            String food_milk = JsonPath.read(document, "$.food_milk") + "";
+            String food_dairy = JsonPath.read(document, "$.food_dairy") + "";
+            if ("1".equals(food_milk)) {
+                rv.setThisTime("不足");// 不喝
+                rv.setThisTimeColor("1");
+                rv.setThisScore(0);
+            } else if ("2".equals(food_milk)) {
+                rv.setThisTime("不足");// 少于0.5杯
+                rv.setThisTimeColor("1");
+                rv.setThisScore(0);
+            } else if ("3".equals(food_milk)) {
+                rv.setThisTime("充足");// 0.5-1杯
+                rv.setThisScore(10);
+            } else if ("4".equals(food_milk)) {
+                rv.setThisTime("充足");// 1-2杯
+                rv.setThisScore(10);
+            } else if ("5".equals(food_milk) && "5".equals(food_dairy)) {
+                rv.setThisTime("过量");// 2杯以上
+                rv.setThisTimeColor("1");
+                rv.setThisScore(3);
+            } else {
+                rv.setThisTime("充足");// 1-2杯
+                rv.setThisScore(10);
+            }
+
+            String food_milklast = JsonPath.read(lastdocument, "$.food_milk") + "";
+            String food_dairylast = JsonPath.read(lastdocument, "$.food_dairy") + "";
+            if ("1".equals(food_milklast)) {
+                rv.setLastTime("不足");// 不喝
+
+                rv.setLastScore(0);
+            } else if ("2".equals(food_milklast)) {
+                rv.setLastTime("不足");// 少于0.5杯
+                rv.setLastScore(0);
+            } else if ("3".equals(food_milklast)) {
+                rv.setLastTime("充足");// 0.5-1杯
+                rv.setLastScore(10);
+            } else if ("4".equals(food_milklast)) {
+                rv.setLastTime("充足");// 1-2杯
+                rv.setLastScore(10);
+            } else if ("5".equals(food_milklast) && "5".equals(food_dairylast)) {
+                rv.setLastTime("过量");// 2杯以上
+                rv.setLastScore(3);
+            } else {
+                rv.setLastTime("充足");// 1-2杯
+                rv.setLastScore(10);
+            }
+            rlist.add(rv);
+
+            vojo.setColumnName("tfa");
+            vojo.setDid(String.valueOf(0));
+            vojo.setRs(rs);
+            returnStr = yhDiseaseAssessReportMapper.findDiseaseRiskResultByRsForResultString(vojo);
+            rv = new RiskFactorsVOJO();
+            jsonObject = JSONObject.parseObject(returnStr);
+            rv.setRiskFactors("反式脂肪酸状况");
+            rv.setChanges(jsonObject.getString("change_value"));
+
+            rv.setIdealLevel("不吃");
+            String food_sweet = JsonPath.read(document, "$.food_sweet") + "";
+            String food_sugary = JsonPath.read(document, "$.food_sugary") + "";
+            String food_sweetNew = "";
+            if (Integer.valueOf(food_sweet) > Integer.valueOf(food_sugary)) {
+                food_sweetNew = food_sweet;
+            } else {
+                food_sweetNew = food_sugary;
+            }
+            if ("1".equals(food_sweetNew)) {
+                rv.setThisTime("不吃");
+                rv.setThisScore(10);
+            }
+            if ("2".equals(food_sweetNew)) {
+                rv.setThisTime("适量");
+                rv.setThisScore(5);
+            }
+            if ("3".equals(food_sweetNew)) {
+                rv.setThisTime("过量");
+                rv.setThisTimeColor("1");
+                rv.setThisScore(0);
+            }
+            if ("4".equals(food_sweetNew)) {
+                rv.setThisTime("过量");
+                rv.setThisTimeColor("1");
+                rv.setThisScore(0);
+            }
+
+            String food_sweetlast = JsonPath.read(lastdocument, "$.food_sweet") + "";
+            String food_sugarylast = JsonPath.read(lastdocument, "$.food_sugary") + "";
+            String food_sweetlastNew = "";
+            if (Integer.valueOf(food_sweetlast) > Integer.valueOf(food_sugarylast)) {
+                food_sweetlastNew = food_sweetlast;
+            } else {
+                food_sweetlastNew = food_sugarylast;
+            }
+            if ("1".equals(food_sweetlastNew)) {
+                rv.setLastTime("不吃");
+                rv.setLastScore(10);
+            }
+            if ("2".equals(food_sweetlastNew)) {
+                rv.setLastTime("适量");
+                rv.setLastScore(5);
+            }
+            if ("3".equals(food_sweetlastNew)) {
+                rv.setLastTime("过量");
+                rv.setLastScore(0);
+            }
+            if ("4".equals(food_sweetlastNew)) {
+                rv.setLastTime("过量");
+                rv.setLastScore(0);
+            }
+            rlist.add(rv);
+
+            vojo.setColumnName("psy_nervous");
+            vojo.setDid(String.valueOf(0));
+            vojo.setRs(rs);
+            returnStr = yhDiseaseAssessReportMapper.findDiseaseRiskResultByRsForResultString(vojo);
+            rv = new RiskFactorsVOJO();
+            jsonObject = JSONObject.parseObject(returnStr);
+            rv.setRiskFactors("精神压力");
+            rv.setChanges(jsonObject.getString("change_value"));
+
+            rv.setIdealLevel("没有");
+            String psy_nervous = JsonPath.read(document, "$.psy_nervous") + "";
+            if ("1".equals(psy_nervous)) {
+                rv.setThisTime("没有");
+                rv.setThisScore(10);
+            }
+            if ("2".equals(psy_nervous)) {
+                rv.setThisTime("偶尔");
+                rv.setThisScore(5);
+            }
+            if ("3".equals(psy_nervous)) {
+                rv.setThisTime("经常");
+                rv.setThisScore(0);
+                rv.setThisTimeColor("1");
+            }
+
+            String psy_nervouslast = JsonPath.read(lastdocument, "$.psy_nervous") + "";
+            if ("1".equals(psy_nervouslast)) {
+                rv.setLastTime("没有");
+                rv.setLastScore(10);
+            }
+            if ("2".equals(psy_nervouslast)) {
+                rv.setLastTime("偶尔");
+                rv.setLastScore(5);
+            }
+            if ("3".equals(psy_nervouslast)) {
+                rv.setLastTime("经常");
+                rv.setLastScore(0);
+            }
+
+            rv = new RiskFactorsVOJO();
+            rv.setRiskFactors("睡眠状况");
+            rv.setIdealLevel("良好");
+            String bedtime = JsonPath.read(document, "$.bedtime") + "";
+            if ("1".equals(bedtime)) {
+                rv.setThisTime("一般");
+                rv.setThisScore(5);
+            }
+            if ("2".equals(bedtime)) {
+                rv.setThisTime("良好");
+                rv.setThisScore(10);
+            }
+            if ("3".equals(bedtime)) {
+                rv.setThisTime("差");
+                rv.setThisTimeColor("1");
+                rv.setThisScore(0);
+            }
+
+            String bedtimelast = JsonPath.read(lastdocument, "$.bedtime") + "";
+            if ("1".equals(bedtimelast)) {
+                rv.setLastTime("一般");
+                rv.setLastScore(5);
+            }
+            if ("2".equals(bedtimelast)) {
+                rv.setLastTime("良好");
+                rv.setLastScore(10);
+            }
+            if ("3".equals(bedtimelast)) {
+                rv.setLastTime("差");
+                rv.setLastScore(0);
+            }
+            if ("1".equals(bedtime)) {
+                if ("1".equals(bedtimelast)) {
+                    rv.setChanges("无改善");
+                }
+                if ("2".equals(bedtimelast)) {
+                    rv.setChanges("转好");
+                }
+                if ("3".equals(bedtimelast)) {
+                    rv.setChanges("恶化");
+                }
+            }
+            if ("2".equals(bedtime)) {
+                if ("1".equals(bedtimelast)) {
+                    rv.setChanges("恶化");
+                }
+                if ("2".equals(bedtimelast)) {
+                    rv.setChanges("无改善");
+                }
+                if ("3".equals(bedtimelast)) {
+                    rv.setChanges("恶化");
+                }
+            }
+            if ("3".equals(bedtime)) {
+                if ("1".equals(bedtimelast)) {
+                    rv.setChanges("恶化");
+                }
+                if ("2".equals(bedtimelast)) {
+                    rv.setChanges("转好");
+                }
+                if ("3".equals(bedtimelast)) {
+                    rv.setChanges("无改善");
+                }
+            }
+            rlist.add(rv);
+
+            return rlist;
+        } else {
+
+
+            int thisNum = 0;
+            int lastNum = 0;
+
+
+            List<RiskFactorsVOJO> rlist = new ArrayList<RiskFactorsVOJO>();
+            YhDiseaseRiskResultAppVOJO vojo = new YhDiseaseRiskResultAppVOJO();
+            vojo.setColumnName("BMI");
+            vojo.setDid(String.valueOf(0));
+            vojo.setRs(rs);
+            String returnStr = yhDiseaseAssessReportMapper.findDiseaseRiskResultByRsForResultString(vojo);
+            RiskFactorsVOJO rv = new RiskFactorsVOJO();
+            JSONObject jsonObject = JSONObject.parseObject(returnStr);
+            rv.setRiskFactors("体重指数(BMI)");
+            rv.setIdealLevel("18.5≤BMI<24");
+            String now_value = jsonObject.getString("now_value");
+            rv.setThisTime(now_value);
+            // 颜色表示
+            if (!(Double.valueOf(now_value) >= 18.5 && Double.valueOf(now_value) < 24)) {
+                rv.setThisTimeColor("1");
+            }
+            // 本次得分
+            if (Double.valueOf(now_value) < 18.5) {
+                rv.setThisScore(5);
+            } else if (Double.valueOf(now_value) >= 18.5 && Double.valueOf(now_value) < 24) {
+                rv.setThisScore(10);
+            } else if (Double.valueOf(now_value) >= 24 && Double.valueOf(now_value) < 28) {
+                rv.setThisScore(3);
+            } else {
+                rv.setThisScore(0);
+            }
+		/*	String last_value = jsonObject.getString("last_value");
+			if (Double.valueOf(last_value) < 18.5) {
+				rv.setLastScore(5);
+			} else if (Double.valueOf(last_value) >= 18.5 && Double.valueOf(last_value) < 24) {
+				rv.setLastScore(10);
+			} else if (Double.valueOf(last_value) >= 24 && Double.valueOf(last_value) < 28) {
+				rv.setLastScore(3);
+			} else {
+				rv.setLastScore(0);
+			}*/
+
+            rlist.add(rv);
+
+            vojo.setColumnName("sport");
+            vojo.setDid(String.valueOf(0));
+            vojo.setRs(rs);
+            returnStr = yhDiseaseAssessReportMapper.findDiseaseRiskResultByRsForResultString(vojo);
+            rv = new RiskFactorsVOJO();
+            jsonObject = JSONObject.parseObject(returnStr);
+            rv.setRiskFactors("体力活动水平");
+
+            String sport_in = JsonPath.read(document, "$.sport_in") + "";
+
+
+            if (sport_in.equals("1")) {
+                // 参加过
+                String sport_freq = JsonPath.read(document, "$.sport_freq") + "";
+                if (sport_freq.equals("1") || sport_freq.equals("2")) {
+                    rv.setThisTime("不足");
+                    rv.setThisScore(0);
+                    rv.setThisTimeColor("1");
+                }
+
+                if (sport_freq.equals("3")) {
+                    rv.setThisTime("不足");
+                    rv.setThisScore(5);
+                    rv.setThisTimeColor("1");
+                }
+                if (sport_freq.equals("4")) {
+                    rv.setThisTime("不足");
+                    rv.setThisScore(10);
+                    rv.setThisTimeColor("1");
+                }
+                if (sport_freq.equals("5")) {
+                    rv.setThisTime("充足");
+                    rv.setThisScore(20);
+                }
+            } else {
+                // 没参加过
+                rv.setThisTime("不足");
+                rv.setThisScore(0);
+                rv.setThisTimeColor("1");
+            }
+
+            rv.setIdealLevel("每周5次以上运动，每次不少于30分钟");
+            rlist.add(rv);
+
+            vojo.setColumnName("smoke");
+            vojo.setDid(String.valueOf(0));
+            vojo.setRs(rs);
+            returnStr = yhDiseaseAssessReportMapper.findDiseaseRiskResultByRsForResultString(vojo);
+            rv = new RiskFactorsVOJO();
+            jsonObject = JSONObject.parseObject(returnStr);
+            rv.setRiskFactors("吸烟状况");
+
+            rv.setIdealLevel("不吸烟/戒烟");
+            String smoke_status = JsonPath.read(document, "$.smoke_status") + "";
+            if (smoke_status.equals("1")) {
+                // 吸烟
+                rv.setLastTime("吸烟");
+                rv.setThisTimeColor("1");
+                String smoke_amount = JsonPath.read(document, "$.smoke_amount") + "";
+                if (Integer.valueOf(smoke_amount) < 10) {
+                    rv.setThisScore(3);
+                }
+                if (Integer.valueOf(smoke_amount) >= 10 && Integer.valueOf(smoke_amount) <= 40) {
+                    rv.setThisScore(1);
+                }
+                if (Integer.valueOf(smoke_amount) > 40) {
+                    rv.setThisScore(0);
+                }
+
+            } else if (smoke_status.equals("2")) {
+                // 不吸烟
+                rv.setThisTime("您不吸烟");
+                rv.setThisScore(10);
+            } else {
+                String smoke_end_age = JsonPath.read(document, "$.smoke_end_age") + "";
+                String age = JsonPath.read(document, "$.person.age") + "";
+                if (StringUtils.isNotEmpty(smoke_end_age)) {
+                    if (Integer.valueOf(age) - Integer.valueOf(smoke_end_age) > 1) {
+                        rv.setThisScore(10);
+                    } else {
+                        rv.setThisScore(3);
+                    }
+                } else {
+                    rv.setThisScore(10);
+                }
+
+
+            }
+
+            rlist.add(rv);
+
+            vojo.setColumnName("drink");
+            vojo.setDid(String.valueOf(0));
+            vojo.setRs(rs);
+            returnStr = yhDiseaseAssessReportMapper.findDiseaseRiskResultByRsForResultString(vojo);
+            rv = new RiskFactorsVOJO();
+            jsonObject = JSONObject.parseObject(returnStr);
+            rv.setRiskFactors("饮酒状况");
+
+            String food_drink = JsonPath.read(document, "$.food_drink") + "";
+            rv.setIdealLevel("不饮酒");
+            if (food_drink.equals("2")) {
+                // 喝酒
+                rv.setThisTime("您不喝酒");
+                rv.setThisScore(5);
+            } else {
+                // 不喝酒
+                String food_drink_times = JsonPath.read(document, "$.food_drink_times") + "";
+                String food_drink_beer = JsonPath.read(document, "$.food_drink_beer") + "";
+                if (food_drink_times.equals("1") && (food_drink_beer.equals("1") || food_drink_beer.equals("2"))) {
+                    rv.setThisTime("您饮酒适量");
+                    rv.setThisScore(2);
+                } else {
+                    rv.setThisTime("您饮酒过量");
+                    rv.setThisScore(0);
+                    rv.setThisTimeColor("1");
+                }
+            }
+            rv.setIdealLevel("不饮酒");
+            rlist.add(rv);
+
+            rv = new RiskFactorsVOJO();
+            rv.setRiskFactors("蔬菜摄入状况");
+            rv.setIdealLevel("适量(300～500克/天)");
+            String food_vegetables = JsonPath.read(document, "$.food_vegetables") + "";
+            if ("1".equals(food_vegetables)) {
+                rv.setThisTime("不足");
+                rv.setThisTimeColor("1");
+                rv.setThisScore(0);
+            } else if ("2".equals(food_vegetables)) {
+                rv.setThisTime("不足");
+                rv.setThisTimeColor("1");
+                rv.setThisScore(0);
+            } else if ("3".equals(food_vegetables)) {
+                rv.setThisTime("不足");
+                rv.setThisTimeColor("1");
+                rv.setThisScore(2);
+            } else if ("4".equals(food_vegetables)) {
+                rv.setThisTime("不足");
+                rv.setThisTimeColor("1");
+                rv.setThisScore(5);
+            } else if ("5".equals(food_vegetables)) {
+                rv.setThisTime("充足");
+
+                rv.setThisScore(10);
+            }
+
+
+            rlist.add(rv);
+
+            rv = new RiskFactorsVOJO();
+            rv.setRiskFactors("水果摄入状况");
+            rv.setIdealLevel("适量(200～350克/天)");
+            String food_fruits = JsonPath.read(document, "$.food_fruits") + "";
+            if ("1".equals(food_fruits)) {
+                rv.setThisTime("不足");
+                rv.setThisTimeColor("1");
+                rv.setThisScore(0);
+            } else if ("2".equals(food_fruits)) {
+                rv.setThisTime("不足");
+                rv.setThisTimeColor("1");
+                rv.setThisScore(0);
+            } else if ("3".equals(food_fruits)) {
+                rv.setThisTime("不足");
+                rv.setThisTimeColor("1");
+                rv.setThisScore(2);
+            } else if ("4".equals(food_fruits)) {
+                rv.setThisTime("不足");
+                rv.setThisTimeColor("1");
+                rv.setThisScore(5);
+            } else if ("5".equals(food_fruits)) {
+                rv.setThisTime("充足");
+                rv.setThisScore(10);
+            }
+
+
+            rlist.add(rv);
+
+            vojo.setColumnName("milk");
+            vojo.setDid(String.valueOf(0));
+            vojo.setRs(rs);
+            returnStr = yhDiseaseAssessReportMapper.findDiseaseRiskResultByRsForResultString(vojo);
+            rv = new RiskFactorsVOJO();
+            jsonObject = JSONObject.parseObject(returnStr);
+            rv.setRiskFactors("乳制品摄入状况");
+
+            rv.setIdealLevel("适量(300克/天)");
+            String food_milk = JsonPath.read(document, "$.food_milk") + "";
+            String food_dairy = JsonPath.read(document, "$.food_dairy") + "";
+            if ("1".equals(food_milk)) {
+                rv.setThisTime("不足");// 不喝
+                rv.setThisTimeColor("1");
+                rv.setThisScore(0);
+            } else if ("2".equals(food_milk)) {
+                rv.setThisTime("不足");// 少于0.5杯
+                rv.setThisTimeColor("1");
+                rv.setThisScore(0);
+            } else if ("3".equals(food_milk)) {
+                rv.setThisTime("充足");// 0.5-1杯
+                rv.setThisScore(10);
+            } else if ("4".equals(food_milk)) {
+                rv.setThisTime("充足");// 1-2杯
+                rv.setThisScore(10);
+            } else if ("5".equals(food_milk) && "5".equals(food_dairy)) {
+                rv.setThisTime("过量");// 2杯以上
+                rv.setThisTimeColor("1");
+                rv.setThisScore(3);
+            } else {
+                rv.setThisTime("充足");// 1-2杯
+                rv.setThisScore(10);
+            }
+
+
+            rlist.add(rv);
+
+            vojo.setColumnName("tfa");
+            vojo.setDid(String.valueOf(0));
+            vojo.setRs(rs);
+            returnStr = yhDiseaseAssessReportMapper.findDiseaseRiskResultByRsForResultString(vojo);
+            rv = new RiskFactorsVOJO();
+            jsonObject = JSONObject.parseObject(returnStr);
+            rv.setRiskFactors("反式脂肪酸状况");
+
+            rv.setIdealLevel("不吃");
+            String food_sweet = JsonPath.read(document, "$.food_sweet") + "";
+            String food_sugary = JsonPath.read(document, "$.food_sugary") + "";
+            String food_sweetNew = "";
+            if (Integer.valueOf(food_sweet) > Integer.valueOf(food_sugary)) {
+                food_sweetNew = food_sweet;
+            } else {
+                food_sweetNew = food_sugary;
+            }
+            if ("1".equals(food_sweetNew)) {
+                rv.setThisTime("不吃");
+                rv.setThisScore(10);
+            }
+            if ("2".equals(food_sweetNew)) {
+                rv.setThisTime("适量");
+                rv.setThisScore(5);
+            }
+            if ("3".equals(food_sweetNew)) {
+                rv.setThisTime("过量");
+                rv.setThisTimeColor("1");
+                rv.setThisScore(0);
+            }
+            if ("4".equals(food_sweetNew)) {
+                rv.setThisTime("过量");
+                rv.setThisTimeColor("1");
+                rv.setThisScore(0);
+            }
+
+
+            rlist.add(rv);
+
+            vojo.setColumnName("psy_nervous");
+            vojo.setDid(String.valueOf(0));
+            vojo.setRs(rs);
+            returnStr = yhDiseaseAssessReportMapper.findDiseaseRiskResultByRsForResultString(vojo);
+            rv = new RiskFactorsVOJO();
+            jsonObject = JSONObject.parseObject(returnStr);
+            rv.setRiskFactors("精神压力");
+
+            rv.setIdealLevel("没有");
+            String psy_nervous = JsonPath.read(document, "$.psy_nervous") + "";
+            if ("1".equals(psy_nervous)) {
+                rv.setThisTime("没有");
+                rv.setThisScore(10);
+            }
+            if ("2".equals(psy_nervous)) {
+                rv.setThisTime("偶尔");
+                rv.setThisScore(5);
+            }
+            if ("3".equals(psy_nervous)) {
+                rv.setThisTime("经常");
+                rv.setThisScore(0);
+                rv.setThisTimeColor("1");
+            }
+
+
+            rv = new RiskFactorsVOJO();
+            rv.setRiskFactors("睡眠状况");
+            rv.setIdealLevel("良好");
+            String bedtime = JsonPath.read(document, "$.bedtime") + "";
+            if ("1".equals(bedtime)) {
+                rv.setThisTime("一般");
+                rv.setThisScore(5);
+            }
+            if ("2".equals(bedtime)) {
+                rv.setThisTime("良好");
+                rv.setThisScore(10);
+            }
+            if ("3".equals(bedtime)) {
+                rv.setThisTime("差");
+                rv.setThisTimeColor("1");
+                rv.setThisScore(0);
+            }
+
+
+            rlist.add(rv);
+
+            return rlist;
+
+        }
+    }
     public YhUserAssessmentReportVOJO getAssessVOJO(YhQuestionCheckJson2Web selectByRsLimit1, String rs, Object document, Model model, String lastTime, JSONObject jsonObject, String sex) {
         SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy-MM-dd");
         int metabolize = 0;

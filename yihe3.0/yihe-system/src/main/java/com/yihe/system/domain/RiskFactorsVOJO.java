@@ -8,6 +8,7 @@ public class RiskFactorsVOJO {
 	private String thisTime;
 	
 	private String thisTimeColor;
+	private String riskFactorsImg;
 	
 	//上次评估
 	private String lastTime;
@@ -39,6 +40,14 @@ public class RiskFactorsVOJO {
 		this.lastTimeColor = lastTimeColor;
 		this.changes = changes;
 		this.idealLevel = idealLevel;
+	}
+
+	public String getRiskFactorsImg() {
+		return riskFactorsImg;
+	}
+
+	public void setRiskFactorsImg(String riskFactorsImg) {
+		this.riskFactorsImg = riskFactorsImg;
 	}
 
 	public String getImmediately() {

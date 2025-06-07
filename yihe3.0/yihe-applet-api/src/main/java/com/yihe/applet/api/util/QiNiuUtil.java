@@ -12,7 +12,7 @@ import java.io.File;
 
 public class QiNiuUtil {
     public static String getUpToken(){
-        Auth auth = Auth.create("nrUqYAKlixX71I3EwMZ14EzcgYcRZDD3yOD2TB_S", "4dOXiUFHu7uUlnndD0QBFfm2w97FeCJK2wAVi_eU");
+        Auth auth = Auth.create("f8crv4u97BOtUYQJ6i2o0q4Mq25pwND6KW75eujx", "gXaQqobz09_z9cf3FjlT-OogTU7mQT77YmUFd4ms");
         String uptoken = auth.uploadToken("shayuxcx");
         return uptoken;
     }

@@ -2,6 +2,7 @@ package com.yihe.system.service.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.yihe.common.utils.StringUtils;
 import com.yihe.system.domain.YhHealthStarweb;
 import com.yihe.system.mapper.YhHealthStarwebMapper;
 import com.yihe.system.service.YhHealthStarwebService;
@@ -9,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class YhHealthStarwebServiceImpl implements YhHealthStarwebService{
@@ -47,9 +49,15 @@ public class YhHealthStarwebServiceImpl implements YhHealthStarwebService{
 	}
 
 	@Override
-	public List<YhHealthStarweb> selectAllUserRecord(String userCode) {
+	public List<YhHealthStarweb> selectAllUserRecord(String userCode, String times) {
 		// TODO Auto-generated method stub
-		return yhHealthStarwebMapper.selectAllUserRecord(userCode);
+		String startTime=null;
+		String endTime=null;
+		if(StringUtils.isNotEmpty(times)){
+			startTime=times.substring(0,10);
+			endTime=times.substring(12);
+		}
+		return yhHealthStarwebMapper.selectAllUserRecord(userCode,startTime,endTime);
 	}
 
 	@Override
@@ -73,10 +81,46 @@ public class YhHealthStarwebServiceImpl implements YhHealthStarwebService{
 	}
 
 	@Override
-	public PageInfo<YhHealthStarweb> queryUserByCriteriaWithPage2(Integer usertype,String orgCode,String orgCode1, String name, String priceMin,
-			String priceMax, int page, int limit) {
+	public PageInfo<YhHealthStarweb> queryUserByCriteriaWithPage2(Integer usertype, String orgCode, String orgCode1, String name, String priceMin,
+                                                                  String priceMax, int page, int limit, String times) {
 		 PageHelper.startPage(page,limit);
-	        List<YhHealthStarweb> list = yhHealthStarwebMapper.selectDoctorUserAllIntegral(usertype,orgCode,orgCode1, name, priceMin, priceMax);
-			return new PageInfo<YhHealthStarweb>(list);
+		 String startTime=null;
+		 String endTime=null;
+		 if(StringUtils.isNotEmpty(times)){
+			 startTime=times.substring(0,10);
+			 endTime=times.substring(12);
+		 }
+
+
+	     List<YhHealthStarweb> list = yhHealthStarwebMapper.selectDoctorUserAllIntegral(usertype,orgCode,orgCode1, name, priceMin, priceMax,startTime,endTime);
+		 return new PageInfo<YhHealthStarweb>(list);
+	}
+	@Override
+	public String selectRecordtypeAndTime(Map<String, Object> map) {
+		// TODO Auto-generated method stub
+		return yhHealthStarwebMapper.selectRecordtypeAndTime(map);
+	}
+
+	@Override
+	public String selectRecordtypeAndTime2(Map<String, Object> map) {
+		// TODO Auto-generated method stub
+		return yhHealthStarwebMapper.selectRecordtypeAndTime2(map);
+	}
+
+	@Override
+	public String selectRecordtypeAndTime3(Map<String, Object> map) {
+		return yhHealthStarwebMapper.selectRecordtypeAndTime3(map);
+	}
+
+	@Override
+	public YhHealthStarweb selectNewestStar(String userCode, String eventName) {
+		// TODO Auto-generated method stub
+		return yhHealthStarwebMapper.selectNewestStar(userCode, eventName);
+	}
+
+	@Override
+	public int selectUserContinuousRecord(String userCode, String eventName) {
+		// TODO Auto-generated method stub
+		return yhHealthStarwebMapper.selectUserContinuousRecord(userCode, eventName);
 	}
 }

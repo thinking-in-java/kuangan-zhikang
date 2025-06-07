@@ -46,6 +46,9 @@ public class TOnemachineDataController extends BaseController {
     @Autowired
     private yHUserHemoglobinService yHUserHemoglobinService;
 
+    @Autowired
+    YhScoreEventCategoryWebService scoreEventCategoryWebService;
+
     @PostMapping("/saveMachineData")
     @ResponseBody
     public AjaxResult saveMachineData(@RequestBody JSONObject jsonObject){
@@ -120,6 +123,8 @@ public class TOnemachineDataController extends BaseController {
             bmi.setEnv("常规测量");
             bmi.setDataSource("一体机");
             yHUserBmiService.saveBmi(bmi);
+
+            scoreEventCategoryWebService.saveMark("weight_log",userCode);
         }
         if (StringUtils.isNotEmpty(jsonObject.getString("diastolicPressure")) || StringUtils.isNotEmpty(jsonObject.getString("systolicPressure"))){
             YHUserBloodPressure pressure = new YHUserBloodPressure();
@@ -131,6 +136,8 @@ public class TOnemachineDataController extends BaseController {
             pressure.setTestHj("常规测量");
             pressure.setType("一体机");
             yHUserBloodPressureService.insertSelective(pressure);
+            scoreEventCategoryWebService.saveMark("blood_pressure",userCode);
+
         }
         if (StringUtils.isNotEmpty(jsonObject.getString("bloodSugar"))){
             YHUserBloodsuger bloodsuger = new YHUserBloodsuger();
@@ -141,6 +148,9 @@ public class TOnemachineDataController extends BaseController {
             bloodsuger.setEnv("空腹");
             bloodsuger.setDataSource("一体机");
             yHUserBloodsugerService.insertSelective(bloodsuger);
+
+            scoreEventCategoryWebService.saveMark("blood_sugar",userCode);
+
         }
         if (StringUtils.isNotEmpty(jsonObject.getString("ffatp")) || StringUtils.isNotEmpty(jsonObject.getString("fmuscle"))){
             YHUserBodyFat fat = new YHUserBodyFat();
@@ -153,9 +163,11 @@ public class TOnemachineDataController extends BaseController {
             fat.setType("一体机");
             fat.setSource(1);
             yHUserBodyFatService.insertSelective(fat);
+
+
         }
         if (StringUtils.isNotEmpty(jsonObject.getString("cholesterin")) || StringUtils.isNotEmpty(jsonObject.getString("ftrig")) ||
-            StringUtils.isNotEmpty(jsonObject.getString("fhdl")) || StringUtils.isNotEmpty(jsonObject.getString("fldl"))){
+                StringUtils.isNotEmpty(jsonObject.getString("fhdl")) || StringUtils.isNotEmpty(jsonObject.getString("fldl"))){
             YHUserBloodfat bloodfat = new YHUserBloodfat();
             bloodfat.setCholesterin(getFloat(jsonObject.getString("cholesterin")));
             bloodfat.setTring(getFloat(jsonObject.getString("ftrig")));
@@ -166,6 +178,9 @@ public class TOnemachineDataController extends BaseController {
             bloodfat.setIsDel(2);
             bloodfat.setDataSource("一体机");
             yHUserBloodfatService.insertSelective(bloodfat);
+
+            scoreEventCategoryWebService.saveMark("blood_fat",userCode);
+
         }
         if (StringUtils.isNotEmpty(jsonObject.getString("uricAcid"))){
             YHUserRenalfunction renalfunction = new YHUserRenalfunction();
@@ -177,6 +192,10 @@ public class TOnemachineDataController extends BaseController {
             renalfunction.setDataSource("一体机");
             renalfunction.setIsDel(2);
             yHUserRenalfunctionService.insertSelective(renalfunction);
+
+            scoreEventCategoryWebService.saveMark("uric_acid",userCode);
+
+
         }else if (StringUtils.isNotEmpty(jsonObject.getString("electrocardiogramValue"))){
             YHUserHeartRate heartRate = new YHUserHeartRate();
             heartRate.setHeartRate(jsonObject.getInteger("electrocardiogramValue"));
@@ -186,6 +205,9 @@ public class TOnemachineDataController extends BaseController {
             heartRate.setIsDel(2);
             heartRate.setEnv("常规测量");
             yHUserHeartRateService.insertSelective(heartRate);
+
+            scoreEventCategoryWebService.saveMark("heart_rate",userCode);
+
         }else if (StringUtils.isNotEmpty(jsonObject.getString("hb"))){
             YhUserHemoglobin hemoglobin = new YhUserHemoglobin();
             hemoglobin.setHeHb(jsonObject.getFloat("hb"));

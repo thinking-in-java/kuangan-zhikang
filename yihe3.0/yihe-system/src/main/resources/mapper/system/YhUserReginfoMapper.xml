@@ -139,7 +139,9 @@
       order by reg_time asc limit 1
   </select>
 
-
+    <select id="showmobile2"  resultMap="BaseResultMap">
+        select * from yh_user_reginfo where mobile = #{mobile,jdbcType=VARCHAR} and User_Type=#{userType} limit 1
+    </select>
   <select id="showOrgrenCount" parameterType="java.lang.String" resultType="int">
   	select count(*) from yh_user_reginfo where Org_Code=#{orgCode,jdbcType=VARCHAR} and User_Type=5;
   </select>
@@ -1174,6 +1176,9 @@ GROUP BY a.`usercode`
       <if test="permanentaddress != null">
         permanentaddress = #{permanentaddress,jdbcType=VARCHAR},
       </if>
+        <if test="changePwdLastTime != null">
+            changePwdLastTime = #{changePwdLastTime,jdbcType=VARCHAR},
+        </if>
     </set>
     where user_code = #{userCode,jdbcType=VARCHAR}
   </update>
@@ -1269,6 +1274,25 @@ GROUP BY a.`usercode`
    select user_pwd from yh_user_reginfo where user_code = #{userCode,jdbcType=VARCHAR} and user_pwd=#{userPwd,jdbcType=VARCHAR}
  </select>
 
+ <select id="selectLastInfo" parameterType="java.lang.String" resultMap="BaseResultMap">
+        SELECT r.*
+        FROM `yh_user_reginfo` r
+        JOIN (
+            SELECT user_code
+            FROM `yh_disease_assess_total_report2`
+            WHERE user_code in (
+                SELECT user_code FROM
+                yh_user_make_card WHERE doctor=(SELECT id FROM
+                yh_user_admin_info
+                WHERE user_code=#{usercode}) AND user_code != ''
+                AND user_code IS NOT
+                NULL
+            )
+            ORDER BY qtime DESC
+            LIMIT 5
+        ) a ON r.user_code = a.user_code;
+
+ </select>
  <!--  查询手机号和用户名 -->
  <select id="selectMobileAndName2" parameterType="java.lang.String" resultMap="BaseResultMap" >
    select user_code,user_name,mobile from yh_user_reginfo where mobile = #{mobile,jdbcType=VARCHAR} limit 1
@@ -1477,5 +1501,13 @@ select * from ( select regin.user_code,regin.user_name,regin.name,tree.Org_Code,
 
     <select id="selectAllUserinfoByuserCode" parameterType="java.lang.String" resultMap="BaseResultMap">
         select * from yh_user_reginfo where user_code=#{userCode}
+    </select>
+
+    <select id="selectDoctorCode" parameterType="java.lang.String" resultMap="BaseResultMap">
+
+    </select>
+
+    <select id="queryDoctorList" resultMap="BaseResultMap">
+        SELECT user_code,user_name,`name` FROM `yh_user_reginfo` where User_Type=4
     </select>
 </mapper>

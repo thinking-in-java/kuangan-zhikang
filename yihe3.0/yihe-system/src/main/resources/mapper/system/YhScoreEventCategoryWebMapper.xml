@@ -13,13 +13,16 @@
     <result column="creator" property="creator" jdbcType="VARCHAR" />
     <result column="standby" property="standby" jdbcType="VARCHAR" />
     <result column="standby2" property="standby2" jdbcType="VARCHAR" />
+    <result column="org_code" property="orgCode" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
     scoreEvent_ID, event_name, score, event_type, type, continuous_status, putaway, update_date, 
     creator, standby, standby2
   </sql>
-  
-  
+
+  <select id="selectEventType"  resultMap="BaseResultMap">
+  select * from yh_score_event_category where event_type=#{eventType,jdbcType=VARCHAR} and org_code=#{orgCode}
+  </select>
     <select id="selectYhScoreEventCategoryPage" resultMap="BaseResultMap">
       select * from yh_score_event_category where scoreEvent_ID is not null
        <if test="type != null" >
@@ -30,6 +33,9 @@
       </if>
        <if test="eventName != null and eventName !=''" >
        		and event_name like concat('%',#{eventName},'%')
+      </if>
+      <if test="orgCode != null and orgCode !=''" >
+        and org_code =#{orgCode}
       </if>
       order by update_date desc
   </select>
@@ -90,6 +96,9 @@
       <if test="standby2 != null" >
         standby2,
       </if>
+      <if test="orgCode != null" >
+        org_code,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="scoreeventId != null" >
@@ -124,6 +133,9 @@
       </if>
       <if test="standby2 != null" >
         #{standby2,jdbcType=VARCHAR},
+      </if>
+      <if test="orgCode != null" >
+        #{orgCode},
       </if>
     </trim>
   </insert>

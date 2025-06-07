@@ -4668,9 +4668,13 @@ public class YhFoodUserDiaryController {
 	@RequestMapping(value = "/queryFoodInfo")
 	@ResponseBody
 	public Result queryFoodInfo(String foodName, String usercode, Integer curPage, Integer pageSize) {
-		if (StringUtil.isEmpty(foodName) || StringUtil.isEmpty(usercode) || null == curPage || null == pageSize) {
+		if (StringUtil.isEmpty(usercode) || null == curPage || null == pageSize) {
 			return Result.error();
 		}
+		if (StringUtil.isEmpty(foodName)) {
+			foodName = "";
+		}
+
 
 		List<YhFoodCookbook2> selectFoodCookBookName = YhFoodCookbook2ServiceImpl.selectFoodCookBookName(foodName,
 				usercode, (curPage - 1) * pageSize, pageSize);

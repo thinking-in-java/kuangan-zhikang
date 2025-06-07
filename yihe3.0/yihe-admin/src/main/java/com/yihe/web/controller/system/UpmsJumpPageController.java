@@ -12,6 +12,7 @@ import com.yihe.system.domain.layim.User;
 import com.yihe.system.mapper.*;
 import com.yihe.system.service.*;
 import com.yihe.system.service.impl.*;
+import com.yihe.system.utils.Result;
 import com.yihe.web.controller.tool.RedisUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -28,7 +29,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import javax.annotation.Resource;
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
+import java.lang.reflect.InvocationTargetException;
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.text.ParseException;
@@ -51,6 +55,8 @@ public class UpmsJumpPageController {
     yHUserHemoglobinService yHUserHemoglobinService;
     @Autowired
     YhQuestionCheckJson2WebService yhQuestionCheckJson2WebService;
+    @Resource
+    YhUserRoleMapper yhUserRoleMapper;
     @Autowired
     IYhUserDeviceService IYhUserDeviceService;
     @Autowired
@@ -174,6 +180,8 @@ public class UpmsJumpPageController {
     private YhOrgFacilityMapper yhOrgFacilityMapper;
     @Autowired
     private YhUserPermissionMapper yhUserPermissionMapper;
+    @Resource
+    private NewEmployeePersonalInformationCardService  newEmployeePersonalInformationCardService;
 
     /**
      * 计算2个日期之间相差的  以年、月、日为单位，各自计算结果是多少
@@ -2818,12 +2826,42 @@ public class UpmsJumpPageController {
         return "symptomManage/symptomAssess";
     }
 
+    @Resource
+    CSDoctorChatListService CSDoctorChatListService;
+    @Resource
+    CSOrgDoctorChatService CSOrgDoctorChatService;
+
     @ApiOperation(value = "系统配置")
     @RequestMapping(value = "system/setting", method = RequestMethod.GET)
-    public String systemLayout(ModelMap modelMap) {
+    public String systemLayout(ModelMap modelMap) throws ServletException {
         List<YhDicIntroduction> yhdic = yhuserpagesettingservice.selectallduction();
         modelMap.put("yhdic", yhdic);
+        YhUserReginfo yhUserReginfo = getUserInfo();
+        if (1 != yhUserReginfo.getUserType()) {
+            throw new ServletException("不是机构账号");
+        }
+        String orgId = yhUserReginfo.getUserCode();
+
+        List<CSDoctorChatList> listServiceList = CSDoctorChatListService.getList();
+        for (com.yihe.system.domain.CSDoctorChatList CSDoctorChatList : listServiceList) {
+            Integer id = CSDoctorChatList.getId();
+            CSOrgDoctorChat CSOrgDoctorChat = CSOrgDoctorChatService.selectListByOrgAndType(orgId, id);
+            if (null != CSOrgDoctorChat) {
+                String docId = CSOrgDoctorChat.getDocId();
+                CSDoctorChatList.setCheck(docId);
+            }
+        }
+
+        modelMap.put("doctorList", listServiceList);
+        modelMap.put("doctorSelect", yhUserReginfoService.queryDoctorList());
+
+
         return "systemLayout/system";
+    }
+
+    public static YhUserReginfo getUserInfo(){
+        Subject subject = SecurityUtils.getSubject();
+        return (YhUserReginfo) subject.getPrincipal();
     }
 
     @ApiOperation(value = "用户积分")
@@ -3014,159 +3052,436 @@ public class UpmsJumpPageController {
 
     @ApiOperation(value = "评估报告")
     @RequestMapping(value = "assessmentReport/info2", method = RequestMethod.GET)
-    public String assessmentReport2(Model model, String rs, String sex) {
-        SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy-MM-dd");
-
-        //查询总表得到各风险等级疾病
-        YhQuestionCheckJson2Web selectByRsLimit1 = YhQuestionCheckJson2WebMapper.selectByRsLimit1(rs);
-        if (null == selectByRsLimit1) {
-            return null;
-        }
-        String findQuestionCheckForCheckAnswerByrs = selectByRsLimit1.getUserCheckAnswer();
-        if (StringUtil.isEmpty(findQuestionCheckForCheckAnswerByrs)) {
-            return null;
-        }
-        // 将json字符串解析成document
-        Object document = Configuration.defaultConfiguration().jsonProvider().parse(findQuestionCheckForCheckAnswerByrs);
-
-
-        //健康指标具体变化 查询上次
-        YhDiseaseAssessTotalReport2web lastRsInfo = YhDiseaseAssessReportServiceImpl.lastRsInfo(selectByRsLimit1.getUserCode(), new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(selectByRsLimit1.getUserCheckTime()));
-
-        String findQuestionCheckForCheckAnswerByrs2 = "";
-        Object lastdocument = null;
-        if(null!=lastRsInfo){
-            YhQuestionCheckJson2Web selectByRsLimit2 = YhQuestionCheckJson2WebMapper.selectByRsLimit1(lastRsInfo.getRequestSerialnum());
-            if ( null!=selectByRsLimit2&&StringUtil.isNotEmpty(findQuestionCheckForCheckAnswerByrs2)) {
-                findQuestionCheckForCheckAnswerByrs2=selectByRsLimit2.getUserCheckAnswer();
-                lastdocument = Configuration.defaultConfiguration().jsonProvider().parse(findQuestionCheckForCheckAnswerByrs2);
-            }
-        }
-
-
-        Object finalLastdocument = lastdocument;
-
-        Callable<String> t1=() ->{
-            //获得评估信息
-            List<YhReportDetailsVOJO> findDiseaseNameAndRiskLevelByRs = YhDiseaseAssessReportServiceImpl.findDiseaseNameAndRiskLevelByRs(rs, sex, model, document, finalLastdocument);
-            model.addAttribute("findDiseaseNameAndRiskLevelByRs", findDiseaseNameAndRiskLevelByRs);
-             return "";
-        };
-
-        Callable<String> t3=() ->{
-            //获得评估信息
-            model.addAttribute("findAssessTotalReportLastInfo", YhDiseaseAssessReportServiceImpl.findAssessTotalReportLastInfo(lastRsInfo, document, rs));
-            model.addAttribute("findResolveInfo", YhDiseaseAssessReportServiceImpl.findResolveInfo(rs, lastRsInfo));
-            return "";
-        };
-        Callable<String> t4=() ->{
-            //获得评估信息
-            model.addAttribute("lifeRiskInfo", YhDiseaseAssessReportServiceImpl.getLifeRiskInfo(rs, document, lastRsInfo, model, Integer.valueOf(sex)));
-            model.addAttribute("sportInfo", YhDiseaseAssessReportServiceImpl.sportInfo(document));
-            return "";
-        };
-
-
-
-        List<YhUserAssessmentReportVOJO> currentLifestyle = YhDiseaseAssessReportServiceImpl.currentLifestyle(rs, document);
-        model.addAttribute("currentLifestyle", currentLifestyle);
-        model.addAttribute("suggestions", YhDiseaseAssessReportServiceImpl.suggestions(rs, document));
-
-        //医学健康指标 异常
-        String height = JsonPath.read(document, "$.height") + "";
-        String weight = JsonPath.read(document, "$.weight") + "";
-        String waistValue = JsonPath.read(document, "$.waist") + "";
-        if (StringUtils.isNotEmpty(height) && StringUtils.isNotEmpty(weight)) {
-            Double bf = (Double.parseDouble(weight)
-                    / ((Double.parseDouble(height) / 100) * (Double.parseDouble(height)) / 100));
-            BigDecimal b = new BigDecimal(bf);
-            double bmiValue = b.setScale(1, BigDecimal.ROUND_HALF_UP).doubleValue();
-            if (bmiValue < 18.5) {
-                model.addAttribute("peipangWeiyi1", 300);
-            } else if (bmiValue >= 18.5 && bmiValue < 24) {
-                model.addAttribute("peipangWeiyi1", 105);
-            } else if (bmiValue >= 24 && bmiValue <= 28) {
-                model.addAttribute("peipangWeiyi1", -100);
-            } else {
-                model.addAttribute("peipangWeiyi1", -298);
-            }
-            model.addAttribute("bmiValue", bmiValue);
-            System.out.println("bmi++++" + bmiValue);
-        }
-        if (com.yihe.system.utils.StringUtil.isEmpty(waistValue)) {
-            waistValue = "0";
-        }
-        model.addAttribute("waistValue", Double.parseDouble(waistValue));
-        if (sex.equals("1")) {
-            if (Double.parseDouble(waistValue) < 85) {
-                model.addAttribute("peipangWeiyi2", 310);
-            } else if (Double.parseDouble(waistValue) >= 85 && Double.parseDouble(waistValue) < 110) {
-                model.addAttribute("peipangWeiyi2", 15);
-            } else {
-                model.addAttribute("peipangWeiyi2", -305);
-            }
-        } else {
-            if (Double.parseDouble(waistValue) < 80) {
-                model.addAttribute("peipangWeiyi2", 310);
-            } else if (Double.parseDouble(waistValue) >= 80 && Double.parseDouble(waistValue) < 105) {
-                model.addAttribute("peipangWeiyi2", 15);
-            } else {
-                model.addAttribute("peipangWeiyi2", -305);
-            }
-        }
-
-
-        Callable<String> t2=() ->{
-            //获得评估信息
-            YhDiseaseAssessReportServiceImpl.getAssessVOJO(selectByRsLimit1, rs, document, model, currentLifestyle.get(0).getLastTime(), JSONObject.parseObject(findQuestionCheckForCheckAnswerByrs), sex);
-            return "";
-        };
-
-        model.addAttribute("lastTime", (null != lastRsInfo ? sdf2.format(lastRsInfo.getQtime()) : "--"));
-        model.addAttribute("thisTime", sdf2.format(selectByRsLimit1.getUserCheckTime()));
-        //代谢综合征指标
-        model.addAttribute("metabolizeList", YhDiseaseAssessReportServiceImpl.metabolize(rs, sex));
-        //肥胖症危险指标
-        model.addAttribute("obesityRelated", YhDiseaseAssessReportServiceImpl.obesityRelated(rs));
-        model.addAttribute("foodInfo", YhDiseaseAssessReportServiceImpl.foodInfo(rs));
-
-        model.addAttribute("rs", rs);
+    public String assessmentReport2(Model model, String rs, String sex) throws InvocationTargetException {
         model.addAttribute("sex", sex);
-        String getimg = null,getrepotimg = null;
-        String orgCode = redisUtils.get("ORG_CODE");
-        if(StringUtils.isNotEmpty(orgCode)){
-            getimg = yhUserPageSettingService.getOrgNameInfo(orgCode);
-        }
-        String topimg;
-        if(StringUtils.isNotEmpty(getimg)){
-            JSONObject jsonObject = JSONObject.parseObject(getimg);
-            topimg = jsonObject.getString("21");
-            getrepotimg = jsonObject.getString("22");
-        }else{
-            topimg = yhUserPageSettingService.getimg(21);
-            getrepotimg = yhUserPageSettingService.getimg(22);
-        }
+        String topimg = yhUserPageSettingService.getimg(21);
+
         model.addAttribute("topimg", topimg);
-        model.addAttribute("getrepotimg", getrepotimg);
-        model.addAttribute("nogoodList", YhDiseaseAssessReportServiceImpl.noGoodList(rs));
+        StringBuilder huanb = new StringBuilder();
+        StringBuilder gaofx = new StringBuilder();
+        StringBuilder jiaogaofx = new StringBuilder();
+        StringBuilder zhongdengfx = new StringBuilder();
+        StringBuilder difx = new StringBuilder();
+        List<YhDiseaseAssessReport> findDiseaseNameAndRiskLevelByRs = YhDiseaseAssessReportServiceImpl.findDiseaseNameAndRiskLevelByRs(rs, sex);
+        Set<String> goodList = new LinkedHashSet<>();
+        Set<String> nogoodList = new LinkedHashSet<>();
+        Map<String, String> mapResolve = new HashMap<>();
 
-        FutureTask<String> t1Task = new FutureTask<>(t1);
-        FutureTask<String> t2Task = new FutureTask<>(t2);
-        FutureTask<String> t3Task = new FutureTask<>(t3);
-        FutureTask<String> t4Task = new FutureTask<>(t4);
 
-        executorService.submit(t1Task);
-        executorService.submit(t2Task);
-        executorService.submit(t3Task);
-        executorService.submit(t4Task);
-        try {
-            t1Task.get();
-            t2Task.get();
-            t3Task.get();
-            t4Task.get();
-        }catch (Exception e) {
-            e.printStackTrace();
+        for (YhDiseaseAssessReport CSDiseaseAssessReport : findDiseaseNameAndRiskLevelByRs) {
+            List<YHDiseaseRiskOptimal> goodList2 = CSDiseaseAssessReport.getGoodList();
+            List<YHDiseaseRiskOptimal> nogoodList2 = CSDiseaseAssessReport.getNogoodList();
+            List<YHDiseaseAssessResolve> glist = CSDiseaseAssessReport.getGlist();
+            if (null != glist) {
+                for (YHDiseaseAssessResolve CSDiseaseAssessResolve : glist) {
+                    if (!mapResolve.containsKey(CSDiseaseAssessResolve.getType())) {
+                        mapResolve.put(CSDiseaseAssessResolve.getType(), CSDiseaseAssessResolve.getName());
+                    }
+
+                }
+            }
+            if (null != goodList2) {
+                for (YHDiseaseRiskOptimal CSDiseaseRiskOptimal : goodList2) {
+                    if (!"1".equals(CSDiseaseRiskOptimal.getRadarRangePoint())) {
+                        goodList.add(CSDiseaseRiskOptimal.getQname() + ":" + CSDiseaseRiskOptimal.getOptimal());
+                    }
+
+                }
+            }
+
+            if (null != nogoodList2) {
+                for (YHDiseaseRiskOptimal CSDiseaseRiskOptimal : nogoodList2) {
+                    if (!"1".equals(CSDiseaseRiskOptimal.getRadarRangePoint())) {
+                        nogoodList.add(CSDiseaseRiskOptimal.getQname());
+                    }
+                }
+
+            }
+
+
+            String riskLevel = CSDiseaseAssessReport.getRiskLevel();
+            if (riskLevel.contains("患") || riskLevel.contains("疑")) {
+                huanb.append(CSDiseaseAssessReport.getDiseaseName()).append("、");
+                CSDiseaseAssessReport.setSign(472);
+                continue;
+            }
+
+            if (riskLevel.contains("高") && !riskLevel.contains("高血压") && !riskLevel.contains("较高")) {
+                gaofx.append(CSDiseaseAssessReport.getDiseaseName()).append("、");
+                CSDiseaseAssessReport.setSign(285);
+                continue;
+            }
+            if (riskLevel.contains("较高")) {
+                jiaogaofx.append(CSDiseaseAssessReport.getDiseaseName()).append("、");
+                CSDiseaseAssessReport.setSign(375);
+                continue;
+            }
+            if (riskLevel.contains("中等")) {
+                zhongdengfx.append(CSDiseaseAssessReport.getDiseaseName()).append("、");
+                CSDiseaseAssessReport.setSign(190);
+                continue;
+            }
+            if (riskLevel.contains("低") || riskLevel.contains("较低")) {
+                if (riskLevel.contains("较低")) {
+                    CSDiseaseAssessReport.setSign(90);
+                } else {
+                    CSDiseaseAssessReport.setSign(0);
+                }
+                difx.append(CSDiseaseAssessReport.getDiseaseName()).append("、");
+            }
         }
+
+        Set<String> strings = YhDiseaseAssessReportServiceImpl.noGoodList(rs);
+        model.addAttribute("goodList", goodList);
+        model.addAttribute("nogoodList", strings);
+        model.addAttribute("mapResolve", mapResolve);
+        //查询总表得到各风险等级疾病
+        //YiBoDiseaseRiskOptimalAssessTotalReport2web selectByPrimaryRs = YiBoDiseaseRiskOptimalAssessTotalReport2Mapper.selectByPrimaryRs(rs);
+
+
+        YhQuestionCheckJson2Web selectByRsLimit1 = YhQuestionCheckJson2WebMapper.selectByRsLimit1(rs);
+        String findQuestionCheckForCheckAnswerByrs = selectByRsLimit1.getUserCheckAnswer();
+        if (StringUtils.isNotEmpty(findQuestionCheckForCheckAnswerByrs)) {
+            // 将json字符串解析成document
+            Object document;
+            document = Configuration.defaultConfiguration().jsonProvider().parse(findQuestionCheckForCheckAnswerByrs);
+            String age = JsonPath.read(document, "$.person.age").toString();
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+            //获取String类型的时间
+            String timeInfo = sdf.format(selectByRsLimit1.getUserCheckTime());
+            //健康指标具体变化 查询上次
+            YhDiseaseAssessTotalReport2web lastRsInfo = YhDiseaseAssessReportServiceImpl.lastRsInfo(selectByRsLimit1.getUserCode(), timeInfo);
+            int thisNum = 0;
+            int lastNum = 0;
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+            String thisTime = simpleDateFormat.format(selectByRsLimit1.getUserCheckTime());
+            if (null != lastRsInfo) {
+                String lastTime = simpleDateFormat.format(lastRsInfo.getQtime());
+                model.addAttribute("lastTime", lastTime);
+                List<YhUserAssessmentReportVOJO> findAssessTotalReportLastInfo = YhDiseaseAssessReportServiceImpl.findAssessTotalReportLastInfo(lastRsInfo, document, rs);
+                model.addAttribute("findAssessTotalReportLastInfo", findAssessTotalReportLastInfo);
+
+                YhUserAssessmentReportVOJO findResolveInfo = YhDiseaseAssessReportServiceImpl.findResolveInfo(rs, lastRsInfo);
+                model.addAttribute("findResolveInfo", findResolveInfo);
+            } else {
+                model.addAttribute("lastTime", "--");
+            }
+            model.addAttribute("thisTime", thisTime);
+
+            List<RiskFactorsVOJO> lifeRiskInfo = YhDiseaseAssessReportServiceImpl.getLifeRiskInfo(rs, document, lastRsInfo);
+            RiskFactorsVOJO rvojo = new RiskFactorsVOJO();
+            rvojo.setRiskFactors("生活方式评分");
+            rvojo.setIdealLevel("优秀（80~100分）");
+
+
+            for (RiskFactorsVOJO CSRiskFactorsVOJO : lifeRiskInfo) {
+                int thisScore = CSRiskFactorsVOJO.getThisScore();
+                thisNum = thisNum + thisScore;
+                Integer lastScore = CSRiskFactorsVOJO.getLastScore();
+                if (null == lastScore) {
+                    continue;
+                }
+                lastNum = lastNum + lastScore;
+            }
+            rvojo.setThisScore(thisNum);
+            if (null != lastRsInfo) {
+                rvojo.setLastScore(lastNum);
+                if (thisNum == lastNum) {
+                    rvojo.setChanges("无改善");
+                }
+                if (thisNum > lastNum) {
+                    rvojo.setChanges("好转");
+                }
+                if (thisNum < lastNum) {
+                    rvojo.setChanges("恶化");
+                }
+
+                String evaluateInfo;
+                if (thisNum == lastNum) {
+                    evaluateInfo = "没有发生变化";
+                } else if (thisNum > lastNum) {
+
+                    double shangshen = (double) Math.round(((thisNum - lastNum) / (double) lastNum * 100) * 100) / 100;
+                    evaluateInfo = "有上升趋势，比上次积分增加了" + (thisNum - lastNum) + "分，上升率" + shangshen + "%。";
+                } else {
+                    double shangshen = (double) Math.round(((lastNum - thisNum) / (double) lastNum * 100) * 100) / 100;
+                    evaluateInfo = "有下降趋势，比上次积分减少了" + (lastNum - thisNum) + "分，下降率" + shangshen + "%。";
+                }
+                model.addAttribute("evaluateInfo", evaluateInfo);
+            }
+
+            if (thisNum >= 80 && thisNum <= 100) {
+                rvojo.setThisTime("优秀");
+            } else if (thisNum >= 60 && thisNum < 80) {
+                rvojo.setThisTime("良好");
+            } else if (thisNum >= 40 && thisNum < 60) {
+                rvojo.setThisTime("一般");
+            } else {
+                rvojo.setThisTime("差");
+            }
+            lifeRiskInfo.add(rvojo);
+            model.addAttribute("lifeRiskInfo", lifeRiskInfo);
+            model.addAttribute("thisNum", thisNum);
+            model.addAttribute("lastNum", lastNum);
+
+
+            model.addAttribute("evaluateAge", YhDiseaseAssessReportServiceImpl.evaluateAge(thisNum, Integer.valueOf(age), Integer.parseInt(sex)));
+
+            model.addAttribute("foodInfo", YhDiseaseAssessReportServiceImpl.foodInfo(rs));
+
+            model.addAttribute("sportInfo", YhDiseaseAssessReportServiceImpl.sportInfo(document));
+
+
+            List<YhUserAssessmentReportVOJO> currentLifestyle = YhDiseaseAssessReportServiceImpl.currentLifestyle(rs, document);
+            model.addAttribute("currentLifestyle", currentLifestyle);
+            List<YhUserAssessmentReportVOJO> suggestions = YhDiseaseAssessReportServiceImpl.suggestions(rs, document);
+            model.addAttribute("suggestions", suggestions);
+            //代谢综合症指标
+
+            List<RiskFactorsVOJO> metabolizeList = YhDiseaseAssessReportServiceImpl.metabolize(rs, sex);
+            model.addAttribute("metabolizeList", metabolizeList);
+            //肥胖症危险指标
+            List<RiskFactorsVOJO> obesityRelated = YhDiseaseAssessReportServiceImpl.obesityRelated(rs);
+            model.addAttribute("obesityRelated", obesityRelated);
+            //医学健康指标 异常
+
+            String height = JsonPath.read(document, "$.height").toString();
+            String weight = JsonPath.read(document, "$.weight").toString();
+            String serumCreatinine = JsonPath.read(document, "$.serum_creatinine").toString();
+            String waistValue = JsonPath.read(document, "$.waist").toString();
+            if (StringUtils.isNotEmpty(height) && StringUtils.isNotEmpty(weight)) {
+                double bf = (Double.parseDouble(weight)
+                        / ((Double.parseDouble(height) / 100) * (Double.parseDouble(height)) / 100));
+                BigDecimal b = new BigDecimal(bf);
+                double bmiValue = b.setScale(1, BigDecimal.ROUND_HALF_UP).doubleValue();
+                if (bmiValue < 18.5) {
+                    model.addAttribute("peipangWeiyi1", 10);
+                } else if (bmiValue >= 18.5 && bmiValue < 24) {
+                    model.addAttribute("peipangWeiyi1", 130);
+                } else if (bmiValue >= 24 && bmiValue <= 28) {
+                    model.addAttribute("peipangWeiyi1", 245);
+                } else {
+                    model.addAttribute("peipangWeiyi1", 365);
+                }
+                model.addAttribute("bmiValue", bmiValue);
+            }
+            if (com.yihe.system.utils.StringUtil.isEmpty(waistValue)) {
+                waistValue = "0";
+            }
+            model.addAttribute("waistValue", Double.parseDouble(waistValue));
+            if (sex.equals("1")) {
+                if (Double.parseDouble(waistValue) < 85) {
+                    model.addAttribute("peipangWeiyi2", 125);
+                } else if (Double.parseDouble(waistValue) >= 85 && Double.parseDouble(waistValue) < 110) {
+                    model.addAttribute("peipangWeiyi2", 280);
+                } else {
+                    model.addAttribute("peipangWeiyi2", 430);
+                }
+            } else {
+                if (Double.parseDouble(waistValue) < 80) {
+                    model.addAttribute("peipangWeiyi2", 125);
+                } else if (Double.parseDouble(waistValue) >= 80 && Double.parseDouble(waistValue) < 105) {
+                    model.addAttribute("peipangWeiyi2", 280);
+                } else {
+                    model.addAttribute("peipangWeiyi2", 430);
+                }
+            }
+
+            YhDiseaseRiskResultAppVOJO findAssessResultInfo = YhDiseaseAssessReportServiceImpl.findAssessResultInfo(rs);
+
+            JSONObject jsonObject = JSONObject.parseObject(findQuestionCheckForCheckAnswerByrs);
+            //代谢综合症 数值有0项符合，低危
+            //有1项、2项符合，高危
+            //三项以及上，现患
+            int metabolize = 0;
+            YhUserAssessmentReportVOJO vojo = new YhUserAssessmentReportVOJO();
+            String age2 = JsonPath.read(document, "$.person.age").toString();
+            String sexStr = JsonPath.read(document, "$.person.sex").toString();
+            YhUserReginfo userReginfo = yhUserReginfoService.selectByPrimaryKey(selectByRsLimit1.getUserCode());
+            vojo.setAge(age2);
+            vojo.setName(userReginfo.getName());
+            vojo.setSex(sexStr.equals("1") ? "男" : "女");
+            String s = yhUserReginfoService.selectOrgName(selectByRsLimit1.getUserCode());
+            vojo.setUnit(s);
+
+            //家族史
+            List<YhUserAssessmentReportVOJO> mainRiskFactors = YhDiseaseAssessReportServiceImpl.mainRiskFactors(rs, document);
+            boolean flagMlist = false;
+            if (null != mainRiskFactors) {
+                for (YhUserAssessmentReportVOJO mList : mainRiskFactors) {
+                    String riskFactors = mList.getRiskFactors();
+                    if (StringUtil.isNotEmpty(riskFactors)) {
+                        flagMlist = true;
+                        break;
+                    }
+
+                }
+            }
+            if (flagMlist) {
+                model.addAttribute("mainRiskFactors", mainRiskFactors);
+            } else {
+                model.addAttribute("mainRiskFactors", null);
+            }
+
+
+            //获取String类型的时间
+            String createdate = simpleDateFormat.format(selectByRsLimit1.getUserCheckTime());
+            vojo.setPinggutime(createdate);
+            //血糖
+            String fbg = jsonObject.getString("fbg");
+            if (Double.parseDouble(fbg) >= 6.1) {
+                metabolize++;
+            }
+            vojo.setBs(fbg);
+            //收缩压
+            String sbp = jsonObject.getString("sbp");
+            //舒张压
+            String dbp = jsonObject.getString("dbp");
+            if (StringUtil.isNotEmpty(sbp) && StringUtil.isNotEmpty(dbp)) {
+                vojo.setSbp(sbp);
+                vojo.setDbp(dbp);
+                if (Double.parseDouble(sbp) >= 140 || Double.parseDouble(dbp) >= 90) {
+                    metabolize++;
+                }
+            }
+            //腰围
+            String waist = jsonObject.getString("waist");
+            vojo.setTheWaist(waist);
+            //身高
+            //体重
+            if (StringUtil.isNotEmpty(height) && StringUtil.isNotEmpty(weight)) {
+                double heightOf = Double.parseDouble(height);
+                double weightOf = Double.parseDouble(weight);
+                Double bmi = weightOf / ((heightOf / 100) * (heightOf / 100));
+                String format = String.format("%.1f", bmi);
+
+                if (Double.parseDouble(format) >= 25) {
+                    metabolize++;
+                }
+                vojo.setBmi(format);
+            }
+            //总胆固醇
+            String cholesterol = jsonObject.getString("cholesterol");
+            vojo.setTc(cholesterol);
+            //甘油三酯
+            String tg = jsonObject.getString("tg");
+            vojo.setTg(tg);
+            //高密度脂蛋白
+            String hdlc = jsonObject.getString("hdlc");
+            vojo.setHdlc(hdlc);
+            //低密度脂蛋白胆固醇
+            String ldlc = jsonObject.getString("ldlc");
+            vojo.setLdlc(ldlc);
+            if ("1".equals(sex)) {
+                if (Double.parseDouble(tg) >= 1.7 || Double.parseDouble(hdlc) < 0.9) {
+                    metabolize++;
+                }
+            } else {
+                if (Double.parseDouble(tg) >= 1.7 || Double.parseDouble(hdlc) < 1) {
+                    metabolize++;
+                }
+            }
+            if (null != findAssessResultInfo) {
+
+
+                //膳食结构
+
+                String lastTime = currentLifestyle.get(0).getLastTime();
+
+                vojo.setB4("您的膳食结果基本合理".equals(lastTime) ? "合理" : "不合理");
+
+
+                //体力活动
+                String sport = findAssessResultInfo.getSport();
+                if (StringUtil.isNotEmpty(sport)) {
+                    JSONObject sportobj = JSONObject.parseObject(sport);
+                    //0：不充足1：充足
+                    String sportStr = sportobj.getString("now_value");
+                    if (StringUtil.isNotEmpty(sportStr)) {
+                        vojo.setSport(sportStr.equals("1") ? "充足" : "不充足");
+                    }
+                }
+            }
+
+
+            //吸烟
+            String smoke_status = jsonObject.getString("smoke_status");
+            if (StringUtil.isNotEmpty(smoke_status)) {
+                if (smoke_status.equals("1")) {
+                    vojo.setSmoke("吸烟");
+                }
+                if (smoke_status.equals("2")) {
+                    vojo.setSmoke("不吸烟");
+                }
+                if (smoke_status.equals("3")) {
+                    vojo.setSmoke("已戒烟");
+                }
+
+            }
+
+            //饮酒
+            String food_drink = jsonObject.getString("food_drink");
+            if (StringUtil.isNotEmpty(food_drink)) {
+                if (food_drink.equals("1")) {
+                    vojo.setFoodDrink("喝酒");
+                }
+                if (food_drink.equals("2")) {
+                    vojo.setFoodDrink("不喝");
+                }
+
+
+            }
+            //T值
+            String t_score = jsonObject.getString("t_score");
+            vojo.setT_score(t_score);
+            //血尿酸
+            String bua = jsonObject.getString("bua");
+
+            if (StringUtil.isNotEmpty(bua)) {
+
+                vojo.setBua(bua);
+
+            } else {
+                vojo.setBua("--");
+            }
+            if (StringUtil.isNotEmpty(serumCreatinine)) {
+                vojo.setSerumCreatinine(serumCreatinine);
+            } else {
+                vojo.setSerumCreatinine("--");
+            }
+
+            model.addAttribute("vojo", vojo);
+            //代谢综合症判断
+            if (metabolize == 0) {
+                //低危
+                model.addAttribute("metabolizeNum", 38);
+            }
+            if (metabolize == 1 || metabolize == 2) {
+                //高危
+                model.addAttribute("metabolizeNum", 225);
+            }
+            if (metabolize > 2) {
+                //现患
+                model.addAttribute("metabolizeNum", 415);
+            }
+
+
+        } else {
+            YhUserAssessmentReportVOJO vojo = new YhUserAssessmentReportVOJO();
+            model.addAttribute("vojo", vojo);
+        }
+        String getrepotimg = userService.getrepotimg();
+
+
+        model.addAttribute("findDiseaseNameAndRiskLevelByRs", findDiseaseNameAndRiskLevelByRs);
+        model.addAttribute("rs", rs);
+        model.addAttribute("huanb", huanb.toString().equals("") ? "无" : huanb.substring(0, huanb.length() - 1));
+        model.addAttribute("gaofx", gaofx.toString().equals("") ? "无" : gaofx.substring(0, gaofx.length() - 1));
+        model.addAttribute("jiaogaofx", jiaogaofx.toString().equals("") ? "无" : jiaogaofx.substring(0, jiaogaofx.length() - 1));
+        model.addAttribute("zhongdengfx", zhongdengfx.toString().equals("") ? "无" : zhongdengfx.substring(0, zhongdengfx.length() - 1));
+        model.addAttribute("difx", difx.toString().equals("") ? "无" : difx.substring(0, difx.length() - 1));
+        model.addAttribute("getrepotimg", getrepotimg);
 
         return "personalUser/healthRecord/assessmentReportTest2";
     }
@@ -3603,6 +3918,13 @@ public class UpmsJumpPageController {
         map.put("notlist", notlist);
         map.put("nocaiyao", nocaiyao);
         return map;
+    }
+
+    @ApiOperation(value = "医生控制台New")
+    @RequestMapping(value = "visualization", method = RequestMethod.GET)
+    public String visualization(Model model, Integer id) throws ParseException {
+
+        return "visualization/index";
     }
 
     /**
@@ -4546,5 +4868,721 @@ public class UpmsJumpPageController {
     public String identification(Model model) {
         return "medicine/identification";
     }
+
+
+    @ApiOperation(value = "个人基本信息")
+    @RequestMapping(value = "newpage/personalBasicInformation", method = RequestMethod.GET)
+    public String personalBasicInformation(Model model) {
+        return "newpage/1/personalBasicInformation";
+    }
+
+    @ApiOperation(value = "个人基本信息表单")
+    @RequestMapping(value = "newpage/personalBasicInformationForm", method = RequestMethod.GET)
+    public String personalBasicInformationForm(Model model) {
+        return "newpage/form/personalBasicInformationForm";
+    }
+
+    @ApiOperation(value = "个人基本信息表单")
+    @RequestMapping(value = "newpage/personalBasicInformationFormG", method = RequestMethod.GET)
+    public String personalBasicInformationFormG(Model model) {
+        return "newpage/form/personalBasicInformationFormG";
+    }
+
+    @ApiOperation(value = "individualOccupationalHealthMonitoringRecordsWorkers")
+    @RequestMapping(value = "newpage/individualOccupationalHealthMonitoringRecordsWorkers", method = RequestMethod.GET)
+    public String individualOccupationalHealthMonitoringRecordsWorkers(Model model) {
+        return "newpage/form/individualOccupationalHealthMonitoringRecordsWorkers";
+    }
+
+    @ApiOperation(value = "个人基本信息表单")
+    @RequestMapping(value = "newpage/personalBasicInformationFormF", method = RequestMethod.GET)
+    public String personalBasicInformationFormF(Model model) {
+        return "newpage/form/personalBasicInformationFormF";
+    }
+
+    @RequestMapping(value = "newpage/annualOccupationalHealthPromotionTrainingListForm", method = RequestMethod.GET)
+    public String annualOccupationalHealthPromotionTrainingListForm(Model model) {
+        return "newpage/form/annualOccupationalHealthPromotionTrainingListForm";
+    }
+
+    @RequestMapping(value = "newpage/unitOccupationalHealthSurveillanceManagementArchivesForm", method = RequestMethod.GET)
+    public String unitOccupationalHealthSurveillanceManagementArchivesForm(Model model) {
+        return "newpage/form/unitOccupationalHealthSurveillanceManagementArchivesForm";
+    }
+
+
+    @ApiOperation(value = "")
+    @RequestMapping(value = "/newpage/duringEmployment", method = RequestMethod.GET)
+    public String duringEmployment(Model model) {
+        return "newpage/2/duringEmployment";
+    }
+
+
+    @ApiOperation(value = "")
+    @RequestMapping(value = "/newpage/annualOccupationalHealthPromotionTrainingList", method = RequestMethod.GET)
+    public String annualOccupationalHealthPromotionTrainingList(Model model) {
+        return "newpage/3/annualOccupationalHealthPromotionTrainingList";
+    }
+
+    @ApiOperation(value = "")
+    @RequestMapping(value = "/newpage/1", method = RequestMethod.GET)
+    public String newpage1(Model model) {
+        return "newpage/worker/1";
+    }
+
+    @ApiOperation(value = "")
+    @RequestMapping(value = "/newpage/1html", method = RequestMethod.GET)
+    public String newpage1html(Model model,Integer personalBasicInformation) {
+        NewEmployeePersonalInformationCard newEmployeePersonalInformationCard=new NewEmployeePersonalInformationCard();
+        newEmployeePersonalInformationCard.setId(personalBasicInformation);
+        NewEmployeePersonalInformationCard newEmployeePersonalInformationCard1=newEmployeePersonalInformationCardService.selectById(newEmployeePersonalInformationCard);
+        model.addAttribute("data",Result.ok(newEmployeePersonalInformationCard1));
+        model.addAttribute("medicalHistory",JSONArray.fromObject(newEmployeePersonalInformationCard1.getOccupationalHistoryExposureHistoryToOccupationalHazards()));
+        model.addAttribute("surgicalHistory",JSONArray.fromObject(newEmployeePersonalInformationCard1.getTextJson()));
+        return "newpage/worker/1html";
+    }
+
+    @ApiOperation(value = "")
+    @RequestMapping(value = "/newpage/2html", method = RequestMethod.GET)
+    public String newpage2html(Model model,Integer personalBasicInformation) {
+        NewEmployeePersonalInformationCard newEmployeePersonalInformationCard=new NewEmployeePersonalInformationCard();
+        newEmployeePersonalInformationCard.setId(personalBasicInformation);
+        NewEmployeePersonalInformationCard newEmployeePersonalInformationCard1=newEmployeePersonalInformationCardService.selectById(newEmployeePersonalInformationCard);
+        model.addAttribute("data",Result.ok(newEmployeePersonalInformationCard1));
+        model.addAttribute("medicalHistory",JSONArray.fromObject(newEmployeePersonalInformationCard1.getTestingResultsOccupationalHazardsInWorkplace()));
+        return "newpage/worker/2html";
+    }
+
+    @ApiOperation(value = "")
+    @RequestMapping(value = "/newpage/3html", method = RequestMethod.GET)
+    public String newpage3html(Model model,Integer personalBasicInformation) {
+        NewEmployeePersonalInformationCard newEmployeePersonalInformationCard=new NewEmployeePersonalInformationCard();
+        newEmployeePersonalInformationCard.setId(personalBasicInformation);
+        NewEmployeePersonalInformationCard newEmployeePersonalInformationCard1=newEmployeePersonalInformationCardService.selectById(newEmployeePersonalInformationCard);
+        model.addAttribute("data",Result.ok(newEmployeePersonalInformationCard1));
+        model.addAttribute("medicalHistory",JSONArray.fromObject(newEmployeePersonalInformationCard1.getPreviousOccupationalHealthExaminationResults()));
+        return "newpage/worker/3html";
+    }
+
+    @ApiOperation(value = "")
+    @RequestMapping(value = "/newpage/4html", method = RequestMethod.GET)
+    public String newpage4html(Model model,Integer personalBasicInformation) {
+        NewEmployeePersonalInformationCard newEmployeePersonalInformationCard=new NewEmployeePersonalInformationCard();
+        newEmployeePersonalInformationCard.setId(personalBasicInformation);
+        NewEmployeePersonalInformationCard newEmployeePersonalInformationCard1=newEmployeePersonalInformationCardService.selectById(newEmployeePersonalInformationCard);
+        model.addAttribute("data",Result.ok(newEmployeePersonalInformationCard1));
+        model.addAttribute("noticeOccupationalHealthExaminationResults",JSONObject.parseObject(newEmployeePersonalInformationCard1.getNoticeOccupationalHealthExaminationResults()));
+        return "newpage/worker/4html";
+    }
+
+    @ApiOperation(value = "")
+    @RequestMapping(value = "/newpage/5html", method = RequestMethod.GET)
+    public String newpage5html(Model model,Integer personalBasicInformation) {
+        NewEmployeePersonalInformationCard newEmployeePersonalInformationCard=new NewEmployeePersonalInformationCard();
+        newEmployeePersonalInformationCard.setId(personalBasicInformation);
+        NewEmployeePersonalInformationCard newEmployeePersonalInformationCard1=newEmployeePersonalInformationCardService.selectById(newEmployeePersonalInformationCard);
+        model.addAttribute("data",Result.ok(newEmployeePersonalInformationCard1));
+        model.addAttribute("occupationalHealthExamination1",JSONArray.fromObject(newEmployeePersonalInformationCard1.getOccupationalHealthExamination1()));
+        model.addAttribute("occupationalHealthExamination2",JSONArray.fromObject(newEmployeePersonalInformationCard1.getOccupationalHealthExamination2()));
+        model.addAttribute("occupationalHealthExamination3",JSONArray.fromObject(newEmployeePersonalInformationCard1.getOccupationalHealthExamination3()));
+        model.addAttribute("occupationalHealthExamination4",JSONArray.fromObject(newEmployeePersonalInformationCard1.getOccupationalHealthExamination4()));
+        return "newpage/worker/5html";
+    }
+
+    @ApiOperation(value = "")
+    @RequestMapping(value = "/newpage/6html", method = RequestMethod.GET)
+    public String newpage6html(Model model,Integer personalBasicInformation) {
+        NewEmployeePersonalInformationCard newEmployeePersonalInformationCard=new NewEmployeePersonalInformationCard();
+        newEmployeePersonalInformationCard.setId(personalBasicInformation);
+        NewEmployeePersonalInformationCard newEmployeePersonalInformationCard1=newEmployeePersonalInformationCardService.selectById(newEmployeePersonalInformationCard);
+
+        model.addAttribute("medicalHistory",JSONArray.fromObject(newEmployeePersonalInformationCard1.getExaminationResults()));
+        model.addAttribute("occupationalHealthExamination4",JSONArray.fromObject(newEmployeePersonalInformationCard1.getExaminationResultsFile()));
+        return "newpage/worker/6html";
+    }
+
+    @ApiOperation(value = "")
+    @RequestMapping(value = "/newpage/7html", method = RequestMethod.GET)
+    public String newpage7html(Model model,Integer personalBasicInformation) {
+        NewEmployeePersonalInformationCard newEmployeePersonalInformationCard=new NewEmployeePersonalInformationCard();
+        newEmployeePersonalInformationCard.setId(personalBasicInformation);
+        NewEmployeePersonalInformationCard newEmployeePersonalInformationCard1=newEmployeePersonalInformationCardService.selectById(newEmployeePersonalInformationCard);
+        model.addAttribute("occupationalHealthExamination4",JSONArray.fromObject(newEmployeePersonalInformationCard1.getRegardingMaterials()));
+        return "newpage/worker/7html";
+    }
+
+    @ApiOperation(value = "")
+    @RequestMapping(value = "/newpage/8html", method = RequestMethod.GET)
+    public String newpage8html(Model model,Integer personalBasicInformation) {
+        NewEmployeePersonalInformationCard newEmployeePersonalInformationCard=new NewEmployeePersonalInformationCard();
+        newEmployeePersonalInformationCard.setId(personalBasicInformation);
+        NewEmployeePersonalInformationCard newEmployeePersonalInformationCard1=newEmployeePersonalInformationCardService.selectById(newEmployeePersonalInformationCard);
+        model.addAttribute("occupationalHealthExamination4",JSONArray.fromObject(newEmployeePersonalInformationCard1.getNotes()));
+        return "newpage/worker/8html";
+    }
+
+    @ApiOperation(value = "")
+    @RequestMapping(value = "/newpage/9html", method = RequestMethod.GET)
+    public String newpage9html(Model model,Integer personalBasicInformation) {
+        NewEmployeePersonalInformationCard newEmployeePersonalInformationCard=new NewEmployeePersonalInformationCard();
+        newEmployeePersonalInformationCard.setId(personalBasicInformation);
+        NewEmployeePersonalInformationCard newEmployeePersonalInformationCard1=newEmployeePersonalInformationCardService.selectById(newEmployeePersonalInformationCard);
+        model.addAttribute("occupationalHealthExamination4",JSONArray.fromObject(newEmployeePersonalInformationCard1.getOther()));
+        return "newpage/worker/9html";
+    }
+
+    @ApiOperation(value = "")
+    @RequestMapping(value = "/newpage/2", method = RequestMethod.GET)
+    public String newpage2(Model model) {
+        return "newpage/worker/2";
+    }
+    @ApiOperation(value = "")
+    @RequestMapping(value = "/newpage/3", method = RequestMethod.GET)
+    public String newpage3(Model model) {
+        return "newpage/worker/3";
+    }
+    @ApiOperation(value = "")
+    @RequestMapping(value = "/newpage/4", method = RequestMethod.GET)
+    public String newpage4(Model model) {
+        return "newpage/worker/4";
+    }
+
+    @ApiOperation(value = "")
+    @RequestMapping(value = "/newpage/4check", method = RequestMethod.GET)
+    public String newpage4html(Model model) {
+        return "newpage/worker/4check";
+    }
+    @ApiOperation(value = "")
+    @RequestMapping(value = "/newpage/5", method = RequestMethod.GET)
+    public String newpage5(Model model) {
+        return "newpage/worker/5";
+    }
+    @ApiOperation(value = "")
+    @RequestMapping(value = "/newpage/6", method = RequestMethod.GET)
+    public String newpage6(Model model) {
+        return "newpage/worker/6";
+    }
+    @ApiOperation(value = "")
+    @RequestMapping(value = "/newpage/7", method = RequestMethod.GET)
+    public String newpage7(Model model) {
+        return "newpage/worker/7";
+    }
+    @ApiOperation(value = "")
+    @RequestMapping(value = "/newpage/8", method = RequestMethod.GET)
+    public String newpage8(Model model) {
+        return "newpage/worker/8";
+    }
+    @ApiOperation(value = "")
+    @RequestMapping(value = "/newpage/9", method = RequestMethod.GET)
+    public String newpage9(Model model) {
+        return "newpage/worker/9";
+    }
+
+    @ApiOperation(value = "")
+    @RequestMapping(value = "/newpage/beforeEmployment", method = RequestMethod.GET)
+    public String beforeEmployment(Model model) {
+        return "newpage/2/beforeEmployment";
+    }
+
+    @ApiOperation(value = "")
+    @RequestMapping(value = "/newpage/beforeEmploymentAll", method = RequestMethod.GET)
+    public String beforeEmploymentAll(Model model) {
+        return "newpage/2/beforeEmploymentAll";
+    }
+
+
+    @ApiOperation(value = "个人健康评估")
+    @RequestMapping(value = "newpage/assessment2", method = RequestMethod.GET)
+    public String assessment2(String userCode, String type, Model model) throws ParseException {
+        System.out.println("-----------------" + userCode);
+        model.addAttribute("type", type);
+        model.addAttribute("usercode", userCode);
+        return "newpage/2/assessment2";
+    }
+
+    @ApiOperation(value = "心理评估管理")
+    @RequestMapping(value = "newpage/psychological", method = RequestMethod.GET)
+    public String psychological2(Model model) {
+        return "newpage/2/psychological";
+    }
+
+    @ApiOperation(value = "")
+    @RequestMapping(value = "/newpage/afterLeavingPost", method = RequestMethod.GET)
+    public String afterLeavingPost(Model model) {
+        return "newpage/2/afterLeavingPost";
+    }
+
+    @ApiOperation(value = "")
+    @RequestMapping(value = "/newpage/constructionProjectOccupationalHealth", method = RequestMethod.GET)
+    public String constructionProjectOccupationalHealth(Model model) {
+        return "newpage/3/constructionProjectOccupationalHealth";
+    }
+
+    @ApiOperation(value = "")
+    @RequestMapping(value = "/newpage/monitoringOccupationalHazardFactors", method = RequestMethod.GET)
+    public String monitoringOccupationalHazardFactors(Model model) {
+        return "newpage/3/monitoringOccupationalHazardFactors";
+    }
+
+    @ApiOperation(value = "")
+    @RequestMapping(value = "/newpage/occupationalHealthPromotionTraining", method = RequestMethod.GET)
+    public String occupationalHealthPromotionTraining(Model model) {
+        return "newpage/3/occupationalHealthPromotionTraining";
+    }
+
+    @RequestMapping(value = "newpage/occupationalHealthManagementForm", method = RequestMethod.GET)
+    public String occupationalHealthManagementForm(Model model) {
+        return "newpage/form/occupationalHealthManagementForm";
+    }
+
+    @ApiOperation(value = "")
+    @RequestMapping(value = "newpage/occupationalHealthManagement", method = RequestMethod.GET)
+    public String occupationalHealthManagement(Model model) {
+        return "newpage/3/occupationalHealthManagement";
+    }
+
+    @ApiOperation(value = "")
+    @RequestMapping(value = "/newpage/healthRiskAssessmentReport", method = RequestMethod.GET)
+    public String healthRiskAssessmentReport(Model model) {
+        return "newpage/4/healthRiskAssessmentReport";
+    }
+
+    @ApiOperation(value = "")
+    @RequestMapping(value = "/newpage/listChronicDiseasePatients", method = RequestMethod.GET)
+    public String listChronicDiseasePatients(Model model) {
+        return "newpage/4/listChronicDiseasePatients";
+    }
+
+    @ApiOperation(value = "")
+    @RequestMapping(value = "/newpage/interventionRecordsForHighriskPopulations", method = RequestMethod.GET)
+    public String interventionRecordsForHighriskPopulations(Model model) {
+        return "newpage/4/interventionRecordsForHighriskPopulations";
+    }
+
+    @ApiOperation(value = "")
+    @RequestMapping(value = "/newpage/recordPneumoconiosisService", method = RequestMethod.GET)
+    public String recordPneumoconiosisService(Model model) {
+        return "newpage/4/recordPneumoconiosisService";
+    }
+
+    @ApiOperation(value = "")
+    @RequestMapping(value = "/newpage/serviceRecordForObesePatients", method = RequestMethod.GET)
+    public String serviceRecordForObesePatients(Model model) {
+        return "newpage/4/serviceRecordForObesePatients";
+    }
+    @ApiOperation(value = "")
+    @RequestMapping(value = "/newpage/serviceRecordForProstatitisPatients", method = RequestMethod.GET)
+    public String serviceRecordForProstatitisPatients(Model model) {
+        return "newpage/4/serviceRecordForProstatitisPatients";
+    }
+
+    @ApiOperation(value = "")
+    @RequestMapping(value = "/newpage/serviceRecordsForHypertensivePatients", method = RequestMethod.GET)
+    public String serviceRecordsForHypertensivePatients(Model model) {
+        return "newpage/4/serviceRecordsForHypertensivePatients";
+    }
+
+    @ApiOperation(value = "")
+    @RequestMapping(value = "/newpage/serviceRecordForCoronaryHeartDiseasePatients", method = RequestMethod.GET)
+    public String serviceRecordForCoronaryHeartDiseasePatients(Model model) {
+        return "newpage/4/serviceRecordForCoronaryHeartDiseasePatients";
+    }
+
+
+    @ApiOperation(value = "")
+    @RequestMapping(value = "/newpage/serviceRecordForOsteoarthritisPatients", method = RequestMethod.GET)
+    public String serviceRecordForOsteoarthritisPatients(Model model) {
+        return "newpage/4/serviceRecordForOsteoarthritisPatients";
+    }
+
+    @RequestMapping(value = "/newpage/unitOccupationalHealthSurveillanceManagementArchives", method = RequestMethod.GET)
+    public String unitOccupationalHealthSurveillanceManagementArchives(Model model) {
+        return "newpage/3/unitOccupationalHealthSurveillanceManagementArchives";
+    }
+
+    @ApiOperation(value = "")
+    @RequestMapping(value = "/newpage/diabetesPatientServiceRecord", method = RequestMethod.GET)
+    public String diabetesPatientServiceRecord(Model model) {
+        return "newpage/4/diabetesPatientServiceRecord";
+    }
+
+    @ApiOperation(value = "")
+    @RequestMapping(value = "/newpage/goutPatientServiceRecord", method = RequestMethod.GET)
+    public String goutPatientServiceRecord(Model model) {
+        return "newpage/4/goutPatientServiceRecord";
+    }
+
+    @ApiOperation(value = "")
+    @RequestMapping(value = "/newpage/serviceRecordForPatientsWithAbnormalBloodLipids", method = RequestMethod.GET)
+    public String serviceRecordForPatientsWithAbnormalBloodLipids(Model model) {
+        return "newpage/4/serviceRecordForPatientsWithAbnormalBloodLipids";
+    }
+
+    @ApiOperation(value = "")
+    @RequestMapping(value = "/newpage/serviceRecordForStrokePatients", method = RequestMethod.GET)
+    public String serviceRecordForStrokePatients(Model model) {
+        return "newpage/4/serviceRecordForStrokePatients";
+    }
+
+
+    @ApiOperation(value = "")
+    @RequestMapping(value = "/newpage/serviceRecordForOsteoporosisPatients", method = RequestMethod.GET)
+    public String serviceRecordForOsteoporosisPatients(Model model) {
+        return "newpage/4/serviceRecordForOsteoporosisPatients";
+    }
+
+    @ApiOperation(value = "")
+    @RequestMapping(value = "/newpage/skinDiseasePatientServiceRecord", method = RequestMethod.GET)
+    public String skinDiseasePatientServiceRecord(Model model) {
+        return "newpage/4/skinDiseasePatientServiceRecord";
+    }
+
+    @ApiOperation(value = "")
+    @RequestMapping(value = "/newpage/serviceRecordForBreastHyperplasiaPatients", method = RequestMethod.GET)
+    public String serviceRecordForBreastHyperplasiaPatients(Model model) {
+        return "newpage/4/serviceRecordForBreastHyperplasiaPatients";
+    }
+
+    @ApiOperation(value = "")
+    @RequestMapping(value = "/newpage/serviceRecordForChronicGastritisPatients", method = RequestMethod.GET)
+    public String serviceRecordForChronicGastritisPatients(Model model) {
+        return "newpage/4/serviceRecordForChronicGastritisPatients";
+    }
+
+
+    @ApiOperation(value = "")
+    @RequestMapping(value = "/newpage/impactAssessment", method = RequestMethod.GET)
+    public String impactAssessment(Model model) {
+        return "newpage/4/impactAssessment";
+    }
+
+    @ApiOperation(value = "")
+    @RequestMapping(value = "/newpage/anxietyDisorderInterventionRecord", method = RequestMethod.GET)
+    public String anxietyDisorderInterventionRecord(Model model) {
+        return "newpage/4/anxietyDisorderInterventionRecord";
+    }
+
+    @ApiOperation(value = "")
+    @RequestMapping(value = "/newpage/otherPsychologicalDiseaseInterventionRecordForm", method = RequestMethod.GET)
+    public String otherPsychologicalDiseaseInterventionRecordForm(Model model) {
+        return "newpage/4/otherPsychologicalDiseaseInterventionRecordForm";
+    }
+
+    @ApiOperation(value = "")
+    @RequestMapping(value = "/newpage/insomniaInterventionRecord", method = RequestMethod.GET)
+    public String insomniaInterventionRecord(Model model) {
+        return "newpage/4/insomniaInterventionRecord";
+    }
+
+    @ApiOperation(value = "")
+    @RequestMapping(value = "/newpage/obsessiveCompulsiveDisorderInterventionRecord", method = RequestMethod.GET)
+    public String obsessiveCompulsiveDisorderInterventionRecord(Model model) {
+        return "newpage/4/obsessiveCompulsiveDisorderInterventionRecord";
+    }
+
+    @ApiOperation(value = "")
+    @RequestMapping(value = "/newpage/stressInterventionRecord", method = RequestMethod.GET)
+    public String stressInterventionRecord(Model model) {
+        return "newpage/4/stressInterventionRecord";
+    }
+
+    @ApiOperation(value = "")
+    @RequestMapping(value = "/newpage/depressionInterventionRecord", method = RequestMethod.GET)
+    public String depressionInterventionRecord(Model model) {
+        return "newpage/4/depressionInterventionRecord";
+    }
+
+    @ApiOperation(value = "")
+    @RequestMapping(value = "/newpage/psychologicalAssessmentReport", method = RequestMethod.GET)
+    public String psychologicalAssessmentReport(Model model) {
+        return "newpage/4/psychologicalAssessmentReport";
+    }
+
+    @ApiOperation(value = "")
+    @RequestMapping(value = "/newpage/employeePsychologicalCounselingRecord", method = RequestMethod.GET)
+    public String employeePsychologicalCounselingRecord(Model model) {
+        return "newpage/4/employeePsychologicalCounselingRecord";
+    }
+
+    @ApiOperation(value = "")
+    @RequestMapping(value = "/newpage/listPsychologicalPatients", method = RequestMethod.GET)
+    public String listPsychologicalPatients(Model model) {
+        return "newpage/4/listPsychologicalPatients";
+    }
+
+
+    @ApiOperation(value = "")
+    @RequestMapping(value = "/newpage/individualOccupationalHealthMonitoring", method = RequestMethod.GET)
+    public String individualOccupationalHealthMonitoring(Model model) {
+        return "newpage/3/individualOccupationalHealthMonitoring";
+    }
+
+
+    @RequestMapping(value = "/newpage/insomniaInterventionRecordForm", method = RequestMethod.GET)
+    public String insomniaInterventionRecordForm(Model model) {
+        Subject subject = SecurityUtils.getSubject();
+        YhUserReginfo yh=(YhUserReginfo) subject.getPrincipal();
+        String roleName = "健管师";  // 默认角色为健管师
+
+        if (Optional.ofNullable(yh).isPresent()) {
+            roleName = yhUserRoleMapper.selectRoleName(yh.getUserCode());
+            // 如果 roleName 包含 "心理" 字符串，则修改显示角色为 心理咨询师
+            if (roleName != null && roleName.contains("心理")) {
+                roleName = "心理咨询师";
+            }
+        } else {
+            roleName = "管理员";
+        }
+        model.addAttribute("roleName", roleName);
+        return "newpage/form/insomniaInterventionRecordForm";
+    }
+
+
+    @RequestMapping(value = "/newpage/stressInterventionRecordForm", method = RequestMethod.GET)
+    public String stressInterventionRecordForm(Model model) {
+        Subject subject = SecurityUtils.getSubject();
+        YhUserReginfo yh=(YhUserReginfo) subject.getPrincipal();
+        String roleName = "健管师";  // 默认角色为健管师
+
+        if (Optional.ofNullable(yh).isPresent()) {
+            roleName = yhUserRoleMapper.selectRoleName(yh.getUserCode());
+            // 如果 roleName 包含 "心理" 字符串，则修改显示角色为 心理咨询师
+            if (roleName != null && roleName.contains("心理")) {
+                roleName = "心理咨询师";
+            }
+        } else {
+            roleName = "管理员";
+        }
+        model.addAttribute("roleName", roleName);
+        return "newpage/form/stressInterventionRecordForm";
+    }
+
+    @RequestMapping(value = "/newpage/otherPsychologicalDisordersForm", method = RequestMethod.GET)
+    public String otherPsychologicalDisordersForm(Model model) {
+        Subject subject = SecurityUtils.getSubject();
+        YhUserReginfo yh=(YhUserReginfo) subject.getPrincipal();
+        String roleName = "健管师";  // 默认角色为健管师
+
+        if (Optional.ofNullable(yh).isPresent()) {
+            roleName = yhUserRoleMapper.selectRoleName(yh.getUserCode());
+            // 如果 roleName 包含 "心理" 字符串，则修改显示角色为 心理咨询师
+            if (roleName != null && roleName.contains("心理")) {
+                roleName = "心理咨询师";
+            }
+        } else {
+            roleName = "管理员";
+        }
+        model.addAttribute("roleName", roleName);
+        return "newpage/form/otherPsychologicalDisordersForm";
+    }
+
+
+    @RequestMapping(value = "/newpage/serviceRecordFormForOsteoarthritisPatients", method = RequestMethod.GET)
+    public String serviceRecordFormForOsteoarthritisPatients(Model model) {
+        return "newpage/form/serviceRecordFormForOsteoarthritisPatients";
+    }
+
+    @RequestMapping(value = "/newpage/prostatitisPatientServiceRecordForm", method = RequestMethod.GET)
+    public String prostatitisPatientServiceRecordForm(Model model) {
+        return "newpage/form/prostatitisPatientServiceRecordForm";
+    }
+
+    @RequestMapping(value = "/newpage/serviceRecordFormForBreastHyperplasiaPatients", method = RequestMethod.GET)
+    public String serviceRecordFormForBreastHyperplasiaPatients(Model model) {
+        return "newpage/form/serviceRecordFormForBreastHyperplasiaPatients";
+    }
+
+    @RequestMapping(value = "/newpage/serviceRecordFormForOsteoporosisPatients", method = RequestMethod.GET)
+    public String serviceRecordFormForOsteoporosisPatients(Model model) {
+        return "newpage/form/serviceRecordFormForOsteoporosisPatients";
+    }
+
+    @RequestMapping(value = "/newpage/occupationalHealthPromotionTrainingArchive", method = RequestMethod.GET)
+    public String occupationalHealthPromotionTrainingArchive(Model model) {
+        return "newpage/form/occupationalHealthPromotionTrainingArchive";
+    }
+
+    @RequestMapping(value = "/newpage/skinDiseasePatientServiceRecordForm", method = RequestMethod.GET)
+    public String skinDiseasePatientServiceRecordForm(Model model) {
+        return "newpage/form/skinDiseasePatientServiceRecordForm";
+    }
+
+    @RequestMapping(value = "/newpage/serviceRecordFormForChronicGastritisPatients", method = RequestMethod.GET)
+    public String serviceRecordFormForChronicGastritisPatients(Model model) {
+        return "newpage/form/serviceRecordFormForChronicGastritisPatients";
+    }
+
+    @RequestMapping(value = "/newpage/serviceRecordFormForPatientsWithAbnormalBloodLipids", method = RequestMethod.GET)
+    public String serviceRecordFormForPatientsWithAbnormalBloodLipids(Model model) {
+        return "newpage/form/serviceRecordFormForPatientsWithAbnormalBloodLipids";
+    }
+
+    @RequestMapping(value = "/newpage/serviceRecordForCoronaryHeartDiseasePatientsFor", method = RequestMethod.GET)
+    public String serviceRecordForCoronaryHeartDiseasePatientsFor(Model model) {
+        return "newpage/form/serviceRecordForCoronaryHeartDiseasePatientsFor";
+    }
+
+    @RequestMapping(value = "/newpage/serviceRecordFormForStrokePatients", method = RequestMethod.GET)
+    public String serviceRecordFormForStrokePatients(Model model) {
+        return "newpage/form/serviceRecordFormForStrokePatients";
+    }
+
+
+
+
+    @RequestMapping(value = "/newpage/type2DiabetesPatientServiceRecordForm", method = RequestMethod.GET)
+    public String type2DiabetesPatientServiceRecordForm(Model model) {
+        return "newpage/form/type2DiabetesPatientServiceRecordForm";
+    }
+
+    @RequestMapping(value = "/newpage/goutPatientServiceRecordForm", method = RequestMethod.GET)
+    public String goutPatientServiceRecordForm(Model model) {
+        return "newpage/form/goutPatientServiceRecordForm";
+    }
+
+    @RequestMapping(value = "/newpage/anxietyDisorderInterventionRecordForm", method = RequestMethod.GET)
+    public String anxietyDisorderInterventionRecordForm(Model model) {
+        Subject subject = SecurityUtils.getSubject();
+        YhUserReginfo yh=(YhUserReginfo) subject.getPrincipal();
+        String roleName = "健管师";  // 默认角色为健管师
+
+        if (Optional.ofNullable(yh).isPresent()) {
+            roleName = yhUserRoleMapper.selectRoleName(yh.getUserCode());
+            // 如果 roleName 包含 "心理" 字符串，则修改显示角色为 心理咨询师
+            if (roleName != null && roleName.contains("心理")) {
+                roleName = "心理咨询师";
+            }
+        } else {
+            roleName = "管理员";
+        }
+        model.addAttribute("roleName", roleName);
+        return "newpage/form/anxietyDisorderInterventionRecordForm";
+    }
+
+    @RequestMapping(value = "/newpage/obsessiveCompulsiveDisorderInterventionRecordForm", method = RequestMethod.GET)
+    public String obsessiveCompulsiveDisorderInterventionRecordForm(Model model) {
+        Subject subject = SecurityUtils.getSubject();
+        YhUserReginfo yh=(YhUserReginfo) subject.getPrincipal();
+        String roleName = "健管师";  // 默认角色为健管师
+
+        if (Optional.ofNullable(yh).isPresent()) {
+            roleName = yhUserRoleMapper.selectRoleName(yh.getUserCode());
+            // 如果 roleName 包含 "心理" 字符串，则修改显示角色为 心理咨询师
+            if (roleName != null && roleName.contains("心理")) {
+                roleName = "心理咨询师";
+            }
+        } else {
+            roleName = "管理员";
+        }
+        model.addAttribute("roleName", roleName);
+        return "newpage/form/obsessiveCompulsiveDisorderInterventionRecordForm";
+    }
+
+    @RequestMapping(value = "/newpage/depressionInterventionRecordForm", method = RequestMethod.GET)
+    public String depressionInterventionRecordForm(Model model) {
+        Subject subject = SecurityUtils.getSubject();
+        YhUserReginfo yh=(YhUserReginfo) subject.getPrincipal();
+        String roleName = "健管师";  // 默认角色为健管师
+
+        if (Optional.ofNullable(yh).isPresent()) {
+            roleName = yhUserRoleMapper.selectRoleName(yh.getUserCode());
+            // 如果 roleName 包含 "心理" 字符串，则修改显示角色为 心理咨询师
+            if (roleName != null && roleName.contains("心理")) {
+                roleName = "心理咨询师";
+            }
+        } else {
+            roleName = "管理员";
+        }
+        model.addAttribute("roleName", roleName);
+        return "newpage/form/depressionInterventionRecordForm";
+    }
+
+    @RequestMapping(value = "/newpage/listChronicDiseasePatientsForm", method = RequestMethod.GET)
+    public String listChronicDiseasePatientsForm(Model model) {
+        return "newpage/form/listChronicDiseasePatientsForm";
+    }
+
+    @RequestMapping(value = "/newpage/threeSimultaneousForms", method = RequestMethod.GET)
+    public String threeSimultaneousForms(Model model) {
+        return "newpage/form/threeSimultaneousForms";
+    }
+
+
+    @RequestMapping(value = "/newpage/individualOccupationalHealthMonitoringRecordFormForWorkers", method = RequestMethod.GET)
+    public String individualOccupationalHealthMonitoringRecordFormForWorkers(Model model) {
+        return "newpage/form/individualOccupationalHealthMonitoringRecordFormForWorkers";
+    }
+
+    @RequestMapping(value = "/newpage/occupationalDiseaseHazardMonitoringForm", method = RequestMethod.GET)
+    public String occupationalDiseaseHazardMonitoringForm(Model model) {
+        return "newpage/form/occupationalDiseaseHazardMonitoringForm";
+    }
+
+
+    @RequestMapping(value = "/newpage/riskAssessmentForm", method = RequestMethod.GET)
+    public String riskAssessmentForm(Model model) {
+        return "newpage/form/riskAssessmentForm";
+    }
+
+    @RequestMapping(value = "/newpage/psychologicalAssessmentForm", method = RequestMethod.GET)
+    public String psychologicalAssessmentForm(Model model) {
+        return "newpage/form/psychologicalAssessmentForm";
+    }
+
+    @RequestMapping(value = "/newpage/medicalExaminationInformation", method = RequestMethod.GET)
+    public String medicalExaminationInformation(Model model) {
+        return "newpage/form/medicalExaminationInformation";
+    }
+
+    @RequestMapping(value = "/newpage/serviceRecordFormForHypertensivePatients", method = RequestMethod.GET)
+    public String serviceRecordFormForHypertensivePatients(Model model) {
+        return "newpage/form/serviceRecordFormForHypertensivePatients";
+    }
+
+    @RequestMapping(value = "/newpage/effectEvaluationForm", method = RequestMethod.GET)
+    public String effectEvaluationForm(Model model,String userCode) {
+        model.addAttribute("userCode", userCode);
+        return "newpage/form/effectEvaluationForm";
+    }
+
+    @RequestMapping(value = "/newpage/employeePsychologicalCounselingRecordForm", method = RequestMethod.GET)
+    public String employeePsychologicalCounselingRecordForm(Model model) {
+        return "newpage/form/employeePsychologicalCounselingRecordForm";
+    }
+
+    @RequestMapping(value = "/newpage/employeePsychologicalChart", method = RequestMethod.GET)
+    public String employeePsychologicalChart(Model model) {
+        return "newpage/form/employeePsychologicalChart";
+    }
+
+    @RequestMapping(value = "/newpage/interventionRecordFormForHighRiskPopulationFrom", method = RequestMethod.GET)
+    public String interventionRecordFormForHighRiskPopulationFrom(Model model) {
+        Subject subject = SecurityUtils.getSubject();
+        YhUserReginfo yh=(YhUserReginfo) subject.getPrincipal();
+        String roleName = "健管师";  // 默认角色为健管师
+
+        if (Optional.ofNullable(yh).isPresent()) {
+            roleName = yhUserRoleMapper.selectRoleName(yh.getUserCode());
+            // 如果 roleName 包含 "心理" 字符串，则修改显示角色为 心理咨询师
+            if (roleName != null && roleName.contains("心理")) {
+                roleName = "心理咨询师";
+            }
+        } else {
+            roleName = "管理员";
+        }
+        model.addAttribute("roleName", roleName);
+        return "newpage/form/interventionRecordFormForHighRiskPopulationFrom";
+    }
+
+    @RequestMapping(value = "/newpage/pneumoconiosisServiceRecordForm", method = RequestMethod.GET)
+    public String pneumoconiosisServiceRecordForm(Model model) {
+        return "newpage/form/pneumoconiosisServiceRecordForm";
+    }
+
+    @RequestMapping(value = "/newpage/serviceRecordFormForObesePatientsForm", method = RequestMethod.GET)
+    public String serviceRecordFormForObesePatientsForm(Model model) {
+        return "newpage/form/serviceRecordFormForObesePatientsForm";
+    }
+
 
 }

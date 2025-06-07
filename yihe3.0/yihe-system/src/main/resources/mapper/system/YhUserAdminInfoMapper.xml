@@ -448,4 +448,38 @@
   <update id="changeusermanager" >
         update  yh_user_role_power set roleId=#{roleid} where userId=#{usercode}
   </update>
+
+  <select id="selectAll" resultMap="BaseResultMap" parameterType="string">
+    select * from yh_user_admin_info where org_code=#{orgCode} ;
+  </select>
+
+  <select id="selectAllCount" resultType="integer">
+    select count(*) from new_reg;
+  </select>
+    <select id="selectAllCountToday" resultType="integer">
+   SELECT COUNT(*) FROM new_reg WHERE DATE(insert_date) = CURDATE();
+  </select>
+
+  <select id="selectAllCountMo" resultType="integer">
+SELECT COUNT(*) FROM new_reg
+WHERE MONTH(insert_date) = MONTH(CURDATE())
+AND YEAR(insert_date) = YEAR(CURDATE());
+
+  </select>
+
+
+ <select id="selectAllCountNM" resultType="integer">
+    select count(*) from new_medical_examination_records;
+  </select>
+    <select id="selectAllCountTodayNM" resultType="integer">
+ SELECT COUNT(*) FROM new_medical_examination_records WHERE DATE(`time`) = CURDATE();
+  </select>
+
+
+  <select id="selectAllCountMoNM" resultType="integer">
+SELECT COUNT(*) FROM new_medical_examination_records
+WHERE MONTH(`time`) = MONTH(CURDATE())
+AND YEAR(`time`) = YEAR(CURDATE());
+
+  </select>
 </mapper>
