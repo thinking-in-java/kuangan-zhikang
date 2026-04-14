@@ -26,7 +26,7 @@ where a.user_code=#{usercode}
                 AND f.post_code != '',
               f.post_code,
               IF
-              ( f.gender, 'https://yjyqny.yhy.ren/new/maleDoctor.png', 'https://yjyqny.yhy.ren/new/femaleDoctor.png' )
+              ( f.gender, 'https://qny.guyijk.com/newnew/maleDoctor.png', 'https://qny.guyijk.com/newnew/femaleDoctor.png' )
       ) AS postCode,
       f.gender,
       e.info
@@ -63,7 +63,7 @@ where a.user_code=#{usercode}
                 AND f.post_code != '',
               f.post_code,
               IF
-              ( f.gender, 'https://yjyqny.yhy.ren/new/maleDoctor.png', 'https://yjyqny.yhy.ren/new/femaleDoctor.png' )
+              ( f.gender, 'https://qny.guyijk.com/newnew/maleDoctor.png', 'https://qny.guyijk.com/newnew/femaleDoctor.png' )
       ) AS postCode,
       f.gender,
       e.info

@@ -57,13 +57,11 @@ public class LoginInterceptor implements HandlerInterceptor {
             if(StringUtils.isEmpty(appToken)){
                 appToken = request.getHeader("token");
             }
-          /*  if(StringUtils.isEmpty(appToken)){
-                //获取请求方式
-                String method = request.getMethod();
-                if ("POST".equals(method)){
+           if(StringUtils.isEmpty(appToken)){
+                if ("/applet/api/YhUserReginfo/changepassword".equals(request.getRequestURI())){
                     isLogin = true;
                 }
-            }*/
+            }
             String token = redisService.getCacheObject(Constants.XCX_LOGIN_TOKEN + appToken);
             if (StringUtils.isNotEmpty(appToken) && StringUtils.isNotEmpty(token) && appToken.equals(token)) {
                 isLogin = true;

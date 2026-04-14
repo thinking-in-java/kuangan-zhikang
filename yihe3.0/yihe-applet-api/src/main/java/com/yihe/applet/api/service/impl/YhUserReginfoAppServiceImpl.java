@@ -57,7 +57,7 @@ public class YhUserReginfoAppServiceImpl  implements YhUserReginfoAppService {
 		// TODO Auto-generated method stub
 		YhUserReginfoApp yhUserReginfo = yhUserReginfoAppMapper.findYhUserReginfo(userCode);
 		if(null!=yhUserReginfo && StringUtils.isEmpty(yhUserReginfo.getPostCode())){
-			yhUserReginfo.setPostCode(1==yhUserReginfo.getGender()?"https://yjyqny.yhy.ren/new/maleDoctor.png":"https://yjyqny.yhy.ren/new/femaleDoctor.png");
+			yhUserReginfo.setPostCode(1==yhUserReginfo.getGender()?"https://qny.guyijk.com/newnew/maleDoctor.png":"https://qny.guyijk.com/newnew/femaleDoctor.png");
 		}
 		return yhUserReginfo;
 	}

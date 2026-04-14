@@ -406,7 +406,7 @@ public class YhHealthyPlanServiceImpl implements YhHealthyPlanService {
 			//获得微信用户的头像
 			String wxuser=yhHealthyPlanMapper.getwxuserimgs(plans.getUserCode());
 			if(wxuser==null){
-				wxuser="http://xcxqny.yhy.ren/xiaochengxu/toxiangnan.png";
+				wxuser="https://qny.guyijk.com/xiaochengxu/toxiangnan.png";
 			}
 
 			//如果top8的头像不是为空就判断是否大于八位，大于就替换否则就

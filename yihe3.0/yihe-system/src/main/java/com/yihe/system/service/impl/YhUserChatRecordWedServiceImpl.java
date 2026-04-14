@@ -36,7 +36,7 @@ public class YhUserChatRecordWedServiceImpl implements YhUserChatRecordWedServic
 		doctor.setUuid(principal.getUserCode());
 		doctor.setName(principal.getName());
 		doctor.setPassword(principal.getUserPwd());
-		doctor.setAvatar("http://xcxqny.yhy.ren/xiaochengxu/toxiangnan.png");
+		doctor.setAvatar("https://qny.guyijk.com/xiaochengxu/toxiangnan.png");
 		
 		 return doctor;
  }
@@ -49,7 +49,7 @@ public class YhUserChatRecordWedServiceImpl implements YhUserChatRecordWedServic
 		doctor.setUuid(principal.getUserCode());
 		doctor.setName(principal.getName());
 		doctor.setPassword(principal.getUserPwd());
-		doctor.setAvatar("http://xcxqny.yhy.ren/xiaochengxu/toxiangnan.png");
+		doctor.setAvatar("https://qny.guyijk.com/xiaochengxu/toxiangnan.png");
 		list.add(doctor);
 		 List<YhUserChatRecordWed> findChatInfo = YhUserChatRecordWedMapper.findChatInfo(principal.getUserCode(), null, null);
 		 if(null!=findChatInfo){
@@ -60,7 +60,7 @@ public class YhUserChatRecordWedServiceImpl implements YhUserChatRecordWedServic
 				 user.setPassword("");
 				 YhWxUserWeb selectByPrimaryKey = YhWxUserWebMapper.selectByPrimaryKey(yhUserChatRecordWed.getUserCode());
 				   if(null==selectByPrimaryKey){
-					   user.setAvatar("http://xcxqny.yhy.ren/xiaochengxu/toxiangnan.png");
+					   user.setAvatar("https://qny.guyijk.com/xiaochengxu/toxiangnan.png");
 				   }else{
 					   user.setAvatar(selectByPrimaryKey.getHeadImg());
 				   }
@@ -87,7 +87,7 @@ public List<YhUserChatRecordWed> findChatInfoList(String doctor){
 		   String userCode = yhUserChatRecordWed.getUserCode();
 		   YhWxUserWeb selectByPrimaryKey = YhWxUserWebMapper.selectByPrimaryKey(userCode);
 		   if(null==selectByPrimaryKey){
-			   yhUserChatRecordWed.setHeadImg("http://xcxqny.yhy.ren/xiaochengxu/toxiangnan.png");
+			   yhUserChatRecordWed.setHeadImg("https://qny.guyijk.com/xiaochengxu/toxiangnan.png");
 		   }else{
 			   yhUserChatRecordWed.setHeadImg(selectByPrimaryKey.getHeadImg());
 		   }

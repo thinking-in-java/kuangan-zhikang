@@ -376,10 +376,10 @@ public class YhUserReginfoController{
 		sysPasswordService.encryptPassword(userName, userPwd);
 		String nameAndPwd = new Md5Hash(userName + userPwd).toHex();
 		if (yhUserReginfo.getGender() == 1) {
-			yhUserReginfo.setPostCode("http://xcxqny.yhy.ren/xiaochengxu/toxiangnan.png");
+			yhUserReginfo.setPostCode("https://qny.guyijk.com/xiaochengxu/toxiangnan.png");
 		}
 		if (yhUserReginfo.getGender() == 2) {
-			yhUserReginfo.setPostCode("http://xcxqny.yhy.ren/xiaochengxu/toxiangnv.png");
+			yhUserReginfo.setPostCode("https://qny.guyijk.com/xiaochengxu/toxiangnv.png");
 		}
 
 		yhUserReginfo.setUserPwd(nameAndPwd);

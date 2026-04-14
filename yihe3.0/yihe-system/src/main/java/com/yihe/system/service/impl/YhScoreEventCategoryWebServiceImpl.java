@@ -185,4 +185,53 @@ public class YhScoreEventCategoryWebServiceImpl implements YhScoreEventCategoryW
 		return 0;
 	}
 
+	@Override
+	public Integer edlMark(String eventType, String userCode) {
+		YhUserReginfo yhUserReginfo = yhUserReginfoApp.selectByPrimaryKey(userCode);
+
+		try {
+			// 根据event_type查询积分事件规则表
+			YhScoreEventCategoryWeb yhScoreEventCategory = yhScoreEventCategoryWebMapper.selectEventType(eventType,yhUserReginfo.getOrgCode());
+			if (yhScoreEventCategory == null) {
+				System.out.println("参数错误，event_type不存在");
+				return 0;
+			}
+			Map<String, Object> map = new HashMap<String, Object>();
+			map.put("eventType", eventType);
+			map.put("userCode", userCode);
+
+			YhHealthStarweb yhHealthStarweb= yhHealthStarService.selectRecordtypeAndTimeMinus(map);
+
+			if(!Objects.isNull(yhHealthStarweb)){
+				yhHealthStarService.deleteByPrimaryKey(yhHealthStarweb.getHealthstarId());
+				YhUserStepWeb YhUserStep = yhUserStepService.selectAggregate(userCode);
+				YhUserStepWeb UserStep = new YhUserStepWeb();
+				int award = 0;
+				if (Objects.isNull(YhUserStep)) {
+					UserStep.setUserCode(userCode);
+					UserStep.setUserType(5);
+					UserStep.setHealthlevelstars(award);
+					UserStep.setHealthstars(award);
+					int insertSelective = yhUserStepService.insertSelective(UserStep);
+					if (insertSelective > 0) {
+						return insertSelective;
+					}
+				}else{
+					Integer healthstars=YhUserStep.getHealthstars()==null? 0:YhUserStep.getHealthstars();
+					Integer healthlevelstars=YhUserStep.getHealthlevelstars()==null? 0:YhUserStep.getHealthlevelstars();
+					YhUserStep.setHealthstars( healthstars- award);
+					YhUserStep.setHealthlevelstars(healthlevelstars - award);
+					int updateAggregateScore = yhUserStepService.updateByPrimaryKey(YhUserStep);
+					if (updateAggregateScore > 0) {
+						return updateAggregateScore;
+					}
+				}
+			}
+
+		} catch (Exception e) {
+			LOGGER.error("调用积分任务完成接口异常，原因是：{} ", e.getMessage(), e);
+		}
+		return 0;
+	}
+
 }

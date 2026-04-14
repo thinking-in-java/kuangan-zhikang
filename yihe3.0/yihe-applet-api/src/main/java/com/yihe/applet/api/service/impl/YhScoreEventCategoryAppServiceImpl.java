@@ -73,8 +73,11 @@ public class YhScoreEventCategoryAppServiceImpl implements YhScoreEventCategoryA
 		if (stepNum >= 6000 && stepNum < 8000) {
 			return scoreEventCategoryWebService.saveMark("sport_step_6000",usercode);
 		} else if (stepNum >= 8000 && stepNum < 10000) {
+					scoreEventCategoryWebService.edlMark("sport_step_6000",usercode);
 			return  scoreEventCategoryWebService.saveMark("sport_step_8000",usercode);
 		} else if (stepNum >= 10000) {
+					scoreEventCategoryWebService.edlMark("sport_step_6000",usercode);
+					scoreEventCategoryWebService.edlMark("sport_step_8000",usercode);
 			return  scoreEventCategoryWebService.saveMark("sport_step_10000",usercode);
 		}
 		return 0;

@@ -66,6 +66,7 @@
 		where t1.event_type=#{eventType,jdbcType=VARCHAR}
 	    and DATE_FORMAT( events_time, '%Y%m' ) = DATE_FORMAT( CURDATE( ) ,'%Y%m' )
 		and `type` = 2
+        and t1.org_code = (select org_code from yh_user_reginfo where user_code= #{userCode,jdbcType=VARCHAR} )
   </select>
 
     <select id="selectRecordtypeAndTime3" parameterType="map" resultType="java.lang.String">
@@ -77,6 +78,7 @@
         AND WEEK(events_time, 1) = WEEK(CURDATE(), 1)
         AND YEAR(events_time) = YEAR(CURDATE())
         and `type` = 3
+        and t1.org_code = (select org_code from yh_user_reginfo where user_code= #{userCode,jdbcType=VARCHAR} )
     </select>
 
     <select id="selectRecordtypeAndTime" parameterType="map" resultType="java.lang.String">
@@ -87,7 +89,18 @@
 		where t1.event_type=#{eventType,jdbcType=VARCHAR}
 		and DATE_FORMAT(t2.events_time,'%Y-%m-%d')=DATE_FORMAT(now(),'%Y-%m-%d')
 		and `type` = 1
+        and t1.org_code = (select org_code from yh_user_reginfo where user_code= #{userCode,jdbcType=VARCHAR} )
   </select>
+
+    <select id="selectRecordtypeAndTimeMinus" parameterType="map" resultMap="BaseResultMap">
+        select t2.*
+        from yh_score_event_category t1
+                 left join yh_health_star t2 on t1.event_name=t2.healthstars_events
+            and t2.user_code=#{userCode,jdbcType=VARCHAR}
+        where t1.event_type=#{eventType,jdbcType=VARCHAR}
+          and DATE_FORMAT(t2.events_time,'%Y-%m-%d')=DATE_FORMAT(now(),'%Y-%m-%d')
+          and `type` = 1  GROUP BY t2.healthstar_ID limit 1
+    </select>
 
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
     select 

@@ -80,9 +80,9 @@ public class YhSportEncourageAppController {
 				
 				if(yhUserSportChallengeApp.getPostCode()==null) {
         			if(yhUserSportChallengeApp.getGender()==1) {
-        				yhUserSportChallengeApp.setPostCode("http://xcxqny.yhy.ren/xiaochengxu/toxiangnan.png");
+        				yhUserSportChallengeApp.setPostCode("https://qny.guyijk.com/xiaochengxu/toxiangnan.png");
         			}else {
-        				yhUserSportChallengeApp.setPostCode("http://xcxqny.yhy.ren/xiaochengxu/toxiangnv.png");
+        				yhUserSportChallengeApp.setPostCode("https://qny.guyijk.com/xiaochengxu/toxiangnv.png");
         			}
         		}
 				
@@ -122,9 +122,9 @@ public class YhSportEncourageAppController {
 		        		YhUserReginfo reginfo=yhUserReginfoMapper.findYhUserReginfo(enco.get(i).getUserCode());
 		        		if(reginfo.getPostCode()==null) {
 		        			if(reginfo.getGender()==1) {
-		        				vojo.setImg("http://xcxqny.yhy.ren/xiaochengxu/toxiangnan.png");
+		        				vojo.setImg("https://qny.guyijk.com/xiaochengxu/toxiangnan.png");
 		        			}else {
-		        				vojo.setImg("http://xcxqny.yhy.ren/xiaochengxu/toxiangnv.png");
+		        				vojo.setImg("https://qny.guyijk.com/xiaochengxu/toxiangnv.png");
 		        			}
 		        		}else {
 		        			vojo.setImg(reginfo.getPostCode());
@@ -136,7 +136,7 @@ public class YhSportEncourageAppController {
 		        		 SportEncouraeImgVojo vojo=new SportEncouraeImgVojo();
 			        		YhUserReginfo reginfo=yhUserReginfoMapper.findYhUserReginfo(yhSportEncourageApp.getUserCode());
 			        		if(reginfo.getPostCode()==null) {
-			        			vojo.setImg("http://xcxqny.yhy.ren/xiaochengxu/toxiangnan.png");
+			        			vojo.setImg("https://qny.guyijk.com/xiaochengxu/toxiangnan.png");
 			        		}else {
 			        			vojo.setImg(reginfo.getPostCode());
 			        		}

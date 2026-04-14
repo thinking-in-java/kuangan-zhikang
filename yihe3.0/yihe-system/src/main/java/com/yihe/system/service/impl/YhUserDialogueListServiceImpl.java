@@ -50,9 +50,9 @@ public class YhUserDialogueListServiceImpl implements YhUserDialogueListService 
             }else{
                 Integer gender = yhUserReginfo.getGender();
                 if(gender==1){
-                    chatListByUserResqVo.setPostCode("https://yjyqny.yhy.ren/new/maleDoctor.png");
+                    chatListByUserResqVo.setPostCode("https://qny.guyijk.com/newnew/maleDoctor.png");
                 }else{
-                    chatListByUserResqVo.setPostCode("https://yjyqny.yhy.ren/new/femaleDoctor.png");
+                    chatListByUserResqVo.setPostCode("https://qny.guyijk.com/newnew/femaleDoctor.png");
                 }
             }
 

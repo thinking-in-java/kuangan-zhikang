@@ -25,6 +25,8 @@ public interface YhHealthStarwebMapper {
 
     String selectRecordtypeAndTime(Map<String, Object> map);
 
+    YhHealthStarweb selectRecordtypeAndTimeMinus(Map<String, Object> map);
+
     String selectRecordtypeAndTime2(Map<String, Object> map);
     String selectRecordtypeAndTime3(Map<String, Object> map);
 

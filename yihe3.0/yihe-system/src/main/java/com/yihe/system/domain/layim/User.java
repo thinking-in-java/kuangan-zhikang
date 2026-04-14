@@ -44,7 +44,7 @@ public class User {
     }
 
     private String id;
-    private String avatar="http://xcxqny.yhy.ren/xiaochengxu/toxiangnan.png";
+    private String avatar="https://qny.guyijk.com/xiaochengxu/toxiangnan.png";
     private String username;
     private String sign;
 }

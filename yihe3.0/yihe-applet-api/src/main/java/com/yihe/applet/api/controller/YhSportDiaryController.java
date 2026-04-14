@@ -760,7 +760,12 @@ public Result decrypt(String encryptedData, String sessionKey, String iv,String 
     } catch (Exception ex) {
         return null;
     }
-}  
+}
+@RequestMapping(value = "/setData")
+@ResponseBody
+public Result setSetp(){
+	return Result.ok( yhScoreEventCategoryAppService.stepPoints("100130","7000"));
+}
 /***
  * 获取当天的步数
  * @param encryptedData

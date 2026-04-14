@@ -282,11 +282,11 @@ public class YhHealthLectureInfoController {
 				String userCode = selectByExample.get(i).getUsercode();
 				YhUserReginfoApp findYhUserReginfo = YhUserReginfoAppService.findYhUserReginfo(userCode);
 				if(findYhUserReginfo.getGender()==1) {
-					selectByExample.get(i).setDefaultImg("http://xcxqny.yhy.ren/xiaochengxu/toxiangnan.png");
+					selectByExample.get(i).setDefaultImg("https://qny.guyijk.com/xiaochengxu/toxiangnan.png");
 				}
 				
 				if(findYhUserReginfo.getGender()==2) {
-					selectByExample.get(i).setDefaultImg("http://xcxqny.yhy.ren/xiaochengxu/toxiangnv.png");
+					selectByExample.get(i).setDefaultImg("https://qny.guyijk.com/xiaochengxu/toxiangnv.png");
 				}
 				
 			}
@@ -331,11 +331,11 @@ public class YhHealthLectureInfoController {
 				String userCode = selectByExample.get(i).getUsercode();
 				YhUserReginfoApp findYhUserReginfo = YhUserReginfoAppService.findYhUserReginfo(userCode);
 				if(findYhUserReginfo.getGender()==1) {
-					selectByExample.get(i).setDefaultImg("http://xcxqny.yhy.ren/xiaochengxu/toxiangnan.png");
+					selectByExample.get(i).setDefaultImg("https://qny.guyijk.com/xiaochengxu/toxiangnan.png");
 				}
 				
 				if(findYhUserReginfo.getGender()==2) {
-					selectByExample.get(i).setDefaultImg("http://xcxqny.yhy.ren/xiaochengxu/toxiangnv.png");
+					selectByExample.get(i).setDefaultImg("https://qny.guyijk.com/xiaochengxu/toxiangnv.png");
 				}
 				
 				

@@ -547,10 +547,10 @@ public class SonkaMachineController {
                     int gender;
                     if (uservojo.getGender() == 0) {
                         gender = 2;
-                        welluser.setPostCode("http://xcxqny.yhy.ren/xiaochengxu/toxiangnv.png");
+                        welluser.setPostCode("https://qny.guyijk.com/xiaochengxu/toxiangnv.png");
                     } else {
                         gender = 1;
-                        welluser.setPostCode("http://xcxqny.yhy.ren/xiaochengxu/toxiangnan.png");
+                        welluser.setPostCode("https://qny.guyijk.com/xiaochengxu/toxiangnan.png");
                     }
                     welluser.setGender(gender);// 性别
                     welluser.setBirthDate(data);// 出生日期

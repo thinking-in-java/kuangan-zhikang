@@ -55,6 +55,7 @@ public class PdfUtils {
 				float x = signRect.getLeft();
 				float y = signRect.getBottom();
 				// 根据路径读取图片
+				System.out.println(imgpath+"----------------------------------");
 				Image image = Image.getInstance(imgpath);
 				// 获取图片页面
 				PdfContentByte under = stamper.getOverContent(pageNo);

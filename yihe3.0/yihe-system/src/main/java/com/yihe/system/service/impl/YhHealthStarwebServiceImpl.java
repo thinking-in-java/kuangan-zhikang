@@ -102,6 +102,11 @@ public class YhHealthStarwebServiceImpl implements YhHealthStarwebService{
 	}
 
 	@Override
+	public YhHealthStarweb selectRecordtypeAndTimeMinus(Map<String, Object> map) {
+		return yhHealthStarwebMapper.selectRecordtypeAndTimeMinus(map);
+	}
+
+	@Override
 	public String selectRecordtypeAndTime2(Map<String, Object> map) {
 		// TODO Auto-generated method stub
 		return yhHealthStarwebMapper.selectRecordtypeAndTime2(map);

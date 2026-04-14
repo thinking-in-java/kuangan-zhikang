@@ -412,10 +412,10 @@ public class YhUserReginfoServiceImpl implements YhUserReginfoService {
         //yhUserReginfo.setGender("男".equals(gender)?1 : 2);
         yhUserReginfo.setGender("男".equals(gender) ? 1 : 2);
         if ("男".equals(gender)) {
-            yhUserReginfo.setPostCode("http://xcxqny.yhy.ren/xiaochengxu/toxiangnan.png");
+            yhUserReginfo.setPostCode("https://qny.guyijk.com/xiaochengxu/toxiangnan.png");
         }
         if ("女".equals(gender)) {
-            yhUserReginfo.setPostCode("http://xcxqny.yhy.ren/xiaochengxu/toxiangnv.png");
+            yhUserReginfo.setPostCode("https://qny.guyijk.com/xiaochengxu/toxiangnv.png");
         }
 
         //判断出生日期

@@ -148,10 +148,10 @@ public class YhUserReginfoController extends BaseController {
         sysPasswordService.encryptPassword(userName, userPwd);
         String nameAndPwd = new Md5Hash(userName + userPwd).toHex();
         if (yhUserReginfo.getGender() == 1) {
-            yhUserReginfo.setPostCode("http://xcxqny.yhy.ren/xiaochengxu/toxiangnan.png");
+            yhUserReginfo.setPostCode("https://qny.guyijk.com/xiaochengxu/toxiangnan.png");
         }
         if (yhUserReginfo.getGender() == 2) {
-            yhUserReginfo.setPostCode("http://xcxqny.yhy.ren/xiaochengxu/toxiangnv.png");
+            yhUserReginfo.setPostCode("https://qny.guyijk.com/xiaochengxu/toxiangnv.png");
         }
 
         yhUserReginfo.setUserPwd(nameAndPwd);
@@ -373,10 +373,10 @@ public class YhUserReginfoController extends BaseController {
     @ResponseBody
     public int updateYhUserReginfo(YhUserReginfo YhUserReginfo) {
 		/*if (YhUserReginfo.getGender() == 1) {
-			YhUserReginfo.setPostCode("http://xcxqny.yhy.ren/xiaochengxu/toxiangnan.png");
+			YhUserReginfo.setPostCode("https://qny.guyijk.com/xiaochengxu/toxiangnan.png");
 		}
 		if (YhUserReginfo.getGender() == 2) {
-			YhUserReginfo.setPostCode("http://xcxqny.yhy.ren/xiaochengxu/toxiangnv.png");
+			YhUserReginfo.setPostCode("https://qny.guyijk.com/xiaochengxu/toxiangnv.png");
 		}*/
         YhUserEnrolinfo yhUserEnrolinfo = new YhUserEnrolinfo();
         yhUserEnrolinfo.setEnergyUptime(new Date());

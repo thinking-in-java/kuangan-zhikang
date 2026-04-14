@@ -96,9 +96,9 @@ public class YhUserNotifyController {
 				//判断头像是否为空，为空则加上默认头像
 				if(yhHealthLectureCommentApp.getHeadImg()==null) {
 					if(yhHealthLectureCommentApp.getGender()==1) {
-						yhHealthLectureCommentApp.setHeadImg("http://xcxqny.yhy.ren/xiaochengxu/toxiangnan.png");
+						yhHealthLectureCommentApp.setHeadImg("https://qny.guyijk.com/xiaochengxu/toxiangnan.png");
 					}else if(yhHealthLectureCommentApp.getGender()==2){
-						yhHealthLectureCommentApp.setHeadImg("http://xcxqny.yhy.ren/xiaochengxu/toxiangnv.png");
+						yhHealthLectureCommentApp.setHeadImg("https://qny.guyijk.com/xiaochengxu/toxiangnv.png");
 					}
 				}
 				comList2.add(yhHealthLectureCommentApp);
@@ -117,9 +117,9 @@ public class YhUserNotifyController {
 			for (YhHealthLectureCommentApp yhHealthLectureCommentApp : comList) {
 				if(yhHealthLectureCommentApp.getHeadImg()==null) {
 					if(yhHealthLectureCommentApp.getGender()==1) {
-						yhHealthLectureCommentApp.setHeadImg("http://xcxqny.yhy.ren/xiaochengxu/toxiangnan.png");
+						yhHealthLectureCommentApp.setHeadImg("https://qny.guyijk.com/xiaochengxu/toxiangnan.png");
 					}else if(yhHealthLectureCommentApp.getGender()==2){
-						yhHealthLectureCommentApp.setHeadImg("http://xcxqny.yhy.ren/xiaochengxu/toxiangnv.png");
+						yhHealthLectureCommentApp.setHeadImg("https://qny.guyijk.com/xiaochengxu/toxiangnv.png");
 					}
 				}
 				comList1.add(yhHealthLectureCommentApp);

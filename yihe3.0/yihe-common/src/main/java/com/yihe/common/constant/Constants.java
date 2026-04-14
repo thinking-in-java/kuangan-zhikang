@@ -1,5 +1,7 @@
 package com.yihe.common.constant;
 
+
+
 /**
  * 通用常量信息
  * 

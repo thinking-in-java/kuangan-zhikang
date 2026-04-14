@@ -20,7 +20,7 @@ public class Constant {
 	    //语音识别接口
 	    public static String FOODRECORDAI_URL = "https://api.jiankangyouyi.com/ego-gw/v2/semantic/speech/record/food/analysis.do";
 	    //评估问卷接口
-	    public static String DOASSESS_URL = "http://47.113.102.179:8084/SYH/getDMRisk";
+	    public static String DOASSESS_URL = "http://qsrx.cn:8084/SYH/getDMRisk";
 	    //患有某项疾病
 	    public static String ISDISEAS= "1";
 	    	

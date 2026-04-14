@@ -92,9 +92,9 @@ public class YhUserSportChallengeAppMapperServiceImpl implements YhUserSportChal
 	        		YhUserReginfo reginfo=yhUserReginfoMapper.findYhUserReginfo(enco.get(i).getUserCode());
 	        		if(reginfo.getPostCode()==null) {
 	        			if(reginfo.getGender()==1) {
-	        				vojo.setImg("http://xcxqny.yhy.ren/xiaochengxu/toxiangnan.png");
+	        				vojo.setImg("https://qny.guyijk.com/xiaochengxu/toxiangnan.png");
 	        			}else {
-	        				vojo.setImg("http://xcxqny.yhy.ren/xiaochengxu/toxiangnv.png");
+	        				vojo.setImg("https://qny.guyijk.com/xiaochengxu/toxiangnv.png");
 	        			}
 	        			
 	        		}else {
@@ -109,7 +109,7 @@ public class YhUserSportChallengeAppMapperServiceImpl implements YhUserSportChal
 	        		 SportEncouraeImgVojo vojo=new SportEncouraeImgVojo();
 		        		YhUserReginfo reginfo=yhUserReginfoMapper.findYhUserReginfo(yhSportEncourageApp.getUserCode());
 		        		if(reginfo.getPostCode()==null) {
-		        			vojo.setImg("http://xcxqny.yhy.ren/xiaochengxu/toxiangnan.png");
+		        			vojo.setImg("https://qny.guyijk.com/xiaochengxu/toxiangnan.png");
 		        		}else {
 		        			vojo.setImg(reginfo.getPostCode());
 		        		}

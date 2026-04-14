@@ -16,7 +16,7 @@
 	<select id="findUserInfoByDoctor" parameterType="String" resultType="com.yihe.system.domain.layim.User">
 	
 SELECT a.user_code AS id,a.name AS username,
- IF ( IFNULL(a.post_code, '' ) = '', 'http://xcxqny.yhy.ren/xiaochengxu/toxiangnan.png', a.post_code) AS avatar
+ IF ( IFNULL(a.post_code, '' ) = '', 'https://qny.guyijk.com/xiaochengxu/toxiangnan.png', a.post_code) AS avatar
  FROM `yh_user_reginfo` AS a
 LEFT JOIN `yh_wx_user` AS b ON a.user_code=b.user_id 
 WHERE a.user_code IN ( SELECT user_code FROM `yh_user_make_card` WHERE doctor=(SELECT id FROM `yh_user_admin_info` WHERE user_code=#{usercode} LIMIT 1)
@@ -25,7 +25,7 @@ WHERE a.user_code IN ( SELECT user_code FROM `yh_user_make_card` WHERE doctor=(S
 	<select id="findUserNameAndImg" parameterType="String" resultType="com.yihe.system.domain.layim.User">
 
  SELECT a.user_code AS id,a.name AS username,
-  IF ( IFNULL(a.post_code, '' ) = '', 'http://xcxqny.yhy.ren/xiaochengxu/toxiangnan.png', a.post_code) AS avatar
+  IF ( IFNULL(a.post_code, '' ) = '', 'https://qny.guyijk.com/xiaochengxu/toxiangnan.png', a.post_code) AS avatar
   FROM `yh_user_reginfo` AS a
 WHERE a.user_code=#{usercode} limit 1
 	</select>

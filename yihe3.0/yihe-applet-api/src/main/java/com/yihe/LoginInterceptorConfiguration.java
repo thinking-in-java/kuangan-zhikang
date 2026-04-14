@@ -40,6 +40,8 @@ public class LoginInterceptorConfiguration implements WebMvcConfigurer {
                         "/**/basicRegistrationInformation",
                         "/**/sendSms",
                         "/**/mobileNumberLogin",
+                        "/**/YhUserReginfo/changepassword",
+                        "/**/YhUserReginfo/updUserInfo",
                         "/**/chatrecord/upload",
                         "/**/selectGrade",
                         "/**/login",

@@ -128,7 +128,7 @@ public class DefaultLayIMService implements LayIMService {
 		user.setUsername(principal.getName());
 		user.setId(principal.getUserCode());
 		user.setSign("");
-		user.setAvatar("http://xcxqny.yhy.ren/xiaochengxu/toxiangnan.png");
+		user.setAvatar("https://qny.guyijk.com/xiaochengxu/toxiangnan.png");
 
 		result.setOwner(user);
 

@@ -332,9 +332,9 @@ public class YhLifeHabitSignAppController {
 			wo++;
 			if(yhLifeHabitPersonDictApp.getPostCode()==null || yhLifeHabitPersonDictApp.getPostCode().equals("")) {
 				if(yhLifeHabitPersonDictApp.getGender()==1) {
-					yhLifeHabitPersonDictApp.setPostCode("http://xcxqny.yhy.ren/xiaochengxu/toxiangnan.png");
+					yhLifeHabitPersonDictApp.setPostCode("https://qny.guyijk.com/xiaochengxu/toxiangnan.png");
 				}else {
-					yhLifeHabitPersonDictApp.setPostCode("http://xcxqny.yhy.ren/xiaochengxu/toxiangnv.png");
+					yhLifeHabitPersonDictApp.setPostCode("https://qny.guyijk.com/xiaochengxu/toxiangnv.png");
 				}
 			}
 			yhLifeHabitPersonDictApp.setSum(yhLifeHabitPersonDictApp.getTotalDay()+"次");

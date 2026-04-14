@@ -10,4 +10,6 @@ public interface YhScoreEventCategoryWebService {
 	 int updateByPrimaryKeySelective(YhScoreEventCategoryWeb record);
 	Integer saveMark(String eventType,String userCode);
 
+	Integer edlMark(String eventType,String userCode);
+
 }
