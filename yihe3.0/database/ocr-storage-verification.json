@@ -1,0 +1,8 @@
+{
+  "storageRoot": "F:\\upload",
+  "verifiedExistingRealFiles": 0,
+  "copiedExistingFiles": 0,
+  "originalFilesRetained": true,
+  "workerTokenFile": "F:\\upload\\.config\\ocr-worker.token",
+  "tokenValuePrinted": false
+}

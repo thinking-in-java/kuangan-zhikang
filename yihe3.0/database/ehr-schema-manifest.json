@@ -1,0 +1,4145 @@
+{
+  "source": {
+    "file": "矿安智康电子健康档案字段字典_v2.0.0.xlsx",
+    "sha256": "8ac2bf8b64d36e420e69b1312a04a1085db2edfc26b7f17b94f5816a9294ba14",
+    "sheets": [
+      {
+        "name": "00 使用说明",
+        "rows": 19,
+        "columns": 2,
+        "file": "00.json"
+      },
+      {
+        "name": "01 标准档案字段字典",
+        "rows": 72,
+        "columns": 23,
+        "file": "01.json"
+      },
+      {
+        "name": "02 医学检查项目字典",
+        "rows": 660,
+        "columns": 16,
+        "file": "02.json"
+      },
+      {
+        "name": "03 字段别名映射",
+        "rows": 1594,
+        "columns": 10,
+        "file": "03.json"
+      },
+      {
+        "name": "04 单位字典",
+        "rows": 395,
+        "columns": 9,
+        "file": "04.json"
+      },
+      {
+        "name": "05 枚举字典",
+        "rows": 44,
+        "columns": 5,
+        "file": "05.json"
+      },
+      {
+        "name": "06 数据来源字典",
+        "rows": 101,
+        "columns": 7,
+        "file": "06.json"
+      },
+      {
+        "name": "07 数据校验规则",
+        "rows": 20,
+        "columns": 6,
+        "file": "07.json"
+      },
+      {
+        "name": "08 MySQL映射字典",
+        "rows": 192,
+        "columns": 11,
+        "file": "08.json"
+      },
+      {
+        "name": "09 JSON接口映射",
+        "rows": 131,
+        "columns": 9,
+        "file": "09.json"
+      },
+      {
+        "name": "10 待确认字段",
+        "rows": 541,
+        "columns": 8,
+        "file": "10.json"
+      },
+      {
+        "name": "11 字段变更记录",
+        "rows": 30,
+        "columns": 6,
+        "file": "11.json"
+      }
+    ]
+  },
+  "core_table_count": 19,
+  "table_count": 31,
+  "tables": [
+    {
+      "name": "a_employees",
+      "core": true,
+      "columns": [
+        {
+          "name": "employee_id",
+          "type": "CHAR(36) CHARACTER SET ascii COLLATE ascii_bin",
+          "nullable": false,
+          "default": null,
+          "comment": "员工标识"
+        },
+        {
+          "name": "scope_code",
+          "type": "VARCHAR(64) CHARACTER SET ascii COLLATE ascii_bin",
+          "nullable": false,
+          "default": null,
+          "comment": "租户或组织范围"
+        },
+        {
+          "name": "data_mode",
+          "type": "ENUM('real','synthetic')",
+          "nullable": false,
+          "default": null,
+          "comment": "真实/模拟隔离"
+        },
+        {
+          "name": "roster_employee_key",
+          "type": "VARCHAR(96) CHARACTER SET ascii COLLATE ascii_bin",
+          "nullable": false,
+          "default": null,
+          "comment": "按冻结 DDL 列定义使用"
+        },
+        {
+          "name": "identity_ref",
+          "type": "VARBINARY(128)",
+          "nullable": false,
+          "default": null,
+          "comment": "按冻结 DDL 列定义使用"
+        },
+        {
+          "name": "roster_source_ref",
+          "type": "VARBINARY(256)",
+          "nullable": false,
+          "default": null,
+          "comment": "按冻结 DDL 列定义使用"
+        },
+        {
+          "name": "created_at",
+          "type": "DATETIME(6)",
+          "nullable": false,
+          "default": "CURRENT_TIMESTAMP(6)",
+          "comment": "记录创建时间 UTC"
+        }
+      ],
+      "indexes": {
+        "PRIMARY": {
+          "name": "PRIMARY",
+          "columns": [
+            "employee_id"
+          ],
+          "unique": false,
+          "primary": true
+        },
+        "uq_employees_scope_id": {
+          "name": "uq_employees_scope_id",
+          "columns": [
+            "scope_code",
+            "data_mode",
+            "employee_id"
+          ],
+          "unique": true,
+          "primary": false
+        },
+        "uq_employees_roster": {
+          "name": "uq_employees_roster",
+          "columns": [
+            "scope_code",
+            "data_mode",
+            "roster_employee_key"
+          ],
+          "unique": true,
+          "primary": false
+        },
+        "uq_employees_identity": {
+          "name": "uq_employees_identity",
+          "columns": [
+            "scope_code",
+            "data_mode",
+            "identity_ref"
+          ],
+          "unique": true,
+          "primary": false
+        }
+      },
+      "checks": [],
+      "comment": "授权职工身份索引；不存储报告抽取的身份覆盖值"
+    },
+    {
+      "name": "a_health_records",
+      "core": true,
+      "columns": [
+        {
+          "name": "record_id",
+          "type": "CHAR(36) CHARACTER SET ascii COLLATE ascii_bin",
+          "nullable": false,
+          "default": null,
+          "comment": "档案标识"
+        },
+        {
+          "name": "scope_code",
+          "type": "VARCHAR(64) CHARACTER SET ascii COLLATE ascii_bin",
+          "nullable": false,
+          "default": null,
+          "comment": "租户或组织范围"
+        },
+        {
+          "name": "data_mode",
+          "type": "ENUM('real','synthetic')",
+          "nullable": false,
+          "default": null,
+          "comment": "真实/模拟隔离"
+        },
+        {
+          "name": "employee_id",
+          "type": "CHAR(36) CHARACTER SET ascii COLLATE ascii_bin",
+          "nullable": false,
+          "default": null,
+          "comment": "员工标识"
+        },
+        {
+          "name": "created_at",
+          "type": "DATETIME(6)",
+          "nullable": false,
+          "default": "CURRENT_TIMESTAMP(6)",
+          "comment": "记录创建时间 UTC"
+        }
+      ],
+      "indexes": {
+        "PRIMARY": {
+          "name": "PRIMARY",
+          "columns": [
+            "record_id"
+          ],
+          "unique": false,
+          "primary": true
+        },
+        "uq_records_scope_id": {
+          "name": "uq_records_scope_id",
+          "columns": [
+            "scope_code",
+            "data_mode",
+            "record_id"
+          ],
+          "unique": true,
+          "primary": false
+        },
+        "ix_records_history": {
+          "name": "ix_records_history",
+          "columns": [
+            "scope_code",
+            "data_mode",
+            "employee_id",
+            "created_at",
+            "record_id"
+          ],
+          "unique": false,
+          "primary": false
+        },
+        "uq_record_employee": {
+          "name": "uq_record_employee",
+          "columns": [
+            "scope_code",
+            "data_mode",
+            "employee_id"
+          ],
+          "unique": true,
+          "primary": false
+        },
+        "uq_record_employee_id": {
+          "name": "uq_record_employee_id",
+          "columns": [
+            "scope_code",
+            "data_mode",
+            "record_id",
+            "employee_id"
+          ],
+          "unique": true,
+          "primary": false
+        }
+      },
+      "checks": [],
+      "comment": "个人健康档案主记录；每个授权职工一份"
+    },
+    {
+      "name": "a_report_sources",
+      "core": true,
+      "columns": [
+        {
+          "name": "source_file_id",
+          "type": "CHAR(36) CHARACTER SET ascii COLLATE ascii_bin",
+          "nullable": false,
+          "default": null,
+          "comment": "受限原文件标识"
+        },
+        {
+          "name": "scope_code",
+          "type": "VARCHAR(64) CHARACTER SET ascii COLLATE ascii_bin",
+          "nullable": false,
+          "default": null,
+          "comment": "租户或组织范围"
+        },
+        {
+          "name": "data_mode",
+          "type": "ENUM('real','synthetic')",
+          "nullable": false,
+          "default": null,
+          "comment": "真实/模拟隔离"
+        },
+        {
+          "name": "sha256",
+          "type": "BINARY(32)",
+          "nullable": false,
+          "default": null,
+          "comment": "原始文件摘要"
+        },
+        {
+          "name": "object_ref",
+          "type": "VARBINARY(512)",
+          "nullable": false,
+          "default": null,
+          "comment": "按冻结 DDL 列定义使用"
+        },
+        {
+          "name": "page_count",
+          "type": "INT UNSIGNED",
+          "nullable": false,
+          "default": null,
+          "comment": "按冻结 DDL 列定义使用"
+        },
+        {
+          "name": "created_at",
+          "type": "DATETIME(6)",
+          "nullable": false,
+          "default": "CURRENT_TIMESTAMP(6)",
+          "comment": "记录创建时间 UTC"
+        }
+      ],
+      "indexes": {
+        "PRIMARY": {
+          "name": "PRIMARY",
+          "columns": [
+            "source_file_id"
+          ],
+          "unique": false,
+          "primary": true
+        },
+        "uq_sources_scope_id": {
+          "name": "uq_sources_scope_id",
+          "columns": [
+            "scope_code",
+            "data_mode",
+            "source_file_id"
+          ],
+          "unique": true,
+          "primary": false
+        },
+        "uq_sources_repeat": {
+          "name": "uq_sources_repeat",
+          "columns": [
+            "scope_code",
+            "data_mode",
+            "sha256"
+          ],
+          "unique": true,
+          "primary": false
+        }
+      },
+      "checks": [
+        "page_count > 0"
+      ],
+      "comment": "PDF或照片原始文件；按组织和模式去重"
+    },
+    {
+      "name": "a_report_series",
+      "core": true,
+      "columns": [
+        {
+          "name": "report_id",
+          "type": "CHAR(36) CHARACTER SET ascii COLLATE ascii_bin",
+          "nullable": false,
+          "default": null,
+          "comment": "逻辑报告 UUID"
+        },
+        {
+          "name": "scope_code",
+          "type": "VARCHAR(64) CHARACTER SET ascii COLLATE ascii_bin",
+          "nullable": false,
+          "default": null,
+          "comment": "租户或组织范围"
+        },
+        {
+          "name": "data_mode",
+          "type": "ENUM('real','synthetic')",
+          "nullable": false,
+          "default": null,
+          "comment": "真实/模拟隔离"
+        },
+        {
+          "name": "source_file_id",
+          "type": "CHAR(36) CHARACTER SET ascii COLLATE ascii_bin",
+          "nullable": false,
+          "default": null,
+          "comment": "受限原文件标识"
+        },
+        {
+          "name": "current_revision",
+          "type": "INT UNSIGNED",
+          "nullable": true,
+          "default": null,
+          "comment": "当前版本指针"
+        },
+        {
+          "name": "created_at",
+          "type": "DATETIME(6)",
+          "nullable": false,
+          "default": "CURRENT_TIMESTAMP(6)",
+          "comment": "记录创建时间 UTC"
+        }
+      ],
+      "indexes": {
+        "PRIMARY": {
+          "name": "PRIMARY",
+          "columns": [
+            "report_id"
+          ],
+          "unique": false,
+          "primary": true
+        },
+        "uq_series_scope_id": {
+          "name": "uq_series_scope_id",
+          "columns": [
+            "scope_code",
+            "data_mode",
+            "report_id"
+          ],
+          "unique": true,
+          "primary": false
+        },
+        "uq_series_primary_source": {
+          "name": "uq_series_primary_source",
+          "columns": [
+            "source_file_id"
+          ],
+          "unique": true,
+          "primary": false
+        }
+      },
+      "checks": [],
+      "comment": "逻辑报告；current_revision不是正式发布标记"
+    },
+    {
+      "name": "a_report_template_mapping",
+      "core": true,
+      "columns": [
+        {
+          "name": "template_key",
+          "type": "VARCHAR(64) CHARACTER SET ascii COLLATE ascii_bin",
+          "nullable": false,
+          "default": null,
+          "comment": "按冻结 DDL 列定义使用"
+        },
+        {
+          "name": "mapping_version",
+          "type": "VARCHAR(64) CHARACTER SET ascii COLLATE ascii_bin",
+          "nullable": false,
+          "default": null,
+          "comment": "按冻结 DDL 列定义使用"
+        },
+        {
+          "name": "template_kind",
+          "type": "ENUM('text_layout','scan_appearance')",
+          "nullable": false,
+          "default": null,
+          "comment": "按冻结 DDL 列定义使用"
+        },
+        {
+          "name": "institution_key",
+          "type": "VARCHAR(255)",
+          "nullable": true,
+          "default": null,
+          "comment": "按冻结 DDL 列定义使用"
+        },
+        {
+          "name": "observed_layout",
+          "type": "TEXT",
+          "nullable": false,
+          "default": null,
+          "comment": "按冻结 DDL 列定义使用"
+        },
+        {
+          "name": "status",
+          "type": "ENUM('needs_confirmation','confirmed','retired')",
+          "nullable": false,
+          "default": null,
+          "comment": "本实体状态，按列枚举"
+        },
+        {
+          "name": "validation_ref",
+          "type": "VARBINARY(256)",
+          "nullable": true,
+          "default": null,
+          "comment": "按冻结 DDL 列定义使用"
+        }
+      ],
+      "indexes": {
+        "PRIMARY": {
+          "name": "PRIMARY",
+          "columns": [
+            "template_key",
+            "mapping_version"
+          ],
+          "unique": false,
+          "primary": true
+        }
+      },
+      "checks": [],
+      "comment": "模板映射；没有原始模板包则不编造种子"
+    },
+    {
+      "name": "a_medical_item_dictionary",
+      "core": true,
+      "columns": [
+        {
+          "name": "item_code",
+          "type": "VARCHAR(64) CHARACTER SET ascii COLLATE ascii_bin",
+          "nullable": false,
+          "default": null,
+          "comment": "按冻结 DDL 列定义使用"
+        },
+        {
+          "name": "dictionary_version",
+          "type": "VARCHAR(64) CHARACTER SET ascii COLLATE ascii_bin",
+          "nullable": false,
+          "default": null,
+          "comment": "按冻结 DDL 列定义使用"
+        },
+        {
+          "name": "standard_name",
+          "type": "VARCHAR(255)",
+          "nullable": false,
+          "default": null,
+          "comment": "按冻结 DDL 列定义使用"
+        },
+        {
+          "name": "semantic_scope",
+          "type": "VARCHAR(255)",
+          "nullable": false,
+          "default": null,
+          "comment": "按冻结 DDL 列定义使用"
+        },
+        {
+          "name": "status",
+          "type": "ENUM('lexical_only','needs_confirmation','confirmed','retired')",
+          "nullable": false,
+          "default": null,
+          "comment": "本实体状态，按列枚举"
+        },
+        {
+          "name": "validation_ref",
+          "type": "VARBINARY(256)",
+          "nullable": true,
+          "default": null,
+          "comment": "按冻结 DDL 列定义使用"
+        }
+      ],
+      "indexes": {
+        "PRIMARY": {
+          "name": "PRIMARY",
+          "columns": [
+            "item_code",
+            "dictionary_version"
+          ],
+          "unique": false,
+          "primary": true
+        },
+        "ix_dictionary_name": {
+          "name": "ix_dictionary_name",
+          "columns": [
+            "dictionary_version",
+            "standard_name"
+          ],
+          "unique": false,
+          "primary": false
+        }
+      },
+      "checks": [],
+      "comment": "655种检查项目；词汇映射不等于医学语义确认"
+    },
+    {
+      "name": "a_medical_field_mapping",
+      "core": true,
+      "columns": [
+        {
+          "name": "mapping_key",
+          "type": "VARCHAR(64) CHARACTER SET ascii COLLATE ascii_bin",
+          "nullable": false,
+          "default": null,
+          "comment": "按冻结 DDL 列定义使用"
+        },
+        {
+          "name": "mapping_version",
+          "type": "VARCHAR(64) CHARACTER SET ascii COLLATE ascii_bin",
+          "nullable": false,
+          "default": null,
+          "comment": "按冻结 DDL 列定义使用"
+        },
+        {
+          "name": "entry_kind",
+          "type": "ENUM('field','item')",
+          "nullable": false,
+          "default": null,
+          "comment": "按冻结 DDL 列定义使用"
+        },
+        {
+          "name": "institution_key",
+          "type": "VARCHAR(255)",
+          "nullable": true,
+          "default": null,
+          "comment": "按冻结 DDL 列定义使用"
+        },
+        {
+          "name": "template_key",
+          "type": "VARCHAR(64) CHARACTER SET ascii COLLATE ascii_bin",
+          "nullable": true,
+          "default": null,
+          "comment": "按冻结 DDL 列定义使用"
+        },
+        {
+          "name": "template_version",
+          "type": "VARCHAR(64) CHARACTER SET ascii COLLATE ascii_bin",
+          "nullable": true,
+          "default": null,
+          "comment": "按冻结 DDL 列定义使用"
+        },
+        {
+          "name": "original_label",
+          "type": "VARCHAR(255)",
+          "nullable": false,
+          "default": null,
+          "comment": "按冻结 DDL 列定义使用"
+        },
+        {
+          "name": "normalized_lookup",
+          "type": "VARCHAR(255)",
+          "nullable": false,
+          "default": null,
+          "comment": "按冻结 DDL 列定义使用"
+        },
+        {
+          "name": "field_key",
+          "type": "VARCHAR(64) CHARACTER SET ascii COLLATE ascii_bin",
+          "nullable": true,
+          "default": null,
+          "comment": "按冻结 DDL 列定义使用"
+        },
+        {
+          "name": "item_code",
+          "type": "VARCHAR(64) CHARACTER SET ascii COLLATE ascii_bin",
+          "nullable": true,
+          "default": null,
+          "comment": "按冻结 DDL 列定义使用"
+        },
+        {
+          "name": "dictionary_version",
+          "type": "VARCHAR(64) CHARACTER SET ascii COLLATE ascii_bin",
+          "nullable": true,
+          "default": null,
+          "comment": "按冻结 DDL 列定义使用"
+        },
+        {
+          "name": "status",
+          "type": "ENUM('needs_confirmation','context_required','lexical_only','confirmed','retired')",
+          "nullable": false,
+          "default": null,
+          "comment": "本实体状态，按列枚举"
+        },
+        {
+          "name": "validation_ref",
+          "type": "VARBINARY(256)",
+          "nullable": true,
+          "default": null,
+          "comment": "按冻结 DDL 列定义使用"
+        }
+      ],
+      "indexes": {
+        "PRIMARY": {
+          "name": "PRIMARY",
+          "columns": [
+            "mapping_key",
+            "mapping_version"
+          ],
+          "unique": false,
+          "primary": true
+        },
+        "ix_field_mapping_lookup": {
+          "name": "ix_field_mapping_lookup",
+          "columns": [
+            "mapping_version",
+            "entry_kind",
+            "normalized_lookup"
+          ],
+          "unique": false,
+          "primary": false
+        }
+      },
+      "checks": [
+        "(item_code IS NULL) = (dictionary_version IS NULL)",
+        "(template_key IS NULL) = (template_version IS NULL)",
+        "(entry_kind = 'field' AND field_key IS NOT NULL AND item_code IS NULL) OR (entry_kind = 'item' AND field_key IS NULL AND item_code IS NOT NULL)"
+      ],
+      "comment": "机构字段及检查项目别名；允许同名多候选"
+    },
+    {
+      "name": "a_medical_unit_mapping",
+      "core": true,
+      "columns": [
+        {
+          "name": "unit_mapping_key",
+          "type": "VARCHAR(64) CHARACTER SET ascii COLLATE ascii_bin",
+          "nullable": false,
+          "default": null,
+          "comment": "按冻结 DDL 列定义使用"
+        },
+        {
+          "name": "mapping_version",
+          "type": "VARCHAR(64) CHARACTER SET ascii COLLATE ascii_bin",
+          "nullable": false,
+          "default": null,
+          "comment": "按冻结 DDL 列定义使用"
+        },
+        {
+          "name": "unit_raw",
+          "type": "VARCHAR(255)",
+          "nullable": false,
+          "default": null,
+          "comment": "原单位"
+        },
+        {
+          "name": "unit_normalized",
+          "type": "VARCHAR(255)",
+          "nullable": true,
+          "default": null,
+          "comment": "按冻结 DDL 列定义使用"
+        },
+        {
+          "name": "item_code",
+          "type": "VARCHAR(64) CHARACTER SET ascii COLLATE ascii_bin",
+          "nullable": true,
+          "default": null,
+          "comment": "按冻结 DDL 列定义使用"
+        },
+        {
+          "name": "dictionary_version",
+          "type": "VARCHAR(64) CHARACTER SET ascii COLLATE ascii_bin",
+          "nullable": true,
+          "default": null,
+          "comment": "按冻结 DDL 列定义使用"
+        },
+        {
+          "name": "rule_ref",
+          "type": "VARBINARY(256)",
+          "nullable": true,
+          "default": null,
+          "comment": "按冻结 DDL 列定义使用"
+        },
+        {
+          "name": "status",
+          "type": "ENUM('observed_raw_only','confirmed','retired')",
+          "nullable": false,
+          "default": null,
+          "comment": "本实体状态，按列枚举"
+        }
+      ],
+      "indexes": {
+        "PRIMARY": {
+          "name": "PRIMARY",
+          "columns": [
+            "unit_mapping_key",
+            "mapping_version"
+          ],
+          "unique": false,
+          "primary": true
+        },
+        "ix_unit_mapping_lookup": {
+          "name": "ix_unit_mapping_lookup",
+          "columns": [
+            "mapping_version",
+            "unit_raw"
+          ],
+          "unique": false,
+          "primary": false
+        }
+      },
+      "checks": [
+        "(item_code IS NULL) = (dictionary_version IS NULL)",
+        "status <> 'confirmed' OR (unit_normalized IS NOT NULL AND rule_ref IS NOT NULL AND item_code IS NOT NULL)"
+      ],
+      "comment": "单位键目录；未批准转换不得生成标准值"
+    },
+    {
+      "name": "a_health_reports",
+      "core": true,
+      "columns": [
+        {
+          "name": "report_id",
+          "type": "CHAR(36) CHARACTER SET ascii COLLATE ascii_bin",
+          "nullable": false,
+          "default": null,
+          "comment": "逻辑报告 UUID"
+        },
+        {
+          "name": "revision",
+          "type": "INT UNSIGNED",
+          "nullable": false,
+          "default": null,
+          "comment": "报告版本号"
+        },
+        {
+          "name": "scope_code",
+          "type": "VARCHAR(64) CHARACTER SET ascii COLLATE ascii_bin",
+          "nullable": false,
+          "default": null,
+          "comment": "租户或组织范围"
+        },
+        {
+          "name": "data_mode",
+          "type": "ENUM('real','synthetic')",
+          "nullable": false,
+          "default": null,
+          "comment": "真实/模拟隔离"
+        },
+        {
+          "name": "record_id",
+          "type": "CHAR(36) CHARACTER SET ascii COLLATE ascii_bin",
+          "nullable": true,
+          "default": null,
+          "comment": "档案标识"
+        },
+        {
+          "name": "prior_revision",
+          "type": "INT UNSIGNED",
+          "nullable": true,
+          "default": null,
+          "comment": "按冻结 DDL 列定义使用"
+        },
+        {
+          "name": "report_kind",
+          "type": "ENUM('individual','organization','unknown')",
+          "nullable": false,
+          "default": null,
+          "comment": "按冻结 DDL 列定义使用"
+        },
+        {
+          "name": "institution_raw",
+          "type": "TEXT",
+          "nullable": true,
+          "default": null,
+          "comment": "按冻结 DDL 列定义使用"
+        },
+        {
+          "name": "exam_date_raw",
+          "type": "TEXT",
+          "nullable": true,
+          "default": null,
+          "comment": "按冻结 DDL 列定义使用"
+        },
+        {
+          "name": "exam_date_verified",
+          "type": "DATE",
+          "nullable": true,
+          "default": null,
+          "comment": "按冻结 DDL 列定义使用"
+        },
+        {
+          "name": "report_date_raw",
+          "type": "TEXT",
+          "nullable": true,
+          "default": null,
+          "comment": "按冻结 DDL 列定义使用"
+        },
+        {
+          "name": "exam_type_raw",
+          "type": "TEXT",
+          "nullable": true,
+          "default": null,
+          "comment": "按冻结 DDL 列定义使用"
+        },
+        {
+          "name": "exam_number_raw",
+          "type": "TEXT",
+          "nullable": true,
+          "default": null,
+          "comment": "按冻结 DDL 列定义使用"
+        },
+        {
+          "name": "age_raw",
+          "type": "TEXT",
+          "nullable": true,
+          "default": null,
+          "comment": "按冻结 DDL 列定义使用"
+        },
+        {
+          "name": "field_values",
+          "type": "JSON",
+          "nullable": false,
+          "default": null,
+          "comment": "版本内字段观察 JSON"
+        },
+        {
+          "name": "dictionary_version",
+          "type": "VARCHAR(64) CHARACTER SET ascii COLLATE ascii_bin",
+          "nullable": false,
+          "default": null,
+          "comment": "按冻结 DDL 列定义使用"
+        },
+        {
+          "name": "review_status",
+          "type": "ENUM('unreviewed','needs_review','confirmed','rejected')",
+          "nullable": false,
+          "default": null,
+          "comment": "复核状态"
+        },
+        {
+          "name": "reviewed_snapshot_ref",
+          "type": "VARBINARY(512)",
+          "nullable": true,
+          "default": null,
+          "comment": "已审核快照受限引用"
+        },
+        {
+          "name": "created_at",
+          "type": "DATETIME(6)",
+          "nullable": false,
+          "default": "CURRENT_TIMESTAMP(6)",
+          "comment": "记录创建时间 UTC"
+        }
+      ],
+      "indexes": {
+        "PRIMARY": {
+          "name": "PRIMARY",
+          "columns": [
+            "report_id",
+            "revision"
+          ],
+          "unique": false,
+          "primary": true
+        },
+        "uq_report_scope_rev": {
+          "name": "uq_report_scope_rev",
+          "columns": [
+            "scope_code",
+            "data_mode",
+            "report_id",
+            "revision"
+          ],
+          "unique": true,
+          "primary": false
+        },
+        "ix_report_timeline": {
+          "name": "ix_report_timeline",
+          "columns": [
+            "scope_code",
+            "data_mode",
+            "record_id",
+            "exam_date_verified"
+          ],
+          "unique": false,
+          "primary": false
+        },
+        "uq_report_record_review": {
+          "name": "uq_report_record_review",
+          "columns": [
+            "scope_code",
+            "data_mode",
+            "report_id",
+            "revision",
+            "record_id",
+            "review_status"
+          ],
+          "unique": true,
+          "primary": false
+        },
+        "ix_report_review": {
+          "name": "ix_report_review",
+          "columns": [
+            "scope_code",
+            "data_mode",
+            "review_status",
+            "created_at"
+          ],
+          "unique": false,
+          "primary": false
+        }
+      },
+      "checks": [
+        "JSON_TYPE(field_values) = 'ARRAY'",
+        "(revision = 1 AND prior_revision IS NULL) OR (revision > 1 AND prior_revision = revision - 1)",
+        "review_status <> 'confirmed' OR (reviewed_snapshot_ref IS NOT NULL AND (report_kind <> 'individual' OR (record_id IS NOT NULL AND exam_date_verified IS NOT NULL)))"
+      ],
+      "comment": "报告版本；报告中的身份信息为原始快照"
+    },
+    {
+      "name": "a_report_revision_sources",
+      "core": true,
+      "columns": [
+        {
+          "name": "report_id",
+          "type": "CHAR(36) CHARACTER SET ascii COLLATE ascii_bin",
+          "nullable": false,
+          "default": null,
+          "comment": "逻辑报告 UUID"
+        },
+        {
+          "name": "revision",
+          "type": "INT UNSIGNED",
+          "nullable": false,
+          "default": null,
+          "comment": "报告版本号"
+        },
+        {
+          "name": "source_file_id",
+          "type": "CHAR(36) CHARACTER SET ascii COLLATE ascii_bin",
+          "nullable": false,
+          "default": null,
+          "comment": "受限原文件标识"
+        },
+        {
+          "name": "scope_code",
+          "type": "VARCHAR(64) CHARACTER SET ascii COLLATE ascii_bin",
+          "nullable": false,
+          "default": null,
+          "comment": "租户或组织范围"
+        },
+        {
+          "name": "data_mode",
+          "type": "ENUM('real','synthetic')",
+          "nullable": false,
+          "default": null,
+          "comment": "真实/模拟隔离"
+        }
+      ],
+      "indexes": {
+        "PRIMARY": {
+          "name": "PRIMARY",
+          "columns": [
+            "report_id",
+            "revision",
+            "source_file_id"
+          ],
+          "unique": false,
+          "primary": true
+        }
+      },
+      "checks": [],
+      "comment": "报告版本与多份原文件的关联"
+    },
+    {
+      "name": "a_report_evidence",
+      "core": true,
+      "columns": [
+        {
+          "name": "report_id",
+          "type": "CHAR(36) CHARACTER SET ascii COLLATE ascii_bin",
+          "nullable": false,
+          "default": null,
+          "comment": "逻辑报告 UUID"
+        },
+        {
+          "name": "revision",
+          "type": "INT UNSIGNED",
+          "nullable": false,
+          "default": null,
+          "comment": "报告版本号"
+        },
+        {
+          "name": "evidence_id",
+          "type": "CHAR(36) CHARACTER SET ascii COLLATE ascii_bin",
+          "nullable": false,
+          "default": null,
+          "comment": "按冻结 DDL 列定义使用"
+        },
+        {
+          "name": "source_file_id",
+          "type": "CHAR(36) CHARACTER SET ascii COLLATE ascii_bin",
+          "nullable": false,
+          "default": null,
+          "comment": "受限原文件标识"
+        },
+        {
+          "name": "page_number",
+          "type": "INT UNSIGNED",
+          "nullable": false,
+          "default": null,
+          "comment": "原件页码，从 1 开始"
+        },
+        {
+          "name": "bbox",
+          "type": "JSON",
+          "nullable": true,
+          "default": null,
+          "comment": "按冻结 DDL 列定义使用"
+        },
+        {
+          "name": "coordinate_system",
+          "type": "ENUM('pdf_points_unrotated','image_pixels_top_left','object_only')",
+          "nullable": false,
+          "default": null,
+          "comment": "按冻结 DDL 列定义使用"
+        },
+        {
+          "name": "page_rotation",
+          "type": "SMALLINT UNSIGNED",
+          "nullable": false,
+          "default": null,
+          "comment": "按冻结 DDL 列定义使用"
+        },
+        {
+          "name": "render_dpi",
+          "type": "SMALLINT UNSIGNED",
+          "nullable": true,
+          "default": null,
+          "comment": "按冻结 DDL 列定义使用"
+        },
+        {
+          "name": "original_label",
+          "type": "TEXT",
+          "nullable": false,
+          "default": null,
+          "comment": "按冻结 DDL 列定义使用"
+        },
+        {
+          "name": "raw_fragment",
+          "type": "MEDIUMTEXT",
+          "nullable": true,
+          "default": null,
+          "comment": "按冻结 DDL 列定义使用"
+        },
+        {
+          "name": "extraction_method",
+          "type": "ENUM('native_text','ocr','pdf_object','manual_transcription')",
+          "nullable": false,
+          "default": null,
+          "comment": "按冻结 DDL 列定义使用"
+        },
+        {
+          "name": "extractor_version",
+          "type": "VARCHAR(120)",
+          "nullable": false,
+          "default": null,
+          "comment": "按冻结 DDL 列定义使用"
+        },
+        {
+          "name": "ocr_confidence",
+          "type": "DECIMAL(8,7)",
+          "nullable": true,
+          "default": null,
+          "comment": "OCR 置信度；原生文本留空"
+        },
+        {
+          "name": "review_status",
+          "type": "ENUM('unreviewed','needs_review','confirmed','rejected')",
+          "nullable": false,
+          "default": null,
+          "comment": "复核状态"
+        }
+      ],
+      "indexes": {
+        "PRIMARY": {
+          "name": "PRIMARY",
+          "columns": [
+            "report_id",
+            "revision",
+            "evidence_id"
+          ],
+          "unique": false,
+          "primary": true
+        },
+        "ix_evidence_source_page": {
+          "name": "ix_evidence_source_page",
+          "columns": [
+            "source_file_id",
+            "page_number"
+          ],
+          "unique": false,
+          "primary": false
+        }
+      },
+      "checks": [
+        "page_number > 0",
+        "page_rotation IN (0,90,180,270)",
+        "(coordinate_system = 'object_only' AND bbox IS NULL) OR (coordinate_system <> 'object_only' AND bbox IS NOT NULL AND JSON_TYPE(bbox) = 'ARRAY' AND JSON_LENGTH(bbox) = 4)",
+        "ocr_confidence IS NULL OR (ocr_confidence >= 0 AND ocr_confidence <= 1)",
+        "extraction_method = 'ocr' OR ocr_confidence IS NULL",
+        "coordinate_system <> 'image_pixels_top_left' OR (render_dpi IS NOT NULL AND render_dpi > 0)"
+      ],
+      "comment": "版本内原页、坐标及提取证据"
+    },
+    {
+      "name": "a_occupational_profiles",
+      "core": true,
+      "columns": [
+        {
+          "name": "profile_id",
+          "type": "CHAR(36) CHARACTER SET ascii COLLATE ascii_bin",
+          "nullable": false,
+          "default": null,
+          "comment": "按冻结 DDL 列定义使用"
+        },
+        {
+          "name": "scope_code",
+          "type": "VARCHAR(64) CHARACTER SET ascii COLLATE ascii_bin",
+          "nullable": false,
+          "default": null,
+          "comment": "租户或组织范围"
+        },
+        {
+          "name": "data_mode",
+          "type": "ENUM('real','synthetic')",
+          "nullable": false,
+          "default": null,
+          "comment": "真实/模拟隔离"
+        },
+        {
+          "name": "report_id",
+          "type": "CHAR(36) CHARACTER SET ascii COLLATE ascii_bin",
+          "nullable": true,
+          "default": null,
+          "comment": "逻辑报告 UUID"
+        },
+        {
+          "name": "revision",
+          "type": "INT UNSIGNED",
+          "nullable": true,
+          "default": null,
+          "comment": "报告版本号"
+        },
+        {
+          "name": "employee_id",
+          "type": "CHAR(36) CHARACTER SET ascii COLLATE ascii_bin",
+          "nullable": true,
+          "default": null,
+          "comment": "员工标识"
+        },
+        {
+          "name": "evidence_id",
+          "type": "CHAR(36) CHARACTER SET ascii COLLATE ascii_bin",
+          "nullable": true,
+          "default": null,
+          "comment": "按冻结 DDL 列定义使用"
+        },
+        {
+          "name": "authorized_source_ref",
+          "type": "VARBINARY(256)",
+          "nullable": true,
+          "default": null,
+          "comment": "按冻结 DDL 列定义使用"
+        },
+        {
+          "name": "field_key",
+          "type": "VARCHAR(64) CHARACTER SET ascii COLLATE ascii_bin",
+          "nullable": false,
+          "default": null,
+          "comment": "按冻结 DDL 列定义使用"
+        },
+        {
+          "name": "original_field_name",
+          "type": "TEXT",
+          "nullable": false,
+          "default": null,
+          "comment": "原字段名"
+        },
+        {
+          "name": "value_raw",
+          "type": "MEDIUMTEXT",
+          "nullable": true,
+          "default": null,
+          "comment": "按冻结 DDL 列定义使用"
+        },
+        {
+          "name": "value_normalized",
+          "type": "JSON",
+          "nullable": true,
+          "default": null,
+          "comment": "按冻结 DDL 列定义使用"
+        },
+        {
+          "name": "review_status",
+          "type": "ENUM('unreviewed','needs_review','confirmed','rejected')",
+          "nullable": false,
+          "default": null,
+          "comment": "复核状态"
+        },
+        {
+          "name": "created_at",
+          "type": "DATETIME(6)",
+          "nullable": false,
+          "default": "CURRENT_TIMESTAMP(6)",
+          "comment": "记录创建时间 UTC"
+        }
+      ],
+      "indexes": {
+        "PRIMARY": {
+          "name": "PRIMARY",
+          "columns": [
+            "profile_id"
+          ],
+          "unique": false,
+          "primary": true
+        },
+        "ix_occupation_lookup": {
+          "name": "ix_occupation_lookup",
+          "columns": [
+            "employee_id",
+            "field_key",
+            "created_at"
+          ],
+          "unique": false,
+          "primary": false
+        }
+      },
+      "checks": [
+        "(report_id IS NULL) = (revision IS NULL)",
+        "(report_id IS NOT NULL AND evidence_id IS NOT NULL) OR (employee_id IS NOT NULL AND authorized_source_ref IS NOT NULL)"
+      ],
+      "comment": "职业健康字段观察及授权职业资料"
+    },
+    {
+      "name": "a_health_items",
+      "core": true,
+      "columns": [
+        {
+          "name": "report_id",
+          "type": "CHAR(36) CHARACTER SET ascii COLLATE ascii_bin",
+          "nullable": false,
+          "default": null,
+          "comment": "逻辑报告 UUID"
+        },
+        {
+          "name": "revision",
+          "type": "INT UNSIGNED",
+          "nullable": false,
+          "default": null,
+          "comment": "报告版本号"
+        },
+        {
+          "name": "item_id",
+          "type": "CHAR(36) CHARACTER SET ascii COLLATE ascii_bin",
+          "nullable": false,
+          "default": null,
+          "comment": "按冻结 DDL 列定义使用"
+        },
+        {
+          "name": "ordinal",
+          "type": "INT UNSIGNED",
+          "nullable": false,
+          "default": null,
+          "comment": "按冻结 DDL 列定义使用"
+        },
+        {
+          "name": "primary_evidence_id",
+          "type": "CHAR(36) CHARACTER SET ascii COLLATE ascii_bin",
+          "nullable": false,
+          "default": null,
+          "comment": "按冻结 DDL 列定义使用"
+        },
+        {
+          "name": "evidence_ids",
+          "type": "JSON",
+          "nullable": false,
+          "default": null,
+          "comment": "按冻结 DDL 列定义使用"
+        },
+        {
+          "name": "original_field_name",
+          "type": "TEXT",
+          "nullable": false,
+          "default": null,
+          "comment": "原字段名"
+        },
+        {
+          "name": "item_code",
+          "type": "VARCHAR(64) CHARACTER SET ascii COLLATE ascii_bin",
+          "nullable": true,
+          "default": null,
+          "comment": "按冻结 DDL 列定义使用"
+        },
+        {
+          "name": "dictionary_version",
+          "type": "VARCHAR(64) CHARACTER SET ascii COLLATE ascii_bin",
+          "nullable": true,
+          "default": null,
+          "comment": "按冻结 DDL 列定义使用"
+        },
+        {
+          "name": "standard_field_name",
+          "type": "TEXT",
+          "nullable": true,
+          "default": null,
+          "comment": "按冻结 DDL 列定义使用"
+        },
+        {
+          "name": "abbreviation_raw",
+          "type": "TEXT",
+          "nullable": true,
+          "default": null,
+          "comment": "按冻结 DDL 列定义使用"
+        },
+        {
+          "name": "result_raw",
+          "type": "MEDIUMTEXT",
+          "nullable": true,
+          "default": null,
+          "comment": "检查结果原文"
+        },
+        {
+          "name": "result_normalized",
+          "type": "JSON",
+          "nullable": true,
+          "default": null,
+          "comment": "按冻结 DDL 列定义使用"
+        },
+        {
+          "name": "unit_raw",
+          "type": "TEXT",
+          "nullable": true,
+          "default": null,
+          "comment": "原单位"
+        },
+        {
+          "name": "unit_normalized",
+          "type": "TEXT",
+          "nullable": true,
+          "default": null,
+          "comment": "按冻结 DDL 列定义使用"
+        },
+        {
+          "name": "unit_mapping_key",
+          "type": "VARCHAR(64) CHARACTER SET ascii COLLATE ascii_bin",
+          "nullable": true,
+          "default": null,
+          "comment": "按冻结 DDL 列定义使用"
+        },
+        {
+          "name": "unit_mapping_version",
+          "type": "VARCHAR(64) CHARACTER SET ascii COLLATE ascii_bin",
+          "nullable": true,
+          "default": null,
+          "comment": "按冻结 DDL 列定义使用"
+        },
+        {
+          "name": "normalization_rule_version",
+          "type": "VARCHAR(64) CHARACTER SET ascii COLLATE ascii_bin",
+          "nullable": true,
+          "default": null,
+          "comment": "按冻结 DDL 列定义使用"
+        },
+        {
+          "name": "reference_range_raw",
+          "type": "MEDIUMTEXT",
+          "nullable": true,
+          "default": null,
+          "comment": "原参考范围"
+        },
+        {
+          "name": "abnormal_flag_raw",
+          "type": "TEXT",
+          "nullable": true,
+          "default": null,
+          "comment": "按冻结 DDL 列定义使用"
+        },
+        {
+          "name": "field_values",
+          "type": "JSON",
+          "nullable": false,
+          "default": null,
+          "comment": "版本内字段观察 JSON"
+        },
+        {
+          "name": "mapping_status",
+          "type": "ENUM('unmapped','lexical_only','needs_confirmation','confirmed')",
+          "nullable": false,
+          "default": null,
+          "comment": "按冻结 DDL 列定义使用"
+        },
+        {
+          "name": "review_status",
+          "type": "ENUM('unreviewed','needs_review','confirmed','rejected')",
+          "nullable": false,
+          "default": null,
+          "comment": "复核状态"
+        }
+      ],
+      "indexes": {
+        "PRIMARY": {
+          "name": "PRIMARY",
+          "columns": [
+            "report_id",
+            "revision",
+            "item_id"
+          ],
+          "unique": false,
+          "primary": true
+        },
+        "uq_item_report_ordinal": {
+          "name": "uq_item_report_ordinal",
+          "columns": [
+            "report_id",
+            "revision",
+            "ordinal"
+          ],
+          "unique": true,
+          "primary": false
+        },
+        "ix_item_dictionary": {
+          "name": "ix_item_dictionary",
+          "columns": [
+            "item_code",
+            "dictionary_version"
+          ],
+          "unique": false,
+          "primary": false
+        }
+      },
+      "checks": [
+        "JSON_TYPE(evidence_ids) = 'ARRAY' AND JSON_LENGTH(evidence_ids) > 0",
+        "JSON_CONTAINS(evidence_ids, JSON_QUOTE(primary_evidence_id))",
+        "ordinal > 0",
+        "JSON_TYPE(field_values) = 'ARRAY'",
+        "(item_code IS NULL) = (dictionary_version IS NULL)",
+        "mapping_status <> 'confirmed' OR item_code IS NOT NULL",
+        "(unit_mapping_key IS NULL) = (unit_mapping_version IS NULL)",
+        "unit_normalized IS NULL OR (unit_mapping_key IS NOT NULL AND normalization_rule_version IS NOT NULL)",
+        "result_normalized IS NULL OR normalization_rule_version IS NOT NULL"
+      ],
+      "comment": "动态检查项目结果；保留原值及原单位"
+    },
+    {
+      "name": "a_health_conclusions",
+      "core": true,
+      "columns": [
+        {
+          "name": "report_id",
+          "type": "CHAR(36) CHARACTER SET ascii COLLATE ascii_bin",
+          "nullable": false,
+          "default": null,
+          "comment": "逻辑报告 UUID"
+        },
+        {
+          "name": "revision",
+          "type": "INT UNSIGNED",
+          "nullable": false,
+          "default": null,
+          "comment": "报告版本号"
+        },
+        {
+          "name": "conclusion_id",
+          "type": "CHAR(36) CHARACTER SET ascii COLLATE ascii_bin",
+          "nullable": false,
+          "default": null,
+          "comment": "按冻结 DDL 列定义使用"
+        },
+        {
+          "name": "primary_evidence_id",
+          "type": "CHAR(36) CHARACTER SET ascii COLLATE ascii_bin",
+          "nullable": false,
+          "default": null,
+          "comment": "按冻结 DDL 列定义使用"
+        },
+        {
+          "name": "evidence_ids",
+          "type": "JSON",
+          "nullable": false,
+          "default": null,
+          "comment": "按冻结 DDL 列定义使用"
+        },
+        {
+          "name": "original_field_name",
+          "type": "TEXT",
+          "nullable": false,
+          "default": null,
+          "comment": "原字段名"
+        },
+        {
+          "name": "original_text",
+          "type": "MEDIUMTEXT",
+          "nullable": true,
+          "default": null,
+          "comment": "医生正式结论原文"
+        },
+        {
+          "name": "completeness",
+          "type": "ENUM('complete','partial','unknown')",
+          "nullable": false,
+          "default": null,
+          "comment": "按冻结 DDL 列定义使用"
+        },
+        {
+          "name": "standard_category",
+          "type": "ENUM('目前未见异常','疑似职业病','职业禁忌证','其他疾病或异常')",
+          "nullable": true,
+          "default": null,
+          "comment": "按冻结 DDL 列定义使用"
+        },
+        {
+          "name": "review_status",
+          "type": "ENUM('unreviewed','needs_review','confirmed','rejected')",
+          "nullable": false,
+          "default": null,
+          "comment": "复核状态"
+        }
+      ],
+      "indexes": {
+        "PRIMARY": {
+          "name": "PRIMARY",
+          "columns": [
+            "report_id",
+            "revision",
+            "conclusion_id"
+          ],
+          "unique": false,
+          "primary": true
+        }
+      },
+      "checks": [
+        "JSON_TYPE(evidence_ids) = 'ARRAY' AND JSON_LENGTH(evidence_ids) > 0",
+        "JSON_CONTAINS(evidence_ids, JSON_QUOTE(primary_evidence_id))",
+        "standard_category IS NULL OR (completeness = 'complete' AND review_status = 'confirmed' AND original_text IS NOT NULL)"
+      ],
+      "comment": "医生正式结论；区别于平台风险等级"
+    },
+    {
+      "name": "a_extraction_jobs",
+      "core": true,
+      "columns": [
+        {
+          "name": "job_id",
+          "type": "CHAR(36) CHARACTER SET ascii COLLATE ascii_bin",
+          "nullable": false,
+          "default": null,
+          "comment": "按冻结 DDL 列定义使用"
+        },
+        {
+          "name": "report_id",
+          "type": "CHAR(36) CHARACTER SET ascii COLLATE ascii_bin",
+          "nullable": false,
+          "default": null,
+          "comment": "逻辑报告 UUID"
+        },
+        {
+          "name": "scope_code",
+          "type": "VARCHAR(64) CHARACTER SET ascii COLLATE ascii_bin",
+          "nullable": false,
+          "default": null,
+          "comment": "租户或组织范围"
+        },
+        {
+          "name": "data_mode",
+          "type": "ENUM('real','synthetic')",
+          "nullable": false,
+          "default": null,
+          "comment": "真实/模拟隔离"
+        },
+        {
+          "name": "request_key",
+          "type": "VARCHAR(96) CHARACTER SET ascii COLLATE ascii_bin",
+          "nullable": false,
+          "default": null,
+          "comment": "按冻结 DDL 列定义使用"
+        },
+        {
+          "name": "pipeline_version",
+          "type": "VARCHAR(64) CHARACTER SET ascii COLLATE ascii_bin",
+          "nullable": false,
+          "default": null,
+          "comment": "按冻结 DDL 列定义使用"
+        },
+        {
+          "name": "status",
+          "type": "ENUM('uploaded','ocr_complete','extracted','standardized','identity_checked','quality_checked','pending_review','failed','published')",
+          "nullable": false,
+          "default": null,
+          "comment": "本实体状态，按列枚举"
+        },
+        {
+          "name": "revision",
+          "type": "INT UNSIGNED",
+          "nullable": true,
+          "default": null,
+          "comment": "报告版本号"
+        },
+        {
+          "name": "created_at",
+          "type": "DATETIME(6)",
+          "nullable": false,
+          "default": "CURRENT_TIMESTAMP(6)",
+          "comment": "记录创建时间 UTC"
+        },
+        {
+          "name": "updated_at",
+          "type": "DATETIME(6)",
+          "nullable": false,
+          "default": "CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6)",
+          "comment": "按冻结 DDL 列定义使用"
+        }
+      ],
+      "indexes": {
+        "PRIMARY": {
+          "name": "PRIMARY",
+          "columns": [
+            "job_id"
+          ],
+          "unique": false,
+          "primary": true
+        },
+        "uq_jobs_request": {
+          "name": "uq_jobs_request",
+          "columns": [
+            "scope_code",
+            "data_mode",
+            "request_key"
+          ],
+          "unique": true,
+          "primary": false
+        },
+        "ix_jobs_queue": {
+          "name": "ix_jobs_queue",
+          "columns": [
+            "scope_code",
+            "data_mode",
+            "status",
+            "created_at"
+          ],
+          "unique": false,
+          "primary": false
+        }
+      },
+      "checks": [],
+      "comment": "PDF解析及OCR任务；与审核状态独立"
+    },
+    {
+      "name": "a_review_records",
+      "core": true,
+      "columns": [
+        {
+          "name": "review_id",
+          "type": "CHAR(36) CHARACTER SET ascii COLLATE ascii_bin",
+          "nullable": false,
+          "default": null,
+          "comment": "按冻结 DDL 列定义使用"
+        },
+        {
+          "name": "report_id",
+          "type": "CHAR(36) CHARACTER SET ascii COLLATE ascii_bin",
+          "nullable": false,
+          "default": null,
+          "comment": "逻辑报告 UUID"
+        },
+        {
+          "name": "revision",
+          "type": "INT UNSIGNED",
+          "nullable": false,
+          "default": null,
+          "comment": "报告版本号"
+        },
+        {
+          "name": "reviewer_ref",
+          "type": "VARBINARY(256)",
+          "nullable": false,
+          "default": null,
+          "comment": "按冻结 DDL 列定义使用"
+        },
+        {
+          "name": "decision",
+          "type": "ENUM('return','reject','confirm')",
+          "nullable": false,
+          "default": null,
+          "comment": "按冻结 DDL 列定义使用"
+        },
+        {
+          "name": "reviewed_digest",
+          "type": "BINARY(32)",
+          "nullable": false,
+          "default": null,
+          "comment": "按冻结 DDL 列定义使用"
+        },
+        {
+          "name": "decision_key",
+          "type": "VARCHAR(96) CHARACTER SET ascii COLLATE ascii_bin",
+          "nullable": false,
+          "default": null,
+          "comment": "按冻结 DDL 列定义使用"
+        },
+        {
+          "name": "issue_disposition",
+          "type": "JSON",
+          "nullable": false,
+          "default": null,
+          "comment": "按冻结 DDL 列定义使用"
+        },
+        {
+          "name": "created_at",
+          "type": "DATETIME(6)",
+          "nullable": false,
+          "default": "CURRENT_TIMESTAMP(6)",
+          "comment": "记录创建时间 UTC"
+        }
+      ],
+      "indexes": {
+        "PRIMARY": {
+          "name": "PRIMARY",
+          "columns": [
+            "review_id"
+          ],
+          "unique": false,
+          "primary": true
+        },
+        "uq_review_revision": {
+          "name": "uq_review_revision",
+          "columns": [
+            "report_id",
+            "revision",
+            "review_id"
+          ],
+          "unique": true,
+          "primary": false
+        },
+        "uq_review_replay": {
+          "name": "uq_review_replay",
+          "columns": [
+            "report_id",
+            "revision",
+            "decision_key"
+          ],
+          "unique": true,
+          "primary": false
+        },
+        "uq_review_decision_digest": {
+          "name": "uq_review_decision_digest",
+          "columns": [
+            "report_id",
+            "revision",
+            "review_id",
+            "decision",
+            "reviewed_digest"
+          ],
+          "unique": true,
+          "primary": false
+        }
+      },
+      "checks": [
+        "JSON_TYPE(issue_disposition) IN ('ARRAY','OBJECT')"
+      ],
+      "comment": "医生审核决策历史；退回与驳回分别记录"
+    },
+    {
+      "name": "a_health_advice",
+      "core": true,
+      "columns": [
+        {
+          "name": "report_id",
+          "type": "CHAR(36) CHARACTER SET ascii COLLATE ascii_bin",
+          "nullable": false,
+          "default": null,
+          "comment": "逻辑报告 UUID"
+        },
+        {
+          "name": "revision",
+          "type": "INT UNSIGNED",
+          "nullable": false,
+          "default": null,
+          "comment": "报告版本号"
+        },
+        {
+          "name": "advice_id",
+          "type": "CHAR(36) CHARACTER SET ascii COLLATE ascii_bin",
+          "nullable": false,
+          "default": null,
+          "comment": "按冻结 DDL 列定义使用"
+        },
+        {
+          "name": "source_kind",
+          "type": "ENUM('pdf','clinician')",
+          "nullable": false,
+          "default": null,
+          "comment": "按冻结 DDL 列定义使用"
+        },
+        {
+          "name": "source_evidence_id",
+          "type": "CHAR(36) CHARACTER SET ascii COLLATE ascii_bin",
+          "nullable": true,
+          "default": null,
+          "comment": "按冻结 DDL 列定义使用"
+        },
+        {
+          "name": "review_id",
+          "type": "CHAR(36) CHARACTER SET ascii COLLATE ascii_bin",
+          "nullable": true,
+          "default": null,
+          "comment": "按冻结 DDL 列定义使用"
+        },
+        {
+          "name": "author_ref",
+          "type": "VARBINARY(256)",
+          "nullable": true,
+          "default": null,
+          "comment": "按冻结 DDL 列定义使用"
+        },
+        {
+          "name": "original_field_name",
+          "type": "TEXT",
+          "nullable": true,
+          "default": null,
+          "comment": "原字段名"
+        },
+        {
+          "name": "text_raw",
+          "type": "MEDIUMTEXT",
+          "nullable": false,
+          "default": null,
+          "comment": "建议原文"
+        },
+        {
+          "name": "review_status",
+          "type": "ENUM('unreviewed','needs_review','confirmed','rejected')",
+          "nullable": false,
+          "default": null,
+          "comment": "复核状态"
+        }
+      ],
+      "indexes": {
+        "PRIMARY": {
+          "name": "PRIMARY",
+          "columns": [
+            "report_id",
+            "revision",
+            "advice_id"
+          ],
+          "unique": false,
+          "primary": true
+        }
+      },
+      "checks": [
+        "(source_kind = 'pdf' AND source_evidence_id IS NOT NULL) OR (source_kind = 'clinician' AND review_id IS NOT NULL AND author_ref IS NOT NULL)"
+      ],
+      "comment": "报告原文建议或医生确认建议"
+    },
+    {
+      "name": "a_followup_tasks",
+      "core": true,
+      "columns": [
+        {
+          "name": "task_id",
+          "type": "CHAR(36) CHARACTER SET ascii COLLATE ascii_bin",
+          "nullable": false,
+          "default": null,
+          "comment": "按冻结 DDL 列定义使用"
+        },
+        {
+          "name": "report_id",
+          "type": "CHAR(36) CHARACTER SET ascii COLLATE ascii_bin",
+          "nullable": false,
+          "default": null,
+          "comment": "逻辑报告 UUID"
+        },
+        {
+          "name": "revision",
+          "type": "INT UNSIGNED",
+          "nullable": false,
+          "default": null,
+          "comment": "报告版本号"
+        },
+        {
+          "name": "advice_id",
+          "type": "CHAR(36) CHARACTER SET ascii COLLATE ascii_bin",
+          "nullable": false,
+          "default": null,
+          "comment": "按冻结 DDL 列定义使用"
+        },
+        {
+          "name": "status",
+          "type": "ENUM('pending','completed','cancelled')",
+          "nullable": false,
+          "default": null,
+          "comment": "本实体状态，按列枚举"
+        },
+        {
+          "name": "due_at",
+          "type": "DATETIME(6)",
+          "nullable": true,
+          "default": null,
+          "comment": "按冻结 DDL 列定义使用"
+        },
+        {
+          "name": "created_at",
+          "type": "DATETIME(6)",
+          "nullable": false,
+          "default": "CURRENT_TIMESTAMP(6)",
+          "comment": "记录创建时间 UTC"
+        }
+      ],
+      "indexes": {
+        "PRIMARY": {
+          "name": "PRIMARY",
+          "columns": [
+            "task_id"
+          ],
+          "unique": false,
+          "primary": true
+        },
+        "uq_tasks_origin": {
+          "name": "uq_tasks_origin",
+          "columns": [
+            "report_id",
+            "revision",
+            "advice_id"
+          ],
+          "unique": true,
+          "primary": false
+        },
+        "ix_tasks_due": {
+          "name": "ix_tasks_due",
+          "columns": [
+            "status",
+            "due_at"
+          ],
+          "unique": false,
+          "primary": false
+        }
+      },
+      "checks": [],
+      "comment": "由医生建议产生的随访任务"
+    },
+    {
+      "name": "a_report_sync_outbox",
+      "core": true,
+      "columns": [
+        {
+          "name": "event_id",
+          "type": "CHAR(36) CHARACTER SET ascii COLLATE ascii_bin",
+          "nullable": false,
+          "default": null,
+          "comment": "按冻结 DDL 列定义使用"
+        },
+        {
+          "name": "report_id",
+          "type": "CHAR(36) CHARACTER SET ascii COLLATE ascii_bin",
+          "nullable": false,
+          "default": null,
+          "comment": "逻辑报告 UUID"
+        },
+        {
+          "name": "revision",
+          "type": "INT UNSIGNED",
+          "nullable": false,
+          "default": null,
+          "comment": "报告版本号"
+        },
+        {
+          "name": "review_id",
+          "type": "CHAR(36) CHARACTER SET ascii COLLATE ascii_bin",
+          "nullable": false,
+          "default": null,
+          "comment": "按冻结 DDL 列定义使用"
+        },
+        {
+          "name": "status",
+          "type": "ENUM('pending','sent')",
+          "nullable": false,
+          "default": null,
+          "comment": "本实体状态，按列枚举"
+        },
+        {
+          "name": "created_at",
+          "type": "DATETIME(6)",
+          "nullable": false,
+          "default": "CURRENT_TIMESTAMP(6)",
+          "comment": "记录创建时间 UTC"
+        }
+      ],
+      "indexes": {
+        "PRIMARY": {
+          "name": "PRIMARY",
+          "columns": [
+            "event_id"
+          ],
+          "unique": false,
+          "primary": true
+        },
+        "uq_sync_publication": {
+          "name": "uq_sync_publication",
+          "columns": [
+            "report_id",
+            "revision"
+          ],
+          "unique": true,
+          "primary": false
+        },
+        "ix_sync_queue": {
+          "name": "ix_sync_queue",
+          "columns": [
+            "status",
+            "created_at"
+          ],
+          "unique": false,
+          "primary": false
+        }
+      },
+      "checks": [],
+      "comment": "正式发布后的事务消息；消费者须幂等处理"
+    },
+    {
+      "name": "a_report_upload_metadata",
+      "core": false,
+      "columns": [
+        {
+          "name": "upload_id",
+          "type": "CHAR(36) CHARACTER SET ascii COLLATE ascii_bin",
+          "nullable": false,
+          "default": null,
+          "comment": "upload_id"
+        },
+        {
+          "name": "scope_code",
+          "type": "VARCHAR(64) CHARACTER SET ascii COLLATE ascii_bin",
+          "nullable": false,
+          "default": null,
+          "comment": "scope_code"
+        },
+        {
+          "name": "data_mode",
+          "type": "ENUM('real','synthetic')",
+          "nullable": false,
+          "default": null,
+          "comment": "data_mode"
+        },
+        {
+          "name": "source_file_id",
+          "type": "CHAR(36) CHARACTER SET ascii COLLATE ascii_bin",
+          "nullable": false,
+          "default": null,
+          "comment": "source_file_id"
+        },
+        {
+          "name": "request_key",
+          "type": "VARCHAR(96) CHARACTER SET ascii COLLATE ascii_bin",
+          "nullable": false,
+          "default": null,
+          "comment": "request_key"
+        },
+        {
+          "name": "upload_channel",
+          "type": "ENUM('miniapp','phone_photo','backend_file','batch_import','legacy_import')",
+          "nullable": false,
+          "default": null,
+          "comment": "upload_channel"
+        },
+        {
+          "name": "original_file_name",
+          "type": "VARCHAR(512)",
+          "nullable": false,
+          "default": null,
+          "comment": "original_file_name"
+        },
+        {
+          "name": "mime_type",
+          "type": "VARCHAR(127)",
+          "nullable": false,
+          "default": null,
+          "comment": "mime_type"
+        },
+        {
+          "name": "file_size",
+          "type": "BIGINT UNSIGNED",
+          "nullable": false,
+          "default": null,
+          "comment": "file_size"
+        },
+        {
+          "name": "uploader_ref",
+          "type": "VARBINARY(256)",
+          "nullable": false,
+          "default": null,
+          "comment": "uploader_ref"
+        },
+        {
+          "name": "uploaded_at",
+          "type": "DATETIME(6)",
+          "nullable": false,
+          "default": "CURRENT_TIMESTAMP(6)",
+          "comment": "UTC时间"
+        }
+      ],
+      "indexes": {
+        "PRIMARY": {
+          "name": "PRIMARY",
+          "columns": [
+            "upload_id"
+          ],
+          "unique": false,
+          "primary": true
+        },
+        "uq_report_upload_metadata_scope": {
+          "name": "uq_report_upload_metadata_scope",
+          "columns": [
+            "scope_code",
+            "data_mode",
+            "upload_id"
+          ],
+          "unique": true,
+          "primary": false
+        },
+        "uq_upload_request": {
+          "name": "uq_upload_request",
+          "columns": [
+            "scope_code",
+            "data_mode",
+            "request_key"
+          ],
+          "unique": true,
+          "primary": false
+        },
+        "ix_upload_channel_time": {
+          "name": "ix_upload_channel_time",
+          "columns": [
+            "scope_code",
+            "data_mode",
+            "upload_channel",
+            "uploaded_at"
+          ],
+          "unique": false,
+          "primary": false
+        }
+      },
+      "checks": [],
+      "comment": "每次上传的渠道及元数据；同一原件可有多次上传"
+    },
+    {
+      "name": "a_standard_field_dictionary",
+      "core": false,
+      "columns": [
+        {
+          "name": "field_key",
+          "type": "VARCHAR(64) CHARACTER SET ascii COLLATE ascii_bin",
+          "nullable": false,
+          "default": null,
+          "comment": "field_key"
+        },
+        {
+          "name": "dictionary_version",
+          "type": "VARCHAR(64) CHARACTER SET ascii COLLATE ascii_bin",
+          "nullable": false,
+          "default": null,
+          "comment": "dictionary_version"
+        },
+        {
+          "name": "field_name",
+          "type": "VARCHAR(255)",
+          "nullable": false,
+          "default": null,
+          "comment": "field_name"
+        },
+        {
+          "name": "field_category",
+          "type": "VARCHAR(100)",
+          "nullable": false,
+          "default": null,
+          "comment": "field_category"
+        },
+        {
+          "name": "target_table",
+          "type": "VARCHAR(64)",
+          "nullable": false,
+          "default": null,
+          "comment": "target_table"
+        },
+        {
+          "name": "target_column",
+          "type": "VARCHAR(64)",
+          "nullable": false,
+          "default": null,
+          "comment": "target_column"
+        },
+        {
+          "name": "json_path",
+          "type": "VARCHAR(255)",
+          "nullable": false,
+          "default": null,
+          "comment": "json_path"
+        },
+        {
+          "name": "definition",
+          "type": "JSON",
+          "nullable": false,
+          "default": null,
+          "comment": "definition"
+        },
+        {
+          "name": "source_row",
+          "type": "SMALLINT UNSIGNED",
+          "nullable": false,
+          "default": null,
+          "comment": "source_row"
+        }
+      ],
+      "indexes": {
+        "PRIMARY": {
+          "name": "PRIMARY",
+          "columns": [
+            "field_key",
+            "dictionary_version"
+          ],
+          "unique": false,
+          "primary": true
+        }
+      },
+      "checks": [],
+      "comment": "01表67个字段的版本化定义；必填键不等于报告必有非空值"
+    },
+    {
+      "name": "a_dictionary_source_rows",
+      "core": false,
+      "columns": [
+        {
+          "name": "workbook_sha256",
+          "type": "BINARY(32)",
+          "nullable": false,
+          "default": null,
+          "comment": "workbook_sha256"
+        },
+        {
+          "name": "sheet_index",
+          "type": "TINYINT UNSIGNED",
+          "nullable": false,
+          "default": null,
+          "comment": "sheet_index"
+        },
+        {
+          "name": "source_row",
+          "type": "SMALLINT UNSIGNED",
+          "nullable": false,
+          "default": null,
+          "comment": "source_row"
+        },
+        {
+          "name": "sheet_name",
+          "type": "VARCHAR(100)",
+          "nullable": false,
+          "default": null,
+          "comment": "sheet_name"
+        },
+        {
+          "name": "payload",
+          "type": "LONGTEXT",
+          "nullable": false,
+          "default": null,
+          "comment": "payload"
+        },
+        {
+          "name": "payload_sha256",
+          "type": "BINARY(32)",
+          "nullable": false,
+          "default": null,
+          "comment": "payload_sha256"
+        }
+      ],
+      "indexes": {
+        "PRIMARY": {
+          "name": "PRIMARY",
+          "columns": [
+            "workbook_sha256",
+            "sheet_index",
+            "source_row"
+          ],
+          "unique": false,
+          "primary": true
+        }
+      },
+      "checks": [
+        "JSON_VALID(payload)"
+      ],
+      "comment": "Excel十二张表的逐行原样快照；校验规则及待确认记录可追溯"
+    },
+    {
+      "name": "a_medical_unit_observations",
+      "core": false,
+      "columns": [
+        {
+          "name": "dictionary_version",
+          "type": "VARCHAR(64) CHARACTER SET ascii COLLATE ascii_bin",
+          "nullable": false,
+          "default": null,
+          "comment": "dictionary_version"
+        },
+        {
+          "name": "source_row",
+          "type": "SMALLINT UNSIGNED",
+          "nullable": false,
+          "default": null,
+          "comment": "source_row"
+        },
+        {
+          "name": "item_code",
+          "type": "VARCHAR(64) CHARACTER SET ascii COLLATE ascii_bin",
+          "nullable": false,
+          "default": null,
+          "comment": "item_code"
+        },
+        {
+          "name": "unit_mapping_key",
+          "type": "VARCHAR(64) CHARACTER SET ascii COLLATE ascii_bin",
+          "nullable": false,
+          "default": null,
+          "comment": "unit_mapping_key"
+        },
+        {
+          "name": "unit_mapping_version",
+          "type": "VARCHAR(64) CHARACTER SET ascii COLLATE ascii_bin",
+          "nullable": false,
+          "default": null,
+          "comment": "unit_mapping_version"
+        },
+        {
+          "name": "unit_raw",
+          "type": "VARCHAR(255)",
+          "nullable": false,
+          "default": null,
+          "comment": "unit_raw"
+        },
+        {
+          "name": "approval_status",
+          "type": "VARCHAR(30)",
+          "nullable": false,
+          "default": null,
+          "comment": "approval_status"
+        }
+      ],
+      "indexes": {
+        "PRIMARY": {
+          "name": "PRIMARY",
+          "columns": [
+            "dictionary_version",
+            "source_row"
+          ],
+          "unique": false,
+          "primary": true
+        }
+      },
+      "checks": [],
+      "comment": "390条项目与原单位观察；81个重复单位键无损关联，不是批准规则"
+    },
+    {
+      "name": "a_report_quality_checks",
+      "core": false,
+      "columns": [
+        {
+          "name": "quality_check_id",
+          "type": "CHAR(36) CHARACTER SET ascii COLLATE ascii_bin",
+          "nullable": false,
+          "default": null,
+          "comment": "quality_check_id"
+        },
+        {
+          "name": "scope_code",
+          "type": "VARCHAR(64) CHARACTER SET ascii COLLATE ascii_bin",
+          "nullable": false,
+          "default": null,
+          "comment": "scope_code"
+        },
+        {
+          "name": "data_mode",
+          "type": "ENUM('real','synthetic')",
+          "nullable": false,
+          "default": null,
+          "comment": "data_mode"
+        },
+        {
+          "name": "report_id",
+          "type": "CHAR(36) CHARACTER SET ascii COLLATE ascii_bin",
+          "nullable": false,
+          "default": null,
+          "comment": "report_id"
+        },
+        {
+          "name": "revision",
+          "type": "INT UNSIGNED",
+          "nullable": false,
+          "default": null,
+          "comment": "revision"
+        },
+        {
+          "name": "status",
+          "type": "ENUM('passed','failed','needs_review')",
+          "nullable": false,
+          "default": null,
+          "comment": "status"
+        },
+        {
+          "name": "report_digest",
+          "type": "BINARY(32)",
+          "nullable": false,
+          "default": null,
+          "comment": "report_digest"
+        },
+        {
+          "name": "identity_status",
+          "type": "ENUM('matched','conflict','ambiguous','unmatched')",
+          "nullable": false,
+          "default": null,
+          "comment": "identity_status"
+        },
+        {
+          "name": "issues",
+          "type": "JSON",
+          "nullable": false,
+          "default": null,
+          "comment": "issues"
+        },
+        {
+          "name": "rule_version",
+          "type": "VARCHAR(64) CHARACTER SET ascii COLLATE ascii_bin",
+          "nullable": false,
+          "default": null,
+          "comment": "rule_version"
+        },
+        {
+          "name": "checked_by_ref",
+          "type": "VARBINARY(256)",
+          "nullable": false,
+          "default": null,
+          "comment": "checked_by_ref"
+        },
+        {
+          "name": "checked_at",
+          "type": "DATETIME(6)",
+          "nullable": false,
+          "default": "CURRENT_TIMESTAMP(6)",
+          "comment": "UTC时间"
+        }
+      ],
+      "indexes": {
+        "PRIMARY": {
+          "name": "PRIMARY",
+          "columns": [
+            "quality_check_id"
+          ],
+          "unique": false,
+          "primary": true
+        },
+        "uq_report_quality_checks_scope": {
+          "name": "uq_report_quality_checks_scope",
+          "columns": [
+            "scope_code",
+            "data_mode",
+            "quality_check_id"
+          ],
+          "unique": true,
+          "primary": false
+        },
+        "uq_quality_release": {
+          "name": "uq_quality_release",
+          "columns": [
+            "scope_code",
+            "data_mode",
+            "report_id",
+            "revision",
+            "quality_check_id",
+            "status",
+            "report_digest"
+          ],
+          "unique": true,
+          "primary": false
+        }
+      },
+      "checks": [
+        "status <> 'passed' OR identity_status = 'matched'",
+        "JSON_TYPE(issues) = 'ARRAY'"
+      ],
+      "comment": "报告版本质量校验结果；按快照摘要和规则版本留痕"
+    },
+    {
+      "name": "a_report_publications",
+      "core": false,
+      "columns": [
+        {
+          "name": "publication_id",
+          "type": "CHAR(36) CHARACTER SET ascii COLLATE ascii_bin",
+          "nullable": false,
+          "default": null,
+          "comment": "publication_id"
+        },
+        {
+          "name": "scope_code",
+          "type": "VARCHAR(64) CHARACTER SET ascii COLLATE ascii_bin",
+          "nullable": false,
+          "default": null,
+          "comment": "scope_code"
+        },
+        {
+          "name": "data_mode",
+          "type": "ENUM('real','synthetic')",
+          "nullable": false,
+          "default": null,
+          "comment": "data_mode"
+        },
+        {
+          "name": "report_id",
+          "type": "CHAR(36) CHARACTER SET ascii COLLATE ascii_bin",
+          "nullable": false,
+          "default": null,
+          "comment": "report_id"
+        },
+        {
+          "name": "revision",
+          "type": "INT UNSIGNED",
+          "nullable": false,
+          "default": null,
+          "comment": "revision"
+        },
+        {
+          "name": "record_id",
+          "type": "CHAR(36) CHARACTER SET ascii COLLATE ascii_bin",
+          "nullable": false,
+          "default": null,
+          "comment": "record_id"
+        },
+        {
+          "name": "review_id",
+          "type": "CHAR(36) CHARACTER SET ascii COLLATE ascii_bin",
+          "nullable": false,
+          "default": null,
+          "comment": "review_id"
+        },
+        {
+          "name": "review_decision",
+          "type": "ENUM('return','reject','confirm')",
+          "nullable": false,
+          "default": null,
+          "comment": "review_decision"
+        },
+        {
+          "name": "report_review_status",
+          "type": "ENUM('unreviewed','needs_review','confirmed','rejected')",
+          "nullable": false,
+          "default": null,
+          "comment": "report_review_status"
+        },
+        {
+          "name": "quality_check_id",
+          "type": "CHAR(36) CHARACTER SET ascii COLLATE ascii_bin",
+          "nullable": false,
+          "default": null,
+          "comment": "quality_check_id"
+        },
+        {
+          "name": "quality_status",
+          "type": "ENUM('passed','failed','needs_review')",
+          "nullable": false,
+          "default": null,
+          "comment": "quality_status"
+        },
+        {
+          "name": "reviewed_digest",
+          "type": "BINARY(32)",
+          "nullable": false,
+          "default": null,
+          "comment": "reviewed_digest"
+        },
+        {
+          "name": "published_by_ref",
+          "type": "VARBINARY(256)",
+          "nullable": false,
+          "default": null,
+          "comment": "published_by_ref"
+        },
+        {
+          "name": "published_at",
+          "type": "DATETIME(6)",
+          "nullable": false,
+          "default": "CURRENT_TIMESTAMP(6)",
+          "comment": "UTC时间"
+        }
+      ],
+      "indexes": {
+        "PRIMARY": {
+          "name": "PRIMARY",
+          "columns": [
+            "publication_id"
+          ],
+          "unique": false,
+          "primary": true
+        },
+        "uq_report_publications_scope": {
+          "name": "uq_report_publications_scope",
+          "columns": [
+            "scope_code",
+            "data_mode",
+            "publication_id"
+          ],
+          "unique": true,
+          "primary": false
+        },
+        "uq_publication_version": {
+          "name": "uq_publication_version",
+          "columns": [
+            "report_id",
+            "revision"
+          ],
+          "unique": true,
+          "primary": false
+        },
+        "uq_publication_record": {
+          "name": "uq_publication_record",
+          "columns": [
+            "scope_code",
+            "data_mode",
+            "record_id",
+            "report_id",
+            "revision"
+          ],
+          "unique": true,
+          "primary": false
+        }
+      },
+      "checks": [
+        "review_decision = 'confirm' AND report_review_status = 'confirmed' AND quality_status = 'passed'"
+      ],
+      "comment": "正式归档凭据；仅允许同摘要的质量通过与医生确认版本"
+    },
+    {
+      "name": "a_health_risk_assessments",
+      "core": false,
+      "columns": [
+        {
+          "name": "assessment_id",
+          "type": "CHAR(36) CHARACTER SET ascii COLLATE ascii_bin",
+          "nullable": false,
+          "default": null,
+          "comment": "assessment_id"
+        },
+        {
+          "name": "scope_code",
+          "type": "VARCHAR(64) CHARACTER SET ascii COLLATE ascii_bin",
+          "nullable": false,
+          "default": null,
+          "comment": "scope_code"
+        },
+        {
+          "name": "data_mode",
+          "type": "ENUM('real','synthetic')",
+          "nullable": false,
+          "default": null,
+          "comment": "data_mode"
+        },
+        {
+          "name": "record_id",
+          "type": "CHAR(36) CHARACTER SET ascii COLLATE ascii_bin",
+          "nullable": false,
+          "default": null,
+          "comment": "record_id"
+        },
+        {
+          "name": "employee_id",
+          "type": "CHAR(36) CHARACTER SET ascii COLLATE ascii_bin",
+          "nullable": false,
+          "default": null,
+          "comment": "employee_id"
+        },
+        {
+          "name": "assessment_time",
+          "type": "DATETIME(6)",
+          "nullable": false,
+          "default": null,
+          "comment": "assessment_time"
+        },
+        {
+          "name": "risk_score",
+          "type": "DECIMAL(12,4)",
+          "nullable": true,
+          "default": null,
+          "comment": "risk_score"
+        },
+        {
+          "name": "risk_level",
+          "type": "ENUM('unknown','low','medium','high','critical')",
+          "nullable": false,
+          "default": null,
+          "comment": "risk_level"
+        },
+        {
+          "name": "assessment_type",
+          "type": "ENUM('rule','clinician','ai_assisted')",
+          "nullable": false,
+          "default": null,
+          "comment": "assessment_type"
+        },
+        {
+          "name": "rule_version",
+          "type": "VARCHAR(64) CHARACTER SET ascii COLLATE ascii_bin",
+          "nullable": false,
+          "default": null,
+          "comment": "rule_version"
+        },
+        {
+          "name": "assessment_status",
+          "type": "ENUM('draft','needs_review','confirmed','superseded')",
+          "nullable": false,
+          "default": null,
+          "comment": "assessment_status"
+        },
+        {
+          "name": "reviewer_ref",
+          "type": "VARBINARY(256)",
+          "nullable": true,
+          "default": null,
+          "comment": "reviewer_ref"
+        },
+        {
+          "name": "reviewed_at",
+          "type": "DATETIME(6)",
+          "nullable": true,
+          "default": null,
+          "comment": "reviewed_at"
+        }
+      ],
+      "indexes": {
+        "PRIMARY": {
+          "name": "PRIMARY",
+          "columns": [
+            "assessment_id"
+          ],
+          "unique": false,
+          "primary": true
+        },
+        "uq_health_risk_assessments_scope": {
+          "name": "uq_health_risk_assessments_scope",
+          "columns": [
+            "scope_code",
+            "data_mode",
+            "assessment_id"
+          ],
+          "unique": true,
+          "primary": false
+        },
+        "uq_assessment_record": {
+          "name": "uq_assessment_record",
+          "columns": [
+            "scope_code",
+            "data_mode",
+            "record_id",
+            "assessment_id"
+          ],
+          "unique": true,
+          "primary": false
+        },
+        "ix_risk_latest": {
+          "name": "ix_risk_latest",
+          "columns": [
+            "scope_code",
+            "data_mode",
+            "record_id",
+            "assessment_status",
+            "assessment_time"
+          ],
+          "unique": false,
+          "primary": false
+        }
+      },
+      "checks": [
+        "assessment_status <> 'confirmed' OR (reviewer_ref IS NOT NULL AND reviewed_at IS NOT NULL AND risk_level <> 'unknown')"
+      ],
+      "comment": "平台风险评估；不替代职业健康正式医学结论"
+    },
+    {
+      "name": "a_health_risk_report_sources",
+      "core": false,
+      "columns": [
+        {
+          "name": "scope_code",
+          "type": "VARCHAR(64) CHARACTER SET ascii COLLATE ascii_bin",
+          "nullable": false,
+          "default": null,
+          "comment": "scope_code"
+        },
+        {
+          "name": "data_mode",
+          "type": "ENUM('real','synthetic')",
+          "nullable": false,
+          "default": null,
+          "comment": "data_mode"
+        },
+        {
+          "name": "record_id",
+          "type": "CHAR(36) CHARACTER SET ascii COLLATE ascii_bin",
+          "nullable": false,
+          "default": null,
+          "comment": "record_id"
+        },
+        {
+          "name": "assessment_id",
+          "type": "CHAR(36) CHARACTER SET ascii COLLATE ascii_bin",
+          "nullable": false,
+          "default": null,
+          "comment": "assessment_id"
+        },
+        {
+          "name": "report_id",
+          "type": "CHAR(36) CHARACTER SET ascii COLLATE ascii_bin",
+          "nullable": false,
+          "default": null,
+          "comment": "report_id"
+        },
+        {
+          "name": "revision",
+          "type": "INT UNSIGNED",
+          "nullable": false,
+          "default": null,
+          "comment": "revision"
+        }
+      ],
+      "indexes": {
+        "PRIMARY": {
+          "name": "PRIMARY",
+          "columns": [
+            "assessment_id",
+            "report_id",
+            "revision"
+          ],
+          "unique": false,
+          "primary": true
+        }
+      },
+      "checks": [],
+      "comment": "风险评估所依据的已发布报告版本；保证同一职工与档案"
+    },
+    {
+      "name": "a_health_risk_factors",
+      "core": false,
+      "columns": [
+        {
+          "name": "factor_id",
+          "type": "CHAR(36) CHARACTER SET ascii COLLATE ascii_bin",
+          "nullable": false,
+          "default": null,
+          "comment": "factor_id"
+        },
+        {
+          "name": "assessment_id",
+          "type": "CHAR(36) CHARACTER SET ascii COLLATE ascii_bin",
+          "nullable": false,
+          "default": null,
+          "comment": "assessment_id"
+        },
+        {
+          "name": "report_id",
+          "type": "CHAR(36) CHARACTER SET ascii COLLATE ascii_bin",
+          "nullable": false,
+          "default": null,
+          "comment": "report_id"
+        },
+        {
+          "name": "revision",
+          "type": "INT UNSIGNED",
+          "nullable": false,
+          "default": null,
+          "comment": "revision"
+        },
+        {
+          "name": "item_id",
+          "type": "CHAR(36) CHARACTER SET ascii COLLATE ascii_bin",
+          "nullable": true,
+          "default": null,
+          "comment": "item_id"
+        },
+        {
+          "name": "evidence_id",
+          "type": "CHAR(36) CHARACTER SET ascii COLLATE ascii_bin",
+          "nullable": false,
+          "default": null,
+          "comment": "evidence_id"
+        },
+        {
+          "name": "factor_name",
+          "type": "VARCHAR(255)",
+          "nullable": false,
+          "default": null,
+          "comment": "factor_name"
+        },
+        {
+          "name": "result_raw",
+          "type": "MEDIUMTEXT",
+          "nullable": true,
+          "default": null,
+          "comment": "result_raw"
+        },
+        {
+          "name": "reason",
+          "type": "TEXT",
+          "nullable": false,
+          "default": null,
+          "comment": "reason"
+        },
+        {
+          "name": "contribution",
+          "type": "DECIMAL(12,4)",
+          "nullable": true,
+          "default": null,
+          "comment": "contribution"
+        }
+      ],
+      "indexes": {
+        "PRIMARY": {
+          "name": "PRIMARY",
+          "columns": [
+            "factor_id"
+          ],
+          "unique": false,
+          "primary": true
+        }
+      },
+      "checks": [],
+      "comment": "可解释的风险因素；追溯已发布报告、指标和原页证据"
+    },
+    {
+      "name": "a_health_record_completeness",
+      "core": false,
+      "columns": [
+        {
+          "name": "snapshot_id",
+          "type": "CHAR(36) CHARACTER SET ascii COLLATE ascii_bin",
+          "nullable": false,
+          "default": null,
+          "comment": "snapshot_id"
+        },
+        {
+          "name": "scope_code",
+          "type": "VARCHAR(64) CHARACTER SET ascii COLLATE ascii_bin",
+          "nullable": false,
+          "default": null,
+          "comment": "scope_code"
+        },
+        {
+          "name": "data_mode",
+          "type": "ENUM('real','synthetic')",
+          "nullable": false,
+          "default": null,
+          "comment": "data_mode"
+        },
+        {
+          "name": "record_id",
+          "type": "CHAR(36) CHARACTER SET ascii COLLATE ascii_bin",
+          "nullable": false,
+          "default": null,
+          "comment": "record_id"
+        },
+        {
+          "name": "required_count",
+          "type": "INT UNSIGNED",
+          "nullable": false,
+          "default": null,
+          "comment": "required_count"
+        },
+        {
+          "name": "completed_count",
+          "type": "INT UNSIGNED",
+          "nullable": false,
+          "default": null,
+          "comment": "completed_count"
+        },
+        {
+          "name": "missing_items",
+          "type": "JSON",
+          "nullable": false,
+          "default": null,
+          "comment": "missing_items"
+        },
+        {
+          "name": "rule_version",
+          "type": "VARCHAR(64) CHARACTER SET ascii COLLATE ascii_bin",
+          "nullable": false,
+          "default": null,
+          "comment": "rule_version"
+        },
+        {
+          "name": "basis",
+          "type": "JSON",
+          "nullable": false,
+          "default": null,
+          "comment": "basis"
+        },
+        {
+          "name": "completeness_rate",
+          "type": "DECIMAL(7,4)",
+          "nullable": true,
+          "default": null,
+          "comment": "0至1；required_count为0时NULL"
+        },
+        {
+          "name": "calculated_at",
+          "type": "DATETIME(6)",
+          "nullable": false,
+          "default": "CURRENT_TIMESTAMP(6)",
+          "comment": "UTC时间"
+        }
+      ],
+      "indexes": {
+        "PRIMARY": {
+          "name": "PRIMARY",
+          "columns": [
+            "snapshot_id"
+          ],
+          "unique": false,
+          "primary": true
+        },
+        "uq_health_record_completeness_scope": {
+          "name": "uq_health_record_completeness_scope",
+          "columns": [
+            "scope_code",
+            "data_mode",
+            "snapshot_id"
+          ],
+          "unique": true,
+          "primary": false
+        },
+        "ix_completeness_latest": {
+          "name": "ix_completeness_latest",
+          "columns": [
+            "scope_code",
+            "data_mode",
+            "record_id",
+            "calculated_at"
+          ],
+          "unique": false,
+          "primary": false
+        }
+      },
+      "checks": [
+        "completed_count <= required_count",
+        "(required_count = 0 AND completeness_rate IS NULL) OR (required_count > 0 AND completeness_rate IS NOT NULL AND completeness_rate = ROUND(completed_count / required_count,4))",
+        "JSON_TYPE(missing_items) = 'ARRAY' AND JSON_LENGTH(missing_items) = required_count - completed_count"
+      ],
+      "comment": "完整度规则计算快照；不是样本PDF字段覆盖率"
+    },
+    {
+      "name": "a_health_archive_audit_logs",
+      "core": false,
+      "columns": [
+        {
+          "name": "audit_id",
+          "type": "CHAR(36) CHARACTER SET ascii COLLATE ascii_bin",
+          "nullable": false,
+          "default": null,
+          "comment": "audit_id"
+        },
+        {
+          "name": "scope_code",
+          "type": "VARCHAR(64) CHARACTER SET ascii COLLATE ascii_bin",
+          "nullable": false,
+          "default": null,
+          "comment": "scope_code"
+        },
+        {
+          "name": "data_mode",
+          "type": "ENUM('real','synthetic')",
+          "nullable": false,
+          "default": null,
+          "comment": "data_mode"
+        },
+        {
+          "name": "record_id",
+          "type": "CHAR(36) CHARACTER SET ascii COLLATE ascii_bin",
+          "nullable": true,
+          "default": null,
+          "comment": "record_id"
+        },
+        {
+          "name": "report_id",
+          "type": "CHAR(36) CHARACTER SET ascii COLLATE ascii_bin",
+          "nullable": true,
+          "default": null,
+          "comment": "report_id"
+        },
+        {
+          "name": "revision",
+          "type": "INT UNSIGNED",
+          "nullable": true,
+          "default": null,
+          "comment": "revision"
+        },
+        {
+          "name": "actor_ref",
+          "type": "VARBINARY(256)",
+          "nullable": false,
+          "default": null,
+          "comment": "actor_ref"
+        },
+        {
+          "name": "action",
+          "type": "VARCHAR(64)",
+          "nullable": false,
+          "default": null,
+          "comment": "action"
+        },
+        {
+          "name": "request_key",
+          "type": "VARCHAR(96) CHARACTER SET ascii COLLATE ascii_bin",
+          "nullable": false,
+          "default": null,
+          "comment": "request_key"
+        },
+        {
+          "name": "reason",
+          "type": "TEXT",
+          "nullable": true,
+          "default": null,
+          "comment": "reason"
+        },
+        {
+          "name": "redacted_diff",
+          "type": "JSON",
+          "nullable": true,
+          "default": null,
+          "comment": "redacted_diff"
+        },
+        {
+          "name": "occurred_at",
+          "type": "DATETIME(6)",
+          "nullable": false,
+          "default": "CURRENT_TIMESTAMP(6)",
+          "comment": "UTC时间"
+        }
+      ],
+      "indexes": {
+        "PRIMARY": {
+          "name": "PRIMARY",
+          "columns": [
+            "audit_id"
+          ],
+          "unique": false,
+          "primary": true
+        },
+        "uq_health_archive_audit_logs_scope": {
+          "name": "uq_health_archive_audit_logs_scope",
+          "columns": [
+            "scope_code",
+            "data_mode",
+            "audit_id"
+          ],
+          "unique": true,
+          "primary": false
+        },
+        "uq_audit_request": {
+          "name": "uq_audit_request",
+          "columns": [
+            "scope_code",
+            "data_mode",
+            "request_key",
+            "action"
+          ],
+          "unique": true,
+          "primary": false
+        }
+      },
+      "checks": [
+        "(report_id IS NULL) = (revision IS NULL)"
+      ],
+      "comment": "档案业务审计补充；不替换旧平台日志，避免记录明文隐私"
+    },
+    {
+      "name": "a_health_schema_migration",
+      "core": false,
+      "columns": [
+        {
+          "name": "version",
+          "type": "VARCHAR(64)",
+          "nullable": false,
+          "default": null,
+          "comment": "version"
+        },
+        {
+          "name": "checksum",
+          "type": "CHAR(64) CHARACTER SET ascii COLLATE ascii_bin",
+          "nullable": false,
+          "default": null,
+          "comment": "checksum"
+        },
+        {
+          "name": "source_sha256",
+          "type": "CHAR(64) CHARACTER SET ascii COLLATE ascii_bin",
+          "nullable": false,
+          "default": null,
+          "comment": "source_sha256"
+        },
+        {
+          "name": "description",
+          "type": "VARCHAR(500)",
+          "nullable": false,
+          "default": null,
+          "comment": "description"
+        },
+        {
+          "name": "applied_by",
+          "type": "VARCHAR(255)",
+          "nullable": false,
+          "default": null,
+          "comment": "applied_by"
+        },
+        {
+          "name": "applied_at",
+          "type": "DATETIME(6)",
+          "nullable": false,
+          "default": "CURRENT_TIMESTAMP(6)",
+          "comment": "UTC时间"
+        }
+      ],
+      "indexes": {
+        "PRIMARY": {
+          "name": "PRIMARY",
+          "columns": [
+            "version"
+          ],
+          "unique": false,
+          "primary": true
+        }
+      },
+      "checks": [],
+      "comment": "本模块结构迁移版本及输入校验摘要"
+    }
+  ],
+  "foreign_keys": [
+    {
+      "table": "a_health_records",
+      "columns": [
+        "scope_code",
+        "data_mode",
+        "employee_id"
+      ],
+      "target": "a_employees",
+      "target_columns": [
+        "scope_code",
+        "data_mode",
+        "employee_id"
+      ]
+    },
+    {
+      "table": "a_report_series",
+      "columns": [
+        "report_id",
+        "current_revision"
+      ],
+      "target": "a_health_reports",
+      "target_columns": [
+        "report_id",
+        "revision"
+      ]
+    },
+    {
+      "table": "a_report_series",
+      "columns": [
+        "scope_code",
+        "data_mode",
+        "source_file_id"
+      ],
+      "target": "a_report_sources",
+      "target_columns": [
+        "scope_code",
+        "data_mode",
+        "source_file_id"
+      ]
+    },
+    {
+      "table": "a_medical_field_mapping",
+      "columns": [
+        "template_key",
+        "template_version"
+      ],
+      "target": "a_report_template_mapping",
+      "target_columns": [
+        "template_key",
+        "mapping_version"
+      ]
+    },
+    {
+      "table": "a_medical_field_mapping",
+      "columns": [
+        "item_code",
+        "dictionary_version"
+      ],
+      "target": "a_medical_item_dictionary",
+      "target_columns": [
+        "item_code",
+        "dictionary_version"
+      ]
+    },
+    {
+      "table": "a_medical_unit_mapping",
+      "columns": [
+        "item_code",
+        "dictionary_version"
+      ],
+      "target": "a_medical_item_dictionary",
+      "target_columns": [
+        "item_code",
+        "dictionary_version"
+      ]
+    },
+    {
+      "table": "a_health_reports",
+      "columns": [
+        "scope_code",
+        "data_mode",
+        "report_id"
+      ],
+      "target": "a_report_series",
+      "target_columns": [
+        "scope_code",
+        "data_mode",
+        "report_id"
+      ]
+    },
+    {
+      "table": "a_health_reports",
+      "columns": [
+        "report_id",
+        "prior_revision"
+      ],
+      "target": "a_health_reports",
+      "target_columns": [
+        "report_id",
+        "revision"
+      ]
+    },
+    {
+      "table": "a_health_reports",
+      "columns": [
+        "scope_code",
+        "data_mode",
+        "record_id"
+      ],
+      "target": "a_health_records",
+      "target_columns": [
+        "scope_code",
+        "data_mode",
+        "record_id"
+      ]
+    },
+    {
+      "table": "a_report_revision_sources",
+      "columns": [
+        "scope_code",
+        "data_mode",
+        "report_id",
+        "revision"
+      ],
+      "target": "a_health_reports",
+      "target_columns": [
+        "scope_code",
+        "data_mode",
+        "report_id",
+        "revision"
+      ]
+    },
+    {
+      "table": "a_report_revision_sources",
+      "columns": [
+        "scope_code",
+        "data_mode",
+        "source_file_id"
+      ],
+      "target": "a_report_sources",
+      "target_columns": [
+        "scope_code",
+        "data_mode",
+        "source_file_id"
+      ]
+    },
+    {
+      "table": "a_report_evidence",
+      "columns": [
+        "report_id",
+        "revision",
+        "source_file_id"
+      ],
+      "target": "a_report_revision_sources",
+      "target_columns": [
+        "report_id",
+        "revision",
+        "source_file_id"
+      ]
+    },
+    {
+      "table": "a_occupational_profiles",
+      "columns": [
+        "scope_code",
+        "data_mode",
+        "employee_id"
+      ],
+      "target": "a_employees",
+      "target_columns": [
+        "scope_code",
+        "data_mode",
+        "employee_id"
+      ]
+    },
+    {
+      "table": "a_occupational_profiles",
+      "columns": [
+        "scope_code",
+        "data_mode",
+        "report_id",
+        "revision"
+      ],
+      "target": "a_health_reports",
+      "target_columns": [
+        "scope_code",
+        "data_mode",
+        "report_id",
+        "revision"
+      ]
+    },
+    {
+      "table": "a_occupational_profiles",
+      "columns": [
+        "report_id",
+        "revision",
+        "evidence_id"
+      ],
+      "target": "a_report_evidence",
+      "target_columns": [
+        "report_id",
+        "revision",
+        "evidence_id"
+      ]
+    },
+    {
+      "table": "a_health_items",
+      "columns": [
+        "report_id",
+        "revision",
+        "primary_evidence_id"
+      ],
+      "target": "a_report_evidence",
+      "target_columns": [
+        "report_id",
+        "revision",
+        "evidence_id"
+      ]
+    },
+    {
+      "table": "a_health_items",
+      "columns": [
+        "item_code",
+        "dictionary_version"
+      ],
+      "target": "a_medical_item_dictionary",
+      "target_columns": [
+        "item_code",
+        "dictionary_version"
+      ]
+    },
+    {
+      "table": "a_health_items",
+      "columns": [
+        "unit_mapping_key",
+        "unit_mapping_version"
+      ],
+      "target": "a_medical_unit_mapping",
+      "target_columns": [
+        "unit_mapping_key",
+        "mapping_version"
+      ]
+    },
+    {
+      "table": "a_health_conclusions",
+      "columns": [
+        "report_id",
+        "revision",
+        "primary_evidence_id"
+      ],
+      "target": "a_report_evidence",
+      "target_columns": [
+        "report_id",
+        "revision",
+        "evidence_id"
+      ]
+    },
+    {
+      "table": "a_extraction_jobs",
+      "columns": [
+        "scope_code",
+        "data_mode",
+        "report_id"
+      ],
+      "target": "a_report_series",
+      "target_columns": [
+        "scope_code",
+        "data_mode",
+        "report_id"
+      ]
+    },
+    {
+      "table": "a_extraction_jobs",
+      "columns": [
+        "report_id",
+        "revision"
+      ],
+      "target": "a_health_reports",
+      "target_columns": [
+        "report_id",
+        "revision"
+      ]
+    },
+    {
+      "table": "a_review_records",
+      "columns": [
+        "report_id",
+        "revision"
+      ],
+      "target": "a_health_reports",
+      "target_columns": [
+        "report_id",
+        "revision"
+      ]
+    },
+    {
+      "table": "a_health_advice",
+      "columns": [
+        "report_id",
+        "revision",
+        "source_evidence_id"
+      ],
+      "target": "a_report_evidence",
+      "target_columns": [
+        "report_id",
+        "revision",
+        "evidence_id"
+      ]
+    },
+    {
+      "table": "a_health_advice",
+      "columns": [
+        "report_id",
+        "revision",
+        "review_id"
+      ],
+      "target": "a_review_records",
+      "target_columns": [
+        "report_id",
+        "revision",
+        "review_id"
+      ]
+    },
+    {
+      "table": "a_followup_tasks",
+      "columns": [
+        "report_id",
+        "revision",
+        "advice_id"
+      ],
+      "target": "a_health_advice",
+      "target_columns": [
+        "report_id",
+        "revision",
+        "advice_id"
+      ]
+    },
+    {
+      "table": "a_report_sync_outbox",
+      "columns": [
+        "report_id",
+        "revision",
+        "review_id"
+      ],
+      "target": "a_review_records",
+      "target_columns": [
+        "report_id",
+        "revision",
+        "review_id"
+      ]
+    },
+    {
+      "table": "a_report_upload_metadata",
+      "columns": [
+        "scope_code",
+        "data_mode",
+        "source_file_id"
+      ],
+      "target": "a_report_sources",
+      "target_columns": [
+        "scope_code",
+        "data_mode",
+        "source_file_id"
+      ]
+    },
+    {
+      "table": "a_medical_field_mapping",
+      "columns": [
+        "field_key",
+        "mapping_version"
+      ],
+      "target": "a_standard_field_dictionary",
+      "target_columns": [
+        "field_key",
+        "dictionary_version"
+      ]
+    },
+    {
+      "table": "a_medical_unit_observations",
+      "columns": [
+        "item_code",
+        "dictionary_version"
+      ],
+      "target": "a_medical_item_dictionary",
+      "target_columns": [
+        "item_code",
+        "dictionary_version"
+      ]
+    },
+    {
+      "table": "a_medical_unit_observations",
+      "columns": [
+        "unit_mapping_key",
+        "unit_mapping_version"
+      ],
+      "target": "a_medical_unit_mapping",
+      "target_columns": [
+        "unit_mapping_key",
+        "mapping_version"
+      ]
+    },
+    {
+      "table": "a_report_quality_checks",
+      "columns": [
+        "scope_code",
+        "data_mode",
+        "report_id",
+        "revision"
+      ],
+      "target": "a_health_reports",
+      "target_columns": [
+        "scope_code",
+        "data_mode",
+        "report_id",
+        "revision"
+      ]
+    },
+    {
+      "table": "a_report_publications",
+      "columns": [
+        "scope_code",
+        "data_mode",
+        "report_id",
+        "revision",
+        "record_id",
+        "report_review_status"
+      ],
+      "target": "a_health_reports",
+      "target_columns": [
+        "scope_code",
+        "data_mode",
+        "report_id",
+        "revision",
+        "record_id",
+        "review_status"
+      ]
+    },
+    {
+      "table": "a_report_publications",
+      "columns": [
+        "report_id",
+        "revision",
+        "review_id",
+        "review_decision",
+        "reviewed_digest"
+      ],
+      "target": "a_review_records",
+      "target_columns": [
+        "report_id",
+        "revision",
+        "review_id",
+        "decision",
+        "reviewed_digest"
+      ]
+    },
+    {
+      "table": "a_report_publications",
+      "columns": [
+        "scope_code",
+        "data_mode",
+        "report_id",
+        "revision",
+        "quality_check_id",
+        "quality_status",
+        "reviewed_digest"
+      ],
+      "target": "a_report_quality_checks",
+      "target_columns": [
+        "scope_code",
+        "data_mode",
+        "report_id",
+        "revision",
+        "quality_check_id",
+        "status",
+        "report_digest"
+      ]
+    },
+    {
+      "table": "a_report_sync_outbox",
+      "columns": [
+        "report_id",
+        "revision"
+      ],
+      "target": "a_report_publications",
+      "target_columns": [
+        "report_id",
+        "revision"
+      ]
+    },
+    {
+      "table": "a_health_risk_assessments",
+      "columns": [
+        "scope_code",
+        "data_mode",
+        "record_id"
+      ],
+      "target": "a_health_records",
+      "target_columns": [
+        "scope_code",
+        "data_mode",
+        "record_id"
+      ]
+    },
+    {
+      "table": "a_health_risk_assessments",
+      "columns": [
+        "scope_code",
+        "data_mode",
+        "record_id",
+        "employee_id"
+      ],
+      "target": "a_health_records",
+      "target_columns": [
+        "scope_code",
+        "data_mode",
+        "record_id",
+        "employee_id"
+      ]
+    },
+    {
+      "table": "a_health_risk_report_sources",
+      "columns": [
+        "scope_code",
+        "data_mode",
+        "record_id",
+        "assessment_id"
+      ],
+      "target": "a_health_risk_assessments",
+      "target_columns": [
+        "scope_code",
+        "data_mode",
+        "record_id",
+        "assessment_id"
+      ]
+    },
+    {
+      "table": "a_health_risk_report_sources",
+      "columns": [
+        "scope_code",
+        "data_mode",
+        "record_id",
+        "report_id",
+        "revision"
+      ],
+      "target": "a_report_publications",
+      "target_columns": [
+        "scope_code",
+        "data_mode",
+        "record_id",
+        "report_id",
+        "revision"
+      ]
+    },
+    {
+      "table": "a_health_risk_factors",
+      "columns": [
+        "assessment_id",
+        "report_id",
+        "revision"
+      ],
+      "target": "a_health_risk_report_sources",
+      "target_columns": [
+        "assessment_id",
+        "report_id",
+        "revision"
+      ]
+    },
+    {
+      "table": "a_health_risk_factors",
+      "columns": [
+        "report_id",
+        "revision",
+        "item_id"
+      ],
+      "target": "a_health_items",
+      "target_columns": [
+        "report_id",
+        "revision",
+        "item_id"
+      ]
+    },
+    {
+      "table": "a_health_risk_factors",
+      "columns": [
+        "report_id",
+        "revision",
+        "evidence_id"
+      ],
+      "target": "a_report_evidence",
+      "target_columns": [
+        "report_id",
+        "revision",
+        "evidence_id"
+      ]
+    },
+    {
+      "table": "a_health_record_completeness",
+      "columns": [
+        "scope_code",
+        "data_mode",
+        "record_id"
+      ],
+      "target": "a_health_records",
+      "target_columns": [
+        "scope_code",
+        "data_mode",
+        "record_id"
+      ]
+    },
+    {
+      "table": "a_health_archive_audit_logs",
+      "columns": [
+        "scope_code",
+        "data_mode",
+        "record_id"
+      ],
+      "target": "a_health_records",
+      "target_columns": [
+        "scope_code",
+        "data_mode",
+        "record_id"
+      ]
+    },
+    {
+      "table": "a_health_archive_audit_logs",
+      "columns": [
+        "scope_code",
+        "data_mode",
+        "report_id",
+        "revision"
+      ],
+      "target": "a_health_reports",
+      "target_columns": [
+        "scope_code",
+        "data_mode",
+        "report_id",
+        "revision"
+      ]
+    }
+  ],
+  "triggers": [
+    {
+      "name": "a_ehr_428fa69ba1827bd547",
+      "table": "a_report_sources",
+      "operation": "UPDATE",
+      "purpose": "append_only"
+    },
+    {
+      "name": "a_ehr_ca603171f293464a9e",
+      "table": "a_report_sources",
+      "operation": "DELETE",
+      "purpose": "append_only"
+    },
+    {
+      "name": "a_ehr_9f6012fd9c8df0cc6f",
+      "table": "a_review_records",
+      "operation": "UPDATE",
+      "purpose": "append_only"
+    },
+    {
+      "name": "a_ehr_b0681304f42d195e58",
+      "table": "a_review_records",
+      "operation": "DELETE",
+      "purpose": "append_only"
+    },
+    {
+      "name": "a_ehr_145987d2a22d967752",
+      "table": "a_report_quality_checks",
+      "operation": "UPDATE",
+      "purpose": "append_only"
+    },
+    {
+      "name": "a_ehr_1c7bc32a5eb1bd56b7",
+      "table": "a_report_quality_checks",
+      "operation": "DELETE",
+      "purpose": "append_only"
+    },
+    {
+      "name": "a_ehr_75d6bf8f4e1ae5c933",
+      "table": "a_report_publications",
+      "operation": "UPDATE",
+      "purpose": "append_only"
+    },
+    {
+      "name": "a_ehr_84056fdc6f762f6a99",
+      "table": "a_report_publications",
+      "operation": "DELETE",
+      "purpose": "append_only"
+    },
+    {
+      "name": "a_ehr_078e26e8f26470a796",
+      "table": "a_report_evidence",
+      "operation": "INSERT",
+      "purpose": "freeze_reviewed_version"
+    },
+    {
+      "name": "a_ehr_5112c6a40dd4e28de5",
+      "table": "a_report_evidence",
+      "operation": "UPDATE",
+      "purpose": "freeze_reviewed_version"
+    },
+    {
+      "name": "a_ehr_97cc6755ac8ed0dd60",
+      "table": "a_report_evidence",
+      "operation": "DELETE",
+      "purpose": "freeze_reviewed_version"
+    },
+    {
+      "name": "a_ehr_da2f3b1733e2bb039a",
+      "table": "a_health_items",
+      "operation": "INSERT",
+      "purpose": "freeze_reviewed_version"
+    },
+    {
+      "name": "a_ehr_79aeb614d3934d4ba5",
+      "table": "a_health_items",
+      "operation": "UPDATE",
+      "purpose": "freeze_reviewed_version"
+    },
+    {
+      "name": "a_ehr_ff7e5135de0f9fb5f7",
+      "table": "a_health_items",
+      "operation": "DELETE",
+      "purpose": "freeze_reviewed_version"
+    },
+    {
+      "name": "a_ehr_83e7a75c44671fbf22",
+      "table": "a_health_conclusions",
+      "operation": "INSERT",
+      "purpose": "freeze_reviewed_version"
+    },
+    {
+      "name": "a_ehr_5e6ac349fd6efed3e7",
+      "table": "a_health_conclusions",
+      "operation": "UPDATE",
+      "purpose": "freeze_reviewed_version"
+    },
+    {
+      "name": "a_ehr_09f03f5e1c43272088",
+      "table": "a_health_conclusions",
+      "operation": "DELETE",
+      "purpose": "freeze_reviewed_version"
+    },
+    {
+      "name": "a_ehr_e54f9dffd5c13d82fc",
+      "table": "a_health_advice",
+      "operation": "INSERT",
+      "purpose": "freeze_reviewed_version"
+    },
+    {
+      "name": "a_ehr_3809de636b1c681974",
+      "table": "a_health_advice",
+      "operation": "UPDATE",
+      "purpose": "freeze_reviewed_version"
+    },
+    {
+      "name": "a_ehr_fbab3fca2b396e2938",
+      "table": "a_health_advice",
+      "operation": "DELETE",
+      "purpose": "freeze_reviewed_version"
+    },
+    {
+      "name": "a_ehr_58655c2a4aa4f61b50",
+      "table": "a_occupational_profiles",
+      "operation": "INSERT",
+      "purpose": "freeze_reviewed_version"
+    },
+    {
+      "name": "a_ehr_f6a534bad95733b7fc",
+      "table": "a_occupational_profiles",
+      "operation": "UPDATE",
+      "purpose": "freeze_reviewed_version"
+    },
+    {
+      "name": "a_ehr_87702aa2686db69097",
+      "table": "a_occupational_profiles",
+      "operation": "DELETE",
+      "purpose": "freeze_reviewed_version"
+    },
+    {
+      "name": "a_ehr_44c0e748e0d574963d",
+      "table": "a_report_revision_sources",
+      "operation": "INSERT",
+      "purpose": "freeze_reviewed_version"
+    },
+    {
+      "name": "a_ehr_aab71e7af6815c1dff",
+      "table": "a_report_revision_sources",
+      "operation": "UPDATE",
+      "purpose": "freeze_reviewed_version"
+    },
+    {
+      "name": "a_ehr_c9d2c5c6751095cbbc",
+      "table": "a_report_revision_sources",
+      "operation": "DELETE",
+      "purpose": "freeze_reviewed_version"
+    },
+    {
+      "name": "a_ehr_ca13845f03ea3ca462",
+      "table": "a_health_reports",
+      "operation": "UPDATE",
+      "purpose": "freeze_reviewed_payload"
+    },
+    {
+      "name": "a_ehr_a1ef09b94f1cd8ac9b",
+      "table": "a_health_reports",
+      "operation": "DELETE",
+      "purpose": "freeze_reviewed_payload"
+    },
+    {
+      "name": "a_ehr_3a6cf215f57e72a452",
+      "table": "a_report_sync_outbox",
+      "operation": "INSERT",
+      "purpose": "publication_review_match"
+    }
+  ],
+  "seed_counts": {
+    "a_dictionary_source_rows": 3739,
+    "a_standard_field_dictionary": 67,
+    "a_medical_item_dictionary": 655,
+    "a_medical_field_mapping": 1589,
+    "a_medical_unit_mapping": 81,
+    "a_medical_unit_observations": 390
+  }
+}

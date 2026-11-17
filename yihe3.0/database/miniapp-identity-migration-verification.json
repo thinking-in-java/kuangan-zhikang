@@ -1,0 +1,15 @@
+{
+  "version": "V004_a_miniapp_identity",
+  "applied": true,
+  "tables": [
+    "a_miniapp_users",
+    "a_miniapp_sessions",
+    "a_employee_binding_codes",
+    "a_miniapp_binding_challenges",
+    "a_miniapp_employee_bindings",
+    "a_miniapp_rate_limits"
+  ],
+  "sql_sha256": "d86bfd308613961fc965aa9d4749ff67cf8a477ebdb9ddde5aff4ec52e69bb83",
+  "legacy_unchanged": true,
+  "verified_at": "2026-11-14T22:15:46.175080+08:00"
+}

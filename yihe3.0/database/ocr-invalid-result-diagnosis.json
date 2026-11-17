@@ -1,0 +1,90 @@
+{
+  "jobId": "edfd06f6-ae9e-4f96-85b5-14ec4ebf7887",
+  "base": "http://localhost:18080",
+  "dataMode": "real",
+  "scope": "org:10000",
+  "retriedOnce": true,
+  "previousAttemptCount": 4,
+  "checks": [],
+  "checkedAt": "2026-11-15T08:58:44.859416+00:00",
+  "current": {
+    "jobId": "edfd06f6-ae9e-4f96-85b5-14ec4ebf7887",
+    "state": "succeeded",
+    "stage": "finished",
+    "percent": 100,
+    "attemptCount": 5,
+    "maxAttempts": 7,
+    "availableAt": "2026-11-15 08:58:32.812086000",
+    "leaseExpiresAt": null,
+    "leaseExpired": false,
+    "errorCode": null,
+    "errorMessage": null,
+    "createdAt": "2026-11-15 08:38:18.360000000",
+    "updatedAt": "2026-11-15 08:58:43.546842000",
+    "reportId": "075f313b-9fd9-4a1f-83a0-fbb4e5b2a144",
+    "revision": 1,
+    "businessStage": "extracted",
+    "attempts": [
+      {
+        "attemptNumber": 5,
+        "workerId": "ocr-pc-b-01",
+        "outcome": "succeeded",
+        "stage": "finished",
+        "percent": 100,
+        "startedAt": "2026-11-15 08:58:33.981000000",
+        "heartbeatAt": "2026-11-15 08:58:35.292857000",
+        "finishedAt": "2026-11-15 08:58:43.549508000",
+        "errorCode": null,
+        "errorMessage": null
+      },
+      {
+        "attemptNumber": 4,
+        "workerId": "ocr-pc-b-01",
+        "outcome": "failed",
+        "stage": "pdf_parse",
+        "percent": 0,
+        "startedAt": "2026-11-15 08:52:48.514000000",
+        "heartbeatAt": "2026-11-15 08:52:49.715939000",
+        "finishedAt": "2026-11-15 08:52:51.485590000",
+        "errorCode": "INVALID_RESULT",
+        "errorMessage": "返回结果未通过A端数据契约校验：report_kind冲突：A端要求=individual，B端回传=unknown"
+      },
+      {
+        "attemptNumber": 3,
+        "workerId": "ocr-pc-b-01",
+        "outcome": "failed",
+        "stage": "pdf_parse",
+        "percent": 0,
+        "startedAt": "2026-11-15 08:51:38.616000000",
+        "heartbeatAt": "2026-11-15 08:51:39.801240000",
+        "finishedAt": "2026-11-15 08:51:41.773145000",
+        "errorCode": "INVALID_RESULT",
+        "errorMessage": "返回结果未通过A端数据契约校验：report_kind冲突：A端要求=individual，B端回传=unknown"
+      },
+      {
+        "attemptNumber": 2,
+        "workerId": "ocr-pc-b-01",
+        "outcome": "failed",
+        "stage": "pdf_parse",
+        "percent": 0,
+        "startedAt": "2026-11-15 08:47:54.572000000",
+        "heartbeatAt": "2026-11-15 08:47:55.697794000",
+        "finishedAt": "2026-11-15 08:47:57.852346000",
+        "errorCode": "INVALID_RESULT",
+        "errorMessage": "返回结果未通过A端数据契约校验：识别结果报告类型冲突"
+      },
+      {
+        "attemptNumber": 1,
+        "workerId": "ocr-pc-b-01",
+        "outcome": "failed",
+        "stage": "pdf_parse",
+        "percent": 0,
+        "startedAt": "2026-11-15 08:38:21.676000000",
+        "heartbeatAt": "2026-11-15 08:38:22.782869000",
+        "finishedAt": "2026-11-15 08:38:24.385760000",
+        "errorCode": "INVALID_RESULT",
+        "errorMessage": "返回结果未通过A端数据契约校验，请检查回传内容"
+      }
+    ]
+  }
+}

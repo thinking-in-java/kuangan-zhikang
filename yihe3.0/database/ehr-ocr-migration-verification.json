@@ -1,0 +1,10 @@
+{
+  "version": "V003_a_ehr_ocr_receipts",
+  "applied": true,
+  "tables": [
+    "a_ehr_ocr_receipts"
+  ],
+  "sql_sha256": "fe13d1bda4820bce16236e064a115cd6b77196765dcd61fb450fdda9efd08789",
+  "legacy_unchanged": true,
+  "verified_at": "2026-11-14T18:48:47.254929+08:00"
+}

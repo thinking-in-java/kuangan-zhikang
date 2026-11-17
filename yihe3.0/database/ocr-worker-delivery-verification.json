@@ -1,0 +1,28 @@
+{
+  "generatedAt": "2026-11-15T11:05:06.899492+08:00",
+  "modeOfBusinessWriteTests": "synthetic",
+  "integrationChecks": {
+    "ocr-worker-queue-verification.json": 39,
+    "ehr-api-integration-verification.json": 26,
+    "ehr-mobile-ocr-verification.json": 19,
+    "ehr-page-verification.json": 16,
+    "ehr-operations-verification.json": 7
+  },
+  "integrationCheckTotal": 107,
+  "readinessChecks": 11,
+  "warStaticAssetsMatchSource": [
+    "live.js",
+    "live.css",
+    "management.html",
+    "detail.html"
+  ],
+  "storageRoot": "F:/upload",
+  "lanBaseUrl": "http://192.168.1.105:18080",
+  "lanLoginHttpStatus": 200,
+  "workerTokenFile": "F:/upload/.config/ocr-worker.token",
+  "tokenValuesInReport": false,
+  "tableCount": 44,
+  "columnCount": 449,
+  "realOcrEngineTested": false,
+  "realEmployeeDataModifiedByTests": false
+}

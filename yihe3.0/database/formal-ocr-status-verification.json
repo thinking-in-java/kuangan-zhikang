@@ -1,0 +1,59 @@
+{
+  "job_id": "9afedd74-559d-4db3-b6e0-52483ec520e5",
+  "scope_code": "org:10000",
+  "data_mode": "real",
+  "status": "extracted",
+  "dispatch_state": "succeeded",
+  "attempt_count": 2,
+  "progress_percent": 100,
+  "review_status": "needs_review",
+  "report_id": "b392eb7a-2b0a-4d7d-a78b-06d099bc2cbb",
+  "revision": 1,
+  "updated_at": "2026-11-15 08:21:42.958630",
+  "receivedContext": {
+    "contract_version": "2.0.0",
+    "scope_code": "org:10000",
+    "data_mode": "real",
+    "report_id": "b392eb7a-2b0a-4d7d-a78b-06d099bc2cbb",
+    "revision": 1
+  },
+  "receivedCounts": {
+    "evidence": 4,
+    "field_values": 2,
+    "items": 1,
+    "conclusions": 1,
+    "advice": 0
+  },
+  "attempts": [
+    {
+      "attempt_number": 1,
+      "outcome": "failed",
+      "error_code": "INPUT_CONTEXT_MISSING",
+      "started_at": "2026-11-15 03:21:26.850000",
+      "finished_at": "2026-11-15 03:21:27.861433"
+    },
+    {
+      "attempt_number": 2,
+      "outcome": "succeeded",
+      "error_code": null,
+      "started_at": "2026-11-15 08:21:30.798000",
+      "finished_at": "2026-11-15 08:21:42.960376"
+    }
+  ],
+  "liveContext": {
+    "scope": "org:10000",
+    "dataMode": "real"
+  },
+  "liveTask": {
+    "state": "succeeded",
+    "percent": 100,
+    "attemptCount": 2,
+    "errorCode": null
+  },
+  "liveReport": {
+    "reviewStatus": "needs_review",
+    "published": false,
+    "stage": "extracted",
+    "itemCount": 1
+  }
+}

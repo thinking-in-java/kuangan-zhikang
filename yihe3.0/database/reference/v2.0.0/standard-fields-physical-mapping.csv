@@ -1,0 +1,68 @@
+﻿source_row,field_key,field_name,category,physical_table,column,json_path,nullable,note
+6,full_name,姓名,职工基本信息,a_health_reports,field_values,health_report:$.field_values[*].value_raw,否,已有低置信候选。以 $.field_values[*].field_key = full_name 定位；重复观察保留
+7,sex,性别,职工基本信息,a_health_reports,field_values,health_report:$.field_values[*].value_raw,否,未量化。以 $.field_values[*].field_key = sex 定位；重复观察保留
+8,age,年龄,职工基本信息,a_health_reports,age_raw,health_report:$.field_values[*].value_raw,是,未量化。顶层镜像 health_report:$.age_raw；须与同键原值一致。以 $.field_values[*].field_key = age 定位；重复观察保留
+9,identity_number,身份证号码,职工基本信息,a_health_reports,field_values,health_report:$.field_values[*].value_raw,否,需核对多行、格式、来源或隐私。以 $.field_values[*].field_key = identity_number 定位；重复观察保留
+10,phone,联系电话,职工基本信息,a_health_reports,field_values,health_report:$.field_values[*].value_raw,否,需核对多行、格式、来源或隐私。以 $.field_values[*].field_key = phone 定位；重复观察保留
+11,marital_status,婚姻状况,职工基本信息,a_health_reports,field_values,health_report:$.field_values[*].value_raw,否,已有低置信候选。以 $.field_values[*].field_key = marital_status 定位；重复观察保留
+12,birth_date,出生日期,职工基本信息,a_health_reports,field_values,health_report:$.field_values[*].value_raw,否,需核对多行、格式、来源或隐私。以 $.field_values[*].field_key = birth_date 定位；重复观察保留
+13,ethnicity,民族,职工基本信息,a_health_reports,field_values,health_report:$.field_values[*].value_raw,否,未量化。以 $.field_values[*].field_key = ethnicity 定位；重复观察保留
+14,postal_code,邮编,职工基本信息,a_health_reports,field_values,health_report:$.field_values[*].value_raw,否,未量化。以 $.field_values[*].field_key = postal_code 定位；重复观察保留
+15,employee_number,职工编号,职工基本信息,a_health_reports,field_values,health_report:$.field_values[*].value_raw,否,需核对多行、格式、来源或隐私。以 $.field_values[*].field_key = employee_number 定位；重复观察保留
+16,home_address,家庭住址,职工基本信息,a_health_reports,field_values,health_report:$.field_values[*].value_raw,否,需核对多行、格式、来源或隐私。以 $.field_values[*].field_key = home_address 定位；重复观察保留
+17,institution,体检机构,体检报告信息,a_health_reports,institution_raw,health_report:$.field_values[*].value_raw,是,未量化。顶层镜像 health_report:$.institution_raw；须与同键原值一致。以 $.field_values[*].field_key = institution 定位；重复观察保留
+18,exam_number,体检编号,体检报告信息,a_health_reports,exam_number_raw,health_report:$.field_values[*].value_raw,是,需核对多行、格式、来源或隐私。顶层镜像 health_report:$.exam_number_raw；须与同键原值一致。以 $.field_values[*].field_key = exam_number 定位；重复观察保留
+19,exam_date,体检日期,体检报告信息,a_health_reports,exam_date_raw,health_report:$.field_values[*].value_raw,是,需核对多行、格式、来源或隐私。顶层镜像 health_report:$.exam_date_raw；须与同键原值一致。以 $.field_values[*].field_key = exam_date 定位；重复观察保留
+20,medical_history,既往史,体检报告信息,a_health_reports,field_values,health_report:$.field_values[*].value_raw,否,未量化。以 $.field_values[*].field_key = medical_history 定位；重复观察保留
+21,check_date,检查日期,体检报告信息,a_health_reports,field_values,health_report:$.field_values[*].value_raw,否,需核对多行、格式、来源或隐私。以 $.field_values[*].field_key = check_date 定位；重复观察保留
+22,symptoms,症状,体检报告信息,a_health_reports,field_values,health_report:$.field_values[*].value_raw,否,未量化。以 $.field_values[*].field_key = symptoms 定位；重复观察保留
+23,report_date,报告日期,体检报告信息,a_health_reports,report_date_raw,health_report:$.field_values[*].value_raw,是,需核对多行、格式、来源或隐私。顶层镜像 health_report:$.report_date_raw；须与同键原值一致。以 $.field_values[*].field_key = report_date 定位；重复观察保留
+24,children,现有子女,体检报告信息,a_health_reports,field_values,health_report:$.field_values[*].value_raw,否,未量化。以 $.field_values[*].field_key = children 定位；重复观察保留
+25,fertility_history,生育史,体检报告信息,a_health_reports,field_values,health_report:$.field_values[*].value_raw,否,未量化。以 $.field_values[*].field_key = fertility_history 定位；重复观察保留
+26,menstrual_history,月经史,体检报告信息,a_health_reports,field_values,health_report:$.field_values[*].value_raw,否,未量化。以 $.field_values[*].field_key = menstrual_history 定位；重复观察保留
+27,examination_section,检查科室,体检报告信息,a_health_reports,field_values,health_report:$.field_values[*].value_raw,否,未量化。以 $.field_values[*].field_key = examination_section 定位；重复观察保留
+28,exam_type,检查类型,体检报告信息,a_health_reports,exam_type_raw,health_report:$.field_values[*].value_raw,是,已有低置信候选。顶层镜像 health_report:$.exam_type_raw；须与同键原值一致。以 $.field_values[*].field_key = exam_type 定位；重复观察保留
+29,menopause_age,停经年龄,体检报告信息,a_health_reports,field_values,health_report:$.field_values[*].value_raw,否,未量化。以 $.field_values[*].field_key = menopause_age 定位；重复观察保留
+30,lab_date,检验日期,体检报告信息,a_health_reports,field_values,health_report:$.field_values[*].value_raw,否,需核对多行、格式、来源或隐私。以 $.field_values[*].field_key = lab_date 定位；重复观察保留
+31,smoking_history,吸烟史,体检报告信息,a_health_reports,field_values,health_report:$.field_values[*].value_raw,否,未量化。以 $.field_values[*].field_key = smoking_history 定位；重复观察保留
+32,family_history,家族史,体检报告信息,a_health_reports,field_values,health_report:$.field_values[*].value_raw,否,未量化。以 $.field_values[*].field_key = family_history 定位；重复观察保留
+33,alcohol_history,饮酒史,体检报告信息,a_health_reports,field_values,health_report:$.field_values[*].value_raw,否,未量化。以 $.field_values[*].field_key = alcohol_history 定位；重复观察保留
+34,barcode,条码号,体检报告信息,a_health_reports,field_values,health_report:$.field_values[*].value_raw,否,需核对多行、格式、来源或隐私。以 $.field_values[*].field_key = barcode 定位；重复观察保留
+35,allergy_history,过敏史,体检报告信息,a_health_reports,field_values,health_report:$.field_values[*].value_raw,否,未量化。以 $.field_values[*].field_key = allergy_history 定位；重复观察保留
+36,exam_location,检查地点,体检报告信息,a_health_reports,field_values,health_report:$.field_values[*].value_raw,否,未量化。以 $.field_values[*].field_key = exam_location 定位；重复观察保留
+37,collection_time,采集时间,体检报告信息,a_health_reports,field_values,health_report:$.field_values[*].value_raw,否,需核对多行、格式、来源或隐私。以 $.field_values[*].field_key = collection_time 定位；重复观察保留
+38,section_conclusion,分项检查结论,医生正式结论,a_health_reports,field_values,health_report:$.field_values[*].value_raw,否,需核对多行、格式、来源或隐私。以 $.field_values[*].field_key = section_conclusion 定位；重复观察保留
+39,section_findings,分项检查所见,医生正式结论,a_health_reports,field_values,health_report:$.field_values[*].value_raw,否,需核对多行、格式、来源或隐私。以 $.field_values[*].field_key = section_findings 定位；重复观察保留
+40,formal_conclusion,正式体检结论,医生正式结论,a_health_conclusions,original_text,health_conclusion:$.original_text,是,需核对多行、格式、来源或隐私
+41,medical_advice,医师建议,医生正式结论,a_health_advice,text_raw,health_advice:$.text_raw,否,需核对多行、格式、来源或隐私。source_kind=pdf；原始标签可区分建议类别
+42,management_advice,处理意见,医生正式结论,a_health_advice,text_raw,health_advice:$.text_raw,否,需核对多行、格式、来源或隐私。source_kind=pdf；原始标签可区分建议类别
+43,item_name,检查项目名称,检查项目明细,a_health_items,original_field_name,health_item:$.original_field_name,否,未量化
+44,item_result,检查结果,检查项目明细,a_health_items,result_raw,health_item:$.result_raw,是,需核对小数点、指数、符号及同一行对应
+45,item_unit,单位,检查项目明细,a_health_items,unit_raw,health_item:$.unit_raw,是,需核对小数点、指数、符号及同一行对应
+46,item_reference,参考范围,检查项目明细,a_health_items,reference_range_raw,health_item:$.reference_range_raw,是,需核对小数点、指数、符号及同一行对应
+47,item_abnormal,异常标记,检查项目明细,a_health_items,abnormal_flag_raw,health_item:$.abnormal_flag_raw,是,需核对小数点、指数、符号及同一行对应
+48,item_abbreviation,项目英文缩写,检查项目明细,a_health_items,abbreviation_raw,health_item:$.abbreviation_raw,是,未量化
+49,exam_doctor,检查医师,原始报告证据,a_health_reports,field_values,health_report:$.field_values[*].value_raw,否,需核对多行、格式、来源或隐私。以 $.field_values[*].field_key = exam_doctor 定位；重复观察保留
+50,lead_doctor,主检医师,原始报告证据,a_health_reports,field_values,health_report:$.field_values[*].value_raw,否,需核对多行、格式、来源或隐私。以 $.field_values[*].field_key = lead_doctor 定位；重复观察保留
+51,patient_signature,受检者签名标签,原始报告证据,a_report_evidence,original_label,health_report:$.evidence[*].original_label,否,图像或手写需看原页。仅标签或对象证据；对照同键字段观察与原页
+52,doctor_signature,医师签名标签,原始报告证据,a_report_evidence,original_label,health_report:$.evidence[*].original_label,否,图像或手写需看原页。仅标签或对象证据；对照同键字段观察与原页
+53,employer_stamp,用人单位签章标签,原始报告证据,a_report_evidence,original_label,health_report:$.evidence[*].original_label,否,图像或手写需看原页。仅标签或对象证据；对照同键字段观察与原页
+54,employer_stamp_date,单位签章日期,原始报告证据,a_health_reports,field_values,health_report:$.field_values[*].value_raw,否,需核对多行、格式、来源或隐私。以 $.field_values[*].field_key = employer_stamp_date 定位；重复观察保留
+55,reporting_doctor,报告医师,原始报告证据,a_health_reports,field_values,health_report:$.field_values[*].value_raw,否,需核对多行、格式、来源或隐私。以 $.field_values[*].field_key = reporting_doctor 定位；重复观察保留
+56,review_doctor,审核人员,原始报告证据,a_health_reports,field_values,health_report:$.field_values[*].value_raw,否,需核对多行、格式、来源或隐私。以 $.field_values[*].field_key = review_doctor 定位；重复观察保留
+57,review_date,审核日期,原始报告证据,a_health_reports,field_values,health_report:$.field_values[*].value_raw,否,需核对多行、格式、来源或隐私。以 $.field_values[*].field_key = review_date 定位；重复观察保留
+58,applying_doctor,申请医师,原始报告证据,a_health_reports,field_values,health_report:$.field_values[*].value_raw,否,需核对多行、格式、来源或隐私。以 $.field_values[*].field_key = applying_doctor 定位；重复观察保留
+59,stamp_annotation,PDF印章批注,原始报告证据,a_report_evidence,original_label,health_report:$.evidence[*].original_label,否,图像或手写需看原页。仅标签或对象证据；对照同键字段观察与原页
+60,job_type,工种,职业健康信息,a_occupational_profiles,value_raw,health_report:$.field_values[*].value_raw,是,已有低置信候选。以 $.field_values[*].field_key = job_type 定位；重复观察保留
+61,employer,工作单位,职业健康信息,a_occupational_profiles,value_raw,health_report:$.field_values[*].value_raw,是,未量化。以 $.field_values[*].field_key = employer 定位；重复观察保留
+62,protection_measures,防护措施,职业健康信息,a_occupational_profiles,value_raw,health_report:$.field_values[*].value_raw,是,未量化。以 $.field_values[*].field_key = protection_measures 定位；重复观察保留
+63,hazard_factors,职业病危害因素,职业健康信息,a_occupational_profiles,value_raw,health_report:$.field_values[*].value_raw,是,未量化。以 $.field_values[*].field_key = hazard_factors 定位；重复观察保留
+64,exposure_duration,接害工龄,职业健康信息,a_occupational_profiles,value_raw,health_report:$.field_values[*].value_raw,是,需核对多行、格式、来源或隐私。以 $.field_values[*].field_key = exposure_duration 定位；重复观察保留
+65,total_work_years,总工龄,职业健康信息,a_occupational_profiles,value_raw,health_report:$.field_values[*].value_raw,是,需核对多行、格式、来源或隐私。以 $.field_values[*].field_key = total_work_years 定位；重复观察保留
+66,workshop,车间,职业健康信息,a_occupational_profiles,value_raw,health_report:$.field_values[*].value_raw,是,未量化。以 $.field_values[*].field_key = workshop 定位；重复观察保留
+67,occupational_history,职业史,职业健康信息,a_occupational_profiles,value_raw,health_report:$.field_values[*].value_raw,是,未量化。以 $.field_values[*].field_key = occupational_history 定位；重复观察保留
+68,occupation_disease_history,职业病史,职业健康信息,a_occupational_profiles,value_raw,health_report:$.field_values[*].value_raw,是,未量化。以 $.field_values[*].field_key = occupation_disease_history 定位；重复观察保留
+69,exposure_start,职业史起始日期,职业健康信息,a_occupational_profiles,value_raw,health_report:$.field_values[*].value_raw,是,需核对多行、格式、来源或隐私。以 $.field_values[*].field_key = exposure_start 定位；重复观察保留
+70,department,部门,职业健康信息,a_occupational_profiles,value_raw,health_report:$.field_values[*].value_raw,是,未量化。以 $.field_values[*].field_key = department 定位；重复观察保留
+71,work_years_other,工龄（口径未注明）,职业健康信息,a_occupational_profiles,value_raw,health_report:$.field_values[*].value_raw,是,需核对多行、格式、来源或隐私。以 $.field_values[*].field_key = work_years_other 定位；重复观察保留
+72,org_unit_combined,部门/工种或部门/车间,职业健康信息,a_occupational_profiles,value_raw,health_report:$.field_values[*].value_raw,是,未量化。以 $.field_values[*].field_key = org_unit_combined 定位；重复观察保留

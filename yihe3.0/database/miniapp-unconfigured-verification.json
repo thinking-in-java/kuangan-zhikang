@@ -1,0 +1,13 @@
+{
+  "base": "http://localhost:18080",
+  "checks": [
+    "configuration_reports_not_ready",
+    "login_returns_explicit_503_without_fallback_identity",
+    "anonymous_me_401",
+    "anonymous_health_record_401",
+    "private_responses_not_cached"
+  ],
+  "count": 5,
+  "realWeChatConfigured": false,
+  "fakeIdentityCreated": false
+}

@@ -1,0 +1,78 @@
+{
+  "file": "矿安智康电子健康档案字段字典_v2.0.0.xlsx",
+  "sha256": "8ac2bf8b64d36e420e69b1312a04a1085db2edfc26b7f17b94f5816a9294ba14",
+  "sheets": [
+    {
+      "name": "00 使用说明",
+      "rows": 19,
+      "columns": 2,
+      "file": "00.json"
+    },
+    {
+      "name": "01 标准档案字段字典",
+      "rows": 72,
+      "columns": 23,
+      "file": "01.json"
+    },
+    {
+      "name": "02 医学检查项目字典",
+      "rows": 660,
+      "columns": 16,
+      "file": "02.json"
+    },
+    {
+      "name": "03 字段别名映射",
+      "rows": 1594,
+      "columns": 10,
+      "file": "03.json"
+    },
+    {
+      "name": "04 单位字典",
+      "rows": 395,
+      "columns": 9,
+      "file": "04.json"
+    },
+    {
+      "name": "05 枚举字典",
+      "rows": 44,
+      "columns": 5,
+      "file": "05.json"
+    },
+    {
+      "name": "06 数据来源字典",
+      "rows": 101,
+      "columns": 7,
+      "file": "06.json"
+    },
+    {
+      "name": "07 数据校验规则",
+      "rows": 20,
+      "columns": 6,
+      "file": "07.json"
+    },
+    {
+      "name": "08 MySQL映射字典",
+      "rows": 192,
+      "columns": 11,
+      "file": "08.json"
+    },
+    {
+      "name": "09 JSON接口映射",
+      "rows": 131,
+      "columns": 9,
+      "file": "09.json"
+    },
+    {
+      "name": "10 待确认字段",
+      "rows": 541,
+      "columns": 8,
+      "file": "10.json"
+    },
+    {
+      "name": "11 字段变更记录",
+      "rows": 30,
+      "columns": 6,
+      "file": "11.json"
+    }
+  ]
+}

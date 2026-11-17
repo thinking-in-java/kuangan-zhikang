@@ -1,0 +1,1190 @@
+[
+  {
+    "row": 2,
+    "cells": [
+      "数据来源字典",
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ]
+  },
+  {
+    "row": 3,
+    "cells": [
+      "PDF、花名册、系统和人工确认的来源边界",
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ]
+  },
+  {
+    "row": 5,
+    "cells": [
+      "field_code",
+      "source_class",
+      "authority",
+      "target",
+      "status",
+      "evidence",
+      "remark"
+    ]
+  },
+  {
+    "row": 6,
+    "cells": [
+      "full_name",
+      "A PDF原始字段",
+      "PDF原页",
+      "health_reports.field_values",
+      "frozen_source_label",
+      "E0000003",
+      "花名册值与PDF快照分开，冲突时复核"
+    ]
+  },
+  {
+    "row": 7,
+    "cells": [
+      "sex",
+      "A PDF原始字段",
+      "PDF原页",
+      "health_reports.field_values",
+      "frozen_source_label",
+      "E0000004",
+      "花名册值与PDF快照分开，冲突时复核"
+    ]
+  },
+  {
+    "row": 8,
+    "cells": [
+      "age",
+      "A PDF原始字段",
+      "PDF原页",
+      "health_reports.age_raw",
+      "frozen_source_label",
+      "E0000002",
+      null
+    ]
+  },
+  {
+    "row": 9,
+    "cells": [
+      "identity_number",
+      "A PDF原始字段",
+      "PDF原页",
+      "health_reports.field_values",
+      "frozen_source_label",
+      "E0000010",
+      "花名册值与PDF快照分开，冲突时复核"
+    ]
+  },
+  {
+    "row": 10,
+    "cells": [
+      "phone",
+      "A PDF原始字段",
+      "PDF原页",
+      "health_reports.field_values",
+      "frozen_source_label",
+      "E0000005",
+      "花名册值与PDF快照分开，冲突时复核"
+    ]
+  },
+  {
+    "row": 11,
+    "cells": [
+      "marital_status",
+      "A PDF原始字段",
+      "PDF原页",
+      "health_reports.field_values",
+      "frozen_source_label",
+      "E0000011",
+      null
+    ]
+  },
+  {
+    "row": 12,
+    "cells": [
+      "birth_date",
+      "A PDF原始字段",
+      "PDF原页",
+      "health_reports.field_values",
+      "frozen_source_label",
+      "E0004439",
+      "花名册值与PDF快照分开，冲突时复核"
+    ]
+  },
+  {
+    "row": 13,
+    "cells": [
+      "ethnicity",
+      "A PDF原始字段",
+      "PDF原页",
+      "health_reports.field_values",
+      "frozen_source_label",
+      "E0004440",
+      null
+    ]
+  },
+  {
+    "row": 14,
+    "cells": [
+      "postal_code",
+      "A PDF原始字段",
+      "PDF原页",
+      "health_reports.field_values",
+      "frozen_source_label",
+      "E0012316",
+      null
+    ]
+  },
+  {
+    "row": 15,
+    "cells": [
+      "employee_number",
+      "A PDF原始字段",
+      "PDF原页",
+      "health_reports.field_values",
+      "frozen_review_required",
+      "E0017372",
+      "花名册值与PDF快照分开，冲突时复核"
+    ]
+  },
+  {
+    "row": 16,
+    "cells": [
+      "home_address",
+      "A PDF原始字段",
+      "PDF原页",
+      "health_reports.field_values",
+      "frozen_source_label",
+      "E0083049",
+      null
+    ]
+  },
+  {
+    "row": 17,
+    "cells": [
+      "institution",
+      "A PDF原始字段",
+      "PDF原页",
+      "health_reports.institution_raw",
+      "frozen_source_label",
+      "E0000466",
+      null
+    ]
+  },
+  {
+    "row": 18,
+    "cells": [
+      "exam_number",
+      "A PDF原始字段",
+      "PDF原页",
+      "health_reports.exam_number_raw",
+      "frozen_source_label",
+      "E0000001",
+      null
+    ]
+  },
+  {
+    "row": 19,
+    "cells": [
+      "exam_date",
+      "A PDF原始字段",
+      "PDF原页",
+      "health_reports.exam_date_raw",
+      "frozen_source_label",
+      "E0000006",
+      null
+    ]
+  },
+  {
+    "row": 20,
+    "cells": [
+      "medical_history",
+      "A PDF原始字段",
+      "PDF原页",
+      "health_reports.field_values",
+      "frozen_source_label",
+      "E0000024",
+      null
+    ]
+  },
+  {
+    "row": 21,
+    "cells": [
+      "check_date",
+      "A PDF原始字段",
+      "PDF原页",
+      "health_reports.field_values",
+      "frozen_source_label",
+      "E0001840",
+      null
+    ]
+  },
+  {
+    "row": 22,
+    "cells": [
+      "symptoms",
+      "A PDF原始字段",
+      "PDF原页",
+      "health_reports.field_values",
+      "frozen_source_label",
+      "E0000029",
+      null
+    ]
+  },
+  {
+    "row": 23,
+    "cells": [
+      "report_date",
+      "A PDF原始字段",
+      "PDF原页",
+      "health_reports.report_date_raw",
+      "frozen_source_label",
+      "E0002023",
+      null
+    ]
+  },
+  {
+    "row": 24,
+    "cells": [
+      "children",
+      "A PDF原始字段",
+      "PDF原页",
+      "health_reports.field_values",
+      "frozen_source_label",
+      "E0000028",
+      null
+    ]
+  },
+  {
+    "row": 25,
+    "cells": [
+      "fertility_history",
+      "A PDF原始字段",
+      "PDF原页",
+      "health_reports.field_values",
+      "frozen_source_label",
+      "E0000027",
+      null
+    ]
+  },
+  {
+    "row": 26,
+    "cells": [
+      "menstrual_history",
+      "A PDF原始字段",
+      "PDF原页",
+      "health_reports.field_values",
+      "frozen_source_label",
+      "E0000026",
+      null
+    ]
+  },
+  {
+    "row": 27,
+    "cells": [
+      "examination_section",
+      "A PDF原始字段",
+      "PDF原页",
+      "health_reports.field_values",
+      "frozen_source_label",
+      "E0001839",
+      null
+    ]
+  },
+  {
+    "row": 28,
+    "cells": [
+      "exam_type",
+      "A PDF原始字段",
+      "PDF原页",
+      "health_reports.exam_type_raw",
+      "frozen_source_label",
+      "E0004431",
+      null
+    ]
+  },
+  {
+    "row": 29,
+    "cells": [
+      "menopause_age",
+      "A PDF原始字段",
+      "PDF原页",
+      "health_reports.field_values",
+      "frozen_source_label",
+      "E0004449",
+      null
+    ]
+  },
+  {
+    "row": 30,
+    "cells": [
+      "lab_date",
+      "A PDF原始字段",
+      "PDF原页",
+      "health_reports.field_values",
+      "frozen_source_label",
+      "E0012515",
+      null
+    ]
+  },
+  {
+    "row": 31,
+    "cells": [
+      "smoking_history",
+      "A PDF原始字段",
+      "PDF原页",
+      "health_reports.field_values",
+      "frozen_source_label",
+      "E0083060",
+      null
+    ]
+  },
+  {
+    "row": 32,
+    "cells": [
+      "family_history",
+      "A PDF原始字段",
+      "PDF原页",
+      "health_reports.field_values",
+      "frozen_source_label",
+      "E0083058",
+      null
+    ]
+  },
+  {
+    "row": 33,
+    "cells": [
+      "alcohol_history",
+      "A PDF原始字段",
+      "PDF原页",
+      "health_reports.field_values",
+      "frozen_source_label",
+      "E0083061",
+      null
+    ]
+  },
+  {
+    "row": 34,
+    "cells": [
+      "barcode",
+      "A PDF原始字段",
+      "PDF原页",
+      "health_reports.field_values",
+      "frozen_source_label",
+      "E0322273",
+      null
+    ]
+  },
+  {
+    "row": 35,
+    "cells": [
+      "allergy_history",
+      "A PDF原始字段",
+      "PDF原页",
+      "health_reports.field_values",
+      "frozen_source_label",
+      "E0348253",
+      null
+    ]
+  },
+  {
+    "row": 36,
+    "cells": [
+      "exam_location",
+      "A PDF原始字段",
+      "PDF原页",
+      "health_reports.field_values",
+      "frozen_source_label",
+      "E0447765",
+      null
+    ]
+  },
+  {
+    "row": 37,
+    "cells": [
+      "collection_time",
+      "A PDF原始字段",
+      "PDF原页",
+      "health_reports.field_values",
+      "frozen_source_label",
+      "E0322520",
+      null
+    ]
+  },
+  {
+    "row": 38,
+    "cells": [
+      "section_conclusion",
+      "A PDF原始字段",
+      "PDF原页",
+      "health_reports.field_values",
+      "frozen_review_required",
+      "E0000035",
+      null
+    ]
+  },
+  {
+    "row": 39,
+    "cells": [
+      "section_findings",
+      "A PDF原始字段",
+      "PDF原页",
+      "health_reports.field_values",
+      "frozen_source_label",
+      "E0000574",
+      null
+    ]
+  },
+  {
+    "row": 40,
+    "cells": [
+      "formal_conclusion",
+      "A PDF原始字段",
+      "PDF原页",
+      "health_conclusions.original_text",
+      "frozen_review_required",
+      "E0001850",
+      null
+    ]
+  },
+  {
+    "row": 41,
+    "cells": [
+      "medical_advice",
+      "A PDF原始字段",
+      "PDF原页",
+      "health_advice.text_raw",
+      "frozen_source_label",
+      "E0000033",
+      null
+    ]
+  },
+  {
+    "row": 42,
+    "cells": [
+      "management_advice",
+      "A PDF原始字段",
+      "PDF原页",
+      "health_advice.text_raw",
+      "frozen_source_label",
+      "E0083207",
+      null
+    ]
+  },
+  {
+    "row": 43,
+    "cells": [
+      "item_name",
+      "A PDF原始字段",
+      "PDF原页",
+      "health_items.original_field_name",
+      "frozen_source_label",
+      "E0000038",
+      null
+    ]
+  },
+  {
+    "row": 44,
+    "cells": [
+      "item_result",
+      "A PDF原始字段",
+      "PDF原页",
+      "health_items.result_raw",
+      "frozen_source_label",
+      "E0000039",
+      null
+    ]
+  },
+  {
+    "row": 45,
+    "cells": [
+      "item_unit",
+      "A PDF原始字段",
+      "PDF原页",
+      "health_items.unit_raw",
+      "frozen_source_label",
+      "E0000041",
+      null
+    ]
+  },
+  {
+    "row": 46,
+    "cells": [
+      "item_reference",
+      "A PDF原始字段",
+      "PDF原页",
+      "health_items.reference_range_raw",
+      "frozen_source_label",
+      "E0000040",
+      null
+    ]
+  },
+  {
+    "row": 47,
+    "cells": [
+      "item_abnormal",
+      "A PDF原始字段",
+      "PDF原页",
+      "health_items.abnormal_flag_raw",
+      "frozen_review_required",
+      "E0000105",
+      null
+    ]
+  },
+  {
+    "row": 48,
+    "cells": [
+      "item_abbreviation",
+      "A PDF原始字段",
+      "PDF原页",
+      "health_items.abbreviation_raw",
+      "frozen_source_label",
+      "E0001929",
+      null
+    ]
+  },
+  {
+    "row": 49,
+    "cells": [
+      "exam_doctor",
+      "A PDF原始字段",
+      "PDF原页",
+      "health_reports.field_values",
+      "frozen_source_label",
+      "E0000036",
+      null
+    ]
+  },
+  {
+    "row": 50,
+    "cells": [
+      "lead_doctor",
+      "A PDF原始字段",
+      "PDF原页",
+      "health_reports.field_values",
+      "frozen_source_label",
+      "E0000031",
+      null
+    ]
+  },
+  {
+    "row": 51,
+    "cells": [
+      "patient_signature",
+      "A PDF原始字段",
+      "PDF原页",
+      "report_evidence.original_label",
+      "frozen_source_label",
+      "E0000014",
+      null
+    ]
+  },
+  {
+    "row": 52,
+    "cells": [
+      "doctor_signature",
+      "A PDF原始字段",
+      "PDF原页",
+      "report_evidence.original_label",
+      "frozen_source_label",
+      "E0000030",
+      null
+    ]
+  },
+  {
+    "row": 53,
+    "cells": [
+      "employer_stamp",
+      "A PDF原始字段",
+      "PDF原页",
+      "report_evidence.original_label",
+      "frozen_source_label",
+      "E0000015",
+      null
+    ]
+  },
+  {
+    "row": 54,
+    "cells": [
+      "employer_stamp_date",
+      "A PDF原始字段",
+      "PDF原页",
+      "health_reports.field_values",
+      "frozen_source_label",
+      "E0000016",
+      null
+    ]
+  },
+  {
+    "row": 55,
+    "cells": [
+      "reporting_doctor",
+      "A PDF原始字段",
+      "PDF原页",
+      "health_reports.field_values",
+      "frozen_source_label",
+      "E0003415",
+      null
+    ]
+  },
+  {
+    "row": 56,
+    "cells": [
+      "review_doctor",
+      "A PDF原始字段",
+      "PDF原页",
+      "health_reports.field_values",
+      "frozen_source_label",
+      "E0002022",
+      null
+    ]
+  },
+  {
+    "row": 57,
+    "cells": [
+      "review_date",
+      "A PDF原始字段",
+      "PDF原页",
+      "health_reports.field_values",
+      "frozen_source_label",
+      "E0015971",
+      null
+    ]
+  },
+  {
+    "row": 58,
+    "cells": [
+      "applying_doctor",
+      "A PDF原始字段",
+      "PDF原页",
+      "health_reports.field_values",
+      "frozen_source_label",
+      "E0012597",
+      null
+    ]
+  },
+  {
+    "row": 59,
+    "cells": [
+      "stamp_annotation",
+      "A PDF原始字段",
+      "PDF原页",
+      "report_evidence.original_label",
+      "frozen_source_label",
+      "E0322285",
+      null
+    ]
+  },
+  {
+    "row": 60,
+    "cells": [
+      "job_type",
+      "A PDF原始字段",
+      "PDF原页",
+      "occupational_profiles.value_raw",
+      "frozen_source_label",
+      "E0000021",
+      null
+    ]
+  },
+  {
+    "row": 61,
+    "cells": [
+      "employer",
+      "A PDF原始字段",
+      "PDF原页",
+      "occupational_profiles.value_raw",
+      "frozen_source_label",
+      "E0000019",
+      null
+    ]
+  },
+  {
+    "row": 62,
+    "cells": [
+      "protection_measures",
+      "A PDF原始字段",
+      "PDF原页",
+      "occupational_profiles.value_raw",
+      "frozen_source_label",
+      "E0000023",
+      null
+    ]
+  },
+  {
+    "row": 63,
+    "cells": [
+      "hazard_factors",
+      "A PDF原始字段",
+      "PDF原页",
+      "occupational_profiles.value_raw",
+      "frozen_source_label",
+      "E0000022",
+      null
+    ]
+  },
+  {
+    "row": 64,
+    "cells": [
+      "exposure_duration",
+      "A PDF原始字段",
+      "PDF原页",
+      "occupational_profiles.value_raw",
+      "frozen_source_label",
+      "E0000013",
+      null
+    ]
+  },
+  {
+    "row": 65,
+    "cells": [
+      "total_work_years",
+      "A PDF原始字段",
+      "PDF原页",
+      "occupational_profiles.value_raw",
+      "frozen_source_label",
+      "E0000012",
+      null
+    ]
+  },
+  {
+    "row": 66,
+    "cells": [
+      "workshop",
+      "A PDF原始字段",
+      "PDF原页",
+      "occupational_profiles.value_raw",
+      "frozen_source_label",
+      "E0000020",
+      null
+    ]
+  },
+  {
+    "row": 67,
+    "cells": [
+      "occupational_history",
+      "A PDF原始字段",
+      "PDF原页",
+      "occupational_profiles.value_raw",
+      "frozen_source_label",
+      "E0000017",
+      null
+    ]
+  },
+  {
+    "row": 68,
+    "cells": [
+      "occupation_disease_history",
+      "A PDF原始字段",
+      "PDF原页",
+      "occupational_profiles.value_raw",
+      "frozen_source_label",
+      "E0000025",
+      null
+    ]
+  },
+  {
+    "row": 69,
+    "cells": [
+      "exposure_start",
+      "A PDF原始字段",
+      "PDF原页",
+      "occupational_profiles.value_raw",
+      "frozen_source_label",
+      "E0000018",
+      null
+    ]
+  },
+  {
+    "row": 70,
+    "cells": [
+      "department",
+      "A PDF原始字段",
+      "PDF原页",
+      "occupational_profiles.value_raw",
+      "frozen_source_label",
+      "E0001838",
+      null
+    ]
+  },
+  {
+    "row": 71,
+    "cells": [
+      "work_years_other",
+      "A PDF原始字段",
+      "PDF原页",
+      "occupational_profiles.value_raw",
+      "frozen_source_label",
+      "E0002371",
+      null
+    ]
+  },
+  {
+    "row": 72,
+    "cells": [
+      "org_unit_combined",
+      "A PDF原始字段",
+      "PDF原页",
+      "occupational_profiles.value_raw",
+      "frozen_review_required",
+      "E0083035",
+      null
+    ]
+  },
+  {
+    "row": 73,
+    "cells": [
+      "employee_master_code",
+      "B 企业授权花名册",
+      "授权职工花名册",
+      "employees.roster_employee_key",
+      "verified_authority",
+      null,
+      "花名册主键；PDF体检编号及员工编号各自保留"
+    ]
+  },
+  {
+    "row": 74,
+    "cells": [
+      "employee_identity_reference",
+      "B 企业授权花名册",
+      "花名册/授权身份库",
+      "employees.identity_ref",
+      "verified_authority",
+      null,
+      "使用受控引用"
+    ]
+  },
+  {
+    "row": 75,
+    "cells": [
+      "organization_scope",
+      "C 系统元数据",
+      "系统租户命名空间",
+      "employees.scope_code",
+      "system_generated",
+      null,
+      "由鉴权上下文产生"
+    ]
+  },
+  {
+    "row": 76,
+    "cells": [
+      "roster_source",
+      "C 系统元数据",
+      "数据导入回执",
+      "employees.roster_source_ref",
+      "system_generated",
+      null,
+      "引用授权花名册的批次及行"
+    ]
+  },
+  {
+    "row": 77,
+    "cells": [
+      "report_id",
+      "C 系统元数据",
+      "上传及处理服务",
+      "health_reports.report_id",
+      "system_generated",
+      null,
+      "逻辑报告的稳定标识"
+    ]
+  },
+  {
+    "row": 78,
+    "cells": [
+      "record_id",
+      "C 系统元数据",
+      "档案服务",
+      "health_records.record_id",
+      "system_generated",
+      null,
+      "归档主键"
+    ]
+  },
+  {
+    "row": 79,
+    "cells": [
+      "revision",
+      "C 系统元数据",
+      "审计与发布服务",
+      "health_reports.revision",
+      "system_generated",
+      null,
+      "入库历史版本"
+    ]
+  },
+  {
+    "row": 80,
+    "cells": [
+      "data_mode",
+      "C 系统元数据",
+      "服务环境",
+      "health_reports.data_mode",
+      "system_generated",
+      null,
+      "real 或 synthetic；命名空间相互隔离"
+    ]
+  },
+  {
+    "row": 81,
+    "cells": [
+      "upload_time",
+      "C 系统元数据",
+      "上传服务",
+      "report_sources.created_at",
+      "system_generated",
+      null,
+      "UTC"
+    ]
+  },
+  {
+    "row": 82,
+    "cells": [
+      "source_file_id",
+      "C 系统元数据",
+      "对象服务",
+      "report_sources.source_file_id",
+      "system_generated",
+      null,
+      "原件对象键"
+    ]
+  },
+  {
+    "row": 83,
+    "cells": [
+      "source_sha256",
+      "C 系统元数据",
+      "上传服务",
+      "report_sources.sha256",
+      "system_generated",
+      null,
+      "原始字节摘要"
+    ]
+  },
+  {
+    "row": 84,
+    "cells": [
+      "source_page",
+      "C 系统元数据",
+      "解析服务",
+      "report_evidence.page_number",
+      "system_generated",
+      null,
+      "从1起"
+    ]
+  },
+  {
+    "row": 85,
+    "cells": [
+      "coordinates",
+      "C 系统元数据",
+      "解析服务",
+      "report_evidence.bbox",
+      "system_generated",
+      null,
+      "坐标由提取器测得"
+    ]
+  },
+  {
+    "row": 86,
+    "cells": [
+      "extraction_method",
+      "C 系统元数据",
+      "解析服务",
+      "report_evidence.extraction_method",
+      "system_generated",
+      null,
+      "附提取器版本"
+    ]
+  },
+  {
+    "row": 87,
+    "cells": [
+      "ocr_confidence",
+      "C 系统元数据",
+      "识别器",
+      "report_evidence.ocr_confidence",
+      "system_generated",
+      null,
+      "原生文本留空"
+    ]
+  },
+  {
+    "row": 88,
+    "cells": [
+      "job_id",
+      "C 系统元数据",
+      "任务队列",
+      "extraction_jobs.job_id",
+      "system_generated",
+      null,
+      "幂等"
+    ]
+  },
+  {
+    "row": 89,
+    "cells": [
+      "review_state",
+      "C 系统元数据",
+      "审核服务",
+      "review_records.decision",
+      "system_generated",
+      null,
+      "以医生决策及证据为准"
+    ]
+  },
+  {
+    "row": 90,
+    "cells": [
+      "normalized_result",
+      "C 系统元数据",
+      "有版本规则",
+      "health_items.result_normalized",
+      "verified_derivation_only",
+      null,
+      "验证后派生，保留 raw"
+    ]
+  },
+  {
+    "row": 91,
+    "cells": [
+      "normalized_unit",
+      "C 系统元数据",
+      "有版本规则",
+      "health_items.unit_normalized",
+      "verified_derivation_only",
+      null,
+      "原单位与转换规则同时保存"
+    ]
+  },
+  {
+    "row": 92,
+    "cells": [
+      "advice_authorship",
+      "C 系统元数据",
+      "人工录入服务",
+      "health_advice.author_ref",
+      "system_generated",
+      null,
+      "医生审核记录"
+    ]
+  },
+  {
+    "row": 93,
+    "cells": [
+      "followup_status",
+      "C 系统元数据",
+      "随访服务",
+      "followup_tasks.status",
+      "system_generated",
+      null,
+      "须有已核验来源"
+    ]
+  },
+  {
+    "row": 94,
+    "cells": [
+      "job_title",
+      "未确认／授权来源候选",
+      "授权企业台账",
+      "occupational_profiles.value_raw",
+      "unconfirmed_pdf",
+      null,
+      "本轮未定位；工种独立"
+    ]
+  },
+  {
+    "row": 95,
+    "cells": [
+      "hazard_monitoring",
+      "未确认／授权来源候选",
+      "授权职业卫生台账",
+      "occupational_profiles.value_raw",
+      "unconfirmed_pdf",
+      null,
+      "危害因素栏已有证据；实测浓度未知"
+    ]
+  },
+  {
+    "row": 96,
+    "cells": [
+      "work_assignment_history",
+      "未确认／授权来源候选",
+      "授权企业台账",
+      "occupational_profiles.value_raw",
+      "unconfirmed_pdf",
+      null,
+      "完整调岗史待核对"
+    ]
+  },
+  {
+    "row": 97,
+    "cells": [
+      "clinical_treatment_history",
+      "未确认／授权来源候选",
+      "授权工卫与医疗档案",
+      "health_reports.field_values",
+      "unconfirmed_pdf",
+      null,
+      "完整职业病诊疗记录待核"
+    ]
+  },
+  {
+    "row": 98,
+    "cells": [
+      "review_decision",
+      "医生确认",
+      "授权医生",
+      "review_records.decision",
+      "已定义",
+      "05_mysql_schema_v2.sql",
+      "同报告版本、候选摘要与处置记录"
+    ]
+  },
+  {
+    "row": 99,
+    "cells": [
+      "standard_category",
+      "医生确认",
+      "职业健康个体报告原文及医生审核",
+      "health_conclusions.standard_category",
+      "仅适用职业健康个体报告",
+      "health_conclusion.schema.json",
+      "普通体检正式原文可存；分类留空"
+    ]
+  },
+  {
+    "row": 100,
+    "cells": [
+      "clinician_advice",
+      "医生确认",
+      "授权医生",
+      "health_advice.text_raw",
+      "source_kind=clinician",
+      "health_advice.schema.json",
+      "须绑定同版本审核记录与作者"
+    ]
+  },
+  {
+    "row": 101,
+    "cells": [
+      "—",
+      "D AI辅助信息",
+      "AI 辅助说明、检索或建议",
+      "契约未定义",
+      "仅使用边界说明",
+      "health_advice.schema.json $.source_kind",
+      "不能作为诊断、正式结论或医生建议入档"
+    ]
+  }
+]

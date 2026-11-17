@@ -1,0 +1,23 @@
+{
+  "checks": [
+    "unreviewed_report_exposes_remove_permission",
+    "missing_if_match_rejected",
+    "stale_candidate_cannot_be_removed",
+    "removal_requires_reason",
+    "delete_endpoint_removes_exact_report",
+    "repeat_delete_is_idempotent",
+    "other_report_and_employee_preserved",
+    "removed_report_not_accessible_from_old_employee",
+    "running_ocr_cancelled",
+    "original_registry_retained",
+    "one_audit_record_on_network_retry",
+    "removed_original_reuploads_to_correct_employee",
+    "old_version_does_not_remove_reupload",
+    "reviewed_report_has_no_remove_button",
+    "reviewed_report_removal_rejected_by_backend",
+    "reviewed_report_preserved"
+  ],
+  "count": 16,
+  "mode": "synthetic",
+  "realEmployeeModified": false
+}

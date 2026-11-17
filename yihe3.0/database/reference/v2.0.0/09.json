@@ -1,0 +1,1808 @@
+[
+  {
+    "row": 2,
+    "cells": [
+      "JSON接口映射",
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ]
+  },
+  {
+    "row": 3,
+    "cells": [
+      "五个实际 JSON Schema · 路径和类型",
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ]
+  },
+  {
+    "row": 5,
+    "cells": [
+      "schema_name",
+      "field_name",
+      "json_path",
+      "json_type",
+      "required",
+      "nullable",
+      "description",
+      "database_mapping",
+      "requirement_scope"
+    ]
+  },
+  {
+    "row": 6,
+    "cells": [
+      "employee_profile",
+      "contract_version",
+      "$.contract_version",
+      "string",
+      "是",
+      "否",
+      "契约版本常量",
+      null,
+      "所属对象；附加条件见 Schema allOf"
+    ]
+  },
+  {
+    "row": 7,
+    "cells": [
+      "employee_profile",
+      "scope_code",
+      "$.scope_code",
+      "string",
+      "是",
+      "否",
+      "租户或组织范围。实体列",
+      "employees.scope_code",
+      "所属对象；附加条件见 Schema allOf"
+    ]
+  },
+  {
+    "row": 8,
+    "cells": [
+      "employee_profile",
+      "data_mode",
+      "$.data_mode",
+      "string",
+      "是",
+      "否",
+      "真实/模拟隔离。实体列。允许值 real｜synthetic",
+      "employees.data_mode",
+      "所属对象；附加条件见 Schema allOf"
+    ]
+  },
+  {
+    "row": 9,
+    "cells": [
+      "employee_profile",
+      "employee_id",
+      "$.employee_id",
+      "string",
+      "是",
+      "否",
+      "员工标识。实体列。format=uuid",
+      "employees.employee_id",
+      "所属对象；附加条件见 Schema allOf"
+    ]
+  },
+  {
+    "row": 10,
+    "cells": [
+      "employee_profile",
+      "roster_employee_key",
+      "$.roster_employee_key",
+      "string",
+      "是",
+      "否",
+      "实体列",
+      "employees.roster_employee_key",
+      "所属对象；附加条件见 Schema allOf"
+    ]
+  },
+  {
+    "row": 11,
+    "cells": [
+      "employee_profile",
+      "identity_ref",
+      "$.identity_ref",
+      "string",
+      "是",
+      "否",
+      "实体列",
+      "employees.identity_ref",
+      "所属对象；附加条件见 Schema allOf"
+    ]
+  },
+  {
+    "row": 12,
+    "cells": [
+      "employee_profile",
+      "roster_source_ref",
+      "$.roster_source_ref",
+      "string",
+      "是",
+      "否",
+      "实体列",
+      "employees.roster_source_ref",
+      "所属对象；附加条件见 Schema allOf"
+    ]
+  },
+  {
+    "row": 13,
+    "cells": [
+      "employee_profile",
+      "source_kind",
+      "$.source_kind",
+      "string",
+      "是",
+      "否",
+      "契约常量 roster",
+      null,
+      "所属对象；附加条件见 Schema allOf"
+    ]
+  },
+  {
+    "row": 14,
+    "cells": [
+      "health_report",
+      "contract_version",
+      "$.contract_version",
+      "string",
+      "是",
+      "否",
+      "契约版本常量",
+      null,
+      "所属对象；附加条件见 Schema allOf"
+    ]
+  },
+  {
+    "row": 15,
+    "cells": [
+      "health_report",
+      "scope_code",
+      "$.scope_code",
+      "string",
+      "是",
+      "否",
+      "租户或组织范围。实体列",
+      "health_reports.scope_code",
+      "所属对象；附加条件见 Schema allOf"
+    ]
+  },
+  {
+    "row": 16,
+    "cells": [
+      "health_report",
+      "data_mode",
+      "$.data_mode",
+      "string",
+      "是",
+      "否",
+      "真实/模拟隔离。实体列。允许值 real｜synthetic",
+      "health_reports.data_mode",
+      "所属对象；附加条件见 Schema allOf"
+    ]
+  },
+  {
+    "row": 17,
+    "cells": [
+      "health_report",
+      "report_id",
+      "$.report_id",
+      "string",
+      "是",
+      "否",
+      "逻辑报告 UUID。实体列。format=uuid",
+      "health_reports.report_id",
+      "所属对象；附加条件见 Schema allOf"
+    ]
+  },
+  {
+    "row": 18,
+    "cells": [
+      "health_report",
+      "revision",
+      "$.revision",
+      "integer",
+      "是",
+      "否",
+      "报告版本号。实体列",
+      "health_reports.revision",
+      "所属对象；附加条件见 Schema allOf"
+    ]
+  },
+  {
+    "row": 19,
+    "cells": [
+      "health_report",
+      "prior_revision",
+      "$.prior_revision",
+      "integer|null",
+      "是",
+      "是",
+      "实体列",
+      "health_reports.prior_revision",
+      "所属对象；附加条件见 Schema allOf"
+    ]
+  },
+  {
+    "row": 20,
+    "cells": [
+      "health_report",
+      "record_id",
+      "$.record_id",
+      "null|string",
+      "是",
+      "是",
+      "档案标识。实体列",
+      "health_reports.record_id",
+      "所属对象；附加条件见 Schema allOf"
+    ]
+  },
+  {
+    "row": 21,
+    "cells": [
+      "health_report",
+      "report_kind",
+      "$.report_kind",
+      "string",
+      "是",
+      "否",
+      "实体列。允许值 individual｜organization｜unknown",
+      "health_reports.report_kind",
+      "所属对象；附加条件见 Schema allOf"
+    ]
+  },
+  {
+    "row": 22,
+    "cells": [
+      "health_report",
+      "institution_raw",
+      "$.institution_raw",
+      "null|string",
+      "是",
+      "是",
+      "实体列",
+      "health_reports.institution_raw",
+      "所属对象；附加条件见 Schema allOf"
+    ]
+  },
+  {
+    "row": 23,
+    "cells": [
+      "health_report",
+      "exam_date_raw",
+      "$.exam_date_raw",
+      "null|string",
+      "是",
+      "是",
+      "实体列",
+      "health_reports.exam_date_raw",
+      "所属对象；附加条件见 Schema allOf"
+    ]
+  },
+  {
+    "row": 24,
+    "cells": [
+      "health_report",
+      "exam_date_verified",
+      "$.exam_date_verified",
+      "null|string",
+      "是",
+      "是",
+      "实体列",
+      "health_reports.exam_date_verified",
+      "所属对象；附加条件见 Schema allOf"
+    ]
+  },
+  {
+    "row": 25,
+    "cells": [
+      "health_report",
+      "report_date_raw",
+      "$.report_date_raw",
+      "null|string",
+      "是",
+      "是",
+      "实体列",
+      "health_reports.report_date_raw",
+      "所属对象；附加条件见 Schema allOf"
+    ]
+  },
+  {
+    "row": 26,
+    "cells": [
+      "health_report",
+      "exam_type_raw",
+      "$.exam_type_raw",
+      "null|string",
+      "是",
+      "是",
+      "实体列",
+      "health_reports.exam_type_raw",
+      "所属对象；附加条件见 Schema allOf"
+    ]
+  },
+  {
+    "row": 27,
+    "cells": [
+      "health_report",
+      "exam_number_raw",
+      "$.exam_number_raw",
+      "null|string",
+      "是",
+      "是",
+      "实体列",
+      "health_reports.exam_number_raw",
+      "所属对象；附加条件见 Schema allOf"
+    ]
+  },
+  {
+    "row": 28,
+    "cells": [
+      "health_report",
+      "age_raw",
+      "$.age_raw",
+      "null|string",
+      "是",
+      "是",
+      "实体列",
+      "health_reports.age_raw",
+      "所属对象；附加条件见 Schema allOf"
+    ]
+  },
+  {
+    "row": 29,
+    "cells": [
+      "health_report",
+      "dictionary_version",
+      "$.dictionary_version",
+      "string",
+      "是",
+      "否",
+      "实体列",
+      "health_reports.dictionary_version",
+      "所属对象；附加条件见 Schema allOf"
+    ]
+  },
+  {
+    "row": 30,
+    "cells": [
+      "health_report",
+      "review_status",
+      "$.review_status",
+      "string",
+      "是",
+      "否",
+      "复核状态。实体列。允许值 unreviewed｜needs_review｜confirmed｜rejected",
+      "health_reports.review_status",
+      "所属对象；附加条件见 Schema allOf"
+    ]
+  },
+  {
+    "row": 31,
+    "cells": [
+      "health_report",
+      "source_files",
+      "$.source_files",
+      "array",
+      "是",
+      "否",
+      "集合通过报告版本及证据外键持久化",
+      null,
+      "所属对象；附加条件见 Schema allOf"
+    ]
+  },
+  {
+    "row": 32,
+    "cells": [
+      "health_report",
+      "source_files 元素",
+      "$.source_files[*]",
+      "object",
+      "否",
+      "否",
+      "集合通过报告版本及证据外键持久化",
+      null,
+      "数组元素，数量以 minItems 为准；附加条件见 Schema allOf"
+    ]
+  },
+  {
+    "row": 33,
+    "cells": [
+      "health_report",
+      "source_file_id",
+      "$.source_files[*].source_file_id",
+      "string",
+      "是",
+      "否",
+      "受限原文件标识。实体列。format=uuid",
+      "report_sources.source_file_id",
+      "所属对象；附加条件见 Schema allOf"
+    ]
+  },
+  {
+    "row": 34,
+    "cells": [
+      "health_report",
+      "sha256",
+      "$.source_files[*].sha256",
+      "string",
+      "是",
+      "否",
+      "原始文件摘要。实体列",
+      "report_sources.sha256",
+      "所属对象；附加条件见 Schema allOf"
+    ]
+  },
+  {
+    "row": 35,
+    "cells": [
+      "health_report",
+      "page_count",
+      "$.source_files[*].page_count",
+      "integer",
+      "是",
+      "否",
+      "实体列",
+      "report_sources.page_count",
+      "所属对象；附加条件见 Schema allOf"
+    ]
+  },
+  {
+    "row": 36,
+    "cells": [
+      "health_report",
+      "evidence",
+      "$.evidence",
+      "array",
+      "是",
+      "否",
+      "集合通过报告版本及证据外键持久化",
+      null,
+      "所属对象；附加条件见 Schema allOf"
+    ]
+  },
+  {
+    "row": 37,
+    "cells": [
+      "health_report",
+      "evidence 元素",
+      "$.evidence[*]",
+      "object",
+      "否",
+      "否",
+      "集合通过报告版本及证据外键持久化",
+      null,
+      "数组元素，数量以 minItems 为准；附加条件见 Schema allOf"
+    ]
+  },
+  {
+    "row": 38,
+    "cells": [
+      "health_report",
+      "evidence_id",
+      "$.evidence[*].evidence_id",
+      "string",
+      "是",
+      "否",
+      "实体列。format=uuid",
+      "report_evidence.evidence_id",
+      "所属对象；附加条件见 Schema allOf"
+    ]
+  },
+  {
+    "row": 39,
+    "cells": [
+      "health_report",
+      "source_file_id",
+      "$.evidence[*].source_file_id",
+      "string",
+      "是",
+      "否",
+      "受限原文件标识。实体列。format=uuid",
+      "report_evidence.source_file_id",
+      "所属对象；附加条件见 Schema allOf"
+    ]
+  },
+  {
+    "row": 40,
+    "cells": [
+      "health_report",
+      "page_number",
+      "$.evidence[*].page_number",
+      "integer",
+      "是",
+      "否",
+      "原件页码，从 1 开始。实体列",
+      "report_evidence.page_number",
+      "所属对象；附加条件见 Schema allOf"
+    ]
+  },
+  {
+    "row": 41,
+    "cells": [
+      "health_report",
+      "bbox",
+      "$.evidence[*].bbox",
+      "array|null",
+      "是",
+      "是",
+      "实体列",
+      "report_evidence.bbox",
+      "所属对象；附加条件见 Schema allOf"
+    ]
+  },
+  {
+    "row": 42,
+    "cells": [
+      "health_report",
+      "coordinate_system",
+      "$.evidence[*].coordinate_system",
+      "string",
+      "是",
+      "否",
+      "实体列。允许值 pdf_points_unrotated｜image_pixels_top_left｜object_only",
+      "report_evidence.coordinate_system",
+      "所属对象；附加条件见 Schema allOf"
+    ]
+  },
+  {
+    "row": 43,
+    "cells": [
+      "health_report",
+      "page_rotation",
+      "$.evidence[*].page_rotation",
+      "integer",
+      "是",
+      "否",
+      "实体列。允许值 0｜90｜180｜270",
+      "report_evidence.page_rotation",
+      "所属对象；附加条件见 Schema allOf"
+    ]
+  },
+  {
+    "row": 44,
+    "cells": [
+      "health_report",
+      "render_dpi",
+      "$.evidence[*].render_dpi",
+      "integer|null",
+      "是",
+      "是",
+      "实体列",
+      "report_evidence.render_dpi",
+      "所属对象；附加条件见 Schema allOf"
+    ]
+  },
+  {
+    "row": 45,
+    "cells": [
+      "health_report",
+      "original_label",
+      "$.evidence[*].original_label",
+      "string",
+      "是",
+      "否",
+      "实体列",
+      "report_evidence.original_label",
+      "所属对象；附加条件见 Schema allOf"
+    ]
+  },
+  {
+    "row": 46,
+    "cells": [
+      "health_report",
+      "raw_fragment",
+      "$.evidence[*].raw_fragment",
+      "null|string",
+      "是",
+      "是",
+      "实体列",
+      "report_evidence.raw_fragment",
+      "所属对象；附加条件见 Schema allOf"
+    ]
+  },
+  {
+    "row": 47,
+    "cells": [
+      "health_report",
+      "extraction_method",
+      "$.evidence[*].extraction_method",
+      "string",
+      "是",
+      "否",
+      "实体列。允许值 native_text｜ocr｜pdf_object｜manual_transcription",
+      "report_evidence.extraction_method",
+      "所属对象；附加条件见 Schema allOf"
+    ]
+  },
+  {
+    "row": 48,
+    "cells": [
+      "health_report",
+      "extractor_version",
+      "$.evidence[*].extractor_version",
+      "string",
+      "是",
+      "否",
+      "实体列",
+      "report_evidence.extractor_version",
+      "所属对象；附加条件见 Schema allOf"
+    ]
+  },
+  {
+    "row": 49,
+    "cells": [
+      "health_report",
+      "ocr_confidence",
+      "$.evidence[*].ocr_confidence",
+      "null|number",
+      "是",
+      "是",
+      "OCR 置信度；原生文本留空。实体列",
+      "report_evidence.ocr_confidence",
+      "所属对象；附加条件见 Schema allOf"
+    ]
+  },
+  {
+    "row": 50,
+    "cells": [
+      "health_report",
+      "review_status",
+      "$.evidence[*].review_status",
+      "string",
+      "是",
+      "否",
+      "复核状态。实体列。允许值 unreviewed｜needs_review｜confirmed｜rejected",
+      "report_evidence.review_status",
+      "所属对象；附加条件见 Schema allOf"
+    ]
+  },
+  {
+    "row": 51,
+    "cells": [
+      "health_report",
+      "field_values",
+      "$.field_values",
+      "array",
+      "是",
+      "否",
+      "版本内字段观察 JSON。实体列",
+      "health_reports.field_values",
+      "所属对象；附加条件见 Schema allOf"
+    ]
+  },
+  {
+    "row": 52,
+    "cells": [
+      "health_report",
+      "field_values 元素",
+      "$.field_values[*]",
+      "object",
+      "否",
+      "否",
+      "JSON 列内的字段观察",
+      "health_reports.field_values",
+      "数组元素，数量以 minItems 为准；附加条件见 Schema allOf"
+    ]
+  },
+  {
+    "row": 53,
+    "cells": [
+      "health_report",
+      "field_key",
+      "$.field_values[*].field_key",
+      "string",
+      "是",
+      "否",
+      "JSON 列内的字段观察。共 58 个冻结字段键，详见标准字段字典",
+      "health_reports.field_values",
+      "所属对象；附加条件见 Schema allOf"
+    ]
+  },
+  {
+    "row": 54,
+    "cells": [
+      "health_report",
+      "original_field_name",
+      "$.field_values[*].original_field_name",
+      "string",
+      "是",
+      "否",
+      "原字段名。JSON 列内的字段观察",
+      "health_reports.field_values",
+      "所属对象；附加条件见 Schema allOf"
+    ]
+  },
+  {
+    "row": 55,
+    "cells": [
+      "health_report",
+      "value_raw",
+      "$.field_values[*].value_raw",
+      "null|string",
+      "是",
+      "是",
+      "JSON 列内的字段观察",
+      "health_reports.field_values",
+      "所属对象；附加条件见 Schema allOf"
+    ]
+  },
+  {
+    "row": 56,
+    "cells": [
+      "health_report",
+      "value_normalized",
+      "$.field_values[*].value_normalized",
+      "null|string",
+      "是",
+      "是",
+      "JSON 列内的字段观察",
+      "health_reports.field_values",
+      "所属对象；附加条件见 Schema allOf"
+    ]
+  },
+  {
+    "row": 57,
+    "cells": [
+      "health_report",
+      "normalization_rule_version",
+      "$.field_values[*].normalization_rule_version",
+      "null|string",
+      "是",
+      "是",
+      "JSON 列内的字段观察",
+      "health_reports.field_values",
+      "所属对象；附加条件见 Schema allOf"
+    ]
+  },
+  {
+    "row": 58,
+    "cells": [
+      "health_report",
+      "evidence_ids",
+      "$.field_values[*].evidence_ids",
+      "array",
+      "是",
+      "否",
+      "JSON 列内的字段观察",
+      "health_reports.field_values",
+      "所属对象；附加条件见 Schema allOf"
+    ]
+  },
+  {
+    "row": 59,
+    "cells": [
+      "health_report",
+      "evidence_ids 元素",
+      "$.field_values[*].evidence_ids[*]",
+      "string",
+      "否",
+      "否",
+      "JSON 列内的字段观察。format=uuid",
+      "health_reports.field_values",
+      "数组元素，数量以 minItems 为准；附加条件见 Schema allOf"
+    ]
+  },
+  {
+    "row": 60,
+    "cells": [
+      "health_report",
+      "review_status",
+      "$.field_values[*].review_status",
+      "string",
+      "是",
+      "否",
+      "复核状态。JSON 列内的字段观察。允许值 unreviewed｜needs_review｜confirmed｜rejected",
+      "health_reports.field_values",
+      "所属对象；附加条件见 Schema allOf"
+    ]
+  },
+  {
+    "row": 61,
+    "cells": [
+      "health_report",
+      "items",
+      "$.items",
+      "array",
+      "是",
+      "否",
+      "引用 health_item.schema.json",
+      null,
+      "所属对象；附加条件见 Schema allOf"
+    ]
+  },
+  {
+    "row": 62,
+    "cells": [
+      "health_report",
+      "items 元素",
+      "$.items[*]",
+      "object",
+      "否",
+      "否",
+      "引用 health_item.schema.json。引用 health_item.schema.json",
+      null,
+      "数组元素，数量以 minItems 为准；附加条件见 Schema allOf"
+    ]
+  },
+  {
+    "row": 63,
+    "cells": [
+      "health_report",
+      "conclusions",
+      "$.conclusions",
+      "array",
+      "是",
+      "否",
+      "引用 health_conclusion.schema.json",
+      null,
+      "所属对象；附加条件见 Schema allOf"
+    ]
+  },
+  {
+    "row": 64,
+    "cells": [
+      "health_report",
+      "conclusions 元素",
+      "$.conclusions[*]",
+      "object",
+      "否",
+      "否",
+      "引用 health_conclusion.schema.json。引用 health_conclusion.schema.json",
+      null,
+      "数组元素，数量以 minItems 为准；附加条件见 Schema allOf"
+    ]
+  },
+  {
+    "row": 65,
+    "cells": [
+      "health_report",
+      "advice",
+      "$.advice",
+      "array",
+      "是",
+      "否",
+      "引用 health_advice.schema.json",
+      null,
+      "所属对象；附加条件见 Schema allOf"
+    ]
+  },
+  {
+    "row": 66,
+    "cells": [
+      "health_report",
+      "advice 元素",
+      "$.advice[*]",
+      "object",
+      "否",
+      "否",
+      "引用 health_advice.schema.json。引用 health_advice.schema.json",
+      null,
+      "数组元素，数量以 minItems 为准；附加条件见 Schema allOf"
+    ]
+  },
+  {
+    "row": 67,
+    "cells": [
+      "health_item",
+      "contract_version",
+      "$.contract_version",
+      "string",
+      "是",
+      "否",
+      "契约版本常量",
+      null,
+      "所属对象；附加条件见 Schema allOf"
+    ]
+  },
+  {
+    "row": 68,
+    "cells": [
+      "health_item",
+      "scope_code",
+      "$.scope_code",
+      "string",
+      "是",
+      "否",
+      "租户或组织范围。从父报告版本关联取得",
+      "health_reports.scope_code",
+      "所属对象；附加条件见 Schema allOf"
+    ]
+  },
+  {
+    "row": 69,
+    "cells": [
+      "health_item",
+      "data_mode",
+      "$.data_mode",
+      "string",
+      "是",
+      "否",
+      "真实/模拟隔离。从父报告版本关联取得。允许值 real｜synthetic",
+      "health_reports.data_mode",
+      "所属对象；附加条件见 Schema allOf"
+    ]
+  },
+  {
+    "row": 70,
+    "cells": [
+      "health_item",
+      "report_id",
+      "$.report_id",
+      "string",
+      "是",
+      "否",
+      "逻辑报告 UUID。实体列。format=uuid",
+      "health_items.report_id",
+      "所属对象；附加条件见 Schema allOf"
+    ]
+  },
+  {
+    "row": 71,
+    "cells": [
+      "health_item",
+      "revision",
+      "$.revision",
+      "integer",
+      "是",
+      "否",
+      "报告版本号。实体列",
+      "health_items.revision",
+      "所属对象；附加条件见 Schema allOf"
+    ]
+  },
+  {
+    "row": 72,
+    "cells": [
+      "health_item",
+      "item_id",
+      "$.item_id",
+      "string",
+      "是",
+      "否",
+      "实体列。format=uuid",
+      "health_items.item_id",
+      "所属对象；附加条件见 Schema allOf"
+    ]
+  },
+  {
+    "row": 73,
+    "cells": [
+      "health_item",
+      "ordinal",
+      "$.ordinal",
+      "integer",
+      "是",
+      "否",
+      "实体列",
+      "health_items.ordinal",
+      "所属对象；附加条件见 Schema allOf"
+    ]
+  },
+  {
+    "row": 74,
+    "cells": [
+      "health_item",
+      "primary_evidence_id",
+      "$.primary_evidence_id",
+      "string",
+      "是",
+      "否",
+      "实体列。format=uuid",
+      "health_items.primary_evidence_id",
+      "所属对象；附加条件见 Schema allOf"
+    ]
+  },
+  {
+    "row": 75,
+    "cells": [
+      "health_item",
+      "evidence_ids",
+      "$.evidence_ids",
+      "array",
+      "是",
+      "否",
+      "实体列",
+      "health_items.evidence_ids",
+      "所属对象；附加条件见 Schema allOf"
+    ]
+  },
+  {
+    "row": 76,
+    "cells": [
+      "health_item",
+      "evidence_ids 元素",
+      "$.evidence_ids[*]",
+      "string",
+      "否",
+      "否",
+      "数组元素保存在同一 JSON 列。format=uuid",
+      "health_items.evidence_ids",
+      "数组元素，数量以 minItems 为准；附加条件见 Schema allOf"
+    ]
+  },
+  {
+    "row": 77,
+    "cells": [
+      "health_item",
+      "original_field_name",
+      "$.original_field_name",
+      "string",
+      "是",
+      "否",
+      "原字段名。实体列",
+      "health_items.original_field_name",
+      "所属对象；附加条件见 Schema allOf"
+    ]
+  },
+  {
+    "row": 78,
+    "cells": [
+      "health_item",
+      "standard_field_name",
+      "$.standard_field_name",
+      "null|string",
+      "是",
+      "是",
+      "实体列",
+      "health_items.standard_field_name",
+      "所属对象；附加条件见 Schema allOf"
+    ]
+  },
+  {
+    "row": 79,
+    "cells": [
+      "health_item",
+      "item_code",
+      "$.item_code",
+      "null|string",
+      "是",
+      "是",
+      "实体列",
+      "health_items.item_code",
+      "所属对象；附加条件见 Schema allOf"
+    ]
+  },
+  {
+    "row": 80,
+    "cells": [
+      "health_item",
+      "dictionary_version",
+      "$.dictionary_version",
+      "null|string",
+      "是",
+      "是",
+      "实体列",
+      "health_items.dictionary_version",
+      "所属对象；附加条件见 Schema allOf"
+    ]
+  },
+  {
+    "row": 81,
+    "cells": [
+      "health_item",
+      "abbreviation_raw",
+      "$.abbreviation_raw",
+      "null|string",
+      "是",
+      "是",
+      "实体列",
+      "health_items.abbreviation_raw",
+      "所属对象；附加条件见 Schema allOf"
+    ]
+  },
+  {
+    "row": 82,
+    "cells": [
+      "health_item",
+      "result_raw",
+      "$.result_raw",
+      "null|string",
+      "是",
+      "是",
+      "检查结果原文。实体列",
+      "health_items.result_raw",
+      "所属对象；附加条件见 Schema allOf"
+    ]
+  },
+  {
+    "row": 83,
+    "cells": [
+      "health_item",
+      "result_normalized",
+      "$.result_normalized",
+      "null|object",
+      "是",
+      "是",
+      "实体列",
+      "health_items.result_normalized",
+      "所属对象；附加条件见 Schema allOf"
+    ]
+  },
+  {
+    "row": 84,
+    "cells": [
+      "health_item",
+      "unit_raw",
+      "$.unit_raw",
+      "null|string",
+      "是",
+      "是",
+      "原单位。实体列",
+      "health_items.unit_raw",
+      "所属对象；附加条件见 Schema allOf"
+    ]
+  },
+  {
+    "row": 85,
+    "cells": [
+      "health_item",
+      "unit_normalized",
+      "$.unit_normalized",
+      "null|string",
+      "是",
+      "是",
+      "实体列",
+      "health_items.unit_normalized",
+      "所属对象；附加条件见 Schema allOf"
+    ]
+  },
+  {
+    "row": 86,
+    "cells": [
+      "health_item",
+      "unit_conversion",
+      "$.unit_conversion",
+      "null|object",
+      "是",
+      "是",
+      "对象容器或无独立列",
+      null,
+      "所属对象；附加条件见 Schema allOf"
+    ]
+  },
+  {
+    "row": 87,
+    "cells": [
+      "health_item",
+      "unit_mapping_key",
+      "$.unit_conversion.unit_mapping_key",
+      "string",
+      "是",
+      "否",
+      "转换规则须有批准记录",
+      "health_items.unit_mapping_key",
+      "对应 union 分支内；附加条件见 Schema allOf"
+    ]
+  },
+  {
+    "row": 88,
+    "cells": [
+      "health_item",
+      "unit_mapping_version",
+      "$.unit_conversion.unit_mapping_version",
+      "string",
+      "是",
+      "否",
+      "转换规则须有批准记录",
+      "health_items.unit_mapping_version",
+      "对应 union 分支内；附加条件见 Schema allOf"
+    ]
+  },
+  {
+    "row": 89,
+    "cells": [
+      "health_item",
+      "normalization_rule_version",
+      "$.unit_conversion.normalization_rule_version",
+      "string",
+      "是",
+      "否",
+      "转换规则须有批准记录",
+      "health_items.normalization_rule_version",
+      "对应 union 分支内；附加条件见 Schema allOf"
+    ]
+  },
+  {
+    "row": 90,
+    "cells": [
+      "health_item",
+      "normalization_rule_version",
+      "$.normalization_rule_version",
+      "null|string",
+      "是",
+      "是",
+      "实体列",
+      "health_items.normalization_rule_version",
+      "所属对象；附加条件见 Schema allOf"
+    ]
+  },
+  {
+    "row": 91,
+    "cells": [
+      "health_item",
+      "reference_range_raw",
+      "$.reference_range_raw",
+      "null|string",
+      "是",
+      "是",
+      "原参考范围。实体列",
+      "health_items.reference_range_raw",
+      "所属对象；附加条件见 Schema allOf"
+    ]
+  },
+  {
+    "row": 92,
+    "cells": [
+      "health_item",
+      "abnormal_flag_raw",
+      "$.abnormal_flag_raw",
+      "null|string",
+      "是",
+      "是",
+      "实体列",
+      "health_items.abnormal_flag_raw",
+      "所属对象；附加条件见 Schema allOf"
+    ]
+  },
+  {
+    "row": 93,
+    "cells": [
+      "health_item",
+      "field_values",
+      "$.field_values",
+      "array",
+      "是",
+      "否",
+      "版本内字段观察 JSON。实体列",
+      "health_items.field_values",
+      "所属对象；附加条件见 Schema allOf"
+    ]
+  },
+  {
+    "row": 94,
+    "cells": [
+      "health_item",
+      "field_values 元素",
+      "$.field_values[*]",
+      "object",
+      "否",
+      "否",
+      "JSON 列内的字段观察",
+      "health_items.field_values",
+      "数组元素，数量以 minItems 为准；附加条件见 Schema allOf"
+    ]
+  },
+  {
+    "row": 95,
+    "cells": [
+      "health_item",
+      "field_key",
+      "$.field_values[*].field_key",
+      "string",
+      "是",
+      "否",
+      "JSON 列内的字段观察。允许值 check_date｜lab_date｜item_name｜item_result｜item_unit｜item_reference｜item_abnormal｜item_abbreviation",
+      "health_items.field_values",
+      "所属对象；附加条件见 Schema allOf"
+    ]
+  },
+  {
+    "row": 96,
+    "cells": [
+      "health_item",
+      "original_field_name",
+      "$.field_values[*].original_field_name",
+      "string",
+      "是",
+      "否",
+      "原字段名。JSON 列内的字段观察",
+      "health_items.field_values",
+      "所属对象；附加条件见 Schema allOf"
+    ]
+  },
+  {
+    "row": 97,
+    "cells": [
+      "health_item",
+      "value_raw",
+      "$.field_values[*].value_raw",
+      "null|string",
+      "是",
+      "是",
+      "JSON 列内的字段观察",
+      "health_items.field_values",
+      "所属对象；附加条件见 Schema allOf"
+    ]
+  },
+  {
+    "row": 98,
+    "cells": [
+      "health_item",
+      "value_normalized",
+      "$.field_values[*].value_normalized",
+      "null|string",
+      "是",
+      "是",
+      "JSON 列内的字段观察",
+      "health_items.field_values",
+      "所属对象；附加条件见 Schema allOf"
+    ]
+  },
+  {
+    "row": 99,
+    "cells": [
+      "health_item",
+      "normalization_rule_version",
+      "$.field_values[*].normalization_rule_version",
+      "null|string",
+      "是",
+      "是",
+      "JSON 列内的字段观察",
+      "health_items.field_values",
+      "所属对象；附加条件见 Schema allOf"
+    ]
+  },
+  {
+    "row": 100,
+    "cells": [
+      "health_item",
+      "evidence_ids",
+      "$.field_values[*].evidence_ids",
+      "array",
+      "是",
+      "否",
+      "JSON 列内的字段观察",
+      "health_items.field_values",
+      "所属对象；附加条件见 Schema allOf"
+    ]
+  },
+  {
+    "row": 101,
+    "cells": [
+      "health_item",
+      "evidence_ids 元素",
+      "$.field_values[*].evidence_ids[*]",
+      "string",
+      "否",
+      "否",
+      "JSON 列内的字段观察。format=uuid",
+      "health_items.field_values",
+      "数组元素，数量以 minItems 为准；附加条件见 Schema allOf"
+    ]
+  },
+  {
+    "row": 102,
+    "cells": [
+      "health_item",
+      "review_status",
+      "$.field_values[*].review_status",
+      "string",
+      "是",
+      "否",
+      "复核状态。JSON 列内的字段观察。允许值 unreviewed｜needs_review｜confirmed｜rejected",
+      "health_items.field_values",
+      "所属对象；附加条件见 Schema allOf"
+    ]
+  },
+  {
+    "row": 103,
+    "cells": [
+      "health_item",
+      "mapping_status",
+      "$.mapping_status",
+      "string",
+      "是",
+      "否",
+      "实体列。允许值 unmapped｜lexical_only｜needs_confirmation｜confirmed",
+      "health_items.mapping_status",
+      "所属对象；附加条件见 Schema allOf"
+    ]
+  },
+  {
+    "row": 104,
+    "cells": [
+      "health_item",
+      "review_status",
+      "$.review_status",
+      "string",
+      "是",
+      "否",
+      "复核状态。实体列。允许值 unreviewed｜needs_review｜confirmed｜rejected",
+      "health_items.review_status",
+      "所属对象；附加条件见 Schema allOf"
+    ]
+  },
+  {
+    "row": 105,
+    "cells": [
+      "health_conclusion",
+      "contract_version",
+      "$.contract_version",
+      "string",
+      "是",
+      "否",
+      "契约版本常量",
+      null,
+      "所属对象；附加条件见 Schema allOf"
+    ]
+  },
+  {
+    "row": 106,
+    "cells": [
+      "health_conclusion",
+      "scope_code",
+      "$.scope_code",
+      "string",
+      "是",
+      "否",
+      "租户或组织范围。从父报告版本关联取得",
+      "health_reports.scope_code",
+      "所属对象；附加条件见 Schema allOf"
+    ]
+  },
+  {
+    "row": 107,
+    "cells": [
+      "health_conclusion",
+      "data_mode",
+      "$.data_mode",
+      "string",
+      "是",
+      "否",
+      "真实/模拟隔离。从父报告版本关联取得。允许值 real｜synthetic",
+      "health_reports.data_mode",
+      "所属对象；附加条件见 Schema allOf"
+    ]
+  },
+  {
+    "row": 108,
+    "cells": [
+      "health_conclusion",
+      "report_id",
+      "$.report_id",
+      "string",
+      "是",
+      "否",
+      "逻辑报告 UUID。实体列。format=uuid",
+      "health_conclusions.report_id",
+      "所属对象；附加条件见 Schema allOf"
+    ]
+  },
+  {
+    "row": 109,
+    "cells": [
+      "health_conclusion",
+      "revision",
+      "$.revision",
+      "integer",
+      "是",
+      "否",
+      "报告版本号。实体列",
+      "health_conclusions.revision",
+      "所属对象；附加条件见 Schema allOf"
+    ]
+  },
+  {
+    "row": 110,
+    "cells": [
+      "health_conclusion",
+      "conclusion_id",
+      "$.conclusion_id",
+      "string",
+      "是",
+      "否",
+      "实体列。format=uuid",
+      "health_conclusions.conclusion_id",
+      "所属对象；附加条件见 Schema allOf"
+    ]
+  },
+  {
+    "row": 111,
+    "cells": [
+      "health_conclusion",
+      "primary_evidence_id",
+      "$.primary_evidence_id",
+      "string",
+      "是",
+      "否",
+      "实体列。format=uuid",
+      "health_conclusions.primary_evidence_id",
+      "所属对象；附加条件见 Schema allOf"
+    ]
+  },
+  {
+    "row": 112,
+    "cells": [
+      "health_conclusion",
+      "evidence_ids",
+      "$.evidence_ids",
+      "array",
+      "是",
+      "否",
+      "实体列",
+      "health_conclusions.evidence_ids",
+      "所属对象；附加条件见 Schema allOf"
+    ]
+  },
+  {
+    "row": 113,
+    "cells": [
+      "health_conclusion",
+      "evidence_ids 元素",
+      "$.evidence_ids[*]",
+      "string",
+      "否",
+      "否",
+      "数组元素保存在同一 JSON 列。format=uuid",
+      "health_conclusions.evidence_ids",
+      "数组元素，数量以 minItems 为准；附加条件见 Schema allOf"
+    ]
+  },
+  {
+    "row": 114,
+    "cells": [
+      "health_conclusion",
+      "original_field_name",
+      "$.original_field_name",
+      "string",
+      "是",
+      "否",
+      "原字段名。实体列",
+      "health_conclusions.original_field_name",
+      "所属对象；附加条件见 Schema allOf"
+    ]
+  },
+  {
+    "row": 115,
+    "cells": [
+      "health_conclusion",
+      "original_text",
+      "$.original_text",
+      "null|string",
+      "是",
+      "是",
+      "医生正式结论原文。实体列",
+      "health_conclusions.original_text",
+      "所属对象；附加条件见 Schema allOf"
+    ]
+  },
+  {
+    "row": 116,
+    "cells": [
+      "health_conclusion",
+      "completeness",
+      "$.completeness",
+      "string",
+      "是",
+      "否",
+      "实体列。允许值 complete｜partial｜unknown",
+      "health_conclusions.completeness",
+      "所属对象；附加条件见 Schema allOf"
+    ]
+  },
+  {
+    "row": 117,
+    "cells": [
+      "health_conclusion",
+      "standard_category",
+      "$.standard_category",
+      "null|string",
+      "是",
+      "是",
+      "实体列",
+      "health_conclusions.standard_category",
+      "所属对象；附加条件见 Schema allOf"
+    ]
+  },
+  {
+    "row": 118,
+    "cells": [
+      "health_conclusion",
+      "review_status",
+      "$.review_status",
+      "string",
+      "是",
+      "否",
+      "复核状态。实体列。允许值 unreviewed｜needs_review｜confirmed｜rejected",
+      "health_conclusions.review_status",
+      "所属对象；附加条件见 Schema allOf"
+    ]
+  },
+  {
+    "row": 119,
+    "cells": [
+      "health_advice",
+      "contract_version",
+      "$.contract_version",
+      "string",
+      "是",
+      "否",
+      "契约版本常量",
+      null,
+      "所属对象；附加条件见 Schema allOf"
+    ]
+  },
+  {
+    "row": 120,
+    "cells": [
+      "health_advice",
+      "scope_code",
+      "$.scope_code",
+      "string",
+      "是",
+      "否",
+      "租户或组织范围。从父报告版本关联取得",
+      "health_reports.scope_code",
+      "所属对象；附加条件见 Schema allOf"
+    ]
+  },
+  {
+    "row": 121,
+    "cells": [
+      "health_advice",
+      "data_mode",
+      "$.data_mode",
+      "string",
+      "是",
+      "否",
+      "真实/模拟隔离。从父报告版本关联取得。允许值 real｜synthetic",
+      "health_reports.data_mode",
+      "所属对象；附加条件见 Schema allOf"
+    ]
+  },
+  {
+    "row": 122,
+    "cells": [
+      "health_advice",
+      "report_id",
+      "$.report_id",
+      "string",
+      "是",
+      "否",
+      "逻辑报告 UUID。实体列。format=uuid",
+      "health_advice.report_id",
+      "所属对象；附加条件见 Schema allOf"
+    ]
+  },
+  {
+    "row": 123,
+    "cells": [
+      "health_advice",
+      "revision",
+      "$.revision",
+      "integer",
+      "是",
+      "否",
+      "报告版本号。实体列",
+      "health_advice.revision",
+      "所属对象；附加条件见 Schema allOf"
+    ]
+  },
+  {
+    "row": 124,
+    "cells": [
+      "health_advice",
+      "advice_id",
+      "$.advice_id",
+      "string",
+      "是",
+      "否",
+      "实体列。format=uuid",
+      "health_advice.advice_id",
+      "所属对象；附加条件见 Schema allOf"
+    ]
+  },
+  {
+    "row": 125,
+    "cells": [
+      "health_advice",
+      "source_kind",
+      "$.source_kind",
+      "string",
+      "是",
+      "否",
+      "实体列。允许值 pdf｜clinician",
+      "health_advice.source_kind",
+      "所属对象；附加条件见 Schema allOf"
+    ]
+  },
+  {
+    "row": 126,
+    "cells": [
+      "health_advice",
+      "text_raw",
+      "$.text_raw",
+      "string",
+      "是",
+      "否",
+      "建议原文。实体列",
+      "health_advice.text_raw",
+      "所属对象；附加条件见 Schema allOf"
+    ]
+  },
+  {
+    "row": 127,
+    "cells": [
+      "health_advice",
+      "source_evidence_id",
+      "$.source_evidence_id",
+      "null|string",
+      "是",
+      "是",
+      "实体列",
+      "health_advice.source_evidence_id",
+      "所属对象；附加条件见 Schema allOf"
+    ]
+  },
+  {
+    "row": 128,
+    "cells": [
+      "health_advice",
+      "author_ref",
+      "$.author_ref",
+      "null|string",
+      "是",
+      "是",
+      "实体列",
+      "health_advice.author_ref",
+      "所属对象；附加条件见 Schema allOf"
+    ]
+  },
+  {
+    "row": 129,
+    "cells": [
+      "health_advice",
+      "review_id",
+      "$.review_id",
+      "null|string",
+      "是",
+      "是",
+      "实体列",
+      "health_advice.review_id",
+      "所属对象；附加条件见 Schema allOf"
+    ]
+  },
+  {
+    "row": 130,
+    "cells": [
+      "health_advice",
+      "original_field_name",
+      "$.original_field_name",
+      "null|string",
+      "是",
+      "是",
+      "原字段名。实体列",
+      "health_advice.original_field_name",
+      "所属对象；附加条件见 Schema allOf"
+    ]
+  },
+  {
+    "row": 131,
+    "cells": [
+      "health_advice",
+      "review_status",
+      "$.review_status",
+      "string",
+      "是",
+      "否",
+      "复核状态。实体列。允许值 unreviewed｜needs_review｜confirmed｜rejected",
+      "health_advice.review_status",
+      "所属对象；附加条件见 Schema allOf"
+    ]
+  }
+]

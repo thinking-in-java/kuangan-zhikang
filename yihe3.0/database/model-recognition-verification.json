@@ -1,0 +1,57 @@
+{
+  "checks": [
+    "model_provider_enabled",
+    "upload_creates_durable_task",
+    "model_result_accepted",
+    "metadata_returned",
+    "date_not_automatically_verified",
+    "medical_results_present",
+    "conclusion_and_advice_present",
+    "not_approved_or_published",
+    "legacy_b_cannot_claim",
+    "legacy_key_cannot_claim_model_tasks"
+  ],
+  "count": 10,
+  "mode": "synthetic",
+  "jobId": "1d9846e8-0764-4c1a-8e3d-d1f8c68ed1cd",
+  "reportId": "ee895057-03cb-4969-8a0b-8bc0a872619a",
+  "revision": 1,
+  "model": "glm-5.3-flash",
+  "items": 3,
+  "conclusions": 1,
+  "advice": 1,
+  "realEmployeeModified": false,
+  "automaticPublication": false,
+  "realModelApiCalled": true,
+  "sourceType": "png",
+  "timing": {
+    "pages": 1,
+    "parallelRequests": 12,
+    "elapsedSeconds": 18.297,
+    "pageTimings": [
+      {
+        "page": 1,
+        "inputType": "ocr",
+        "seconds": 17.969,
+        "serviceTier": "unreported",
+        "detailRetry": false,
+        "usage": {
+          "input_tokens": null,
+          "output_tokens": null,
+          "total_tokens": 3522,
+          "reasoning_tokens": null,
+          "cached_input_tokens": null
+        },
+        "request": {
+          "attempts": 1,
+          "httpStatuses": [
+            200
+          ],
+          "seconds": 17.969,
+          "responseBytes": 1559,
+          "declaredEncoding": "ISO-8859-1"
+        }
+      }
+    ]
+  }
+}

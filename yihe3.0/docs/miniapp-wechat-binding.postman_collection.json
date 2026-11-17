@@ -1,0 +1,703 @@
+{
+  "info": {
+    "name": "矿安智康 · 微信登录与职工身份绑定 V1",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": "仅提供后端接口。每一步人工确认后执行；微信真实AppID/AppSecret尚待配置，AppSecret不放Postman。个人验证码与token是敏感临时变量，不要导出带实际值的集合或共享日志。"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://192.168.1.105:18080"
+    },
+    {
+      "key": "consentVersion",
+      "value": "2026-11-v1"
+    },
+    {
+      "key": "wxCode",
+      "value": ""
+    },
+    {
+      "key": "token",
+      "value": ""
+    },
+    {
+      "key": "employeeName",
+      "value": ""
+    },
+    {
+      "key": "employeeNo",
+      "value": ""
+    },
+    {
+      "key": "verificationCode",
+      "value": ""
+    },
+    {
+      "key": "confirmationToken",
+      "value": ""
+    },
+    {
+      "key": "recordId",
+      "value": ""
+    },
+    {
+      "key": "csrfToken",
+      "value": ""
+    },
+    {
+      "key": "uploadKey",
+      "value": "为一次上传填写唯一UUID，重试沿用此值"
+    },
+    {
+      "key": "reportId",
+      "value": ""
+    },
+    {
+      "key": "revision",
+      "value": "1"
+    },
+    {
+      "key": "fileId",
+      "value": ""
+    },
+    {
+      "key": "correctionId",
+      "value": ""
+    },
+    {
+      "key": "correctionRowVersion",
+      "value": "1"
+    },
+    {
+      "key": "correctionRequestKey",
+      "value": "请生成UUID，网络重试沿用同一个键"
+    }
+  ],
+  "item": [
+    {
+      "name": "01 获取微信配置与协议版本",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "{{baseUrl}}/ehr/miniapp/config",
+        "description": "微信真实参数配置后，使用小程序 wx.login 临时code。模拟身份不能用于真实环境。"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "if (pm.response.code === 200) { const d=pm.response.json().data; pm.collectionVariables.set(\"consentVersion\",d.consentVersion); }"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "02 微信登录（填写新 wxCode）",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/ehr/miniapp/wechat/login",
+        "description": "微信code换取后端会话；首次成功自动注册。canEnterHome=true进入首页，false进入认证或等待审核，不能仅按isNewUser跳转。AppSecret仅保存在后端。",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"code\": \"{{wxCode}}\",\n  \"privacyAccepted\": true,\n  \"consentVersion\": \"{{consentVersion}}\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "if (pm.response.code === 200) { const d=pm.response.json().data; pm.collectionVariables.set(\"token\",d.token); }"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "03 当前用户绑定状态",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}"
+          }
+        ],
+        "url": "{{baseUrl}}/ehr/miniapp/me",
+        "description": "微信真实参数配置后，使用小程序 wx.login 临时code。模拟身份不能用于真实环境。"
+      }
+    },
+    {
+      "name": "04 校验姓名工号个人验证码",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/ehr/miniapp/binding/verify",
+        "description": "微信真实参数配置后，使用小程序 wx.login 临时code。模拟身份不能用于真实环境。",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"{{employeeName}}\",\n  \"employeeNo\": \"{{employeeNo}}\",\n  \"verificationCode\": \"{{verificationCode}}\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "if (pm.response.code === 200) { const d=pm.response.json().data; pm.collectionVariables.set(\"confirmationToken\",d.confirmationToken); pm.collectionVariables.set(\"recordId\",d.employee.recordId); }"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "05 用户核对资料后确认绑定",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/ehr/miniapp/binding/confirm",
+        "description": "微信真实参数配置后，使用小程序 wx.login 临时code。模拟身份不能用于真实环境。",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"confirmationToken\": \"{{confirmationToken}}\",\n  \"confirmed\": true\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "06 获取本人已发布健康档案",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}"
+          }
+        ],
+        "url": "{{baseUrl}}/ehr/miniapp/health-record",
+        "description": "微信真实参数配置后，使用小程序 wx.login 临时code。模拟身份不能用于真实环境。"
+      }
+    },
+    {
+      "name": "07 上传本人原始报告",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}"
+          },
+          {
+            "key": "Idempotency-Key",
+            "value": "{{uploadKey}}"
+          }
+        ],
+        "url": "{{baseUrl}}/ehr/miniapp/reports",
+        "description": "微信真实参数配置后，使用小程序 wx.login 临时code。模拟身份不能用于真实环境。",
+        "body": {
+          "mode": "formdata",
+          "formdata": [
+            {
+              "key": "file",
+              "type": "file",
+              "src": null,
+              "description": "选择PDF/PNG/JPEG，最大20 MB；绑定后只写本人档案。"
+            }
+          ]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "if (pm.response.code === 200) { const d=pm.response.json().data; pm.collectionVariables.set(\"reportId\",d.id); pm.collectionVariables.set(\"revision\",d.revision); if(d.files && d.files.length) pm.collectionVariables.set(\"fileId\",d.files[0].id); }"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "08 查询本人报告处理进度",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}"
+          }
+        ],
+        "url": "{{baseUrl}}/ehr/miniapp/reports/{{reportId}}/{{revision}}",
+        "description": "微信真实参数配置后，使用小程序 wx.login 临时code。模拟身份不能用于真实环境。"
+      }
+    },
+    {
+      "name": "09 下载本人报告原件",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}"
+          }
+        ],
+        "url": "{{baseUrl}}/ehr/miniapp/files/{{fileId}}",
+        "description": "微信真实参数配置后，使用小程序 wx.login 临时code。模拟身份不能用于真实环境。"
+      }
+    },
+    {
+      "name": "10 退出当前会话",
+      "request": {
+        "method": "DELETE",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}"
+          }
+        ],
+        "url": "{{baseUrl}}/ehr/miniapp/session",
+        "description": "微信真实参数配置后，使用小程序 wx.login 临时code。模拟身份不能用于真实环境。"
+      }
+    },
+    {
+      "name": "后台01 获取医生上下文CSRF（需登录Cookie）",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "{{baseUrl}}/ehr/api/context",
+        "description": "后台操作使用已登录医生Cookie。请先在测试环境按文档准备职工资料；不要整套自动运行写操作。"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "if (pm.response.code === 200) { const d=pm.response.json().data; pm.collectionVariables.set(\"csrfToken\",d.csrfToken); }"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "后台02 职工绑定/验证码状态",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "{{baseUrl}}/ehr/api/records/{{recordId}}/binding",
+        "description": "后台操作使用已登录医生Cookie。请先在测试环境按文档准备职工资料；不要整套自动运行写操作。"
+      }
+    },
+    {
+      "name": "后台03 生成一次性个人验证码",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "X-CSRF-Token",
+            "value": "{{csrfToken}}"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/ehr/api/records/{{recordId}}/binding-code",
+        "description": "后台操作使用已登录医生Cookie。请先在测试环境按文档准备职工资料；不要整套自动运行写操作。",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"requestKey\": \"{{$guid}}\",\n  \"expiresIn\": 86400\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "if (pm.response.code === 200) { const d=pm.response.json().data; pm.collectionVariables.set(\"verificationCode\",d.verificationCode); }"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "后台04 撤销当前未用验证码",
+      "request": {
+        "method": "DELETE",
+        "header": [
+          {
+            "key": "X-CSRF-Token",
+            "value": "{{csrfToken}}"
+          }
+        ],
+        "url": "{{baseUrl}}/ehr/api/records/{{recordId}}/binding-code",
+        "description": "后台操作使用已登录医生Cookie。请先在测试环境按文档准备职工资料；不要整套自动运行写操作。"
+      }
+    },
+    {
+      "name": "后台05 核对原因后解除绑定（使会话失效）",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "X-CSRF-Token",
+            "value": "{{csrfToken}}"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/ehr/api/records/{{recordId}}/binding/revoke",
+        "description": "后台操作使用已登录医生Cookie。请先在测试环境按文档准备职工资料；不要整套自动运行写操作。",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"reason\": \"请填写实际核对原因\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "后台06 批量签发（每人不同，整批事务）",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "X-CSRF-Token",
+            "value": "{{csrfToken}}"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/ehr/api/binding-codes/batch",
+        "description": "后台操作使用已登录医生Cookie。请先在测试环境按文档准备职工资料；不要整套自动运行写操作。",
+        "body": {
+          "mode": "raw",
+          "raw": "[\n  {\n    \"recordId\": \"{{recordId}}\",\n    \"requestKey\": \"{{$guid}}\",\n    \"expiresIn\": 86400\n  }\n]",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "更正01 绑定前申请资料更正",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/ehr/miniapp/binding/correction-requests",
+        "description": "详见miniapp-correction-api.md；逐步人工执行，审核前核对真实资料。",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"confirmationToken\": \"{{confirmationToken}}\",\n  \"requestKey\": \"{{correctionRequestKey}}\",\n  \"reason\": \"请填写真实更正原因\",\n  \"changes\": {\n    \"team\": \"请填写正确班组\"\n  }\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "if(pm.response.code===200){const d=pm.response.json().data; pm.collectionVariables.set(\"correctionId\",d.id); pm.collectionVariables.set(\"correctionRowVersion\",d.rowVersion);}"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "更正02 查看本人申请进度",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}"
+          }
+        ],
+        "url": "{{baseUrl}}/ehr/miniapp/binding/correction-requests?page=1&limit=10",
+        "description": "详见miniapp-correction-api.md；逐步人工执行，审核前核对真实资料。"
+      }
+    },
+    {
+      "name": "更正后台01 待审队列",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "{{baseUrl}}/ehr/api/correction-requests?status=pending&page=1&limit=10",
+        "description": "详见miniapp-correction-api.md；逐步人工执行，审核前核对真实资料。"
+      }
+    },
+    {
+      "name": "更正后台02 核实后通过申请",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "X-CSRF-Token",
+            "value": "{{csrfToken}}"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/ehr/api/correction-requests/{{correctionId}}/review",
+        "description": "详见miniapp-correction-api.md；逐步人工执行，审核前核对真实资料。",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"decision\": \"approve\",\n  \"note\": \"请填写实际核对依据\",\n  \"requestKey\": \"{{$guid}}\",\n  \"rowVersion\": \"{{correctionRowVersion}}\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "更正后台03 驳回申请",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "X-CSRF-Token",
+            "value": "{{csrfToken}}"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/ehr/api/correction-requests/{{correctionId}}/review",
+        "description": "详见miniapp-correction-api.md；逐步人工执行，审核前核对真实资料。",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"decision\": \"reject\",\n  \"note\": \"请填写实际驳回原因\",\n  \"requestKey\": \"{{$guid}}\",\n  \"rowVersion\": \"{{correctionRowVersion}}\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "My report lists",
+      "item": [
+        {
+          "name": "My reports - all",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/ehr/miniapp/reports?page=1&pageSize=10",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "ehr",
+                "miniapp",
+                "reports"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "pageSize",
+                  "value": "10"
+                }
+              ]
+            },
+            "description": "Current bound employee only. HTTP 200/code 0; data.items, total, counts, hasMore. See docs/miniapp-report-list-api.md."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 200 and code 0', function () { pm.response.to.have.status(200); pm.expect(pm.response.json().code).to.eql(0); });",
+                  "pm.test('Paged reports', function () { const d=pm.response.json().data; pm.expect(d.items).to.be.an('array'); pm.expect(d.counts.all).to.eql(d.counts.approved+d.counts.pending); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "My reports - approved",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/ehr/miniapp/reports/approved?page=1&pageSize=10",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "ehr",
+                "miniapp",
+                "reports",
+                "approved"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "pageSize",
+                  "value": "10"
+                }
+              ]
+            },
+            "description": "Current bound employee only. HTTP 200/code 0; data.items, total, counts, hasMore. See docs/miniapp-report-list-api.md."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 200 and code 0', function () { pm.response.to.have.status(200); pm.expect(pm.response.json().code).to.eql(0); });",
+                  "pm.test('Paged reports', function () { const d=pm.response.json().data; pm.expect(d.items).to.be.an('array'); pm.expect(d.counts.all).to.eql(d.counts.approved+d.counts.pending); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "My reports - pending",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/ehr/miniapp/reports/pending?page=1&pageSize=10",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "ehr",
+                "miniapp",
+                "reports",
+                "pending"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "pageSize",
+                  "value": "10"
+                }
+              ]
+            },
+            "description": "Current bound employee only. HTTP 200/code 0; data.items, total, counts, hasMore. See docs/miniapp-report-list-api.md."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 200 and code 0', function () { pm.response.to.have.status(200); pm.expect(pm.response.json().code).to.eql(0); });",
+                  "pm.test('Paged reports', function () { const d=pm.response.json().data; pm.expect(d.items).to.be.an('array'); pm.expect(d.counts.all).to.eql(d.counts.approved+d.counts.pending); });"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

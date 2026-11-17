@@ -1,0 +1,15 @@
+{
+  "appId": "wx23dee6836f09f2f5",
+  "baseUrl": "http://192.168.1.105:18080",
+  "wechatConfigured": true,
+  "automaticRegistrationImplemented": true,
+  "homeRoutingRule": "active employee binding required",
+  "privateConfigFile": "F:/upload/.config/wechat-miniapp.json",
+  "secretInRepository": false,
+  "offlineChecks": 16,
+  "liveNegativeChecks": 13,
+  "providerNegativeProbeErrcode": 40029,
+  "validUserCodeUsed": false,
+  "realUserRegistrationVerified": false,
+  "adminAndAppletBuild": "SUCCESS"
+}

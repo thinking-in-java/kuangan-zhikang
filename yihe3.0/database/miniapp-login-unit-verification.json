@@ -1,0 +1,25 @@
+{
+  "checks": [
+    "real_config_loads_private_file",
+    "synthetic_never_imports_real_credentials",
+    "explicit_environment_pair_takes_precedence",
+    "partial_environment_does_not_mix_secret_sources",
+    "malformed_private_config_fails_closed",
+    "oversized_private_config_fails_closed",
+    "malformed_real_app_id_rejected",
+    "malformed_real_secret_rejected",
+    "consent_required_before_registration",
+    "first_login_creates_user_and_requires_identity",
+    "repeat_unbound_login_reuses_user_and_requires_identity",
+    "bound_login_enters_home",
+    "pending_confirmation_does_not_enter_home",
+    "pending_correction_waits_for_review",
+    "credentials_and_wechat_identity_not_in_response",
+    "login_issues_distinct_short_lived_tokens"
+  ],
+  "count": 16,
+  "mode": "offline unit only",
+  "realDatabaseModified": false,
+  "realWechatIdentityCreated": false,
+  "realSecretPrinted": false
+}

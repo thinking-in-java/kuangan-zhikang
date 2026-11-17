@@ -1,0 +1,331 @@
+{
+  "model": "gpt-6.1-sol",
+  "requestedTier": "ultrafast",
+  "jobs": {
+    "6e6efda0-9791-4d8c-8f1f-5bfb19ea980c": {
+      "reportId": "22fef113-6ecd-401a-9c85-7c9e8e0c7f2a",
+      "revision": 2,
+      "state": "succeeded",
+      "percent": 100,
+      "errorCode": null,
+      "errorMessage": null,
+      "wallSeconds": 37.547,
+      "timing": {
+        "pages": 13,
+        "parallelRequests": 12,
+        "elapsedSeconds": 27.735,
+        "pageTimings": [
+          {
+            "page": 1,
+            "inputType": "ocr",
+            "seconds": 20.203,
+            "serviceTier": "ultrafast",
+            "detailRetry": false,
+            "usage": {
+              "input_tokens": 7575,
+              "output_tokens": 277,
+              "total_tokens": 7852,
+              "reasoning_tokens": 151,
+              "cached_input_tokens": 4096
+            },
+            "request": {
+              "attempts": 1,
+              "httpStatuses": [
+                200
+              ],
+              "seconds": 20.203,
+              "responseBytes": 29595,
+              "declaredEncoding": "utf-8"
+            }
+          },
+          {
+            "page": 2,
+            "inputType": "native_text",
+            "seconds": 14.921,
+            "serviceTier": "ultrafast",
+            "detailRetry": false,
+            "usage": {
+              "input_tokens": 6028,
+              "output_tokens": 120,
+              "total_tokens": 6148,
+              "reasoning_tokens": 33,
+              "cached_input_tokens": 4096
+            },
+            "request": {
+              "attempts": 1,
+              "httpStatuses": [
+                200
+              ],
+              "seconds": 14.921,
+              "responseBytes": 28049,
+              "declaredEncoding": "utf-8"
+            }
+          },
+          {
+            "page": 3,
+            "inputType": "native_text",
+            "seconds": 13.344,
+            "serviceTier": "ultrafast",
+            "detailRetry": false,
+            "usage": {
+              "input_tokens": 6436,
+              "output_tokens": 63,
+              "total_tokens": 6499,
+              "reasoning_tokens": 0,
+              "cached_input_tokens": 4096
+            },
+            "request": {
+              "attempts": 1,
+              "httpStatuses": [
+                200
+              ],
+              "seconds": 13.344,
+              "responseBytes": 24565,
+              "declaredEncoding": "utf-8"
+            }
+          },
+          {
+            "page": 4,
+            "inputType": "ocr",
+            "seconds": 15.157,
+            "serviceTier": "ultrafast",
+            "detailRetry": false,
+            "usage": {
+              "input_tokens": 7575,
+              "output_tokens": 222,
+              "total_tokens": 7797,
+              "reasoning_tokens": 79,
+              "cached_input_tokens": 4096
+            },
+            "request": {
+              "attempts": 1,
+              "httpStatuses": [
+                200
+              ],
+              "seconds": 15.157,
+              "responseBytes": 28774,
+              "declaredEncoding": "utf-8"
+            }
+          },
+          {
+            "page": 5,
+            "inputType": "ocr",
+            "seconds": 15.797,
+            "serviceTier": "ultrafast",
+            "detailRetry": false,
+            "usage": {
+              "input_tokens": 7575,
+              "output_tokens": 353,
+              "total_tokens": 7928,
+              "reasoning_tokens": 135,
+              "cached_input_tokens": 4096
+            },
+            "request": {
+              "attempts": 1,
+              "httpStatuses": [
+                200
+              ],
+              "seconds": 15.797,
+              "responseBytes": 29701,
+              "declaredEncoding": "utf-8"
+            }
+          },
+          {
+            "page": 6,
+            "inputType": "native_text",
+            "seconds": 13.391,
+            "serviceTier": "ultrafast",
+            "detailRetry": false,
+            "usage": {
+              "input_tokens": 6813,
+              "output_tokens": 625,
+              "total_tokens": 7438,
+              "reasoning_tokens": 61,
+              "cached_input_tokens": 4096
+            },
+            "request": {
+              "attempts": 1,
+              "httpStatuses": [
+                200
+              ],
+              "seconds": 13.391,
+              "responseBytes": 29868,
+              "declaredEncoding": "utf-8"
+            }
+          },
+          {
+            "page": 7,
+            "inputType": "ocr",
+            "seconds": 12.844,
+            "serviceTier": "ultrafast",
+            "detailRetry": false,
+            "usage": {
+              "input_tokens": 7575,
+              "output_tokens": 185,
+              "total_tokens": 7760,
+              "reasoning_tokens": 91,
+              "cached_input_tokens": 4096
+            },
+            "request": {
+              "attempts": 1,
+              "httpStatuses": [
+                200
+              ],
+              "seconds": 12.844,
+              "responseBytes": 28820,
+              "declaredEncoding": "utf-8"
+            }
+          },
+          {
+            "page": 8,
+            "inputType": "native_text",
+            "seconds": 13.828,
+            "serviceTier": "ultrafast",
+            "detailRetry": false,
+            "usage": {
+              "input_tokens": 6328,
+              "output_tokens": 765,
+              "total_tokens": 7093,
+              "reasoning_tokens": 94,
+              "cached_input_tokens": 4096
+            },
+            "request": {
+              "attempts": 1,
+              "httpStatuses": [
+                200
+              ],
+              "seconds": 13.828,
+              "responseBytes": 30454,
+              "declaredEncoding": "utf-8"
+            }
+          },
+          {
+            "page": 9,
+            "inputType": "native_text",
+            "seconds": 15.157,
+            "serviceTier": "ultrafast",
+            "detailRetry": false,
+            "usage": {
+              "input_tokens": 6717,
+              "output_tokens": 1144,
+              "total_tokens": 7861,
+              "reasoning_tokens": 0,
+              "cached_input_tokens": 4096
+            },
+            "request": {
+              "attempts": 1,
+              "httpStatuses": [
+                200
+              ],
+              "seconds": 15.141,
+              "responseBytes": 27425,
+              "declaredEncoding": "utf-8"
+            }
+          },
+          {
+            "page": 10,
+            "inputType": "native_text",
+            "seconds": 11.969,
+            "serviceTier": "ultrafast",
+            "detailRetry": false,
+            "usage": {
+              "input_tokens": 6312,
+              "output_tokens": 648,
+              "total_tokens": 6960,
+              "reasoning_tokens": 0,
+              "cached_input_tokens": 4096
+            },
+            "request": {
+              "attempts": 1,
+              "httpStatuses": [
+                200
+              ],
+              "seconds": 11.953,
+              "responseBytes": 26361,
+              "declaredEncoding": "utf-8"
+            }
+          },
+          {
+            "page": 11,
+            "inputType": "native_text",
+            "seconds": 13.453,
+            "serviceTier": "ultrafast",
+            "detailRetry": false,
+            "usage": {
+              "input_tokens": 6369,
+              "output_tokens": 706,
+              "total_tokens": 7075,
+              "reasoning_tokens": 0,
+              "cached_input_tokens": 4096
+            },
+            "request": {
+              "attempts": 1,
+              "httpStatuses": [
+                200
+              ],
+              "seconds": 13.453,
+              "responseBytes": 26411,
+              "declaredEncoding": "utf-8"
+            }
+          },
+          {
+            "page": 12,
+            "inputType": "native_text",
+            "seconds": 12.219,
+            "serviceTier": "ultrafast",
+            "detailRetry": false,
+            "usage": {
+              "input_tokens": 6149,
+              "output_tokens": 437,
+              "total_tokens": 6586,
+              "reasoning_tokens": 0,
+              "cached_input_tokens": 4096
+            },
+            "request": {
+              "attempts": 1,
+              "httpStatuses": [
+                200
+              ],
+              "seconds": 12.219,
+              "responseBytes": 25803,
+              "declaredEncoding": "utf-8"
+            }
+          },
+          {
+            "page": 13,
+            "inputType": "native_text",
+            "seconds": 12.188,
+            "serviceTier": "ultrafast",
+            "detailRetry": false,
+            "usage": {
+              "input_tokens": 6064,
+              "output_tokens": 362,
+              "total_tokens": 6426,
+              "reasoning_tokens": 0,
+              "cached_input_tokens": 4096
+            },
+            "request": {
+              "attempts": 1,
+              "httpStatuses": [
+                200
+              ],
+              "seconds": 12.188,
+              "responseBytes": 25591,
+              "declaredEncoding": "utf-8"
+            }
+          }
+        ]
+      }
+    },
+    "e205f694-dc33-45e9-96a9-cbb61546fbf9": {
+      "reportId": "885ad89d-7e44-42b6-902c-34fb88ae0c8b",
+      "revision": 1,
+      "state": "failed",
+      "percent": 80,
+      "errorCode": "MODEL_FIELD_INVALID",
+      "errorMessage": "\u6a21\u578b\u68c0\u67e5\u9879\u76ee\u7f3a\u5c11\u539f\u540d\u79f0",
+      "wallSeconds": 57.672
+    }
+  },
+  "pending": []
+}

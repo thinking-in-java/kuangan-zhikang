@@ -1,0 +1,13 @@
+{
+  "checkedAt": "2026-11-15T09:10:08.965870+00:00",
+  "appId": "wx23dee6836f09f2f5",
+  "secretPrinted": false,
+  "realUserCodeUsed": false,
+  "userCreated": false,
+  "providerReachable": true,
+  "httpStatus": 200,
+  "wechatErrcode": 40029,
+  "configurationRejected": false,
+  "invalidCodeRejected": true,
+  "identityReturned": false
+}

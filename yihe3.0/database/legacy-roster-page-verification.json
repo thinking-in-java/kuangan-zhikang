@@ -1,0 +1,12 @@
+{
+  "mode": "real",
+  "checks": [
+    "management_shows_imported_roster",
+    "smart_archive_roster_populated",
+    "statistics_render_actual_data",
+    "review_page_remains_separate_from_basic_import"
+  ],
+  "count": 4,
+  "readOnly": true,
+  "javascriptErrors": []
+}

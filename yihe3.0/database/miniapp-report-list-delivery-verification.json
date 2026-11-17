@@ -1,0 +1,17 @@
+{
+  "baseUrl": "http://192.168.1.105:18080",
+  "checks": [
+    "configured_wechat_preserved",
+    "/ehr/miniapp/reports:anonymous401",
+    "/ehr/miniapp/reports:invalidToken401",
+    "/ehr/miniapp/reports/approved:anonymous401",
+    "/ehr/miniapp/reports/approved:invalidToken401",
+    "/ehr/miniapp/reports/pending:anonymous401",
+    "/ehr/miniapp/reports/pending:invalidToken401"
+  ],
+  "count": 7,
+  "databaseChecks": 22,
+  "fixtureTransactionsRolledBack": true,
+  "bothWarBuilds": "SUCCESS",
+  "validWechatUserEndToEndTested": false
+}

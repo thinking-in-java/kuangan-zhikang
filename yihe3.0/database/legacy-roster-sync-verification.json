@@ -1,0 +1,25 @@
+{
+  "checks": [
+    "legacy_source_hash_unchanged",
+    "all_imports_have_provenance_audit",
+    "actual_legacy_teams_preserved",
+    "doctor_login",
+    "statistics_matches_scoped_database",
+    "imports_stay_unassessed",
+    "management_list_populated",
+    "identity_fields_match_source",
+    "unit_and_team_match_source",
+    "no_reports_or_risk_fabricated",
+    "repeat_import_no_new_records"
+  ],
+  "count": 11,
+  "totalActiveProfiles": 2309,
+  "newImported": 2309,
+  "actualTeamCount": 105,
+  "legacySourceUnchanged": true,
+  "clinicalReportsCreated": 0,
+  "skippedLegacyIds": [
+    22,
+    1762
+  ]
+}

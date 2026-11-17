@@ -1,0 +1,22 @@
+{
+  "mode": "real",
+  "base": "http://localhost:18080",
+  "checks": [
+    "real_worker_credentials_ready",
+    "real_dictionary_67_fields_655_items",
+    "anonymous_worker_rejected",
+    "doctor_login",
+    "real_mode",
+    "real_task_queue_accessible",
+    "task_queue_does_not_leak_secret",
+    "live_asset_management.html",
+    "live_asset_live.js",
+    "live_asset_live.css",
+    "private_storage_not_static"
+  ],
+  "count": 11,
+  "realTaskClaimed": false,
+  "realBusinessDataModified": false,
+  "storageRoot": "F:/upload",
+  "workerTokenValuePrinted": false
+}

@@ -1,0 +1,42 @@
+{
+  "18080": {
+    "httpStatus": 200,
+    "mode": "real",
+    "statistics": {
+      "total": 2305,
+      "draft": 2305,
+      "pending": 0,
+      "approved": 0,
+      "archived": 0,
+      "rejected": 0,
+      "low": 0,
+      "medium": 0,
+      "high": 0,
+      "critical": 0,
+      "unknown": 2305,
+      "month": 2305,
+      "rate": 0.0
+    },
+    "cascadeWarningServed": true
+  },
+  "18082": {
+    "httpStatus": 200,
+    "mode": "synthetic",
+    "statistics": {
+      "total": 2,
+      "draft": 2,
+      "pending": 0,
+      "approved": 0,
+      "archived": 0,
+      "rejected": 0,
+      "low": 0,
+      "medium": 0,
+      "high": 0,
+      "critical": 0,
+      "unknown": 2,
+      "month": 2,
+      "rate": 0.0
+    },
+    "cascadeWarningServed": true
+  }
+}

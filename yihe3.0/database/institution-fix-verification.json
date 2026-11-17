@@ -1,0 +1,14 @@
+{
+  "reportId": "22fef113-6ecd-401a-9c85-7c9e8e0c7f2a",
+  "revision": 3,
+  "selectedInstitution": "神木市中医医院体检中心",
+  "sourcePage": 2,
+  "modelHadRawInstitutionFields": true,
+  "literalOriginalVerified": true,
+  "originalReceiptPreserved": true,
+  "httpStatus": 200,
+  "apiInstitution": "神木市中医医院体检中心",
+  "medicalItemsPreserved": 152,
+  "reviewStatus": "needs_review",
+  "published": false
+}

@@ -5,10 +5,12 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
-    <link th:href="${topimg}" rel="icon">
-    <title>谷宜健康管理平台</title>
+    <link th:href="@{/assets/images/kuangan-zhikang-mark.svg}" rel="icon" type="image/svg+xml">
+    <title>矿安智康 · 职业健康管理平台</title>
     <link rel="stylesheet" th:href="@{/assets/libs/layui/css/layui.css}"/>
     <link rel="stylesheet" th:href="@{/assets/module/admin.css}"/>
+    <link rel="stylesheet" th:href="@{/assets/css/mine-admin.css(v=20261114c)}"/>
+    <link rel="stylesheet" th:href="@{/assets/css/digital-health.css(v=20261114d)}"/>
     <!--[if lt IE 9]>
     <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
     <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
@@ -170,7 +172,7 @@
 
     </style>
 </head>
-<body class="layui-layout-body">
+<body class="layui-layout-body mine-admin">
 <input id="change" type="hidden" th:value="${yhuserrole[0].roletype}">
 <input id="usercode" type="hidden" th:value="${yh.userCode}">
 <input id="isuri" type="hidden" th:value="${isuri}">
@@ -178,10 +180,14 @@
     <!-- 头部 -->
     <div class="layui-header">
         <div class="layui-logo">
-            <img th:src="${leftimg}"/>
+            <a class="mine-brand" th:href="@{/register}" aria-label="矿安智康首页">
+                <img th:src="@{/assets/images/kuangan-zhikang-mark.svg}" alt="" width="34" height="34"/>
+                <span class="mine-brand-copy"><strong>矿安智康</strong><small>职业健康管理平台</small></span>
+            </a>
+            <button class="mine-sidebar-toggle" type="button" ew-event="flexible" title="展开或折叠菜单" aria-label="展开或折叠侧边菜单"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16"/></svg></button>
         </div>
         <ul class="layui-nav layui-layout-left">
-            <li class="layui-nav-item" lay-unselect>
+            <li class="layui-nav-item mine-toolbar-toggle" lay-unselect>
                 <a ew-event="flexible" title="侧边伸缩"><i class="layui-icon layui-icon-shrink-right"></i></a>
             </li>
             <li class="layui-nav-item" lay-unselect>
@@ -222,42 +228,32 @@
         </ul>
     </div>
     <!-- 侧边栏 -->
-<!--    <div class="layui-side">-->
-<!--        <div class="layui-side-scroll">-->
-<!--            <ul class="layui-nav layui-nav-tree arrow2" lay-filter="admin-side-nav" lay-shrink="all">-->
-<!--                <span th:each="item:${upmsPermissions}">-->
-<!--                    <li class="layui-nav-item layui-nav-itemed" th:if="${item.type eq 1 && item.permissionValue eq 'cmd:single:signon'}">-->
-<!--                        <a th:id="${item.permissionId}" onclick="signonClick()">-->
-<!--                            <i class="layui-icon " th:classappend='${item.icon} '></i>&emsp;-->
-<!--                            <cite><span th:text="${item.name}"/></cite>-->
-<!--                        </a>-->
-<!--                    </li>-->
-<!--                    <li class="layui-nav-item layui-nav-itemed" th:if="${item.type eq 1 && item.permissionValue ne 'cmd:single:signon'}">-->
-<!--                        <input class="zijidian" type="hidden" th:id="${item.uri}"/>-->
-<!--                        <a th:id="${item.permissionId}" lay-href="${item.uri}">-->
-<!--                            <i class="layui-icon " th:classappend='${item.icon} '></i>&emsp;-->
-<!--                            <cite><span th:text="${item.name}"/></cite>-->
-<!--                        </a>-->
-<!--                    </li>-->
-<!--                </span>-->
-<!--            </ul>-->
-<!--        </div>-->
-<!--    </div>-->
-
-    <div style="overflow-x: unset !important;" class="layui-side">
-        <div style="overflow-x: unset  !important;" class="layui-side-scroll">
-            <ul class="layui-nav layui-nav-tree arrow2" lay-filter="admin-side-nav" id="side-menu">
-                <!-- 菜单项将在这里动态生成 -->
-            </ul>
+    <aside class="layui-side mine-sidebar" aria-label="系统导航">
+        <div class="mine-sidebar-head">
+            <div class="mine-workspace-label"><span>工作空间</span><span>企业管理端</span></div>
+            <div class="mine-menu-search">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 5 5"/></svg>
+                <input id="mine-menu-search" type="text" placeholder="搜索菜单" aria-label="搜索有权限的菜单" autocomplete="off"/>
+                <button id="mine-search-clear" type="button" aria-label="清空菜单搜索" hidden>×</button>
+            </div>
         </div>
-    </div>
+        <p class="mine-search-status" id="mine-search-status" role="status" aria-live="polite"></p>
+        <div class="layui-side-scroll">
+            <ul class="layui-nav layui-nav-tree arrow2" lay-filter="admin-side-nav" id="side-menu"></ul>
+            <div class="mine-menu-empty" id="mine-menu-empty" hidden><strong>没有找到相关菜单</strong>可按 Esc 清空搜索</div>
+        </div>
+        <div class="mine-sidebar-footer">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="m12 3 8 3v6c0 5-8 9-8 9s-8-4-8-9V6Z"/><path d="m8 12 3 3 5-6"/></svg>
+            <span>用心守护，安心工作<small>矿安智康 · 职业健康</small></span>
+        </div>
+    </aside>
 
     <!-- 主体部分 -->
     <div class="layui-body"></div>
     <!-- 底部 -->
     <div class="layui-footer layui-text">
-        copyright © 2020 [[${name}]] all rights reserved.
-        <span class="pull-right">Version 3.0.0</span>
+        矿安智康 · 职业健康管理平台
+        <span class="pull-right">技术支持：三个臭皮匠</span>
     </div>
 </div>
 
@@ -289,6 +285,9 @@
 <script type="text/javascript" th:src="@{/assets/js/common.js}"></script>
 <script th:src="@{/assets/js/socket.io.min.js}"></script>
 <script type="text/javascript" th:src="@{/assets/js/GoEasyDemo-IM-Chat/goeasy.min.js}"></script>
+<script th:src="@{/assets/js/mine-navigation.js(v=20261114)}"></script>
+<script type="module" th:src="@{/assets/vendor/deep-chat/deepChat.bundle.js}"></script>
+<script th:src="@{/assets/js/digital-health.js(v=20261114g)}"></script>
 <script th:inline="javascript">
     var upmsPermissions = [[${upmsPermissions}]]
     console.log(upmsPermissions,"upmsPermissionsupmsPermissionsupmsPermissionsupmsPermissionsupmsPermissionsupmsPermissionsupmsPermissionsupmsPermissions");
@@ -298,7 +297,7 @@
     var userCode = [[${yh.userCode}]];
 
 
-    layui.use(['index', 'admin', 'notice', 'upload', 'admin', 'form'], function () {
+    layui.use(['index', 'admin', 'notice', 'upload', 'form', 'element'], function () {
         var index = layui.index;
         var upload = layui.upload;
         var notice = layui.notice;
@@ -306,9 +305,13 @@
         var admin = layui.admin;
         var form = layui.form;
 
-
-
-
+        // Render the default home before optional chat integrations can fail.
+        index.loadHome({
+            menuPath: '/manage/visualization',
+            menuName: '健康驾驶舱',
+            loadSetting: false
+        });
+        $('.layui-body iframe.admin-iframe').attr('title', '矿安智康健康驾驶舱').attr('allowfullscreen', '').attr('allow', 'fullscreen');
         signonClick = function(){
             $.ajax({
                 type: 'get',
@@ -327,106 +330,30 @@
             });
         }
 
-        function createMenuItem(item) {
-            // 创建菜单项的 HTML 结构
-            let menuItem = `<li class="layui-nav-item  layui-menu-item-parent">`;
-
-            // 检查是否有子菜单
-            if (item.children && item.children.length > 0) {
-                menuItem += `
-               <a href="javascript:;" lay-href="${item.uri}" onclick="signonClick('${item.uri}')">
-                    <input class="zijidian" type="hidden" th:id="${item.uri}"/>`;
-
-                if (item.pid == -1) {
-                    menuItem += `<i class="layui-icon ${item.icon}"></i>`;
-                }
-
-                menuItem += ` &emsp;<cite>${item.name}</cite>
-                <i style="float: right;background: transparent;color: black;line-height: 45px;" class="layui-icon layui-icon-right"></i> <!-- 子菜单展开图标 -->
-                </a>
-
-
-            <div class="layui-panel layui-menu-body-panel">
-                <ul>`;
-
-                // 递归生成子菜单
-                item.children.forEach(subItem => {
-                    menuItem += createMenuItem(subItem);
-                });
-
-                menuItem += `</ul>
-            </div>`;
-            } else {
-                // 没有子菜单的普通项
-                menuItem += `
-                   <a href="javascript:;" lay-href="${item.uri}" onclick="signonClick('${item.uri}')">
-                        <input class="zijidian" type="hidden" th:id="${item.uri}"/>`;
-
-                    if (item.pid == -1) {
-                        menuItem += `<i class="layui-icon ${item.icon}"></i>`;
-                    }
-
-                    menuItem += ` &emsp;<cite>${item.name}</cite>
-                    </a>`;
-            }
-
-            menuItem += `</li>`;
-            return menuItem;
-        }
-
-
-        // function createMenuItem(item) {
-        //     // 创建菜单项的 HTML 结构
-        //     let menuItem = `<li class="layui-nav-item">`;
-        //
-        //     // 检查是否有子菜单
-        //     if (item.children && item.children.length > 0) {
-        //         menuItem += `
-        //
-        //             <a href="javascript:;"  onclick="signonClick('${item.uri}')">
-        //              <input class="zijidian" type="hidden" th:id="${item.uri}"/>`;
-        //             if(item.pid==-1){
-        //                 menuItem += `<i class="layui-icon ${item.icon}"></i>`
-        //             }
-        //
-        //
-        //         menuItem += ` &emsp;<cite>${item.name}</cite>
-        //             </a>
-        //             <dl class="layui-nav-child">`;
-        //         // 递归生成子菜单
-        //         item.children.forEach(subItem => {
-        //             menuItem += createMenuItem(subItem);
-        //         });
-        //         menuItem += `</dl>`;
-        //     } else {
-        //         menuItem += `
-        //
-        //         <a href="javascript:;" lay-href="${item.uri}" onclick="signonClick('${item.uri}')">
-        //          <input class="zijidian" type="hidden" th:id="${item.uri}"/>`
-        //
-        //             if(item.pid==-1){
-        //                 menuItem += `<i class="layui-icon ${item.icon}"></i>`
-        //                 }
-        //             menuItem += `
-        //             &emsp;<cite>${item.name}</cite>
-        //         </a>`;
-        //     }
-        //     menuItem += `</li>`;
-        //     return menuItem;
-        // }
-        function renderMenu(menuData) {
-            const menuContainer = document.getElementById('side-menu');
-            let menuHtml = '';
-            menuData.forEach(item => {
-                menuHtml += createMenuItem(item);
-            });
-            menuContainer.innerHTML = menuHtml;
-            layui.element.init(); // 初始化Layui的元素
-        }
-        renderMenu(upmsPermissions);
+        // Add the local UI preview only beneath an assessment group the user already has.
+        var digitalHealthMenus = upmsPermissions.map(function (item) {
+            if (String(item.name).trim() !== '健康评估') { return item; }
+            var group = Object.assign({}, item);
+            group.children = (item.children || []).concat([{ name: '数字健康师', uri: '/assets/digital-health/index.html', type: 4, pid: item.permissionId, children: [] }]);
+            return group;
+        });
+        MineNavigation.mount({
+            menus: [
+                { name: '健康驾驶舱', uri: '/manage/visualization', type: 1, pid: -1, children: [] },
+                { name: '健康档案', type: 1, pid: -1, children: [
+                    { name: '智能档案页', uri: '/assets/health-archive/index.html?v=archive-report-cascade-20261117', type: 4, children: [] },
+                    { name: '档案统计分析', uri: '/assets/health-archive/statistics.html?v=archive-report-cascade-20261117', type: 4, children: [] },
+                    { name: '档案信息管理', uri: '/assets/health-archive/management.html?v=archive-report-cascade-20261117', type: 4, children: [] },
+                    { name: '档案审核与归档', uri: '/assets/health-archive/review.html?v=archive-report-cascade-20261117', type: 4, children: [] }
+                ] }
+            ].concat(digitalHealthMenus),
+            homePath: '/manage/visualization',
+            onSingleSignOn: signonClick
+        });
+        DigitalHealth.mountFloating({ code: [[${yh.userCode}]], name: [[${yh.userName}]], gender: [[${yh.gender}]] });
 
         //连接GoEasy 2020-12-18
-        loginGoeasy();
+        try { loginGoeasy(); } catch (error) { console.warn('聊天组件暂不可用，主页和业务菜单可继续使用。', error); }
 
         function loginGoeasy() {
             var options = {
@@ -488,33 +415,8 @@
         }
 
         var socket;
-        connect();
+        try { connect(); } catch (error) { console.warn('消息连接暂不可用，主页和业务菜单可继续使用。', error); }
         selectHender();
-        var change = $("#change").val();
-        console.log(change,"change");
-        var time = $(".zijidian");
-        for (var i = 0; i < time.length; i++) {
-            var jeidian = $(".zijidian")[i].parentNode.childNodes[3].id;
-            $("#" + jeidian).attr("lay-href", $(".zijidian")[i].id)
-        }
-        // 默认加载主页
-        if ("2" == change) {
-            console.log($("#isuri").val())
-            index.loadHome({
-                menuPath: $("#isuri").val(),
-                menuName: '<i class="layui-icon layui-icon-home"></i>'
-            });
-        } else if ("1" == change || "超级管理员" == change || "二级机构" == change) {
-            index.loadHome({
-                menuPath: $("#isuri").val(),
-                menuName: '<i class="layui-icon layui-icon-home"></i>'
-            });
-        } else {
-            index.loadHome({
-                menuPath: '/job/task',
-                menuName: '<i class="layui-icon layui-icon-home"></i>'
-            });
-        }
         var str = null
 
         function connect() {

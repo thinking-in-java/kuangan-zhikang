@@ -1,0 +1,28 @@
+{
+  "checks": [
+    "plain_pdf_upload_creates_queue",
+    "plain_pdf_two_pages",
+    "same_idempotency_key_reuses_report",
+    "owner_permission_fixture_is_encrypted",
+    "password_free_encrypted_pdf_upload_succeeds",
+    "encrypted_pdf_page_count",
+    "original_encrypted_bytes_are_preserved",
+    "password_required_pdf_has_explicit_error",
+    "malformed_pdf_rejected_without_staging_leak",
+    "fake_extension_rejected_without_staging_leak",
+    "rollback_removes_moved_original",
+    "rejected_uploads_create_no_source_rows",
+    "upload_does_not_publish_or_approve",
+    "removed_original_can_be_uploaded_to_another_employee",
+    "reupload_creates_fresh_revision_and_queue",
+    "reupload_does_not_reuse_previous_candidate_results",
+    "reupload_idempotency_resolves_new_revision",
+    "removed_upload_key_cannot_rebind_historical_revision",
+    "active_other_employee_binding_still_protected",
+    "reuploaded_original_download_ignores_unlinked_old_revision"
+  ],
+  "count": 20,
+  "mode": "synthetic",
+  "realEmployeeModified": false,
+  "ocrEngineCalled": false
+}

@@ -1,0 +1,26 @@
+{
+  "base": "http://localhost:18080",
+  "mode": "real",
+  "scope": "org:10000",
+  "checks": [
+    "login_page_200",
+    "doctor_login",
+    "real_mode_scoped_doctor_context",
+    "real_statistics_200",
+    "live_source_match_index.html",
+    "live_source_match_statistics.html",
+    "live_source_match_management.html",
+    "live_source_match_review.html",
+    "live_source_match_detail.html",
+    "live_source_match_live.js",
+    "live_source_match_live.css",
+    "real_record_query_200",
+    "anonymous_json_401",
+    "real_correction_queue_200",
+    "anonymous_correction_requests_401"
+  ],
+  "count": 15,
+  "realRecordCount": 2309,
+  "statsTotal": 2309,
+  "testDataInserted": false
+}

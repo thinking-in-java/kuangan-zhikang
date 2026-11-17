@@ -28,6 +28,7 @@ public class LoginInterceptorConfiguration implements WebMvcConfigurer {
         registry.addInterceptor(new LoginInterceptor(redisService))
                 .addPathPatterns("/**") //对来自/** 全路径请求进行拦截
                 .excludePathPatterns(
+                        "/ehr/**", // EHR uses its own strict opaque-token/session authorization.
                         "/**/login/*",
                         "/**/sysUser/*",
                         "/**/*.html",

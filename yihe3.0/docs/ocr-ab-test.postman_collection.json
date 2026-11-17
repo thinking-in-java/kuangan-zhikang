@@ -1,0 +1,334 @@
+{
+  "info": {
+    "name": "???? A/B OCR ?? synthetic ??",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": "???????18082??????synthetic?candidateOnly=true???B???????A????PDF?????????????????"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://192.168.1.102:18082"
+    },
+    {
+      "key": "workerToken",
+      "value": ""
+    },
+    {
+      "key": "workerId",
+      "value": "ocr-pc-b-test-01"
+    },
+    {
+      "key": "claimKey",
+      "value": ""
+    },
+    {
+      "key": "jobId",
+      "value": ""
+    },
+    {
+      "key": "leaseToken",
+      "value": ""
+    },
+    {
+      "key": "reportId",
+      "value": ""
+    },
+    {
+      "key": "revision",
+      "value": "1"
+    },
+    {
+      "key": "fileId",
+      "value": ""
+    },
+    {
+      "key": "csrfToken",
+      "value": ""
+    },
+    {
+      "key": "scopeCode",
+      "value": "org:10000"
+    },
+    {
+      "key": "dataMode",
+      "value": "synthetic"
+    },
+    {
+      "key": "reportKind",
+      "value": ""
+    },
+    {
+      "key": "recordId",
+      "value": ""
+    },
+    {
+      "key": "sourceFilesJson",
+      "value": "[]"
+    }
+  ],
+  "item": [
+    {
+      "name": "00 ??????",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{workerToken}}"
+          }
+        ],
+        "url": "{{baseUrl}}/ehr/worker/environment"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Synthetic candidate-only environment', function(){ pm.response.to.have.status(200); const d=pm.response.json().data; pm.expect(d.data_mode).to.eql('synthetic'); pm.expect(d.candidateOnly).to.eql(true); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "01 获取67标准字段与655项目字典",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{workerToken}}"
+          }
+        ],
+        "url": "{{baseUrl}}/ehr/worker/dictionary",
+        "description": "按ocr-worker-api.md顺序调用；本文集合不包含密钥。写操作逐步执行，不能整组自动运行。"
+      }
+    },
+    {
+      "name": "02 领取任务（请求重试沿用claimKey）",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{workerToken}}"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/ehr/worker/tasks/claim",
+        "description": "按ocr-worker-api.md顺序调用；本文集合不包含密钥。写操作逐步执行，不能整组自动运行。",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"workerId\": \"{{workerId}}\",\n  \"requestKey\": \"{{claimKey}}\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "if(!pm.collectionVariables.get('claimKey')) pm.collectionVariables.set('claimKey',pm.variables.replaceIn('{{$guid}}')); // Clear claimKey before a new processing cycle; preserve for network retry."
+            ]
+          }
+        },
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "if(pm.response.code===200){const d=pm.response.json().data; if(d.task){pm.collectionVariables.set(\"jobId\",d.task.jobId); pm.collectionVariables.set(\"leaseToken\",d.task.leaseToken);}}"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "03 获取当前租约任务输入",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{workerToken}}"
+          },
+          {
+            "key": "X-OCR-Lease",
+            "value": "{{leaseToken}}"
+          }
+        ],
+        "url": "{{baseUrl}}/ehr/worker/tasks/{{jobId}}/input",
+        "description": "按ocr-worker-api.md顺序调用；本文集合不包含密钥。写操作逐步执行，不能整组自动运行。"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "if(pm.response.code===200){const d=pm.response.json().data; pm.collectionVariables.set(\"reportId\",d.reportId); pm.collectionVariables.set(\"revision\",d.revision); if(d.files.length)pm.collectionVariables.set(\"fileId\",d.files[0].id);}",
+              "if(pm.response.code===200){const d=pm.response.json().data; for(const [v,k] of [[\"scopeCode\",\"scope_code\"],[\"dataMode\",\"data_mode\"],[\"reportKind\",\"report_kind\"]])pm.collectionVariables.set(v,d[k]);}"
+            ]
+          }
+        },
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "if(pm.response.code===200){const d=pm.response.json().data;pm.collectionVariables.set(\"recordId\",d.record_id);pm.collectionVariables.set(\"sourceFilesJson\",JSON.stringify(d.source_files));}"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "04 下载原始PDF或照片",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{workerToken}}"
+          },
+          {
+            "key": "X-OCR-Lease",
+            "value": "{{leaseToken}}"
+          }
+        ],
+        "url": "{{baseUrl}}/ehr/worker/tasks/{{jobId}}/files/{{fileId}}",
+        "description": "按ocr-worker-api.md顺序调用；本文集合不包含密钥。写操作逐步执行，不能整组自动运行。"
+      }
+    },
+    {
+      "name": "05 心跳上报进度并续期",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{workerToken}}"
+          },
+          {
+            "key": "X-OCR-Lease",
+            "value": "{{leaseToken}}"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/ehr/worker/tasks/{{jobId}}/heartbeat",
+        "description": "按ocr-worker-api.md顺序调用；本文集合不包含密钥。写操作逐步执行，不能整组自动运行。",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"stage\": \"ocr\",\n  \"percent\": 30\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "06 提交2.0.0结果（替换为真实识别JSON）",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{workerToken}}"
+          },
+          {
+            "key": "X-OCR-Lease",
+            "value": "{{leaseToken}}"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/ehr/worker/tasks/{{jobId}}/result",
+        "description": "先领取并获取input；sourceFilesJson来自本次input。完整B端格式及上下文绑定见b-ocr-result-integration.md。示例空数组仅展示结构，不代表已提取全部内容。",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"contract_version\": \"2.0.0\",\n  \"report_id\": \"{{reportId}}\",\n  \"revision\": \"{{revision}}\",\n  \"evidence\": [],\n  \"field_values\": [],\n  \"items\": [],\n  \"conclusions\": [],\n  \"advice\": [],\n  \"scope_code\": \"{{scopeCode}}\",\n  \"data_mode\": \"{{dataMode}}\",\n  \"report_kind\": \"{{reportKind}}\",\n  \"record_id\": \"{{recordId}}\",\n  \"dictionary_version\": \"2.0.0\",\n  \"source_files\": {{sourceFilesJson}}\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "07 引擎失败时报告错误",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{workerToken}}"
+          },
+          {
+            "key": "X-OCR-Lease",
+            "value": "{{leaseToken}}"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/ehr/worker/tasks/{{jobId}}/failure",
+        "description": "按ocr-worker-api.md顺序调用；本文集合不包含密钥。写操作逐步执行，不能整组自动运行。",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"errorCode\": \"ENGINE_UNAVAILABLE\",\n  \"message\": \"识别服务暂不可用\",\n  \"retryable\": true\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "08 ????????",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{workerToken}}"
+          },
+          {
+            "key": "X-OCR-Lease",
+            "value": "{{leaseToken}}"
+          }
+        ],
+        "url": "{{baseUrl}}/ehr/worker/tasks/{{jobId}}/receipt"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Candidate receipt without publication', function(){ pm.response.to.have.status(200); const d=pm.response.json().data; pm.expect(d.data_mode).to.eql('synthetic'); pm.expect(d.published).to.eql(false); });"
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -113,7 +113,7 @@
                                 <label style="width: 85px" class="layui-form-label">健康管理师：</label>
                                 <div class="layui-input-inline mr0">
                                     <select name="v22" id="responsibleHealthManager">
-                                        <option value=" "></option>
+                                        <option value="">全部健康管理师</option>
                                     </select>
                                 </div>
                             </div>
@@ -200,6 +200,7 @@
 
 
         var treeSelect = layui.treeSelect;
+        var unitRootId = null;
         randtreesone();
         function randtreesone(){
             treeSelect.render({
@@ -210,37 +211,21 @@
                 // 异步加载方式：get/post，默认get
                 type : 'get',
                 // 占位符
-                // placeholder : '全部',
+                placeholder : '全部单位',
                 // 是否开启搜索功能：true/false，默认false
                 search : true,
                 // 点击回调
                 click : function(d) {
                     console.log(d,"---------------")
-                    console.log($('#tree').val(d.current.name));
+                    // 集团根节点代表全部单位，不把集团名称当作档案单位文本筛选。
+                    $('#tree').val(String(d.current.id) === unitRootId ? '' : d.current.name);
                 },
                 // 加载完成后的回调函数
                 success : function(d) {
                     console.log(d);
-                    treeSelect.checkNode('tree', d.data[0].id);
-                    $('#tree').val(d.data[0].name)
-                    setTimeout(function(){
-                        regManageTb.reload({
-                            where : {
-                                //这里注意一定要跟Bean 里面的属性对应
-                                'name':$("#name").val(),
-                                'workUnit':$("#tree").val(),
-                                'department':$("#department").val(),
-                                "regTime":$('#test10').val(),
-                                "sex":$("#gender").val(),
-                                "Times":$("#test10").val(),
-                                "responsibleHealthManagerCode":$("#responsibleHealthManager").val()
-
-                            },
-                            page : {
-                                curr : 1
-                            }
-                        });
-                    },100);
+                    unitRootId = d.data && d.data.length ? String(d.data[0].id) : null;
+                    // 保持首次查询不带单位限制；由用户主动选择具体煤矿/电厂。
+                    // 不自动选中集团名称，也不触发第二次覆盖首次列表的查询。
 
 
                 }
@@ -426,7 +411,9 @@
 
             },
             parseData : function(res) { //将原始数据解析成 table 组件所规定的数据
-                console.log(res,"sssssssssssssssssssssssssssssssssssssss")
+                if (!res || !res.data || !Array.isArray(res.data.data)) {
+                    return {code: 1, msg: (res && (res.message || res.msg)) || '档案查询失败，请刷新或重新登录', count: 0, data: []};
+                }
                 return {
                     "code" : res.data.code, //解析接口状态
                     "msg" : res.data.msg, //解析提示文本

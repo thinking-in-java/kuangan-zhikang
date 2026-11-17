@@ -1,0 +1,2515 @@
+{
+  "testedOn": "2026-11-17",
+  "sourceFile": "00da0fd60264443cadea2f631935120e(1).pdf",
+  "sha256": "936ef44ddc4ad095f29ca0d395ab3c76698f6f2a01eaf3ba0850401be8cd156f",
+  "pages": 11,
+  "expectedRuns": 9,
+  "runs": [
+    {
+      "pages": 11,
+      "parallelRequests": 12,
+      "elapsedSeconds": 24.203,
+      "pageTimings": [
+        {
+          "page": 1,
+          "inputType": "native_text",
+          "seconds": 7.656,
+          "serviceTier": "default",
+          "detailRetry": false,
+          "usage": {
+            "input_tokens": 6125,
+            "output_tokens": 182,
+            "total_tokens": 6307,
+            "reasoning_tokens": 60,
+            "cached_input_tokens": 4224
+          },
+          "request": {
+            "attempts": 1,
+            "httpStatuses": [
+              200
+            ],
+            "seconds": 7.656,
+            "responseBytes": 27641
+          }
+        },
+        {
+          "page": 2,
+          "inputType": "native_text",
+          "seconds": 8.547,
+          "serviceTier": "default",
+          "detailRetry": false,
+          "usage": {
+            "input_tokens": 6133,
+            "output_tokens": 201,
+            "total_tokens": 6334,
+            "reasoning_tokens": 106,
+            "cached_input_tokens": 4224
+          },
+          "request": {
+            "attempts": 1,
+            "httpStatuses": [
+              200
+            ],
+            "seconds": 8.547,
+            "responseBytes": 28030
+          }
+        },
+        {
+          "page": 3,
+          "inputType": "native_text",
+          "seconds": 24.031,
+          "serviceTier": "default",
+          "detailRetry": false,
+          "usage": {
+            "input_tokens": 6515,
+            "output_tokens": 1107,
+            "total_tokens": 7622,
+            "reasoning_tokens": 173,
+            "cached_input_tokens": 6400
+          },
+          "request": {
+            "attempts": 1,
+            "httpStatuses": [
+              200
+            ],
+            "seconds": 24.031,
+            "responseBytes": 31612
+          }
+        },
+        {
+          "page": 4,
+          "inputType": "native_text",
+          "seconds": 18.828,
+          "serviceTier": "default",
+          "detailRetry": false,
+          "usage": {
+            "input_tokens": 6542,
+            "output_tokens": 824,
+            "total_tokens": 7366,
+            "reasoning_tokens": 139,
+            "cached_input_tokens": 6400
+          },
+          "request": {
+            "attempts": 1,
+            "httpStatuses": [
+              200
+            ],
+            "seconds": 18.828,
+            "responseBytes": 30487
+          }
+        },
+        {
+          "page": 5,
+          "inputType": "native_text",
+          "seconds": 13.391,
+          "serviceTier": "default",
+          "detailRetry": false,
+          "usage": {
+            "input_tokens": 6086,
+            "output_tokens": 463,
+            "total_tokens": 6549,
+            "reasoning_tokens": 0,
+            "cached_input_tokens": 4096
+          },
+          "request": {
+            "attempts": 1,
+            "httpStatuses": [
+              200
+            ],
+            "seconds": 13.391,
+            "responseBytes": 26054
+          }
+        },
+        {
+          "page": 6,
+          "inputType": "native_text",
+          "seconds": 20.906,
+          "serviceTier": "default",
+          "detailRetry": false,
+          "usage": {
+            "input_tokens": 6353,
+            "output_tokens": 814,
+            "total_tokens": 7167,
+            "reasoning_tokens": 110,
+            "cached_input_tokens": 4096
+          },
+          "request": {
+            "attempts": 1,
+            "httpStatuses": [
+              200
+            ],
+            "seconds": 20.891,
+            "responseBytes": 30942
+          }
+        },
+        {
+          "page": 7,
+          "inputType": "native_text",
+          "seconds": 18.5,
+          "serviceTier": "default",
+          "detailRetry": false,
+          "usage": {
+            "input_tokens": 6309,
+            "output_tokens": 731,
+            "total_tokens": 7040,
+            "reasoning_tokens": 0,
+            "cached_input_tokens": 4096
+          },
+          "request": {
+            "attempts": 1,
+            "httpStatuses": [
+              200
+            ],
+            "seconds": 18.5,
+            "responseBytes": 26565
+          }
+        },
+        {
+          "page": 8,
+          "inputType": "native_text",
+          "seconds": 12.828,
+          "serviceTier": "default",
+          "detailRetry": false,
+          "usage": {
+            "input_tokens": 2258,
+            "output_tokens": 980,
+            "total_tokens": 3238,
+            "reasoning_tokens": 88,
+            "cached_input_tokens": 0
+          },
+          "request": {
+            "attempts": 1,
+            "httpStatuses": [
+              200
+            ],
+            "seconds": 12.828,
+            "responseBytes": 8172
+          }
+        },
+        {
+          "page": 9,
+          "inputType": "native_text",
+          "seconds": 14.937,
+          "serviceTier": "default",
+          "detailRetry": false,
+          "usage": {
+            "input_tokens": 6179,
+            "output_tokens": 561,
+            "total_tokens": 6740,
+            "reasoning_tokens": 0,
+            "cached_input_tokens": 4096
+          },
+          "request": {
+            "attempts": 1,
+            "httpStatuses": [
+              200
+            ],
+            "seconds": 14.937,
+            "responseBytes": 26244
+          }
+        },
+        {
+          "page": 10,
+          "inputType": "native_text",
+          "seconds": 13.469,
+          "serviceTier": "default",
+          "detailRetry": false,
+          "usage": {
+            "input_tokens": 6131,
+            "output_tokens": 452,
+            "total_tokens": 6583,
+            "reasoning_tokens": 0,
+            "cached_input_tokens": 4096
+          },
+          "request": {
+            "attempts": 1,
+            "httpStatuses": [
+              200
+            ],
+            "seconds": 13.469,
+            "responseBytes": 25907
+          }
+        },
+        {
+          "page": 11,
+          "inputType": "ocr",
+          "seconds": 13.297,
+          "serviceTier": "default",
+          "detailRetry": false,
+          "usage": {
+            "input_tokens": 7575,
+            "output_tokens": 383,
+            "total_tokens": 7958,
+            "reasoning_tokens": 149,
+            "cached_input_tokens": 4096
+          },
+          "request": {
+            "attempts": 1,
+            "httpStatuses": [
+              200
+            ],
+            "seconds": 13.297,
+            "responseBytes": 29949
+          }
+        }
+      ],
+      "run": 1,
+      "passed": false,
+      "checks": {
+        "name": true,
+        "examDate": true,
+        "institution": true,
+        "unverified": true,
+        "conclusion": true,
+        "coreItems": false,
+        "context": true,
+        "unconverted": true
+      },
+      "itemPages": {
+        "3": 15,
+        "5": 22,
+        "6": 19,
+        "7": 20,
+        "8": 25,
+        "9": 7,
+        "10": 1,
+        "11": 10
+      },
+      "items": 119,
+      "conclusions": 2,
+      "advice": 8
+    },
+    {
+      "pages": 11,
+      "parallelRequests": 8,
+      "elapsedSeconds": 27.719,
+      "pageTimings": [
+        {
+          "page": 1,
+          "inputType": "native_text",
+          "seconds": 6.61,
+          "serviceTier": "default",
+          "detailRetry": false,
+          "usage": {
+            "input_tokens": 6125,
+            "output_tokens": 215,
+            "total_tokens": 6340,
+            "reasoning_tokens": 92,
+            "cached_input_tokens": 5888
+          },
+          "request": {
+            "attempts": 1,
+            "httpStatuses": [
+              200
+            ],
+            "seconds": 6.61,
+            "responseBytes": 28039
+          }
+        },
+        {
+          "page": 2,
+          "inputType": "native_text",
+          "seconds": 6.5,
+          "serviceTier": "default",
+          "detailRetry": false,
+          "usage": {
+            "input_tokens": 6133,
+            "output_tokens": 166,
+            "total_tokens": 6299,
+            "reasoning_tokens": 80,
+            "cached_input_tokens": 4224
+          },
+          "request": {
+            "attempts": 1,
+            "httpStatuses": [
+              200
+            ],
+            "seconds": 6.484,
+            "responseBytes": 27679
+          }
+        },
+        {
+          "page": 3,
+          "inputType": "native_text",
+          "seconds": 27.547,
+          "serviceTier": "default",
+          "detailRetry": false,
+          "usage": {
+            "input_tokens": 6515,
+            "output_tokens": 1311,
+            "total_tokens": 7826,
+            "reasoning_tokens": 219,
+            "cached_input_tokens": 6400
+          },
+          "request": {
+            "attempts": 1,
+            "httpStatuses": [
+              200
+            ],
+            "seconds": 27.531,
+            "responseBytes": 33036
+          }
+        },
+        {
+          "page": 4,
+          "inputType": "native_text",
+          "seconds": 15.985,
+          "serviceTier": "default",
+          "detailRetry": false,
+          "usage": {
+            "input_tokens": 6542,
+            "output_tokens": 697,
+            "total_tokens": 7239,
+            "reasoning_tokens": 216,
+            "cached_input_tokens": 4224
+          },
+          "request": {
+            "attempts": 1,
+            "httpStatuses": [
+              200
+            ],
+            "seconds": 15.985,
+            "responseBytes": 30993
+          }
+        },
+        {
+          "page": 5,
+          "inputType": "native_text",
+          "seconds": 13.563,
+          "serviceTier": "default",
+          "detailRetry": false,
+          "usage": {
+            "input_tokens": 6086,
+            "output_tokens": 460,
+            "total_tokens": 6546,
+            "reasoning_tokens": 0,
+            "cached_input_tokens": 4096
+          },
+          "request": {
+            "attempts": 1,
+            "httpStatuses": [
+              200
+            ],
+            "seconds": 13.563,
+            "responseBytes": 26044
+          }
+        },
+        {
+          "page": 6,
+          "inputType": "native_text",
+          "seconds": 19.485,
+          "serviceTier": "default",
+          "detailRetry": false,
+          "usage": {
+            "input_tokens": 6353,
+            "output_tokens": 726,
+            "total_tokens": 7079,
+            "reasoning_tokens": 0,
+            "cached_input_tokens": 4096
+          },
+          "request": {
+            "attempts": 1,
+            "httpStatuses": [
+              200
+            ],
+            "seconds": 19.469,
+            "responseBytes": 26567
+          }
+        },
+        {
+          "page": 7,
+          "inputType": "native_text",
+          "seconds": 18.969,
+          "serviceTier": "default",
+          "detailRetry": false,
+          "usage": {
+            "input_tokens": 6309,
+            "output_tokens": 731,
+            "total_tokens": 7040,
+            "reasoning_tokens": 0,
+            "cached_input_tokens": 4096
+          },
+          "request": {
+            "attempts": 1,
+            "httpStatuses": [
+              200
+            ],
+            "seconds": 18.969,
+            "responseBytes": 26565
+          }
+        },
+        {
+          "page": 8,
+          "inputType": "native_text",
+          "seconds": 13.656,
+          "serviceTier": "default",
+          "detailRetry": false,
+          "usage": {
+            "input_tokens": 2258,
+            "output_tokens": 996,
+            "total_tokens": 3254,
+            "reasoning_tokens": 105,
+            "cached_input_tokens": 2257
+          },
+          "request": {
+            "attempts": 1,
+            "httpStatuses": [
+              200
+            ],
+            "seconds": 13.641,
+            "responseBytes": 8388
+          }
+        },
+        {
+          "page": 9,
+          "inputType": "native_text",
+          "seconds": 14.485,
+          "serviceTier": "default",
+          "detailRetry": false,
+          "usage": {
+            "input_tokens": 6179,
+            "output_tokens": 541,
+            "total_tokens": 6720,
+            "reasoning_tokens": 0,
+            "cached_input_tokens": 4096
+          },
+          "request": {
+            "attempts": 1,
+            "httpStatuses": [
+              200
+            ],
+            "seconds": 14.485,
+            "responseBytes": 26208
+          }
+        },
+        {
+          "page": 10,
+          "inputType": "native_text",
+          "seconds": 13.093,
+          "serviceTier": "default",
+          "detailRetry": false,
+          "usage": {
+            "input_tokens": 6131,
+            "output_tokens": 449,
+            "total_tokens": 6580,
+            "reasoning_tokens": 0,
+            "cached_input_tokens": 4096
+          },
+          "request": {
+            "attempts": 1,
+            "httpStatuses": [
+              200
+            ],
+            "seconds": 13.093,
+            "responseBytes": 25897
+          }
+        },
+        {
+          "page": 11,
+          "inputType": "ocr",
+          "seconds": 14.547,
+          "serviceTier": "default",
+          "detailRetry": false,
+          "usage": {
+            "input_tokens": 7575,
+            "output_tokens": 381,
+            "total_tokens": 7956,
+            "reasoning_tokens": 147,
+            "cached_input_tokens": 4096
+          },
+          "request": {
+            "attempts": 1,
+            "httpStatuses": [
+              200
+            ],
+            "seconds": 14.547,
+            "responseBytes": 30078
+          }
+        }
+      ],
+      "run": 2,
+      "passed": true,
+      "checks": {
+        "name": true,
+        "examDate": true,
+        "institution": true,
+        "unverified": true,
+        "conclusion": true,
+        "coreItems": true,
+        "context": true,
+        "unconverted": true
+      },
+      "itemPages": {
+        "3": 15,
+        "5": 22,
+        "6": 21,
+        "7": 20,
+        "8": 25,
+        "9": 7,
+        "10": 1,
+        "11": 10
+      },
+      "items": 121,
+      "conclusions": 1,
+      "advice": 7
+    },
+    {
+      "pages": 11,
+      "parallelRequests": 6,
+      "elapsedSeconds": 164.015,
+      "pageTimings": [
+        {
+          "page": 1,
+          "inputType": "native_text",
+          "seconds": 6.36,
+          "serviceTier": "default",
+          "detailRetry": false,
+          "usage": {
+            "input_tokens": 6125,
+            "output_tokens": 130,
+            "total_tokens": 6255,
+            "reasoning_tokens": 0,
+            "cached_input_tokens": 4224
+          },
+          "request": {
+            "attempts": 1,
+            "httpStatuses": [
+              200
+            ],
+            "seconds": 6.36,
+            "responseBytes": 24631
+          }
+        },
+        {
+          "page": 2,
+          "inputType": "native_text",
+          "seconds": 5.594,
+          "serviceTier": "default",
+          "detailRetry": false,
+          "usage": {
+            "input_tokens": 6133,
+            "output_tokens": 152,
+            "total_tokens": 6285,
+            "reasoning_tokens": 66,
+            "cached_input_tokens": 4224
+          },
+          "request": {
+            "attempts": 1,
+            "httpStatuses": [
+              200
+            ],
+            "seconds": 5.594,
+            "responseBytes": 27487
+          }
+        },
+        {
+          "page": 3,
+          "inputType": "native_text",
+          "seconds": 38.828,
+          "serviceTier": "default",
+          "detailRetry": false,
+          "usage": {
+            "input_tokens": 6515,
+            "output_tokens": 1967,
+            "total_tokens": 8482,
+            "reasoning_tokens": 458,
+            "cached_input_tokens": 6400
+          },
+          "request": {
+            "attempts": 1,
+            "httpStatuses": [
+              200
+            ],
+            "seconds": 38.828,
+            "responseBytes": 37336
+          }
+        },
+        {
+          "page": 4,
+          "inputType": "native_text",
+          "seconds": 28.672,
+          "serviceTier": "default",
+          "detailRetry": false,
+          "usage": {
+            "input_tokens": 6542,
+            "output_tokens": 823,
+            "total_tokens": 7365,
+            "reasoning_tokens": 130,
+            "cached_input_tokens": 6400
+          },
+          "request": {
+            "attempts": 2,
+            "httpStatuses": [
+              502,
+              200
+            ],
+            "seconds": 28.672,
+            "responseBytes": 30383
+          }
+        },
+        {
+          "page": 5,
+          "inputType": "native_text",
+          "seconds": 145.0,
+          "serviceTier": "default",
+          "detailRetry": false,
+          "usage": {
+            "input_tokens": 6086,
+            "output_tokens": 463,
+            "total_tokens": 6549,
+            "reasoning_tokens": 0,
+            "cached_input_tokens": 4096
+          },
+          "request": {
+            "attempts": 2,
+            "httpStatuses": [
+              502,
+              200
+            ],
+            "seconds": 145.0,
+            "responseBytes": 26054
+          }
+        },
+        {
+          "page": 6,
+          "inputType": "native_text",
+          "seconds": 152.672,
+          "serviceTier": "default",
+          "detailRetry": false,
+          "usage": {
+            "input_tokens": 6353,
+            "output_tokens": 726,
+            "total_tokens": 7079,
+            "reasoning_tokens": 0,
+            "cached_input_tokens": 4096
+          },
+          "request": {
+            "attempts": 2,
+            "httpStatuses": [
+              502,
+              200
+            ],
+            "seconds": 152.672,
+            "responseBytes": 26567
+          }
+        },
+        {
+          "page": 7,
+          "inputType": "native_text",
+          "seconds": 151.938,
+          "serviceTier": "default",
+          "detailRetry": false,
+          "usage": {
+            "input_tokens": 6309,
+            "output_tokens": 731,
+            "total_tokens": 7040,
+            "reasoning_tokens": 0,
+            "cached_input_tokens": 4096
+          },
+          "request": {
+            "attempts": 2,
+            "httpStatuses": [
+              502,
+              200
+            ],
+            "seconds": 151.938,
+            "responseBytes": 26565
+          }
+        },
+        {
+          "page": 8,
+          "inputType": "native_text",
+          "seconds": 125.032,
+          "serviceTier": "default",
+          "detailRetry": false,
+          "usage": {
+            "input_tokens": 2258,
+            "output_tokens": 983,
+            "total_tokens": 3241,
+            "reasoning_tokens": 91,
+            "cached_input_tokens": 2257
+          },
+          "request": {
+            "attempts": 1,
+            "httpStatuses": [
+              200
+            ],
+            "seconds": 125.032,
+            "responseBytes": 8175
+          }
+        },
+        {
+          "page": 9,
+          "inputType": "native_text",
+          "seconds": 148.328,
+          "serviceTier": "default",
+          "detailRetry": false,
+          "usage": {
+            "input_tokens": 6179,
+            "output_tokens": 568,
+            "total_tokens": 6747,
+            "reasoning_tokens": 0,
+            "cached_input_tokens": 4096
+          },
+          "request": {
+            "attempts": 2,
+            "httpStatuses": [
+              502,
+              200
+            ],
+            "seconds": 148.328,
+            "responseBytes": 26243
+          }
+        },
+        {
+          "page": 10,
+          "inputType": "native_text",
+          "seconds": 17.657,
+          "serviceTier": "default",
+          "detailRetry": false,
+          "usage": {
+            "input_tokens": 6131,
+            "output_tokens": 559,
+            "total_tokens": 6690,
+            "reasoning_tokens": 95,
+            "cached_input_tokens": 4096
+          },
+          "request": {
+            "attempts": 1,
+            "httpStatuses": [
+              200
+            ],
+            "seconds": 17.657,
+            "responseBytes": 30149
+          }
+        },
+        {
+          "page": 11,
+          "inputType": "ocr",
+          "seconds": 122.672,
+          "serviceTier": "default",
+          "detailRetry": false,
+          "usage": {
+            "input_tokens": 7575,
+            "output_tokens": 362,
+            "total_tokens": 7937,
+            "reasoning_tokens": 128,
+            "cached_input_tokens": 4096
+          },
+          "request": {
+            "attempts": 1,
+            "httpStatuses": [
+              200
+            ],
+            "seconds": 122.672,
+            "responseBytes": 29902
+          }
+        }
+      ],
+      "run": 3,
+      "passed": true,
+      "checks": {
+        "name": true,
+        "examDate": true,
+        "institution": true,
+        "unverified": true,
+        "conclusion": true,
+        "coreItems": true,
+        "context": true,
+        "unconverted": true
+      },
+      "itemPages": {
+        "3": 15,
+        "5": 22,
+        "6": 21,
+        "7": 20,
+        "8": 25,
+        "9": 7,
+        "10": 1,
+        "11": 10
+      },
+      "items": 121,
+      "conclusions": 2,
+      "advice": 8
+    },
+    {
+      "pages": 11,
+      "parallelRequests": 8,
+      "elapsedSeconds": 39.891,
+      "pageTimings": [
+        {
+          "page": 1,
+          "inputType": "native_text",
+          "seconds": 5.375,
+          "serviceTier": "default",
+          "detailRetry": false,
+          "usage": {
+            "input_tokens": 6125,
+            "output_tokens": 121,
+            "total_tokens": 6246,
+            "reasoning_tokens": 0,
+            "cached_input_tokens": 5888
+          },
+          "request": {
+            "attempts": 1,
+            "httpStatuses": [
+              200
+            ],
+            "seconds": 5.375,
+            "responseBytes": 24594
+          }
+        },
+        {
+          "page": 2,
+          "inputType": "native_text",
+          "seconds": 5.468,
+          "serviceTier": "default",
+          "detailRetry": false,
+          "usage": {
+            "input_tokens": 6133,
+            "output_tokens": 164,
+            "total_tokens": 6297,
+            "reasoning_tokens": 69,
+            "cached_input_tokens": 4224
+          },
+          "request": {
+            "attempts": 1,
+            "httpStatuses": [
+              200
+            ],
+            "seconds": 5.468,
+            "responseBytes": 27543
+          }
+        },
+        {
+          "page": 3,
+          "inputType": "native_text",
+          "seconds": 26.171,
+          "serviceTier": "default",
+          "detailRetry": false,
+          "usage": {
+            "input_tokens": 6515,
+            "output_tokens": 1273,
+            "total_tokens": 7788,
+            "reasoning_tokens": 199,
+            "cached_input_tokens": 6400
+          },
+          "request": {
+            "attempts": 1,
+            "httpStatuses": [
+              200
+            ],
+            "seconds": 26.156,
+            "responseBytes": 32750
+          }
+        },
+        {
+          "page": 4,
+          "inputType": "native_text",
+          "seconds": 21.828,
+          "serviceTier": "default",
+          "detailRetry": false,
+          "usage": {
+            "input_tokens": 6542,
+            "output_tokens": 770,
+            "total_tokens": 7312,
+            "reasoning_tokens": 172,
+            "cached_input_tokens": 6400
+          },
+          "request": {
+            "attempts": 1,
+            "httpStatuses": [
+              200
+            ],
+            "seconds": 21.828,
+            "responseBytes": 30691
+          }
+        },
+        {
+          "page": 5,
+          "inputType": "native_text",
+          "seconds": 27.921,
+          "serviceTier": "default",
+          "detailRetry": false,
+          "usage": {
+            "input_tokens": 6086,
+            "output_tokens": 460,
+            "total_tokens": 6546,
+            "reasoning_tokens": 0,
+            "cached_input_tokens": 4096
+          },
+          "request": {
+            "attempts": 1,
+            "httpStatuses": [
+              200
+            ],
+            "seconds": 27.906,
+            "responseBytes": 26044
+          }
+        },
+        {
+          "page": 6,
+          "inputType": "native_text",
+          "seconds": 38.453,
+          "serviceTier": "default",
+          "detailRetry": false,
+          "usage": {
+            "input_tokens": 6353,
+            "output_tokens": 847,
+            "total_tokens": 7200,
+            "reasoning_tokens": 116,
+            "cached_input_tokens": 4096
+          },
+          "request": {
+            "attempts": 1,
+            "httpStatuses": [
+              200
+            ],
+            "seconds": 38.437,
+            "responseBytes": 31106
+          }
+        },
+        {
+          "page": 7,
+          "inputType": "native_text",
+          "seconds": 39.734,
+          "serviceTier": "default",
+          "detailRetry": false,
+          "usage": {
+            "input_tokens": 6309,
+            "output_tokens": 732,
+            "total_tokens": 7041,
+            "reasoning_tokens": 0,
+            "cached_input_tokens": 4096
+          },
+          "request": {
+            "attempts": 1,
+            "httpStatuses": [
+              200
+            ],
+            "seconds": 39.734,
+            "responseBytes": 26575
+          }
+        },
+        {
+          "page": 8,
+          "inputType": "native_text",
+          "seconds": 16.468,
+          "serviceTier": "default",
+          "detailRetry": false,
+          "usage": {
+            "input_tokens": 2258,
+            "output_tokens": 948,
+            "total_tokens": 3206,
+            "reasoning_tokens": 56,
+            "cached_input_tokens": 2257
+          },
+          "request": {
+            "attempts": 1,
+            "httpStatuses": [
+              200
+            ],
+            "seconds": 16.453,
+            "responseBytes": 7639
+          }
+        },
+        {
+          "page": 9,
+          "inputType": "native_text",
+          "seconds": 35.0,
+          "serviceTier": "default",
+          "detailRetry": false,
+          "usage": {
+            "input_tokens": 6179,
+            "output_tokens": 554,
+            "total_tokens": 6733,
+            "reasoning_tokens": 0,
+            "cached_input_tokens": 4096
+          },
+          "request": {
+            "attempts": 1,
+            "httpStatuses": [
+              200
+            ],
+            "seconds": 35.0,
+            "responseBytes": 26227
+          }
+        },
+        {
+          "page": 10,
+          "inputType": "native_text",
+          "seconds": 24.89,
+          "serviceTier": "default",
+          "detailRetry": false,
+          "usage": {
+            "input_tokens": 6131,
+            "output_tokens": 449,
+            "total_tokens": 6580,
+            "reasoning_tokens": 0,
+            "cached_input_tokens": 4096
+          },
+          "request": {
+            "attempts": 1,
+            "httpStatuses": [
+              200
+            ],
+            "seconds": 24.89,
+            "responseBytes": 25897
+          }
+        },
+        {
+          "page": 11,
+          "inputType": "ocr",
+          "seconds": 10.75,
+          "serviceTier": "default",
+          "detailRetry": false,
+          "usage": {
+            "input_tokens": 7575,
+            "output_tokens": 328,
+            "total_tokens": 7903,
+            "reasoning_tokens": 94,
+            "cached_input_tokens": 4096
+          },
+          "request": {
+            "attempts": 1,
+            "httpStatuses": [
+              200
+            ],
+            "seconds": 10.75,
+            "responseBytes": 29324
+          }
+        }
+      ],
+      "run": 4,
+      "passed": true,
+      "checks": {
+        "name": true,
+        "examDate": true,
+        "institution": true,
+        "unverified": true,
+        "conclusion": true,
+        "coreItems": true,
+        "context": true,
+        "unconverted": true
+      },
+      "itemPages": {
+        "3": 15,
+        "5": 22,
+        "6": 21,
+        "7": 20,
+        "8": 25,
+        "9": 7,
+        "10": 1,
+        "11": 10
+      },
+      "items": 121,
+      "conclusions": 1,
+      "advice": 8
+    },
+    {
+      "pages": 11,
+      "parallelRequests": 6,
+      "elapsedSeconds": 42.61,
+      "pageTimings": [
+        {
+          "page": 1,
+          "inputType": "native_text",
+          "seconds": 7.094,
+          "serviceTier": "default",
+          "detailRetry": false,
+          "usage": {
+            "input_tokens": 6125,
+            "output_tokens": 223,
+            "total_tokens": 6348,
+            "reasoning_tokens": 100,
+            "cached_input_tokens": 4224
+          },
+          "request": {
+            "attempts": 1,
+            "httpStatuses": [
+              200
+            ],
+            "seconds": 7.094,
+            "responseBytes": 28186
+          }
+        },
+        {
+          "page": 2,
+          "inputType": "native_text",
+          "seconds": 6.031,
+          "serviceTier": "default",
+          "detailRetry": false,
+          "usage": {
+            "input_tokens": 6133,
+            "output_tokens": 170,
+            "total_tokens": 6303,
+            "reasoning_tokens": 84,
+            "cached_input_tokens": 6016
+          },
+          "request": {
+            "attempts": 1,
+            "httpStatuses": [
+              200
+            ],
+            "seconds": 6.031,
+            "responseBytes": 27751
+          }
+        },
+        {
+          "page": 3,
+          "inputType": "native_text",
+          "seconds": 23.781,
+          "serviceTier": "default",
+          "detailRetry": false,
+          "usage": {
+            "input_tokens": 6515,
+            "output_tokens": 1136,
+            "total_tokens": 7651,
+            "reasoning_tokens": 229,
+            "cached_input_tokens": 6400
+          },
+          "request": {
+            "attempts": 1,
+            "httpStatuses": [
+              200
+            ],
+            "seconds": 23.781,
+            "responseBytes": 32222
+          }
+        },
+        {
+          "page": 4,
+          "inputType": "native_text",
+          "seconds": 19.156,
+          "serviceTier": "default",
+          "detailRetry": false,
+          "usage": {
+            "input_tokens": 6542,
+            "output_tokens": 628,
+            "total_tokens": 7170,
+            "reasoning_tokens": 120,
+            "cached_input_tokens": 6400
+          },
+          "request": {
+            "attempts": 1,
+            "httpStatuses": [
+              200
+            ],
+            "seconds": 19.141,
+            "responseBytes": 29638
+          }
+        },
+        {
+          "page": 5,
+          "inputType": "native_text",
+          "seconds": 15.188,
+          "serviceTier": "default",
+          "detailRetry": false,
+          "usage": {
+            "input_tokens": 6086,
+            "output_tokens": 463,
+            "total_tokens": 6549,
+            "reasoning_tokens": 0,
+            "cached_input_tokens": 4096
+          },
+          "request": {
+            "attempts": 1,
+            "httpStatuses": [
+              200
+            ],
+            "seconds": 15.188,
+            "responseBytes": 26054
+          }
+        },
+        {
+          "page": 6,
+          "inputType": "native_text",
+          "seconds": 20.891,
+          "serviceTier": "default",
+          "detailRetry": false,
+          "usage": {
+            "input_tokens": 6353,
+            "output_tokens": 726,
+            "total_tokens": 7079,
+            "reasoning_tokens": 0,
+            "cached_input_tokens": 4096
+          },
+          "request": {
+            "attempts": 1,
+            "httpStatuses": [
+              200
+            ],
+            "seconds": 20.891,
+            "responseBytes": 26567
+          }
+        },
+        {
+          "page": 7,
+          "inputType": "native_text",
+          "seconds": 19.485,
+          "serviceTier": "default",
+          "detailRetry": false,
+          "usage": {
+            "input_tokens": 6309,
+            "output_tokens": 731,
+            "total_tokens": 7040,
+            "reasoning_tokens": 0,
+            "cached_input_tokens": 4096
+          },
+          "request": {
+            "attempts": 1,
+            "httpStatuses": [
+              200
+            ],
+            "seconds": 19.485,
+            "responseBytes": 26565
+          }
+        },
+        {
+          "page": 8,
+          "inputType": "native_text",
+          "seconds": 19.891,
+          "serviceTier": "default",
+          "detailRetry": false,
+          "usage": {
+            "input_tokens": 2258,
+            "output_tokens": 1119,
+            "total_tokens": 3377,
+            "reasoning_tokens": 220,
+            "cached_input_tokens": 2257
+          },
+          "request": {
+            "attempts": 1,
+            "httpStatuses": [
+              200
+            ],
+            "seconds": 19.891,
+            "responseBytes": 9819
+          }
+        },
+        {
+          "page": 9,
+          "inputType": "native_text",
+          "seconds": 18.657,
+          "serviceTier": "default",
+          "detailRetry": false,
+          "usage": {
+            "input_tokens": 6179,
+            "output_tokens": 718,
+            "total_tokens": 6897,
+            "reasoning_tokens": 155,
+            "cached_input_tokens": 4096
+          },
+          "request": {
+            "attempts": 1,
+            "httpStatuses": [
+              200
+            ],
+            "seconds": 18.657,
+            "responseBytes": 31241
+          }
+        },
+        {
+          "page": 10,
+          "inputType": "native_text",
+          "seconds": 15.812,
+          "serviceTier": "default",
+          "detailRetry": false,
+          "usage": {
+            "input_tokens": 6131,
+            "output_tokens": 459,
+            "total_tokens": 6590,
+            "reasoning_tokens": 0,
+            "cached_input_tokens": 4096
+          },
+          "request": {
+            "attempts": 1,
+            "httpStatuses": [
+              200
+            ],
+            "seconds": 15.812,
+            "responseBytes": 25912
+          }
+        },
+        {
+          "page": 11,
+          "inputType": "ocr",
+          "seconds": 35.61,
+          "serviceTier": "default",
+          "detailRetry": false,
+          "usage": {
+            "input_tokens": 7575,
+            "output_tokens": 436,
+            "total_tokens": 8011,
+            "reasoning_tokens": 202,
+            "cached_input_tokens": 4096
+          },
+          "request": {
+            "attempts": 1,
+            "httpStatuses": [
+              200
+            ],
+            "seconds": 35.61,
+            "responseBytes": 30606
+          }
+        }
+      ],
+      "run": 5,
+      "passed": true,
+      "checks": {
+        "name": true,
+        "examDate": true,
+        "institution": true,
+        "unverified": true,
+        "conclusion": true,
+        "coreItems": true,
+        "context": true,
+        "unconverted": true
+      },
+      "itemPages": {
+        "3": 15,
+        "5": 22,
+        "6": 21,
+        "7": 20,
+        "8": 25,
+        "9": 7,
+        "10": 1,
+        "11": 10
+      },
+      "items": 121,
+      "conclusions": 2,
+      "advice": 7
+    },
+    {
+      "pages": 11,
+      "parallelRequests": 12,
+      "elapsedSeconds": 26.031,
+      "pageTimings": [
+        {
+          "page": 1,
+          "inputType": "native_text",
+          "seconds": 7.094,
+          "serviceTier": "default",
+          "detailRetry": false,
+          "usage": {
+            "input_tokens": 6125,
+            "output_tokens": 187,
+            "total_tokens": 6312,
+            "reasoning_tokens": 65,
+            "cached_input_tokens": 5888
+          },
+          "request": {
+            "attempts": 1,
+            "httpStatuses": [
+              200
+            ],
+            "seconds": 7.094,
+            "responseBytes": 27693
+          }
+        },
+        {
+          "page": 2,
+          "inputType": "native_text",
+          "seconds": 6.532,
+          "serviceTier": "default",
+          "detailRetry": false,
+          "usage": {
+            "input_tokens": 6133,
+            "output_tokens": 162,
+            "total_tokens": 6295,
+            "reasoning_tokens": 76,
+            "cached_input_tokens": 6016
+          },
+          "request": {
+            "attempts": 1,
+            "httpStatuses": [
+              200
+            ],
+            "seconds": 6.532,
+            "responseBytes": 27620
+          }
+        },
+        {
+          "page": 3,
+          "inputType": "native_text",
+          "seconds": 22.828,
+          "serviceTier": "default",
+          "detailRetry": false,
+          "usage": {
+            "input_tokens": 6515,
+            "output_tokens": 1080,
+            "total_tokens": 7595,
+            "reasoning_tokens": 371,
+            "cached_input_tokens": 6400
+          },
+          "request": {
+            "attempts": 1,
+            "httpStatuses": [
+              200
+            ],
+            "seconds": 22.828,
+            "responseBytes": 33721
+          }
+        },
+        {
+          "page": 4,
+          "inputType": "native_text",
+          "seconds": 25.89,
+          "serviceTier": "default",
+          "detailRetry": false,
+          "usage": {
+            "input_tokens": 6542,
+            "output_tokens": 980,
+            "total_tokens": 7522,
+            "reasoning_tokens": 286,
+            "cached_input_tokens": 6400
+          },
+          "request": {
+            "attempts": 1,
+            "httpStatuses": [
+              200
+            ],
+            "seconds": 25.875,
+            "responseBytes": 32574
+          }
+        },
+        {
+          "page": 5,
+          "inputType": "native_text",
+          "seconds": 15.484,
+          "serviceTier": "default",
+          "detailRetry": false,
+          "usage": {
+            "input_tokens": 6086,
+            "output_tokens": 565,
+            "total_tokens": 6651,
+            "reasoning_tokens": 93,
+            "cached_input_tokens": 4096
+          },
+          "request": {
+            "attempts": 1,
+            "httpStatuses": [
+              200
+            ],
+            "seconds": 15.469,
+            "responseBytes": 30315
+          }
+        },
+        {
+          "page": 6,
+          "inputType": "native_text",
+          "seconds": 23.406,
+          "serviceTier": "default",
+          "detailRetry": false,
+          "usage": {
+            "input_tokens": 6353,
+            "output_tokens": 841,
+            "total_tokens": 7194,
+            "reasoning_tokens": 113,
+            "cached_input_tokens": 4096
+          },
+          "request": {
+            "attempts": 1,
+            "httpStatuses": [
+              200
+            ],
+            "seconds": 23.406,
+            "responseBytes": 31032
+          }
+        },
+        {
+          "page": 7,
+          "inputType": "native_text",
+          "seconds": 19.219,
+          "serviceTier": "default",
+          "detailRetry": false,
+          "usage": {
+            "input_tokens": 6309,
+            "output_tokens": 731,
+            "total_tokens": 7040,
+            "reasoning_tokens": 0,
+            "cached_input_tokens": 4096
+          },
+          "request": {
+            "attempts": 1,
+            "httpStatuses": [
+              200
+            ],
+            "seconds": 19.219,
+            "responseBytes": 26565
+          }
+        },
+        {
+          "page": 8,
+          "inputType": "native_text",
+          "seconds": 21.328,
+          "serviceTier": "default",
+          "detailRetry": false,
+          "usage": {
+            "input_tokens": 2258,
+            "output_tokens": 1055,
+            "total_tokens": 3313,
+            "reasoning_tokens": 177,
+            "cached_input_tokens": 2257
+          },
+          "request": {
+            "attempts": 1,
+            "httpStatuses": [
+              200
+            ],
+            "seconds": 21.328,
+            "responseBytes": 9287
+          }
+        },
+        {
+          "page": 9,
+          "inputType": "native_text",
+          "seconds": 15.531,
+          "serviceTier": "default",
+          "detailRetry": false,
+          "usage": {
+            "input_tokens": 6179,
+            "output_tokens": 568,
+            "total_tokens": 6747,
+            "reasoning_tokens": 0,
+            "cached_input_tokens": 4096
+          },
+          "request": {
+            "attempts": 1,
+            "httpStatuses": [
+              200
+            ],
+            "seconds": 15.515,
+            "responseBytes": 26243
+          }
+        },
+        {
+          "page": 10,
+          "inputType": "native_text",
+          "seconds": 15.812,
+          "serviceTier": "default",
+          "detailRetry": false,
+          "usage": {
+            "input_tokens": 6131,
+            "output_tokens": 449,
+            "total_tokens": 6580,
+            "reasoning_tokens": 0,
+            "cached_input_tokens": 4096
+          },
+          "request": {
+            "attempts": 1,
+            "httpStatuses": [
+              200
+            ],
+            "seconds": 15.797,
+            "responseBytes": 25897
+          }
+        },
+        {
+          "page": 11,
+          "inputType": "ocr",
+          "seconds": 11.406,
+          "serviceTier": "default",
+          "detailRetry": false,
+          "usage": {
+            "input_tokens": 7575,
+            "output_tokens": 343,
+            "total_tokens": 7918,
+            "reasoning_tokens": 109,
+            "cached_input_tokens": 4096
+          },
+          "request": {
+            "attempts": 1,
+            "httpStatuses": [
+              200
+            ],
+            "seconds": 11.406,
+            "responseBytes": 29542
+          }
+        }
+      ],
+      "run": 6,
+      "passed": true,
+      "checks": {
+        "name": true,
+        "examDate": true,
+        "institution": true,
+        "unverified": true,
+        "conclusion": true,
+        "coreItems": true,
+        "context": true,
+        "unconverted": true
+      },
+      "itemPages": {
+        "3": 15,
+        "5": 22,
+        "6": 21,
+        "7": 20,
+        "8": 25,
+        "9": 7,
+        "10": 1,
+        "11": 10
+      },
+      "items": 121,
+      "conclusions": 1,
+      "advice": 8
+    },
+    {
+      "pages": 11,
+      "parallelRequests": 6,
+      "elapsedSeconds": 59.078,
+      "pageTimings": [
+        {
+          "page": 1,
+          "inputType": "native_text",
+          "seconds": 7.641,
+          "serviceTier": "default",
+          "detailRetry": false,
+          "usage": {
+            "input_tokens": 6125,
+            "output_tokens": 253,
+            "total_tokens": 6378,
+            "reasoning_tokens": 130,
+            "cached_input_tokens": 4224
+          },
+          "request": {
+            "attempts": 1,
+            "httpStatuses": [
+              200
+            ],
+            "seconds": 7.641,
+            "responseBytes": 28481
+          }
+        },
+        {
+          "page": 2,
+          "inputType": "native_text",
+          "seconds": 5.969,
+          "serviceTier": "default",
+          "detailRetry": false,
+          "usage": {
+            "input_tokens": 6133,
+            "output_tokens": 167,
+            "total_tokens": 6300,
+            "reasoning_tokens": 78,
+            "cached_input_tokens": 4224
+          },
+          "request": {
+            "attempts": 1,
+            "httpStatuses": [
+              200
+            ],
+            "seconds": 5.969,
+            "responseBytes": 27669
+          }
+        },
+        {
+          "page": 3,
+          "inputType": "native_text",
+          "seconds": 27.797,
+          "serviceTier": "default",
+          "detailRetry": false,
+          "usage": {
+            "input_tokens": 6515,
+            "output_tokens": 1360,
+            "total_tokens": 7875,
+            "reasoning_tokens": 284,
+            "cached_input_tokens": 6400
+          },
+          "request": {
+            "attempts": 1,
+            "httpStatuses": [
+              200
+            ],
+            "seconds": 27.797,
+            "responseBytes": 33863
+          }
+        },
+        {
+          "page": 4,
+          "inputType": "native_text",
+          "seconds": 19.813,
+          "serviceTier": "default",
+          "detailRetry": false,
+          "usage": {
+            "input_tokens": 6542,
+            "output_tokens": 932,
+            "total_tokens": 7474,
+            "reasoning_tokens": 272,
+            "cached_input_tokens": 6400
+          },
+          "request": {
+            "attempts": 1,
+            "httpStatuses": [
+              200
+            ],
+            "seconds": 19.813,
+            "responseBytes": 32310
+          }
+        },
+        {
+          "page": 5,
+          "inputType": "native_text",
+          "seconds": 16.765,
+          "serviceTier": "default",
+          "detailRetry": false,
+          "usage": {
+            "input_tokens": 6086,
+            "output_tokens": 613,
+            "total_tokens": 6699,
+            "reasoning_tokens": 141,
+            "cached_input_tokens": 4096
+          },
+          "request": {
+            "attempts": 1,
+            "httpStatuses": [
+              200
+            ],
+            "seconds": 16.765,
+            "responseBytes": 30913
+          }
+        },
+        {
+          "page": 6,
+          "inputType": "native_text",
+          "seconds": 20.453,
+          "serviceTier": "default",
+          "detailRetry": false,
+          "usage": {
+            "input_tokens": 6353,
+            "output_tokens": 726,
+            "total_tokens": 7079,
+            "reasoning_tokens": 0,
+            "cached_input_tokens": 4096
+          },
+          "request": {
+            "attempts": 1,
+            "httpStatuses": [
+              200
+            ],
+            "seconds": 20.453,
+            "responseBytes": 26567
+          }
+        },
+        {
+          "page": 7,
+          "inputType": "native_text",
+          "seconds": 20.312,
+          "serviceTier": "default",
+          "detailRetry": false,
+          "usage": {
+            "input_tokens": 6309,
+            "output_tokens": 785,
+            "total_tokens": 7094,
+            "reasoning_tokens": 52,
+            "cached_input_tokens": 4096
+          },
+          "request": {
+            "attempts": 1,
+            "httpStatuses": [
+              200
+            ],
+            "seconds": 20.297,
+            "responseBytes": 30196
+          }
+        },
+        {
+          "page": 8,
+          "inputType": "native_text",
+          "seconds": 17.484,
+          "serviceTier": "default",
+          "detailRetry": false,
+          "usage": {
+            "input_tokens": 2258,
+            "output_tokens": 974,
+            "total_tokens": 3232,
+            "reasoning_tokens": 78,
+            "cached_input_tokens": 2257
+          },
+          "request": {
+            "attempts": 1,
+            "httpStatuses": [
+              200
+            ],
+            "seconds": 17.484,
+            "responseBytes": 8035
+          }
+        },
+        {
+          "page": 9,
+          "inputType": "native_text",
+          "seconds": 15.437,
+          "serviceTier": "default",
+          "detailRetry": false,
+          "usage": {
+            "input_tokens": 6179,
+            "output_tokens": 561,
+            "total_tokens": 6740,
+            "reasoning_tokens": 0,
+            "cached_input_tokens": 4096
+          },
+          "request": {
+            "attempts": 1,
+            "httpStatuses": [
+              200
+            ],
+            "seconds": 15.437,
+            "responseBytes": 26244
+          }
+        },
+        {
+          "page": 10,
+          "inputType": "native_text",
+          "seconds": 41.469,
+          "serviceTier": "default",
+          "detailRetry": false,
+          "usage": {
+            "input_tokens": 6131,
+            "output_tokens": 459,
+            "total_tokens": 6590,
+            "reasoning_tokens": 0,
+            "cached_input_tokens": 4096
+          },
+          "request": {
+            "attempts": 1,
+            "httpStatuses": [
+              200
+            ],
+            "seconds": 41.454,
+            "responseBytes": 25912
+          }
+        },
+        {
+          "page": 11,
+          "inputType": "ocr",
+          "seconds": 25.375,
+          "serviceTier": "default",
+          "detailRetry": false,
+          "usage": {
+            "input_tokens": 7575,
+            "output_tokens": 404,
+            "total_tokens": 7979,
+            "reasoning_tokens": 165,
+            "cached_input_tokens": 4096
+          },
+          "request": {
+            "attempts": 1,
+            "httpStatuses": [
+              200
+            ],
+            "seconds": 25.375,
+            "responseBytes": 30297
+          }
+        }
+      ],
+      "run": 7,
+      "passed": true,
+      "checks": {
+        "name": true,
+        "examDate": true,
+        "institution": true,
+        "unverified": true,
+        "conclusion": true,
+        "coreItems": true,
+        "context": true,
+        "unconverted": true
+      },
+      "itemPages": {
+        "3": 15,
+        "5": 22,
+        "6": 21,
+        "7": 20,
+        "8": 25,
+        "9": 7,
+        "10": 1,
+        "11": 8
+      },
+      "items": 119,
+      "conclusions": 1,
+      "advice": 8
+    },
+    {
+      "pages": 11,
+      "parallelRequests": 12,
+      "elapsedSeconds": 29.719,
+      "pageTimings": [
+        {
+          "page": 1,
+          "inputType": "native_text",
+          "seconds": 7.188,
+          "serviceTier": "default",
+          "detailRetry": false,
+          "usage": {
+            "input_tokens": 6125,
+            "output_tokens": 200,
+            "total_tokens": 6325,
+            "reasoning_tokens": 77,
+            "cached_input_tokens": 4224
+          },
+          "request": {
+            "attempts": 1,
+            "httpStatuses": [
+              200
+            ],
+            "seconds": 7.188,
+            "responseBytes": 27819
+          }
+        },
+        {
+          "page": 2,
+          "inputType": "native_text",
+          "seconds": 8.782,
+          "serviceTier": "default",
+          "detailRetry": false,
+          "usage": {
+            "input_tokens": 6133,
+            "output_tokens": 141,
+            "total_tokens": 6274,
+            "reasoning_tokens": 55,
+            "cached_input_tokens": 4224
+          },
+          "request": {
+            "attempts": 1,
+            "httpStatuses": [
+              200
+            ],
+            "seconds": 8.766,
+            "responseBytes": 27339
+          }
+        },
+        {
+          "page": 3,
+          "inputType": "native_text",
+          "seconds": 26.25,
+          "serviceTier": "default",
+          "detailRetry": false,
+          "usage": {
+            "input_tokens": 6515,
+            "output_tokens": 1226,
+            "total_tokens": 7741,
+            "reasoning_tokens": 257,
+            "cached_input_tokens": 4224
+          },
+          "request": {
+            "attempts": 1,
+            "httpStatuses": [
+              200
+            ],
+            "seconds": 26.25,
+            "responseBytes": 32649
+          }
+        },
+        {
+          "page": 4,
+          "inputType": "native_text",
+          "seconds": 17.063,
+          "serviceTier": "default",
+          "detailRetry": false,
+          "usage": {
+            "input_tokens": 6542,
+            "output_tokens": 739,
+            "total_tokens": 7281,
+            "reasoning_tokens": 0,
+            "cached_input_tokens": 6400
+          },
+          "request": {
+            "attempts": 1,
+            "httpStatuses": [
+              200
+            ],
+            "seconds": 17.047,
+            "responseBytes": 26538
+          }
+        },
+        {
+          "page": 5,
+          "inputType": "native_text",
+          "seconds": 15.938,
+          "serviceTier": "default",
+          "detailRetry": false,
+          "usage": {
+            "input_tokens": 6086,
+            "output_tokens": 580,
+            "total_tokens": 6666,
+            "reasoning_tokens": 115,
+            "cached_input_tokens": 4096
+          },
+          "request": {
+            "attempts": 1,
+            "httpStatuses": [
+              200
+            ],
+            "seconds": 15.938,
+            "responseBytes": 30667
+          }
+        },
+        {
+          "page": 6,
+          "inputType": "native_text",
+          "seconds": 19.813,
+          "serviceTier": "default",
+          "detailRetry": false,
+          "usage": {
+            "input_tokens": 6353,
+            "output_tokens": 787,
+            "total_tokens": 7140,
+            "reasoning_tokens": 59,
+            "cached_input_tokens": 4096
+          },
+          "request": {
+            "attempts": 1,
+            "httpStatuses": [
+              200
+            ],
+            "seconds": 19.813,
+            "responseBytes": 30282
+          }
+        },
+        {
+          "page": 7,
+          "inputType": "native_text",
+          "seconds": 19.985,
+          "serviceTier": "default",
+          "detailRetry": false,
+          "usage": {
+            "input_tokens": 6309,
+            "output_tokens": 731,
+            "total_tokens": 7040,
+            "reasoning_tokens": 0,
+            "cached_input_tokens": 4096
+          },
+          "request": {
+            "attempts": 1,
+            "httpStatuses": [
+              200
+            ],
+            "seconds": 19.969,
+            "responseBytes": 26565
+          }
+        },
+        {
+          "page": 8,
+          "inputType": "native_text",
+          "seconds": 13.204,
+          "serviceTier": "default",
+          "detailRetry": false,
+          "usage": {
+            "input_tokens": 2258,
+            "output_tokens": 979,
+            "total_tokens": 3237,
+            "reasoning_tokens": 87,
+            "cached_input_tokens": 2257
+          },
+          "request": {
+            "attempts": 1,
+            "httpStatuses": [
+              200
+            ],
+            "seconds": 13.204,
+            "responseBytes": 8640
+          }
+        },
+        {
+          "page": 9,
+          "inputType": "native_text",
+          "seconds": 15.141,
+          "serviceTier": "default",
+          "detailRetry": false,
+          "usage": {
+            "input_tokens": 6179,
+            "output_tokens": 541,
+            "total_tokens": 6720,
+            "reasoning_tokens": 0,
+            "cached_input_tokens": 4096
+          },
+          "request": {
+            "attempts": 1,
+            "httpStatuses": [
+              200
+            ],
+            "seconds": 15.141,
+            "responseBytes": 26208
+          }
+        },
+        {
+          "page": 10,
+          "inputType": "native_text",
+          "seconds": 29.579,
+          "serviceTier": "default",
+          "detailRetry": false,
+          "usage": {
+            "input_tokens": 6131,
+            "output_tokens": 459,
+            "total_tokens": 6590,
+            "reasoning_tokens": 0,
+            "cached_input_tokens": 4096
+          },
+          "request": {
+            "attempts": 1,
+            "httpStatuses": [
+              200
+            ],
+            "seconds": 29.563,
+            "responseBytes": 25912
+          }
+        },
+        {
+          "page": 11,
+          "inputType": "ocr",
+          "seconds": 12.407,
+          "serviceTier": "default",
+          "detailRetry": false,
+          "usage": {
+            "input_tokens": 7575,
+            "output_tokens": 398,
+            "total_tokens": 7973,
+            "reasoning_tokens": 156,
+            "cached_input_tokens": 4096
+          },
+          "request": {
+            "attempts": 1,
+            "httpStatuses": [
+              200
+            ],
+            "seconds": 12.407,
+            "responseBytes": 30114
+          }
+        }
+      ],
+      "run": 8,
+      "passed": true,
+      "checks": {
+        "name": true,
+        "examDate": true,
+        "institution": true,
+        "unverified": true,
+        "conclusion": true,
+        "coreItems": true,
+        "context": true,
+        "unconverted": true
+      },
+      "itemPages": {
+        "3": 15,
+        "5": 22,
+        "6": 21,
+        "7": 20,
+        "8": 25,
+        "9": 7,
+        "10": 1,
+        "11": 9
+      },
+      "items": 120,
+      "conclusions": 2,
+      "advice": 7
+    },
+    {
+      "pages": 11,
+      "parallelRequests": 8,
+      "elapsedSeconds": 27.516,
+      "pageTimings": [
+        {
+          "page": 1,
+          "inputType": "native_text",
+          "seconds": 5.547,
+          "serviceTier": "default",
+          "detailRetry": false,
+          "usage": {
+            "input_tokens": 6125,
+            "output_tokens": 176,
+            "total_tokens": 6301,
+            "reasoning_tokens": 53,
+            "cached_input_tokens": 5888
+          },
+          "request": {
+            "attempts": 1,
+            "httpStatuses": [
+              200
+            ],
+            "seconds": 5.547,
+            "responseBytes": 27527
+          }
+        },
+        {
+          "page": 2,
+          "inputType": "native_text",
+          "seconds": 5.219,
+          "serviceTier": "default",
+          "detailRetry": false,
+          "usage": {
+            "input_tokens": 6133,
+            "output_tokens": 139,
+            "total_tokens": 6272,
+            "reasoning_tokens": 53,
+            "cached_input_tokens": 4224
+          },
+          "request": {
+            "attempts": 1,
+            "httpStatuses": [
+              200
+            ],
+            "seconds": 5.219,
+            "responseBytes": 27319
+          }
+        },
+        {
+          "page": 3,
+          "inputType": "native_text",
+          "seconds": 27.344,
+          "serviceTier": "default",
+          "detailRetry": false,
+          "usage": {
+            "input_tokens": 6515,
+            "output_tokens": 1319,
+            "total_tokens": 7834,
+            "reasoning_tokens": 248,
+            "cached_input_tokens": 6400
+          },
+          "request": {
+            "attempts": 1,
+            "httpStatuses": [
+              200
+            ],
+            "seconds": 27.344,
+            "responseBytes": 33276
+          }
+        },
+        {
+          "page": 4,
+          "inputType": "native_text",
+          "seconds": 20.469,
+          "serviceTier": "default",
+          "detailRetry": false,
+          "usage": {
+            "input_tokens": 6542,
+            "output_tokens": 935,
+            "total_tokens": 7477,
+            "reasoning_tokens": 275,
+            "cached_input_tokens": 6400
+          },
+          "request": {
+            "attempts": 1,
+            "httpStatuses": [
+              200
+            ],
+            "seconds": 20.469,
+            "responseBytes": 32310
+          }
+        },
+        {
+          "page": 5,
+          "inputType": "native_text",
+          "seconds": 14.953,
+          "serviceTier": "default",
+          "detailRetry": false,
+          "usage": {
+            "input_tokens": 6086,
+            "output_tokens": 463,
+            "total_tokens": 6549,
+            "reasoning_tokens": 0,
+            "cached_input_tokens": 4096
+          },
+          "request": {
+            "attempts": 1,
+            "httpStatuses": [
+              200
+            ],
+            "seconds": 14.953,
+            "responseBytes": 26054
+          }
+        },
+        {
+          "page": 6,
+          "inputType": "native_text",
+          "seconds": 22.547,
+          "serviceTier": "default",
+          "detailRetry": false,
+          "usage": {
+            "input_tokens": 6353,
+            "output_tokens": 728,
+            "total_tokens": 7081,
+            "reasoning_tokens": 0,
+            "cached_input_tokens": 5844
+          },
+          "request": {
+            "attempts": 1,
+            "httpStatuses": [
+              200
+            ],
+            "seconds": 22.547,
+            "responseBytes": 26569
+          }
+        },
+        {
+          "page": 7,
+          "inputType": "native_text",
+          "seconds": 20.219,
+          "serviceTier": "default",
+          "detailRetry": false,
+          "usage": {
+            "input_tokens": 6309,
+            "output_tokens": 734,
+            "total_tokens": 7043,
+            "reasoning_tokens": 0,
+            "cached_input_tokens": 4096
+          },
+          "request": {
+            "attempts": 1,
+            "httpStatuses": [
+              200
+            ],
+            "seconds": 20.203,
+            "responseBytes": 26575
+          }
+        },
+        {
+          "page": 8,
+          "inputType": "native_text",
+          "seconds": 13.734,
+          "serviceTier": "default",
+          "detailRetry": false,
+          "usage": {
+            "input_tokens": 2258,
+            "output_tokens": 949,
+            "total_tokens": 3207,
+            "reasoning_tokens": 57,
+            "cached_input_tokens": 2257
+          },
+          "request": {
+            "attempts": 1,
+            "httpStatuses": [
+              200
+            ],
+            "seconds": 13.734,
+            "responseBytes": 7683
+          }
+        },
+        {
+          "page": 9,
+          "inputType": "native_text",
+          "seconds": 16.734,
+          "serviceTier": "default",
+          "detailRetry": false,
+          "usage": {
+            "input_tokens": 6179,
+            "output_tokens": 544,
+            "total_tokens": 6723,
+            "reasoning_tokens": 0,
+            "cached_input_tokens": 5684
+          },
+          "request": {
+            "attempts": 1,
+            "httpStatuses": [
+              200
+            ],
+            "seconds": 16.734,
+            "responseBytes": 26226
+          }
+        },
+        {
+          "page": 10,
+          "inputType": "native_text",
+          "seconds": 12.844,
+          "serviceTier": "default",
+          "detailRetry": false,
+          "usage": {
+            "input_tokens": 6131,
+            "output_tokens": 449,
+            "total_tokens": 6580,
+            "reasoning_tokens": 0,
+            "cached_input_tokens": 4096
+          },
+          "request": {
+            "attempts": 1,
+            "httpStatuses": [
+              200
+            ],
+            "seconds": 12.828,
+            "responseBytes": 25897
+          }
+        },
+        {
+          "page": 11,
+          "inputType": "ocr",
+          "seconds": 14.031,
+          "serviceTier": "default",
+          "detailRetry": false,
+          "usage": {
+            "input_tokens": 7575,
+            "output_tokens": 364,
+            "total_tokens": 7939,
+            "reasoning_tokens": 130,
+            "cached_input_tokens": 4096
+          },
+          "request": {
+            "attempts": 1,
+            "httpStatuses": [
+              200
+            ],
+            "seconds": 14.031,
+            "responseBytes": 29734
+          }
+        }
+      ],
+      "run": 9,
+      "passed": true,
+      "checks": {
+        "name": true,
+        "examDate": true,
+        "institution": true,
+        "unverified": true,
+        "conclusion": true,
+        "coreItems": true,
+        "context": true,
+        "unconverted": true
+      },
+      "itemPages": {
+        "3": 15,
+        "5": 22,
+        "6": 21,
+        "7": 20,
+        "8": 25,
+        "9": 7,
+        "10": 1,
+        "11": 10
+      },
+      "items": 121,
+      "conclusions": 1,
+      "advice": 8
+    }
+  ],
+  "summary": [
+    {
+      "parallelRequests": 6,
+      "runs": 3,
+      "passed": 3,
+      "failed": 0,
+      "minSeconds": 42.61,
+      "averageSeconds": 88.568,
+      "maxSeconds": 164.015
+    },
+    {
+      "parallelRequests": 8,
+      "runs": 3,
+      "passed": 3,
+      "failed": 0,
+      "minSeconds": 27.516,
+      "averageSeconds": 31.709,
+      "maxSeconds": 39.891
+    },
+    {
+      "parallelRequests": 12,
+      "runs": 3,
+      "passed": 2,
+      "failed": 1,
+      "minSeconds": 26.031,
+      "averageSeconds": 27.875,
+      "maxSeconds": 29.719
+    }
+  ],
+  "bestParallelRequests": 8,
+  "applicationResultCacheUsed": false,
+  "providerPromptCacheControlled": false,
+  "externalModelCalled": true,
+  "reportDataModified": false,
+  "postedToA": false
+}

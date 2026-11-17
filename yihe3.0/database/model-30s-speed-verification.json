@@ -1,0 +1,238 @@
+{
+  "pages": 15,
+  "parallelRequests": 12,
+  "elapsedSeconds": 30.797,
+  "pageTimings": [
+    {
+      "page": 1,
+      "inputType": "ocr",
+      "seconds": 11.906,
+      "serviceTier": "default",
+      "detailRetry": false,
+      "usage": {
+        "input_tokens": 7739,
+        "output_tokens": 253,
+        "total_tokens": 7992,
+        "reasoning_tokens": 59
+      }
+    },
+    {
+      "page": 2,
+      "inputType": "native_text",
+      "seconds": 11.235,
+      "serviceTier": "default",
+      "detailRetry": false,
+      "usage": {
+        "input_tokens": 6549,
+        "output_tokens": 408,
+        "total_tokens": 6957,
+        "reasoning_tokens": 325
+      }
+    },
+    {
+      "page": 3,
+      "inputType": "native_text",
+      "seconds": 15.719,
+      "serviceTier": "default",
+      "detailRetry": false,
+      "usage": {
+        "input_tokens": 6183,
+        "output_tokens": 317,
+        "total_tokens": 6500,
+        "reasoning_tokens": 155
+      }
+    },
+    {
+      "page": 4,
+      "inputType": "native_text",
+      "seconds": 12.703,
+      "serviceTier": "default",
+      "detailRetry": false,
+      "usage": {
+        "input_tokens": 7007,
+        "output_tokens": 475,
+        "total_tokens": 7482,
+        "reasoning_tokens": 285
+      }
+    },
+    {
+      "page": 5,
+      "inputType": "ocr",
+      "seconds": 15.703,
+      "serviceTier": "default",
+      "detailRetry": false,
+      "usage": {
+        "input_tokens": 7878,
+        "output_tokens": 114,
+        "total_tokens": 7992,
+        "reasoning_tokens": 0
+      }
+    },
+    {
+      "page": 6,
+      "inputType": "native_text",
+      "seconds": 14.265,
+      "serviceTier": "default",
+      "detailRetry": false,
+      "usage": {
+        "input_tokens": 6173,
+        "output_tokens": 561,
+        "total_tokens": 6734,
+        "reasoning_tokens": 98
+      }
+    },
+    {
+      "page": 7,
+      "inputType": "native_text",
+      "seconds": 15.672,
+      "serviceTier": "default",
+      "detailRetry": false,
+      "usage": {
+        "input_tokens": 6447,
+        "output_tokens": 612,
+        "total_tokens": 7059,
+        "reasoning_tokens": 126
+      }
+    },
+    {
+      "page": 8,
+      "inputType": "native_text",
+      "seconds": 26.766,
+      "serviceTier": "default",
+      "detailRetry": false,
+      "usage": {
+        "input_tokens": 6851,
+        "output_tokens": 926,
+        "total_tokens": 7777,
+        "reasoning_tokens": 114
+      }
+    },
+    {
+      "page": 9,
+      "inputType": "native_text",
+      "seconds": 18.828,
+      "serviceTier": "default",
+      "detailRetry": false,
+      "usage": {
+        "input_tokens": 6904,
+        "output_tokens": 854,
+        "total_tokens": 7758,
+        "reasoning_tokens": 134
+      }
+    },
+    {
+      "page": 10,
+      "inputType": "native_text",
+      "seconds": 19.094,
+      "serviceTier": "default",
+      "detailRetry": false,
+      "usage": {
+        "input_tokens": 7048,
+        "output_tokens": 829,
+        "total_tokens": 7877,
+        "reasoning_tokens": 0
+      }
+    },
+    {
+      "page": 11,
+      "inputType": "native_text",
+      "seconds": 26.422,
+      "serviceTier": "default",
+      "detailRetry": false,
+      "usage": {
+        "input_tokens": 6491,
+        "output_tokens": 890,
+        "total_tokens": 7381,
+        "reasoning_tokens": 118
+      }
+    },
+    {
+      "page": 12,
+      "inputType": "ocr",
+      "seconds": 14.141,
+      "serviceTier": "default",
+      "detailRetry": false,
+      "usage": {
+        "input_tokens": 7739,
+        "output_tokens": 286,
+        "total_tokens": 8025,
+        "reasoning_tokens": 170
+      }
+    },
+    {
+      "page": 13,
+      "inputType": "ocr",
+      "seconds": 24.407,
+      "serviceTier": "default",
+      "detailRetry": false,
+      "usage": {
+        "input_tokens": 7739,
+        "output_tokens": 858,
+        "total_tokens": 8597,
+        "reasoning_tokens": 482
+      }
+    },
+    {
+      "page": 14,
+      "inputType": "ocr",
+      "seconds": 24.532,
+      "serviceTier": "default",
+      "detailRetry": false,
+      "usage": {
+        "input_tokens": 7739,
+        "output_tokens": 543,
+        "total_tokens": 8282,
+        "reasoning_tokens": 153
+      }
+    },
+    {
+      "page": 15,
+      "inputType": "ocr",
+      "seconds": 29.578,
+      "serviceTier": "default",
+      "detailRetry": false,
+      "usage": {
+        "input_tokens": 7739,
+        "output_tokens": 964,
+        "total_tokens": 8703,
+        "reasoning_tokens": 183
+      }
+    }
+  ],
+  "jobId": "6e801bab-dc26-48a2-800c-c26bd3cc8338",
+  "baselineSeconds": 56.172,
+  "speedup": 1.82,
+  "within30Seconds": false,
+  "reasoningEffort": "none",
+  "compactOutput": true,
+  "checks": {
+    "date": true,
+    "institution": true,
+    "unverified": true,
+    "page8Detailed": true,
+    "fullResultCoverage": true,
+    "bothConclusionPages": true,
+    "unitsUnconverted": true
+  },
+  "itemPages": {
+    "4": 4,
+    "6": 10,
+    "7": 35,
+    "8": 40,
+    "9": 36,
+    "10": 31,
+    "11": 5,
+    "13": 7,
+    "14": 1,
+    "15": 9
+  },
+  "counts": {
+    "items": 178,
+    "field_values": 100,
+    "evidence": 280,
+    "conclusions": 2,
+    "advice": 0
+  },
+  "reportDataModified": false,
+  "postedToA": false
+}

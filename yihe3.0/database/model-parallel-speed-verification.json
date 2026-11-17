@@ -1,0 +1,237 @@
+{
+  "pages": 15,
+  "parallelRequests": 8,
+  "elapsedSeconds": 56.172,
+  "pageTimings": [
+    {
+      "page": 1,
+      "inputType": "ocr",
+      "seconds": 14.328,
+      "serviceTier": "default",
+      "detailRetry": false,
+      "usage": {
+        "input_tokens": 8209,
+        "output_tokens": 192,
+        "total_tokens": 8401,
+        "reasoning_tokens": 0
+      }
+    },
+    {
+      "page": 2,
+      "inputType": "native_text",
+      "seconds": 13.25,
+      "serviceTier": "default",
+      "detailRetry": false,
+      "usage": {
+        "input_tokens": 6955,
+        "output_tokens": 338,
+        "total_tokens": 7293,
+        "reasoning_tokens": 172
+      }
+    },
+    {
+      "page": 3,
+      "inputType": "native_text",
+      "seconds": 13.515,
+      "serviceTier": "default",
+      "detailRetry": false,
+      "usage": {
+        "input_tokens": 6589,
+        "output_tokens": 465,
+        "total_tokens": 7054,
+        "reasoning_tokens": 198
+      }
+    },
+    {
+      "page": 4,
+      "inputType": "native_text",
+      "seconds": 32.156,
+      "serviceTier": "default",
+      "detailRetry": false,
+      "usage": {
+        "input_tokens": 7338,
+        "output_tokens": 1578,
+        "total_tokens": 8916,
+        "reasoning_tokens": 192
+      }
+    },
+    {
+      "page": 5,
+      "inputType": "ocr",
+      "seconds": 13.672,
+      "serviceTier": "default",
+      "detailRetry": false,
+      "usage": {
+        "input_tokens": 8272,
+        "output_tokens": 381,
+        "total_tokens": 8653,
+        "reasoning_tokens": 162
+      }
+    },
+    {
+      "page": 6,
+      "inputType": "native_text",
+      "seconds": 17.672,
+      "serviceTier": "default",
+      "detailRetry": false,
+      "usage": {
+        "input_tokens": 6579,
+        "output_tokens": 814,
+        "total_tokens": 7393,
+        "reasoning_tokens": 187
+      }
+    },
+    {
+      "page": 7,
+      "inputType": "native_text",
+      "seconds": 28.469,
+      "serviceTier": "default",
+      "detailRetry": false,
+      "usage": {
+        "input_tokens": 6853,
+        "output_tokens": 1198,
+        "total_tokens": 8051,
+        "reasoning_tokens": 193
+      }
+    },
+    {
+      "page": 8,
+      "inputType": "native_text",
+      "seconds": 37.407,
+      "serviceTier": "default",
+      "detailRetry": false,
+      "usage": {
+        "input_tokens": 7257,
+        "output_tokens": 1810,
+        "total_tokens": 9067,
+        "reasoning_tokens": 153
+      }
+    },
+    {
+      "page": 9,
+      "inputType": "native_text",
+      "seconds": 35.422,
+      "serviceTier": "default",
+      "detailRetry": false,
+      "usage": {
+        "input_tokens": 7310,
+        "output_tokens": 1498,
+        "total_tokens": 8808,
+        "reasoning_tokens": 120
+      }
+    },
+    {
+      "page": 10,
+      "inputType": "native_text",
+      "seconds": 35.609,
+      "serviceTier": "default",
+      "detailRetry": false,
+      "usage": {
+        "input_tokens": 7454,
+        "output_tokens": 1465,
+        "total_tokens": 8919,
+        "reasoning_tokens": 256
+      }
+    },
+    {
+      "page": 11,
+      "inputType": "native_text",
+      "seconds": 26.938,
+      "serviceTier": "default",
+      "detailRetry": false,
+      "usage": {
+        "input_tokens": 6897,
+        "output_tokens": 1234,
+        "total_tokens": 8131,
+        "reasoning_tokens": 210
+      }
+    },
+    {
+      "page": 12,
+      "inputType": "ocr",
+      "seconds": 10.0,
+      "serviceTier": "default",
+      "detailRetry": false,
+      "usage": {
+        "input_tokens": 8209,
+        "output_tokens": 196,
+        "total_tokens": 8405,
+        "reasoning_tokens": 80
+      }
+    },
+    {
+      "page": 13,
+      "inputType": "ocr",
+      "seconds": 29.328,
+      "serviceTier": "default",
+      "detailRetry": false,
+      "usage": {
+        "input_tokens": 8209,
+        "output_tokens": 776,
+        "total_tokens": 8985,
+        "reasoning_tokens": 405
+      }
+    },
+    {
+      "page": 14,
+      "inputType": "ocr",
+      "seconds": 13.719,
+      "serviceTier": "default",
+      "detailRetry": false,
+      "usage": {
+        "input_tokens": 8209,
+        "output_tokens": 433,
+        "total_tokens": 8642,
+        "reasoning_tokens": 176
+      }
+    },
+    {
+      "page": 15,
+      "inputType": "ocr",
+      "seconds": 27.469,
+      "serviceTier": "default",
+      "detailRetry": false,
+      "usage": {
+        "input_tokens": 8209,
+        "output_tokens": 1024,
+        "total_tokens": 9233,
+        "reasoning_tokens": 257
+      }
+    }
+  ],
+  "jobId": "6e801bab-dc26-48a2-800c-c26bd3cc8338",
+  "baselineSeconds": 235.86,
+  "speedup": 4.2,
+  "within60Seconds": true,
+  "reasoningEffort": "none",
+  "compactOutput": true,
+  "checks": {
+    "date": true,
+    "institution": true,
+    "unverified": true,
+    "page8Detailed": true,
+    "fullResultCoverage": true,
+    "bothConclusionPages": true,
+    "unitsUnconverted": true
+  },
+  "itemPages": {
+    "4": 4,
+    "6": 10,
+    "7": 35,
+    "8": 40,
+    "9": 36,
+    "10": 31,
+    "11": 8,
+    "13": 7,
+    "15": 9
+  },
+  "counts": {
+    "items": 180,
+    "field_values": 125,
+    "evidence": 307,
+    "conclusions": 2,
+    "advice": 0
+  },
+  "reportDataModified": false,
+  "postedToA": false
+}

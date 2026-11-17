@@ -1,0 +1,134 @@
+{
+  "pages": 15,
+  "parallelRequests": 3,
+  "elapsedSeconds": 235.86,
+  "pageTimings": [
+    {
+      "page": 1,
+      "inputType": "ocr",
+      "seconds": 63.0,
+      "serviceTier": "default",
+      "detailRetry": false
+    },
+    {
+      "page": 2,
+      "inputType": "native_text",
+      "seconds": 37.156,
+      "serviceTier": "default",
+      "detailRetry": false
+    },
+    {
+      "page": 3,
+      "inputType": "native_text",
+      "seconds": 18.266,
+      "serviceTier": "default",
+      "detailRetry": false
+    },
+    {
+      "page": 4,
+      "inputType": "native_text",
+      "seconds": 64.688,
+      "serviceTier": "default",
+      "detailRetry": false
+    },
+    {
+      "page": 5,
+      "inputType": "ocr",
+      "seconds": 12.953,
+      "serviceTier": "default",
+      "detailRetry": false
+    },
+    {
+      "page": 6,
+      "inputType": "native_text",
+      "seconds": 25.797,
+      "serviceTier": "default",
+      "detailRetry": false
+    },
+    {
+      "page": 7,
+      "inputType": "native_text",
+      "seconds": 87.703,
+      "serviceTier": "default",
+      "detailRetry": false
+    },
+    {
+      "page": 8,
+      "inputType": "native_text",
+      "seconds": 98.25,
+      "serviceTier": "default",
+      "detailRetry": false
+    },
+    {
+      "page": 9,
+      "inputType": "native_text",
+      "seconds": 90.703,
+      "serviceTier": "default",
+      "detailRetry": false
+    },
+    {
+      "page": 10,
+      "inputType": "native_text",
+      "seconds": 61.39,
+      "serviceTier": "default",
+      "detailRetry": false
+    },
+    {
+      "page": 11,
+      "inputType": "native_text",
+      "seconds": 24.657,
+      "serviceTier": "default",
+      "detailRetry": false
+    },
+    {
+      "page": 12,
+      "inputType": "ocr",
+      "seconds": 8.938,
+      "serviceTier": "default",
+      "detailRetry": false
+    },
+    {
+      "page": 13,
+      "inputType": "ocr",
+      "seconds": 39.5,
+      "serviceTier": "default",
+      "detailRetry": false
+    },
+    {
+      "page": 14,
+      "inputType": "ocr",
+      "seconds": 25.172,
+      "serviceTier": "default",
+      "detailRetry": false
+    },
+    {
+      "page": 15,
+      "inputType": "ocr",
+      "seconds": 23.578,
+      "serviceTier": "default",
+      "detailRetry": false
+    }
+  ],
+  "jobId": "6e801bab-dc26-48a2-800c-c26bd3cc8338",
+  "priorElapsedSeconds": 597.3651,
+  "speedup": 2.53,
+  "examDateRaw": "2022-11-08",
+  "examDateVerified": null,
+  "institutionRaw": "榆林市第二医院健康管理中心",
+  "priorCounts": {
+    "items": 194,
+    "field_values": 118,
+    "evidence": 318,
+    "conclusions": 5,
+    "advice": 1
+  },
+  "newCounts": {
+    "items": 190,
+    "field_values": 192,
+    "evidence": 384,
+    "conclusions": 2,
+    "advice": 0
+  },
+  "reportDataModified": false,
+  "postedToA": false
+}

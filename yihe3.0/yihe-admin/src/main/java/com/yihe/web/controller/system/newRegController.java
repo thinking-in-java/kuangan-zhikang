@@ -92,9 +92,22 @@ public class newRegController {
     public Result selectRegInfo(newRegWithBLOBs newRegWithBLOBs,@RequestParam(required = false, defaultValue = "1") int page,@RequestParam(required = false, defaultValue = "5") int limit){
         Subject subject = SecurityUtils.getSubject();
         YhUserReginfo yh=(YhUserReginfo) subject.getPrincipal();
-        if(newRegWithBLOBs.getTimes()!=null&&!newRegWithBLOBs.getTimes().trim().equals("")){
-            newRegWithBLOBs.setBeginTime(newRegWithBLOBs.getTimes().substring(0,19));
-            newRegWithBLOBs.setEndTime(newRegWithBLOBs.getTimes().substring(21));
+        if (yh == null) return Result.error("登录已失效，请重新登录");
+        // 旧表单传来的空格不得被当作一个实际的健管师编码或单位名。
+        if (newRegWithBLOBs.getResponsibleHealthManagerCode() != null) newRegWithBLOBs.setResponsibleHealthManagerCode(newRegWithBLOBs.getResponsibleHealthManagerCode().trim());
+        if (newRegWithBLOBs.getWorkUnit() != null) newRegWithBLOBs.setWorkUnit(newRegWithBLOBs.getWorkUnit().trim());
+        page = Math.max(1, page);
+        limit = Math.max(1, Math.min(100, limit));
+        if (newRegWithBLOBs.getTimes() != null && !newRegWithBLOBs.getTimes().trim().isEmpty()) {
+            String[] range = newRegWithBLOBs.getTimes().trim().split("\\s+-\\s+", -1);
+            if (range.length != 2) return Result.error("建档时间范围格式不正确");
+            try {
+                java.time.LocalDateTime from = java.time.LocalDateTime.parse(range[0], java.time.format.DateTimeFormatter.ofPattern("uuuu-MM-dd HH:mm:ss").withResolverStyle(java.time.format.ResolverStyle.STRICT));
+                java.time.LocalDateTime to = java.time.LocalDateTime.parse(range[1], java.time.format.DateTimeFormatter.ofPattern("uuuu-MM-dd HH:mm:ss").withResolverStyle(java.time.format.ResolverStyle.STRICT));
+                if (from.isAfter(to)) return Result.error("建档起始时间不能晚于结束时间");
+            } catch (java.time.DateTimeException e) { return Result.error("建档时间范围格式不正确"); }
+            newRegWithBLOBs.setBeginTime(range[0]);
+            newRegWithBLOBs.setEndTime(range[1]);
         }
         newRegWithBLOBs.setDoctor(yh.getUserCode());
         List<newRegWithBLOBs> newRegWithBLOBs1= newRegService.selectRegInfo(newRegWithBLOBs,page,limit);

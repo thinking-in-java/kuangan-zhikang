@@ -1,0 +1,30 @@
+{
+  "checks": [
+    "empty_tabs_return_zero",
+    "approved_contains_reviewed_and_archived",
+    "approved_and_archived_labels_are_distinct",
+    "pending_excludes_confirmed_reports",
+    "pending_exposes_queued_processing_failed",
+    "tab_counts_consistent",
+    "pagination_limits_rows_and_has_more",
+    "last_page_has_one_row",
+    "list_contains_metadata_without_clinical_candidates",
+    "another_employee_report_not_visible",
+    "other_data_mode_not_visible",
+    "removed_report_not_visible",
+    "old_versions_not_duplicated",
+    "returned_new_revision_has_returned_label",
+    "rejected_report_stays_in_pending_tab_with_label",
+    "unknown_status_is422",
+    "zero_page_is422",
+    "overlarge_page_size_is422",
+    "caller_cannot_supply_other_record_id",
+    "unbound_actor_is403",
+    "cross_scope_actor_is404",
+    "all_database_fixtures_rolled_back"
+  ],
+  "count": 22,
+  "fixturesRolledBack": true,
+  "wechatLoginBypassAdded": false,
+  "formalEmployeeModified": false
+}

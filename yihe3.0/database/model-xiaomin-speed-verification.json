@@ -1,0 +1,193 @@
+{
+  "pages": 11,
+  "parallelRequests": 12,
+  "elapsedSeconds": 54.531,
+  "pageTimings": [
+    {
+      "page": 1,
+      "inputType": "native_text",
+      "seconds": 9.734,
+      "serviceTier": "default",
+      "detailRetry": false,
+      "usage": {
+        "input_tokens": 6125,
+        "output_tokens": 226,
+        "total_tokens": 6351,
+        "reasoning_tokens": 113
+      }
+    },
+    {
+      "page": 2,
+      "inputType": "native_text",
+      "seconds": 6.922,
+      "serviceTier": "default",
+      "detailRetry": false,
+      "usage": {
+        "input_tokens": 6133,
+        "output_tokens": 144,
+        "total_tokens": 6277,
+        "reasoning_tokens": 58
+      }
+    },
+    {
+      "page": 3,
+      "inputType": "native_text",
+      "seconds": 20.094,
+      "serviceTier": "default",
+      "detailRetry": false,
+      "usage": {
+        "input_tokens": 6515,
+        "output_tokens": 881,
+        "total_tokens": 7396,
+        "reasoning_tokens": 244
+      }
+    },
+    {
+      "page": 4,
+      "inputType": "native_text",
+      "seconds": 22.14,
+      "serviceTier": "default",
+      "detailRetry": false,
+      "usage": {
+        "input_tokens": 6542,
+        "output_tokens": 734,
+        "total_tokens": 7276,
+        "reasoning_tokens": 255
+      }
+    },
+    {
+      "page": 5,
+      "inputType": "native_text",
+      "seconds": 14.109,
+      "serviceTier": "default",
+      "detailRetry": false,
+      "usage": {
+        "input_tokens": 6086,
+        "output_tokens": 470,
+        "total_tokens": 6556,
+        "reasoning_tokens": 0
+      }
+    },
+    {
+      "page": 6,
+      "inputType": "native_text",
+      "seconds": 21.188,
+      "serviceTier": "default",
+      "detailRetry": false,
+      "usage": {
+        "input_tokens": 6353,
+        "output_tokens": 726,
+        "total_tokens": 7079,
+        "reasoning_tokens": 0
+      }
+    },
+    {
+      "page": 7,
+      "inputType": "native_text",
+      "seconds": 19.922,
+      "serviceTier": "default",
+      "detailRetry": false,
+      "usage": {
+        "input_tokens": 6309,
+        "output_tokens": 731,
+        "total_tokens": 7040,
+        "reasoning_tokens": 0
+      }
+    },
+    {
+      "page": 8,
+      "inputType": "native_text",
+      "seconds": 54.313,
+      "serviceTier": "default",
+      "detailRetry": false,
+      "usage": {
+        "input_tokens": 6468,
+        "output_tokens": 896,
+        "total_tokens": 7364,
+        "reasoning_tokens": 0
+      }
+    },
+    {
+      "page": 9,
+      "inputType": "native_text",
+      "seconds": 17.312,
+      "serviceTier": "default",
+      "detailRetry": false,
+      "usage": {
+        "input_tokens": 6179,
+        "output_tokens": 554,
+        "total_tokens": 6733,
+        "reasoning_tokens": 0
+      }
+    },
+    {
+      "page": 10,
+      "inputType": "native_text",
+      "seconds": 17.14,
+      "serviceTier": "default",
+      "detailRetry": false,
+      "usage": {
+        "input_tokens": 6131,
+        "output_tokens": 449,
+        "total_tokens": 6580,
+        "reasoning_tokens": 0
+      }
+    },
+    {
+      "page": 11,
+      "inputType": "ocr",
+      "seconds": 12.0,
+      "serviceTier": "default",
+      "detailRetry": false,
+      "usage": {
+        "input_tokens": 7575,
+        "output_tokens": 357,
+        "total_tokens": 7932,
+        "reasoning_tokens": 123
+      }
+    }
+  ],
+  "testedOn": "2026-11-17",
+  "jobId": "24c44284-b5d6-424c-8c26-a5d0cd81fc7b",
+  "pagesExpected": 11,
+  "priorAttemptSeconds": 430.1603,
+  "within30Seconds": false,
+  "config": {
+    "parallelRequests": 12,
+    "compactOutput": true,
+    "reasoningEffort": "none",
+    "prioritizeDensePages": true
+  },
+  "checks": {
+    "correctName": true,
+    "date": true,
+    "institution": true,
+    "unverified": true,
+    "contextUnchanged": true,
+    "medicalResultsPresent": true,
+    "conclusionPresent": true,
+    "unitsUnconverted": true
+  },
+  "itemPages": {
+    "3": 15,
+    "5": 22,
+    "6": 21,
+    "7": 20,
+    "8": 25,
+    "9": 7,
+    "10": 1,
+    "11": 10
+  },
+  "counts": {
+    "items": 121,
+    "field_values": 88,
+    "evidence": 219,
+    "conclusions": 1,
+    "advice": 9
+  },
+  "examDateRaw": "2026-09-20",
+  "institutionRaw": "大柳塔试验区人民医院",
+  "reportDataModified": false,
+  "postedToA": false,
+  "externalModelCalled": true
+}

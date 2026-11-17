@@ -1,0 +1,422 @@
+[
+  {
+    "row": 2,
+    "cells": [
+      "枚举字典",
+      null,
+      null,
+      null,
+      null
+    ]
+  },
+  {
+    "row": 3,
+    "cells": [
+      "冻结 DDL 与 JSON Schema 的实际取值",
+      null,
+      null,
+      null,
+      null
+    ]
+  },
+  {
+    "row": 5,
+    "cells": [
+      "enum_group",
+      "contract_member",
+      "enum_value",
+      "definition",
+      "remark"
+    ]
+  },
+  {
+    "row": 6,
+    "cells": [
+      "report_type",
+      "report_kind",
+      "individual",
+      "health_report.schema.json $.report_kind",
+      "契约成员名为 report_kind"
+    ]
+  },
+  {
+    "row": 7,
+    "cells": [
+      "report_type",
+      "report_kind",
+      "organization",
+      "health_report.schema.json $.report_kind",
+      "契约成员名为 report_kind"
+    ]
+  },
+  {
+    "row": 8,
+    "cells": [
+      "report_type",
+      "report_kind",
+      "unknown",
+      "health_report.schema.json $.report_kind",
+      "契约成员名为 report_kind"
+    ]
+  },
+  {
+    "row": 9,
+    "cells": [
+      "processing_status",
+      "status",
+      "uploaded",
+      "05_mysql_schema_v2.sql extraction_jobs.status",
+      null
+    ]
+  },
+  {
+    "row": 10,
+    "cells": [
+      "processing_status",
+      "status",
+      "ocr_complete",
+      "05_mysql_schema_v2.sql extraction_jobs.status",
+      null
+    ]
+  },
+  {
+    "row": 11,
+    "cells": [
+      "processing_status",
+      "status",
+      "extracted",
+      "05_mysql_schema_v2.sql extraction_jobs.status",
+      null
+    ]
+  },
+  {
+    "row": 12,
+    "cells": [
+      "processing_status",
+      "status",
+      "standardized",
+      "05_mysql_schema_v2.sql extraction_jobs.status",
+      null
+    ]
+  },
+  {
+    "row": 13,
+    "cells": [
+      "processing_status",
+      "status",
+      "identity_checked",
+      "05_mysql_schema_v2.sql extraction_jobs.status",
+      null
+    ]
+  },
+  {
+    "row": 14,
+    "cells": [
+      "processing_status",
+      "status",
+      "quality_checked",
+      "05_mysql_schema_v2.sql extraction_jobs.status",
+      null
+    ]
+  },
+  {
+    "row": 15,
+    "cells": [
+      "processing_status",
+      "status",
+      "pending_review",
+      "05_mysql_schema_v2.sql extraction_jobs.status",
+      null
+    ]
+  },
+  {
+    "row": 16,
+    "cells": [
+      "processing_status",
+      "status",
+      "failed",
+      "05_mysql_schema_v2.sql extraction_jobs.status",
+      null
+    ]
+  },
+  {
+    "row": 17,
+    "cells": [
+      "processing_status",
+      "status",
+      "published",
+      "05_mysql_schema_v2.sql extraction_jobs.status",
+      null
+    ]
+  },
+  {
+    "row": 18,
+    "cells": [
+      "review_status",
+      "review_status",
+      "unreviewed",
+      "health_report.schema.json $.review_status",
+      null
+    ]
+  },
+  {
+    "row": 19,
+    "cells": [
+      "review_status",
+      "review_status",
+      "needs_review",
+      "health_report.schema.json $.review_status",
+      null
+    ]
+  },
+  {
+    "row": 20,
+    "cells": [
+      "review_status",
+      "review_status",
+      "confirmed",
+      "health_report.schema.json $.review_status",
+      null
+    ]
+  },
+  {
+    "row": 21,
+    "cells": [
+      "review_status",
+      "review_status",
+      "rejected",
+      "health_report.schema.json $.review_status",
+      null
+    ]
+  },
+  {
+    "row": 22,
+    "cells": [
+      "occupational_conclusion",
+      "standard_category",
+      "目前未见异常",
+      "health_conclusion.schema.json $.standard_category",
+      "仅适用职业健康个体报告，经医生核对完整结论及证据后填写"
+    ]
+  },
+  {
+    "row": 23,
+    "cells": [
+      "occupational_conclusion",
+      "standard_category",
+      "疑似职业病",
+      "health_conclusion.schema.json $.standard_category",
+      "仅适用职业健康个体报告，经医生核对完整结论及证据后填写"
+    ]
+  },
+  {
+    "row": 24,
+    "cells": [
+      "occupational_conclusion",
+      "standard_category",
+      "职业禁忌证",
+      "health_conclusion.schema.json $.standard_category",
+      "仅适用职业健康个体报告，经医生核对完整结论及证据后填写"
+    ]
+  },
+  {
+    "row": 25,
+    "cells": [
+      "occupational_conclusion",
+      "standard_category",
+      "其他疾病或异常",
+      "health_conclusion.schema.json $.standard_category",
+      "仅适用职业健康个体报告，经医生核对完整结论及证据后填写"
+    ]
+  },
+  {
+    "row": 26,
+    "cells": [
+      "source_type",
+      "$.source_kind",
+      "roster",
+      "employee_profile.schema.json $.source_kind",
+      "各成员适用范围独立"
+    ]
+  },
+  {
+    "row": 27,
+    "cells": [
+      "source_type",
+      "$.source_kind",
+      "pdf",
+      "health_advice.schema.json $.source_kind",
+      "各成员适用范围独立"
+    ]
+  },
+  {
+    "row": 28,
+    "cells": [
+      "source_type",
+      "$.source_kind",
+      "clinician",
+      "health_advice.schema.json $.source_kind",
+      "各成员适用范围独立"
+    ]
+  },
+  {
+    "row": 29,
+    "cells": [
+      "source_type",
+      "$.evidence[*].extraction_method",
+      "native_text",
+      "health_report.schema.json $.evidence[*].extraction_method",
+      "各成员适用范围独立"
+    ]
+  },
+  {
+    "row": 30,
+    "cells": [
+      "source_type",
+      "$.evidence[*].extraction_method",
+      "ocr",
+      "health_report.schema.json $.evidence[*].extraction_method",
+      "各成员适用范围独立"
+    ]
+  },
+  {
+    "row": 31,
+    "cells": [
+      "source_type",
+      "$.evidence[*].extraction_method",
+      "pdf_object",
+      "health_report.schema.json $.evidence[*].extraction_method",
+      "各成员适用范围独立"
+    ]
+  },
+  {
+    "row": 32,
+    "cells": [
+      "source_type",
+      "$.evidence[*].extraction_method",
+      "manual_transcription",
+      "health_report.schema.json $.evidence[*].extraction_method",
+      "各成员适用范围独立"
+    ]
+  },
+  {
+    "row": 33,
+    "cells": [
+      "contract_other",
+      "health_reports.data_mode",
+      "real",
+      "05_mysql_schema_v2.sql health_reports.data_mode",
+      null
+    ]
+  },
+  {
+    "row": 34,
+    "cells": [
+      "contract_other",
+      "health_reports.data_mode",
+      "synthetic",
+      "05_mysql_schema_v2.sql health_reports.data_mode",
+      null
+    ]
+  },
+  {
+    "row": 35,
+    "cells": [
+      "contract_other",
+      "health_items.mapping_status",
+      "unmapped",
+      "05_mysql_schema_v2.sql health_items.mapping_status",
+      null
+    ]
+  },
+  {
+    "row": 36,
+    "cells": [
+      "contract_other",
+      "health_items.mapping_status",
+      "lexical_only",
+      "05_mysql_schema_v2.sql health_items.mapping_status",
+      null
+    ]
+  },
+  {
+    "row": 37,
+    "cells": [
+      "contract_other",
+      "health_items.mapping_status",
+      "needs_confirmation",
+      "05_mysql_schema_v2.sql health_items.mapping_status",
+      null
+    ]
+  },
+  {
+    "row": 38,
+    "cells": [
+      "contract_other",
+      "health_items.mapping_status",
+      "confirmed",
+      "05_mysql_schema_v2.sql health_items.mapping_status",
+      null
+    ]
+  },
+  {
+    "row": 39,
+    "cells": [
+      "contract_other",
+      "health_conclusions.completeness",
+      "complete",
+      "05_mysql_schema_v2.sql health_conclusions.completeness",
+      null
+    ]
+  },
+  {
+    "row": 40,
+    "cells": [
+      "contract_other",
+      "health_conclusions.completeness",
+      "partial",
+      "05_mysql_schema_v2.sql health_conclusions.completeness",
+      null
+    ]
+  },
+  {
+    "row": 41,
+    "cells": [
+      "contract_other",
+      "health_conclusions.completeness",
+      "unknown",
+      "05_mysql_schema_v2.sql health_conclusions.completeness",
+      null
+    ]
+  },
+  {
+    "row": 42,
+    "cells": [
+      "contract_other",
+      "review_records.decision",
+      "return",
+      "05_mysql_schema_v2.sql review_records.decision",
+      null
+    ]
+  },
+  {
+    "row": 43,
+    "cells": [
+      "contract_other",
+      "review_records.decision",
+      "reject",
+      "05_mysql_schema_v2.sql review_records.decision",
+      null
+    ]
+  },
+  {
+    "row": 44,
+    "cells": [
+      "contract_other",
+      "review_records.decision",
+      "confirm",
+      "05_mysql_schema_v2.sql review_records.decision",
+      null
+    ]
+  }
+]

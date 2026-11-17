@@ -1,0 +1,13 @@
+{
+  "mode": "synthetic",
+  "checks": [
+    "import_conflict_rolls_back_entire_batch",
+    "import_success_two_records",
+    "filtered_csv_export",
+    "csv_formula_prefix_escaped",
+    "combined_team_query",
+    "cross_origin_request_rejected",
+    "anonymous_api_401"
+  ],
+  "count": 7
+}

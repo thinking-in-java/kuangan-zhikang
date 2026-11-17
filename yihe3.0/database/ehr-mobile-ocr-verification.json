@@ -1,0 +1,27 @@
+{
+  "mode": "synthetic",
+  "checks": [
+    "legacy_user_code_is_not_bearer",
+    "mobile_authenticated_self_roster",
+    "mobile_png_upload_bound_to_self",
+    "mobile_upload_idempotency",
+    "mobile_private_file_bytes",
+    "mobile_cannot_read_other_employee",
+    "mobile_cannot_download_other_employee",
+    "file_magic_validation",
+    "manual_ocr_restart_queues_durable_job",
+    "ocr_callback_auth_required",
+    "ocr_unapproved_derived_value_rejected",
+    "ocr_raw_unit_and_string_preserved",
+    "ocr_not_auto_approved_or_date_verified",
+    "ocr_callback_replay_idempotent",
+    "ocr_conflicting_replay_409",
+    "ocr_input_protected_and_correlated",
+    "late_ocr_does_not_overwrite_manual_candidate",
+    "mobile_logout",
+    "revoked_bearer_rejected"
+  ],
+  "count": 19,
+  "ownRecordId": "e260c709-657f-421f-8d7c-00a3a57192e8",
+  "ocrReportId": "649a1c43-292d-4643-8a89-90e73d852d77"
+}

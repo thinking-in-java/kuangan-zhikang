@@ -1,0 +1,23 @@
+{
+  "base": "http://localhost:18080",
+  "checks": [
+    "legacy_unfiltered_api_has_data",
+    "unit_filter_list_and_total_match",
+    "blank_manager_not_a_real_filter",
+    "pagination_advances",
+    "invalid_date_returns_business_error",
+    "creation_date_filter_consistent",
+    "browser_default_list_stays_visible",
+    "default_unit_and_manager_empty",
+    "no_automatic_group_name_filter",
+    "browser_unit_search_has_five_rows",
+    "browser_clear_restores_default_list",
+    "browser_no_javascript_exceptions"
+  ],
+  "count": 12,
+  "defaultListRows": 20,
+  "defaultQueryTotal": 2319,
+  "unitFilteredTotal": 5,
+  "legacyDatabaseRowsUnmodified": true,
+  "javascriptErrors": []
+}

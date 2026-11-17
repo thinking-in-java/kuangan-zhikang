@@ -1,0 +1,64 @@
+{
+  "before": {
+    "a_report_series": 127,
+    "a_health_reports": 160,
+    "a_report_sources": 127,
+    "a_report_revision_sources": 160,
+    "a_report_upload_metadata": 151,
+    "a_extraction_jobs": 168,
+    "a_ocr_dispatch_tasks": 136,
+    "a_ocr_dispatch_attempts": 214,
+    "a_ehr_ocr_receipts": 67,
+    "a_health_items": 2102,
+    "a_report_evidence": 4486,
+    "a_health_conclusions": 109,
+    "a_health_advice": 93,
+    "a_occupational_profiles": 51,
+    "a_review_records": 29,
+    "a_report_review_snapshots": 29,
+    "a_report_publications": 23,
+    "a_report_quality_checks": 93,
+    "a_report_sync_outbox": 23,
+    "a_followup_tasks": 0
+  },
+  "after": {
+    "a_report_series": 0,
+    "a_health_reports": 0,
+    "a_report_sources": 0,
+    "a_report_revision_sources": 0,
+    "a_report_upload_metadata": 0,
+    "a_extraction_jobs": 0,
+    "a_ocr_dispatch_tasks": 0,
+    "a_ocr_dispatch_attempts": 0,
+    "a_ehr_ocr_receipts": 0,
+    "a_health_items": 0,
+    "a_report_evidence": 0,
+    "a_health_conclusions": 0,
+    "a_health_advice": 0,
+    "a_occupational_profiles": 0,
+    "a_review_records": 0,
+    "a_report_review_snapshots": 0,
+    "a_report_publications": 0,
+    "a_report_quality_checks": 0,
+    "a_report_sync_outbox": 0,
+    "a_followup_tasks": 0
+  },
+  "employeeTablesPreserved": {
+    "a_employees": 2399,
+    "a_health_records": 2399,
+    "a_employee_roster_profiles": 2399,
+    "a_miniapp_users": 36,
+    "a_miniapp_employee_bindings": 6
+  },
+  "reportsByMode": {
+    "real": 11,
+    "synthetic": 116
+  },
+  "committed": true,
+  "removedFiles": {
+    "F:\\upload": 0,
+    "F:\\upload-test": 6,
+    "F:\\upload\\.config\\model-results": 37,
+    "F:\\workstation\\exports\\ocr": 1
+  }
+}

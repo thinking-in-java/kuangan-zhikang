@@ -1,0 +1,12 @@
+{
+  "version": "V002_a_ehr_business_api",
+  "applied": true,
+  "tables": [
+    "a_employee_roster_profiles",
+    "a_report_review_snapshots",
+    "a_ehr_mobile_sessions"
+  ],
+  "sql_sha256": "370c6a9d1f21f2ca67cbcb8ee71bf7f545409c1617dab83f748edea4bd1265c3",
+  "legacy_unchanged": true,
+  "verified_at": "2026-11-14T18:29:38.537601+08:00"
+}

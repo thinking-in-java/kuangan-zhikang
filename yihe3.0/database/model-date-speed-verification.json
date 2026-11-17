@@ -1,0 +1,78 @@
+{
+  "pages": 10,
+  "parallelRequests": 3,
+  "elapsedSeconds": 91.75,
+  "pageTimings": [
+    {
+      "page": 1,
+      "inputType": "native_text",
+      "seconds": 38.36
+    },
+    {
+      "page": 2,
+      "inputType": "native_text",
+      "seconds": 64.156
+    },
+    {
+      "page": 3,
+      "inputType": "native_text",
+      "seconds": 60.781
+    },
+    {
+      "page": 4,
+      "inputType": "native_text",
+      "seconds": 25.86
+    },
+    {
+      "page": 5,
+      "inputType": "native_text",
+      "seconds": 20.719
+    },
+    {
+      "page": 6,
+      "inputType": "ocr",
+      "seconds": 7.625
+    },
+    {
+      "page": 7,
+      "inputType": "ocr",
+      "seconds": 7.343
+    },
+    {
+      "page": 8,
+      "inputType": "ocr",
+      "seconds": 14.453
+    },
+    {
+      "page": 9,
+      "inputType": "ocr",
+      "seconds": 12.468
+    },
+    {
+      "page": 10,
+      "inputType": "ocr",
+      "seconds": 10.156
+    }
+  ],
+  "jobId": "ae9ba9f5-2dba-4772-93b6-c00e65892b39",
+  "priorElapsedSeconds": 334.248,
+  "speedup": 3.64,
+  "examDateRaw": "2024/07/10",
+  "examDateVerified": null,
+  "priorCounts": {
+    "items": 80,
+    "field_values": 97,
+    "evidence": 189,
+    "conclusions": 6,
+    "advice": 6
+  },
+  "newCounts": {
+    "items": 79,
+    "field_values": 109,
+    "evidence": 192,
+    "conclusions": 2,
+    "advice": 2
+  },
+  "reportDataModified": false,
+  "postedToA": false
+}

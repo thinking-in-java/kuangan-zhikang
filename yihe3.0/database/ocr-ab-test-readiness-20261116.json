@@ -1,0 +1,19 @@
+{
+  "date": "2026-11-16",
+  "currentLocalIp": "192.168.1.105",
+  "plannedTestBaseUrl": "http://192.168.1.105:18082",
+  "scope_code": "org:10000",
+  "data_mode": "synthetic",
+  "report_kind": "individual",
+  "candidateOnly": true,
+  "queuePartition": "synthetic",
+  "offlineIsolationChecks": 9,
+  "testServiceStarted": true,
+  "mysqlErrorCode": null,
+  "mysqlError": null,
+  "testPdfUploaded": false,
+  "ocrTaskCreated": false,
+  "waitingForBListenerReady": true,
+  "currentIP": "192.168.1.105",
+  "mysqlConnected": true
+}

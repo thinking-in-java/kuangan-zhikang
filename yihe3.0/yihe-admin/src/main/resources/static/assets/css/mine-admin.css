@@ -1,0 +1,66 @@
+/* Scoped to the admin shell; business pages retain their own styles. */
+.mine-admin{--mine-sidebar:#102a35;--mine-accent:#49d7b7;--mine-ink:#d9e8ed;font-family:"Microsoft YaHei","PingFang SC",Arial,sans-serif}
+.mine-admin .layui-header .layui-logo{background:#102a35!important;border-bottom:1px solid #87beb516;box-sizing:border-box;padding:0 19px!important;display:flex;align-items:center;justify-content:flex-start}
+.mine-brand{display:flex!important;align-items:center;gap:10px;padding:0!important;line-height:normal;text-align:left;text-decoration:none}
+.mine-admin .layui-header .mine-brand img{width:34px!important;height:34px!important;max-height:none!important;margin:0!important;border-radius:10px;flex:none}
+.mine-brand-copy{display:flex;flex-direction:column;gap:4px;white-space:nowrap}
+.mine-brand-copy strong{font-size:19px;letter-spacing:2px;color:#edf7f8;font-weight:600;line-height:1.2}
+.mine-brand-copy small{font-size:8px;letter-spacing:2.5px;color:#84a8b2;line-height:1.2}
+.mine-sidebar-toggle{display:grid;place-items:center;flex:none;width:28px;height:30px;margin-left:auto;padding:5px;border:0;border-radius:6px;background:transparent;color:#9dc4cb;cursor:pointer;transition:background .18s,color .18s}.mine-sidebar-toggle svg{width:18px;height:18px}.mine-sidebar-toggle:hover{background:#74d4bd16;color:#83e6c9}.mine-sidebar-toggle:focus-visible{outline:2px solid #68dfc2;outline-offset:2px}
+@media(min-width:769px){.mine-admin .mine-toolbar-toggle{display:none!important}.mine-admin .admin-nav-mini .layui-header .mine-brand{display:none!important}.mine-admin .admin-nav-mini .mine-sidebar-toggle{margin-left:0;width:34px;height:34px}}
+.mine-admin{margin:0;background:#04162c}
+.mine-admin .layui-header{box-shadow:0 1px 0 #2586a326!important;background:linear-gradient(90deg,#0b2536,#071b2d)!important;border-bottom:1px solid #32647b26}
+.mine-admin .layui-header .layui-nav{background:transparent!important}
+.mine-admin .layui-header .layui-layout-right>.layui-nav-item>a{color:#88aebf!important}
+.mine-admin .layui-header .layui-layout-right>.layui-nav-item>a:hover{color:#b7efed!important;background:#47c5b50a}
+.mine-admin .layui-header .layui-nav .layui-nav-more{border-top-color:#6d9aad!important}
+.mine-admin .layui-header .layui-nav .layui-nav-child{background:#0c293d!important;border:1px solid #39657c55;box-shadow:0 10px 25px #010b1c66;border-radius:7px}
+.mine-admin .layui-header .layui-nav .layui-nav-child a{color:#a6c8d9!important}
+.mine-admin .layui-header .layui-nav .layui-nav-child a:hover{color:#8ee8d3!important;background:#45c6ae15!important}
+.mine-admin .layui-header .layui-nav .layui-nav-bar{background:#4ad9bf}
+.mine-admin .layui-body{background:#04162c}
+.mine-admin .layui-header .layui-layout-left a{margin:7px 2px;height:36px;line-height:36px;border-radius:8px;color:#81a8bb!important}
+.mine-admin .layui-header .layui-layout-left a:hover{background:#47c5b50a!important;color:#8ee8d3!important}
+.mine-admin .mine-sidebar{display:flex;flex-direction:column;overflow:visible!important;background:linear-gradient(180deg,#102a35,#0d222d)!important;box-shadow:3px 0 18px #102a3507!important;color:var(--mine-ink)}
+.mine-sidebar-head{flex:none;padding:20px 16px 12px}
+.mine-workspace-label{display:flex;align-items:center;justify-content:space-between;margin:0 2px 13px;font-size:10px;color:#8aabb5;letter-spacing:1px}
+.mine-workspace-label span:last-child{font-size:9px;color:#78c6b5;letter-spacing:0;border:1px solid #62c7b123;padding:3px 6px;border-radius:4px;background:#62c7b108}
+.mine-menu-search{height:34px;display:flex;align-items:center;border:1px solid #8dbeb822;background:#ffffff05;border-radius:7px;transition:border-color .2s}
+.mine-menu-search:focus-within{border-color:#57d9bb8c;background:#ffffff08}
+.mine-menu-search>svg{width:14px;height:14px;margin:0 8px 0 10px;color:#739aa7;flex:none}
+.mine-menu-search input{width:100%;min-width:0;border:0;outline:none;background:transparent;color:#d4e8ed;font-size:11px;line-height:32px;padding:0;font-family:inherit}
+.mine-menu-search input::placeholder{color:#7597a3}
+.mine-menu-search button{flex:none;margin-right:6px;border:0;background:transparent;color:#a4bec8;width:22px;height:24px;font-size:18px;cursor:pointer;padding:0;line-height:22px}
+.mine-admin .mine-sidebar .layui-side-scroll{flex:1;min-height:0;height:auto!important;width:100%!important;overflow-x:hidden!important;overflow-y:auto;scrollbar-width:thin;scrollbar-color:#42616c transparent}
+.mine-sidebar .layui-side-scroll::-webkit-scrollbar{width:4px}.mine-sidebar .layui-side-scroll::-webkit-scrollbar-thumb{background:#42616c;border-radius:5px}.mine-sidebar .layui-side-scroll::-webkit-scrollbar-track{background:transparent}
+.mine-admin #side-menu{width:100%!important;padding:0 0 10px;margin:0!important;background:transparent!important}
+.mine-admin #side-menu .mine-menu-node[hidden],.mine-admin [hidden]{display:none!important}
+.mine-admin #side-menu>.mine-menu-node{display:block;width:auto;margin:3px 10px 5px;line-height:normal}
+.mine-admin #side-menu a.mine-menu-link{position:relative;display:flex;align-items:center;gap:12px;height:43px;line-height:43px;padding:0 12px!important;border-radius:8px;color:#a9c2cd!important;font-size:13px;transition:background-color .18s,color .18s;box-sizing:border-box;text-decoration:none;cursor:pointer}
+.mine-admin #side-menu a.mine-menu-link:before{display:none!important}
+.mine-admin #side-menu a.mine-menu-link:focus-visible{outline:2px solid #68dfc2;outline-offset:-2px}
+.mine-admin #side-menu a.mine-menu-link:hover{background:#78c3b60c!important;color:#f2fafb!important}
+.mine-admin #side-menu .mine-menu-link>cite{font-style:normal;display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0;flex:1;line-height:inherit;font-size:inherit}
+.mine-admin #side-menu .mine-menu-icon{position:static!important;display:grid;place-items:center;width:21px;height:23px;line-height:1;margin:0!important;font-style:normal;color:#83a9b8;flex:none;border-radius:0;background:none!important}
+.mine-menu-icon svg{display:block;width:19px;height:19px}
+.mine-admin #side-menu .layui-nav-more{right:12px!important;color:#658996!important;flex:none;position:relative;margin:0 0 0 auto!important;top:auto!important;transform:none}
+.mine-admin #side-menu .layui-nav-itemed>a .layui-nav-more{color:#92c7bd!important;transform:rotate(-180deg)}
+.mine-admin #side-menu .layui-nav-itemed>a,.mine-admin #side-menu .mine-parent-current>a{color:#def5ef!important;background:#6cc4b108!important}
+.mine-admin #side-menu .mine-parent-current>a .mine-menu-icon{color:#67d5bc}
+.mine-admin #side-menu .layui-nav-child{padding:3px 0 5px!important;background:transparent!important;box-shadow:none;border:0;margin:3px 0 7px;min-width:0}
+.mine-admin #side-menu dd{margin:2px 0;line-height:normal;background:transparent!important}
+.mine-admin #side-menu dd>a.mine-menu-link{height:36px;line-height:36px;padding-left:45px!important;font-size:12px;color:#88a8b6!important;gap:0}
+.mine-admin #side-menu dd>a.mine-menu-link:after{content:"";position:absolute;width:4px;height:4px;border-radius:50%;left:22px;top:16px;background:#476977;transition:background .2s}
+.mine-admin #side-menu dd .layui-nav-child a.mine-menu-link{padding-left:59px!important;font-size:11px}.mine-admin #side-menu dd .layui-nav-child a.mine-menu-link:after{left:43px;width:3px;height:3px}
+.mine-admin #side-menu .layui-this>a.mine-menu-link{color:#8de7cd!important;background:linear-gradient(100deg,#2cb99c29,#2cb99c12)!important;box-shadow:inset 0 0 0 1px #58d5b317;font-weight:500}
+.mine-admin #side-menu .layui-this>a.mine-menu-link:after{background:#68e2bf;box-shadow:0 0 6px #68e2bf33}
+.mine-admin #side-menu>.layui-this>a.mine-menu-link{box-shadow:inset 3px 0 #4cd8b4,inset 0 0 0 1px #58d5b317}
+.mine-admin #side-menu>.layui-this>a.mine-menu-link .mine-menu-icon{color:#7ce4c6}
+.mine-admin #side-menu .layui-nav-bar{display:none!important}
+.mine-menu-empty{padding:26px 20px;text-align:center;color:#7897a5;font-size:11px;line-height:1.8}.mine-menu-empty strong{display:block;color:#bad0d9;font-weight:400;font-size:12px;margin-bottom:5px}
+.mine-search-status{font-size:10px;padding:0 18px;color:#80a79f;line-height:22px;min-height:0}.mine-search-status:empty{display:none}
+.mine-sidebar-footer{flex:none;margin:6px 16px 0;padding:15px 1px 17px;border-top:1px solid #8cbbb513;display:flex;align-items:center;gap:9px;font-size:10px;color:#7897a3;white-space:nowrap}.mine-sidebar-footer>svg{width:15px;height:15px;color:#67b6a7}.mine-sidebar-footer>span{display:flex;flex-direction:column;gap:5px}.mine-sidebar-footer small{color:#4d7685;font-size:8px;letter-spacing:1px}
+.mine-admin .layui-footer{background:#061a2d!important;color:#547d96!important;border-top:1px solid #22547455;font-size:10px}.mine-admin .layui-footer .pull-right{color:#648ba2}
+.mine-admin .layui-body-header{background:#092235!important;border-bottom:1px solid #22547455;color:#a8d6e6}.mine-admin .layui-body-header .layui-body-header-title{color:#a8d6e6}.mine-admin .layui-body-header .layui-breadcrumb a,.mine-admin .layui-body-header .layui-breadcrumb a cite{color:#6e9cb7!important}
+@media(min-width:769px){.mine-admin .admin-nav-mini .mine-brand-copy,.mine-admin .admin-nav-mini .mine-sidebar-head,.mine-admin .admin-nav-mini .mine-sidebar-footer,.mine-admin .admin-nav-mini .mine-search-status{display:none!important}.mine-admin .admin-nav-mini .layui-header .layui-logo{padding:0!important;justify-content:center}.mine-admin .admin-nav-mini .mine-brand{justify-content:center;width:60px}.mine-admin .admin-nav-mini #side-menu{padding-top:15px}.mine-admin .admin-nav-mini #side-menu>.mine-menu-node{margin:3px 7px 7px}.mine-admin .admin-nav-mini #side-menu>.mine-menu-node>a.mine-menu-link{padding:0!important;justify-content:center;gap:0}.mine-admin .admin-nav-mini #side-menu>.mine-menu-node>a.mine-menu-link>cite,.mine-admin .admin-nav-mini #side-menu>.mine-menu-node>a.mine-menu-link>.layui-nav-more{display:none!important}.mine-admin .admin-nav-mini #side-menu .admin-nav-hover>.layui-nav-child{padding:7px!important;min-width:176px!important;background:#132f3b!important;border:1px solid #6ca99a26;border-radius:10px;box-shadow:0 10px 30px #091a2d29}.mine-admin .admin-nav-mini #side-menu .admin-nav-hover>.layui-nav-child:before{background:transparent!important}.mine-admin .admin-nav-mini #side-menu .admin-nav-hover>.layui-nav-child>dd>a.mine-menu-link{padding:0 14px!important}.mine-admin .admin-nav-mini #side-menu .admin-nav-hover>.layui-nav-child>dd>a.mine-menu-link:after{display:none}.mine-admin .admin-nav-mini #side-menu .admin-nav-hover>.layui-nav-child>dd>a.mine-menu-link .layui-nav-more{display:block!important}}
+@media(prefers-reduced-motion:reduce){.mine-admin #side-menu *{transition:none!important}}

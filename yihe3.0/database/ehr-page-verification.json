@@ -1,0 +1,23 @@
+{
+  "mode": "synthetic",
+  "checks": [
+    "management_loaded_real_api_no_demo_store",
+    "ui_create_record_database_persisted",
+    "ui_edit_record",
+    "ui_search_and_filters",
+    "ui_personal_binding_code_generated_without_local_storage",
+    "ui_code_plaintext_not_reloaded_and_revocation_persisted",
+    "ui_upload_private_report_and_durable_queue_progress",
+    "ui_automatically_polls_worker_progress",
+    "ui_save_raw_candidate",
+    "ui_submit_workflow",
+    "ui_approve_workflow",
+    "ui_archive_workflow",
+    "smart_archive_only_published_report_visible",
+    "statistics_charts_with_database_data",
+    "review_page_real_filters",
+    "ui_soft_delete_keeps_history"
+  ],
+  "count": 16,
+  "consoleErrors": []
+}

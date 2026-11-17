@@ -1,0 +1,34 @@
+{
+  "apply": false,
+  "runId": "57a13f3f-f148-45c3-bd68-f68d9b47cd88",
+  "scope": "org:10000",
+  "mode": "real",
+  "source": "new_reg",
+  "policy": "insert only; preserve existing profiles; no clinical reports",
+  "sourceRows": 2311,
+  "plannedNew": 2309,
+  "existing": 0,
+  "linkedExisting": 0,
+  "skipped": [
+    {
+      "legacyId": 22,
+      "reason": "新库工号已存在但身份不能安全合并，保留原记录待人工核对"
+    },
+    {
+      "legacyId": 1762,
+      "reason": "缺少姓名或旧用户编码，不能建立可信身份"
+    }
+  ],
+  "warnings": [
+    {
+      "legacyId": 1736,
+      "reason": "旧联系电话格式异常，新表留空，原值保留在旧表"
+    }
+  ],
+  "newRecords": [],
+  "authorizedOrgCount": 31,
+  "sourceRowsSha256": "02c01d8d71d0d6f6ea1c38a79d17a1fc3ce64c4c7bc98b07f16196044aa12795",
+  "legacyUnchanged": true,
+  "clinicalReportsCreated": 0,
+  "verifiedAt": "2026-11-14T13:30:57.322179+00:00"
+}

@@ -1,0 +1,310 @@
+[
+  {
+    "row": 2,
+    "cells": [
+      "字段变更记录",
+      null,
+      null,
+      null,
+      null,
+      null
+    ]
+  },
+  {
+    "row": 3,
+    "cells": [
+      "版本、生成日期和输入 SHA-256",
+      null,
+      null,
+      null,
+      null,
+      null
+    ]
+  },
+  {
+    "row": 5,
+    "cells": [
+      "dictionary_version",
+      "contract_version",
+      "generated_on",
+      "change",
+      "source_file",
+      "sha256"
+    ]
+  },
+  {
+    "row": 6,
+    "cells": [
+      "2.0.0 r1",
+      "2.0.0",
+      "2026-11-14",
+      "首次开发交付字典",
+      "reports/ehr_field_discovery/01_pdf_inventory.csv",
+      "7a58d54aa1a89e8bebc404c07bc0e50d6f81bddda6d4003960cd81c3fbfe31fc"
+    ]
+  },
+  {
+    "row": 7,
+    "cells": [
+      "2.0.0 r1",
+      "2.0.0",
+      "2026-11-14",
+      "首次开发交付字典",
+      "reports/ehr_field_discovery/04_field_frequency.csv",
+      "181fbfaea6be66fec88e766f13473331764d4d6223bc017ca44a5e2766cd99fe"
+    ]
+  },
+  {
+    "row": 8,
+    "cells": [
+      "2.0.0 r1",
+      "2.0.0",
+      "2026-11-14",
+      "首次开发交付字典",
+      "reports/ehr_field_discovery/05_medical_item_catalog.csv",
+      "8dd583718d2e8446bbfa68d3d9350124dfdd22524c271f9ad91cafc65f0e47df"
+    ]
+  },
+  {
+    "row": 9,
+    "cells": [
+      "2.0.0 r1",
+      "2.0.0",
+      "2026-11-14",
+      "首次开发交付字典",
+      "reports/ehr_field_discovery/06_hospital_field_mapping.csv",
+      "4cf343d5e0a095ec3bcabdce588640eb5093cd4d423da0035af5bc193d8cfc8d"
+    ]
+  },
+  {
+    "row": 10,
+    "cells": [
+      "2.0.0 r1",
+      "2.0.0",
+      "2026-11-14",
+      "首次开发交付字典",
+      "reports/ehr_field_discovery/09_source_evidence.csv",
+      "3c9eebe3ad2b018b68a05f71808c1bfddbc29ee87e821f772fe705a4763273d5"
+    ]
+  },
+  {
+    "row": 11,
+    "cells": [
+      "2.0.0 r1",
+      "2.0.0",
+      "2026-11-14",
+      "首次开发交付字典",
+      "reports/ehr_schema_freeze/01_field_validation_report.md",
+      "425e5db4a806f612717f46b05895bfc03af98efb93f25d251c59e3b36aebd554"
+    ]
+  },
+  {
+    "row": 12,
+    "cells": [
+      "2.0.0 r1",
+      "2.0.0",
+      "2026-11-14",
+      "首次开发交付字典",
+      "reports/ehr_schema_freeze/02_final_field_dictionary.csv",
+      "91437120b3c16c9e6c3bd5139153d9f3751068d010a4328ee887acec7f9d77a4"
+    ]
+  },
+  {
+    "row": 13,
+    "cells": [
+      "2.0.0 r1",
+      "2.0.0",
+      "2026-11-14",
+      "首次开发交付字典",
+      "reports/ehr_schema_freeze/03_final_item_dictionary.csv",
+      "9bd4a459d8501285feedc81184b6f63ef3d62b100159ae3f99f4e7fd13549f73"
+    ]
+  },
+  {
+    "row": 14,
+    "cells": [
+      "2.0.0 r1",
+      "2.0.0",
+      "2026-11-14",
+      "首次开发交付字典",
+      "reports/ehr_schema_freeze/04_field_source_mapping.csv",
+      "79413ee3f7444e5842ddb70eb9211f0e7ffbf3bba448ade82d94db741f5bd9fb"
+    ]
+  },
+  {
+    "row": 15,
+    "cells": [
+      "2.0.0 r1",
+      "2.0.0",
+      "2026-11-14",
+      "首次开发交付字典",
+      "reports/ehr_schema_freeze/04_mappings/item_alias_collisions.csv",
+      "56091be68e982b01b2d25e9acdc91d5422ca0309bd153623a5fb5aa27d587193"
+    ]
+  },
+  {
+    "row": 16,
+    "cells": [
+      "2.0.0 r1",
+      "2.0.0",
+      "2026-11-14",
+      "首次开发交付字典",
+      "reports/ehr_schema_freeze/04_mappings/medical_field_mapping.csv",
+      "6ae27c0716dcb040b4872b81e5ce8d04fd6cd9edacdeb87c8b4920826722b769"
+    ]
+  },
+  {
+    "row": 17,
+    "cells": [
+      "2.0.0 r1",
+      "2.0.0",
+      "2026-11-14",
+      "首次开发交付字典",
+      "reports/ehr_schema_freeze/04_mappings/medical_item_dictionary.csv",
+      "9bd4a459d8501285feedc81184b6f63ef3d62b100159ae3f99f4e7fd13549f73"
+    ]
+  },
+  {
+    "row": 18,
+    "cells": [
+      "2.0.0 r1",
+      "2.0.0",
+      "2026-11-14",
+      "首次开发交付字典",
+      "reports/ehr_schema_freeze/04_mappings/medical_unit_mapping.csv",
+      "d1c86a466525b2b1f38b48b2b62ff43158b73112ea2c3daad5168ab8f8c9ed68"
+    ]
+  },
+  {
+    "row": 19,
+    "cells": [
+      "2.0.0 r1",
+      "2.0.0",
+      "2026-11-14",
+      "首次开发交付字典",
+      "reports/ehr_schema_freeze/04_mappings/report_template_mapping.csv",
+      "e5c59e541afadfaededb84d6543647f018fe385356168f5ac9c77c221ca009ff"
+    ]
+  },
+  {
+    "row": 20,
+    "cells": [
+      "2.0.0 r1",
+      "2.0.0",
+      "2026-11-14",
+      "首次开发交付字典",
+      "reports/ehr_schema_freeze/05_mysql_schema_v2.sql",
+      "44913c5da5fc770cc35bb639f00c17ce113cac1b715636876d13fd3c51967fba"
+    ]
+  },
+  {
+    "row": 21,
+    "cells": [
+      "2.0.0 r1",
+      "2.0.0",
+      "2026-11-14",
+      "首次开发交付字典",
+      "reports/ehr_schema_freeze/06_json_schemas/employee_profile.schema.json",
+      "c24c18b61f9f56f01bccf0df0be44c60e294a0df29263362ced8189168ee882d"
+    ]
+  },
+  {
+    "row": 22,
+    "cells": [
+      "2.0.0 r1",
+      "2.0.0",
+      "2026-11-14",
+      "首次开发交付字典",
+      "reports/ehr_schema_freeze/06_json_schemas/health_advice.schema.json",
+      "7c88e5bcdf7caf16bd289cb938f5fb4a63dc3671ce80b99143a81a1f3bebf6bf"
+    ]
+  },
+  {
+    "row": 23,
+    "cells": [
+      "2.0.0 r1",
+      "2.0.0",
+      "2026-11-14",
+      "首次开发交付字典",
+      "reports/ehr_schema_freeze/06_json_schemas/health_conclusion.schema.json",
+      "72375df783bc4c8aa819203e3aee2b7a3fc4faf1c81c0e852c4e052af73c1a0c"
+    ]
+  },
+  {
+    "row": 24,
+    "cells": [
+      "2.0.0 r1",
+      "2.0.0",
+      "2026-11-14",
+      "首次开发交付字典",
+      "reports/ehr_schema_freeze/06_json_schemas/health_item.schema.json",
+      "be06696faab73213893a57572c071780f7323e9151033f490f737b95198cf085"
+    ]
+  },
+  {
+    "row": 25,
+    "cells": [
+      "2.0.0 r1",
+      "2.0.0",
+      "2026-11-14",
+      "首次开发交付字典",
+      "reports/ehr_schema_freeze/06_json_schemas/health_report.schema.json",
+      "4b5e866d8aae619141a370b1cfe1ad810422c839b8fcb9db16d8fcca76b2c748"
+    ]
+  },
+  {
+    "row": 26,
+    "cells": [
+      "2.0.0 r1",
+      "2.0.0",
+      "2026-11-14",
+      "首次开发交付字典",
+      "reports/ehr_schema_freeze/07_agent_data_contract.md",
+      "1f82b35671782e26c90612364bb82e030b207b4f2281ffd221e62e0588b14d5c"
+    ]
+  },
+  {
+    "row": 27,
+    "cells": [
+      "2.0.0 r1",
+      "2.0.0",
+      "2026-11-14",
+      "首次开发交付字典",
+      "reports/ehr_schema_freeze/08_data_quality_rules.md",
+      "946d112eaec4162f173cdce49ecbc17e96971e2515417cd14286dccb04f0d79a"
+    ]
+  },
+  {
+    "row": 28,
+    "cells": [
+      "2.0.0 r1",
+      "2.0.0",
+      "2026-11-14",
+      "首次开发交付字典",
+      "reports/ehr_schema_freeze/09_workflow_design.md",
+      "2d975bcd4a1c012972c1c173dbdc7893463ed167b1a0fe138f058d9f37d4d50f"
+    ]
+  },
+  {
+    "row": 29,
+    "cells": [
+      "2.0.0 r1",
+      "2.0.0",
+      "2026-11-14",
+      "首次开发交付字典",
+      "reports/ehr_schema_freeze/verification/audit.py",
+      "28824117929aed0ea7f376f8106712f532fa319675688e827205b46707f8f00f"
+    ]
+  },
+  {
+    "row": 30,
+    "cells": [
+      "2.0.0 r1",
+      "2.0.0",
+      "2026-11-14",
+      "首次开发交付字典",
+      "reports/ehr_schema_freeze/verification/simulate.py",
+      "9716937c4cde7705d2e108ae5aa79a938458cd96b44a9e8055d6ba460a798ad5"
+    ]
+  }
+]

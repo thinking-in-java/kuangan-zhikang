@@ -1,0 +1,10 @@
+{
+  "version": "V005_a_miniapp_correction_requests",
+  "applied": true,
+  "tables": [
+    "a_miniapp_correction_requests"
+  ],
+  "sql_sha256": "f351a519d81cf9ce8343396d1ba2ee2bbcc6efd905a942ce8ce345bf62064fab",
+  "legacy_unchanged": true,
+  "verified_at": "2026-11-15T09:53:20.232776+08:00"
+}

@@ -1,0 +1,1 @@
+PASS project JDBC: mysql-connector-java-8.0.13 (Revision: 66459e9d39c8fd09767992bc592acd2053279be6); Chinese labels, raw Unicode units, 655 item reads; read only.

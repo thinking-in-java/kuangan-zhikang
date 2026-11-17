@@ -1,0 +1,17 @@
+{
+  "originalFailedJobPreserved": "9afedd74-559d-4db3-b6e0-52483ec520e5",
+  "originalRealReportNotModified": true,
+  "syntheticOnly": true,
+  "baseUrl": "http://192.168.1.105:18081",
+  "recordId": "ffcc42d1-5078-475a-ab18-ebb511582dea",
+  "reportId": "d5f8b247-e1bd-471f-ae74-9a5f4326d808",
+  "revision": 1,
+  "jobId": "937242d0-1162-49b7-8318-c985c605d9fa",
+  "scope_code": "org:10000",
+  "data_mode": "synthetic",
+  "report_kind": "individual",
+  "state": "queued",
+  "fileSha256": "673701f0ad96d735c56545e85b9f7216219e5d9549230190ba2a6eb026937d32",
+  "fileBytes": 6971177,
+  "note": "Only queued for actual B OCR. No fabricated result or automatic doctor approval. Synthetic test employee may not match report identity; keep any mismatch for review."
+}

@@ -1,0 +1,10 @@
+{
+  "jobId": "6e6efda0-9791-4d8c-8f1f-5bfb19ea980c",
+  "reportId": "22fef113-6ecd-401a-9c85-7c9e8e0c7f2a",
+  "revision": 2,
+  "state": "failed",
+  "percent": 80,
+  "errorCode": "MODEL_REPORT_KIND",
+  "errorMessage": "\u8bc6\u522b\u4e3a\u673a\u6784\u6c47\u603b\u6216\u591a\u4eba\u62a5\u544a\uff0c\u8bf7\u4eba\u5de5\u6838\u67e5\uff0c\u4e0d\u5199\u5165\u4e2a\u4eba\u5019\u9009",
+  "wallSeconds": 36.032
+}

@@ -1,0 +1,17 @@
+{
+  "cause": "Missing Bouncy Castle ASN1Primitive during encrypted PDF metadata parsing",
+  "actualFailedPdf": {
+    "pages": 11,
+    "originalBytesUnchanged": true,
+    "formalSourceRowsAfterFailedAttempts": 0
+  },
+  "uploadRegressionChecks": 13,
+  "realReadinessChecks": 11,
+  "miniappNegativeChecks": 13,
+  "failedTemporaryFilesPreserved": 5,
+  "failedFilesArchive": "F:\\upload\\.config\\failed-uploads\\pdf-upload-failure-20261115",
+  "formalLanLoginHttpStatus": 200,
+  "formalPort": 18080,
+  "newFormalReportCreatedByThisFix": false,
+  "bothWarBuilds": "SUCCESS"
+}

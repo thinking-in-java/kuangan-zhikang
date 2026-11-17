@@ -1,0 +1,30 @@
+{
+  "jobId": "edfd06f6-ae9e-4f96-85b5-14ec4ebf7887",
+  "reportId": "075f313b-9fd9-4a1f-83a0-fbb4e5b2a144",
+  "revision": 1,
+  "scope_code": "org:10000",
+  "data_mode": "real",
+  "workerReportKind": "unknown",
+  "state": "succeeded",
+  "percent": 100,
+  "errorCode": null,
+  "reviewStatus": "needs_review",
+  "requiresReportKindConfirmation": true,
+  "published": false,
+  "counts": {
+    "field_values": 40,
+    "items": 83,
+    "evidence": 123,
+    "conclusions": 0,
+    "advice": 0
+  },
+  "qualityIssueCodes": [
+    "DOCTOR_REVIEW_REQUIRED",
+    "IDENTITY_REVIEW_REQUIRED",
+    "REPORT_KIND_UNCERTAIN"
+  ],
+  "qualityIdentityStatuses": [
+    "unmatched"
+  ],
+  "liveFrontendUpdated": true
+}

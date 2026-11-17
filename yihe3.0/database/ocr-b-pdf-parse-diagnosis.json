@@ -1,0 +1,76 @@
+{
+  "jobId": "b70fa6ae-9036-4a01-b015-b60c1e38427b",
+  "source": {
+    "source_file_id": "7361275a-c821-45d9-a42f-1fcaf69cd7a8",
+    "sha256": "936EF44DDC4AD095F29CA0D395AB3C76698F6F2A01EAF3BA0850401BE8CD156F",
+    "page_count": 11,
+    "mime_type": "application/pdf",
+    "file_size": 234753
+  },
+  "storedFile": "F:\\upload\\7361275a-c821-45d9-a42f-1fcaf69cd7a8.source",
+  "sha256Matches": true,
+  "pdfEncryptedFlag": true,
+  "emptyPasswordResult": 1,
+  "encryptedFlagAfterOpening": true,
+  "pypdfPages": 11,
+  "pymupdfNeedsPassword": 0,
+  "pymupdfPages": 11,
+  "allPagesReadableAndRenderable": true,
+  "pages": [
+    {
+      "page": 1,
+      "textChars": 361,
+      "rendered": true
+    },
+    {
+      "page": 2,
+      "textChars": 352,
+      "rendered": true
+    },
+    {
+      "page": 3,
+      "textChars": 764,
+      "rendered": true
+    },
+    {
+      "page": 4,
+      "textChars": 801,
+      "rendered": true
+    },
+    {
+      "page": 5,
+      "textChars": 598,
+      "rendered": true
+    },
+    {
+      "page": 6,
+      "textChars": 742,
+      "rendered": true
+    },
+    {
+      "page": 7,
+      "textChars": 694,
+      "rendered": true
+    },
+    {
+      "page": 8,
+      "textChars": 898,
+      "rendered": true
+    },
+    {
+      "page": 9,
+      "textChars": 772,
+      "rendered": true
+    },
+    {
+      "page": 10,
+      "textChars": 544,
+      "rendered": true
+    },
+    {
+      "page": 11,
+      "textChars": 310,
+      "rendered": true
+    }
+  ]
+}

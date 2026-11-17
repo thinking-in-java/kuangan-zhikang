@@ -1,0 +1,33 @@
+{
+  "sourcePath": "F:\\upload\\378fb2bf-4ec6-4492-b44c-4c322f2198da.source",
+  "pages": 12,
+  "textCharsByPage": [
+    766,
+    1147,
+    1337,
+    887,
+    759,
+    422,
+    219,
+    306,
+    250,
+    372,
+    753,
+    416
+  ],
+  "structuralLabelCounts": {
+    "个人体检": 0,
+    "职业健康检查": 0,
+    "团体": 0,
+    "单位总结": 0,
+    "健康体检报告": 0,
+    "体检总结": 0,
+    "姓名": 13,
+    "单位": 15,
+    "本次受检": 0,
+    "汇总": 0,
+    "合成": 0,
+    "模拟": 0
+  },
+  "previewPath": "F:/workstation/.tools/runtime/ocr-report-first-page.png"
+}

@@ -1,0 +1,19 @@
+{
+  "baseUrl": "https://xyyapi.com/v1",
+  "apiKey": "仅在本机私有配置文件中填写，不提交源码",
+  "model": "gpt-6.1-sol",
+  "apiStyle": "responses",
+  "enabled": true,
+  "maxPages": 40,
+  "parallelRequests": 12,
+  "reasoningEffort": "none",
+  "preferPdfText": true,
+  "nativeTextMinChars": 180,
+  "renderDpi": 130,
+  "imageMaxLongEdge": 1800,
+  "maxResponseTokens": 10000,
+  "readTimeoutSeconds": 240,
+  "serviceTier": "ultrafast",
+  "compactOutput": true,
+  "prioritizeDensePages": true
+}

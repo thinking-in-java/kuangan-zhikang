@@ -1,0 +1,9 @@
+{
+  "base": "http://192.168.1.105:18080",
+  "removalBusinessChecks": 16,
+  "browserInteractionChecks": 3,
+  "ocrQueueRegressionChecks": 60,
+  "formalReadinessChecks": 11,
+  "deployed": true,
+  "realReportRemovedByTests": false
+}

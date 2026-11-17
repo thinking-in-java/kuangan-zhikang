@@ -1,0 +1,23 @@
+server:
+  address: 127.0.0.1
+spring:
+  datasource:
+    druid:
+      master:
+        connection-init-sqls:
+          - "SET SESSION sql_mode=(SELECT REPLACE(@@SESSION.sql_mode,'ONLY_FULL_GROUP_BY',''))"
+  redis:
+    host: 127.0.0.1
+    port: 16379
+    password: ""
+  quartz:
+    job-store-type: memory
+    auto-startup: false
+logging:
+  config: classpath:logback-local.xml
+  level:
+    com.yihe: info
+    org.springframework: info
+
+ehr:
+  storage-root: ${EHR_STORAGE_ROOT:F:/upload}

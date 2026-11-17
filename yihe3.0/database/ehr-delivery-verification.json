@@ -1,0 +1,132 @@
+{
+  "verified_at": "2026-11-14T19:36:18.279768+08:00",
+  "business_checks": 65,
+  "post_restart_read_checks": 13,
+  "build": "SUCCESS: yihe-admin and yihe-applet-api",
+  "scope": "Four web pages and server-side miniapp/OCR integration APIs only",
+  "ocr_provider_connected": false,
+  "table_count": 35,
+  "column_count": 339,
+  "artifacts_match_source": true,
+  "reports": {
+    "ehr-api-integration-verification.json": {
+      "base": "http://localhost:18081",
+      "checks": [
+        "anonymous_api_401",
+        "doctor_login",
+        "synthetic_mode",
+        "csrf_required",
+        "record_create_unknown_risk",
+        "duplicate_employee_no_409",
+        "optimistic_lock",
+        "record_edit",
+        "upload_pdf",
+        "upload_idempotency",
+        "original_bytes_preserved",
+        "report_content_conflict",
+        "raw_composite_string",
+        "submit_pending",
+        "stale_review_etag_rejected",
+        "doctor_approval",
+        "confirmed_field_review_states",
+        "reviewed_version_immutable",
+        "publication_and_snapshot_digest",
+        "new_revision_retains_raw_items",
+        "revision_resets_field_review_states",
+        "old_publication_preserved",
+        "published_projection_survives_new_draft",
+        "unknown_record_404",
+        "soft_delete_visibility",
+        "real_summary_restored"
+      ],
+      "count": 26,
+      "recordId": "34ca731d-a2ec-4a48-ba7b-3d3d3656b0a4",
+      "reportId": "a3c3086e-4ac1-4900-a28d-3bc8d6eb52d2",
+      "mode": "synthetic"
+    },
+    "ehr-mobile-ocr-verification.json": {
+      "mode": "synthetic",
+      "checks": [
+        "legacy_user_code_is_not_bearer",
+        "mobile_authenticated_self_roster",
+        "mobile_png_upload_bound_to_self",
+        "mobile_upload_idempotency",
+        "mobile_private_file_bytes",
+        "mobile_cannot_read_other_employee",
+        "mobile_cannot_download_other_employee",
+        "file_magic_validation",
+        "unconfigured_provider_is_explicit_503",
+        "ocr_callback_auth_required",
+        "ocr_unapproved_derived_value_rejected",
+        "ocr_raw_unit_and_string_preserved",
+        "ocr_not_auto_approved_or_date_verified",
+        "ocr_callback_replay_idempotent",
+        "ocr_conflicting_replay_409",
+        "ocr_input_protected_and_correlated",
+        "late_ocr_does_not_overwrite_manual_candidate",
+        "mobile_logout",
+        "revoked_bearer_rejected"
+      ],
+      "count": 19,
+      "ownRecordId": "e260c709-657f-421f-8d7c-00a3a57192e8",
+      "ocrReportId": "18c0723c-13e8-4b03-ab21-05a546282475"
+    },
+    "ehr-page-verification.json": {
+      "mode": "synthetic",
+      "checks": [
+        "management_loaded_real_api_no_demo_store",
+        "ui_create_record_database_persisted",
+        "ui_edit_record",
+        "ui_search_and_filters",
+        "ui_upload_private_report",
+        "ui_save_raw_candidate",
+        "ui_submit_workflow",
+        "ui_approve_workflow",
+        "ui_archive_workflow",
+        "smart_archive_only_published_report_visible",
+        "statistics_charts_with_database_data",
+        "review_page_real_filters",
+        "ui_soft_delete_keeps_history"
+      ],
+      "count": 13,
+      "consoleErrors": []
+    },
+    "ehr-operations-verification.json": {
+      "mode": "synthetic",
+      "checks": [
+        "import_conflict_rolls_back_entire_batch",
+        "import_success_two_records",
+        "filtered_csv_export",
+        "csv_formula_prefix_escaped",
+        "combined_team_query",
+        "cross_origin_request_rejected",
+        "anonymous_api_401"
+      ],
+      "count": 7
+    },
+    "ehr-deployment-verification.json": {
+      "base": "http://localhost:18080",
+      "mode": "real",
+      "scope": "org:10000",
+      "checks": [
+        "login_page_200",
+        "doctor_login",
+        "real_mode_scoped_doctor_context",
+        "real_statistics_200",
+        "live_source_match_index.html",
+        "live_source_match_statistics.html",
+        "live_source_match_management.html",
+        "live_source_match_review.html",
+        "live_source_match_detail.html",
+        "live_source_match_live.js",
+        "live_source_match_live.css",
+        "real_record_query_200",
+        "anonymous_json_401"
+      ],
+      "count": 13,
+      "realRecordCount": 0,
+      "statsTotal": 0,
+      "testDataInserted": false
+    }
+  }
+}

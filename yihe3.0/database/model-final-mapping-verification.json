@@ -1,0 +1,17 @@
+{
+  "checks": 6,
+  "pages": 15,
+  "counts": {
+    "items": 168,
+    "field_values": 215,
+    "evidence": 385,
+    "conclusions": 2,
+    "advice": 0
+  },
+  "reportDataModified": false,
+  "postedToA": false,
+  "verbatimConclusionPages": [
+    4,
+    5
+  ]
+}

@@ -134,16 +134,24 @@
 			<groupId>org.eclipse.birt.runtime.3_7_1</groupId>
 			<artifactId>com.lowagie.text</artifactId>
 			<version>2.1.7</version>
+			<exclusions>
+				<exclusion><groupId>bouncycastle</groupId><artifactId>*</artifactId></exclusion>
+				<exclusion><groupId>org.bouncycastle</groupId><artifactId>*</artifactId></exclusion>
+			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>org.xhtmlrenderer</groupId>
 			<artifactId>flying-saucer-pdf</artifactId>
 			<version>9.0.8</version>
+			<exclusions>
+				<exclusion><groupId>bouncycastle</groupId><artifactId>*</artifactId></exclusion>
+				<exclusion><groupId>org.bouncycastle</groupId><artifactId>*</artifactId></exclusion>
+			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>com.itextpdf</groupId>
 			<artifactId>itextpdf</artifactId>
-			<version>5.4.2</version>
+			<version>5.5.13.4</version>
 		</dependency>
 		<!-- 解析网页 -->
 		<dependency>
@@ -185,6 +193,10 @@
 		    <groupId>com.lowagie</groupId>
 		    <artifactId>itext</artifactId>
 		    <version>2.1.7</version>
+		    <exclusions>
+		        <exclusion><groupId>bouncycastle</groupId><artifactId>*</artifactId></exclusion>
+		        <exclusion><groupId>org.bouncycastle</groupId><artifactId>*</artifactId></exclusion>
+		    </exclusions>
         </dependency>
         
          <dependency>

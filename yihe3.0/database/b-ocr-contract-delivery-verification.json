@@ -1,0 +1,22 @@
+{
+  "contractVersion": "2.0.0",
+  "sourceExportSha256": "fab7cc86c569d49b721499300291fabc03c549b96b4bc0db6aa60349f2a258c2",
+  "replayChecks": 25,
+  "regressionChecks": 57,
+  "inputIncludesVerifiedSources": true,
+  "nestedContextsValidated": true,
+  "bIdsAndOrdinalsPreserved": true,
+  "formalSampleOverwritten": false,
+  "schemaMigrationRequired": false,
+  "counts": {
+    "field_values": 68,
+    "items": 102,
+    "evidence": 458,
+    "conclusions": 1,
+    "advice": 7
+  },
+  "distinctReportFieldKeys": 16,
+  "deployedBaseUrl": "http://192.168.1.105:18080",
+  "realServiceReadOnlyChecks": 11,
+  "wechatConfiguredChecks": 13
+}

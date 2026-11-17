@@ -1,0 +1,29 @@
+{
+  "checks": [
+    "reviewed_fixture_created",
+    "reviewed_direct_delete_guard_retained",
+    "cross_scope_delete_rejected",
+    "rollback_restores_reviewed_report",
+    "original_exists_before_delete",
+    "deleted_person_report_api_returns_404",
+    "deleted_original_download_returns_404",
+    "late_worker_result_returns_404",
+    "a_health_reports_erased",
+    "a_health_items_erased",
+    "a_report_evidence_erased",
+    "a_health_conclusions_erased",
+    "a_health_advice_erased",
+    "a_review_records_erased",
+    "a_report_review_snapshots_erased",
+    "a_report_series_erased",
+    "a_extraction_jobs_erased",
+    "worker_job_erased",
+    "other_employee_report_preserved",
+    "original_and_model_cache_erased",
+    "file_erasure_tasks_completed",
+    "same_original_can_upload_again",
+    "no_source_dedup_collision_after_person_deleted"
+  ],
+  "count": 23,
+  "dataMode": "synthetic"
+}

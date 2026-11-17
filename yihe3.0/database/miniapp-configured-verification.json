@@ -1,0 +1,25 @@
+{
+  "checkedAt": "2026-11-15T10:12:09.532374+00:00",
+  "base": "http://localhost:18080",
+  "checks": [
+    "config_http200_code0",
+    "wechat_configuration_enabled",
+    "binding_required_and_token_expiry",
+    "public_config_does_not_return_secret",
+    "consent_required_before_wechat_exchange",
+    "client_openid_cannot_register",
+    "invalid_code_rejected_after_real_wechat_exchange",
+    "anonymous_state_is401",
+    "anonymous_health_data_is401",
+    "anonymous_cannot_read_credentials_through_profile",
+    "doctor_login_for_private_path_check",
+    "credentials_not_served_even_to_authenticated_doctor",
+    "invalid_requests_create_no_real_users"
+  ],
+  "count": 13,
+  "wechatConfigured": true,
+  "validUserCodeUsed": false,
+  "realUserRegistered": false,
+  "realUserRowsChanged": false,
+  "actualBoundUserRedirectTested": false
+}

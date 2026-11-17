@@ -543,19 +543,8 @@
     where id = #{id,jdbcType=INTEGER}
   </update>
 
-  <select id="selectRegInfo" parameterType="com.yihe.system.domain.newReg" resultMap="ResultMapWithBLOBs">
-    SELECT nr.*,yur.name as dname,
-    (SELECT COUNT(*)
-    FROM new_medical_examination_records nme
-    WHERE nme.user_code = nr.user_code) AS numberPhysicalExaminations,
-    t2.evaluationTime,
-    assess.qtime,
-    nepi.occupational_health_examination1 as v1,
-    nepi.occupational_health_examination2 as v2,
-    nepi.occupational_health_examination3 as v3,
-    nepi.occupational_health_examination4 as v4,
-    CASE WHEN assess.df_names IS NOT NULL AND assess.df_names != '' THEN '是' ELSE '否' END AS df_names,
-    CASE WHEN assess.sk_names IS NOT NULL AND assess.sk_names != '' THEN '是' ELSE '否' END AS sk_names
+  <!-- 列表与总数复用同一套关联和筛选，保留旧列表现有可见范围。 -->
+  <sql id="legacyRegListFromAndFilters">
     FROM new_reg nr
     LEFT JOIN new_employee_personal_information_card as nepi  on nr.id=nepi.reg_id
 
@@ -599,15 +588,30 @@
         and nr.responsible_health_manager_code=#{responsibleHealthManagerCode}
       </if>
       <if test="beginTime!=null and beginTime!=''">
-        and nr.birth    &gt;=  #{beginTime}
+        and nr.insert_date    &gt;=  #{beginTime}
       </if>
       <if test="endTime!=null and endTime!=''">
-        and nr.birth    &lt;=  #{endTime}
+        and nr.insert_date    &lt;=  #{endTime}
       </if>
     </where>
-    LIMIT #{begin}, #{limit};
+  </sql>
 
-
+  <select id="selectRegInfo" parameterType="com.yihe.system.domain.newReg" resultMap="ResultMapWithBLOBs">
+    SELECT nr.*,yur.name as dname,
+    (SELECT COUNT(*)
+    FROM new_medical_examination_records nme
+    WHERE nme.user_code = nr.user_code) AS numberPhysicalExaminations,
+    t2.evaluationTime,
+    assess.qtime,
+    nepi.occupational_health_examination1 as v1,
+    nepi.occupational_health_examination2 as v2,
+    nepi.occupational_health_examination3 as v3,
+    nepi.occupational_health_examination4 as v4,
+    CASE WHEN assess.df_names IS NOT NULL AND assess.df_names != '' THEN '是' ELSE '否' END AS df_names,
+    CASE WHEN assess.sk_names IS NOT NULL AND assess.sk_names != '' THEN '是' ELSE '否' END AS sk_names
+    <include refid="legacyRegListFromAndFilters"/>
+    ORDER BY nr.id ASC
+    LIMIT #{begin}, #{limit}
   </select>
 
   <select id="queryLocallyManagedArchives" parameterType="com.yihe.system.domain.newReg" resultMap="ResultMapWithBLOBs">
@@ -647,37 +651,8 @@
   </select>
 
   <select id="selectRegCount" parameterType="com.yihe.system.domain.newReg" resultType="int">
-    SELECT count(*)  FROM new_reg nr
-
-    LEFT JOIN `yh_user_make_card` AS c ON nr.`user_code` = c.`User_Code`
-    LEFT JOIN yh_user_admin_info AS ai ON c.doctor = ai.id
-    <where>
-      ai.user_code = #{doctor}
-      <if test="sex!=null and sex!=''">
-        and nr.sex=#{sex}
-      </if>
-      <if test="name!=null and name!=''">
-        and nr.name  LIKE CONCAT('%', #{name}, '%')
-      </if>
-      <if test="workUnit!=null and workUnit!=''">
-        and nr.work_unit  LIKE CONCAT('%', #{workUnit}, '%')
-      </if>
-      <if test="department!=null and department!=''">
-        and nr.department LIKE CONCAT('%', #{department}, '%')
-      </if>
-      <if test="phone!=null and phone!=''">
-        and nr.phone  LIKE CONCAT('%', #{phone}, '%')
-      </if>
-      <if test="responsibleHealthManagerCode!=null and responsibleHealthManagerCode!=''">
-        and nr.responsible_health_manager_code=#{responsibleHealthManagerCode}
-      </if>
-      <if test="beginTime!=null and beginTime!=''">
-        and nr.birth    &gt;=  #{beginTime}
-      </if>
-      <if test="endTime!=null and endTime!=''">
-        and nr.birth    &lt;=  #{endTime}
-      </if>
-    </where>
+    SELECT COUNT(*)
+    <include refid="legacyRegListFromAndFilters"/>
   </select>
 
   <select id="selectByList" resultMap="ResultMapWithBLOBs" parameterType="list">

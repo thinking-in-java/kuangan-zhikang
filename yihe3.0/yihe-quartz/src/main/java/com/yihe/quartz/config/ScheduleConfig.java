@@ -1,6 +1,7 @@
 package com.yihe.quartz.config;
 
 import org.springframework.context.annotation.Bean;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.quartz.SchedulerFactoryBean;
 import javax.sql.DataSource;
@@ -15,10 +16,15 @@ import java.util.Properties;
 public class ScheduleConfig
 {
     @Bean
-    public SchedulerFactoryBean schedulerFactoryBean(DataSource dataSource)
+    public SchedulerFactoryBean schedulerFactoryBean(DataSource dataSource,
+            @Value("${spring.quartz.job-store-type:jdbc}") String jobStoreType,
+            @Value("${spring.quartz.auto-startup:true}") boolean autoStartup)
     {
         SchedulerFactoryBean factory = new SchedulerFactoryBean();
-        factory.setDataSource(dataSource);
+        boolean inMemory = "memory".equalsIgnoreCase(jobStoreType);
+        if (!inMemory) {
+            factory.setDataSource(dataSource);
+        }
 
         // quartz参数
         Properties prop = new Properties();
@@ -29,6 +35,9 @@ public class ScheduleConfig
         prop.put("org.quartz.threadPool.threadCount", "20");
         prop.put("org.quartz.threadPool.threadPriority", "5");
         // JobStore配置
+        if (inMemory) {
+            prop.put("org.quartz.jobStore.class", "org.quartz.simpl.RAMJobStore");
+        } else {
         prop.put("org.quartz.jobStore.class", "org.quartz.impl.jdbcjobstore.JobStoreTX");
         // 集群配置
         prop.put("org.quartz.jobStore.isClustered", "true");
@@ -40,6 +49,7 @@ public class ScheduleConfig
         // prop.put("org.quartz.jobStore.selectWithLockSQL", "SELECT * FROM {0}LOCKS UPDLOCK WHERE LOCK_NAME = ?");
         prop.put("org.quartz.jobStore.misfireThreshold", "12000");
         prop.put("org.quartz.jobStore.tablePrefix", "QRTZ_");
+        }
         factory.setQuartzProperties(prop);
 
         factory.setSchedulerName("yiheScheduler");
@@ -50,7 +60,7 @@ public class ScheduleConfig
         // 启动时更新己存在的Job，这样就不用每次修改targetObject后删除qrtz_job_details表对应记录了
         factory.setOverwriteExistingJobs(true);
         // 设置自动启动，默认为true
-        factory.setAutoStartup(true);
+        factory.setAutoStartup(autoStartup);
 
         return factory;
     }

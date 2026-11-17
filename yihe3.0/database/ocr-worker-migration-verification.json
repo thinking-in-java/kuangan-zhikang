@@ -1,0 +1,11 @@
+{
+  "version": "V006_a_ocr_worker_queue",
+  "applied": true,
+  "tables": [
+    "a_ocr_dispatch_tasks",
+    "a_ocr_dispatch_attempts"
+  ],
+  "sql_sha256": "19ac25dbbefa9a6c2523b9963e13b506f68fb3142d8d8731c02094fe1924dd02",
+  "legacy_unchanged": true,
+  "verified_at": "2026-11-15T10:33:28.520838+08:00"
+}

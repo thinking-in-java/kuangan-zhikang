@@ -242,6 +242,9 @@ public class ShiroConfig
         shiroFilterFactoryBean.setUnauthorizedUrl(unauthorizedUrl);
         // Shiro连接约束配置，即过滤链的定义
         LinkedHashMap<String, String> filterChainDefinitionMap = new LinkedHashMap<>();
+        // EHR controllers enforce their own session/CSRF or opaque bearer auth
+        // and return JSON 401 instead of an HTML login redirect.
+        filterChainDefinitionMap.put("/ehr/**", "anon");
         // 对静态资源设置匿名访问
         filterChainDefinitionMap.put("/favicon.ico**", "anon");
         filterChainDefinitionMap.put("/OrganizationIndexController/bigDataCenter", "anon");
