@@ -21,6 +21,14 @@ logging:
 
 ehr:
   storage-root: ${EHR_STORAGE_ROOT:F:/upload}
+  agent:
+    config-file: ${EHR_AGENT_CONFIG_FILE:F:/upload/.config/health-agent.json}
+  miniapp-agent:
+    enabled: ${EHR_MINIAPP_AGENT_ENABLED:true}
+    workers: ${EHR_MINIAPP_AGENT_WORKERS:2}
+    per-minute: ${EHR_MINIAPP_AGENT_PER_MINUTE:6}
+    per-day: ${EHR_MINIAPP_AGENT_PER_DAY:100}
+    queue-limit: ${EHR_MINIAPP_AGENT_QUEUE_LIMIT:100}
   recognition:
     provider: ${EHR_RECOGNITION_PROVIDER:model}
     config-file: ${EHR_MODEL_CONFIG_FILE:F:/upload/.config/model-recognition.json}

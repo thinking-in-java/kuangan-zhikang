@@ -14,9 +14,9 @@ public class ArchiveResourceCacheFilter extends OncePerRequestFilter {
     @Override protected void doFilterInternal(HttpServletRequest request,HttpServletResponse response,FilterChain chain)
             throws ServletException,IOException {
         String path=request.getRequestURI().substring(request.getContextPath().length());
-        if(path.startsWith("/assets/health-archive/")&&(path.endsWith(".html")||path.endsWith("/live.js")||path.endsWith("/live.css"))){
-            response.setHeader("Cache-Control","no-cache, max-age=0, must-revalidate");
-            response.setHeader("X-Archive-UI-Version","report-remove-20261115");
+        if(path.startsWith("/assets/health-archive/")&&(path.endsWith(".html")||path.endsWith("/live.js")||path.endsWith("/live.css"))||path.equals("/assets/digital-health/index.html")||path.equals("/assets/digital-health/")||path.equals("/assets/js/digital-health.js")||path.equals("/assets/css/health-agent.css")||path.equals("/register")){
+            response.setHeader("Cache-Control","no-store, max-age=0, must-revalidate");
+            response.setHeader("X-Archive-UI-Version","agent-chat-20261117-v2");
         }
         chain.doFilter(request,response);
     }

@@ -17,3 +17,33 @@
 .dh-avatar-stage{position:absolute;top:0;left:0;width:124px;height:144px;display:block;z-index:1;pointer-events:none}.dh-doctor-canvas{display:block;width:100%;height:100%;pointer-events:none;filter:drop-shadow(0 5px 7px #244f4922)}.dh-live-avatar-ready>img{visibility:hidden!important}.dh-floating-root .dh-launcher>img{animation:none!important;transform:none!important}.dh-motion-controls{position:absolute;left:50%;top:-28px;transform:translateX(-50%);display:flex;gap:4px;white-space:nowrap;pointer-events:auto;opacity:.25;transition:opacity .2s}.dh-floating-root:hover .dh-motion-controls,.dh-motion-controls:focus-within{opacity:1}.dh-motion-controls button{font-size:8px;border:1px solid #c9e4da;border-radius:11px;background:#f7fefaed;color:#60998b;padding:4px 7px;line-height:1.2;box-shadow:0 2px 7px #204c3a0c}.dh-motion-controls button:hover{color:#25785f;border-color:#72c4a7;background:#eaf9ef}.dh-avatar-fallback-note{position:absolute;right:3px;top:0;font-size:7px;color:#aa8c62;background:#fff8e9;border:1px solid #ead6ae;border-radius:4px;padding:2px 4px}.dh-is-dragging .dh-avatar-stage{filter:drop-shadow(0 10px 8px #1a483d22)}
 @media(max-width:600px){.dh-avatar-stage{width:93px;height:111px}.dh-motion-controls{top:-25px;gap:2px}.dh-motion-controls button{font-size:7px;padding:4px 5px}}
 @media(prefers-reduced-motion:reduce){.dh-launcher>img,.dh-page-doctor>img,.dh-is-greeting .dh-launcher>img,.dh-doctor-bubble{animation:none}.dh-starter-grid>button,.dh-motion-controls{transition:none}}
+
+/* Occupational health companion dock with automatic gestures and a compact entry. */
+.dh-floating-root.dh-doctor-dock{width:174px;height:230px;max-width:calc(100vw - 14px)}
+.dh-doctor-dock [hidden]{display:none!important}
+.dh-doctor-dock .dh-launcher{box-sizing:border-box;position:relative;width:174px;height:196px;min-height:196px;margin-top:34px;padding:0;display:flex;align-items:center;justify-content:flex-start;gap:0;isolation:isolate}
+.dh-doctor-dock .dh-launcher>img{display:block;width:132px;height:158px;object-fit:contain;flex:none;z-index:1}
+.dh-doctor-dock .dh-avatar-stage{left:21px;top:0;width:132px;height:158px}
+.dh-doctor-dock .dh-launcher-glow{display:block;left:7px;bottom:33px;width:160px;height:42px;opacity:1;background:none;border-radius:0;color:#32c8af;z-index:0;animation:dh-dock-breathe 4s ease-in-out infinite;pointer-events:none}
+.dh-doctor-dock .dh-launcher-glow>svg{display:block;width:160px;height:42px;max-width:none}
+.dh-doctor-dock .dh-launcher-label{box-sizing:border-box;position:absolute;left:4px;bottom:0;width:166px;height:42px;margin:0;padding:6px 9px;display:flex;align-items:center;gap:7px;border:1px solid #78d7c68c;border-radius:13px;background:linear-gradient(120deg,#f4fffcf5,#e5f7f2f5);box-shadow:0 5px 16px #0c64551c;color:#246f68;white-space:nowrap;z-index:2}
+.dh-dock-mark{width:28px;height:28px;display:grid;place-items:center;flex:none;border-radius:9px;color:#fff;background:linear-gradient(140deg,#31cfad,#129f94);box-shadow:0 3px 7px #129f9420}
+.dh-dock-mark>svg{display:block;width:25px;height:25px;max-width:none}
+.dh-dock-title{display:flex;flex-direction:column;align-items:flex-start;gap:3px;min-width:0}
+.dh-dock-title strong{font-size:12px;font-weight:600;line-height:1.2;letter-spacing:.5px}
+.dh-dock-caption{font-size:9px;font-weight:400;line-height:1.2;color:#719a92;letter-spacing:0}
+.dh-doctor-dock .dh-launcher-label>b{display:block;margin-left:auto;font-size:17px;font-weight:400;color:#4a9f91}
+.dh-widget-minimize{position:absolute;right:0;top:0;box-sizing:border-box;width:27px;height:28px;padding:4px;border:1px solid #b9dfd6;border-radius:9px;background:#f7fffcf5;color:#438a7d;box-shadow:0 2px 8px #15574c0a;z-index:5;pointer-events:auto;cursor:pointer}
+.dh-widget-minimize>svg{display:block;width:18px;height:18px;max-width:none}.dh-widget-minimize:hover{background:#dff5ed;color:#096b58}
+.dh-widget-restore{position:absolute;inset:0;box-sizing:border-box;display:grid;place-items:center;width:56px;height:56px;padding:8px;border:1px solid #76dbc4;border-radius:18px;background:linear-gradient(140deg,#2cc9a8,#108e88);color:#fff;box-shadow:0 6px 22px #0e6b5333;cursor:pointer;pointer-events:auto;z-index:4}
+.dh-widget-restore>svg{width:36px;height:36px;display:block;max-width:none}.dh-widget-restore:hover{background:linear-gradient(140deg,#33d8b5,#0b807a);box-shadow:0 6px 24px #0e6b534d}
+.dh-restore-arrow{position:absolute;bottom:2px;right:4px;font-size:12px;line-height:14px;opacity:.85}
+.dh-doctor-dock.dh-widget-compact{width:56px;height:56px}
+.dh-widget-compact .dh-launcher,.dh-widget-compact .dh-motion-controls,.dh-widget-compact .dh-widget-minimize,.dh-widget-compact .dh-doctor-bubble{display:none!important}
+.dh-doctor-dock .dh-doctor-badge,.dh-compact-badge{box-sizing:border-box;position:absolute;display:grid;place-items:center;min-width:22px;width:auto;height:22px;padding:0 4px;border:2px solid #fff;border-radius:12px;background:#f05264;color:#fff;font:600 11px/18px Arial,sans-serif;box-shadow:0 3px 9px #c4253930;z-index:3;pointer-events:none}
+.dh-doctor-dock .dh-doctor-badge{right:29px;top:10px}.dh-compact-badge{right:-3px;top:-4px}
+.dh-doctor-dock .dh-avatar-fallback-note{top:34px;right:15px}
+.dh-doctor-dock button:focus-visible{outline:2px solid #12a98e;outline-offset:3px}
+@keyframes dh-dock-breathe{0%,100%{opacity:.65;transform:scale(.97)}50%{opacity:1;transform:scale(1.02)}}
+@media(max-width:600px){.dh-floating-root.dh-doctor-dock{right:10px;bottom:54px}.dh-doctor-dock .dh-doctor-bubble{width:228px}}
+@media(prefers-reduced-motion:reduce){.dh-doctor-dock .dh-launcher-glow{animation:none}}

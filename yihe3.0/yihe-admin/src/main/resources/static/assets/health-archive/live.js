@@ -10,7 +10,7 @@ const auditActions={
  report_reject:'报告审核未通过',report_archive:'报告归档',revision_created:'创建修订版本',
  wechat_employee_bound:'微信绑定',wechat_employee_unbound:'解除微信绑定',
  binding_code_issued:'生成身份验证码',binding_code_revoked:'撤销身份验证码',
- profile_saved:'保存职工资料',profile_deleted:'删除职工档案',legacy_roster_imported:'同步原系统职工资料',
+ agent_action_confirmed:'确认智能体操作',profile_saved:'保存职工资料',profile_deleted:'删除职工档案',legacy_roster_imported:'同步原系统职工资料',
  profile_correction_requested:'提交资料更正申请',profile_correction_approved:'资料更正审核通过',
  profile_correction_rejected:'资料更正审核未通过',records_exported:'导出档案'
 };

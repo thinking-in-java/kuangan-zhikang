@@ -1,0 +1,192 @@
+{
+  "info": {
+    "name": "矿安智康-小程序个人AI健康师",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": "复用微信登录Bearer Token。新问题使用新request_id，重试保留原ID。仅可访问当前绑定职工本人的数据。"
+  },
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{miniapp_token}}",
+        "type": "string"
+      }
+    ]
+  },
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://192.168.1.105:18080"
+    },
+    {
+      "key": "miniapp_token",
+      "value": ""
+    },
+    {
+      "key": "conversation_id",
+      "value": ""
+    },
+    {
+      "key": "message_id",
+      "value": ""
+    },
+    {
+      "key": "request_id",
+      "value": "miniapp_demo_question_0001"
+    },
+    {
+      "key": "report_request_id",
+      "value": "miniapp_demo_report_0001"
+    },
+    {
+      "key": "question",
+      "value": "请查询我本人的职业背景，告诉我班组和岗位"
+    },
+    {
+      "key": "report_id",
+      "value": ""
+    }
+  ],
+  "item": [
+    {
+      "name": "1. 初始化本人健康师",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "{{base_url}}/ehr/miniapp/agent/context"
+      }
+    },
+    {
+      "name": "2. 创建个人对话",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{base_url}}/ehr/miniapp/agent/conversations",
+        "body": {
+          "mode": "raw",
+          "raw": "{}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "if (pm.response.code === 200) pm.collectionVariables.set('conversation_id', pm.response.json().data.id);"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "3. 查看会话列表",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "{{base_url}}/ehr/miniapp/agent/conversations?page=1&pageSize=20"
+      }
+    },
+    {
+      "name": "4. 发送问题（新问题替换request_id）",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{base_url}}/ehr/miniapp/agent/chat",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"conversationId\": \"{{conversation_id}}\",\n  \"requestId\": \"{{request_id}}\",\n  \"message\": \"{{question}}\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "if ([200,202].includes(pm.response.code)) pm.collectionVariables.set('message_id', pm.response.json().data.messageId);"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "5. 查询回复（完成或失败后停止轮询）",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "{{base_url}}/ehr/miniapp/agent/messages/{{message_id}}"
+      }
+    },
+    {
+      "name": "6. 查看对话历史",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "{{base_url}}/ehr/miniapp/agent/conversations/{{conversation_id}}?page=1&pageSize=10"
+      }
+    },
+    {
+      "name": "7. 选中本人报告后解读",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{base_url}}/ehr/miniapp/agent/chat",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"conversationId\": \"{{conversation_id}}\",\n  \"requestId\": \"{{report_request_id}}\",\n  \"message\": \"解释这份报告，注明审核状态和证据页码\",\n  \"context\": {\n    \"reportId\": \"{{report_id}}\",\n    \"revision\": 1\n  }\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "if ([200,202].includes(pm.response.code)) pm.collectionVariables.set('message_id', pm.response.json().data.messageId);"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "8. 删除当前对话（运行后无法恢复）",
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "url": "{{base_url}}/ehr/miniapp/agent/conversations/{{conversation_id}}"
+      }
+    }
+  ]
+}

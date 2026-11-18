@@ -5,7 +5,8 @@
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <title>数字健康师 · 矿安智康</title>
     <link rel="icon" type="image/svg+xml" href="/assets/images/kuangan-zhikang-mark.svg"/>
-    <link rel="stylesheet" href="/assets/css/digital-health.css?v=20261114d"/>
+    <link rel="stylesheet" href="/assets/css/digital-health.css?v=20261117-dock2"/>
+    <link rel="stylesheet" href="/assets/css/health-agent.css?v=20261117-dock2"/>
 </head>
 <body class="dh-workbench-body">
 <main class="dh-workbench" id="digital-health-workbench">
@@ -13,23 +14,23 @@
         <a class="dh-workbench-brand" href="/register" target="_top"><img src="/assets/images/kuangan-zhikang-mark.svg" width="33" height="33" alt=""/><span>数字健康师<small>矿安智康 · 职业健康助手</small></span></a>
         <button type="button" class="dh-new-chat" id="dh-new-chat"><span>＋</span> 新建对话</button>
         <label class="dh-history-search"><span>⌕</span><input id="dh-history-search" type="text" placeholder="搜索会话" aria-label="搜索会话"/></label>
-        <div class="dh-history-heading">当前会话 <span>仅本次登录</span></div>
+        <div class="dh-history-heading">当前会话 <span>当前账号私有</span></div>
         <nav id="dh-session-list" class="dh-session-list" aria-label="对话记录"></nav>
-        <div class="dh-history-bottom"><span class="dh-privacy-mark">◇</span><div>专注职业健康，连接持续关怀<small>页面预览 · 暂未接入大模型</small></div></div>
+        <div class="dh-history-bottom"><span class="dh-privacy-mark">◇</span><div>专注职业健康，连接持续关怀<small>查询真实档案 · 修改先确认</small></div></div>
     </aside>
     <section class="dh-main">
-        <header class="dh-main-header"><div><p>职业健康服务工作台</p><h1>数字健康师<span>PREVIEW</span></h1></div><div class="dh-mode-tag"><i></i> 界面预览</div></header>
-        <div class="dh-context-bar"><div class="dh-context-label"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21v-2a8 8 0 0 1 16 0v2"/></svg><span>服务对象</span></div><select id="dh-patient-context" aria-label="选择演示服务对象"><option value="">选择职工（演示入口）</option><option value="示例职工 A">示例职工 A · 职业健康档案</option><option value="示例职工 B">示例职工 B · 体检随访</option></select><span class="dh-context-note">仅演示页面交互，不读取真实职工档案</span></div>
+        <header class="dh-main-header"><div><p>职业健康服务工作台</p><h1>数字健康师<span>AI</span></h1></div><div class="dh-mode-tag"><i></i> 业务智能体</div></header>
+        <div class="dh-context-bar"><div class="dh-context-label"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21v-2a8 8 0 0 1 16 0v2"/></svg><span>服务对象</span></div><input id="dh-employee-search" type="search" placeholder="按姓名或工号搜索" aria-label="搜索服务对象"/><select id="dh-patient-context" aria-label="选择职工"><option value="">正在读取职工资料…</option></select><span class="dh-context-note">查询限当前单位 · 修改和删除先确认</span></div>
         <div class="dh-capability-bar"><div class="dh-capability-label">快捷服务</div><div id="dh-workbench-tools" class="dh-workbench-tools"></div></div>
-        <div class="dh-conversation-area"><div class="dh-workbench-intro" id="dh-workbench-intro"><div class="dh-intro-avatar"><img id="dh-page-avatar" src="/assets/images/kuangan-zhikang-mark.svg" alt="数字健康师"/></div><p class="dh-intro-eyebrow">YOUR OCCUPATIONAL HEALTH ASSISTANT</p><h2 id="dh-welcome-title">你好，我是你的数字健康师</h2><p class="dh-intro-description">从一份体检报告出发，连接档案、评估与健康关怀。<br/>你可以先选择一个服务方向，体验对话工作台。</p><div class="dh-starter-grid" id="dh-starter-grid"></div><div class="dh-preview-note">当前为界面演示，回复为示例内容；未接入大模型或自动执行功能。</div></div><div class="dh-chat-host dh-page-chat-host" id="dh-page-chat-host"></div></div>
-        <div class="dh-composer-tools"><button id="dh-page-attach" type="button" title="添加材料，仅本地预览"><span>＋</span> 添加材料</button><button id="dh-page-voice" type="button">♩ 语音输入</button><span id="dh-context-status">Enter 发送 · Shift + Enter 换行</span></div>
+        <div class="dh-conversation-area"><div class="dh-workbench-intro" id="dh-workbench-intro"><div class="dh-intro-avatar"><img id="dh-page-avatar" src="/assets/images/kuangan-zhikang-mark.svg" alt="数字健康师"/></div><p class="dh-intro-eyebrow">YOUR OCCUPATIONAL HEALTH ASSISTANT</p><h2 id="dh-welcome-title">你好，我是你的数字健康师</h2><p class="dh-intro-description">从一份体检报告出发，连接档案、评估与健康关怀。<br/>查找职工、解读体检报告，让每次分析都有依据。</p><div class="dh-starter-grid" id="dh-starter-grid"></div><div class="dh-preview-note">AI分析供医生核验，不能代替临床诊断。修改和删除必须由你确认。</div></div><div class="dh-chat-host dh-page-chat-host" id="dh-page-chat-host"></div></div>
+        <div class="dh-composer-tools"><button id="dh-page-attach" type="button" title="进入档案信息管理上传体检报告"><span>＋</span> 上传体检报告</button><button id="dh-page-voice" type="button">♩ 语音输入</button><span id="dh-context-status">Enter 发送 · Shift + Enter 换行</span></div>
     </section>
-    <aside class="dh-insights-sidebar"><section class="dh-overview-card"><div class="dh-side-heading"><span>▦</span><h2>服务概览</h2><span class="dh-small-preview">演示布局</span></div><div class="dh-total-preview"><span>当前服务模式</span><strong>页面预览 <small>PREVIEW</small></strong><p>数据与大模型接口将在后续接入</p></div><div class="dh-overview-grid"><div><strong>—</strong><span>在管职工</span></div><div><strong>—</strong><span>风险关注</span></div><div><strong>—</strong><span>待随访</span></div><div><strong>—</strong><span>活跃方案</span></div></div></section><section class="dh-next-card"><div class="dh-side-heading"><span>☷</span><h2>健康服务路径</h2></div><ol><li><i>01</i><div><strong>体检报告</strong><span>整理指标，保留原始依据</span></div></li><li><i>02</i><div><strong>职业健康档案</strong><span>一人一档，记录岗位与健康变化</span></div></li><li><i>03</i><div><strong>风险评估</strong><span>关联指标与职业暴露信息</span></div></li><li><i>04</i><div><strong>随访关怀</strong><span>跟进反馈，连接持续服务</span></div></li></ol></section><div class="dh-page-doctor"><span class="dh-doctor-halo"></span><img id="dh-side-avatar" src="/assets/images/kuangan-zhikang-mark.svg" alt=""/><p>每一次健康变化，都值得被关注</p></div></aside>
+    <aside class="dh-insights-sidebar"><section class="dh-overview-card"><div class="dh-side-heading"><span>▦</span><h2>服务概览</h2><span class="dh-small-preview">当前单位</span></div><div class="dh-total-preview"><span>当前服务模式</span><strong>业务智能体 <small>AI</small></strong><p>正在连接真实档案数据</p></div><div class="dh-overview-grid"><div><strong>—</strong><span>在管职工</span></div><div><strong>—</strong><span>风险关注</span></div><div><strong>—</strong><span>待随访</span></div><div><strong>—</strong><span>活跃方案</span></div></div></section><section class="dh-next-card"><div class="dh-side-heading"><span>☷</span><h2>健康服务路径</h2></div><ol><li><i>01</i><div><strong>体检报告</strong><span>整理指标，保留原始依据</span></div></li><li><i>02</i><div><strong>职业健康档案</strong><span>一人一档，记录岗位与健康变化</span></div></li><li><i>03</i><div><strong>风险评估</strong><span>关联指标与职业暴露信息</span></div></li><li><i>04</i><div><strong>随访关怀</strong><span>跟进反馈，连接持续服务</span></div></li></ol></section><div class="dh-page-doctor"><span class="dh-doctor-halo"></span><img id="dh-side-avatar" src="/assets/images/kuangan-zhikang-mark.svg" alt=""/><p>每一次健康变化，都值得被关注</p></div></aside>
 </main>
 <div id="dh-toast" class="dh-toast" role="status" aria-live="polite" hidden></div>
 <input type="file" id="dh-page-files" accept=".jpg,.jpeg,.png,.pdf,.doc,.docx,.xls,.xlsx" multiple hidden/>
-<script type="module" src="/assets/vendor/deep-chat/deepChat.bundle.js"></script>
-<script src="/assets/js/digital-health.js?v=20261114g"></script>
+<script src="/editormd/lib/marked.min.js"></script>
+<script src="/assets/js/digital-health.js?v=20261117-dock2"></script>
 <script>DigitalHealth.mountPage();</script>
 </body>
 </html>

@@ -10,7 +10,7 @@
     <link rel="stylesheet" th:href="@{/assets/libs/layui/css/layui.css}"/>
     <link rel="stylesheet" th:href="@{/assets/module/admin.css}"/>
     <link rel="stylesheet" th:href="@{/assets/css/mine-admin.css(v=20261114c)}"/>
-    <link rel="stylesheet" th:href="@{/assets/css/digital-health.css(v=20261114d)}"/>
+    <link rel="stylesheet" th:href="@{/assets/css/digital-health.css(v=20261117dock2)}"/>
     <!--[if lt IE 9]>
     <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
     <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
@@ -171,6 +171,7 @@
 
 
     </style>
+<link rel="stylesheet" href="/assets/css/health-agent.css?v=20261117-dock2"/>
 </head>
 <body class="layui-layout-body mine-admin">
 <input id="change" type="hidden" th:value="${yhuserrole[0].roletype}">
@@ -286,8 +287,8 @@
 <script th:src="@{/assets/js/socket.io.min.js}"></script>
 <script type="text/javascript" th:src="@{/assets/js/GoEasyDemo-IM-Chat/goeasy.min.js}"></script>
 <script th:src="@{/assets/js/mine-navigation.js(v=20261114)}"></script>
-<script type="module" th:src="@{/assets/vendor/deep-chat/deepChat.bundle.js}"></script>
-<script th:src="@{/assets/js/digital-health.js(v=20261114g)}"></script>
+<script th:src="@{/editormd/lib/marked.min.js}"></script>
+<script th:src="@{/assets/js/digital-health.js(v=20261117dock2)}"></script>
 <script th:inline="javascript">
     var upmsPermissions = [[${upmsPermissions}]]
     console.log(upmsPermissions,"upmsPermissionsupmsPermissionsupmsPermissionsupmsPermissionsupmsPermissionsupmsPermissionsupmsPermissionsupmsPermissions");
@@ -334,7 +335,7 @@
         var digitalHealthMenus = upmsPermissions.map(function (item) {
             if (String(item.name).trim() !== '健康评估') { return item; }
             var group = Object.assign({}, item);
-            group.children = (item.children || []).concat([{ name: '数字健康师', uri: '/assets/digital-health/index.html', type: 4, pid: item.permissionId, children: [] }]);
+            group.children = (item.children || []).concat([{ name: '数字健康师', uri: '/assets/digital-health/index.html?v=20261117-dock2', type: 4, pid: item.permissionId, children: [] }]);
             return group;
         });
         MineNavigation.mount({

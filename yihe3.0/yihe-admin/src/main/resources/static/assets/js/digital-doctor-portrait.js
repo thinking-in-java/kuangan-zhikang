@@ -189,18 +189,18 @@ export async function mountDoctor(host,gender){
     const camera=new THREE.OrthographicCamera(-1.3,1.3,1.6,-1.6,.1,10);camera.position.set(0,1.5,5);camera.lookAt(0,1.5,0);
     renderer.domElement.className='dh-doctor-canvas';renderer.domElement.setAttribute('aria-hidden','true');host.appendChild(renderer.domElement);
     const input={lookX:0,lookY:0,reduced:window.matchMedia('(prefers-reduced-motion: reduce)').matches};
-    let disposed=false,frame,last=performance.now(),renderAt=0,nextAction=last+12000,turn=0;
+    let disposed=false,frame,last=performance.now(),renderAt=0,nextAction=last+8500,turn=0;
     function resize(){const width=host.clientWidth||124,height=host.clientHeight||144;renderer.setSize(width,height,false);const ratio=width/height;camera.left=-1.59*ratio;camera.right=1.59*ratio;camera.updateProjectionMatrix();}
     const observer=new ResizeObserver(resize);observer.observe(host);resize();
     function pointer(event){const r=host.getBoundingClientRect();input.lookX=THREE.MathUtils.clamp((event.clientX-r.left-r.width/2)/250,-1,1);input.lookY=THREE.MathUtils.clamp((event.clientY-r.top-r.height/2)/250,-1,1);}
     window.addEventListener('pointermove',pointer,{passive:true});
-    function draw(now){if(disposed)return;frame=requestAnimationFrame(draw);if(now-renderAt<33)return;const dt=Math.min((now-last)/1000,.08);last=now;renderAt=now;if(document.hidden||!host.isConnected||host.closest('[hidden]'))return;
-        if(now>nextAction&&!input.reduced){rig.play(['listen','smile','nod'][turn++%3]);nextAction=now+14000;}
-        rig.update(dt,input);renderer.render(scene,camera);
+    function draw(now){if(disposed)return;frame=requestAnimationFrame(draw);if(now-renderAt<33)return;const dt=Math.min((now-last)/1000,.08);last=now;renderAt=now;if(document.hidden||!host.isConnected||host.closest('[hidden]')||host.closest('.dh-widget-compact'))return;
+        if(now>nextAction&&!input.reduced){rig.play(['listen','smile','nod','wave'][turn++%4]);nextAction=now+10000+Math.random()*3500;}
+        const pose=rig.update(dt,input);host.dataset.doctorAction=pose.action;renderer.render(scene,camera);
     }
     renderer.debug.onShaderError=()=>{throw new Error('Doctor shader compilation failed');};
     try{renderer.render(scene,camera);}catch(error){observer.disconnect();window.removeEventListener('pointermove',pointer);renderer.dispose();rig.dispose();loaded.forEach(t=>t.dispose());renderer.domElement.remove();throw error;}
     frame=requestAnimationFrame(draw);
-    const controller={play(type){rig.play(type);},dispose(){if(disposed)return;disposed=true;cancelAnimationFrame(frame);observer.disconnect();window.removeEventListener('pointermove',pointer);renderer.dispose();rig.dispose();loaded.forEach(t=>t.dispose());renderer.domElement.remove();}};
+    const controller={play(type){rig.play(type);nextAction=performance.now()+(type==='wave'?12000:10000);},dispose(){if(disposed)return;disposed=true;cancelAnimationFrame(frame);observer.disconnect();window.removeEventListener('pointermove',pointer);renderer.dispose();rig.dispose();loaded.forEach(t=>t.dispose());renderer.domElement.remove();}};
     window.addEventListener('pagehide',()=>controller.dispose(),{once:true});return controller;
 }
