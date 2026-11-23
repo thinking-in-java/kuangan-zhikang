@@ -6,9 +6,9 @@ spring:
         druid:
               # 主库数据源
             master:
-                url: jdbc:mysql://192.168.1.109:3306/shayu_3.0?useUnicode=true&characterEncoding=utf8&serverTimezone=GMT%2B8&characterSetResults=UTF-8
-                username: root
-                password: a123456
+                url: ${EHR_DB_URL:jdbc:mysql://192.168.1.109:3306/shayu_3.0?useUnicode=true&characterEncoding=utf8&serverTimezone=GMT%2B8&characterSetResults=UTF-8}
+                username: ${EHR_DB_USER}
+                password: ${EHR_DB_PASSWORD}
             # 从库数据源
             slave:
                 # 从数据源开关/默认关闭

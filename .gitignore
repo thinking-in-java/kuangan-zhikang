@@ -48,3 +48,12 @@ Thumbs.db
 # Python runtime caches
 __pycache__/
 *.py[cod]
+
+# Private deployment configuration and full database exports
+.env
+.env.*
+!.env.example
+**/connection-private.json
+**/credentials.json
+**/database-before.sql*
+**/remote-full.sql
