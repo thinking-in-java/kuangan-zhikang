@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class ReportFileCleanup {
     private final EhrRepository db;private final ModelRecognitionSettings settings;
-    @Value("${ehr.storage-root:F:/upload}") String storage;
+    @Value("${ehr.storage-root:D:/update}") String storage;
     @Value("${ehr.data-mode:real}") String mode;
     public ReportFileCleanup(EhrRepository db,ModelRecognitionSettings settings){this.db=db;this.settings=settings;}
     public synchronized void run(){

@@ -9,7 +9,7 @@ import org.apache.ibatis.annotations.Param;
 
 public interface YhHeThresholdAlarmMapper {
 	
-	List<YhHeThresholdAlarmVOJO> findYhHeThresholdAlarmByDoctor(@Param("usercode")String usercode,@Param("nameLike")String nameLike,@Param("nametype")String nametype,@Param("status")String status,@Param("strTime")String strTime,@Param("endTime")String endTime);
+	List<YhHeThresholdAlarmVOJO> findYhHeThresholdAlarmByDoctor(@Param("usercode")String usercode,@Param("nameLike")String nameLike,@Param("nametype")String nametype,@Param("status")String status,@Param("strTime")String strTime,@Param("endTime")String endTime, @Param("alertId") Integer alertId);
 	
 	List<YhHeThresholdAlarmVOJO> findYhHeThresholdTypeByDoctor(@Param("usercode")String usercode);
 	

@@ -13,7 +13,7 @@ import static com.yihe.framework.ehr.EhrService.*;
 @Component
 public class HealthAgentSettings {
     final ModelRecognitionSettings recognition;
-    @Value("${ehr.agent.config-file:F:/upload/.config/health-agent.json}") String configFile;
+    @Value("${ehr.agent.config-file:D:/update/.config/health-agent.json}") String configFile;
     public HealthAgentSettings(ModelRecognitionSettings recognition){this.recognition=recognition;}
     @SuppressWarnings("unchecked") Map<String,Object> read(){
         Map<String,Object> c=new LinkedHashMap<>(recognition.read());

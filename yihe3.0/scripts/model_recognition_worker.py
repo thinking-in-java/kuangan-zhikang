@@ -9,12 +9,15 @@ import hashlib
 import io
 import json
 import logging
+import multiprocessing
 import os
 import threading
 import time
 import uuid
 import re
 from datetime import date
+from contextlib import contextmanager
+from multiprocessing.managers import BaseManager
 from concurrent.futures import ThreadPoolExecutor, wait, FIRST_COMPLETED
 from pathlib import Path
 from urllib.parse import urlsplit
@@ -24,6 +27,7 @@ import requests
 from PIL import Image, ImageOps
 
 LOG = logging.getLogger('model-adapter')
+ADAPTER_REVISION = 'page-validation-v1'
 META = ('institution_raw', 'exam_date_raw', 'report_date_raw', 'exam_type_raw', 'exam_number_raw', 'age_raw')
 
 
@@ -41,6 +45,111 @@ def load_config(path):
     if not c.get('model') or not c.get('apiKey'):
         raise AdapterError('MODEL_CONFIGURATION', '模型名称或私有密钥尚未配置')
     return c
+
+
+def concurrency_limits(config):
+    def bounded(key, default, maximum):
+        try:
+            value = config.get(key, default)
+            return max(1, min(maximum, int(value))) if not isinstance(value, (bool, float)) else default
+        except (ValueError, TypeError, OverflowError):
+            return default
+    return bounded('concurrentReports', 3, 8), bounded('maxTotalRequests', 12, 24)
+
+
+class RequestBudget:
+    """Manager-owned budget: a dead report process cannot permanently leak permits."""
+    def __init__(self, limit):
+        self.limit = limit
+        self.owners = {}
+        self.waiting = []
+        self.condition = threading.Condition()
+
+    def activate(self, owner):
+        with self.condition:
+            self.owners.setdefault(owner, 0)
+
+    def deactivate(self, owner):
+        with self.condition:
+            self.owners.pop(owner, None)
+            self.waiting = [entry for entry in self.waiting if entry[0] != owner]
+            self.condition.notify_all()
+
+    def acquire(self, owner, timeout=1):
+        deadline = time.monotonic() + timeout
+        with self.condition:
+            ticket = object()
+            self.waiting.append((owner, ticket))
+            try:
+                while owner in self.owners:
+                    if self.waiting and self.waiting[0][1] is ticket and sum(self.owners.values()) < self.limit:
+                        self.waiting.pop(0)
+                        self.owners[owner] += 1
+                        self.condition.notify_all()
+                        return True
+                    remaining = deadline - time.monotonic()
+                    if remaining <= 0:
+                        return False
+                    self.condition.wait(remaining)
+                return False
+            finally:
+                self.waiting = [entry for entry in self.waiting if entry[1] is not ticket]
+                self.condition.notify_all()
+
+    def release(self, owner):
+        with self.condition:
+            if self.owners.get(owner, 0) > 0:
+                self.owners[owner] -= 1
+                self.condition.notify_all()
+
+    def set_limit(self, limit):
+        with self.condition:
+            self.limit = limit
+            self.condition.notify_all()
+
+    def status(self):
+        with self.condition:
+            return {'maxTotalRequests': self.limit, 'activeRequests': sum(self.owners.values())}
+
+
+class BudgetManager(BaseManager):
+    pass
+
+
+BudgetManager.register('RequestBudget', RequestBudget)
+
+
+class RequestLimiter:
+    def __init__(self, budget, owner):
+        self.budget, self.owner = budget, owner
+
+    def acquire(self, timeout=1):
+        try:
+            return self.budget.acquire(self.owner, timeout)
+        except (EOFError, BrokenPipeError, ConnectionError):
+            raise AdapterError('MODEL_POOL_UNAVAILABLE', '识别并发调度暂时不可用，请稍后重试', True)
+
+    def release(self):
+        try:
+            self.budget.release(self.owner)
+        except (EOFError, BrokenPipeError, ConnectionError):
+            raise AdapterError('MODEL_POOL_UNAVAILABLE', '识别并发调度暂时不可用，请稍后重试', True)
+
+
+@contextmanager
+def request_slot(limiter, cancelled=None):
+    if limiter is None:
+        yield
+        return
+    while not limiter.acquire(timeout=1):
+        if cancelled is not None and cancelled.is_set():
+            raise AdapterError('MODEL_LEASE_LOST', '任务租约中断，取消等待模型请求名额')
+    try:
+        if cancelled is not None and cancelled.is_set():
+            raise AdapterError('MODEL_LEASE_LOST', '任务租约中断，未调用模型')
+        yield
+    finally:
+        limiter.release()
 
 
 def report_date_key(value):
@@ -166,6 +275,87 @@ def expand_page_arrays(result):
                 raise AdapterError('MODEL_FIELD_INVALID', '紧凑结果列数或格式不正确')
         result[name] = expanded
     return result
+
+
+def normalize_item_names(result):
+    """Accept explicit raw-name keys; never derive a name from a result or abbreviation."""
+    items = result.get('items', [])
+    if not isinstance(items, list):
+        raise AdapterError('MODEL_FIELD_INVALID', '模型检查项目集合格式不正确')
+    normalized = []
+    for index, item in enumerate(items, 1):
+        if not isinstance(item, dict):
+            raise AdapterError('MODEL_FIELD_INVALID', '模型检查项目第' + str(index) + '行格式不正确')
+        if all(value is None or (isinstance(value, str) and not value.strip()) for value in item.values()):
+            continue
+        name = text(item.get('name'), 1000)
+        if not name:
+            alternatives = {text(item.get(key), 1000) for key in ('item_name', 'original_field_name', '项目名称')}
+            alternatives.discard(None); alternatives.discard('')
+            if len(alternatives) == 1:
+                item = dict(item, name=next(iter(alternatives)))
+            else:
+                raise AdapterError('MODEL_FIELD_INVALID', '模型检查项目第' + str(index) + '行缺少原名称')
+        normalized.append(item)
+    result['items'] = normalized
+    return result
+
+
+class PageResultCache:
+    """Private per-job cache, bound to immutable originals, dictionary and extraction config."""
+    def __init__(self, path, task_input, dictionary, config):
+        self.path = Path(path)
+        settings = {key: config.get(key) for key in ('baseUrl','model','apiStyle','serviceTier','reasoningEffort',
+            'compactOutput','maxResponseTokens','maxPages','preferPdfText','nativeTextMinChars','renderDpi','imageMaxLongEdge')}
+        identity = {'version':'page-validation-v1','promptHash':hashlib.sha256(page_prompt(dictionary,bool(config.get('compactOutput',False))).encode()).hexdigest(),'context':{key:task_input.get(key) for key in
+            ('job_id','report_id','revision','record_id','scope_code','data_mode','source_files')},'dictionary':dictionary,'settings':settings}
+        self.fingerprint = hashlib.sha256(json.dumps(identity, sort_keys=True, ensure_ascii=False).encode()).hexdigest()
+        self.rows = {}; self.lock = threading.Lock()
+        try:
+            if self.path.is_file() and self.path.stat().st_size <= 16*1024*1024:
+                saved = json.loads(self.path.read_text(encoding='utf-8'))
+                if saved.get('fingerprint') == self.fingerprint and isinstance(saved.get('pages'), dict):
+                    self.rows = saved['pages']
+        except (OSError, ValueError):
+            pass
+
+    def key(self, source, page):
+        uuid.UUID(source)
+        return source + ':' + str(page)
+
+    def get(self, source, page):
+        with self.lock:
+            entry = self.rows.get(self.key(source, page))
+            if not isinstance(entry, dict) or not isinstance(entry.get('result'), dict):
+                return None
+            encoded = json.dumps(entry['result'], sort_keys=True, ensure_ascii=False)
+            if hashlib.sha256(encoded.encode()).hexdigest() != entry.get('sha256'):
+                return None
+            return json.loads(encoded)
+
+    def save(self, source, page, result):
+        with self.lock:
+            encoded = json.dumps(result, sort_keys=True, ensure_ascii=False)
+            self.rows[self.key(source, page)] = {'sha256':hashlib.sha256(encoded.encode()).hexdigest(),'result':result}
+            raw = json.dumps({'fingerprint':self.fingerprint,'pages':self.rows}, ensure_ascii=False)
+            if len(raw.encode()) > 16*1024*1024:
+                return
+            try:
+                self.path.parent.mkdir(parents=True, exist_ok=True)
+                temporary = self.path.with_suffix('.tmp')
+                temporary.write_text(raw, encoding='utf-8'); temporary.replace(self.path)
+            except OSError:
+                LOG.warning('validated page cache could not be written page=%s', page)
+
+    def diagnostic(self, source, page, attempt, error, result):
+        uuid.UUID(source)
+        path = self.path.with_name(self.path.stem + '.' + source + '.page-' + str(page) + '.repair-' + str(attempt) + '.json')
+        try:
+            path.parent.mkdir(parents=True, exist_ok=True)
+            path.write_text(json.dumps({'sourceFileId':source,'page':page,'repairAttempt':attempt,
+                'errorCode':error.code,'errorMessage':error.message,'result':result},ensure_ascii=False,indent=2),encoding='utf-8')
+        except OSError:
+            LOG.warning('page diagnostic could not be written page=%s', page)
 
 
 def recognize_page(session, config, image_bytes, dictionary):
@@ -424,7 +614,7 @@ def attach_native_evidence(result, native):
     return result
 
 
-def extract_document(task_input, dictionary, config, source_loader, progress=None, cancelled=None, recognizer=None):
+def extract_document(task_input, dictionary, config, source_loader, progress=None, cancelled=None, recognizer=None, request_limiter=None, page_cache=None):
     """Bound concurrency and merge in original page order; no partial result on failure."""
     total = sum(x['page_count'] for x in task_input['source_files'])
     if total > int(config.get('maxPages', 40)):
@@ -441,27 +631,62 @@ def extract_document(task_input, dictionary, config, source_loader, progress=Non
                 ordinal += 1
     def call(entry):
         t = time.monotonic(); _, source, page, content = entry
-        if recognizer:
-            result = recognizer(content)
-        else:
-            with requests.Session() as session:
-                session.trust_env = False
-                result = recognize_page(session, config, content, dictionary)
-        # A page with exam tables summarized as prose needs a focused second pass.
-        needs_detail = (not result.get('items') and '检查结果表' in content.get('page_hint', '')
-                        and any(f.get('field_key') in ('section_findings', 'item_result') for f in result.get('fields', [])))
-        repaired = False
-        if needs_detail and not recognizer:
-            detail = {**content, 'page_hint': content['page_hint'] + '上一轮漏掉逐项结果。请重新逐行读取本页，所有检查结果放入 items，不只输出元数据或 fields。'}
-            with requests.Session() as session:
-                session.trust_env = False
-                result = recognize_page(session, config, detail, dictionary)
-            repaired = True
-        result = attach_native_evidence(result, content.get('native_text', ''))
-        result = complete_page_arrays(result, content)
-        result = native_report_anchors(result, content.get('native_text', ''), page)
-        result['_detail_retry'] = repaired
-        return entry[0], source, page, content['method'], result, round(time.monotonic() - t, 3)
+        def validate(result):
+            result = normalize_item_names(result)
+            result = attach_native_evidence(result, content.get('native_text', ''))
+            result = complete_page_arrays(result, content)
+            result = native_report_anchors(result, content.get('native_text', ''), page)
+            # Validate before marking the page complete, not only when the entire PDF is merged.
+            CandidateBuilder(task_input, dictionary, config['model']).add_page(source, page, result, content['method'])
+            return result
+        cached = page_cache.get(source, page) if page_cache else None
+        if cached is not None:
+            try:
+                result = validate(cached); result['_cache_hit'] = True; result['_page_repair_attempts'] = 0
+                return entry[0], source, page, content['method'], result, round(time.monotonic() - t, 3)
+            except AdapterError:
+                pass
+        attempts = max(0, min(2, int(config.get('pageRepairAttempts', 2))))
+        previous_error = None
+        for repair in range(attempts + 1):
+            result = None
+            try:
+                current = content
+                if previous_error:
+                    hint = ('上一轮本页JSON校验失败：' + previous_error.message + '。重新完整提取当前页，'
+                            '每条有结果的检查项目必须包含原文项目名称 name；不要输出空行，不得用结果、未知项目或猜测名称代替原项目名。'
+                            '严格遵循固定列顺序和字段键，保留全部实际检查结果。')
+                    current = {**content,'page_hint':content.get('page_hint','') + '\n' + hint}
+                with request_slot(request_limiter, cancelled):
+                    if recognizer:
+                        result = recognizer(current)
+                    else:
+                        with requests.Session() as session:
+                            session.trust_env = False
+                            result = recognize_page(session, config, current, dictionary)
+                needs_detail = (not result.get('items') and '检查结果表' in content.get('page_hint', '')
+                                and any(f.get('field_key') in ('section_findings','item_result') for f in result.get('fields', [])))
+                detail_retry = False
+                if needs_detail and not recognizer:
+                    detail = {**current,'page_hint':current.get('page_hint','') + '请逐行输出 items，不只输出元数据或 fields。'}
+                    with request_slot(request_limiter, cancelled):
+                        with requests.Session() as session:
+                            session.trust_env = False
+                            result = recognize_page(session, config, detail, dictionary)
+                    detail_retry = True
+                result = validate(result)
+                result['_detail_retry'] = detail_retry; result['_page_repair_attempts'] = repair; result['_cache_hit'] = False
+                if page_cache:
+                    page_cache.save(source, page, result)
+                return entry[0], source, page, content['method'], result, round(time.monotonic() - t, 3)
+            except AdapterError as error:
+                if error.code not in ('MODEL_FIELD_INVALID','MODEL_INVALID_JSON'):
+                    raise
+                if page_cache:
+                    page_cache.diagnostic(source, page, repair, error, result)
+                previous_error = error
+                if repair == attempts:
+                    raise AdapterError(error.code,'第'+str(page)+'页：'+error.message+'；已针对本页重试'+str(repair)+'次，请核对原件或重试')
     if config.get('prioritizeDensePages', False):
         entries = list(pages())
         def cost(entry):
@@ -495,9 +720,10 @@ def extract_document(task_input, dictionary, config, source_loader, progress=Non
     for _, source, page, method, result, seconds in sorted(results.values()):
         builder.add_page(source, page, result, method)
         timing.append({'page': page, 'inputType': method, 'seconds': seconds,
+                       'cached': result.get('_cache_hit', False), 'repairAttempts': result.get('_page_repair_attempts', 0),
                        'serviceTier': result.get('_served_service_tier', 'unreported'), 'detailRetry': result.get('_detail_retry', False),
                        'usage': result.get('_model_usage', {}), 'request': result.get('_request_metrics', {})})
-    return builder.finish(), {'pages': total, 'parallelRequests': workers,
+    return builder.finish(), {'pages': total, 'parallelRequests': workers,'cachedPages':sum(row['cached'] for row in timing),
         'elapsedSeconds': round(time.monotonic() - started, 3), 'pageTimings': timing}
 
 
@@ -642,12 +868,14 @@ class CandidateBuilder:
 
 
 class Worker:
-    def __init__(self, base, mode, config_path, token_path):
+    def __init__(self, base, mode, config_path, token_path, worker_id=None, request_limiter=None, slot=None):
         self.base, self.mode, self.config_path = base.rstrip('/'), mode, Path(config_path)
         self.headers = {'Authorization': 'Bearer ' + Path(token_path).read_text().strip()}
         self.session = requests.Session(); self.session.trust_env = False
         self.model_session = requests.Session(); self.model_session.trust_env = False
-        self.worker_id = 'model-a-' + mode
+        self.worker_id = worker_id or 'model-a-' + mode + '-' + str(os.getpid())
+        self.request_limiter, self.slot = request_limiter, slot
+        self.claim_request_key = None
 
     def api(self, path, body=None, lease=None, session=None):
         if not path.startswith('/ehr/') or '..' in path or '://' in path:
@@ -704,9 +932,12 @@ class Worker:
             if inp['data_mode'] != self.mode or inp['job_id'] != jid:
                 raise AdapterError('MODEL_INPUT_INVALID', '任务上下文不一致')
             progress('ocr', 10)
+            results = self.config_path.parent / 'model-results'; results.mkdir(exist_ok=True)
+            uuid.UUID(jid)
+            page_cache = PageResultCache(results/(jid+'.pages.json'),inp,dictionary,config)
             payload, timing = extract_document(inp, dictionary, config,
                 lambda file, source: self.download(file['downloadPath'], lease, source['sha256']),
-                lambda done, total: progress('ocr', 10 + int(done / max(total, 1) * 70)), lost)
+                lambda done, total: progress('ocr', 10 + int(done / max(total, 1) * 70)), lost, request_limiter=self.request_limiter,page_cache=page_cache)
             progress('field_extraction', 85)
             progress('item_matching', 90)
             # Keep a private, credential-free candidate for audit/debugging.
@@ -722,7 +953,7 @@ class Worker:
             receipt = self.api('/ehr/worker/tasks/' + jid + '/receipt', lease=lease)
             if not receipt.get('accepted'):
                 raise AdapterError('MODEL_RECEIPT_MISSING', '模型结果回传后未取得接收回执')
-            LOG.info('accepted job=%s pages=%s items=%s evidence=%s seconds=%s parallel=%s', jid, timing['pages'], len(payload['items']), len(payload['evidence']), timing['elapsedSeconds'], timing['parallelRequests'])
+            LOG.info('accepted job=%s pages=%s items=%s evidence=%s seconds=%s parallel=%s cachedPages=%s', jid, timing['pages'], len(payload['items']), len(payload['evidence']), timing['elapsedSeconds'], timing['parallelRequests'], timing.get('cachedPages',0))
         except AdapterError as e:
             LOG.warning('failed job=%s code=%s', jid, e.code)
             if e.code == 'A_HTTP_404':
@@ -749,9 +980,16 @@ class Worker:
         dictionary = self.api('/ehr/worker/dictionary')
         while True:
             c = load_config(self.config_path)
-            if not c.get('enabled'):
+            if not c.get('enabled') or (self.slot is not None and self.slot >= concurrency_limits(c)[0]):
                 return
-            reply = self.api('/ehr/model-worker/tasks/claim', {'workerId': self.worker_id, 'requestKey': str(uuid.uuid4())})
+            self.claim_request_key = self.claim_request_key or str(uuid.uuid4())
+            try:
+                reply = self.api('/ehr/model-worker/tasks/claim', {'workerId': self.worker_id, 'requestKey': self.claim_request_key})
+            except AdapterError as error:
+                if error.code == 'A_HTTP_409':
+                    self.claim_request_key = None
+                raise
+            self.claim_request_key = None
             if reply.get('task'):
                 self.process(reply['task'], dictionary)
                 if once:
@@ -762,6 +1000,122 @@ class Worker:
                 time.sleep(max(1, min(30, int(reply.get('retryAfterSeconds', 3)))))
 
 
+def start_parent_watchdog(parent_pid):
+    def watch_parent():
+        if os.name == 'nt':
+            import ctypes
+            from ctypes import wintypes
+            kernel = ctypes.WinDLL('kernel32', use_last_error=True)
+            kernel.OpenProcess.argtypes = [wintypes.DWORD, wintypes.BOOL, wintypes.DWORD]
+            kernel.OpenProcess.restype = wintypes.HANDLE
+            kernel.GetExitCodeProcess.argtypes = [wintypes.HANDLE, ctypes.POINTER(wintypes.DWORD)]
+            handle = kernel.OpenProcess(0x1000, False, parent_pid)
+            if not handle:
+                os._exit(0)
+            while True:
+                code = wintypes.DWORD()
+                if not kernel.GetExitCodeProcess(handle, ctypes.byref(code)) or code.value != 259:
+                    os._exit(0)
+                time.sleep(3)
+        else:
+            while os.getppid() == parent_pid:
+                time.sleep(3)
+            os._exit(0)
+    threading.Thread(target=watch_parent, daemon=True, name='model-parent-watchdog').start()
+
+
+def run_worker_forever(worker, once=False):
+    while True:
+        try:
+            worker.run(once)
+            return
+        except Exception as e:
+            LOG.warning('adapter waiting errorType=%s', type(e).__name__)
+            if once:
+                raise SystemExit(1)
+            time.sleep(10)
+
+
+def report_worker(base, mode, config_path, token_path, slot, owner, budget, parent_pid):
+    logging.basicConfig(level=logging.INFO, format='%(asctime)s %(levelname)s %(message)s')
+    start_parent_watchdog(parent_pid)
+    worker = Worker(base, mode, config_path, token_path, worker_id=owner,
+                    request_limiter=RequestLimiter(budget, owner), slot=slot)
+    try:
+        run_worker_forever(worker)
+    finally:
+        worker.session.close()
+        worker.model_session.close()
+
+
+def run_report_pool(base, mode, config_path, token_path):
+    """Separate PDF processes; shared bounded model calls and per-report page threads."""
+    ctx = multiprocessing.get_context('spawn')
+    config = load_config(config_path)
+    report_count, request_count = concurrency_limits(config)
+    manager = BudgetManager(ctx=ctx)
+    manager.start(initializer=start_parent_watchdog, initargs=(os.getpid(),))
+    budget = manager.RequestBudget(request_count)
+    children = {}
+    logs = Path(config_path).parent / 'model-logs'; logs.mkdir(exist_ok=True)
+    status_file = logs / ('pool-' + mode + '.json')
+    LOG.info('report pool started reports=%s maxTotalRequests=%s', report_count, request_count)
+    try:
+        while True:
+            config = load_config(config_path)
+            if not config.get('enabled'):
+                return
+            report_count, request_count = concurrency_limits(config)
+            budget.set_limit(request_count)
+            for slot, (process, owner) in list(children.items()):
+                if not process.is_alive():
+                    process.join()
+                    budget.deactivate(owner)
+                    del children[slot]
+                    if process.exitcode:
+                        LOG.warning('report worker exited slot=%s exitCode=%s; leases remain recoverable', slot, process.exitcode)
+            for slot in range(report_count):
+                if slot in children:
+                    continue
+                owner = 'model-a-' + mode + '-' + str(os.getpid()) + '-' + str(slot) + '-' + uuid.uuid4().hex[:8]
+                budget.activate(owner)
+                process = ctx.Process(target=report_worker,
+                    args=(base, mode, str(config_path), str(token_path), slot, owner, budget, os.getpid()),
+                    name='model-report-' + str(slot))
+                try:
+                    process.start()
+                except Exception:
+                    budget.deactivate(owner)
+                    raise
+                children[slot] = process, owner
+            status = {**budget.status(), 'adapterRevision':ADAPTER_REVISION,'mode': mode, 'coordinatorPid': os.getpid(),
+                      'reportConcurrency': report_count, 'workerPids': [p.pid for p, _ in children.values() if p.is_alive()],
+                      'updatedAtEpochSeconds': time.time()}
+            try:
+                temporary = status_file.with_suffix('.tmp')
+                temporary.write_text(json.dumps(status), encoding='utf-8')
+                temporary.replace(status_file)
+            except OSError:
+                LOG.warning('report pool status could not be written')
+            time.sleep(1)
+    finally:
+        for process, _ in children.values():
+            if process.is_alive():
+                process.terminate()
+        for process, owner in children.values():
+            process.join(timeout=5)
+            if process.is_alive():
+                process.kill(); process.join(timeout=2)
+            try:
+                budget.deactivate(owner)
+            except (EOFError, BrokenPipeError, ConnectionError):
+                pass
+        try:
+            manager.shutdown()
+        except (EOFError, BrokenPipeError, ConnectionError):
+            pass
+
+
 def main():
     p = argparse.ArgumentParser(); p.add_argument('--base-url', required=True); p.add_argument('--mode', choices=['real', 'synthetic'], required=True)
     p.add_argument('--config', required=True); p.add_argument('--worker-token-file', required=True); p.add_argument('--once', action='store_true'); p.add_argument('--parent-pid', type=int)
@@ -770,37 +1124,19 @@ def main():
         raise SystemExit('Local adapter must connect to A through loopback')
     logging.basicConfig(level=logging.INFO, format='%(asctime)s %(levelname)s %(message)s')
     if args.parent_pid:
-        def watch_parent():
-            if os.name == 'nt':
-                import ctypes
-                from ctypes import wintypes
-                kernel = ctypes.WinDLL('kernel32', use_last_error=True)
-                kernel.OpenProcess.argtypes = [wintypes.DWORD, wintypes.BOOL, wintypes.DWORD]
-                kernel.OpenProcess.restype = wintypes.HANDLE
-                kernel.GetExitCodeProcess.argtypes = [wintypes.HANDLE, ctypes.POINTER(wintypes.DWORD)]
-                handle = kernel.OpenProcess(0x1000, False, args.parent_pid)
-                if not handle:
-                    os._exit(0)
-                while True:
-                    code = wintypes.DWORD()
-                    if not kernel.GetExitCodeProcess(handle, ctypes.byref(code)) or code.value != 259:
-                        os._exit(0)
-                    time.sleep(3)
-            else:
-                while os.getppid() == args.parent_pid:
-                    time.sleep(3)
-                os._exit(0)
-        threading.Thread(target=watch_parent, daemon=True).start()
-    worker = Worker(args.base_url, args.mode, args.config, args.worker_token_file)
-    while True:
-        try:
-            worker.run(args.once); return
-        except Exception as e:
-            LOG.warning('adapter waiting errorType=%s', type(e).__name__)
-            if args.once:
-                raise SystemExit(1)
-            time.sleep(10)
+        start_parent_watchdog(args.parent_pid)
+    if args.once:
+        run_worker_forever(Worker(args.base_url, args.mode, args.config, args.worker_token_file), True)
+    else:
+        while True:
+            try:
+                run_report_pool(args.base_url, args.mode, args.config, args.worker_token_file)
+                return
+            except Exception as error:
+                LOG.warning('report pool waiting errorType=%s', type(error).__name__)
+                time.sleep(10)
 
 
 if __name__ == '__main__':
+    multiprocessing.freeze_support()
     main()

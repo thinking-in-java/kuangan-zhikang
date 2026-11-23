@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>数字员工协作中心 · 矿安智康</title>
+    <link rel="stylesheet" th:href="@{/assets/css/digital-workers-reference.css}">
+    <link rel="stylesheet" th:unless="${workerPage == 'overview'}" th:href="@{/assets/css/digital-workers.css(v=live)}">
+    <script defer th:src="@{/assets/js/digital-worker-service.js(v=worker-independent-v1)}"></script>
+    <link rel="stylesheet" th:href="@{/assets/css/digital-worker-dispatch.css(v=worker-independent-v1)}">
+    <script defer th:src="@{/assets/js/digital-worker-task-results.js(v=worker-independent-v1)}"></script>
+    <script defer th:src="@{/assets/js/digital-worker-dispatch.js(v=worker-independent-v1)}"></script>
+    <link rel="stylesheet" th:if="${workerPage == 'overview'}" th:href="@{/assets/css/digital-worker-hub.css(v=worker-independent-v1)}">
+    <script defer th:src="@{/assets/js/digital-worker-hub.js(v=worker-independent-v1)}"></script>
+    <script defer th:src="@{/assets/js/digital-workers-overview.js(v=worker-independent-v1)}"></script>
+    <link rel="stylesheet" th:if="${workerPage == 'settings'}" th:href="@{/assets/css/digital-worker-settings.css(v=worker-independent-v1)}">
+    <script defer th:if="${workerPage == 'settings'}" th:src="@{/assets/js/digital-worker-settings.js(v=worker-independent-v1)}"></script>
+    <script defer th:unless="${workerPage == 'overview'}" th:src="@{/assets/js/digital-workers.js(v=worker-independent-v1)}"></script>
+</head>
+<body th:attr="data-page=${workerPage},data-base=@{/}">
+<th:block th:if="${workerPage == 'overview'}" th:insert="~{digital-workers/overview :: overview}"></th:block>
+<th:block th:unless="${workerPage == 'overview'}">
+<main class="app dw-shell" id="dw-app"></main>
+</th:block>
+<noscript>请启用 JavaScript 以使用数字员工协作中心。</noscript>
+</body>
+</html>

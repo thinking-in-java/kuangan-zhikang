@@ -17,6 +17,7 @@
 
     <![endif]-->
     <style type="text/css">
+        .mine-workbench-active .dh-floating-root { display: none; }
         .user-info-head {
             width: 110px;
             height: 110px;
@@ -338,9 +339,21 @@
             group.children = (item.children || []).concat([{ name: '数字健康师', uri: '/assets/digital-health/index.html?v=20261117-dock2', type: 4, pid: item.permissionId, children: [] }]);
             return group;
         });
+        var workerPages = {
+            overview: '数字员工总览',
+            workbench: '数字员工工作台',
+            dispatch: '智能任务调度',
+            records: '任务执行记录',
+            settings: '数字员工配置'
+        };
+        var workerPrefix = ctx + 'manage/digital-workers/';
+        var workerMenu = { name: '数字员工协作中心', type: 1, pid: -1, children: Object.keys(workerPages).map(function (page) {
+            return { name: workerPages[page], uri: workerPrefix + page, type: 4, children: [] };
+        }) };
         MineNavigation.mount({
             menus: [
                 { name: '健康驾驶舱', uri: '/manage/visualization', type: 1, pid: -1, children: [] },
+                workerMenu,
                 { name: '健康档案', type: 1, pid: -1, children: [
                     { name: '智能档案页', uri: '/assets/health-archive/index.html?v=archive-report-cascade-20261117', type: 4, children: [] },
                     { name: '档案统计分析', uri: '/assets/health-archive/statistics.html?v=archive-report-cascade-20261117', type: 4, children: [] },
@@ -351,6 +364,126 @@
             homePath: '/manage/visualization',
             onSingleSignOn: signonClick
         });
+        var workerNavigationKey = 'digital-workers.active.' + userCode;
+        function activeAdminFrame() {
+            return document.querySelector('.layui-body .layui-tab-item.layui-show iframe.admin-iframe, .layui-body > div > iframe.admin-iframe');
+        }
+        function workerQuery(query) {
+            var safe = new URLSearchParams();
+            if (query && ['demo', 'real'].indexOf(query.get('source')) !== -1 && /^[1-9]\d{0,9}$/.test(query.get('alert') || '')) {
+                safe.set('source', query.get('source'));
+                safe.set('alert', query.get('alert'));
+            }
+            if (query && /^(archive|assess|follow|plan|care)$/.test(query.get('worker') || '')) {
+                safe.set('worker', query.get('worker'));
+            }
+            if (query && /^[0-9a-f-]{36}$/.test(query.get('task') || '')) safe.set('task', query.get('task'));
+            if (query && query.get('hub') === '1') {
+                safe.set('hub', '1');
+                var hubRules = {status: /^(all|active|finished|queued|in_progress|pending_review|completed|failed|cancelled|unknown)$/, source: /^(assignment|ocr|alert)$/, priority: /^(normal|high|urgent)$/, type: /^[a-z_]{1,40}$/, sort: /^(updated|created|priority)$/, page: /^[1-9]\d{0,4}$/};
+                Object.keys(hubRules).forEach(function (key) { if (hubRules[key].test(query.get(key) || '')) safe.set(key, query.get(key)); });
+                if (query.get('search') && query.get('search').length <= 100) safe.set('search', query.get('search'));
+            }
+            return safe;
+        }
+        window.saveDigitalWorkerHubQuery = function (params) {
+            var frame = activeAdminFrame();
+            if (!frame || frame.getAttribute('lay-id') !== workerPrefix + 'overview') return;
+            var query = workerQuery(params).toString();
+            frame.dataset.workerHubQuery = query;
+            try { sessionStorage.setItem(workerNavigationKey, 'overview' + (query ? '?' + query : '')); } catch (error) { /* Optional restoration. */ }
+        };
+        window.saveDigitalWorkerSettingsSelection = function (worker) {
+            if (!/^(archive|assess|follow|plan|care)$/.test(worker)) return;
+            var frame = activeAdminFrame();
+            if (!frame || frame.getAttribute('lay-id') !== workerPrefix + 'settings') return;
+            frame.dataset.settingsWorkerSelection = worker;
+            try { sessionStorage.setItem(workerNavigationKey, 'settings?worker=' + worker); } catch (error) { /* Optional restoration. */ }
+        };
+        window.openDigitalWorkerPage = function (page, params) {
+            if (!Object.prototype.hasOwnProperty.call(workerPages, page)) return;
+            var path = workerPrefix + page;
+            var query = workerQuery(params).toString();
+            index.openTab({ url: path, title: workerPages[page] });
+            var frame = activeAdminFrame();
+            if (frame && frame.getAttribute('lay-id') === path) {
+                var url = path + (query ? '?' + query : '');
+                if (frame.getAttribute('src') !== url) frame.setAttribute('src', url);
+                frame.title = workerPages[page];
+                if (page === 'overview') frame.dataset.workerHubQuery = query;
+                if (page === 'settings') frame.dataset.settingsWorkerSelection = new URLSearchParams(query).get('worker') || 'archive';
+            }
+        };
+        // Restore only this module's routes. All other tabs retain the existing home behavior.
+        var lastWorkerView;
+        try {
+            lastWorkerView = sessionStorage.getItem(workerNavigationKey);
+        } catch (error) { /* The menu remains usable when session storage is unavailable. */ }
+        if (lastWorkerView) {
+            var savedWorkerView = lastWorkerView.split('?');
+            window.openDigitalWorkerPage(savedWorkerView[0], new URLSearchParams(savedWorkerView[1]));
+        }
+        window.saveDigitalWorkerSelection = function (worker) {
+            if (!/^(archive|assess|follow|plan|care)$/.test(worker)) return;
+            var frame = activeAdminFrame();
+            if (!frame || frame.getAttribute('lay-id') !== workerPrefix + 'workbench') return;
+            frame.dataset.workerSelection = worker;
+            try {
+                sessionStorage.setItem(workerNavigationKey, 'workbench?worker=' + worker);
+            } catch (error) { /* Routing remains usable without optional restoration. */ }
+        };
+        var workerObserver = new MutationObserver(function () {
+            var frame = activeAdminFrame();
+            var path = frame && (frame.getAttribute('lay-id') || '');
+            document.body.classList.toggle('mine-workbench-active', path === workerPrefix + 'workbench');
+            try {
+                if (!path || path.indexOf(workerPrefix) !== 0) {
+                    sessionStorage.removeItem(workerNavigationKey);
+                    return;
+                }
+                var page = path.slice(workerPrefix.length);
+                if (!Object.prototype.hasOwnProperty.call(workerPages, page)) return;
+                frame.title = workerPages[page];
+                var params = new URL(frame.src, window.location.href).searchParams;
+                if (page === 'overview' && typeof frame.dataset.workerHubQuery === 'string') params = new URLSearchParams(frame.dataset.workerHubQuery);
+                if (page === 'settings' && frame.dataset.settingsWorkerSelection) params.set('worker', frame.dataset.settingsWorkerSelection);
+                if (page === 'workbench' && frame.dataset.workerSelection) params.set('worker', frame.dataset.workerSelection);
+                var query = workerQuery(params).toString();
+                sessionStorage.setItem(workerNavigationKey, page + (query ? '?' + query : ''));
+            } catch (error) { /* Optional route restoration. */ }
+        });
+        var workerFrame = activeAdminFrame();
+        document.body.classList.toggle('mine-workbench-active',
+            !!workerFrame && workerFrame.getAttribute('lay-id') === workerPrefix + 'workbench');
+        workerObserver.observe(document.querySelector('.layui-body'), {
+            subtree: true, attributes: true, childList: true, attributeFilter: ['class', 'lay-id', 'src']
+        });
+
+        function findWorkerBusinessLink(items, labels) {
+            for (var i = 0; i < items.length; i++) {
+                var item = items[i];
+                if (item.type == 3) continue;
+                var children = (item.children || []).filter(function (child) { return child.type != 3; });
+                if (!children.length && labels.test(String(item.name).trim()) &&
+                    /^\/manage\/[A-Za-z0-9_/-]+$/.test(item.uri || '')) return item.uri;
+                var child = findWorkerBusinessLink(children, labels);
+                if (child) return child;
+            }
+            return null;
+        }
+
+        window.digitalWorkerBusinessLinks = function () {
+            var links = [{ title: '健康档案', url: '/assets/health-archive/index.html?v=archive-report-cascade-20261117' }];
+            [
+                { title: '健康干预', labels: /^(健康干预|健康干预管理|干预计划|干预计划服务管理)$/ },
+                { title: '跟踪服务', labels: /^(跟踪服务|跟踪服务管理|随访管理|服务任务管理)$/ }
+            ].forEach(function (item) {
+                var url = findWorkerBusinessLink(upmsPermissions, item.labels);
+                if (url) links.push({ title: item.title, url: url });
+            });
+            return links;
+        };
+
         DigitalHealth.mountFloating({ code: [[${yh.userCode}]], name: [[${yh.userName}]], gender: [[${yh.gender}]] });
 
         //连接GoEasy 2020-12-18

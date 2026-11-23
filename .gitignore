@@ -44,3 +44,7 @@ Thumbs.db
 /yihe3.0/yihe-quartz/target
 /yihe3.0/yihe-admin/target
 
+
+# Python runtime caches
+__pycache__/
+*.py[cod]

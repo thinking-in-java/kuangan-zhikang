@@ -29,10 +29,10 @@ public class YhHeThresholdAlarmServiceImpl  implements YhHeThresholdAlarmService
 
 	@Override
 	public PageInfo<YhHeThresholdAlarmVOJO> findYhHeThresholdAlarmByDoctor(String usercode,String nameLike, String nametype,
-			String status, String strTime, String endTime, int pageNum, int pageSize) {
+			String status, String strTime, String endTime, int pageNum, int pageSize, Integer alertId) {
 		// TODO Auto-generated method stub
 		PageHelper.startPage(pageNum, pageSize);
-		List<YhHeThresholdAlarmVOJO> list = yhHeThresholdAlarmMapper.findYhHeThresholdAlarmByDoctor(usercode,nameLike, nametype, status, strTime, endTime);
+		List<YhHeThresholdAlarmVOJO> list = yhHeThresholdAlarmMapper.findYhHeThresholdAlarmByDoctor(usercode,nameLike, nametype, status, strTime, endTime, alertId);
 		return new PageInfo<>(list);
 	}
 

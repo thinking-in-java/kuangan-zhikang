@@ -13,7 +13,7 @@ import com.yihe.system.domain.YhHeThresholdAlarmVOJO;
 * Created by royiwen on 2020/3/27.
 */
 public interface YhHeThresholdAlarmService {
-	PageInfo<YhHeThresholdAlarmVOJO> findYhHeThresholdAlarmByDoctor(String usercode,String nameLike,String nametype,String status,String strTime,String endTime,int pageNum,int pageSize);
+	PageInfo<YhHeThresholdAlarmVOJO> findYhHeThresholdAlarmByDoctor(String usercode,String nameLike,String nametype,String status,String strTime,String endTime,int pageNum,int pageSize, Integer alertId);
 	List<YhHeThresholdAlarmVOJO> findYhHeThresholdTypeByDoctor(String usercode);
 	
 	List<YhHeThresholdAlarmVOJO> findYhHeThresholdTypeByDoctorAndStatus(String usercode);

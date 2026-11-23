@@ -175,6 +175,9 @@
 		AND user_code IS NOT
 		NULL
 		)
+		<if test="alertId != null">
+        AND a.ID = #{alertId}
+        </if>
 		<if test="nameLike!=null">
 		AND c.name LIKE CONCAT('%',#{nameLike},'%')
 		</if>

@@ -23,6 +23,7 @@ public class OcrWorkerController {
     @GetMapping("/ehr/worker/environment") public Object environment(HttpServletRequest r){auth(r);return ok(queue.environment());}
     @GetMapping("/ehr/worker/tasks/{id}/receipt") public Object receipt(HttpServletRequest r,@PathVariable String id){auth(r);return ok(queue.receipt(id,lease(r)));}
     @GetMapping("/ehr/api/ocr/tasks") public Object list(HttpServletRequest r,@RequestParam Map<String,String> q){return ok(queue.list(access.web(r),q));}
+    @GetMapping("/ehr/api/ocr/summary") public Object summary(HttpServletRequest r){return ok(queue.summary(access.web(r)));}
     @GetMapping("/ehr/api/ocr/tasks/{id}") public Object detail(HttpServletRequest r,@PathVariable String id){return ok(queue.detail(access.web(r),id));}
     @PostMapping("/ehr/api/ocr/tasks/{id}/retry") public Object retry(HttpServletRequest r,@PathVariable String id,@RequestBody Map<String,Object> b){return ok(queue.control(access.web(r),id,b,true));}
     @PostMapping("/ehr/api/ocr/tasks/{id}/cancel") public Object cancel(HttpServletRequest r,@PathVariable String id,@RequestBody Map<String,Object> b){return ok(queue.control(access.web(r),id,b,false));}

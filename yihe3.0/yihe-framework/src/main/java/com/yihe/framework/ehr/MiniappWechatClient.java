@@ -18,7 +18,7 @@ public class MiniappWechatClient {
     @Value("${ehr.wechat.app-secret:${EHR_WECHAT_APP_SECRET:}}") String appSecret;
     @Value("${ehr.wechat.test-url:${EHR_WECHAT_TEST_URL:}}") String testUrl;
     @Value("${ehr.data-mode:real}") String mode;
-    @Value("${ehr.wechat.credentials-file:${EHR_WECHAT_CREDENTIALS_FILE:F:/upload/.config/wechat-miniapp.json}}") String credentialsFile;
+    @Value("${ehr.wechat.credentials-file:${EHR_WECHAT_CREDENTIALS_FILE:D:/update/.config/wechat-miniapp.json}}") String credentialsFile;
 
     @PostConstruct public void loadPrivateConfiguration(){
         // Never import real application secrets into a synthetic instance.

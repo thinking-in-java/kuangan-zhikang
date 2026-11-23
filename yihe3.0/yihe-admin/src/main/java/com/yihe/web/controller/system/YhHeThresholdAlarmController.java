@@ -52,7 +52,8 @@ public class YhHeThresholdAlarmController extends BaseController {
 	
     @RequestMapping(value = "/findThresholdList", method = RequestMethod.GET)
    	@ResponseBody
-   	public Result findThresholdList(@RequestParam(required = false) String nameLike,
+    public Result findThresholdList(@RequestParam(required = false) Integer alertId,
+            @RequestParam(required = false) String nameLike,
    			@RequestParam(required = false) String nametype,
    			@RequestParam(required = false) String status,
    			@RequestParam(required = false) String startTime, @RequestParam(required = false) String strTime,
@@ -75,7 +76,7 @@ public class YhHeThresholdAlarmController extends BaseController {
    		}
    		String usercode = upmsUser.getUserCode();
    		
-   		PageInfo<YhHeThresholdAlarmVOJO> listpage = yhHeThresholdAlarmServiceImpl.findYhHeThresholdAlarmByDoctor(usercode,nameLike, nametype, status, strTime, endTime, page, limit);
+        PageInfo<YhHeThresholdAlarmVOJO> listpage = yhHeThresholdAlarmServiceImpl.findYhHeThresholdAlarmByDoctor(usercode,nameLike, nametype, status, strTime, endTime, page, limit, alertId);
    		List<YhHeThresholdAlarmVOJO> list = listpage.getList();
    		Map<String,Object> rsMap = new HashMap<String,Object>();
            rsMap.put("count",listpage.getTotal());

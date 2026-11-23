@@ -1,0 +1,66 @@
+.engine#engineButton{border:0;width:min(720px,100%);text-align:left;flex-wrap:wrap;justify-content:space-between;min-height:94px;padding:16px 18px;transition:background .18s,box-shadow .18s}
+.engine#engineButton:hover{background:linear-gradient(100deg,#244dc0,#454fd0);box-shadow:0 12px 26px #405ddc40}
+.engine-entry{display:flex;align-items:center;gap:12px;min-width:0;flex:1}
+.engine#engineButton .engine-title,.engine#engineButton .engine-sub{display:block}
+.engine#engineButton .engine-sub{font-size:12px;line-height:1.5;white-space:normal}
+.engine#engineButton .engine-title{font-size:16px}
+.engine#engineButton .engine-badges{display:flex;gap:7px}
+.engine#engineButton .engine-badges>span{display:block;font-size:12px;padding:7px 9px}
+.engine#engineButton .engine-badges b{font-size:16px;font-variant-numeric:tabular-nums}
+.engine-open{display:flex;gap:5px;align-items:center;color:white;font-size:12px;font-weight:650;width:100%;justify-content:flex-end}
+.engine-open svg{width:14px;height:14px}
+.hub-worker-counts{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:5px;padding-block:9px;border-block:1px solid #e6edf8}
+.hub-worker-counts button{border:0;background:transparent;padding:5px 0;color:var(--ink);border-radius:6px}
+.hub-worker-counts button:hover{background:#f0f5ff}
+.hub-worker-counts b{display:block;font-size:19px;font-variant-numeric:tabular-nums}
+.hub-worker-counts small{display:block;font-size:11px;color:#526681;margin-top:3px}
+.worker .worker-desc{color:#526681}
+.worker .worker-role{color:#526681}
+.worker .worker-actions .btn{font-size:12px;padding:9px 5px}
+.task-hub{margin-top:16px;padding:22px;scroll-margin-top:16px;color:var(--ink)}
+.task-hub[hidden]{display:none!important}
+.hub-heading{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;margin-bottom:18px}
+.hub-heading h2{margin:0;font-size:19px}
+.hub-heading p{margin:7px 0 0;color:#526681;font-size:13px;line-height:1.6}
+.hub-button{border:1px solid #d8e3f3;background:white;border-radius:8px;padding:9px 13px;color:#29476e;white-space:nowrap;font-weight:600;font-size:13px}
+.hub-button:hover{background:#eef4ff;border-color:#9bb8ed}
+.hub-button.hub-primary{color:white;background:#3466db;border-color:#3466db}
+.hub-button.hub-primary:hover{background:#284fae}
+.hub-statuses{display:flex;gap:8px;flex-wrap:wrap;padding-bottom:18px;border-bottom:1px solid #e5edf8}
+.hub-statuses button{border:1px solid #e2eaf6;border-radius:8px;background:#f7f9fd;padding:9px 12px;color:#415774;font-size:13px}
+.hub-statuses button[aria-pressed=true]{background:#eaf1ff;border-color:#5782dc;color:#204da6;font-weight:700}
+.hub-statuses b{margin-left:7px;font-variant-numeric:tabular-nums}
+.hub-filters{display:flex;flex-wrap:wrap;gap:12px;align-items:flex-end;margin-top:18px}
+.hub-filters label{display:grid;gap:7px;min-width:130px;font-size:12px;color:#415774;flex:1}
+.hub-filters select,.hub-filters input{font:inherit;font-size:13px;color:#1b3056;background:#fff;border:1px solid #d8e3f3;padding:9px 10px;border-radius:8px;width:100%;min-width:0;min-height:38px}
+.hub-filters .hub-search{flex:2;min-width:230px}
+.hub-filters input::placeholder{color:#596c87;opacity:1}
+.hub-scope{font-size:12px;color:#526681;line-height:1.7;margin:16px 0 12px}
+.hub-table-scroll{overflow-x:auto;overscroll-behavior-inline:contain}
+.hub-table{border-collapse:collapse;width:100%;min-width:880px;table-layout:fixed;font-size:13px}
+.hub-table th,.hub-table td{text-align:left;vertical-align:top;padding:13px 10px;border-bottom:1px solid #e6edf7;overflow-wrap:anywhere}
+.hub-table thead{background:#f3f6fc;color:#415774}
+.hub-table th:first-child{width:27%}
+.hub-table th:nth-child(2){width:10%}
+.hub-table th:nth-child(6){width:14%}
+.hub-table small{display:block;color:#526681;font-size:12px;margin-top:5px;line-height:1.5}
+.hub-task-link{background:transparent;border:0;color:#2356b5;text-align:left;padding:0;font-weight:600;font-size:inherit;line-height:1.6;overflow-wrap:anywhere}
+.hub-task-link:hover{text-decoration:underline;text-underline-offset:3px}
+.hub-unavailable{color:#526681;font-size:inherit;line-height:1.6}
+.hub-state{display:inline-block;padding:3px 7px;background:#edf2fa;color:#415774;border-radius:6px;font-size:12px;white-space:nowrap}
+.hub-state-in_progress{background:#eaf1ff;color:#204da6}
+.hub-state-pending_review{background:#fff3df;color:#78500b}
+.hub-state-completed{background:#e7f6ef;color:#146447}
+.hub-state-failed{background:#fff0f1;color:#9d2e3e}
+.hub-pagination{display:flex;justify-content:flex-end;align-items:center;gap:15px;flex-wrap:wrap;margin-top:18px;color:#415774;font-size:13px}
+.hub-empty{padding:36px 16px;text-align:center;color:#415774;line-height:1.8}
+.hub-empty p{margin:8px 0 15px}
+.hub-loading{opacity:.65}
+.hub-footnote{margin:20px 0 0;font-size:12px;color:#526681;line-height:1.7}
+.hub-text-button{background:transparent;border:0;color:#2356b5;font-size:12px;padding:4px}
+.task-hub :focus-visible{outline:3px solid #719ce9;outline-offset:3px}
+.task-hub button:disabled{opacity:.55;cursor:not-allowed}
+.task-hub ::selection{background:#dce8ff;color:#18365f}
+@media(max-width:1000px){.engine#engineButton{gap:10px}.hub-filters label{flex:1 1 160px}.hub-filters .hub-search{flex:2 1 250px}}
+@media(max-width:640px){.engine#engineButton{padding:14px;gap:12px}.engine-entry{flex:1 1 100%}.engine#engineButton .engine-badges{width:100%;justify-content:space-between}.engine#engineButton .engine-badges>span:nth-child(2){display:block}.engine#engineButton .engine-badges>span{font-size:11px;padding:6px 8px}.engine-open{width:auto;margin-left:auto}.task-hub{padding:16px 12px}.hub-heading{flex-wrap:wrap}.hub-heading h2{font-size:17px}.hub-heading p{font-size:14px}.hub-filters label{flex:1 1 140px;min-width:0}.hub-filters .hub-search{flex:1 1 100%;min-width:0}.hub-filters input,.hub-filters select{font-size:16px}.hub-statuses{gap:6px}.hub-statuses button{padding:8px}.hub-pagination{justify-content:space-between;gap:8px}.hub-worker-counts b{font-size:17px}.worker .worker-actions{flex-wrap:wrap}.worker .worker-actions .btn{flex:1 1 100%;padding:8px}.hub-scope{font-size:13px}}
+@media(prefers-reduced-motion:reduce){.engine#engineButton{transition:none}}

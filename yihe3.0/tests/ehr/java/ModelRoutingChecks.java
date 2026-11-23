@@ -20,6 +20,10 @@ public class ModelRoutingChecks {
             Map<String,Object> status=settings.status();check(!status.containsKey("apiKey")&&!status.containsKey("configFile")&&!status.toString().contains("never-expose"));
             check(Boolean.TRUE.equals(status.get("legacyWorkerPaused"))&&Boolean.TRUE.equals(status.get("reviewRequired")));
             check(Boolean.FALSE.equals(status.get("automaticRedaction")));
+            check(Integer.valueOf(3).equals(status.get("concurrentReports"))&&Integer.valueOf(12).equals(status.get("maxTotalRequests")));
+            Files.write(c,"{\"concurrentReports\":99,\"maxTotalRequests\":999}".getBytes("UTF-8"));status=settings.status();check(Integer.valueOf(8).equals(status.get("concurrentReports"))&&Integer.valueOf(24).equals(status.get("maxTotalRequests")));
+            Files.write(c,"{\"concurrentReports\":0,\"maxTotalRequests\":-1}".getBytes("UTF-8"));status=settings.status();check(Integer.valueOf(1).equals(status.get("concurrentReports"))&&Integer.valueOf(1).equals(status.get("maxTotalRequests")));
+            Files.write(c,"{\"concurrentReports\":true,\"maxTotalRequests\":\"invalid\"}".getBytes("UTF-8"));status=settings.status();check(Integer.valueOf(3).equals(status.get("concurrentReports"))&&Integer.valueOf(12).equals(status.get("maxTotalRequests")));
             System.out.println("PASS "+checks+" model routing checks; no task claimed or database accessed");
         }finally{Files.deleteIfExists(c);Files.deleteIfExists(t);}
     }

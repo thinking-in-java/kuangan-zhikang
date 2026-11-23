@@ -192,7 +192,7 @@
                 risks: [ { name: '高风险关注', value: high || 0 }, { name: '其他风险关注', value: other || 0 }, { name: '已评估其他', value: Math.max(0, assessed - high - other) }, { name: '待评估', value: val('notassessment') || 0 } ],
                 quality: [ { label: '健康评估覆盖率', value: coverage, icon: 'clipboard' }, { label: '复查闭环率', value: null, icon: 'refresh' }, { label: '职业档案建档率', value: null, icon: 'archive' } ],
                 exposures: [ { name: '已评估覆盖', value: coverage, icon: 'clipboard' }, { name: '待评估占比', value: percent(val('notassessment'), total), icon: 'people' }, { name: '粉尘暴露风险', value: null, icon: 'dust' }, { name: '噪声暴露风险', value: null, icon: 'noise' }, { name: '职业健康风险', value: null, icon: 'shield' } ],
-                alerts: (alarm.data || []).slice(0, 5).map(function (a) { var name = a.name ? a.name.charAt(0) + '**' : '关联用户'; return { time: String(a.time || '').slice(-8, -3) || '--:--', level: a.status || '待核对', color: '#ffcd74', text: name + '：' + (a.typename || a.type || '指标预警'), detail: name + '：' + (a.content || a.typename || '请进入原有预警管理页面核对记录与处置状态。') }; }),
+                alerts: (alarm.data || []).slice(0, 5).map(function (a) { var name = a.name ? a.name.charAt(0) + '**' : '关联用户'; return { id: a.id, time: String(a.time || '').slice(-8, -3) || '--:--', level: a.status || '待核对', color: '#ffcd74', text: name + '：' + (a.typename || a.type || '指标预警'), detail: name + '：' + (a.content || a.typename || '请进入原有预警管理页面核对记录与处置状态。') }; }),
                 advice: [
                     { title: '评估覆盖跟进', text: number(val('notassessment')) + ' 名在管用户尚待评估，可在健康评估菜单中核对。', icon: 'clipboard', color: '#58e5f3' },
                     { title: '风险关注清单', text: '已查询到 ' + number(high) + ' 名高风险关注用户，建议健管师核对具体记录。', icon: 'shield', color: '#4ce1c5' },
@@ -229,6 +229,7 @@
     function openDetail(title, body, label) {
         $('detail-title').textContent = title;
         $('detail-content').innerHTML = '<p class="detail-label">' + escape(label || (mode === 'demo' ? '模拟场景 · 不对应真实职工记录' : '当前账号关联数据')) + '</p><p>' + escape(body) + '</p>';
+        $('detail-worker-link').hidden = true;
         if ($('detail-dialog').showModal) { $('detail-dialog').showModal(); }
         else { $('detail-dialog').setAttribute('open', ''); }
     }
@@ -236,11 +237,29 @@
     document.addEventListener('click', function (event) {
         var alert = event.target.closest('[data-alert]');
         var advice = event.target.closest('[data-advice]');
-        if (alert) { var a = data.alerts[Number(alert.getAttribute('data-alert'))]; openDetail(a.level + ' · 健康关注', a.detail); }
+        if (alert) {
+            var position = Number(alert.getAttribute('data-alert'));
+            var a = data.alerts[position];
+            openDetail(a.level + ' · 健康关注', a.detail);
+            var id = mode === 'real' ? String(a.id || '') : '';
+            if (/^[1-9]\d{0,9}$/.test(id)) {
+                var link = $('detail-worker-link');
+                link.href = '/manage/digital-workers/dispatch?' + new URLSearchParams({ source: mode, alert: id });
+                link.hidden = false;
+            }
+        }
         if (advice) { var tip = data.advice[Number(advice.getAttribute('data-advice'))]; openDetail(tip.title, tip.text + (mode === 'demo' ? ' 当前为产品演示，不会下发随访或修改职工数据。' : ' 请通过现有业务菜单核对并处理。')); }
     });
     $('view-alerts').addEventListener('click', function () {
         openDetail(mode === 'demo' ? '预警动态 · 演示清单' : '预警记录', data.alerts.length ? data.alerts.map(function (a) { return a.time + ' ' + a.text; }).join('；') : '当前账号暂无预警记录。');
+    });
+    $('detail-worker-link').addEventListener('click', function (event) {
+        if (event.ctrlKey || event.metaKey || event.shiftKey || event.altKey ||
+            window.parent === window || !window.parent.openDigitalWorkerPage) return;
+        event.preventDefault();
+        var query = new URL(this.href).searchParams;
+        closeDetail();
+        window.parent.openDigitalWorkerPage('dispatch', query);
     });
     $('close-detail').addEventListener('click', closeDetail); $('confirm-detail').addEventListener('click', closeDetail);
     $('detail-dialog').addEventListener('click', function (e) { if (e.target === this) { var r = this.getBoundingClientRect(); if (e.clientX < r.left || e.clientX > r.right || e.clientY < r.top || e.clientY > r.bottom) { closeDetail(); } } });
