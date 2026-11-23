@@ -353,6 +353,11 @@
         MineNavigation.mount({
             menus: [
                 { name: '健康驾驶舱', uri: '/manage/visualization', type: 1, pid: -1, children: [] },
+                { name: '工作台', type: 1, pid: -1, children: [
+                    { name: '工作总览', uri: '/manage/workbench', type: 4, children: [] },
+                    { name: '我的待办', uri: '/manage/workbench/todos', type: 4, children: [] },
+                    { name: '预警中心', uri: '/manage/workbench/alerts', type: 4, children: [] }
+                ] },
                 workerMenu,
                 { name: '健康档案', type: 1, pid: -1, children: [
                     { name: '智能档案页', uri: '/assets/health-archive/index.html?v=archive-report-cascade-20261117', type: 4, children: [] },

@@ -40,7 +40,15 @@ public class DigitalWorkerTaskHub {
         }
         String search=query.getOrDefault("search","").trim();if(search.length()>100)throw new EhrException(422,"搜索关键词最多100字");
         if(!search.isEmpty()){where+=" AND (title LIKE ? ESCAPE '!' OR memberCode LIKE ? ESCAPE '!' OR memberName LIKE ? ESCAPE '!' OR id LIKE ? ESCAPE '!')";String keyword="%"+EhrService.like(search)+"%";args.addAll(Arrays.asList(keyword,keyword,keyword,keyword));}
+        String from=query.getOrDefault("createdFrom", ""),to=query.getOrDefault("createdTo", "");
+        if(!from.isEmpty()) {date(from);where+=" AND createdAt>=?";args.add(from+" 00:00:00");}
+        if(!to.isEmpty()) {where+=" AND createdAt<?";args.add(date(to).plusDays(1).toString()+" 00:00:00");}
+        if(!from.isEmpty()&&!to.isEmpty()&&date(from).isAfter(date(to)))throw new EhrException(422,"结束日期不能早于开始日期");
         return where;
+    }
+    private java.time.LocalDate date(String value) {
+        if(!value.matches("\\d{4}-\\d{2}-\\d{2}"))throw new EhrException(422,"日期格式无效");
+        try{return java.time.LocalDate.parse(value);}catch(RuntimeException error){throw new EhrException(422,"日期无效");}
     }
     private String status(String value,List<Object> args){
         if(value==null||value.isEmpty()||"all".equals(value))return "";
@@ -52,9 +60,9 @@ public class DigitalWorkerTaskHub {
     private Map<String,Object> empty(){Map<String,Object> m=map("total",0L,"active",0L);for(String state:STATES)m.put(state,0L);return m;}
     private void add(Map<String,Object> summary,String state,long count){summary.put("total",((Number)summary.get("total")).longValue()+count);summary.put(state,((Number)summary.get(state)).longValue()+count);if(Arrays.asList("queued","in_progress","pending_review").contains(state))summary.put("active",((Number)summary.get("active")).longValue()+count);}
     private Map<String,Object> aggregate(String from,String where,List<Object> args){
-        Map<String,Object> summary=empty(),byWorker=new LinkedHashMap<>(),bySource=new LinkedHashMap<>();for(String w:WORKERS)byWorker.put(w,empty());for(String s:SOURCES)bySource.put(s,0L);
-        for(Map<String,Object> row:db.all("SELECT worker,source,status,COUNT(*) count FROM "+from+where+" GROUP BY worker,source,status",args.toArray())){String state=text(row,"status");long count=((Number)row.get("count")).longValue();add(summary,state,count);@SuppressWarnings("unchecked") Map<String,Object> worker=(Map<String,Object>)byWorker.get(text(row,"worker"));if(worker!=null)add(worker,state,count);String source=text(row,"source");bySource.put(source,((Number)bySource.get(source)).longValue()+count);}
-        return map("summary",summary,"byWorker",byWorker,"bySource",bySource,"capturedAt",now());
+        Map<String,Object> summary=empty(),byWorker=new LinkedHashMap<>(),bySource=new LinkedHashMap<>(),bySourceActive=new LinkedHashMap<>();for(String w:WORKERS)byWorker.put(w,empty());for(String s:SOURCES){bySource.put(s,0L);bySourceActive.put(s,0L);}
+        for(Map<String,Object> row:db.all("SELECT worker,source,status,COUNT(*) count FROM "+from+where+" GROUP BY worker,source,status",args.toArray())){String state=text(row,"status");long count=((Number)row.get("count")).longValue();add(summary,state,count);@SuppressWarnings("unchecked") Map<String,Object> worker=(Map<String,Object>)byWorker.get(text(row,"worker"));if(worker!=null)add(worker,state,count);String source=text(row,"source");bySource.put(source,((Number)bySource.get(source)).longValue()+count);if(Arrays.asList("queued","in_progress","pending_review").contains(state))bySourceActive.put(source,((Number)bySourceActive.get(source)).longValue()+count);}
+        return map("summary",summary,"byWorker",byWorker,"bySource",bySource,"bySourceActive",bySourceActive,"capturedAt",now());
     }
     @Transactional(readOnly=true,isolation=Isolation.REPEATABLE_READ)
     public Map<String,Object> summary(EhrActor actor){List<Object> args=new ArrayList<>();String from=union(actor,args);return aggregate(from,"",args);}
