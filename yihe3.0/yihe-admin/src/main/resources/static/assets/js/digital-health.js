@@ -1,8 +1,8 @@
 /* Digital health workbench: authenticated Responses tools; writes require explicit confirmation. */
 (function (window) {
     'use strict';
-    var PAGE_PATH = '/assets/digital-health/index.html';
-    var PAGE = PAGE_PATH + '?v=20261117-dock2';
+    var PAGE_PATH = '/assets/agents/health.html';
+    var PAGE = PAGE_PATH + '?v=20261125';
     var ASSET = '/assets/images/';
     var profile = { code: '', name: '健康管理师', gender: 0 };
     var sessions = [];
@@ -13,7 +13,7 @@
     var doctorModule;
     var counter = 0;
     var csrfPromise, agentReady, pending = false, removing = false, selectedRecord = '';
-    var toolLabels = { search_employees:'查找职工', get_employee_record:'读取健康档案', list_exam_reports:'查询体检报告', get_exam_report:'读取报告及证据', get_health_statistics:'查询企业统计', find_abnormal_results:'查询异常指标', prepare_employee_delete:'生成删除预览', prepare_employee_update:'生成修改预览' };
+    var toolLabels = { get_digital_worker_overview:'汇总数字员工协作', list_digital_worker_tasks:'查询数字员工任务', search_employees:'查找职工', get_employee_record:'读取健康档案', list_exam_reports:'查询体检报告', get_exam_report:'读取报告及证据', get_health_statistics:'查询企业统计', find_abnormal_results:'查询异常指标', prepare_employee_delete:'生成删除预览', prepare_employee_update:'生成修改预览' };
     var commands = [
         { key: 'report', name: '体检报告', icon: '▤', prompt: '查看当前服务对象的体检报告；未选择职工时，请先让我提供姓名或工号' },
         { key: 'scan', name: '异常指标', icon: '↗', prompt: '查询已确认报告中的异常指标，汇总需要医生关注的线索，标明依据和范围' },
@@ -41,11 +41,11 @@
         var r=await fetch('/ehr/api'+path,options),j;try{j=await r.json();}catch(e){throw Error('服务未返回有效结果，请检查登录状态');}
         if(!r.ok||j.code!==0){if(r.status===401||r.status===403)csrfPromise=null;throw Error(j.msg||'请求失败（'+r.status+'）');}return j.data;
     }
-    async function remoteSession(session){if(session.serverId)return session.serverId;if(!session.creating)session.creating=api('/agent/conversations','POST',{}).then(function(c){session.serverId=c.id;return c.id;});return session.creating;}
+    async function remoteSession(session){if(session.serverId)return session.serverId;if(!session.creating)session.creating=api('/agent/conversations','POST',{}).then(function(c){session.serverId=c.id;var wasActive=activeId===session.id;session.id=c.id;if(wasActive)activeId=c.id;notify();return c.id;});return session.creating;}
     async function loadConversation(session){if(!session.serverId)return;var d=await api('/agent/conversations/'+session.serverId);if(current()!==session)return;session.messages=d.messages||[];session.actions=d.actions||[];session.lastResult=d.lastResult||null;chats.forEach(function(c){c.setMessages(session.messages,session);});renderResults(session);notify();}
     function bootAgent(){if(agentReady)return agentReady;agentReady=Promise.all([api('/agent/context'),api('/agent/conversations')]).then(async function(values){
         var c=values[0],saved=values[1];
-        if(saved.length&&current()&&!current().messages.length){sessions=saved.map(function(s){return {id:s.id,serverId:s.id,title:s.title,time:s.updatedAt,messages:[],actions:[]};});activeId=sessions[0].id;await loadConversation(sessions[0]);}
+        if(saved.length&&current()&&!current().messages.length){sessions=saved.map(function(s){return {id:s.id,serverId:s.id,title:s.title,time:s.updatedAt,messages:[],actions:[],pendingCount:s.pendingCount||0};});var requested=new URLSearchParams(location.search).get('conversation'), chosen=sessions.find(function(s){return s.id===requested;})||sessions[0];activeId=chosen.id;await loadConversation(chosen);}
         document.querySelectorAll('.dh-mode-tag,.dh-panel-banner>span').forEach(function(n){n.textContent=c.enabled?'● 智能分析已启用':'模型待配置';});
         document.querySelectorAll('.dh-total-preview').forEach(function(n){n.innerHTML='<span>当前服务模式</span><strong>'+(c.enabled?'业务智能体':'模型待配置')+'</strong><p>账号权限内查询 · 修改先确认</p>';});
         var s=c.statistics||{},numbers=[s.total,(s.high||0)+(s.critical||0),s.pending,s.archived];
@@ -71,7 +71,7 @@
         document.body.appendChild(d);d.querySelector('.dh-dialog-close').onclick=function(){d.close();d.remove();};d.querySelector('form').onsubmit=async function(e){e.preventDefault();var b=d.querySelector('[type=submit]');b.disabled=true;try{var r=await api('/agent/actions/'+action.id+'/resolve','POST',{confirm:true,employeeCode:d.querySelector('input').value.trim()});session.actions=session.actions.filter(function(x){return x.id!==action.id;});addMessage('ai',r.text);renderResults(session);d.close();d.remove();}catch(err){d.querySelector('.dh-action-error').textContent=err.message;b.disabled=false;}};d.showModal();
     }
     function current() { return sessions.filter(function (s) { return s.id === activeId; })[0]; }
-    function notify() { uiListeners.forEach(function (listener) { listener(); }); }
+    function notify() { uiListeners.forEach(function (listener) { listener(); }); window.dispatchEvent(new CustomEvent('digital-health:update')); }
     function deleteSession(id) {
         if(pending||removing){toast('正在处理当前请求，请完成后再删除对话');return;}
         var session=sessions.find(function(s){return s.id===id;});if(!session)return;
@@ -200,8 +200,10 @@
     }
     function openPage() {
         closeFloating();
-        if (window.layui && window.layui.index) { window.layui.index.openTab({ url: PAGE, title: '数字健康师' }); }
-        else { window.location.href = PAGE; }
+        var destination=PAGE+(current()&&current().serverId?'&conversation='+encodeURIComponent(current().serverId):'');
+        var host=window.parent!==window?window.parent:window;
+        if (host.layui && host.layui.index) { host.layui.index.openTab({ url: destination, title: '数字健康师' }); }
+        else { window.location.href = destination; }
     }
     function closeFloating() {
         if (!floating) { return; }
@@ -377,10 +379,10 @@
         // Keep a single assistant visible when its dedicated workbench is open.
         var frameObserver = new MutationObserver(function () {
             if (!root.isConnected) { return; }
-            var frame = document.querySelector('.layui-body iframe.admin-iframe');
+            var frame = document.querySelector('.layui-body .layui-tab-item.layui-show iframe.admin-iframe, .layui-body > div > iframe.admin-iframe');
             root.hidden = !!(frame && frame.getAttribute('src') && frame.getAttribute('src').split('?')[0] === PAGE_PATH);
         });
-        frameObserver.observe(document.querySelector('.layui-body') || document.body, { subtree: true, childList: true, attributes: true, attributeFilter: ['src'] });
+        frameObserver.observe(document.querySelector('.layui-body') || document.body, { subtree: true, childList: true, attributes: true, attributeFilter: ['src', 'class'] });
         window.addEventListener('pagehide', function () { frameObserver.disconnect(); });
     }
     function mountPage() {
@@ -430,5 +432,7 @@
         document.getElementById('dh-page-attach').addEventListener('click',openArchives);
     }
     function openArchives(){var url='/assets/health-archive/management.html';try{var w=window.parent!==window?window.parent:window;if(w.layui&&w.layui.index){w.layui.index.openTab({url:url,title:'档案信息管理'});return;}}catch(e){}window.open(url,'_blank','noopener');}
-    window.DigitalHealth = { mountFloating: mountFloating, mountPage: mountPage, getIdentity: identity, openPage: openPage, closeFloating: closeFloating };
+    window.DigitalHealth = { mountFloating: mountFloating, mountPage: mountPage, getIdentity: identity, openPage: openPage, closeFloating: closeFloating,
+        request: api, getSessions: function(){return sessions.slice();}, getCurrentSession: current,
+        ask: function(text){return submit(chats[0],text);}, getSelectedRecord: function(){return selectedRecord;} };
 })(window);

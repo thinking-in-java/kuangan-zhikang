@@ -26,7 +26,19 @@
         span.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round">' + paths[key] + '</svg>';
         return span;
     }
+    // Move only the nine named centers to the front. Preserve every menu tree unchanged.
+    function organizeMenus(items) {
+        var titles = ['工作台', '职工中心', '报告与档案中心', '健康评估中心', '健康干预中心', '沟通与服务中心', 'AI数字员工中心', '数据分析中心', '系统管理中心'];
+        var remaining = (items || []).slice(), front = [];
+        function nameOf(item) { return String(item.name || '').trim().replace(/^\d{1,2}\s*/, '').replace(/\s/g, ''); }
+        titles.forEach(function (title) {
+            var index = remaining.findIndex(function (item) { return item && nameOf(item) === title; });
+            if (index !== -1) { front.push(remaining.splice(index, 1)[0]); }
+        });
+        return front.concat(remaining);
+    }
     window.MineNavigation = {
+        organize: organizeMenus,
         mount: function (options) {
             var container = document.getElementById('side-menu');
             var search = document.getElementById('mine-menu-search');
@@ -75,7 +87,7 @@
                 });
                 return record;
             }
-            var roots = (options.menus || []).filter(function (item) { return item.type != 3; }).map(function (item) { return build(item, 0); });
+            var roots = organizeMenus(options.menus).filter(function (item) { return item.type != 3; }).map(function (item) { return build(item, 0); });
             container.textContent = '';
             roots.forEach(function (record) { container.appendChild(record.node); });
             // Expand the current page's ancestors before Layui attaches its navigation handlers.

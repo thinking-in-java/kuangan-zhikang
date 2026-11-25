@@ -1,0 +1,19 @@
+{
+  "checks": [
+    "real_model_search_tool",
+    "http_chat_idempotent",
+    "real_model_report_analysis",
+    "original_evidence_download",
+    "model_update_preview",
+    "update_not_automatic",
+    "confirmed_update_via_http",
+    "delete_not_automatic",
+    "delete_confirmed_http",
+    "repeat_confirmation_idempotent"
+  ],
+  "count": 10,
+  "realModelCalls": true,
+  "mode": "synthetic",
+  "reportAnalysisMs": 17281,
+  "productionDataModified": false
+}

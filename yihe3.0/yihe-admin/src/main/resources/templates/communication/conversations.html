@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>职工会话 · 矿安智康</title><link rel="stylesheet" th:href="@{/assets/css/communication.css(v='20261125-1')}"></head>
+<body th:attr="data-base=@{/}">
+<svg class="svg-library" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
+<symbol id="c-chat" viewBox="0 0 24 24"><path d="M21 11a8 8 0 0 1-8 8H7l-5 3 2-6a9 9 0 1 1 17-5Z"/><path d="M7 10h10M7 14h6"/></symbol>
+<symbol id="c-search" viewBox="0 0 24 24"><circle cx="10" cy="10" r="6"/><path d="m15 15 6 6"/></symbol>
+<symbol id="c-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+<symbol id="c-close" viewBox="0 0 24 24"><path d="m6 6 12 12M18 6 6 18"/></symbol>
+<symbol id="c-send" viewBox="0 0 24 24"><path d="m21 3-7 18-4-8-8-4 19-6ZM10 13 21 3"/></symbol>
+<symbol id="c-file" viewBox="0 0 24 24"><path d="M14 2H5v20h14V7l-5-5ZM14 2v6h5M8 12h8M8 16h6"/></symbol>
+<symbol id="c-person" viewBox="0 0 24 24"><circle cx="12" cy="7" r="4"/><path d="M4 22v-4a8 8 0 0 1 16 0v4"/></symbol>
+<symbol id="c-shield" viewBox="0 0 24 24"><path d="m12 2 8 3v6c0 6-8 11-8 11S4 17 4 11V5l8-3Z"/><path d="m8 12 3 3 5-6"/></symbol>
+<symbol id="c-image" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="8" cy="8" r="2"/><path d="m4 18 5-5 4 3 4-6 4 8"/></symbol>
+<symbol id="c-spark" viewBox="0 0 24 24"><path d="m12 2 3 7 7 3-7 3-3 7-3-7-7-3 7-3Z"/></symbol>
+<symbol id="c-bell" viewBox="0 0 24 24"><path d="M5 10a7 7 0 0 1 14 0c0 7 3 7 3 8H2c0-1 3-1 3-8M9 22h6"/></symbol>
+<symbol id="c-check" viewBox="0 0 24 24"><path d="m4 12 5 5L20 6"/></symbol>
+<symbol id="c-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 6v6l4 2"/></symbol>
+</svg>
+<main class="service-app">
+ <header class="service-top"><div class="page-heading"><span class="heading-mark"><svg><use href="#c-chat"/></svg></span><div><div class="eyebrow">沟通与服务中心</div><h1>职工会话 <span>连接每一次健康关怀</span></h1></div></div><div class="page-actions"><span id="syncState" class="sync-state">连接中</span><button id="notifyBtn" class="button quiet" title="开启浏览器消息提醒"><svg><use href="#c-bell"/></svg>消息提醒</button><button id="newConversation" class="button primary"><svg><use href="#c-plus"/></svg>发起会话</button></div></header>
+ <div class="service-body">
+  <aside class="inbox panel" aria-label="职工会话列表">
+   <div class="inbox-title"><h2>会话列表 <span id="conversationTotal" class="count">0</span></h2><button id="refreshBtn" class="text-button">刷新</button></div>
+   <div class="inbox-tabs" role="group" aria-label="筛选会话"><button data-filter="open" class="active">进行中</button><button data-filter="pending">待回复 <b id="pendingCount">0</b></button><button data-filter="all">全部</button></div>
+   <form id="searchForm" class="search-box"><svg><use href="#c-search"/></svg><input id="conversationSearch" maxlength="100" placeholder="姓名 / 工号 / 消息关键词" aria-label="搜索会话"><button type="submit" class="text-button">搜索</button></form>
+   <div class="inbox-subfilters"><button data-filter="unread">未读 <b id="unreadCount">0</b></button><button data-filter="mine">由我处理</button><button data-filter="closed">已结束</button></div>
+   <div id="conversationList" class="conversation-list"><div class="empty compact">正在加载会话…</div></div>
+   <footer class="list-footer"><span id="pageLabel">第 1 页</span><div><button id="previousPage" class="small-button" aria-label="上一页">‹</button><button id="nextPage" class="small-button" aria-label="下一页">›</button></div></footer>
+  </aside>
+  <section class="chat panel" aria-label="会话窗口">
+   <div id="chatEmpty" class="chat-empty"><span class="welcome-icon"><svg><use href="#c-chat"/></svg></span><h2>让沟通成为健康服务的起点</h2><p>从左侧选择职工会话，查看咨询并及时回复。</p><div class="welcome-points"><span><svg><use href="#c-shield"/></svg>单位内授权服务</span><span><svg><use href="#c-spark"/></svg>AI 辅助，人工确认</span></div><button id="emptyCreate" class="button primary">发起职工会话</button></div>
+   <div id="chatActive" class="chat-active" hidden>
+    <header class="chat-heading"><div class="chat-identity" id="chatIdentity"></div><div class="chat-tools"><button id="profileToggle" class="button small mobile-profile">健康档案</button><button id="takeoverBtn" class="button small">人工接管</button><details class="more-menu"><summary aria-label="更多会话操作">•••</summary><div><button data-action="release">释放会话</button><button data-action="close">结束服务</button><button data-action="reopen">重新开启</button></div></details></div></header>
+    <div id="ownershipBar" class="ownership-bar"></div>
+    <div class="message-container" id="messageScroller" tabindex="0" aria-label="聊天消息"><button id="loadEarlier" class="history-button" hidden>加载更早消息</button><div id="messages" role="log" aria-live="polite" aria-relevant="additions"></div></div>
+    <button id="newMessagesBtn" class="new-messages" hidden>有新消息，点击查看 ↓</button>
+    <section class="composer" aria-label="发送消息">
+     <div class="ai-tools"><span><svg><use href="#c-spark"/></svg>AI 辅助回复</span><button data-draft="general">回复建议</button><button data-draft="report">报告说明</button><button data-draft="exercise">运动关怀</button><button data-draft="diet">饮食关怀</button><button data-draft="review">复查沟通</button></div>
+     <div id="draftNote" class="draft-note" hidden></div><div id="pendingFiles" class="pending-files"></div>
+     <form id="sendForm"><textarea id="messageInput" rows="3" maxlength="4000" aria-label="消息内容" placeholder="请先接管会话，再输入回复…"></textarea><div class="compose-bottom"><div class="attach-tools"><button type="button" id="imageBtn" title="发送图片" aria-label="选择图片"><svg><use href="#c-image"/></svg></button><button type="button" id="fileBtn" title="发送文件" aria-label="选择文件"><svg><use href="#c-file"/></svg></button><span id="charCount">0 / 4000</span></div><div class="send-actions"><span class="keyboard-tip">Enter 发送 · Shift + Enter 换行</span><button id="sendBtn" class="button primary" type="submit"><svg><use href="#c-send"/></svg>发送</button></div></div></form>
+     <input type="file" id="attachmentInput" accept=".pdf,.jpg,.jpeg,.png,.txt" multiple hidden><p class="compose-note">PDF、JPG、PNG、TXT，每个最大 20 MB。AI 草稿须核对，发送后职工可在小程序会话中查看。</p>
+    </section>
+   </div>
+  </section>
+  <aside class="health panel" id="healthPanel" aria-label="职工健康资料"><div class="health-tabs" role="group"><button data-health="archive" class="active">健康档案</button><button data-health="summary">会话摘要</button><button data-health="events">服务记录</button><button id="closeProfile" class="mobile-profile" aria-label="收起资料">×</button></div><div id="healthContent" class="health-content"><div class="empty"><svg><use href="#c-person"/></svg><p>选择会话后，查看职工健康资料。</p></div></div><div class="health-foot"><svg><use href="#c-shield"/></svg>风险只引用已确认评估，未评估不等于低风险。</div></aside>
+ </div>
+</main>
+<dialog id="newDialog"><form method="dialog" class="dialog-heading"><h2>发起职工会话</h2><button class="icon-button" aria-label="关闭">×</button></form><p class="muted">选择本单位职工，已有会话将直接打开。</p><form id="employeeSearchForm" class="search-box"><svg><use href="#c-search"/></svg><input id="employeeSearch" maxlength="100" placeholder="输入职工姓名或工号" aria-label="查找职工"><button class="button small" type="submit">查找</button></form><div id="employeeResults" class="employee-results"></div></dialog>
+<dialog id="imageDialog"><form method="dialog" class="dialog-heading"><h2>图片附件</h2><button class="icon-button" aria-label="关闭图片">×</button></form><img id="imagePreview" alt="聊天图片附件"></dialog>
+<div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
+<script defer th:src="@{/assets/js/communication.js(v='20261125-1')}"></script>
+</body></html>

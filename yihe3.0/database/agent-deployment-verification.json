@@ -1,0 +1,14 @@
+{
+  "serviceUrl": "http://localhost:18080",
+  "mainPort": 18080,
+  "mode": "real",
+  "enabled": true,
+  "canModify": true,
+  "model": "gpt-6.1-sol",
+  "totalEmployees": 2305,
+  "anonymousBlocked": true,
+  "csrfEnforced": true,
+  "workbenchServed": true,
+  "floatingScriptServed": true,
+  "freshAssets": true
+}

@@ -1,0 +1,13 @@
+{
+  "version": "V009_a_miniapp_health_agent",
+  "applied": true,
+  "schemaCloneValidated": true,
+  "existingRowsPreserved": true,
+  "tablesAltered": [
+    "a_agent_conversations",
+    "a_agent_turns"
+  ],
+  "newTables": [],
+  "sqlSha256": "349e201a49bbddee9df0a117eed87154214eddf27313a95abbc27fef98d2bcac",
+  "verifiedAt": "2026-11-17T20:22:33.209372+08:00"
+}

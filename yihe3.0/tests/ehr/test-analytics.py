@@ -1,0 +1,12 @@
+"""Actual MySQL analytics formulas, scoped synthetic data, rollback all writes."""
+from pathlib import Path
+import os,sys,subprocess
+ROOT=Path(__file__).resolve().parents[2]
+sys.path.insert(0,str(ROOT/'database'))
+from health_archive_db import configuration
+c=configuration();jdk=Path('F:/workstation/.tools/jdk8/zulu8.98.0.111-ca-jdk8.0.512-win_x64/bin')
+cp=';'.join(str(ROOT/p) for p in ['yihe-framework/target/classes','yihe-system/target/classes','yihe-common/target/classes','yihe-admin/target/yihe-admin/WEB-INF/lib/*'])
+out=ROOT/'yihe-framework/target/analytics-test-classes';out.mkdir(parents=True,exist_ok=True)
+subprocess.run([str(jdk/'javac.exe'),'-encoding','UTF-8','-cp',cp,'-d',str(out),str(ROOT/'tests/ehr/java/AnalyticsChecks.java')],check=True)
+env=dict(os.environ,EHR_JDBC_URL=f"jdbc:mysql://{c['host']}:{c['port']}/{c['database']}?useSSL=false&serverTimezone=UTC&useUnicode=true&characterEncoding=utf8&characterSetResults=UTF-8",EHR_DB_USER=c['user'],EHR_DB_PASSWORD=c['password'])
+subprocess.run([str(jdk/'java.exe'),'-Dfile.encoding=UTF-8','-cp',str(out)+';'+cp,'com.yihe.framework.ehr.AnalyticsChecks'],env=env,check=True)

@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>数字健康师 · AI 数字员工中心</title>
+<link rel="icon" href="/assets/images/kuangan-zhikang-mark.svg"><link rel="stylesheet" href="/assets/css/digital-health.css?v=20261125"><link rel="stylesheet" href="/assets/css/health-agent.css?v=20261125"><link rel="stylesheet" href="health.css?v=20261125"></head>
+<body class="dh-workbench-body health-hub">
+<main class="dh-workbench" id="digital-health-workbench">
+ <header class="health-hero"><div class="hero-identity"><img id="dh-side-avatar" src="/assets/images/digital-doctor-female.png" alt="数字健康师"><div><h1>数字健康师 <span>AI</span></h1><p>医生与健康管理员的智能中枢助手 · 汇聚协作成果，连接每一次健康服务</p></div></div><div class="hero-metrics">
+ <button data-tasks="pending_review"><i data-icon="clipboard"></i><span>待审核任务 <b id="metric-review">—</b></span></button><button data-high-tasks><i data-icon="alert"></i><span>高优先任务 <b id="metric-high">—</b></span></button><button data-tab="pending"><i data-icon="user"></i><span>待操作确认 <b id="metric-confirm">—</b></span></button></div></header>
+ <aside class="dh-history-sidebar">
+ <button class="dh-new-chat" id="dh-new-chat" type="button"><span>＋</span> 新建对话</button>
+ <label class="dh-history-search"><i data-icon="search"></i><input id="dh-history-search" placeholder="搜索会话、汇报或职工…" aria-label="搜索会话"></label>
+ <div class="hub-session-tabs" role="tablist" aria-label="会话分类"><button role="tab" aria-selected="true" data-tab="all">全部会话</button><button role="tab" aria-selected="false" data-tab="pending">待确认</button><button role="tab" aria-selected="false" data-tab="starred">我的关注</button></div>
+ <div class="dh-history-heading">我的健康服务对话 <span>当前账号私有</span></div><nav id="dh-session-list" class="dh-session-list" aria-label="对话记录"></nav>
+ <div class="dh-history-bottom"><span>◇</span><div>真实数据 · 有据可查<small>修改先确认，健康结论由医生审核</small></div></div>
+ </aside>
+ <section class="dh-main">
+ <div class="hub-notice" id="hub-notice"><i data-icon="spark"></i><p>我可以查询职工档案、解读体检报告，汇总五位数字员工的协作成果，并带你前往随访、方案与审核工作台。</p><button aria-label="关闭功能说明" id="hub-notice-close">×</button></div>
+ <header class="dh-main-header"><div><p>职业健康服务工作台</p><h1>健康服务对话 <span>AI</span></h1></div><div class="dh-mode-tag">正在连接服务</div></header>
+ <div class="dh-context-bar"><div class="dh-context-label"><i data-icon="user"></i><span>服务对象</span></div><input id="dh-employee-search" type="search" placeholder="按姓名或工号搜索" aria-label="搜索服务对象"><select id="dh-patient-context" aria-label="选择职工"><option value="">正在读取职工资料…</option></select><span class="dh-context-note">当前单位 · 操作先确认</span></div>
+ <div class="dh-capability-bar"><div class="dh-capability-label">快捷查询</div><div id="dh-workbench-tools" class="dh-workbench-tools"></div><button id="hub-star" aria-pressed="false" title="关注当前对话">☆ 关注</button></div>
+ <div class="dh-conversation-area"><div class="dh-workbench-intro" id="dh-workbench-intro"><div class="dh-intro-avatar"><img id="dh-page-avatar" src="/assets/images/digital-doctor-female.png" alt="数字健康师"></div><p class="dh-intro-eyebrow">YOUR OCCUPATIONAL HEALTH ASSISTANT</p><h2 id="dh-welcome-title">你好，欢迎来到健康服务工作台</h2><p class="dh-intro-description">从一份体检报告出发，连接档案、评估与健康关怀。<br>查询职工、整理报告，了解数字员工的处理进度。</p><div class="dh-starter-grid" id="dh-starter-grid"></div><div class="dh-preview-note">依据当前单位授权数据回答；AI分析供医生核验。</div></div><div class="dh-chat-host dh-page-chat-host" id="dh-page-chat-host"></div></div>
+ <div class="dh-composer-tools"><button id="dh-page-attach" type="button">＋ 上传体检报告</button><button id="dh-page-voice" type="button" hidden>语音输入</button><span id="dh-context-status">Enter 发送 · Shift + Enter 换行</span></div>
+ </section>
+ <aside class="dh-insights-sidebar">
+ <section class="hub-card"><h2><i data-icon="user"></i>当前服务对象</h2><div class="hub-scope"><p>服务范围：<b id="hub-total">正在读取</b></p><p>我的角色：<b id="hub-role">正在读取</b></p><p>工作重点：档案查询、报告解读与协作跟进</p></div><div id="hub-selected" hidden></div></section>
+ <section class="hub-card"><h2><i data-icon="bell"></i>重点提醒 <button id="hub-refresh" title="刷新业务数据" aria-label="刷新业务数据">↻</button></h2><div class="hub-reminders"><button data-prompt="查询当前单位已确认的高风险和极高风险职工，未评估人数单独说明"><i class="red">!</i><span>已确认风险关注职工</span><b id="reminder-risk">—</b><span>›</span></button><button data-tasks="pending_review"><i class="orange">◷</i><span>等待人工审核任务</span><b id="reminder-review">—</b><span>›</span></button><button data-worker="follow"><i class="blue">▦</i><span>随访小谷待处理任务</span><b id="reminder-follow">—</b><span>›</span></button></div></section>
+ <section class="hub-card"><h2><i data-icon="network"></i>五个数字员工协同状态 <small id="hub-sync">连接中</small></h2><div id="hub-workers"></div><button class="hub-text-link" data-navigate="/assets/agents/overview.html">进入 AI 智能体总览 ›</button></section>
+ <section class="hub-card"><h2><i data-icon="spark"></i>快捷操作</h2><div class="hub-quick-grid"><button data-prompt="我想查询职工健康档案，请让我提供姓名或工号"><i data-icon="user"></i>查询职工档案</button><button data-navigate="/assets/agents/plan.html"><i data-icon="file"></i>生成干预方案</button><button data-navigate="/assets/agents/follow.html"><i data-icon="calendar"></i>发起健康随访</button><button data-navigate="/assets/assessment/exam.html"><i data-icon="chart"></i>查看评估报告</button><button data-navigate="/manage/workbench/alerts"><i data-icon="alert"></i>查看风险预警</button><button data-prompt="请调用数字员工协同总览工具，汇总五位数字员工今日任务、积压任务、待人工审核和最近成果，说明数据口径，不要虚构已执行的工作"><i data-icon="layers"></i>汇总 AI 今日汇报</button></div></section>
+ <p id="hub-data-status" role="status">正在读取当前单位的业务数据…</p>
+ </aside>
+</main>
+<div id="dh-toast" class="dh-toast" role="status" aria-live="polite" hidden></div><input id="dh-page-files" type="file" hidden>
+<dialog id="hub-task-dialog"><header><div><p>数字员工协作</p><h2 id="hub-task-title">业务任务</h2></div><button id="hub-task-close" aria-label="关闭任务列表">×</button></header><div id="hub-task-body"></div><footer><button id="hub-task-prev">上一页</button><span id="hub-task-page"></span><button id="hub-task-next">下一页</button></footer></dialog>
+<script src="/editormd/lib/marked.min.js"></script><script src="/assets/js/digital-health.js?v=20261125healthhub"></script><script>DigitalHealth.mountPage();</script><script src="health.js?v=20261125"></script>
+</body></html>

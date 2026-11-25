@@ -1,0 +1,11 @@
+window.calls=[];window.confirm=()=>true;
+let draft=structuredClone(SEED);draft.rules.forEach((r,i)=>Object.assign(r,{id:'00000000-0000-4000-8000-'+String(i+1).padStart(12,'0'),state:'enabled',match:'any',updatedAt:'2026-11-25 01:00:00'}));
+let version=1,release=null,releases=[];
+const categories={report:'体检报告',abnormal:'异常指标',review:'复查预约',plan:'健康方案',contact:'联系管理员',miniapp:'小程序使用',occupational:'职业健康',health:'健康知识'};
+function view(){return {initialized:true,version,release,draft:structuredClone(draft),categories,statistics:{requests:0,replies:0,handoffs:0,failures:0,processing:0,hitRate:null,trend:[],rules:[],suggestions:[]}};}
+window.fetch=async (url,o={})=>{let u=new URL(url,location.origin),p=u.pathname,b=o.body?JSON.parse(o.body):{};calls.push({path:p,method:o.method||'GET',body:b});let d;
+if(p==='/ehr/api/context')d={csrfToken:'test'};
+else if(p.endsWith('/releases'))d=releases;
+else if(p.endsWith('/test'))d={type:b.question.includes('胸痛')?'handoff':'fixed',boundary:b.question.includes('胸痛')?'urgent':'general',reason:'规则测试',reply:'这是合成测试回复，不发送给职工。',knowledge:[],automaticEnabled:true,generated:false};
+else {if(o.method){if(p.endsWith('/publish')){release={id:crypto.randomUUID(),number:releases.length+1,enabled:true,time:'2026-11-25 01:00:00',actor:'test'};releases.push(release);}else if(p.includes('/rules/')){let i=draft.rules.findIndex(r=>r.id===p.split('/').pop());draft.rules[i]={...b.rule,id:draft.rules[i].id};version++;}else if(p.endsWith('/rules')){draft.rules.push({...b.rule,id:crypto.randomUUID()});version++;}else if(p.endsWith('/batch')){if(b.action==='copy')b.ids.forEach(id=>draft.rules.push({...draft.rules.find(r=>r.id===id),id:crypto.randomUUID(),state:'draft'}));else if(b.action==='delete')draft.rules=draft.rules.filter(r=>!b.ids.includes(r.id));else draft.rules.forEach(r=>{if(b.ids.includes(r.id))r.state=b.action==='enable'?'enabled':'disabled';});version++;}else if(p.endsWith('/settings')){draft.enabled=b.enabled;draft.knowledge=b.knowledge;version++;}else if(p.endsWith('/import')){b.rules.forEach(r=>draft.rules.push({...r,id:crypto.randomUUID(),state:'draft'}));version++;}else if(p.endsWith('/rollback')){release={...release,number:releases.length+1};releases.push(release);version++;}}d=view();}
+return new Response(JSON.stringify({code:0,data:d}),{status:200,headers:{'Content-Type':'application/json'}});};

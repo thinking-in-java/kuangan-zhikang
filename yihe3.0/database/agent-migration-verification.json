@@ -1,0 +1,13 @@
+{
+  "version": "V008_a_digital_health_agent",
+  "applied": true,
+  "tables": [
+    "a_agent_conversations",
+    "a_agent_turns",
+    "a_agent_actions",
+    "a_agent_tool_logs"
+  ],
+  "sql_sha256": "f1cdf7d67fc6f82d41a2544cacb21e184cfd1b769fb28869347d5f59d0a84696",
+  "legacy_unchanged": true,
+  "verified_at": "2026-11-17T18:09:19.386775+08:00"
+}

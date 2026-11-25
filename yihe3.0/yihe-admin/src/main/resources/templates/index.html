@@ -288,9 +288,9 @@
 <script type="text/javascript" th:src="@{/assets/js/common.js}"></script>
 <script th:src="@{/assets/js/socket.io.min.js}"></script>
 <script type="text/javascript" th:src="@{/assets/js/GoEasyDemo-IM-Chat/goeasy.min.js}"></script>
-<script th:src="@{/assets/js/mine-navigation.js(v=20261114)}"></script>
+<script th:src="@{/assets/js/mine-navigation.js(v=20261125-order2)}"></script>
 <script th:src="@{/editormd/lib/marked.min.js}"></script>
-<script th:src="@{/assets/js/digital-health.js(v=20261117dock2)}"></script>
+<script th:src="@{/assets/js/digital-health.js(v=20261125healthhub)}"></script>
 <script th:inline="javascript">
     var upmsPermissions = [[${upmsPermissions}]]
     console.log(upmsPermissions,"upmsPermissionsupmsPermissionsupmsPermissionsupmsPermissionsupmsPermissionsupmsPermissionsupmsPermissionsupmsPermissions");
@@ -341,9 +341,7 @@
             group.children = (item.children || []).filter(function (child) {
                 return String(child.uri || '').split('?')[0] !== '/assets/assessment/exam.html';
             });
-            if (!group.children.some(function (child) { return String(child.uri || '').split('?')[0] === '/assets/digital-health/index.html'; })) {
-                group.children = group.children.concat([{ name: '数字健康师', uri: '/assets/digital-health/index.html?v=20261117-dock2', type: 4, pid: item.permissionId, children: [] }]);
-            }
+            group.children = group.children.filter(function (child) { return String(child.uri || '').split('?')[0] !== '/assets/digital-health/index.html'; });
             return group;
         });
         var assessmentCenterMenu = { name: '健康评估中心', type: 1, pid: -1, children: [
@@ -381,6 +379,7 @@
                 assessmentCenterMenu,
                 { name: 'AI 数字员工中心', type: 1, pid: -1, children: [
                     { name: 'AI 智能体总览', uri: '/assets/agents/overview.html', type: 4, children: [] },
+                    { name: '数字健康师', uri: '/assets/agents/health.html?v=20261125', type: 4, children: [] },
                     { name: '档案小谷工作台', uri: '/assets/agents/archive.html', type: 4, children: [] },
                     { name: '评估小谷工作台', uri: '/assets/agents/assess.html', type: 4, children: [] },
                     { name: '随访小谷工作台', uri: '/assets/agents/follow.html', type: 4, children: [] },
@@ -397,7 +396,6 @@
                 { name: '职工中心', type: 1, pid: -1, children: [
                     { name: '职工列表', uri: '/manage/employees/list', type: 4, children: [] },
                     { name: '职工分组', uri: '/manage/employees/groups', type: 4, children: [] },
-                    { name: '职工标签', uri: '/manage/employees/tags', type: 4, children: [] },
                     { name: '职工批量导入', uri: '/manage/employees/import', type: 4, children: [] },
                     { name: '小程序账号绑定', uri: '/manage/employees/bindings', type: 4, children: [] },
                     { name: '企业组织与岗位管理', uri: '/manage/employees/organization', type: 4, children: [] }
@@ -425,6 +423,13 @@
                     { name: '用户与角色权限', uri: '/manage/system-center/users', type: 4, children: [] }
                 ] },
                 workerMenu,
+                { name: '沟通与服务中心', type: 1, pid: -1, children: [
+                    { name: '职工会话', uri: '/manage/communication/conversations', type: 4, children: [] },
+                    { name: '聊天记录', uri: '/manage/communication/history', type: 4, children: [] },
+                    { name: '自动回复', uri: '/manage/communication/auto-replies', type: 4, children: [] },
+                    { name: '服务知识库', uri: '/manage/communication/knowledge', type: 4, children: [] },
+                    { name: '沟通统计分析', uri: '/manage/communication/analytics', type: 4, children: [] }
+                ] },
                 { name: '健康档案', type: 1, pid: -1, children: [
                     { name: '智能档案页', uri: '/assets/health-archive/index.html?v=archive-report-cascade-20261117', type: 4, children: [] },
                     { name: '档案统计分析', uri: '/assets/health-archive/statistics.html?v=archive-report-cascade-20261117', type: 4, children: [] },
