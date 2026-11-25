@@ -9,5 +9,5 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/manage/employees")
 public class EmployeeCenterController {
     @GetMapping("/{page:list|groups|tags|import|bindings|organization}")
-    public String page(@PathVariable String page,Model model,HttpServletResponse response){response.setHeader("Cache-Control","no-store");model.addAttribute("employeePage",page);return "employee-center/index";}
+    public String page(@PathVariable String page,Model model,HttpServletResponse response){response.setHeader("Cache-Control","no-store");model.addAttribute("employeePage",page);return "organization".equals(page)?"employee-center/organization":"employee-center/index";}
 }
