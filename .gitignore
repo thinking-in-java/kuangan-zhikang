@@ -58,12 +58,7 @@ __pycache__/
 **/database-before.sql*
 **/remote-full.sql
 
-# Mini-program build and local development files
-/miniapp/node_modules/
-/miniapp/dist/
-/miniapp/**/node_modules/
-/miniapp/project.private.config.json
-
-# Keep mini-program icon assets (the macOS Icon? rule also matches icons directories).
-!/miniapp/**/icons/
-!/miniapp/**/icons/**
+# Mini-program sources and WeChat deployment settings remain local.
+/miniapp/
+/yihe3.0/deploy/wechat-miniapp.json
+/yihe3.0/deploy/wechat-miniapp-setup.md

@@ -1,8 +1,0 @@
-<script setup lang="ts">
-import type {Message} from '../types'
-import AppIcon from './AppIcon.vue'
-defineProps<{message:Message}>()
-defineEmits<{retry:[message:Message]}>()
-</script>
-<template><view class="message" :class="message.role"><view v-if="message.role==='assistant'" class="bot-avatar"><AppIcon name="bot" :size="23"/></view><view class="message-body"><view class="bubble"><text>{{message.content}}</text><view v-if="message.status==='sending'" class="thinking">正在思考中…</view><view v-if="message.sources?.length" class="sources"><text class="source-title">参考来源</text><text v-for="s in message.sources" :key="s">{{s}}</text></view></view><view v-if="message.status==='failed'" class="failed" @tap="$emit('retry',message)">发送失败 · 点击重试</view></view></view></template>
-<style scoped>.message{display:flex;gap:16rpx;margin-bottom:30rpx;align-items:flex-start}.user{flex-direction:row-reverse}.bot-avatar{padding:11rpx;background:#e7f5ec;border-radius:16rpx;display:flex;flex-shrink:0}.message-body{max-width:86%}.bubble{background:#fff;border-radius:4rpx 23rpx 23rpx 23rpx;padding:24rpx;font-size:27rpx;color:#3b5747;line-height:1.85;white-space:pre-wrap;border:1px solid #edf2ee;word-break:break-word}.user .bubble{background:#008f57;color:#fff;border:0;border-radius:23rpx 4rpx 23rpx 23rpx}.sources{border-top:1px solid #edf2ee;margin-top:20rpx;padding-top:16rpx;color:#94a496;font-size:21rpx}.sources text{display:block}.source-title{font-weight:550;margin-bottom:6rpx;color:#6d8b75}.failed{font-size:22rpx;color:#bd715b;margin-top:10rpx;text-align:right}.thinking{font-size:23rpx;color:#80a089}</style>
