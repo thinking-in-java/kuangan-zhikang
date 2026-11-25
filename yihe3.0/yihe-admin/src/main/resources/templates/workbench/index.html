@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>工作台 · 矿安智康</title>
+<link rel="stylesheet" th:href="@{/assets/css/health-workbench.css(v=20261123b)}">
+<script defer th:src="@{/assets/js/echarts.min.js}"></script>
+<script defer th:src="@{/assets/js/digital-worker-service.js(v=worker-independent-v1)}"></script>
+<script defer th:src="@{/assets/js/health-workbench-data.js(v=20261123b)}"></script>
+<script defer th:src="@{/assets/js/health-workbench.js(v=20261124r2)}"></script><link rel="stylesheet" th:href="@{/assets/css/workspace-layout.css(v=20261124r4)}"></head>
+<body class="workspace-page workbench-overview" th:attr="data-base=@{/},data-user=${displayName}">
+<header class="hero"><div class="hero-top"><span class="brand">✦ 矿安智康 <small>OCCUPATIONAL HEALTH</small></span><div class="tools"><span class="live-dot"></span>健康管理工作台<button id="fullscreen" title="全屏展示" aria-label="全屏展示">⛶</button></div></div>
+<div class="hero-title"><div><p>让每一份辛勤，都有健康守护</p><h1>煤矿职业健康 AI 管理平台</h1><span>AI 赋能 · 精准评估 · 主动干预 · 守护矿工健康</span></div><div class="clock"><strong id="clock">--:--:--</strong><span id="date">正在获取时间</span></div></div></header>
+<main>
+<section class="welcome"><div class="greeting"><div class="robot" aria-hidden="true"><i></i><div>● ●</div><span>◡</span></div><div><div class="eyebrow">YOUR HEALTH WORKSPACE</div><h2 id="greeting">您好，健康管理师</h2><p id="greeting-note">正在同步工作台数据…</p></div></div><nav class="quick-actions" aria-label="快捷操作"><a class="action blue" th:href="@{/assets/health-archive/management.html(action=upload)}"><span>↥</span>上传体检报告</a><button class="action teal" data-worker="follow"><span>＋</span>新建随访</button><button class="action purple" data-worker="plan"><span>▣</span>生成干预方案</button><a class="action blue" th:href="@{/assets/digital-health/index.html}"><span>✧</span>AI 智能助手</a></nav></section>
+<div class="data-bar"><span id="data-status" role="status" aria-live="polite">正在读取当前账号数据</span><button id="refresh">↻ 刷新数据</button></div>
+<section class="metrics" aria-label="健康管理概况" id="metrics"></section>
+<section class="middle-grid">
+<article class="panel risk"><div class="panel-head"><h2><em>♧</em>健康风险分布</h2><a th:href="@{/assets/health-archive/statistics.html}">统计分析 ›</a></div><div class="risk-content"><div id="risk-chart" class="ring-chart" role="img" aria-label="在档职工风险等级分布"></div><div id="risk-legend" class="legend"></div></div><p class="footnote">按在档职工统计，未评估单独列示</p></article>
+<article class="panel trend"><div class="panel-head"><h2 id="trend-title">健康数据趋势</h2><select id="trend-mode" aria-label="趋势统计类型"><option value="abnormal">近30日健康异常</option><option value="growth">档案增长</option></select></div><div id="trend-chart" class="trend-chart" role="img" aria-label="档案增长趋势"></div><div id="trend-empty" class="chart-empty" hidden><span>⌁</span><b>健康异常趋势待接入</b><p>当前接口未提供按日的异常与高风险统计</p></div><p class="footnote" id="trend-note">近12个月新增档案人数 · 当前账号授权范围</p></article>
+<article class="panel alerts" id="alerts"><div class="panel-head"><h2>重点预警 <small id="alert-count"></small></h2><a th:href="@{/manage/workbench/alerts}">查看全部 ›</a></div><div id="alert-list" class="alert-list"><div class="empty">正在查询预警…</div></div><p class="footnote">当前账号的指标预警记录</p></article>
+</section>
+<section class="bottom-grid"><article class="panel team"><div class="panel-head"><h2><em>AI</em> 数字员工工作状态</h2><a th:href="@{/manage/digital-workers/overview}">协作中心 ›</a></div><div class="worker-grid" id="workers"></div><p class="footnote">累计任务与当前活跃任务 · 点击员工进入工作台</p></article>
+<article class="panel execution"><div class="panel-head"><h2>方案任务执行情况</h2><span class="scope">累计任务</span></div><div class="execution-body"><div id="plan-chart" class="ring-chart" role="img" aria-label="方案任务完成率"></div><div class="legend" id="plan-legend"></div></div><p class="footnote">方案小谷任务口径，非本月实际干预效果</p></article></section>
+<footer>矿安智康 · 数据按当前登录账号权限展示 <span>健康管理，从每一天开始</span></footer>
+</main></body></html>

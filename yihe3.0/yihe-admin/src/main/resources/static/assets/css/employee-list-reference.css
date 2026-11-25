@@ -1,0 +1,62 @@
+/* Employee list only: keep existing workflows and fit the reference composition. */
+body.workspace-business[data-page=list] main.employee-shell{display:flex;flex-direction:column;min-height:100dvh}
+body.workspace-business[data-page=list] #app{display:grid;grid-template-rows:100px auto minmax(460px,1fr);gap:12px;flex:1}
+body.workspace-business[data-page=list] .employee-heading{margin-bottom:5px}
+body.workspace-business[data-page=list] .employee-heading h1:before{content:'♟';font-size:29px}
+body.workspace-business[data-page=list] .ec-kpis{margin:0;gap:12px}
+body.workspace-business[data-page=list] .ec-kpi{height:100%;padding:16px;gap:14px;border-radius:15px;box-shadow:0 4px 10px #3787d51a}
+body.workspace-business[data-page=list] .ec-kpi>i{border-radius:50%;width:57px;height:57px;line-height:57px;font-size:33px}
+body.workspace-business[data-page=list] .ec-kpi b{font-size:15px;color:#17243b}
+body.workspace-business[data-page=list] .ec-kpi strong{font-size:31px;color:#092d70}
+body.workspace-business[data-page=list] .ec-kpi small{font-size:12px;color:#47628a}
+body.workspace-business[data-page=list] #app>.ec-kpis+.panel{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:10px;margin:0;padding:14px}
+body.workspace-business[data-page=list] #app>.ec-kpis+.panel>.panel-head{grid-column:2;grid-row:1;margin:0}
+body.workspace-business[data-page=list] #app>.ec-kpis+.panel>.filters{grid-column:1;grid-row:1;min-width:0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px 14px;padding:0}
+body.workspace-business[data-page=list] .ec-filters label{display:flex;gap:6px;white-space:nowrap;font-size:12px}
+body.workspace-business[data-page=list] .ec-filters label:first-child{grid-column:span 1}
+body.workspace-business[data-page=list] .ec-filters input,body.workspace-business[data-page=list] .ec-filters select{width:100%;min-width:0;max-width:none;height:32px;font-size:12px}
+body.workspace-business[data-page=list] .ec-filters>.wb-button{position:relative;grid-row:3;width:max-content}
+body.workspace-business[data-page=list] .ec-filters>.wb-button:last-child{margin-left:76px;grid-column:1;grid-row:3}
+body.workspace-business[data-page=list] .ec-actions{flex-direction:column;gap:8px}
+body.workspace-business[data-page=list] .ec-layout{grid-template-columns:minmax(0,3.15fr) minmax(280px,1fr);gap:12px;min-height:0}
+body.workspace-business[data-page=list] .ec-main{display:flex;min-height:0}
+body.workspace-business[data-page=list] .ec-main>.ec-panel{width:100%;display:flex;flex-direction:column;margin:0;padding:10px;border-radius:15px;min-width:0;box-shadow:0 3px 10px #3787d514}
+body.workspace-business[data-page=list] .ec-main .ec-toolbar{flex:none;margin-bottom:8px;min-height:28px}
+body.workspace-business[data-page=list] .ec-main .ec-table{flex:1;display:flex;min-height:0;border:0}
+body.workspace-business[data-page=list] .ec-main table{table-layout:fixed;min-width:950px;height:100%}
+body.workspace-business[data-page=list] .ec-main th{height:35px;font-size:12px;color:#17253b;background:#eaf3fe;padding:5px}
+body.workspace-business[data-page=list] .ec-main td{height:36px;padding:5px;font-size:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+body.workspace-business[data-page=list] .ec-main th:nth-child(1){width:25px}
+body.workspace-business[data-page=list] .ec-main th:nth-child(2){width:65px}
+body.workspace-business[data-page=list] .ec-main th:nth-child(3){width:76px}
+body.workspace-business[data-page=list] .ec-main th:nth-child(4){width:63px}
+body.workspace-business[data-page=list] .ec-main th:nth-child(5){width:9%}
+body.workspace-business[data-page=list] .ec-main th:nth-child(6){width:7%}
+body.workspace-business[data-page=list] .ec-main th:nth-child(7){width:8%}
+body.workspace-business[data-page=list] .ec-main th:nth-child(8){width:10%}
+body.workspace-business[data-page=list] .ec-main th:nth-child(n+9):nth-child(-n+12){width:65px}
+body.workspace-business[data-page=list] .ec-main th:last-child{width:145px}
+body.workspace-business[data-page=list] .ec-main .ec-person{min-width:0;font-size:12px;padding:0;white-space:nowrap}
+body.workspace-business[data-page=list] .ec-main .ec-link{font-size:11px;padding:2px}
+body.workspace-business[data-page=list] .ec-main .ec-row-actions{justify-content:flex-start;gap:2px}
+body.workspace-business[data-page=list] .ec-main .pagination{flex:none;margin-top:auto;min-height:40px;padding-top:10px}
+body.workspace-business[data-page=list] .ec-aside{grid-template-rows:1fr 1.12fr;align-content:stretch;min-height:0}
+body.workspace-business[data-page=list] .ec-aside>.ec-panel{margin:0;padding:12px;border-radius:15px;min-height:0;display:flex;flex-direction:column}
+body.workspace-business[data-page=list] .ec-aside h2{font-size:16px;color:#17243b}
+body.workspace-business[data-page=list] .ec-aside>.ec-panel:first-child{display:grid;grid-template-columns:44% minmax(0,1fr);grid-template-rows:auto 1fr;column-gap:8px}
+body.workspace-business[data-page=list] .ec-aside>.ec-panel:first-child .panel-head{grid-column:1/-1}
+body.workspace-business[data-page=list] #risk-chart{height:100%;min-height:135px}
+body.workspace-business[data-page=list] .ec-chart-legend{align-content:center;gap:13px;font-size:12px}
+body.workspace-business[data-page=list] .ec-chart-legend b{white-space:nowrap;color:#203b62}
+body.workspace-business[data-page=list] #employee-risk-trend{flex:1;min-height:145px;width:100%}
+body.workspace-business[data-page=list] .ec-trend-note{font-size:10px;color:#7890aa;margin:0;text-align:right}
+@media(min-width:1000px) and (min-height:850px){body.workspace-business[data-page=list] main.employee-shell{height:100dvh}body.workspace-business[data-page=list] #app{grid-template-rows:100px auto minmax(0,1fr)}body.workspace-business[data-page=list] .ec-main td{height:40px}}
+@media(min-width:1450px){body.workspace-business[data-page=list] #app>.ec-kpis+.panel>.filters{grid-template-columns:repeat(4,minmax(0,1fr))}body.workspace-business[data-page=list] .ec-filters>.wb-button{grid-column:5;grid-row:1}body.workspace-business[data-page=list] .ec-filters>.wb-button:last-child{grid-column:5;grid-row:2;margin-left:0}body.workspace-business[data-page=list] #app>.ec-kpis+.panel>.filters{grid-template-columns:repeat(4,minmax(0,1fr)) 70px}}
+@media(min-width:1000px) and (max-height:780px){body.workspace-business[data-page=list] main.employee-shell{height:100dvh}body.workspace-business[data-page=list] #app{grid-template-rows:60px auto minmax(0,1fr);gap:8px}body.workspace-business[data-page=list] .ec-kpi{padding:8px 10px;gap:8px}body.workspace-business[data-page=list] .ec-kpi>i{width:35px;height:35px;line-height:35px;font-size:24px}body.workspace-business[data-page=list] .ec-kpi b{font-size:11px}body.workspace-business[data-page=list] .ec-kpi strong{font-size:24px}body.workspace-business[data-page=list] #app>.ec-kpis+.panel{padding:8px;gap:7px}body.workspace-business[data-page=list] .ec-filters label{font-size:10px}body.workspace-business[data-page=list] .ec-filters input,body.workspace-business[data-page=list] .ec-filters select{height:27px;font-size:10px}body.workspace-business[data-page=list] #app>.ec-kpis+.panel>.filters{gap:5px 8px}body.workspace-business[data-page=list] .ec-layout{grid-template-columns:minmax(0,1fr) 240px;gap:8px}body.workspace-business[data-page=list] .ec-main>.ec-panel{padding:7px}body.workspace-business[data-page=list] .ec-main .ec-toolbar{margin-bottom:4px;min-height:24px}body.workspace-business[data-page=list] .ec-main th{height:28px;font-size:10px}body.workspace-business[data-page=list] .ec-main table{min-width:950px}body.workspace-business[data-page=list] .ec-main td{height:27px!important;padding:3px 4px!important;font-size:11px!important}body.workspace-business[data-page=list] .ec-main .pagination{min-height:32px;padding-top:5px}body.workspace-business[data-page=list] .ec-aside>.ec-panel{padding:9px}body.workspace-business[data-page=list] .ec-aside h2{font-size:12px}body.workspace-business[data-page=list] .ec-chart-legend{gap:8px;font-size:10px}body.workspace-business[data-page=list] #risk-chart{min-height:105px}body.workspace-business[data-page=list] #employee-risk-trend{min-height:110px}}
+@media(min-width:1000px){body.workspace-business[data-page=list] main.employee-shell{height:100dvh;min-height:0}body.workspace-business[data-page=list] #app{min-height:0;grid-template-rows:100px auto minmax(0,1fr)}body.workspace-business[data-page=list] #app>.ec-kpis+.panel>.filters{grid-template-columns:repeat(20,minmax(0,1fr)) 70px;gap:9px 6px}body.workspace-business[data-page=list] .ec-filters label:nth-child(-n+4){grid-column:span 5}body.workspace-business[data-page=list] .ec-filters label:nth-child(n+5){grid-column:span 4}body.workspace-business[data-page=list] .ec-filters>.wb-button{grid-column:21;grid-row:1;margin:0}body.workspace-business[data-page=list] .ec-filters>.wb-button:last-child{grid-column:21;grid-row:2;margin:0}body.workspace-business[data-page=list] .ec-main .ec-table{flex-basis:0}body.workspace-business[data-page=list] .ec-main th:nth-child(2){width:70px}body.workspace-business[data-page=list] .ec-main th:nth-child(6){width:9%}body.workspace-business[data-page=list] .ec-main th:nth-child(5){width:8%}}
+@media(min-width:1000px) and (max-height:780px){body.workspace-business[data-page=list] #app{grid-template-rows:60px auto minmax(0,1fr)}body.workspace-business[data-page=list] #app>.ec-kpis+.panel>.filters{gap:5px 4px}body.workspace-business[data-page=list] .ec-filters label{gap:3px}body.workspace-business[data-page=list] .ec-filters>.wb-button{padding:4px 8px;height:27px}body.workspace-business[data-page=list] .ec-main td{height:25px!important}}
+@media(max-width:999px){body.workspace-business[data-page=list] #app{display:block}body.workspace-business[data-page=list] #app>.ec-kpis+.panel{display:flex;flex-direction:column;align-items:stretch;margin:12px 0}body.workspace-business[data-page=list] #app>.ec-kpis+.panel>.filters{display:flex;flex-wrap:wrap}body.workspace-business[data-page=list] .ec-actions{flex-direction:row}body.workspace-business[data-page=list] .ec-layout{grid-template-columns:1fr}body.workspace-business[data-page=list] .ec-main table{height:auto}body.workspace-business[data-page=list] .ec-aside{margin-top:12px}body.workspace-business[data-page=list] .ec-aside>.ec-panel{min-height:220px}body.workspace-business[data-page=list] .ec-main td{height:36px}}
+ @media(min-width:1000px){body.workspace-business[data-page=list] .ec-main .ec-table tbody td{height:1px!important}}
+body.workspace-business[data-page=list] .ec-kpi>i{display:grid;place-items:center}body.workspace-business[data-page=list] .ec-kpi>i svg{width:33px;height:33px}body.workspace-business[data-page=list] .ec-chart-legend small{font-weight:400;font-size:10px;color:#617997}body.workspace-business[data-page=list] .employee-heading h1:before{content:'♧';font-size:29px}
+@media(min-width:1000px) and (max-width:1350px){body.workspace-business[data-page=list] .ec-main table{min-width:840px}body.workspace-business[data-page=list] .ec-main th:nth-child(2){width:60px}body.workspace-business[data-page=list] .ec-main th:nth-child(3){width:63px}body.workspace-business[data-page=list] .ec-main th:nth-child(4){width:50px}body.workspace-business[data-page=list] .ec-main th:nth-child(n+9):nth-child(-n+12){width:50px}body.workspace-business[data-page=list] .ec-main th:last-child{width:115px}body.workspace-business[data-page=list] .ec-main .ec-link{font-size:10px;padding:1px}body.workspace-business[data-page=list] .ec-main td .pill{font-size:9px;padding:2px 4px}body.workspace-business[data-page=list] .ec-kpi>i svg{width:23px;height:23px}body.workspace-business[data-page=list] .ec-chart-legend small{font-size:8px}}
+@media(min-width:1000px){body.workspace-business[data-page=list] .ec-main .ec-table:not(:has(tbody tr:nth-child(10))){align-items:flex-start}body.workspace-business[data-page=list] .ec-main .ec-table:not(:has(tbody tr:nth-child(10))) table{height:auto}body.workspace-business[data-page=list] .ec-main .ec-table:not(:has(tbody tr:nth-child(10))) tbody td{height:36px!important}body.workspace-business[data-page=list] .ec-main:has(tbody tr:nth-child(11)) .ec-table{flex:none}body.workspace-business[data-page=list] .ec-main:has(tbody tr:nth-child(11)) table{height:auto}body.workspace-business[data-page=list] .ec-main:has(tbody tr:nth-child(11)) tbody td{height:32px!important}}
