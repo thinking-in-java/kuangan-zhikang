@@ -173,7 +173,7 @@
 
     </style>
 <link rel="stylesheet" href="/assets/css/health-agent.css?v=20261117-dock2"/>
-</head>
+<link rel="stylesheet" th:href="@{/assets/css/admin-reference.css(v=20261124r2)}"></head>
 <body class="layui-layout-body mine-admin">
 <input id="change" type="hidden" th:value="${yhuserrole[0].roletype}">
 <input id="usercode" type="hidden" th:value="${yh.userCode}">
@@ -357,6 +357,36 @@
                     { name: '工作总览', uri: '/manage/workbench', type: 4, children: [] },
                     { name: '我的待办', uri: '/manage/workbench/todos', type: 4, children: [] },
                     { name: '预警中心', uri: '/manage/workbench/alerts', type: 4, children: [] }
+                ] },
+                { name: '职工中心', type: 1, pid: -1, children: [
+                    { name: '职工列表', uri: '/manage/employees/list', type: 4, children: [] },
+                    { name: '职工分组', uri: '/manage/employees/groups', type: 4, children: [] },
+                    { name: '职工标签', uri: '/manage/employees/tags', type: 4, children: [] },
+                    { name: '职工批量导入', uri: '/manage/employees/import', type: 4, children: [] },
+                    { name: '小程序账号绑定', uri: '/manage/employees/bindings', type: 4, children: [] },
+                    { name: '企业组织与岗位管理', uri: '/manage/employees/organization', type: 4, children: [] }
+                ] },
+                { name: '健康干预中心', type: 1, pid: -1, children: [
+                    { name: '健康方案管理', uri: '/manage/intervention/plans', type: 4, children: [] },
+                    { name: 'AI 方案助手', uri: '/manage/intervention/assistant', type: 4, children: [] },
+                    { name: '随访计划', uri: '/manage/intervention/followups', type: 4, children: [] },
+                    { name: '随访任务中心', uri: '/manage/intervention/tasks', type: 4, children: [] },
+                    { name: '复查管理', uri: '/manage/intervention/revisits', type: 4, children: [] },
+                    { name: '预警处置', uri: '/manage/intervention/alerts', type: 4, children: [] },
+                    { name: '心理干预', uri: '/manage/intervention/psychology', type: 4, children: [] },
+                    { name: '健康促进', uri: '/manage/intervention/promotion', type: 4, children: [] }
+                ] },
+                { name: '数据分析中心', type: 1, pid: -1, children: [
+                    { name: '企业健康总览', uri: '/manage/analytics/overview', type: 4, children: [] },
+                    { name: '职业健康数据分析', uri: '/manage/analytics/occupational', type: 4, children: [] },
+                    { name: '疾病风险统计', uri: '/manage/analytics/disease', type: 4, children: [] },
+                    { name: '人群健康趋势', uri: '/manage/analytics/population', type: 4, children: [] },
+                    { name: '干预效果分析', uri: '/manage/analytics/intervention-effect', type: 4, children: [] },
+                    { name: '随访效果分析', uri: '/manage/analytics/followup-effect', type: 4, children: [] },
+                    { name: '数字员工效率分析', uri: '/manage/analytics/worker-efficiency', type: 4, children: [] }
+                ] },
+                { name: '系统管理中心', type: 1, pid: -1, children: [
+                    { name: '用户与角色权限', uri: '/manage/system-center/users', type: 4, children: [] }
                 ] },
                 workerMenu,
                 { name: '健康档案', type: 1, pid: -1, children: [
@@ -737,5 +767,5 @@
         });
     });
 </script>
-</body>
+<script defer th:src="@{/assets/js/workspace-shell.js(v=20261125r3)}"></script></body>
 </html>

@@ -6,8 +6,8 @@
 <script defer th:src="@{/assets/js/echarts.min.js}"></script>
 <script defer th:src="@{/assets/js/digital-worker-service.js(v=worker-independent-v1)}"></script>
 <script defer th:src="@{/assets/js/health-workbench-data.js(v=20261123b)}"></script>
-<script defer th:src="@{/assets/js/health-workbench.js(v=20261123b)}"></script></head>
-<body th:attr="data-base=@{/},data-user=${displayName}">
+<script defer th:src="@{/assets/js/health-workbench.js(v=20261124r2)}"></script><link rel="stylesheet" th:href="@{/assets/css/workspace-layout.css(v=20261124r4)}"></head>
+<body class="workspace-page workbench-overview" th:attr="data-base=@{/},data-user=${displayName}">
 <header class="hero"><div class="hero-top"><span class="brand">✦ 矿安智康 <small>OCCUPATIONAL HEALTH</small></span><div class="tools"><span class="live-dot"></span>健康管理工作台<button id="fullscreen" title="全屏展示" aria-label="全屏展示">⛶</button></div></div>
 <div class="hero-title"><div><p>让每一份辛勤，都有健康守护</p><h1>煤矿职业健康 AI 管理平台</h1><span>AI 赋能 · 精准评估 · 主动干预 · 守护矿工健康</span></div><div class="clock"><strong id="clock">--:--:--</strong><span id="date">正在获取时间</span></div></div></header>
 <main>
