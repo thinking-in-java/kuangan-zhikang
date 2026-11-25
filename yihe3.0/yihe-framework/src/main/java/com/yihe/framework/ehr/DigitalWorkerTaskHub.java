@@ -16,7 +16,7 @@ public class DigitalWorkerTaskHub {
     public DigitalWorkerTaskHub(EhrRepository db){this.db=db;}
     private static String string(String sql){return "CONVERT("+sql+" USING utf8mb4) COLLATE utf8mb4_unicode_ci";}
     private static String columns(String... expressions){List<String> result=new ArrayList<>();String[] names={"id","source","worker","type","title","status","nativeStatus","priority","recordId","memberCode","memberName"};for(int i=0;i<names.length;i++)result.add(string(expressions[i])+" "+names[i]);return String.join(",",result);}
-    private String union(EhrActor actor,List<Object> args){
+    String union(EhrActor actor,List<Object> args){
         if(actor.mobile)throw new EhrException(403,"任务总览仅供后台管理使用");
         args.addAll(Arrays.asList(actor.scope,actor.mode,actor.scope,actor.mode));
         String assignment="SELECT "+columns("t.task_id","'assignment'","t.worker_id","t.task_type","t.title","t.task_status","t.task_status","t.priority","t.record_id","t.member_code","p.employee_name")+

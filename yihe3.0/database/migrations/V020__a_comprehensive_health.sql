@@ -1,0 +1,41 @@
+-- Person-wide AI analyses and immutable clinician review records.
+CREATE TABLE IF NOT EXISTS a_comprehensive_analyses (
+ analysis_id CHAR(36) CHARACTER SET ascii COLLATE ascii_bin PRIMARY KEY,
+ scope_code VARCHAR(64) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
+ data_mode ENUM('real','synthetic') NOT NULL,
+ record_id CHAR(36) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
+ request_key CHAR(36) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
+ payload_digest CHAR(64) NOT NULL,
+ source_digest CHAR(64) NOT NULL,
+ source_json JSON NOT NULL,
+ analysis_state ENUM('pending','completed','failed','cancelled') NOT NULL,
+ output_text MEDIUMTEXT NULL,
+ error_code VARCHAR(80) NULL,
+ requested_by VARCHAR(100) NOT NULL,
+ row_version INT NOT NULL DEFAULT 1,
+ lease_until DATETIME(6) NULL,
+ created_at DATETIME(6) NOT NULL,
+ finished_at DATETIME(6) NULL,
+ UNIQUE KEY uq_comprehensive_request(scope_code,data_mode,request_key),
+ KEY ix_comprehensive_record(scope_code,data_mode,record_id,created_at,analysis_id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+CREATE TABLE IF NOT EXISTS a_comprehensive_reviews (
+ review_id CHAR(36) CHARACTER SET ascii COLLATE ascii_bin PRIMARY KEY,
+ scope_code VARCHAR(64) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
+ data_mode ENUM('real','synthetic') NOT NULL,
+ record_id CHAR(36) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
+ analysis_id CHAR(36) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
+ assessment_id CHAR(36) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
+ source_digest CHAR(64) NOT NULL,
+ review_json JSON NOT NULL,
+ reviewer VARCHAR(100) NOT NULL,
+ request_key CHAR(36) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
+ payload_digest CHAR(64) NOT NULL,
+ row_version INT NOT NULL DEFAULT 1,
+ published TINYINT NOT NULL DEFAULT 0,
+ published_at DATETIME(6) NULL,
+ created_at DATETIME(6) NOT NULL,
+ UNIQUE KEY uq_comprehensive_review_key(scope_code,data_mode,request_key),
+ UNIQUE KEY uq_comprehensive_analysis_review(analysis_id),
+ KEY ix_comprehensive_review_record(scope_code,data_mode,record_id,created_at)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

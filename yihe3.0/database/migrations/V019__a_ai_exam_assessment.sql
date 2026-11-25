@@ -1,0 +1,57 @@
+-- Report-specific AI analysis, human review and explicit publication.
+CREATE TABLE IF NOT EXISTS a_ai_exam_batches (
+ batch_id CHAR(36) CHARACTER SET ascii COLLATE ascii_bin PRIMARY KEY,
+ scope_code VARCHAR(64) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
+ data_mode ENUM('real','synthetic') NOT NULL,
+ operation ENUM('assess','publish') NOT NULL,
+ title VARCHAR(120) NOT NULL,
+ task_ids JSON NOT NULL,
+ requested_by VARCHAR(100) NOT NULL,
+ request_key CHAR(36) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
+ payload_digest CHAR(64) NOT NULL,
+ created_at DATETIME(6) NOT NULL,
+ UNIQUE KEY uq_ai_exam_batch_key(scope_code,data_mode,request_key)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+CREATE TABLE IF NOT EXISTS a_ai_exam_tasks (
+ task_id CHAR(36) CHARACTER SET ascii COLLATE ascii_bin PRIMARY KEY,
+ batch_id CHAR(36) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
+ scope_code VARCHAR(64) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
+ data_mode ENUM('real','synthetic') NOT NULL,
+ record_id CHAR(36) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
+ report_id CHAR(36) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
+ revision INT NOT NULL,
+ source_digest CHAR(64) NOT NULL,
+ source_json JSON NOT NULL,
+ ai_state ENUM('queued','running','completed','failed','cancelled') NOT NULL,
+ review_state ENUM('pending','confirmed','rejected') NOT NULL DEFAULT 'pending',
+ result_text MEDIUMTEXT NULL,
+ error_code VARCHAR(80) NULL,
+ risk_level ENUM('unknown','low','medium','high','critical') NOT NULL DEFAULT 'unknown',
+ assessment_id CHAR(36) CHARACTER SET ascii COLLATE ascii_bin NULL,
+ reviewer VARCHAR(100) NULL,
+ review_note VARCHAR(1500) NULL,
+ reviewed_at DATETIME(6) NULL,
+ published TINYINT NOT NULL DEFAULT 0,
+ published_at DATETIME(6) NULL,
+ requested_by VARCHAR(100) NOT NULL,
+ row_version INT NOT NULL DEFAULT 1,
+ created_at DATETIME(6) NOT NULL,
+ started_at DATETIME(6) NULL,
+ finished_at DATETIME(6) NULL,
+ duration_ms BIGINT NULL,
+ lease_until DATETIME(6) NULL,
+ KEY ix_ai_exam_report(scope_code,data_mode,report_id,revision,created_at,task_id),
+ KEY ix_ai_exam_claim(data_mode,ai_state,created_at),
+ KEY ix_ai_exam_batch(batch_id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+CREATE TABLE IF NOT EXISTS a_ai_exam_events (
+ event_id CHAR(36) CHARACTER SET ascii COLLATE ascii_bin PRIMARY KEY,
+ task_id CHAR(36) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
+ actor VARCHAR(100) NOT NULL,
+ action VARCHAR(32) NOT NULL,
+ note VARCHAR(1500) NOT NULL,
+ request_key CHAR(36) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
+ payload_digest CHAR(64) NOT NULL,
+ created_at DATETIME(6) NOT NULL,
+ UNIQUE KEY uq_ai_exam_event(task_id,request_key)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

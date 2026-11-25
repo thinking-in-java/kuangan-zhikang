@@ -1,0 +1,56 @@
+-- Dedicated occupational risk analyses; never overwrite source reports.
+CREATE TABLE IF NOT EXISTS a_occupational_risk_rules (
+ scope_code VARCHAR(64) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
+ data_mode ENUM('real','synthetic') NOT NULL,
+ rules_json JSON NOT NULL,
+ row_version INT NOT NULL DEFAULT 1,
+ updated_by VARCHAR(100) NOT NULL,
+ updated_at DATETIME(6) NOT NULL,
+ PRIMARY KEY(scope_code,data_mode)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+CREATE TABLE IF NOT EXISTS a_occupational_risk_tasks (
+ task_id CHAR(36) CHARACTER SET ascii COLLATE ascii_bin PRIMARY KEY,
+ batch_id CHAR(36) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
+ scope_code VARCHAR(64) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
+ data_mode ENUM('real','synthetic') NOT NULL,
+ record_id CHAR(36) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
+ assessment_year INT NOT NULL,
+ request_key CHAR(36) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
+ payload_digest CHAR(64) NOT NULL,
+ source_digest CHAR(64) NOT NULL,
+ source_json JSON NOT NULL,
+ profile_version INT NOT NULL,
+ report_manifest TEXT NOT NULL,
+ rules_version INT NOT NULL,
+ rules_json JSON NOT NULL,
+ ai_state ENUM('queued','running','completed','failed','cancelled') NOT NULL,
+ output_text MEDIUMTEXT NULL,
+ error_code VARCHAR(80) NULL,
+ lease_until DATETIME(6) NULL,
+ review_state ENUM('pending','confirmed') NOT NULL DEFAULT 'pending',
+ risk_level ENUM('unknown','low','medium','high','critical') NOT NULL DEFAULT 'unknown',
+ domain_json JSON NULL,
+ assessment_id CHAR(36) CHARACTER SET ascii COLLATE ascii_bin NULL,
+ reviewer VARCHAR(100) NULL,
+ review_note TEXT NULL,
+ reviewed_at DATETIME(6) NULL,
+ requested_by VARCHAR(100) NOT NULL,
+ created_at DATETIME(6) NOT NULL,
+ finished_at DATETIME(6) NULL,
+ row_version INT NOT NULL DEFAULT 1,
+ UNIQUE KEY uq_occ_risk_request(scope_code,data_mode,request_key,record_id),
+ KEY ix_occ_risk_queue(data_mode,ai_state,created_at),
+ KEY ix_occ_risk_person(scope_code,data_mode,record_id,assessment_year,created_at,task_id),
+ KEY ix_occ_risk_batch(scope_code,data_mode,batch_id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+CREATE TABLE IF NOT EXISTS a_occupational_risk_events (
+ event_id CHAR(36) CHARACTER SET ascii COLLATE ascii_bin PRIMARY KEY,
+ task_id CHAR(36) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
+ actor VARCHAR(100) NOT NULL,
+ action VARCHAR(30) NOT NULL,
+ note TEXT NOT NULL,
+ request_key CHAR(36) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
+ payload_digest CHAR(64) NOT NULL,
+ created_at DATETIME(6) NOT NULL,
+ UNIQUE KEY uq_occ_risk_action(task_id,request_key)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

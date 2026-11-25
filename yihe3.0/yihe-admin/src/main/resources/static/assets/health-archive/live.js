@@ -57,7 +57,7 @@ function detailLocation(id){
 function returnListLocation(){
  const raw=new URLSearchParams(location.search).get('returnTo');
  if(raw)try{const url=new URL(raw,location.href);
-  if(url.origin===location.origin&&['/assets/health-archive/management.html','/assets/health-archive/review.html','/assets/health-archive/index.html'].includes(url.pathname))
+  if(url.origin===location.origin&&['/assets/health-archive/management.html','/assets/health-archive/review.html','/assets/health-archive/index.html','/assets/report-center/employees.html','/assets/report-center/occupational.html'].includes(url.pathname))
    return url.pathname+url.search;
  }catch(ignore){}
  return 'management.html';

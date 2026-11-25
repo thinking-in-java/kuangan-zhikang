@@ -18,6 +18,7 @@
     <![endif]-->
     <style type="text/css">
         .mine-workbench-active .dh-floating-root { display: none; }
+        .mine-ocr-active .dh-floating-root { display: none; }
         .user-info-head {
             width: 110px;
             height: 110px;
@@ -332,13 +333,28 @@
             });
         }
 
-        // Add the local UI preview only beneath an assessment group the user already has.
+        // Keep the original assessment group and its authorized destinations intact.
         var digitalHealthMenus = upmsPermissions.map(function (item) {
-            if (String(item.name).trim() !== '健康评估') { return item; }
+            if (['健康评估', '健康评估中心'].indexOf(String(item.name).trim()) === -1) { return item; }
             var group = Object.assign({}, item);
-            group.children = (item.children || []).concat([{ name: '数字健康师', uri: '/assets/digital-health/index.html?v=20261117-dock2', type: 4, pid: item.permissionId, children: [] }]);
+            group.name = '健康评估';
+            group.children = (item.children || []).filter(function (child) {
+                return String(child.uri || '').split('?')[0] !== '/assets/assessment/exam.html';
+            });
+            if (!group.children.some(function (child) { return String(child.uri || '').split('?')[0] === '/assets/digital-health/index.html'; })) {
+                group.children = group.children.concat([{ name: '数字健康师', uri: '/assets/digital-health/index.html?v=20261117-dock2', type: 4, pid: item.permissionId, children: [] }]);
+            }
             return group;
         });
+        var assessmentCenterMenu = { name: '健康评估中心', type: 1, pid: -1, children: [
+            { name: 'AI体检评估', uri: '/assets/assessment/exam.html', type: 4, children: [] },
+            { name: '综合健康评估', uri: '/assets/assessment/comprehensive.html', type: 4, children: [] },
+            { name: '职业健康风险评估', uri: '/assets/assessment/occupational-risk.html', type: 4, children: [] },
+            { name: '慢性病风险评估', uri: '/assets/assessment/chronic-risk.html', type: 4, children: [] },
+            { name: '心理健康评估', uri: '/assets/assessment/psychological.html', type: 4, children: [] },
+            { name: '问卷管理与分析', uri: '/assets/assessment/questionnaires.html', type: 4, children: [] },
+            { name: '评估规则管理', uri: '/assets/assessment/assessment-rules.html', type: 4, children: [] }
+        ] };
         var workerPages = {
             overview: '数字员工总览',
             workbench: '数字员工工作台',
@@ -353,6 +369,26 @@
         MineNavigation.mount({
             menus: [
                 { name: '健康驾驶舱', uri: '/manage/visualization', type: 1, pid: -1, children: [] },
+                { name: '报告与档案中心', type: 1, pid: -1, children: [
+                    { name: '报告上传中心', uri: '/assets/report-center/index.html', type: 4, children: [] },
+                    { name: 'OCR 识别工作台', uri: '/assets/report-center/ocr.html', type: 4, children: [] },
+                    { name: '报告匹配与核对', uri: '/assets/report-center/matching.html', type: 4, children: [] },
+                    { name: '档案审核与归档', uri: '/assets/report-center/review.html', type: 4, children: [] },
+                    { name: '职工健康档案', uri: '/assets/report-center/employees.html', type: 4, children: [] },
+                    { name: '职业健康监护档案', uri: '/assets/report-center/occupational.html', type: 4, children: [] },
+                    { name: '档案填写工作台', uri: '/assets/report-center/filing.html', type: 4, children: [] }
+                ] },
+                assessmentCenterMenu,
+                { name: 'AI 数字员工中心', type: 1, pid: -1, children: [
+                    { name: 'AI 智能体总览', uri: '/assets/agents/overview.html', type: 4, children: [] },
+                    { name: '档案小谷工作台', uri: '/assets/agents/archive.html', type: 4, children: [] },
+                    { name: '评估小谷工作台', uri: '/assets/agents/assess.html', type: 4, children: [] },
+                    { name: '随访小谷工作台', uri: '/assets/agents/follow.html', type: 4, children: [] },
+                    { name: '方案小谷工作台', uri: '/assets/agents/plan.html', type: 4, children: [] },
+                    { name: '心理小谷工作台', uri: '/assets/agents/care.html', type: 4, children: [] },
+                    { name: '任务调度中心', uri: '/assets/agents/dispatch.html', type: 4, children: [] },
+                    { name: 'AI 执行记录', uri: '/assets/agents/records.html', type: 4, children: [] }
+                ] },
                 workerMenu,
                 { name: '健康档案', type: 1, pid: -1, children: [
                     { name: '智能档案页', uri: '/assets/health-archive/index.html?v=archive-report-cascade-20261117', type: 4, children: [] },
@@ -432,7 +468,14 @@
                 sessionStorage.setItem(workerNavigationKey, 'workbench?worker=' + worker);
             } catch (error) { /* Routing remains usable without optional restoration. */ }
         };
+        function syncOcrWorkspaceChrome() {
+            var frame = activeAdminFrame(), ocrActive = false;
+            try { ocrActive = !!frame && ['/assets/report-center/ocr.html', '/assets/report-center/matching.html', '/assets/report-center/review.html', '/assets/report-center/employees.html', '/assets/report-center/occupational.html', '/assets/report-center/filing.html', '/assets/assessment/exam.html', '/assets/assessment/comprehensive.html', '/assets/assessment/occupational-risk.html', '/assets/assessment/chronic-risk.html', '/assets/assessment/psychological.html', '/assets/assessment/questionnaires.html', '/assets/assessment/assessment-rules.html', '/assets/agents/overview.html', '/assets/agents/archive.html', '/assets/agents/assess.html', '/assets/agents/follow.html', '/assets/agents/plan.html', '/assets/agents/care.html', '/assets/agents/dispatch.html', '/assets/agents/records.html'].indexOf(frame.contentWindow.location.pathname) !== -1; } catch (error) { /* External tabs retain their own chrome. */ }
+            document.body.classList.toggle('mine-ocr-active', ocrActive);
+        }
+        document.querySelector('.layui-body').addEventListener('load', syncOcrWorkspaceChrome, true);
         var workerObserver = new MutationObserver(function () {
+            syncOcrWorkspaceChrome();
             var frame = activeAdminFrame();
             var path = frame && (frame.getAttribute('lay-id') || '');
             document.body.classList.toggle('mine-workbench-active', path === workerPrefix + 'workbench');
