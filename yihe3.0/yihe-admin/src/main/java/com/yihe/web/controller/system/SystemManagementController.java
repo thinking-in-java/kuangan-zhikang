@@ -21,6 +21,7 @@ public class SystemManagementController {
  @GetMapping("/assessment-rules") public String assessmentRules(HttpServletResponse response){response.setHeader("Cache-Control","no-store");return "system-center/rules";}
  @GetMapping("/intervention-templates") public String interventionTemplates(HttpServletResponse response){response.setHeader("Cache-Control","no-store");return "system-center/intervention-templates";}
  @GetMapping("/message-templates") public String messageTemplates(HttpServletResponse response){response.setHeader("Cache-Control","no-store");return "system-center/messages";}
+ @GetMapping("/ai-models") public String aiModels(HttpServletResponse response){response.setHeader("Cache-Control","no-store");return "system-center/ai";}
  @GetMapping("/context") @ResponseBody public Object context(HttpServletRequest request,HttpServletResponse response){
   access.web(request);response.setHeader("Cache-Control","private, no-store");YhUserReginfo user=ShiroUtils.getSysUser();
   List<Object> roles=new ArrayList<>(),permissions=new ArrayList<>();
