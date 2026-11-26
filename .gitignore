@@ -4,40 +4,40 @@
 .classpath
 .class
 .project
-.settings   
+.settings
 ..gitignore
  ##filter databfile、sln file##
-*.mdb  
-*.ldb  
-*.sln   
+*.mdb
+*.ldb
+*.sln
 ##class file##
-*.com  
-*.class  
-*.dll  
-*.exe  
-*.o  
-*.so 
+*.com
+*.class
+*.dll
+*.exe
+*.o
+*.so
 # compression file
-*.7z  
-*.dmg  
-*.gz  
-*.iso  
-*.jar  
-*.rar  
-*.tar  
-*.zip  
+*.7z
+*.dmg
+*.gz
+*.iso
+*.jar
+*.rar
+*.tar
+*.zip
 *.via
 *.tmp
 *.err
-# OS generated files #  
-.DS_Store  
-.DS_Store?  
-._*  
-.Spotlight-V100  
-.Trashes  
-Icon?  
-ehthumbs.db  
-Thumbs.db 
+# OS generated files #
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+Icon?
+ehthumbs.db
+Thumbs.db
 /yihe3.0/yihe-applet-api/target
 /yihe3.0/yihe-framework/target
 /yihe3.0/yihe-generator/target
@@ -57,3 +57,8 @@ __pycache__/
 **/credentials.json
 **/database-before.sql*
 **/remote-full.sql
+
+# Mini-program sources and WeChat deployment settings remain local.
+/miniapp/
+/yihe3.0/deploy/wechat-miniapp.json
+/yihe3.0/deploy/wechat-miniapp-setup.md
