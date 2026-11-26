@@ -23,6 +23,7 @@ public class SystemManagementController {
  @GetMapping("/message-templates") public String messageTemplates(HttpServletResponse response){response.setHeader("Cache-Control","no-store");return "system-center/messages";}
  @GetMapping("/ai-models") public String aiModels(HttpServletResponse response){response.setHeader("Cache-Control","no-store");return "system-center/ai";}
  @GetMapping("/ai-tools") public String aiTools(HttpServletResponse response){response.setHeader("Cache-Control","no-store");return "system-center/tools";}
+ @GetMapping("/audit-logs") public String auditLogs(HttpServletResponse response){response.setHeader("Cache-Control","no-store");return "system-center/audit";}
  @GetMapping("/context") @ResponseBody public Object context(HttpServletRequest request,HttpServletResponse response){
   access.web(request);response.setHeader("Cache-Control","private, no-store");YhUserReginfo user=ShiroUtils.getSysUser();
   List<Object> roles=new ArrayList<>(),permissions=new ArrayList<>();
