@@ -19,8 +19,10 @@
     
     	<!-- Mysql驱动包 -->
         <dependency>
-            <groupId>mysql</groupId>
-            <artifactId>mysql-connector-java</artifactId>
+            <groupId>com.mysql</groupId>
+            <artifactId>mysql-connector-j</artifactId>
+            <!-- Recognize MySQL 8.4 collations such as utf8mb4_0900_bin (309). -->
+            <version>8.4.0</version>
         </dependency>
         <!-- AOP依赖 -->
         <dependency>
