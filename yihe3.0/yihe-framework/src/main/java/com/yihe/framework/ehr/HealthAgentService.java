@@ -22,7 +22,7 @@ public class HealthAgentService {
             String instructions=RULES+"\n服务器时间："+java.time.LocalDate.now(java.time.ZoneId.of("Asia/Shanghai"))+"。当前数据模式："+a.mode+"。"+(selected.isEmpty()?"当前未选择职工。":"用户当前选择的职工ID："+selected+"。")+"\n本会话操作的服务端实际状态（confirmed才是已执行）："+ehr.encode(store.actionStatus(cid));
             int calls=0;String answer="";long deadline=started+150000;
             for(int round=0;round<7;round++){
-                Map<String,Object> response=client.respond(input,tools.catalog(a.doctor),instructions,deadline);List<Object> output=(List<Object>)response.get("output");
+                Map<String,Object> response=client.respond(input,tools.catalogFor(a),instructions,deadline);List<Object> output=(List<Object>)response.get("output");
                 input.addAll(output);transcript.addAll(output);boolean hasCall=false;
                 for(Object item:output){if(!(item instanceof Map))continue;Map<String,Object> call=(Map<String,Object>)item;if(!"function_call".equals(call.get("type")))continue;hasCall=true;require(++calls<=12,422,"本次工具调用较多，请缩小问题范围");
                     String name=text(call,"name"),callId=text(call,"call_id");require(!callId.isEmpty(),502,"中转站返回工具调用缺少call_id");Map<String,Object> args=map();Object value;String outcome="ok";long start=System.currentTimeMillis();
