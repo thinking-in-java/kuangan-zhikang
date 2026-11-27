@@ -1,0 +1,30 @@
+// Isolated state/permission checks; this test never contacts a real server.
+const fs=require('node:fs'),path=require('node:path'),vm=require('node:vm'),assert=require('node:assert/strict');
+const source=process.argv[2]||path.resolve(__dirname,'../../yihe-admin/src/main/resources/static/assets/js/employee-bindings.js');
+const app={innerHTML:''};
+const sandbox={window:{},document:{getElementById:()=>app},console,Date,setInterval,clearInterval};
+vm.runInNewContext(fs.readFileSync(source,'utf8').replace('window.EmployeeBindings={','window.__bindingTests={time,codeState,day,cache,current,refresh,steps};window.EmployeeBindings={'),sandbox);
+const api=sandbox.window.EmployeeBindings,test=sandbox.window.__bindingTests;
+const staff=[{id:'fixture-a',name:'fixture <img src=x>',code:'QA01',job:'test-only',phone:'13800001234',org:'test-org',status:'draft',bound:false},{id:'fixture-b',name:'fixture-b',code:'QA02',job:'test-only',status:'draft',bound:false}];
+const c={people:staff,realPeople:true,filters:{},currentPage:1,limit:10,selectedBinding:'fixture-a',api:async()=>{},onRender(){},kpis:()=>'',panel:(title,body)=>title+body,searchForm:()=>'',filterSelect:()=>'',table:()=>'',pager:()=>'',badge:x=>x,btn:()=>'',link:()=>''};
+test.cache.set('fixture-a',{bound:false,canManage:false,lastCode:null});api.render(c);
+(async()=>{
+ assert.equal(test.codeState(null),'none');
+ assert.equal(test.codeState({status:'issued',expiresAt:'2000-01-01T00:00:00Z'}),'expired');
+ assert.equal(test.codeState({status:'issued',expired:1,expiresAt:'2099-01-01T00:00:00Z'}),'expired');
+ assert.equal(test.codeState({status:'issued',expired:0,expiresAt:'2099-01-01T00:00:00Z'}),'issued');
+ assert.equal(test.codeState({status:'consumed',expired:1}),'consumed');
+ assert.equal(test.codeState({status:'revoked',expired:1}),'revoked');
+ assert.match(test.time('2026-11-27T00:05:00Z'),/8:05:00/);
+ assert.equal(test.day('2026-11-26T23:30:00Z'),'2026-11-27');
+ assert.ok(!app.innerHTML.includes('<img src=x>'));assert.match(app.innerHTML,/&lt;img/);
+ assert.match(app.innerHTML,/data-act="issue-code"[^>]*disabled/);
+ let resolveRequest,calls=0;c.api=async()=>{calls++;return await new Promise(resolve=>resolveRequest=resolve);};
+ const a=test.refresh('fixture-a',true),b=test.refresh('fixture-a',true);assert.equal(calls,1);
+ resolveRequest({bound:true,canManage:true,currentBinding:{confirmedAt:'2026-11-27T01:00:00Z',lastLoginAt:'2026-11-27T02:00:00Z'}});await Promise.all([a,b]);
+ assert.equal(staff[0].bound,true);assert.equal(staff[0].boundAt,'2026-11-27T01:00:00Z');
+ c.api=async()=>{throw Error('fixture: forbidden');};await assert.rejects(test.refresh('fixture-b',true),/forbidden/);assert.equal(staff[1].bound,false);assert.match(test.cache.get('fixture-b').error,/forbidden/);
+ c.api=async()=>({bound:false,canManage:true,lastCode:null,currentBinding:null});await test.refresh('fixture-a',true);assert.equal(staff[0].bound,false);assert.equal(staff[0].boundAt,null);assert.equal(staff[0].lastLoginAt,null);
+ c.realPeople=false;api.render(c);await assert.rejects(api.open('issue-code','fixture-a'),/真实职工档案未加载/);
+ console.log('PASS: code expiry/consumption/revocation, Beijing dates, HTML escaping, view-only permissions, coalesced requests, correct employee updates, error recovery, unbind state, real-roster guard');
+})().catch(err=>{console.error(err);process.exitCode=1;});

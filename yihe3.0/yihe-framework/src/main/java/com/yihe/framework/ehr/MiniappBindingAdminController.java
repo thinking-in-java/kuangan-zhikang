@@ -13,6 +13,6 @@ public class MiniappBindingAdminController {
     public MiniappBindingAdminController(MiniappIdentityService identity,EhrAccess access){this.identity=identity;this.access=access;}
     @GetMapping("/binding") public Object metadata(HttpServletRequest req,@PathVariable String recordId){return ok(identity.metadata(access.web(req),recordId));}
     @PostMapping("/binding-code") public Object issue(HttpServletRequest req,@PathVariable String recordId,@RequestBody Map<String,Object> b){return ok(identity.issue(access.web(req),recordId,b));}
-    @DeleteMapping("/binding-code") public Object revoke(HttpServletRequest req,@PathVariable String recordId){identity.revokeCode(access.web(req),recordId);return ok(map("revoked",true));}
+    @DeleteMapping("/binding-code") public Object revoke(HttpServletRequest req,@PathVariable String recordId,@RequestParam(required=false) String codeId){if(codeId==null)identity.revokeCode(access.web(req),recordId);else identity.revokeCode(access.web(req),recordId,codeId);return ok(map("revoked",true));}
     @PostMapping("/binding/revoke") public Object unbind(HttpServletRequest req,@PathVariable String recordId,@RequestBody Map<String,Object> b){identity.unbind(access.web(req),recordId,text(b,"reason"));return ok(map("unbound",true,"sessionsRevoked",true));}
 }
