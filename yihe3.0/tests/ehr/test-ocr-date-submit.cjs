@@ -1,0 +1,25 @@
+// Isolated browser contracts: no business writes reach the running application.
+const {chromium}=require(process.env.PLAYWRIGHT_MODULE||'playwright');
+const assert=require('node:assert/strict'),fs=require('node:fs'),path=require('node:path');
+const base=process.env.EHR_TEST_BASE||'http://127.0.0.1:8080',root=path.resolve(__dirname,'../..');
+(async()=>{const browser=await chromium.launch({executablePath:process.env.EHR_CHROME||'C:/Program Files/Google/Chrome/Application/chrome.exe'});let checks=0;try{
+ const context=await browser.newContext(),page=await context.newPage(),errors=[];page.on('pageerror',e=>errors.push(e.message));await page.request.get(base+'/login');assert.equal((await(await page.request.post(base+'/login',{form:{username:process.env.EHR_TEST_USER||'医生医生',password:process.env.EHR_TEST_PASSWORD,code:'123465'}})).json()).code,200);
+ await context.route('**/assets/report-center/ocr.js*',route=>route.fulfill({path:path.join(root,'yihe-admin/src/main/resources/static/assets/report-center/ocr.js'),contentType:'application/javascript'}));
+ let report,calls=[],conflict=false;const bundle=()=>({report,employee:{name:'测试职工',code:'TEST-DATE',team:'基础班组',job:'基础岗位'},normalized:[],logs:[],task:null,editable:true});
+ await context.route('**/ehr/api/**',async route=>{const request=route.request(),p=new URL(request.url()).pathname,m=request.method();let data;
+  if(p==='/ehr/api/context')data={csrfToken:'fixture-csrf',recognition:{}};
+  else if(p==='/ehr/api/recognition')data={enabled:true,provider:'model'};else if(p==='/ehr/api/report-center')data={counts:{all:1,pending_check:1},items:[{id:'date-fixture',revision:1}]};
+  else if(p==='/ehr/api/report-center/ocr/date-fixture/1'){if(m==='PUT'){const body=request.postDataJSON();calls.push({method:m,body});if(conflict)return route.fulfill({status:409,contentType:'application/json',body:JSON.stringify({code:409,msg:'报告已修改，请刷新后重试'})});assert.equal(request.headers()['if-match'],report.etag);report={...report,examDate:body.examDate,etag:'saved-etag'};}data=bundle();}
+  else if(p==='/ehr/api/reports/date-fixture/1')data=report;
+  else if(p==='/ehr/api/reports/date-fixture/1/actions'&&m==='POST'){calls.push({method:m,body:request.postDataJSON()});assert.ok(report.examDate,'Submission must have a persisted date');data=report;}
+  else throw Error('Unexpected API '+m+' '+p);
+  return route.fulfill({contentType:'application/json',body:JSON.stringify({code:0,data})});
+ });
+ async function open({verified=false,raw='2023-11-21',reject=false}={}){calls=[];conflict=reject;report={id:'date-fixture',revision:1,recordId:'record-fixture',reviewStatus:'needs_review',examDate:verified?raw:null,examDateRaw:raw,institution:'测试体检机构',etag:'initial-etag',files:[],reviews:[],items:[{id:'fixture-item',name:'血压',value:'正常',page:1}],fieldValues:[{field_key:'full_name',value_raw:'测试职工'}],conclusions:[{label:'完整体检结论',text:'测试结论',page:1}],advice:[]};await page.goto(base+'/assets/report-center/ocr.html?report=date-fixture&revision=1');await page.locator('[name=examDate]').waitFor();assert.ok(!(await page.locator('[data-do=save]').innerText()).includes('*'),'Form is unchanged');checks++;}
+ async function submit(){await page.locator('[data-do=submit]').click();await page.locator('#submit-form [name=identity]').check();await page.locator('#submit-form [name=note]').fill('已对照报告原件核对日期与身份');await page.locator('#submit-form .primary').click();}
+ await open();assert.equal(await page.locator('[aria-label="工号（基础资料）"]').inputValue(),'TEST-DATE');assert.equal(await page.locator('[aria-label="部门 / 班组（基础资料）"]').inputValue(),'基础班组');assert.equal(await page.locator('[aria-label="岗位 / 工种（基础资料）"]').inputValue(),'基础岗位');assert.equal(await page.locator('[data-roster-field]:not([readonly])').count(),0);checks+=4;assert.equal(await page.locator('[name=examDate]').inputValue(),'2023-11-21');checks++;await submit();await page.waitForFunction(()=>document.querySelector('#toast').textContent==='已提交人工审核');assert.deepEqual(calls.map(c=>c.method),['PUT','POST']);assert.equal(calls[0].body.examDate,'2023-11-21');assert.ok(!('employee_number' in calls[0].body)&&!('workshop' in calls[0].body)&&!('job_type' in calls[0].body));checks++;assert.equal(calls[1].body.etag,'saved-etag');checks+=3;
+ await open({verified:true});await submit();await page.waitForFunction(()=>document.querySelector('#toast').textContent==='已提交人工审核');assert.deepEqual(calls.map(c=>c.method),['POST']);checks++;
+ await open({raw:''});await submit();await page.locator('#submit-error').filter({hasText:'未识别到体检日期'}).waitFor();assert.equal(calls.length,0);checks++;
+ await open({reject:true});await submit();await page.locator('#submit-error').filter({hasText:'报告已修改'}).waitFor();assert.deepEqual(calls.map(c=>c.method),['PUT']);checks++;
+ assert.deepEqual(errors,[]);checks++;console.log(JSON.stringify({passed:true,checks,productionWrites:0,cases:['unchanged_ocr_date_saved_before_submit','verified_date_not_resaved','missing_date_not_fabricated','save_conflict_blocks_submit']}));
+ }finally{await browser.close();}})().catch(e=>{console.error(e);process.exit(1)});

@@ -17,6 +17,18 @@ def result(name='BP',value='120/80'):
     return {'report_kind':'individual','metadata':{},'fields':[],'items':[{'name':name,'result_raw':value,'unit_raw':'raw-unit'}],'conclusions':[],'advice':[]}
 
 class Checks(unittest.TestCase):
+    def test_native_subject_name_corrects_visual_ocr_without_voting(self):
+        page = {'fields': [{'field_key':'full_name','value_raw':'齐文忠','quote':'姓名：齐文忠'}]}
+        fixed = m.native_name_anchor(page, '档案号 123 姓名：乔文忠 性别：男')
+        self.assertEqual(fixed['fields'][0]['value_raw'], '乔文忠')
+        self.assertEqual(fixed['fields'][0]['quote'], '姓名：乔文忠')
+        self.assertEqual(fixed['fields'][0]['_model_value_raw'], '齐文忠')
+    def test_ambiguous_native_names_are_not_collapsed(self):
+        page={'fields':[{'field_key':'full_name','value_raw':'齐文忠'}]}
+        self.assertEqual(m.native_name_anchor(page,'姓名：乔文忠\n姓名：齐文忠')['fields'][0]['value_raw'],'齐文忠')
+    def test_doctor_name_not_used_as_subject(self):
+        page={'fields':[{'field_key':'full_name','value_raw':'受检者'}]}
+        self.assertEqual(m.native_name_anchor(page,'医生姓名：王医生')['fields'][0]['value_raw'],'受检者')
     def test_explicit_name_aliases_preserve_raw_strings(self):
         for key in ['item_name','original_field_name','项目名称']:
             row={'name':None,key:'丙氨酸氨基转移酶','result_raw':' 42.0 ','unit_raw':' U/L '}
@@ -75,6 +87,30 @@ class Checks(unittest.TestCase):
             path=Path(directory)/'job.pages.json';cache=m.PageResultCache(path,INPUT,D,C);cache.save(SOURCE,1,result())
             raw=json.loads(path.read_text());raw['pages'][SOURCE+':1']['result']['items'][0]['result_raw']='corrupt';path.write_text(json.dumps(raw))
             self.assertIsNone(m.PageResultCache(path,INPUT,D,C).get(SOURCE,1))
+    def test_earlier_revision_cache_reuses_only_identical_extraction_inputs(self):
+        with tempfile.TemporaryDirectory() as directory:
+            old=Path(directory)/(INPUT['job_id']+'.pages.json');m.PageResultCache(old,INPUT,D,C).save(SOURCE,1,result())
+            old.with_name(INPUT['job_id']+'.candidate.json').write_text(json.dumps(INPUT))
+            current={**INPUT,'job_id':'55555555-5555-4555-8555-555555555555','revision':2}
+            new=Path(directory)/(current['job_id']+'.pages.json')
+            self.assertIsNotNone(m.PageResultCache(new,current,D,C).get(SOURCE,1))
+            for field,value in [('report_id','66666666-6666-4666-8666-666666666666'),('scope_code','org:OTHER'),('data_mode','real')]:
+                self.assertIsNone(m.PageResultCache(new,{**current,field:value},D,C).get(SOURCE,1))
+            changed=copy.deepcopy(current);changed['source_files'][0]['sha256']='a'*64
+            self.assertIsNone(m.PageResultCache(new,changed,D,C).get(SOURCE,1))
+            self.assertIsNone(m.PageResultCache(new,current,D,{**C,'model':'different'}).get(SOURCE,1))
+            self.assertIsNone(m.PageResultCache(new,current,D,{**C,'baseUrl':'https://different.invalid/v1'}).get(SOURCE,1))
+            self.assertIsNone(m.PageResultCache(new,current,D,{**C,'reuseValidatedPages':False}).get(SOURCE,1))
+    def test_prior_version_cache_cannot_bypass_current_page_validation(self):
+        with tempfile.TemporaryDirectory() as directory:
+            old=Path(directory)/(INPUT['job_id']+'.pages.json');m.PageResultCache(old,INPUT,D,C).save(SOURCE,1,result(None))
+            old.with_name(INPUT['job_id']+'.candidate.json').write_text(json.dumps(INPUT))
+            current={**INPUT,'job_id':'55555555-5555-4555-8555-555555555555','revision':2,'source_files':[{**INPUT['source_files'][0],'page_count':2}]}
+            calls=[]
+            def recognize(content):calls.append(content['text']);return result()
+            with patch.object(m,'prepare_pages',return_value=iter(copy.deepcopy(PAGES))):
+                _,timing=m.extract_document(current,D,C,lambda f,s:b'fixture',recognizer=recognize,page_cache=m.PageResultCache(Path(directory)/(current['job_id']+'.pages.json'),current,D,C))
+            self.assertEqual(len(calls),2);self.assertEqual(timing['cachedPages'],0)
     def test_parallel_cache_updates_are_atomic(self):
         with tempfile.TemporaryDirectory() as directory:
             path=Path(directory)/'job.pages.json';cache=m.PageResultCache(path,INPUT,D,C)

@@ -190,6 +190,8 @@
                 <version>3.0.0</version>   
                 <configuration>
                     <failOnMissingWebXml>false</failOnMissingWebXml>
+                    <!-- Exclude obsolete driver left by incremental WAR assembly. -->
+                    <packagingExcludes>WEB-INF/lib/mysql-connector-java-*.jar</packagingExcludes>
                     <warName>${project.artifactId}</warName>
                 </configuration>   
 		   </plugin>   

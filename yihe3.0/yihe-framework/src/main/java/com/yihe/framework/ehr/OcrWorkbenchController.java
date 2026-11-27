@@ -16,7 +16,7 @@ public class OcrWorkbenchController {
     @GetMapping("/{id}/{revision}") public Object get(HttpServletRequest request,@PathVariable("id") String id,@PathVariable("revision") int revision){return map("code",0,"data",read(auth.web(request),id,revision));}
     public Map<String,Object> read(EhrActor actor,String id,int revision){
         require(!actor.mobile,403,"仅供后台管理使用");
-        Map<String,Object> report=ehr.report(actor,id,revision,true),person=ehr.profile(actor,str(report.get("recordId")),false);
+        Map<String,Object> report=ehr.report(actor,id,revision,true),person=report.get("recordId")==null?Collections.emptyMap():ehr.profile(actor,str(report.get("recordId")),false);
         List<Map<String,Object>> logs=db.all("SELECT audit_id id,action,reason note,CONVERT(actor_ref USING utf8mb4) actor,occurred_at time,redacted_diff changes FROM a_health_archive_audit_logs WHERE scope_code=? AND data_mode=? AND report_id=? AND revision=? ORDER BY occurred_at DESC,audit_id DESC LIMIT 100",actor.scope,actor.mode,id,revision);
         for(Map<String,Object> log:logs)log.put("changes",ehr.decode(log.get("changes")));
         Map<String,Object> task=null;if(report.get("ocrTask") instanceof Map){Object job=((Map<?,?>)report.get("ocrTask")).get("jobId");if(job!=null)task=queue.detail(actor,str(job));}

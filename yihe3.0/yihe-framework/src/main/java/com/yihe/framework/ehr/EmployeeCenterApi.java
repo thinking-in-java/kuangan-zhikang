@@ -55,7 +55,7 @@ public class EmployeeCenterApi {
     @GetMapping("/import/template") public void template(HttpServletRequest request,HttpServletResponse response)throws IOException {
         access.web(request);response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");response.setHeader("Content-Disposition","attachment; filename=employee-import-template.xlsx");
         try(Workbook book=new org.apache.poi.xssf.usermodel.XSSFWorkbook()){
-            Sheet sheet=book.createSheet("职工信息");String[] columns={"职工姓名","职工工号","手机号","所属单位","班组","岗位","性别","出生日期","职业危害因素"};Row head=sheet.createRow(0);
+            Sheet sheet=book.createSheet("职工信息");String[] columns={"职工姓名","职工工号","手机号","所属单位","班组","岗位","性别","出生日期","职业危害因素","身份证号"};Row head=sheet.createRow(0);
             CellStyle textStyle=book.createCellStyle();textStyle.setDataFormat(book.createDataFormat().getFormat("@"));
             for(int i=0;i<columns.length;i++){head.createCell(i).setCellValue(columns[i]);sheet.setColumnWidth(i,6000);sheet.setDefaultColumnStyle(i,textStyle);}sheet.createFreezePane(0,1);book.write(response.getOutputStream());
         }

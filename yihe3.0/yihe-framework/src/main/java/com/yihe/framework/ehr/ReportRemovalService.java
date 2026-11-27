@@ -20,10 +20,10 @@ public class ReportRemovalService {
         if(previous!=null){
             @SuppressWarnings("unchecked")Map<String,Object> result=(Map<String,Object>)ehr.decode(previous.get("redacted_diff"));
             require(id.equals(result.get("removedReportId"))&&revision==num(result.get("revision")),409,"操作幂等键已用于其他报告");
-            ehr.profile(a,str(previous.get("record_id")),false);return map("removed",true,"reportId",id,"recordId",previous.get("record_id"));
+            if(previous.get("record_id")!=null)ehr.profile(a,str(previous.get("record_id")),false);return map("removed",true,"reportId",id,"recordId",previous.get("record_id"));
         }
         Map<String,Object> report=ehr.rawReport(a,id,revision,false);String record=str(report.get("record_id"));
-        ehr.profile(a,record,true);report=ehr.rawReport(a,id,revision,true);
+        if(!record.isEmpty())ehr.profile(a,record,true);report=ehr.rawReport(a,id,revision,true);
         Map<String,Object> series=db.one("SELECT current_revision FROM a_report_series WHERE report_id=? AND scope_code=? AND data_mode=? FOR UPDATE",id,a.scope,a.mode);
         require(series!=null&&num(series.get("current_revision"))==revision,409,"报告版本已变化，请刷新后再移除");
         require(etag!=null&&etag.equals(hex(digest(bytes(ehr.encode(ehr.snapshot(id,revision)))))),409,"报告已变化，请刷新后核对再移除");
@@ -32,7 +32,7 @@ public class ReportRemovalService {
         ehr.cancelOcrTasks(id,null,"报告已由后台移除："+note);
         db.exec("UPDATE a_report_series SET current_revision=NULL WHERE report_id=?",id);
         db.exec("UPDATE a_health_reports SET record_id=NULL WHERE report_id=?",id);
-        db.insert("a_health_archive_audit_logs",ehr.scoped(a,"audit_id",id(),"record_id",record,"actor_ref",bytes(a.user),"action","report_removed","request_key",key,"reason",note,
+        db.insert("a_health_archive_audit_logs",ehr.scoped(a,"audit_id",id(),"record_id",record.isEmpty()?null:record,"actor_ref",bytes(a.user),"action","report_removed","request_key",key,"reason",note,
             "redacted_diff",ehr.encode(map("removedReportId",id,"revision",revision,"oldRecordId",record)),"occurred_at",now()));
         ehr.completeness(a,record);
         return map("removed",true,"reportId",id,"recordId",record);

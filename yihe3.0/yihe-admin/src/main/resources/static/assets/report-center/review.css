@@ -7,3 +7,6 @@ body{background:linear-gradient(135deg,#fff,#f1f7ff);color:#101b34}.review-page{
  .review-retention-note{margin-top:10px;margin-bottom:10px;padding-top:10px;padding-bottom:10px}
 }
 .review-table{background:#fff}
+
+.auto-archive-tools{display:flex;align-items:center;flex-wrap:wrap;gap:12px;margin:12px 0;color:#0762ff}.auto-archive-tools a{padding:8px 12px;border:1px solid #dbe8fa;border-radius:8px;background:#f5f9ff;text-decoration:none}.archive-state-summary,.archive-exception{margin:12px 16px;padding:14px;border:1px solid #cfeadd;border-radius:10px;background:#f0fbf7;line-height:1.7}.archive-exception{background:#fff9ee;border-color:#ffe0ad}.archive-exception.critical{background:#fff0f2;border-color:#ff9aab;border-left:4px solid #e53550}.archive-exception p,.archive-state-summary p{margin:6px 0}.archive-exception button{padding:5px 8px;margin-top:6px}.archive-state-summary h3{margin:0;font-size:15px}
+.review-status{display:inline-block;max-width:100%;white-space:normal;overflow-wrap:anywhere;line-height:1.5}.review-table td:nth-child(7) small{display:block}.review-table td:nth-child(9){overflow-wrap:anywhere}
