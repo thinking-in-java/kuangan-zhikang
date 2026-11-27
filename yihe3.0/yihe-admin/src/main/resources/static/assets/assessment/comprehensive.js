@@ -1,3 +1,11 @@
+function lanRequestId(){
+ const secure=window.crypto;
+ if(typeof secure?.randomUUID==='function')return secure.randomUUID();
+ if(typeof secure?.getRandomValues!=='function')throw Error('浏览器不支持生成请求编号，请更新浏览器后重试');
+ const bytes=secure.getRandomValues(new Uint8Array(16));bytes[6]=(bytes[6]&15)|64;bytes[8]=(bytes[8]&63)|128;
+ const hex=Array.from(bytes,b=>b.toString(16).padStart(2,'0')).join('');
+ return hex.slice(0,8)+'-'+hex.slice(8,12)+'-'+hex.slice(12,16)+'-'+hex.slice(16,20)+'-'+hex.slice(20);
+}
 const $=s=>document.querySelector(s),esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const paths={file:'M14 2H4v20h16V8Z M14 2v6h6 M8 12h8 M8 16h5',person:'M16 7a4 4 0 1 1-8 0 4 4 0 0 1 8 0 M4 22v-3a8 8 0 0 1 16 0v3',hazard:'m12 3 10 18H2Z M12 9v5 M12 17v1',job:'M4 8h16v13H4Z M8 8V3h8v5 M4 13h16 M10 12v3h4v-3',shield:'m12 2 9 4v7c0 6-9 10-9 10S3 19 3 13V6Z M8 12l3 3 5-6',calendar:'M3 5h18v17H3Z M7 2v6 M17 2v6 M3 10h18 M8 14h2v3H8Z',edit:'m3 17 13-13 4 4L7 21H3Z M13 7l4 4',robot:'M3 7h18v14H3Z M12 2v5 M8 11v3 M16 11v3 M8 18h8',print:'M7 8V2h10v6 M6 17H2V8h20v9h-4 M6 13h12v9H6Z',download:'M12 2v14 m-5-5 5 5 5-5 M3 17v5h18v-5',layers:'m12 2 10 6-10 6L2 8Z M2 13l10 6 10-6 M2 18l10 6 10-6',back:'m14 4-8 8 8 8',check:'m4 12 5 5L21 5',medical:'M9 2v6a4 4 0 0 0 8 0V2 M9 3H5v6a8 8 0 0 0 16 0V3h-4 M13 17v2a4 4 0 0 0 8 0v-3'};
 function icon(name){return `<span class="icon"><svg viewBox="0 0 24 25" aria-hidden="true"><path d="${paths[name]||paths.file}"/></svg></span>`;}
@@ -6,7 +14,7 @@ const domains={hypertension:'高血压风险',diabetes:'糖尿病风险',lipids:
 let data,context,record=qs.get('record')||'',tab=0,chart,period=3,metric='血压',custom=null,listData,analysisBusy=false;
 const tag=(s,c='unknown')=>`<span class="tag ${esc(c)}">${esc(s)}</span>`,empty=s=>`<p class="empty">${esc(s)}</p>`,btn=(text,act,cls='')=>`<button data-do="${act}" class="${cls}">${text}</button>`,section=(title,body,cls='',ico='medical')=>`<section class="health-section ${cls}"><header><h2>${icon(ico)}${title}</h2></header>${body}</section>`;
 async function api(url,body){const r=await fetch('/ehr/api/'+url,{credentials:'same-origin',headers:body?{'Content-Type':'application/json','X-CSRF-Token':context.csrfToken}:{},...(body?{method:'POST',body:JSON.stringify(body)}:{})});const x=await r.json();if(x.code!==0)throw Error(x.msg||x.message||'请求失败');return x.data;}
-const key=()=>crypto.randomUUID(),p=()=>{if((data?.historical||data?.sourceChanged)&&data?.analysis?.source_json){try{return JSON.parse(data.analysis.source_json);}catch{}}return data?.person||{};},analysis=()=>data?.analysis,review=()=>data?.review?.content,reportList=()=>p().reports||[],ordered=()=>[...reportList()].sort((a,b)=>String(b.examDate||'').localeCompare(String(a.examDate||''))),latest=()=>ordered()[0],risk=()=>review()?.riskLevel||p().risk||'unknown';
+const key=()=>lanRequestId(),p=()=>{if((data?.historical||data?.sourceChanged)&&data?.analysis?.source_json){try{return JSON.parse(data.analysis.source_json);}catch{}}return data?.person||{};},analysis=()=>data?.analysis,review=()=>data?.review?.content,reportList=()=>p().reports||[],ordered=()=>[...reportList()].sort((a,b)=>String(b.examDate||'').localeCompare(String(a.examDate||''))),latest=()=>ordered()[0],risk=()=>review()?.riskLevel||p().risk||'unknown';
 function toast(s){$('#toast').textContent=s;$('#toast').classList.add('visible');setTimeout(()=>$('#toast').classList.remove('visible'),4500);}
 function dialog(title,html){$('#dialog-title').textContent=title;$('#dialog-body').innerHTML=html;if(!$('#dialog').open)$('#dialog').showModal();}
 function error(e){$('#error').hidden=false;$('#error').textContent=e.message;}

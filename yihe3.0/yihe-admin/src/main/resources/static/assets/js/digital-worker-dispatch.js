@@ -213,6 +213,10 @@
         try {
             const task=await service.assignment(id);
             if(current!==dialog||!current.open) return;
+            if(task.automation){
+                const auto=task.automation,link='/assets/report-center/index.html?automation=1&report='+encodeURIComponent(auto.reportId)+'&revision='+Number(auto.revision);
+                show('档案小谷 · 自动处理任务','<div class="dispatch-content"><h3>'+escape(statuses[task.status]||'处理中')+'</h3><p>'+escape(task.resultNote||auto.reason||'正在跟进报告识别与整理')+'</p><p><a href="'+escape(link)+'">打开报告处理详情与审核入口 →</a></p><h3>自动执行记录</h3>'+task.events.map(e=>'<p>'+escape(timestamp(e.time))+' · '+escape(e.actor)+'<br>'+escape(e.note)+'</p>').join('')+'</div>');return;
+            }
             const isOriginal=task.type==='archive_completion';
             current.classList.toggle('is-original-check',isOriginal);
             current.classList.toggle('is-task-result',!isOriginal);

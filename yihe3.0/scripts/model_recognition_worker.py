@@ -27,7 +27,7 @@ import requests
 from PIL import Image, ImageOps
 
 LOG = logging.getLogger('model-adapter')
-ADAPTER_REVISION = 'page-validation-v1'
+ADAPTER_REVISION = 'native-name-anchor-v1'
 META = ('institution_raw', 'exam_date_raw', 'report_date_raw', 'exam_type_raw', 'exam_number_raw', 'age_raw')
 
 
@@ -310,6 +310,7 @@ class PageResultCache:
         identity = {'version':'page-validation-v1','promptHash':hashlib.sha256(page_prompt(dictionary,bool(config.get('compactOutput',False))).encode()).hexdigest(),'context':{key:task_input.get(key) for key in
             ('job_id','report_id','revision','record_id','scope_code','data_mode','source_files')},'dictionary':dictionary,'settings':settings}
         self.fingerprint = hashlib.sha256(json.dumps(identity, sort_keys=True, ensure_ascii=False).encode()).hexdigest()
+        self.identity = identity
         self.rows = {}; self.lock = threading.Lock()
         try:
             if self.path.is_file() and self.path.stat().st_size <= 16*1024*1024:
@@ -318,6 +319,44 @@ class PageResultCache:
                     self.rows = saved['pages']
         except (OSError, ValueError):
             pass
+        if config.get('reuseValidatedPages', True):
+            self._reuse_prior_versions(task_input)
+
+    def _reuse_prior_versions(self, task_input):
+        """Reuse only proven-identical extraction inputs from this report's earlier jobs.
+
+        Recompute the old job fingerprint using today's dictionary/prompt/settings.
+        The candidate supplies context only; page results still undergo checksum
+        and the normal per-page validation before building a fresh result receipt.
+        """
+        try:
+            paths = sorted(self.path.parent.glob('*.pages.json'), key=lambda p:p.stat().st_mtime, reverse=True)[:100]
+        except OSError:
+            return
+        for path in paths:
+            if path == self.path or path.is_symlink():
+                continue
+            candidate_path = path.with_name(path.name.removesuffix('.pages.json') + '.candidate.json')
+            try:
+                if not candidate_path.is_file() or candidate_path.is_symlink() or candidate_path.stat().st_size > 5_000_000 or path.stat().st_size > 16*1024*1024:
+                    continue
+                candidate = json.loads(candidate_path.read_text(encoding='utf-8'))
+                if any(candidate.get(k) != task_input.get(k) for k in ('report_id','scope_code','data_mode','source_files')):
+                    continue
+                if candidate.get('job_id') != path.name.removesuffix('.pages.json'):
+                    continue
+                identity = {**self.identity, 'context':{k:candidate.get(k) for k in self.identity['context']}}
+                expected = hashlib.sha256(json.dumps(identity,sort_keys=True,ensure_ascii=False).encode()).hexdigest()
+                saved = json.loads(path.read_text(encoding='utf-8'))
+                if saved.get('fingerprint') != expected or not isinstance(saved.get('pages'),dict):
+                    continue
+                for key, entry in saved['pages'].items():
+                    if key not in self.rows and isinstance(entry,dict):
+                        result=entry.get('result')
+                        if isinstance(result,dict) and hashlib.sha256(json.dumps(result,sort_keys=True,ensure_ascii=False).encode()).hexdigest()==entry.get('sha256'):
+                            self.rows[key]=entry
+            except (OSError,ValueError,TypeError,AttributeError):
+                continue
 
     def key(self, source, page):
         uuid.UUID(source)
@@ -583,7 +622,28 @@ def complete_page_arrays(result, content):
     return result
 
 
+def native_name_anchor(result, native):
+    """Use one explicit PDF subject-name label, never a majority vote across people."""
+    matches = list(re.finditer(r'(?<![\u4e00-\u9fff])姓名\s*[:：]\s*([\u4e00-\u9fff·]{2,20})(?=\s|$|[,，;；])', native))
+    names = {m.group(1) for m in matches}
+    if len(names) != 1:
+        return result
+    name = next(iter(names)); quote = matches[0].group(0)
+    fields = result.get('fields', [])
+    if not isinstance(fields, list):
+        return result
+    # Preserve model observations in the page cache diagnostics; downstream values
+    # use the actual native header and keep the existing report/page provenance.
+    for field in fields:
+        if isinstance(field, dict) and field.get('field_key') == 'full_name':
+            if field.get('value_raw') != name:
+                field['_model_value_raw'] = field.get('value_raw')
+            field['value_raw'] = name; field['label'] = '姓名'; field['quote'] = quote
+    return result
+
+
 def native_report_anchors(result, native, page):
+    result = native_name_anchor(result, native)
     result.pop('_native_exam_date', None)
     result.pop('_native_institution', None)
     result = native_exam_date(result, native)

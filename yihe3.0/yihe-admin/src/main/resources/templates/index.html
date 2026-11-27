@@ -291,6 +291,7 @@
 <script th:src="@{/assets/js/mine-navigation.js(v=20261125-order2)}"></script>
 <script th:src="@{/editormd/lib/marked.min.js}"></script>
 <script th:src="@{/assets/js/digital-health.js(v=20261125healthhub)}"></script>
+<script th:src="@{/assets/js/page-state.js(v=20261126r1)}"></script>
 <script th:inline="javascript">
     var upmsPermissions = [[${upmsPermissions}]]
     console.log(upmsPermissions,"upmsPermissionsupmsPermissionsupmsPermissionsupmsPermissionsupmsPermissionsupmsPermissionsupmsPermissionsupmsPermissions");
@@ -308,6 +309,7 @@
         var admin = layui.admin;
         var form = layui.form;
 
+        var pageState = MinePageState.connect(index, admin, userCode);
         // Render the default home before optional chat integrations can fail.
         index.loadHome({
             menuPath: '/manage/visualization',
@@ -495,10 +497,13 @@
         try {
             lastWorkerView = sessionStorage.getItem(workerNavigationKey);
         } catch (error) { /* The menu remains usable when session storage is unavailable. */ }
-        if (lastWorkerView) {
+        if (pageState.saved) {
+            pageState.restore();
+        } else if (lastWorkerView) {
             var savedWorkerView = lastWorkerView.split('?');
             window.openDigitalWorkerPage(savedWorkerView[0], new URLSearchParams(savedWorkerView[1]));
         }
+        pageState.start();
         window.saveDigitalWorkerSelection = function (worker) {
             if (!/^(archive|assess|follow|plan|care)$/.test(worker)) return;
             var frame = activeAdminFrame();

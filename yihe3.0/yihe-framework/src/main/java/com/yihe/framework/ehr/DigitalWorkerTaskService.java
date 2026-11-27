@@ -108,7 +108,8 @@ public class DigitalWorkerTaskService {
         try { row.put("archive",archives.read(actor,(String)row.get("recordId"))); }
         catch (EhrException error) {row.put("archive",map("linked",false,"unavailable",true));}
         row.put("workerConfig",settings.get(actor,String.valueOf(row.get("worker"))));
-        row.put("canManage",actor.doctor);
+        Map<String,Object> automatic=db.one("SELECT report_id reportId,revision,workflow_state state,match_reason reason FROM a_archive_automation WHERE task_id=? AND scope_code=? AND data_mode=?",id,actor.scope,actor.mode);row.put("automation",automatic);
+        row.put("canManage",actor.doctor&&automatic==null);
         return row;
     }
     private void event(String id,EhrActor actor,String action,String from,String to,String note) {
@@ -191,6 +192,7 @@ public class DigitalWorkerTaskService {
     @Transactional
     public Map<String,Object> act(EhrActor actor,String id,Map<String,Object> body) {
         doctor(actor);
+        require(db.count("SELECT COUNT(*) FROM a_archive_automation WHERE task_id=? AND scope_code=? AND data_mode=?",id,actor.scope,actor.mode)==0,409,"系统整理任务由档案小谷自动执行，请在报告中心处理身份异常、审核或归档");
         id=uuid(id);
         String action=field(body,"action",24,true),note=field(body,"note",2000,true);
         Object expected=body.get("version");

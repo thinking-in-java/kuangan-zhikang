@@ -2,6 +2,9 @@ package com.yihe.framework.ehr;
 
 import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.beans.factory.annotation.Autowired;
+import java.io.IOException;
 import java.util.*;
 import static com.yihe.framework.ehr.EhrAccess.map;
 
@@ -9,27 +12,36 @@ import static com.yihe.framework.ehr.EhrAccess.map;
 @RestController
 @RequestMapping("/ehr/api/report-center")
 public class ReportCenterController {
+    @Autowired EhrService ehr;
+    @PostMapping("/uploads") public Object upload(HttpServletRequest request,@RequestParam("file") MultipartFile file,@RequestHeader("Idempotency-Key") String key,@RequestParam(defaultValue="backend_file") String channel)throws IOException {
+        return map("code",0,"data",ehr.upload(auth.web(request),null,file,key,channel));
+    }
+    @Autowired ArchiveAutomationService automation;
+    @GetMapping("/{id}/{revision}/automation") public Object automationStatus(HttpServletRequest request,@PathVariable String id,@PathVariable int revision){return map("code",0,"data",automation.status(auth.web(request),id,revision));}
+    @PostMapping("/{id}/{revision}/automation") public Object resumeAutomation(HttpServletRequest request,@PathVariable String id,@PathVariable int revision){EhrActor a=auth.web(request);return map("code",0,"data",automation.register(a,id,revision));}
     final EhrAccess auth; final EhrRepository db;
     public ReportCenterController(EhrAccess auth,EhrRepository db){this.auth=auth;this.db=db;}
     @GetMapping public Object list(HttpServletRequest request,@RequestParam Map<String,String> q){
         EhrActor a=auth.web(request);
         if(a.mobile)throw new EhrException(403,"仅供后台管理使用");
         int page=EhrService.bounded(q.get("page"),1,1,100000),limit=EhrService.bounded(q.get("limit"),10,1,100);
-        String sql="SELECT h.report_id id,h.revision,r.record_id recordId,p.employee_name employeeName,p.employee_no employeeCode,p.organization_name organization,COALESCE(h.exam_date_verified,h.exam_date_raw) examDate,h.review_status reviewStatus,"+
+        String sql="SELECT h.report_id id,h.revision,r.record_id recordId,p.employee_name employeeName,p.employee_no employeeCode,p.organization_name organization,COALESCE(h.exam_date_verified,h.exam_date_raw) examDate,h.review_status reviewStatus,(SELECT x.archive_status FROM a_report_archive_entries x WHERE x.report_id=h.report_id AND x.revision=h.revision) archiveStatus,(SELECT x.quality_status FROM a_report_archive_entries x WHERE x.report_id=h.report_id AND x.revision=h.revision) qualityStatus,"+
             "(SELECT CONVERT(u.original_file_name USING utf8mb4) FROM a_report_upload_metadata u WHERE u.source_file_id=s.source_file_id ORDER BY u.uploaded_at DESC LIMIT 1) fileName,"+
             "(SELECT u.upload_channel FROM a_report_upload_metadata u WHERE u.source_file_id=s.source_file_id ORDER BY u.uploaded_at DESC LIMIT 1) channel,"+
             "s.source_file_id sourceId,h.created_at uploadedAt,"+
             "CASE WHEN EXISTS(SELECT 1 FROM a_report_publications pub WHERE pub.report_id=h.report_id AND pub.revision=h.revision) THEN 'archived' "+
             "WHEN h.review_status='confirmed' THEN 'reviewed' "+
+            "WHEN EXISTS(SELECT 1 FROM a_report_archive_entries x WHERE x.report_id=h.report_id AND x.revision=h.revision AND x.archive_status='archived') THEN 'auto_archived' "+
+            "WHEN EXISTS(SELECT 1 FROM a_report_archive_entries x WHERE x.report_id=h.report_id AND x.revision=h.revision AND x.archive_status='partial') THEN 'partial_archived' "+
             "WHEN h.review_status='rejected' THEN 'failed' "+
             "WHEN (SELECT j.status FROM a_extraction_jobs j WHERE j.report_id=h.report_id AND (j.revision=h.revision OR j.revision IS NULL) ORDER BY j.created_at DESC,j.job_id DESC LIMIT 1)='pending_review' THEN 'pending_review' "+
             "WHEN (SELECT t.dispatch_state FROM a_ocr_dispatch_tasks t JOIN a_extraction_jobs j ON j.job_id=t.job_id WHERE j.report_id=h.report_id ORDER BY t.updated_at DESC,t.job_id DESC LIMIT 1)='running' THEN 'running' "+
             "WHEN (SELECT t.dispatch_state FROM a_ocr_dispatch_tasks t JOIN a_extraction_jobs j ON j.job_id=t.job_id WHERE j.report_id=h.report_id ORDER BY t.updated_at DESC,t.job_id DESC LIMIT 1)='failed' THEN 'failed' "+
-            "WHEN EXISTS(SELECT 1 FROM a_health_items i WHERE i.report_id=h.report_id AND i.revision=h.revision) THEN 'pending_check' ELSE 'queued' END status "+
+            "WHEN h.record_id IS NULL AND EXISTS(SELECT 1 FROM a_ehr_ocr_receipts o JOIN a_extraction_jobs j ON j.job_id=o.job_id WHERE j.report_id=h.report_id AND j.revision=h.revision) THEN 'pending_match' WHEN EXISTS(SELECT 1 FROM a_health_items i WHERE i.report_id=h.report_id AND i.revision=h.revision) THEN 'pending_check' ELSE 'queued' END status "+
             "FROM a_health_reports h JOIN a_report_series s ON s.report_id=h.report_id AND s.current_revision=h.revision "+
-            "JOIN a_health_records r ON r.record_id=h.record_id AND r.scope_code=h.scope_code AND r.data_mode=h.data_mode "+
-            "JOIN a_employee_roster_profiles p ON p.employee_id=r.employee_id AND p.scope_code=r.scope_code AND p.data_mode=r.data_mode "+
-            "WHERE h.scope_code=? AND h.data_mode=? AND p.deleted_at IS NULL";
+            "LEFT JOIN a_health_records r ON r.record_id=h.record_id AND r.scope_code=h.scope_code AND r.data_mode=h.data_mode "+
+            "LEFT JOIN a_employee_roster_profiles p ON p.employee_id=r.employee_id AND p.scope_code=r.scope_code AND p.data_mode=r.data_mode "+
+            "WHERE h.scope_code=? AND h.data_mode=? AND p.deleted_at IS NULL AND (r.record_id IS NOT NULL OR (h.record_id IS NULL AND EXISTS(SELECT 1 FROM a_health_archive_audit_logs l WHERE l.report_id=h.report_id AND l.revision=h.revision AND l.scope_code=h.scope_code AND l.data_mode=h.data_mode AND l.action='report_intake_uploaded')))";
         List<Object> args=new ArrayList<>(Arrays.asList(a.scope,a.mode));
         String filtered="SELECT * FROM ("+sql+") reports WHERE 1=1";
         for(String key:new String[]{"from","to"}){
@@ -51,10 +63,10 @@ public class ReportCenterController {
         for(Map<String,Object> row:facets){counts.put(String.valueOf(row.get("status")),row.get("count"));all+=((Number)row.get("count")).longValue();}
         counts.put("all",all);
         String status=q.get("status");if(status!=null&&!status.isEmpty()&&!status.equals("all")){
-            if(status.equals("recognized"))filtered+=" AND status IN ('pending_check','pending_review','reviewed','archived')";
-            else if(status.equals("pending_match"))filtered+=" AND 1=0";
+            if(status.equals("recognized"))filtered+=" AND status IN ('pending_match','pending_check','pending_review','reviewed','archived','auto_archived','partial_archived')";
+            else if(status.equals("pending_match")){filtered+=" AND status=?";args.add(status);}
             else {
-                if(!Arrays.asList("queued","running","pending_check","pending_review","reviewed","archived","failed").contains(status))throw new EhrException(422,"状态不正确");
+                if(!Arrays.asList("queued","running","pending_check","pending_review","reviewed","archived","auto_archived","partial_archived","failed").contains(status))throw new EhrException(422,"状态不正确");
                 filtered+=" AND status=?";args.add(status);
             }
         }

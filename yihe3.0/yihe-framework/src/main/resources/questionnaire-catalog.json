@@ -1,0 +1,869 @@
+{
+  "scales": [
+    {
+      "id": "PHQ-9",
+      "name": "PHQ-9",
+      "title": "抑郁症状筛查量表",
+      "displayName": "PHQ-9 抑郁症状筛查量表",
+      "category": "情绪/心理健康",
+      "count": 9,
+      "version": "zh-reference-2026.1",
+      "status": "已启用",
+      "scaleType": "standard",
+      "standard": true,
+      "scoringMethod": "total",
+      "itemMax": 3,
+      "riskMode": "standard",
+      "riskBands": [
+        {
+          "min": 0,
+          "max": 4,
+          "note": "无或极轻症状"
+        },
+        {
+          "min": 5,
+          "max": 9,
+          "note": "轻度症状"
+        },
+        {
+          "min": 10,
+          "max": 14,
+          "note": "中度症状"
+        },
+        {
+          "min": 15,
+          "max": 19,
+          "note": "中重度症状"
+        },
+        {
+          "min": 20,
+          "max": 27,
+          "note": "重度症状"
+        }
+      ],
+      "source": "https://www.phqscreeners.com；https://www.uab.edu/medicine/pcp-sci/images/SCIMS/PHQ-9_Instruction_Manual.pdf",
+      "license": "Public domain; reproduction, translation, display and distribution permitted by author manual.",
+      "description": "近两周症状筛查；原作者：Spitzer、Williams、Kroenke等。风险为辅助筛查，不是疾病诊断。中文呈现须由本单位专业人员核对适用性。",
+      "aiEnabled": true,
+      "recommended": true,
+      "scenario": "心理健康初筛"
+    },
+    {
+      "id": "GAD-7",
+      "name": "GAD-7",
+      "title": "广泛性焦虑筛查量表",
+      "displayName": "GAD-7 广泛性焦虑筛查量表",
+      "category": "情绪/心理健康",
+      "count": 7,
+      "version": "zh-reference-2026.1",
+      "status": "已启用",
+      "scaleType": "standard",
+      "standard": true,
+      "scoringMethod": "total",
+      "itemMax": 3,
+      "riskMode": "standard",
+      "riskBands": [
+        {
+          "min": 0,
+          "max": 4,
+          "note": "无或极轻症状"
+        },
+        {
+          "min": 5,
+          "max": 9,
+          "note": "轻度症状"
+        },
+        {
+          "min": 10,
+          "max": 14,
+          "note": "中度症状"
+        },
+        {
+          "min": 15,
+          "max": 21,
+          "note": "重度症状"
+        }
+      ],
+      "source": "https://www.phqscreeners.com；https://www.uab.edu/medicine/pcp-sci/images/SCIMS/PHQ-9_Instruction_Manual.pdf",
+      "license": "Public domain; reproduction, translation, display and distribution permitted by author manual.",
+      "description": "近两周症状筛查；原作者：Spitzer、Williams、Kroenke等。风险为辅助筛查，不是疾病诊断。中文呈现须由本单位专业人员核对适用性。",
+      "aiEnabled": true,
+      "recommended": true,
+      "scenario": "心理健康初筛"
+    },
+    {
+      "id": "PSS-10",
+      "name": "PSS-10",
+      "title": "待授权版本导入",
+      "displayName": "PSS-10（待授权原版）",
+      "category": "压力与应激",
+      "count": 0,
+      "version": "待核定",
+      "status": "停用",
+      "source": "https://www.cmu.edu/dietrich/psychology/stress-immunity-disease-lab/scales/",
+      "license": "需核对版权、适用中文版本和正式评分算法后导入",
+      "restricted": true,
+      "scaleType": "standard",
+      "description": "未内置受限制题目和未经核实的分级阈值；不能发布作答。"
+    },
+    {
+      "id": "PSQI",
+      "name": "PSQI",
+      "title": "待授权版本导入",
+      "displayName": "PSQI（待授权原版）",
+      "category": "睡眠与作息",
+      "count": 0,
+      "version": "待核定",
+      "status": "停用",
+      "source": "https://www.sleep.pitt.edu/psqi",
+      "license": "需核对版权、适用中文版本和正式评分算法后导入",
+      "restricted": true,
+      "scaleType": "standard",
+      "description": "未内置受限制题目和未经核实的分级阈值；不能发布作答。"
+    },
+    {
+      "id": "SCL-90",
+      "name": "SCL-90",
+      "title": "待授权版本导入",
+      "displayName": "SCL-90（待授权原版）",
+      "category": "心理症状评估",
+      "count": 0,
+      "version": "待核定",
+      "status": "停用",
+      "source": "https://www.pearsonassessments.com/",
+      "license": "需核对版权、适用中文版本和正式评分算法后导入",
+      "restricted": true,
+      "scaleType": "standard",
+      "description": "未内置受限制题目和未经核实的分级阈值；不能发布作答。"
+    },
+    {
+      "id": "MINE-WELLBEING",
+      "name": "MINE-WELLBEING",
+      "title": "煤矿岗位健康与支持需求调查（自编）",
+      "category": "职业心理",
+      "count": 6,
+      "version": "v1.0",
+      "status": "已启用",
+      "scaleType": "custom",
+      "source": "本项目自编需求调查；非标准心理量表",
+      "description": "用于了解作息、疲劳、支持和服务需求，不作心理疾病或职业适任结论。",
+      "scoringMethod": "total",
+      "riskMode": "custom",
+      "riskBands": [],
+      "itemMax": 3
+    }
+  ],
+  "questions": [
+    {
+      "id": "PHQ-9-01",
+      "code": "PHQ-9-01",
+      "scale": "PHQ-9",
+      "text": "做事时提不起劲或没有兴趣",
+      "description": "在过去两个星期里，以下问题困扰您的频率是？",
+      "type": "single",
+      "status": "启用",
+      "required": true,
+      "order": 10,
+      "options": "完全没有；有几天；一半以上的天数；几乎每天",
+      "optionItems": [
+        {
+          "label": "完全没有",
+          "score": 0
+        },
+        {
+          "label": "有几天",
+          "score": 1
+        },
+        {
+          "label": "一半以上的天数",
+          "score": 2
+        },
+        {
+          "label": "几乎每天",
+          "score": 3
+        }
+      ],
+      "standard": true,
+      "source": "https://www.phqscreeners.com",
+      "version": "zh-reference-2026.1"
+    },
+    {
+      "id": "PHQ-9-02",
+      "code": "PHQ-9-02",
+      "scale": "PHQ-9",
+      "text": "感到心情低落、沮丧或绝望",
+      "description": "在过去两个星期里，以下问题困扰您的频率是？",
+      "type": "single",
+      "status": "启用",
+      "required": true,
+      "order": 20,
+      "options": "完全没有；有几天；一半以上的天数；几乎每天",
+      "optionItems": [
+        {
+          "label": "完全没有",
+          "score": 0
+        },
+        {
+          "label": "有几天",
+          "score": 1
+        },
+        {
+          "label": "一半以上的天数",
+          "score": 2
+        },
+        {
+          "label": "几乎每天",
+          "score": 3
+        }
+      ],
+      "standard": true,
+      "source": "https://www.phqscreeners.com",
+      "version": "zh-reference-2026.1"
+    },
+    {
+      "id": "PHQ-9-03",
+      "code": "PHQ-9-03",
+      "scale": "PHQ-9",
+      "text": "入睡困难、睡不安稳或睡眠过多",
+      "description": "在过去两个星期里，以下问题困扰您的频率是？",
+      "type": "single",
+      "status": "启用",
+      "required": true,
+      "order": 30,
+      "options": "完全没有；有几天；一半以上的天数；几乎每天",
+      "optionItems": [
+        {
+          "label": "完全没有",
+          "score": 0
+        },
+        {
+          "label": "有几天",
+          "score": 1
+        },
+        {
+          "label": "一半以上的天数",
+          "score": 2
+        },
+        {
+          "label": "几乎每天",
+          "score": 3
+        }
+      ],
+      "standard": true,
+      "source": "https://www.phqscreeners.com",
+      "version": "zh-reference-2026.1"
+    },
+    {
+      "id": "PHQ-9-04",
+      "code": "PHQ-9-04",
+      "scale": "PHQ-9",
+      "text": "感觉疲倦或没有活力",
+      "description": "在过去两个星期里，以下问题困扰您的频率是？",
+      "type": "single",
+      "status": "启用",
+      "required": true,
+      "order": 40,
+      "options": "完全没有；有几天；一半以上的天数；几乎每天",
+      "optionItems": [
+        {
+          "label": "完全没有",
+          "score": 0
+        },
+        {
+          "label": "有几天",
+          "score": 1
+        },
+        {
+          "label": "一半以上的天数",
+          "score": 2
+        },
+        {
+          "label": "几乎每天",
+          "score": 3
+        }
+      ],
+      "standard": true,
+      "source": "https://www.phqscreeners.com",
+      "version": "zh-reference-2026.1"
+    },
+    {
+      "id": "PHQ-9-05",
+      "code": "PHQ-9-05",
+      "scale": "PHQ-9",
+      "text": "食欲不振或吃太多",
+      "description": "在过去两个星期里，以下问题困扰您的频率是？",
+      "type": "single",
+      "status": "启用",
+      "required": true,
+      "order": 50,
+      "options": "完全没有；有几天；一半以上的天数；几乎每天",
+      "optionItems": [
+        {
+          "label": "完全没有",
+          "score": 0
+        },
+        {
+          "label": "有几天",
+          "score": 1
+        },
+        {
+          "label": "一半以上的天数",
+          "score": 2
+        },
+        {
+          "label": "几乎每天",
+          "score": 3
+        }
+      ],
+      "standard": true,
+      "source": "https://www.phqscreeners.com",
+      "version": "zh-reference-2026.1"
+    },
+    {
+      "id": "PHQ-9-06",
+      "code": "PHQ-9-06",
+      "scale": "PHQ-9",
+      "text": "觉得自己很糟，或觉得自己很失败，或让自己或家人失望",
+      "description": "在过去两个星期里，以下问题困扰您的频率是？",
+      "type": "single",
+      "status": "启用",
+      "required": true,
+      "order": 60,
+      "options": "完全没有；有几天；一半以上的天数；几乎每天",
+      "optionItems": [
+        {
+          "label": "完全没有",
+          "score": 0
+        },
+        {
+          "label": "有几天",
+          "score": 1
+        },
+        {
+          "label": "一半以上的天数",
+          "score": 2
+        },
+        {
+          "label": "几乎每天",
+          "score": 3
+        }
+      ],
+      "standard": true,
+      "source": "https://www.phqscreeners.com",
+      "version": "zh-reference-2026.1"
+    },
+    {
+      "id": "PHQ-9-07",
+      "code": "PHQ-9-07",
+      "scale": "PHQ-9",
+      "text": "对事物专注有困难，例如阅读报纸或看电视时",
+      "description": "在过去两个星期里，以下问题困扰您的频率是？",
+      "type": "single",
+      "status": "启用",
+      "required": true,
+      "order": 70,
+      "options": "完全没有；有几天；一半以上的天数；几乎每天",
+      "optionItems": [
+        {
+          "label": "完全没有",
+          "score": 0
+        },
+        {
+          "label": "有几天",
+          "score": 1
+        },
+        {
+          "label": "一半以上的天数",
+          "score": 2
+        },
+        {
+          "label": "几乎每天",
+          "score": 3
+        }
+      ],
+      "standard": true,
+      "source": "https://www.phqscreeners.com",
+      "version": "zh-reference-2026.1"
+    },
+    {
+      "id": "PHQ-9-08",
+      "code": "PHQ-9-08",
+      "scale": "PHQ-9",
+      "text": "动作或说话速度缓慢到别人已经察觉，或正好相反，烦躁或坐立不安，动来动去的情况更胜于平常",
+      "description": "在过去两个星期里，以下问题困扰您的频率是？",
+      "type": "single",
+      "status": "启用",
+      "required": true,
+      "order": 80,
+      "options": "完全没有；有几天；一半以上的天数；几乎每天",
+      "optionItems": [
+        {
+          "label": "完全没有",
+          "score": 0
+        },
+        {
+          "label": "有几天",
+          "score": 1
+        },
+        {
+          "label": "一半以上的天数",
+          "score": 2
+        },
+        {
+          "label": "几乎每天",
+          "score": 3
+        }
+      ],
+      "standard": true,
+      "source": "https://www.phqscreeners.com",
+      "version": "zh-reference-2026.1"
+    },
+    {
+      "id": "PHQ-9-09",
+      "code": "PHQ-9-09",
+      "scale": "PHQ-9",
+      "text": "有不如死掉或用某种方式伤害自己的念头",
+      "description": "在过去两个星期里，以下问题困扰您的频率是？",
+      "type": "single",
+      "status": "启用",
+      "required": true,
+      "order": 90,
+      "options": "完全没有；有几天；一半以上的天数；几乎每天",
+      "optionItems": [
+        {
+          "label": "完全没有",
+          "score": 0
+        },
+        {
+          "label": "有几天",
+          "score": 1
+        },
+        {
+          "label": "一半以上的天数",
+          "score": 2
+        },
+        {
+          "label": "几乎每天",
+          "score": 3
+        }
+      ],
+      "standard": true,
+      "source": "https://www.phqscreeners.com",
+      "version": "zh-reference-2026.1"
+    },
+    {
+      "id": "GAD-7-01",
+      "code": "GAD-7-01",
+      "scale": "GAD-7",
+      "text": "感觉紧张、焦虑或急切",
+      "description": "在过去两个星期里，以下问题困扰您的频率是？",
+      "type": "single",
+      "status": "启用",
+      "required": true,
+      "order": 10,
+      "options": "完全没有；有几天；一半以上的天数；几乎每天",
+      "optionItems": [
+        {
+          "label": "完全没有",
+          "score": 0
+        },
+        {
+          "label": "有几天",
+          "score": 1
+        },
+        {
+          "label": "一半以上的天数",
+          "score": 2
+        },
+        {
+          "label": "几乎每天",
+          "score": 3
+        }
+      ],
+      "standard": true,
+      "source": "https://www.phqscreeners.com",
+      "version": "zh-reference-2026.1"
+    },
+    {
+      "id": "GAD-7-02",
+      "code": "GAD-7-02",
+      "scale": "GAD-7",
+      "text": "不能够停止或控制担忧",
+      "description": "在过去两个星期里，以下问题困扰您的频率是？",
+      "type": "single",
+      "status": "启用",
+      "required": true,
+      "order": 20,
+      "options": "完全没有；有几天；一半以上的天数；几乎每天",
+      "optionItems": [
+        {
+          "label": "完全没有",
+          "score": 0
+        },
+        {
+          "label": "有几天",
+          "score": 1
+        },
+        {
+          "label": "一半以上的天数",
+          "score": 2
+        },
+        {
+          "label": "几乎每天",
+          "score": 3
+        }
+      ],
+      "standard": true,
+      "source": "https://www.phqscreeners.com",
+      "version": "zh-reference-2026.1"
+    },
+    {
+      "id": "GAD-7-03",
+      "code": "GAD-7-03",
+      "scale": "GAD-7",
+      "text": "对各种各样的事情担忧过多",
+      "description": "在过去两个星期里，以下问题困扰您的频率是？",
+      "type": "single",
+      "status": "启用",
+      "required": true,
+      "order": 30,
+      "options": "完全没有；有几天；一半以上的天数；几乎每天",
+      "optionItems": [
+        {
+          "label": "完全没有",
+          "score": 0
+        },
+        {
+          "label": "有几天",
+          "score": 1
+        },
+        {
+          "label": "一半以上的天数",
+          "score": 2
+        },
+        {
+          "label": "几乎每天",
+          "score": 3
+        }
+      ],
+      "standard": true,
+      "source": "https://www.phqscreeners.com",
+      "version": "zh-reference-2026.1"
+    },
+    {
+      "id": "GAD-7-04",
+      "code": "GAD-7-04",
+      "scale": "GAD-7",
+      "text": "很难放松下来",
+      "description": "在过去两个星期里，以下问题困扰您的频率是？",
+      "type": "single",
+      "status": "启用",
+      "required": true,
+      "order": 40,
+      "options": "完全没有；有几天；一半以上的天数；几乎每天",
+      "optionItems": [
+        {
+          "label": "完全没有",
+          "score": 0
+        },
+        {
+          "label": "有几天",
+          "score": 1
+        },
+        {
+          "label": "一半以上的天数",
+          "score": 2
+        },
+        {
+          "label": "几乎每天",
+          "score": 3
+        }
+      ],
+      "standard": true,
+      "source": "https://www.phqscreeners.com",
+      "version": "zh-reference-2026.1"
+    },
+    {
+      "id": "GAD-7-05",
+      "code": "GAD-7-05",
+      "scale": "GAD-7",
+      "text": "由于不安而无法静坐",
+      "description": "在过去两个星期里，以下问题困扰您的频率是？",
+      "type": "single",
+      "status": "启用",
+      "required": true,
+      "order": 50,
+      "options": "完全没有；有几天；一半以上的天数；几乎每天",
+      "optionItems": [
+        {
+          "label": "完全没有",
+          "score": 0
+        },
+        {
+          "label": "有几天",
+          "score": 1
+        },
+        {
+          "label": "一半以上的天数",
+          "score": 2
+        },
+        {
+          "label": "几乎每天",
+          "score": 3
+        }
+      ],
+      "standard": true,
+      "source": "https://www.phqscreeners.com",
+      "version": "zh-reference-2026.1"
+    },
+    {
+      "id": "GAD-7-06",
+      "code": "GAD-7-06",
+      "scale": "GAD-7",
+      "text": "变得容易烦恼或急躁",
+      "description": "在过去两个星期里，以下问题困扰您的频率是？",
+      "type": "single",
+      "status": "启用",
+      "required": true,
+      "order": 60,
+      "options": "完全没有；有几天；一半以上的天数；几乎每天",
+      "optionItems": [
+        {
+          "label": "完全没有",
+          "score": 0
+        },
+        {
+          "label": "有几天",
+          "score": 1
+        },
+        {
+          "label": "一半以上的天数",
+          "score": 2
+        },
+        {
+          "label": "几乎每天",
+          "score": 3
+        }
+      ],
+      "standard": true,
+      "source": "https://www.phqscreeners.com",
+      "version": "zh-reference-2026.1"
+    },
+    {
+      "id": "GAD-7-07",
+      "code": "GAD-7-07",
+      "scale": "GAD-7",
+      "text": "感到似乎将有可怕的事情发生而害怕",
+      "description": "在过去两个星期里，以下问题困扰您的频率是？",
+      "type": "single",
+      "status": "启用",
+      "required": true,
+      "order": 70,
+      "options": "完全没有；有几天；一半以上的天数；几乎每天",
+      "optionItems": [
+        {
+          "label": "完全没有",
+          "score": 0
+        },
+        {
+          "label": "有几天",
+          "score": 1
+        },
+        {
+          "label": "一半以上的天数",
+          "score": 2
+        },
+        {
+          "label": "几乎每天",
+          "score": 3
+        }
+      ],
+      "standard": true,
+      "source": "https://www.phqscreeners.com",
+      "version": "zh-reference-2026.1"
+    },
+    {
+      "id": "MINE-1",
+      "code": "MINE-1",
+      "scale": "MINE-WELLBEING",
+      "text": "最近两周，您是否因轮班安排难以获得充足休息？",
+      "type": "single",
+      "required": true,
+      "status": "启用",
+      "options": "完全没有；有几天；一半以上的天数；几乎每天",
+      "optionItems": [
+        {
+          "label": "完全没有",
+          "score": 0
+        },
+        {
+          "label": "有几天",
+          "score": 1
+        },
+        {
+          "label": "一半以上的天数",
+          "score": 2
+        },
+        {
+          "label": "几乎每天",
+          "score": 3
+        }
+      ],
+      "source": "本项目自编，非标准量表"
+    },
+    {
+      "id": "MINE-2",
+      "code": "MINE-2",
+      "scale": "MINE-WELLBEING",
+      "text": "工作结束后，您是否仍感到明显疲劳？",
+      "type": "single",
+      "required": true,
+      "status": "启用",
+      "options": "完全没有；有几天；一半以上的天数；几乎每天",
+      "optionItems": [
+        {
+          "label": "完全没有",
+          "score": 0
+        },
+        {
+          "label": "有几天",
+          "score": 1
+        },
+        {
+          "label": "一半以上的天数",
+          "score": 2
+        },
+        {
+          "label": "几乎每天",
+          "score": 3
+        }
+      ],
+      "source": "本项目自编，非标准量表"
+    },
+    {
+      "id": "MINE-3",
+      "code": "MINE-3",
+      "scale": "MINE-WELLBEING",
+      "text": "您是否担忧工作中的安全风险？",
+      "type": "single",
+      "required": true,
+      "status": "启用",
+      "options": "完全没有；有几天；一半以上的天数；几乎每天",
+      "optionItems": [
+        {
+          "label": "完全没有",
+          "score": 0
+        },
+        {
+          "label": "有几天",
+          "score": 1
+        },
+        {
+          "label": "一半以上的天数",
+          "score": 2
+        },
+        {
+          "label": "几乎每天",
+          "score": 3
+        }
+      ],
+      "source": "本项目自编，非标准量表"
+    },
+    {
+      "id": "MINE-4",
+      "code": "MINE-4",
+      "scale": "MINE-WELLBEING",
+      "text": "遇到工作压力时，您是否难以获得同事或班组支持？",
+      "type": "single",
+      "required": true,
+      "status": "启用",
+      "options": "完全没有；有几天；一半以上的天数；几乎每天",
+      "optionItems": [
+        {
+          "label": "完全没有",
+          "score": 0
+        },
+        {
+          "label": "有几天",
+          "score": 1
+        },
+        {
+          "label": "一半以上的天数",
+          "score": 2
+        },
+        {
+          "label": "几乎每天",
+          "score": 3
+        }
+      ],
+      "source": "本项目自编，非标准量表"
+    },
+    {
+      "id": "MINE-5",
+      "code": "MINE-5",
+      "scale": "MINE-WELLBEING",
+      "text": "您是否需要健康教育或心理支持服务？",
+      "type": "single",
+      "required": true,
+      "status": "启用",
+      "options": "完全没有；有几天；一半以上的天数；几乎每天",
+      "optionItems": [
+        {
+          "label": "完全没有",
+          "score": 0
+        },
+        {
+          "label": "有几天",
+          "score": 1
+        },
+        {
+          "label": "一半以上的天数",
+          "score": 2
+        },
+        {
+          "label": "几乎每天",
+          "score": 3
+        }
+      ],
+      "source": "本项目自编，非标准量表"
+    },
+    {
+      "id": "MINE-6",
+      "code": "MINE-6",
+      "scale": "MINE-WELLBEING",
+      "text": "您是否希望工作人员与您进行一次私下沟通？",
+      "type": "single",
+      "required": true,
+      "status": "启用",
+      "options": "完全没有；有几天；一半以上的天数；几乎每天",
+      "optionItems": [
+        {
+          "label": "完全没有",
+          "score": 0
+        },
+        {
+          "label": "有几天",
+          "score": 1
+        },
+        {
+          "label": "一半以上的天数",
+          "score": 2
+        },
+        {
+          "label": "几乎每天",
+          "score": 3
+        }
+      ],
+      "source": "本项目自编，非标准量表"
+    }
+  ],
+  "questionCategories": [
+    {
+      "id": "mine-support",
+      "name": "煤矿岗位健康与支持",
+      "parent": "custom",
+      "enabled": true,
+      "order": 10
+    }
+  ]
+}

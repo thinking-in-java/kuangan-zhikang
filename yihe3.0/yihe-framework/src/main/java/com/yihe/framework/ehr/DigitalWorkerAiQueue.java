@@ -23,6 +23,7 @@ public class DigitalWorkerAiQueue {
         if (!actor.doctor||actor.mobile) throw new EhrException(403,"AI 处理需要医生权限");
         Map<String,Object> hint=db.one("SELECT worker_id FROM a_digital_worker_tasks WHERE task_id=? AND scope_code=? AND data_mode=?",id,actor.scope,actor.mode);
         if(hint==null)throw new EhrException(404,"任务不存在或无权访问");
+        if(db.count("SELECT COUNT(*) FROM a_archive_automation WHERE task_id=?",id)>0)throw new EhrException(409,"该任务由档案小谷自动整理流程执行，请在报告处理详情查看或处理异常");
         Map<String,Object> config=settings.lock(actor,text(hint,"worker_id"));settings.requireAi(config);
         Map<String,Object> task=db.one("SELECT * FROM a_digital_worker_tasks WHERE task_id=? AND scope_code=? AND data_mode=? FOR UPDATE",
             id,actor.scope,actor.mode);
