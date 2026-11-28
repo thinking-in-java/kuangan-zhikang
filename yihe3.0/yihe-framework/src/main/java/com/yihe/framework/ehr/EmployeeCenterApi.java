@@ -48,7 +48,7 @@ public class EmployeeCenterApi {
         long total=db.count("SELECT COUNT(*)"+ehr.baseSql(),actor.scope,actor.mode);
         people.addAll(db.all(ehr.projection()+" ORDER BY p.created_at DESC,r.record_id DESC LIMIT 5000",actor.scope,actor.mode));
         Map<String,Map<String,Object>> bindings=new HashMap<>();
-        for(Map<String,Object> row:db.all("SELECT b.record_id recordId,b.confirmed_at confirmedAt,u.last_login_at lastLoginAt FROM a_miniapp_employee_bindings b JOIN a_miniapp_users u ON u.mini_user_id=b.mini_user_id AND u.data_mode=b.data_mode WHERE b.scope_code=? AND b.data_mode=? AND b.binding_status='active'",actor.scope,actor.mode))bindings.put(String.valueOf(row.get("recordId")),row);
+        for(Map<String,Object> row:db.all("SELECT b.record_id recordId,DATE_FORMAT(b.confirmed_at,'%Y-%m-%dT%H:%i:%sZ') confirmedAt,DATE_FORMAT(u.last_login_at,'%Y-%m-%dT%H:%i:%sZ') lastLoginAt FROM a_miniapp_employee_bindings b JOIN a_miniapp_users u ON u.mini_user_id=b.mini_user_id AND u.data_mode=b.data_mode WHERE b.scope_code=? AND b.data_mode=? AND b.binding_status='active'",actor.scope,actor.mode))bindings.put(String.valueOf(row.get("recordId")),row);
         for(Map<String,Object> row:people){Map<String,Object> binding=bindings.get(String.valueOf(row.get("id")));row.put("bound",binding!=null);if(binding!=null){row.put("boundAt",binding.get("confirmedAt"));row.put("lastLoginAt",binding.get("lastLoginAt"));}}
         return ok(map("items",people,"total",total,"truncated",people.size()<total));
     }
@@ -65,11 +65,11 @@ public class EmployeeCenterApi {
         if(file.isEmpty()||file.getSize()>10485760||name==null||!name.toLowerCase(Locale.ROOT).matches(".*\\.(xlsx|xls)$"))throw new EhrException(422,"请选择10 MiB以内的 XLSX 或 XLS 文件");
         try(InputStream input=file.getInputStream();Workbook book=WorkbookFactory.create(input)){
             if(book.getNumberOfSheets()==0)throw new EhrException(422,"文件没有工作表");Sheet sheet=book.getSheetAt(0);
-            if(sheet.getLastRowNum()>500)throw new EhrException(422,"单次最多导入500位职工，请拆分文件");
+            if(sheet.getPhysicalNumberOfRows()>20000)throw new EhrException(422,"工作表空白行过多，请清理后重试");
             Row head=sheet.getRow(sheet.getFirstRowNum());if(head==null||head.getLastCellNum()<1||head.getLastCellNum()>100)throw new EhrException(422,"首行应包含1至100个字段名");
             DataFormatter formatter=new DataFormatter(Locale.CHINA);List<String> headers=new ArrayList<>();for(int i=0;i<head.getLastCellNum();i++)headers.add(formatter.formatCellValue(head.getCell(i)).trim());
-            List<List<String>> rows=new ArrayList<>();for(int n=sheet.getFirstRowNum()+1;n<=sheet.getLastRowNum();n++){Row row=sheet.getRow(n);if(row==null)continue;List<String> values=new ArrayList<>();boolean nonempty=false;for(int c=0;c<headers.size();c++){Cell cell=row.getCell(c);String v=formatter.formatCellValue(cell).trim();if(cell!=null&&cell.getCellTypeEnum()==CellType.NUMERIC&&DateUtil.isCellDateFormatted(cell))v=new java.text.SimpleDateFormat("yyyy-MM-dd").format(cell.getDateCellValue());if(v.length()>4000)throw new EhrException(422,"第"+(n+1)+"行单元格内容过长");if(cell!=null&&cell.getCellTypeEnum()==CellType.FORMULA)throw new EhrException(422,"请将第"+(n+1)+"行公式转换为值后导入");values.add(v);nonempty|=!v.isEmpty();}if(nonempty)rows.add(values);}
-            if(rows.isEmpty())throw new EhrException(422,"文件没有可导入的职工数据");return ok(map("headers",headers,"rows",rows,"fileName",name));
+            List<List<String>> rows=new ArrayList<>();List<Integer> rowNumbers=new ArrayList<>();for(int n=sheet.getFirstRowNum()+1;n<=sheet.getLastRowNum();n++){Row row=sheet.getRow(n);if(row==null)continue;List<String> values=new ArrayList<>();boolean nonempty=false;for(int c=0;c<headers.size();c++){Cell cell=row.getCell(c);String v=formatter.formatCellValue(cell).trim();if(cell!=null&&cell.getCellTypeEnum()==CellType.NUMERIC&&DateUtil.isCellDateFormatted(cell))v=new java.text.SimpleDateFormat("yyyy-MM-dd").format(cell.getDateCellValue());if(v.length()>4000)throw new EhrException(422,"第"+(n+1)+"行单元格内容过长");if(cell!=null&&cell.getCellTypeEnum()==CellType.FORMULA)throw new EhrException(422,"请将第"+(n+1)+"行公式转换为值后导入");values.add(v);nonempty|=!v.isEmpty();}if(nonempty){rows.add(values);rowNumbers.add(n+1);if(rows.size()>5000)throw new EhrException(422,"单次最多导入5000位职工，请拆分文件");}}
+            if(rows.isEmpty())throw new EhrException(422,"文件没有可导入的职工数据");return ok(map("headers",headers,"rows",rows,"rowNumbers",rowNumbers,"fileName",name));
         }catch(EhrException error){throw error;}catch(Exception error){throw new EhrException(422,"无法读取Excel，请确认文件格式和内容完整");}
     }
 }
