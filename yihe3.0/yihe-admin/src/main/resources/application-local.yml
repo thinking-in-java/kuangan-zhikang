@@ -23,6 +23,8 @@ ehr:
   storage-root: ${EHR_STORAGE_ROOT:D:/update}
   agent:
     config-file: ${EHR_AGENT_CONFIG_FILE:D:/update/.config/health-agent.json}
+  digital-worker:
+    model-config-file: ${EHR_DIGITAL_WORKER_CONFIG_FILE:${EHR_AGENT_CONFIG_FILE:D:/update/.config/health-agent.json}}
   miniapp-agent:
     enabled: ${EHR_MINIAPP_AGENT_ENABLED:true}
     workers: ${EHR_MINIAPP_AGENT_WORKERS:2}

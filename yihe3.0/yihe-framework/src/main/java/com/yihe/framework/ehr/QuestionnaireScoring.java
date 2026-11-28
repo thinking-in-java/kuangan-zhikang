@@ -10,15 +10,17 @@ import static com.yihe.framework.ehr.EhrService.*;
  public static Map<String,Object> score(Map<String,Object> doc,Map<String,Object> answers){
   List<Object> results=new ArrayList<>(),items=new ArrayList<>();boolean urgent=false;String overall="unknown";
   for(Map<String,Object> scale:rows(doc.get("scoringScales"))){double sum=0,max=0;int count=0;boolean complete=true;
+   if("management".equals(scale.get("method"))){results.add(QuestionnaireManagementScoring.scoreScale(scale,answers,items));continue;}
    for(Map<String,Object> q:rows(scale.get("questions"))){Object raw=answers.get(str(q.get("id")));double value=0,highest=0;List<?> chosen=raw instanceof List?(List<?>)raw:raw==null?Collections.emptyList():Collections.singletonList(raw);List<String> labels=new ArrayList<>();for(Map<String,Object> o:rows(q.get("options"))){double v=Double.parseDouble(str(o.get("score")));highest=Math.max(highest,v);if(chosen.contains(o.get("id"))){value+=v;labels.add(str(o.get("label")));}}
     if(raw==null)complete=false;sum+=value;max+=highest;count++;items.add(map("id",q.get("id"),"text",q.get("title"),"answer",labels,"score",value,"scale",scale.get("name")));
     if("PHQ-9".equals(scale.get("name"))&&str(q.get("id")).endsWith("09")&&value>0)urgent=true;
    }
    if("average".equals(scale.get("method"))&&count>0){sum/=count;max/=count;}
+   double multiplier=scale.get("multiplier") instanceof Number?((Number)scale.get("multiplier")).doubleValue():1;require(Double.isFinite(multiplier)&&multiplier>0&&multiplier<=10,422,"Invalid scoring multiplier");sum*=multiplier;max*=multiplier;
    String level="unknown",severity="未配置分级，需专业解释";
    if(complete)for(Map<String,Object> band:rows(scale.get("bands"))){double lo=Double.parseDouble(str(band.get("min"))),hi=Double.parseDouble(str(band.get("max")));if(sum>=lo&&sum<=hi){level=str(band.get("level"));severity=str(band.get("note"));break;}}
    if(rank(level)>rank(overall))overall=level;
-   results.add(map("name",scale.get("name"),"version",scale.get("version"),"source",scale.get("source"),"score",sum,"maxScore",max,"risk",level,"severity",severity,"complete",complete));
+   results.add(map("name",scale.get("name"),"version",scale.get("version"),"source",scale.get("source"),"score",sum,"maxScore",max,"risk",level,"severity",severity,"complete",complete,"employeeScoreHidden",Boolean.TRUE.equals(scale.get("employeeScoreHidden")),"parentScale",scale.get("parentScale")));
   }
   return map("scales",results,"items",items,"risk",overall,"urgent",urgent,"basis","冻结发布版本逐量表计分；不将不同量表分数相加判定疾病；医生审核独立记录");
  }

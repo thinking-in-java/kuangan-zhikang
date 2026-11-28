@@ -1,0 +1,51 @@
+{
+  "version": "2026.11.27",
+  "newQuestions": 2239,
+  "originalQuestions": 2160,
+  "newStandardItems": 79,
+  "newStandardScales": 6,
+  "newCustomSurveys": 12,
+  "categories": 18,
+  "expectedQuestions": 2261,
+  "expectedScales": 24,
+  "sources": {
+    "occupational": {
+      "title": "中国劳动者职业健康素养：基本知识和技能（2022年版）",
+      "url": "https://www.chinacdc.cn/jkyj/hjwsyzdkz/jswj3/202203/t20220309_295926.html",
+      "use": "参考主题，调查题为本项目原创，不复制国家监测问卷或其评分算法"
+    },
+    "literacy": {
+      "title": "中国公民健康素养：基本知识与技能（2024年版）",
+      "url": "https://wjw.gz.gov.cn/zmhd/cjwt/zczy/content/post_9687151.html",
+      "use": "参考健康教育主题；原创需求调查，不作为诊断"
+    },
+    "wellbq": {
+      "title": "NIOSH Worker Well-Being Questionnaire：领域框架",
+      "url": "https://www.cdc.gov/niosh/twh/php/wellbq/",
+      "use": "仅参考工作体验、组织支持、工作环境、健康、家庭社会五领域，不复制受单项使用条件限制的题目"
+    },
+    "phq": {
+      "title": "PHQ and GAD-7 Measures: Author Instruction Manual",
+      "url": "https://www.uab.edu/medicine/pcp-sci/images/SCIMS/PHQ-9_Instruction_Manual.pdf",
+      "use": "作者说明为公共领域；保留题目、时间窗、原始分值与独立计分，中文参考呈现需专业核对"
+    },
+    "dass": {
+      "title": "DASS：UNSW 官方许可与使用说明",
+      "url": "https://www2.psy.unsw.edu.au/dass/DASSFAQ.htm",
+      "use": "Public domain；题目与计分键可复制，不修改或单独售卖量表；由专业人员解释，不向职工自动给出分数解释"
+    },
+    "dass_zh": {
+      "title": "DASS-42：Zuo & Chang 简体中文译本",
+      "url": "https://www2.psy.unsw.edu.au/dass/Chinese/DASS42%20simplified%20Chinese.pdf",
+      "use": "逐字保留译文；21题版按英文短版与42题原题对应关系抽取，明确为参考呈现"
+    },
+    "dass21": {
+      "title": "DASS-21：英文原表与计分键",
+      "url": "https://www2.psy.unsw.edu.au/dass/Download%20files/Dass21.pdf",
+      "use": "抑郁、焦虑、压力分别求和，分量表乘2；不输出混合诊断总分"
+    }
+  },
+  "questionTextSha256": "6bc142bfc1982b508c7eaec3515f251f6525bebfa17e52aab911f13924549237",
+  "managementScoringVersion": "management-v1-20261127",
+  "scoredOriginalQuestions": 1620
+}

@@ -151,6 +151,318 @@
       "riskMode": "custom",
       "riskBands": [],
       "itemMax": 3
+    },
+    {
+      "id": "PHQ-2",
+      "name": "PHQ-2",
+      "title": "抑郁症状两题筛查",
+      "displayName": "PHQ-2 抑郁症状两题筛查",
+      "category": "情绪/心理健康",
+      "count": 2,
+      "version": "zh-reference-2026.11.27",
+      "status": "已启用",
+      "scaleType": "standard",
+      "standard": true,
+      "source": "https://www.uab.edu/medicine/pcp-sci/images/SCIMS/PHQ-9_Instruction_Manual.pdf",
+      "license": "Public domain; author instruction manual pp. 3, 8.",
+      "scoringMethod": "total",
+      "itemMax": 3,
+      "riskBands": [
+        {
+          "min": 0,
+          "max": 2,
+          "note": "未达到建议扩展筛查的分数；不排除其他问题",
+          "level": "unknown"
+        },
+        {
+          "min": 3,
+          "max": 6,
+          "note": "建议进一步完成完整量表并由专业人员评估；不是诊断",
+          "level": "unknown"
+        }
+      ],
+      "riskMode": "standard",
+      "aiEnabled": false,
+      "requiresProfessionalReview": true,
+      "scenario": "心理健康初筛",
+      "description": "作者开放使用；中文沿用本项目现有PHQ/GAD参考题。保留过去两周时间窗，不代替专业诊断。不建议与同源长版在一次问卷内重复发放。"
+    },
+    {
+      "id": "GAD-2",
+      "name": "GAD-2",
+      "title": "焦虑症状两题筛查",
+      "displayName": "GAD-2 焦虑症状两题筛查",
+      "category": "情绪/心理健康",
+      "count": 2,
+      "version": "zh-reference-2026.11.27",
+      "status": "已启用",
+      "scaleType": "standard",
+      "standard": true,
+      "source": "https://www.uab.edu/medicine/pcp-sci/images/SCIMS/PHQ-9_Instruction_Manual.pdf",
+      "license": "Public domain; author instruction manual pp. 3, 8.",
+      "scoringMethod": "total",
+      "itemMax": 3,
+      "riskBands": [
+        {
+          "min": 0,
+          "max": 2,
+          "note": "未达到建议扩展筛查的分数；不排除其他问题",
+          "level": "unknown"
+        },
+        {
+          "min": 3,
+          "max": 6,
+          "note": "建议进一步完成完整量表并由专业人员评估；不是诊断",
+          "level": "unknown"
+        }
+      ],
+      "riskMode": "standard",
+      "aiEnabled": false,
+      "requiresProfessionalReview": true,
+      "scenario": "心理健康初筛",
+      "description": "作者开放使用；中文沿用本项目现有PHQ/GAD参考题。保留过去两周时间窗，不代替专业诊断。不建议与同源长版在一次问卷内重复发放。"
+    },
+    {
+      "id": "PHQ-8",
+      "name": "PHQ-8",
+      "title": "抑郁症状八题筛查",
+      "displayName": "PHQ-8 抑郁症状八题筛查",
+      "category": "情绪/心理健康",
+      "count": 8,
+      "version": "zh-reference-2026.11.27",
+      "status": "已启用",
+      "scaleType": "standard",
+      "standard": true,
+      "source": "https://www.uab.edu/medicine/pcp-sci/images/SCIMS/PHQ-9_Instruction_Manual.pdf",
+      "license": "Public domain; author instruction manual pp. 3, 8.",
+      "scoringMethod": "total",
+      "itemMax": 3,
+      "riskBands": [
+        {
+          "min": 0,
+          "max": 4,
+          "note": "无或极少症状；仅反映症状程度，非诊断",
+          "level": "unknown"
+        },
+        {
+          "min": 5,
+          "max": 9,
+          "note": "轻度症状；仅反映症状程度，非诊断",
+          "level": "unknown"
+        },
+        {
+          "min": 10,
+          "max": 14,
+          "note": "中度症状；仅反映症状程度，非诊断",
+          "level": "unknown"
+        },
+        {
+          "min": 15,
+          "max": 19,
+          "note": "较重症状；仅反映症状程度，非诊断",
+          "level": "unknown"
+        },
+        {
+          "min": 20,
+          "max": 24,
+          "note": "重度症状；仅反映症状程度，非诊断",
+          "level": "unknown"
+        }
+      ],
+      "riskMode": "standard",
+      "aiEnabled": false,
+      "requiresProfessionalReview": true,
+      "scenario": "心理健康初筛",
+      "description": "作者开放使用；中文沿用本项目现有PHQ/GAD参考题。保留过去两周时间窗，不代替专业诊断。不建议与同源长版在一次问卷内重复发放。"
+    },
+    {
+      "id": "PHQ-4",
+      "name": "PHQ-4",
+      "title": "情绪困扰四题筛查",
+      "displayName": "PHQ-4 情绪困扰四题筛查",
+      "category": "情绪/心理健康",
+      "count": 4,
+      "version": "zh-reference-2026.11.27",
+      "status": "已启用",
+      "scaleType": "standard",
+      "standard": true,
+      "source": "https://www.uab.edu/medicine/pcp-sci/images/SCIMS/PHQ-9_Instruction_Manual.pdf",
+      "license": "Public domain; author instruction manual pp. 3, 8.",
+      "scoringMethod": "total",
+      "itemMax": 3,
+      "riskBands": [],
+      "riskMode": "standard",
+      "aiEnabled": false,
+      "requiresProfessionalReview": true,
+      "scenario": "心理健康初筛",
+      "description": "作者开放使用；中文沿用本项目现有PHQ/GAD参考题。保留过去两周时间窗，不代替专业诊断。不建议与同源长版在一次问卷内重复发放。 分别呈现两题焦虑和两题抑郁分量表，不将两者合计成疾病风险分。",
+      "subscales": [
+        {
+          "name": "PHQ-4-焦虑分量表",
+          "itemOrders": [
+            1,
+            2
+          ],
+          "multiplier": 1
+        },
+        {
+          "name": "PHQ-4-抑郁分量表",
+          "itemOrders": [
+            3,
+            4
+          ],
+          "multiplier": 1
+        }
+      ]
+    },
+    {
+      "id": "DASS-42",
+      "name": "DASS-42",
+      "title": "抑郁焦虑压力量表42题版",
+      "displayName": "DASS-42 抑郁焦虑压力量表",
+      "category": "压力与应激",
+      "count": 42,
+      "version": "Zuo-Chang-zh-2026.11.27",
+      "status": "已启用",
+      "standard": true,
+      "scaleType": "standard",
+      "source": "https://www2.psy.unsw.edu.au/dass/Chinese/DASS42%20simplified%20Chinese.pdf ; https://www2.psy.unsw.edu.au/dass/DASSFAQ.htm",
+      "license": "Public domain；题目与计分键可复制，不修改或单独售卖量表；由专业人员解释，不向职工自动给出分数解释",
+      "scoringMethod": "subscales",
+      "riskMode": "standard",
+      "riskBands": [],
+      "itemMax": 3,
+      "requiresProfessionalReview": true,
+      "employeeScoreHidden": true,
+      "aiEnabled": false,
+      "scenario": "压力与情绪专业评估",
+      "subscales": [
+        {
+          "name": "DASS-42-抑郁分量表",
+          "itemOrders": [
+            3,
+            5,
+            10,
+            13,
+            16,
+            17,
+            21,
+            24,
+            26,
+            31,
+            34,
+            37,
+            38,
+            42
+          ],
+          "multiplier": 1
+        },
+        {
+          "name": "DASS-42-焦虑分量表",
+          "itemOrders": [
+            2,
+            4,
+            7,
+            9,
+            15,
+            19,
+            20,
+            23,
+            25,
+            28,
+            30,
+            36,
+            40,
+            41
+          ],
+          "multiplier": 1
+        },
+        {
+          "name": "DASS-42-压力分量表",
+          "itemOrders": [
+            1,
+            6,
+            8,
+            11,
+            12,
+            14,
+            18,
+            22,
+            27,
+            29,
+            32,
+            33,
+            35,
+            39
+          ],
+          "multiplier": 1
+        }
+      ],
+      "description": "过去一周；保留官方简体中文原题，抑郁、焦虑、压力分开计分。不设置疾病阈值；不自动向职工解释分数，由具备资质人员评估。Zuo与Chang官方站点公开的42题译本。"
+    },
+    {
+      "id": "DASS-21",
+      "name": "DASS-21",
+      "title": "抑郁焦虑压力量表21题版",
+      "displayName": "DASS-21 抑郁焦虑压力量表",
+      "category": "压力与应激",
+      "count": 21,
+      "version": "Zuo-Chang-zh-2026.11.27",
+      "status": "已启用",
+      "standard": true,
+      "scaleType": "standard",
+      "source": "https://www2.psy.unsw.edu.au/dass/Chinese/DASS42%20simplified%20Chinese.pdf ; https://www2.psy.unsw.edu.au/dass/DASSFAQ.htm",
+      "license": "Public domain；题目与计分键可复制，不修改或单独售卖量表；由专业人员解释，不向职工自动给出分数解释",
+      "scoringMethod": "subscales",
+      "riskMode": "standard",
+      "riskBands": [],
+      "itemMax": 3,
+      "requiresProfessionalReview": true,
+      "employeeScoreHidden": true,
+      "aiEnabled": false,
+      "scenario": "压力与情绪专业评估",
+      "subscales": [
+        {
+          "name": "DASS-21-抑郁分量表",
+          "itemOrders": [
+            3,
+            5,
+            10,
+            13,
+            16,
+            17,
+            21
+          ],
+          "multiplier": 2
+        },
+        {
+          "name": "DASS-21-焦虑分量表",
+          "itemOrders": [
+            2,
+            4,
+            7,
+            9,
+            15,
+            19,
+            20
+          ],
+          "multiplier": 2
+        },
+        {
+          "name": "DASS-21-压力分量表",
+          "itemOrders": [
+            1,
+            6,
+            8,
+            11,
+            12,
+            14,
+            18
+          ],
+          "multiplier": 2
+        }
+      ],
+      "description": "过去一周；保留官方简体中文原题，抑郁、焦虑、压力分开计分。不设置疾病阈值；不自动向职工解释分数，由具备资质人员评估。21题中文参考版按英文短版对应原题抽取，正式使用前核对适用性。"
     }
   ],
   "questions": [
@@ -855,6 +1167,2676 @@
         }
       ],
       "source": "本项目自编，非标准量表"
+    },
+    {
+      "id": "PHQ-2-01",
+      "code": "PHQ-2-01",
+      "scale": "PHQ-2",
+      "text": "做事时提不起劲或没有兴趣",
+      "description": "在过去两个星期里，以下问题困扰您的频率是？",
+      "type": "single",
+      "status": "启用",
+      "required": true,
+      "order": 10,
+      "options": "完全没有；有几天；一半以上的天数；几乎每天",
+      "optionItems": [
+        {
+          "label": "完全没有",
+          "score": 0
+        },
+        {
+          "label": "有几天",
+          "score": 1
+        },
+        {
+          "label": "一半以上的天数",
+          "score": 2
+        },
+        {
+          "label": "几乎每天",
+          "score": 3
+        }
+      ],
+      "standard": true,
+      "source": "https://www.uab.edu/medicine/pcp-sci/images/SCIMS/PHQ-9_Instruction_Manual.pdf",
+      "version": "zh-reference-2026.11.27"
+    },
+    {
+      "id": "PHQ-2-02",
+      "code": "PHQ-2-02",
+      "scale": "PHQ-2",
+      "text": "感到心情低落、沮丧或绝望",
+      "description": "在过去两个星期里，以下问题困扰您的频率是？",
+      "type": "single",
+      "status": "启用",
+      "required": true,
+      "order": 20,
+      "options": "完全没有；有几天；一半以上的天数；几乎每天",
+      "optionItems": [
+        {
+          "label": "完全没有",
+          "score": 0
+        },
+        {
+          "label": "有几天",
+          "score": 1
+        },
+        {
+          "label": "一半以上的天数",
+          "score": 2
+        },
+        {
+          "label": "几乎每天",
+          "score": 3
+        }
+      ],
+      "standard": true,
+      "source": "https://www.uab.edu/medicine/pcp-sci/images/SCIMS/PHQ-9_Instruction_Manual.pdf",
+      "version": "zh-reference-2026.11.27"
+    },
+    {
+      "id": "GAD-2-01",
+      "code": "GAD-2-01",
+      "scale": "GAD-2",
+      "text": "感觉紧张、焦虑或急切",
+      "description": "在过去两个星期里，以下问题困扰您的频率是？",
+      "type": "single",
+      "status": "启用",
+      "required": true,
+      "order": 10,
+      "options": "完全没有；有几天；一半以上的天数；几乎每天",
+      "optionItems": [
+        {
+          "label": "完全没有",
+          "score": 0
+        },
+        {
+          "label": "有几天",
+          "score": 1
+        },
+        {
+          "label": "一半以上的天数",
+          "score": 2
+        },
+        {
+          "label": "几乎每天",
+          "score": 3
+        }
+      ],
+      "standard": true,
+      "source": "https://www.uab.edu/medicine/pcp-sci/images/SCIMS/PHQ-9_Instruction_Manual.pdf",
+      "version": "zh-reference-2026.11.27"
+    },
+    {
+      "id": "GAD-2-02",
+      "code": "GAD-2-02",
+      "scale": "GAD-2",
+      "text": "不能够停止或控制担忧",
+      "description": "在过去两个星期里，以下问题困扰您的频率是？",
+      "type": "single",
+      "status": "启用",
+      "required": true,
+      "order": 20,
+      "options": "完全没有；有几天；一半以上的天数；几乎每天",
+      "optionItems": [
+        {
+          "label": "完全没有",
+          "score": 0
+        },
+        {
+          "label": "有几天",
+          "score": 1
+        },
+        {
+          "label": "一半以上的天数",
+          "score": 2
+        },
+        {
+          "label": "几乎每天",
+          "score": 3
+        }
+      ],
+      "standard": true,
+      "source": "https://www.uab.edu/medicine/pcp-sci/images/SCIMS/PHQ-9_Instruction_Manual.pdf",
+      "version": "zh-reference-2026.11.27"
+    },
+    {
+      "id": "PHQ-8-01",
+      "code": "PHQ-8-01",
+      "scale": "PHQ-8",
+      "text": "做事时提不起劲或没有兴趣",
+      "description": "在过去两个星期里，以下问题困扰您的频率是？",
+      "type": "single",
+      "status": "启用",
+      "required": true,
+      "order": 10,
+      "options": "完全没有；有几天；一半以上的天数；几乎每天",
+      "optionItems": [
+        {
+          "label": "完全没有",
+          "score": 0
+        },
+        {
+          "label": "有几天",
+          "score": 1
+        },
+        {
+          "label": "一半以上的天数",
+          "score": 2
+        },
+        {
+          "label": "几乎每天",
+          "score": 3
+        }
+      ],
+      "standard": true,
+      "source": "https://www.uab.edu/medicine/pcp-sci/images/SCIMS/PHQ-9_Instruction_Manual.pdf",
+      "version": "zh-reference-2026.11.27"
+    },
+    {
+      "id": "PHQ-8-02",
+      "code": "PHQ-8-02",
+      "scale": "PHQ-8",
+      "text": "感到心情低落、沮丧或绝望",
+      "description": "在过去两个星期里，以下问题困扰您的频率是？",
+      "type": "single",
+      "status": "启用",
+      "required": true,
+      "order": 20,
+      "options": "完全没有；有几天；一半以上的天数；几乎每天",
+      "optionItems": [
+        {
+          "label": "完全没有",
+          "score": 0
+        },
+        {
+          "label": "有几天",
+          "score": 1
+        },
+        {
+          "label": "一半以上的天数",
+          "score": 2
+        },
+        {
+          "label": "几乎每天",
+          "score": 3
+        }
+      ],
+      "standard": true,
+      "source": "https://www.uab.edu/medicine/pcp-sci/images/SCIMS/PHQ-9_Instruction_Manual.pdf",
+      "version": "zh-reference-2026.11.27"
+    },
+    {
+      "id": "PHQ-8-03",
+      "code": "PHQ-8-03",
+      "scale": "PHQ-8",
+      "text": "入睡困难、睡不安稳或睡眠过多",
+      "description": "在过去两个星期里，以下问题困扰您的频率是？",
+      "type": "single",
+      "status": "启用",
+      "required": true,
+      "order": 30,
+      "options": "完全没有；有几天；一半以上的天数；几乎每天",
+      "optionItems": [
+        {
+          "label": "完全没有",
+          "score": 0
+        },
+        {
+          "label": "有几天",
+          "score": 1
+        },
+        {
+          "label": "一半以上的天数",
+          "score": 2
+        },
+        {
+          "label": "几乎每天",
+          "score": 3
+        }
+      ],
+      "standard": true,
+      "source": "https://www.uab.edu/medicine/pcp-sci/images/SCIMS/PHQ-9_Instruction_Manual.pdf",
+      "version": "zh-reference-2026.11.27"
+    },
+    {
+      "id": "PHQ-8-04",
+      "code": "PHQ-8-04",
+      "scale": "PHQ-8",
+      "text": "感觉疲倦或没有活力",
+      "description": "在过去两个星期里，以下问题困扰您的频率是？",
+      "type": "single",
+      "status": "启用",
+      "required": true,
+      "order": 40,
+      "options": "完全没有；有几天；一半以上的天数；几乎每天",
+      "optionItems": [
+        {
+          "label": "完全没有",
+          "score": 0
+        },
+        {
+          "label": "有几天",
+          "score": 1
+        },
+        {
+          "label": "一半以上的天数",
+          "score": 2
+        },
+        {
+          "label": "几乎每天",
+          "score": 3
+        }
+      ],
+      "standard": true,
+      "source": "https://www.uab.edu/medicine/pcp-sci/images/SCIMS/PHQ-9_Instruction_Manual.pdf",
+      "version": "zh-reference-2026.11.27"
+    },
+    {
+      "id": "PHQ-8-05",
+      "code": "PHQ-8-05",
+      "scale": "PHQ-8",
+      "text": "食欲不振或吃太多",
+      "description": "在过去两个星期里，以下问题困扰您的频率是？",
+      "type": "single",
+      "status": "启用",
+      "required": true,
+      "order": 50,
+      "options": "完全没有；有几天；一半以上的天数；几乎每天",
+      "optionItems": [
+        {
+          "label": "完全没有",
+          "score": 0
+        },
+        {
+          "label": "有几天",
+          "score": 1
+        },
+        {
+          "label": "一半以上的天数",
+          "score": 2
+        },
+        {
+          "label": "几乎每天",
+          "score": 3
+        }
+      ],
+      "standard": true,
+      "source": "https://www.uab.edu/medicine/pcp-sci/images/SCIMS/PHQ-9_Instruction_Manual.pdf",
+      "version": "zh-reference-2026.11.27"
+    },
+    {
+      "id": "PHQ-8-06",
+      "code": "PHQ-8-06",
+      "scale": "PHQ-8",
+      "text": "觉得自己很糟，或觉得自己很失败，或让自己或家人失望",
+      "description": "在过去两个星期里，以下问题困扰您的频率是？",
+      "type": "single",
+      "status": "启用",
+      "required": true,
+      "order": 60,
+      "options": "完全没有；有几天；一半以上的天数；几乎每天",
+      "optionItems": [
+        {
+          "label": "完全没有",
+          "score": 0
+        },
+        {
+          "label": "有几天",
+          "score": 1
+        },
+        {
+          "label": "一半以上的天数",
+          "score": 2
+        },
+        {
+          "label": "几乎每天",
+          "score": 3
+        }
+      ],
+      "standard": true,
+      "source": "https://www.uab.edu/medicine/pcp-sci/images/SCIMS/PHQ-9_Instruction_Manual.pdf",
+      "version": "zh-reference-2026.11.27"
+    },
+    {
+      "id": "PHQ-8-07",
+      "code": "PHQ-8-07",
+      "scale": "PHQ-8",
+      "text": "对事物专注有困难，例如阅读报纸或看电视时",
+      "description": "在过去两个星期里，以下问题困扰您的频率是？",
+      "type": "single",
+      "status": "启用",
+      "required": true,
+      "order": 70,
+      "options": "完全没有；有几天；一半以上的天数；几乎每天",
+      "optionItems": [
+        {
+          "label": "完全没有",
+          "score": 0
+        },
+        {
+          "label": "有几天",
+          "score": 1
+        },
+        {
+          "label": "一半以上的天数",
+          "score": 2
+        },
+        {
+          "label": "几乎每天",
+          "score": 3
+        }
+      ],
+      "standard": true,
+      "source": "https://www.uab.edu/medicine/pcp-sci/images/SCIMS/PHQ-9_Instruction_Manual.pdf",
+      "version": "zh-reference-2026.11.27"
+    },
+    {
+      "id": "PHQ-8-08",
+      "code": "PHQ-8-08",
+      "scale": "PHQ-8",
+      "text": "动作或说话速度缓慢到别人已经察觉，或正好相反，烦躁或坐立不安，动来动去的情况更胜于平常",
+      "description": "在过去两个星期里，以下问题困扰您的频率是？",
+      "type": "single",
+      "status": "启用",
+      "required": true,
+      "order": 80,
+      "options": "完全没有；有几天；一半以上的天数；几乎每天",
+      "optionItems": [
+        {
+          "label": "完全没有",
+          "score": 0
+        },
+        {
+          "label": "有几天",
+          "score": 1
+        },
+        {
+          "label": "一半以上的天数",
+          "score": 2
+        },
+        {
+          "label": "几乎每天",
+          "score": 3
+        }
+      ],
+      "standard": true,
+      "source": "https://www.uab.edu/medicine/pcp-sci/images/SCIMS/PHQ-9_Instruction_Manual.pdf",
+      "version": "zh-reference-2026.11.27"
+    },
+    {
+      "id": "PHQ-4-01",
+      "code": "PHQ-4-01",
+      "scale": "PHQ-4",
+      "text": "感觉紧张、焦虑或急切",
+      "description": "在过去两个星期里，以下问题困扰您的频率是？",
+      "type": "single",
+      "status": "启用",
+      "required": true,
+      "order": 10,
+      "options": "完全没有；有几天；一半以上的天数；几乎每天",
+      "optionItems": [
+        {
+          "label": "完全没有",
+          "score": 0
+        },
+        {
+          "label": "有几天",
+          "score": 1
+        },
+        {
+          "label": "一半以上的天数",
+          "score": 2
+        },
+        {
+          "label": "几乎每天",
+          "score": 3
+        }
+      ],
+      "standard": true,
+      "source": "https://www.uab.edu/medicine/pcp-sci/images/SCIMS/PHQ-9_Instruction_Manual.pdf",
+      "version": "zh-reference-2026.11.27"
+    },
+    {
+      "id": "PHQ-4-02",
+      "code": "PHQ-4-02",
+      "scale": "PHQ-4",
+      "text": "不能够停止或控制担忧",
+      "description": "在过去两个星期里，以下问题困扰您的频率是？",
+      "type": "single",
+      "status": "启用",
+      "required": true,
+      "order": 20,
+      "options": "完全没有；有几天；一半以上的天数；几乎每天",
+      "optionItems": [
+        {
+          "label": "完全没有",
+          "score": 0
+        },
+        {
+          "label": "有几天",
+          "score": 1
+        },
+        {
+          "label": "一半以上的天数",
+          "score": 2
+        },
+        {
+          "label": "几乎每天",
+          "score": 3
+        }
+      ],
+      "standard": true,
+      "source": "https://www.uab.edu/medicine/pcp-sci/images/SCIMS/PHQ-9_Instruction_Manual.pdf",
+      "version": "zh-reference-2026.11.27"
+    },
+    {
+      "id": "PHQ-4-03",
+      "code": "PHQ-4-03",
+      "scale": "PHQ-4",
+      "text": "做事时提不起劲或没有兴趣",
+      "description": "在过去两个星期里，以下问题困扰您的频率是？",
+      "type": "single",
+      "status": "启用",
+      "required": true,
+      "order": 30,
+      "options": "完全没有；有几天；一半以上的天数；几乎每天",
+      "optionItems": [
+        {
+          "label": "完全没有",
+          "score": 0
+        },
+        {
+          "label": "有几天",
+          "score": 1
+        },
+        {
+          "label": "一半以上的天数",
+          "score": 2
+        },
+        {
+          "label": "几乎每天",
+          "score": 3
+        }
+      ],
+      "standard": true,
+      "source": "https://www.uab.edu/medicine/pcp-sci/images/SCIMS/PHQ-9_Instruction_Manual.pdf",
+      "version": "zh-reference-2026.11.27"
+    },
+    {
+      "id": "PHQ-4-04",
+      "code": "PHQ-4-04",
+      "scale": "PHQ-4",
+      "text": "感到心情低落、沮丧或绝望",
+      "description": "在过去两个星期里，以下问题困扰您的频率是？",
+      "type": "single",
+      "status": "启用",
+      "required": true,
+      "order": 40,
+      "options": "完全没有；有几天；一半以上的天数；几乎每天",
+      "optionItems": [
+        {
+          "label": "完全没有",
+          "score": 0
+        },
+        {
+          "label": "有几天",
+          "score": 1
+        },
+        {
+          "label": "一半以上的天数",
+          "score": 2
+        },
+        {
+          "label": "几乎每天",
+          "score": 3
+        }
+      ],
+      "standard": true,
+      "source": "https://www.uab.edu/medicine/pcp-sci/images/SCIMS/PHQ-9_Instruction_Manual.pdf",
+      "version": "zh-reference-2026.11.27"
+    },
+    {
+      "id": "DASS-42-01",
+      "code": "DASS-42-01",
+      "text": "我发现我自己被一些琐碎的事情弄得很不开心",
+      "type": "single",
+      "status": "启用",
+      "required": true,
+      "options": "此项根本不符合我的情况；此项在某种程度上或是某些时候与我的实际情况相符；此项在很大程度上或是大部分情况下与我的实际情况相符；此项与我的实际情况非常相符",
+      "optionItems": [
+        {
+          "label": "此项根本不符合我的情况",
+          "score": 0
+        },
+        {
+          "label": "此项在某种程度上或是某些时候与我的实际情况相符",
+          "score": 1
+        },
+        {
+          "label": "此项在很大程度上或是大部分情况下与我的实际情况相符",
+          "score": 2
+        },
+        {
+          "label": "此项与我的实际情况非常相符",
+          "score": 3
+        }
+      ],
+      "scale": "DASS-42",
+      "standard": true,
+      "source": "https://www2.psy.unsw.edu.au/dass/Chinese/DASS42%20simplified%20Chinese.pdf",
+      "version": "Zuo-Chang-zh-2026.11.27",
+      "order": 10,
+      "originalItemNumber": 1,
+      "description": "请阅读以下各项，然后根据过去一周之内符合您的实际情况，在相应的数字（0，1，2或3）上打勾。您的回答没有对错之分，所以请不要在以下任何一项上花太多时间。"
+    },
+    {
+      "id": "DASS-42-02",
+      "code": "DASS-42-02",
+      "text": "我感到嘴巴很干",
+      "type": "single",
+      "status": "启用",
+      "required": true,
+      "options": "此项根本不符合我的情况；此项在某种程度上或是某些时候与我的实际情况相符；此项在很大程度上或是大部分情况下与我的实际情况相符；此项与我的实际情况非常相符",
+      "optionItems": [
+        {
+          "label": "此项根本不符合我的情况",
+          "score": 0
+        },
+        {
+          "label": "此项在某种程度上或是某些时候与我的实际情况相符",
+          "score": 1
+        },
+        {
+          "label": "此项在很大程度上或是大部分情况下与我的实际情况相符",
+          "score": 2
+        },
+        {
+          "label": "此项与我的实际情况非常相符",
+          "score": 3
+        }
+      ],
+      "scale": "DASS-42",
+      "standard": true,
+      "source": "https://www2.psy.unsw.edu.au/dass/Chinese/DASS42%20simplified%20Chinese.pdf",
+      "version": "Zuo-Chang-zh-2026.11.27",
+      "order": 20,
+      "originalItemNumber": 2,
+      "description": "请阅读以下各项，然后根据过去一周之内符合您的实际情况，在相应的数字（0，1，2或3）上打勾。您的回答没有对错之分，所以请不要在以下任何一项上花太多时间。"
+    },
+    {
+      "id": "DASS-42-03",
+      "code": "DASS-42-03",
+      "text": "我似乎完全不能积极乐观起来",
+      "type": "single",
+      "status": "启用",
+      "required": true,
+      "options": "此项根本不符合我的情况；此项在某种程度上或是某些时候与我的实际情况相符；此项在很大程度上或是大部分情况下与我的实际情况相符；此项与我的实际情况非常相符",
+      "optionItems": [
+        {
+          "label": "此项根本不符合我的情况",
+          "score": 0
+        },
+        {
+          "label": "此项在某种程度上或是某些时候与我的实际情况相符",
+          "score": 1
+        },
+        {
+          "label": "此项在很大程度上或是大部分情况下与我的实际情况相符",
+          "score": 2
+        },
+        {
+          "label": "此项与我的实际情况非常相符",
+          "score": 3
+        }
+      ],
+      "scale": "DASS-42",
+      "standard": true,
+      "source": "https://www2.psy.unsw.edu.au/dass/Chinese/DASS42%20simplified%20Chinese.pdf",
+      "version": "Zuo-Chang-zh-2026.11.27",
+      "order": 30,
+      "originalItemNumber": 3,
+      "description": "请阅读以下各项，然后根据过去一周之内符合您的实际情况，在相应的数字（0，1，2或3）上打勾。您的回答没有对错之分，所以请不要在以下任何一项上花太多时间。"
+    },
+    {
+      "id": "DASS-42-04",
+      "code": "DASS-42-04",
+      "text": "我感到过呼吸困难（例如： 在没有体力透支的情况下而感到呼吸急促， 喘不过气来）",
+      "type": "single",
+      "status": "启用",
+      "required": true,
+      "options": "此项根本不符合我的情况；此项在某种程度上或是某些时候与我的实际情况相符；此项在很大程度上或是大部分情况下与我的实际情况相符；此项与我的实际情况非常相符",
+      "optionItems": [
+        {
+          "label": "此项根本不符合我的情况",
+          "score": 0
+        },
+        {
+          "label": "此项在某种程度上或是某些时候与我的实际情况相符",
+          "score": 1
+        },
+        {
+          "label": "此项在很大程度上或是大部分情况下与我的实际情况相符",
+          "score": 2
+        },
+        {
+          "label": "此项与我的实际情况非常相符",
+          "score": 3
+        }
+      ],
+      "scale": "DASS-42",
+      "standard": true,
+      "source": "https://www2.psy.unsw.edu.au/dass/Chinese/DASS42%20simplified%20Chinese.pdf",
+      "version": "Zuo-Chang-zh-2026.11.27",
+      "order": 40,
+      "originalItemNumber": 4,
+      "description": "请阅读以下各项，然后根据过去一周之内符合您的实际情况，在相应的数字（0，1，2或3）上打勾。您的回答没有对错之分，所以请不要在以下任何一项上花太多时间。"
+    },
+    {
+      "id": "DASS-42-05",
+      "code": "DASS-42-05",
+      "text": "我似乎没法提起劲来做事情",
+      "type": "single",
+      "status": "启用",
+      "required": true,
+      "options": "此项根本不符合我的情况；此项在某种程度上或是某些时候与我的实际情况相符；此项在很大程度上或是大部分情况下与我的实际情况相符；此项与我的实际情况非常相符",
+      "optionItems": [
+        {
+          "label": "此项根本不符合我的情况",
+          "score": 0
+        },
+        {
+          "label": "此项在某种程度上或是某些时候与我的实际情况相符",
+          "score": 1
+        },
+        {
+          "label": "此项在很大程度上或是大部分情况下与我的实际情况相符",
+          "score": 2
+        },
+        {
+          "label": "此项与我的实际情况非常相符",
+          "score": 3
+        }
+      ],
+      "scale": "DASS-42",
+      "standard": true,
+      "source": "https://www2.psy.unsw.edu.au/dass/Chinese/DASS42%20simplified%20Chinese.pdf",
+      "version": "Zuo-Chang-zh-2026.11.27",
+      "order": 50,
+      "originalItemNumber": 5,
+      "description": "请阅读以下各项，然后根据过去一周之内符合您的实际情况，在相应的数字（0，1，2或3）上打勾。您的回答没有对错之分，所以请不要在以下任何一项上花太多时间。"
+    },
+    {
+      "id": "DASS-42-06",
+      "code": "DASS-42-06",
+      "text": "我对于所处的环境（情况）易于反应过度",
+      "type": "single",
+      "status": "启用",
+      "required": true,
+      "options": "此项根本不符合我的情况；此项在某种程度上或是某些时候与我的实际情况相符；此项在很大程度上或是大部分情况下与我的实际情况相符；此项与我的实际情况非常相符",
+      "optionItems": [
+        {
+          "label": "此项根本不符合我的情况",
+          "score": 0
+        },
+        {
+          "label": "此项在某种程度上或是某些时候与我的实际情况相符",
+          "score": 1
+        },
+        {
+          "label": "此项在很大程度上或是大部分情况下与我的实际情况相符",
+          "score": 2
+        },
+        {
+          "label": "此项与我的实际情况非常相符",
+          "score": 3
+        }
+      ],
+      "scale": "DASS-42",
+      "standard": true,
+      "source": "https://www2.psy.unsw.edu.au/dass/Chinese/DASS42%20simplified%20Chinese.pdf",
+      "version": "Zuo-Chang-zh-2026.11.27",
+      "order": 60,
+      "originalItemNumber": 6,
+      "description": "请阅读以下各项，然后根据过去一周之内符合您的实际情况，在相应的数字（0，1，2或3）上打勾。您的回答没有对错之分，所以请不要在以下任何一项上花太多时间。"
+    },
+    {
+      "id": "DASS-42-07",
+      "code": "DASS-42-07",
+      "text": "我曾有发抖的感觉（例如：腿都站不稳）",
+      "type": "single",
+      "status": "启用",
+      "required": true,
+      "options": "此项根本不符合我的情况；此项在某种程度上或是某些时候与我的实际情况相符；此项在很大程度上或是大部分情况下与我的实际情况相符；此项与我的实际情况非常相符",
+      "optionItems": [
+        {
+          "label": "此项根本不符合我的情况",
+          "score": 0
+        },
+        {
+          "label": "此项在某种程度上或是某些时候与我的实际情况相符",
+          "score": 1
+        },
+        {
+          "label": "此项在很大程度上或是大部分情况下与我的实际情况相符",
+          "score": 2
+        },
+        {
+          "label": "此项与我的实际情况非常相符",
+          "score": 3
+        }
+      ],
+      "scale": "DASS-42",
+      "standard": true,
+      "source": "https://www2.psy.unsw.edu.au/dass/Chinese/DASS42%20simplified%20Chinese.pdf",
+      "version": "Zuo-Chang-zh-2026.11.27",
+      "order": 70,
+      "originalItemNumber": 7,
+      "description": "请阅读以下各项，然后根据过去一周之内符合您的实际情况，在相应的数字（0，1，2或3）上打勾。您的回答没有对错之分，所以请不要在以下任何一项上花太多时间。"
+    },
+    {
+      "id": "DASS-42-08",
+      "code": "DASS-42-08",
+      "text": "我发现很难放松下来",
+      "type": "single",
+      "status": "启用",
+      "required": true,
+      "options": "此项根本不符合我的情况；此项在某种程度上或是某些时候与我的实际情况相符；此项在很大程度上或是大部分情况下与我的实际情况相符；此项与我的实际情况非常相符",
+      "optionItems": [
+        {
+          "label": "此项根本不符合我的情况",
+          "score": 0
+        },
+        {
+          "label": "此项在某种程度上或是某些时候与我的实际情况相符",
+          "score": 1
+        },
+        {
+          "label": "此项在很大程度上或是大部分情况下与我的实际情况相符",
+          "score": 2
+        },
+        {
+          "label": "此项与我的实际情况非常相符",
+          "score": 3
+        }
+      ],
+      "scale": "DASS-42",
+      "standard": true,
+      "source": "https://www2.psy.unsw.edu.au/dass/Chinese/DASS42%20simplified%20Chinese.pdf",
+      "version": "Zuo-Chang-zh-2026.11.27",
+      "order": 80,
+      "originalItemNumber": 8,
+      "description": "请阅读以下各项，然后根据过去一周之内符合您的实际情况，在相应的数字（0，1，2或3）上打勾。您的回答没有对错之分，所以请不要在以下任何一项上花太多时间。"
+    },
+    {
+      "id": "DASS-42-09",
+      "code": "DASS-42-09",
+      "text": "我发现我曾处于非常焦虑的情况下，极想立刻离开这种环境松一口气",
+      "type": "single",
+      "status": "启用",
+      "required": true,
+      "options": "此项根本不符合我的情况；此项在某种程度上或是某些时候与我的实际情况相符；此项在很大程度上或是大部分情况下与我的实际情况相符；此项与我的实际情况非常相符",
+      "optionItems": [
+        {
+          "label": "此项根本不符合我的情况",
+          "score": 0
+        },
+        {
+          "label": "此项在某种程度上或是某些时候与我的实际情况相符",
+          "score": 1
+        },
+        {
+          "label": "此项在很大程度上或是大部分情况下与我的实际情况相符",
+          "score": 2
+        },
+        {
+          "label": "此项与我的实际情况非常相符",
+          "score": 3
+        }
+      ],
+      "scale": "DASS-42",
+      "standard": true,
+      "source": "https://www2.psy.unsw.edu.au/dass/Chinese/DASS42%20simplified%20Chinese.pdf",
+      "version": "Zuo-Chang-zh-2026.11.27",
+      "order": 90,
+      "originalItemNumber": 9,
+      "description": "请阅读以下各项，然后根据过去一周之内符合您的实际情况，在相应的数字（0，1，2或3）上打勾。您的回答没有对错之分，所以请不要在以下任何一项上花太多时间。"
+    },
+    {
+      "id": "DASS-42-10",
+      "code": "DASS-42-10",
+      "text": "我感到我没什么可期待的",
+      "type": "single",
+      "status": "启用",
+      "required": true,
+      "options": "此项根本不符合我的情况；此项在某种程度上或是某些时候与我的实际情况相符；此项在很大程度上或是大部分情况下与我的实际情况相符；此项与我的实际情况非常相符",
+      "optionItems": [
+        {
+          "label": "此项根本不符合我的情况",
+          "score": 0
+        },
+        {
+          "label": "此项在某种程度上或是某些时候与我的实际情况相符",
+          "score": 1
+        },
+        {
+          "label": "此项在很大程度上或是大部分情况下与我的实际情况相符",
+          "score": 2
+        },
+        {
+          "label": "此项与我的实际情况非常相符",
+          "score": 3
+        }
+      ],
+      "scale": "DASS-42",
+      "standard": true,
+      "source": "https://www2.psy.unsw.edu.au/dass/Chinese/DASS42%20simplified%20Chinese.pdf",
+      "version": "Zuo-Chang-zh-2026.11.27",
+      "order": 100,
+      "originalItemNumber": 10,
+      "description": "请阅读以下各项，然后根据过去一周之内符合您的实际情况，在相应的数字（0，1，2或3）上打勾。您的回答没有对错之分，所以请不要在以下任何一项上花太多时间。"
+    },
+    {
+      "id": "DASS-42-11",
+      "code": "DASS-42-11",
+      "text": "我发现我极其容易不开心",
+      "type": "single",
+      "status": "启用",
+      "required": true,
+      "options": "此项根本不符合我的情况；此项在某种程度上或是某些时候与我的实际情况相符；此项在很大程度上或是大部分情况下与我的实际情况相符；此项与我的实际情况非常相符",
+      "optionItems": [
+        {
+          "label": "此项根本不符合我的情况",
+          "score": 0
+        },
+        {
+          "label": "此项在某种程度上或是某些时候与我的实际情况相符",
+          "score": 1
+        },
+        {
+          "label": "此项在很大程度上或是大部分情况下与我的实际情况相符",
+          "score": 2
+        },
+        {
+          "label": "此项与我的实际情况非常相符",
+          "score": 3
+        }
+      ],
+      "scale": "DASS-42",
+      "standard": true,
+      "source": "https://www2.psy.unsw.edu.au/dass/Chinese/DASS42%20simplified%20Chinese.pdf",
+      "version": "Zuo-Chang-zh-2026.11.27",
+      "order": 110,
+      "originalItemNumber": 11,
+      "description": "请阅读以下各项，然后根据过去一周之内符合您的实际情况，在相应的数字（0，1，2或3）上打勾。您的回答没有对错之分，所以请不要在以下任何一项上花太多时间。"
+    },
+    {
+      "id": "DASS-42-12",
+      "code": "DASS-42-12",
+      "text": "我感到时常神经紧张",
+      "type": "single",
+      "status": "启用",
+      "required": true,
+      "options": "此项根本不符合我的情况；此项在某种程度上或是某些时候与我的实际情况相符；此项在很大程度上或是大部分情况下与我的实际情况相符；此项与我的实际情况非常相符",
+      "optionItems": [
+        {
+          "label": "此项根本不符合我的情况",
+          "score": 0
+        },
+        {
+          "label": "此项在某种程度上或是某些时候与我的实际情况相符",
+          "score": 1
+        },
+        {
+          "label": "此项在很大程度上或是大部分情况下与我的实际情况相符",
+          "score": 2
+        },
+        {
+          "label": "此项与我的实际情况非常相符",
+          "score": 3
+        }
+      ],
+      "scale": "DASS-42",
+      "standard": true,
+      "source": "https://www2.psy.unsw.edu.au/dass/Chinese/DASS42%20simplified%20Chinese.pdf",
+      "version": "Zuo-Chang-zh-2026.11.27",
+      "order": 120,
+      "originalItemNumber": 12,
+      "description": "请阅读以下各项，然后根据过去一周之内符合您的实际情况，在相应的数字（0，1，2或3）上打勾。您的回答没有对错之分，所以请不要在以下任何一项上花太多时间。"
+    },
+    {
+      "id": "DASS-42-13",
+      "code": "DASS-42-13",
+      "text": "我感到伤心和郁闷",
+      "type": "single",
+      "status": "启用",
+      "required": true,
+      "options": "此项根本不符合我的情况；此项在某种程度上或是某些时候与我的实际情况相符；此项在很大程度上或是大部分情况下与我的实际情况相符；此项与我的实际情况非常相符",
+      "optionItems": [
+        {
+          "label": "此项根本不符合我的情况",
+          "score": 0
+        },
+        {
+          "label": "此项在某种程度上或是某些时候与我的实际情况相符",
+          "score": 1
+        },
+        {
+          "label": "此项在很大程度上或是大部分情况下与我的实际情况相符",
+          "score": 2
+        },
+        {
+          "label": "此项与我的实际情况非常相符",
+          "score": 3
+        }
+      ],
+      "scale": "DASS-42",
+      "standard": true,
+      "source": "https://www2.psy.unsw.edu.au/dass/Chinese/DASS42%20simplified%20Chinese.pdf",
+      "version": "Zuo-Chang-zh-2026.11.27",
+      "order": 130,
+      "originalItemNumber": 13,
+      "description": "请阅读以下各项，然后根据过去一周之内符合您的实际情况，在相应的数字（0，1，2或3）上打勾。您的回答没有对错之分，所以请不要在以下任何一项上花太多时间。"
+    },
+    {
+      "id": "DASS-42-14",
+      "code": "DASS-42-14",
+      "text": "我发现当我因为某种原因而耽误时间的时候，我变得没有耐性（例如：等电梯，在十字路口等红绿灯或其他处于等待的状态）",
+      "type": "single",
+      "status": "启用",
+      "required": true,
+      "options": "此项根本不符合我的情况；此项在某种程度上或是某些时候与我的实际情况相符；此项在很大程度上或是大部分情况下与我的实际情况相符；此项与我的实际情况非常相符",
+      "optionItems": [
+        {
+          "label": "此项根本不符合我的情况",
+          "score": 0
+        },
+        {
+          "label": "此项在某种程度上或是某些时候与我的实际情况相符",
+          "score": 1
+        },
+        {
+          "label": "此项在很大程度上或是大部分情况下与我的实际情况相符",
+          "score": 2
+        },
+        {
+          "label": "此项与我的实际情况非常相符",
+          "score": 3
+        }
+      ],
+      "scale": "DASS-42",
+      "standard": true,
+      "source": "https://www2.psy.unsw.edu.au/dass/Chinese/DASS42%20simplified%20Chinese.pdf",
+      "version": "Zuo-Chang-zh-2026.11.27",
+      "order": 140,
+      "originalItemNumber": 14,
+      "description": "请阅读以下各项，然后根据过去一周之内符合您的实际情况，在相应的数字（0，1，2或3）上打勾。您的回答没有对错之分，所以请不要在以下任何一项上花太多时间。"
+    },
+    {
+      "id": "DASS-42-15",
+      "code": "DASS-42-15",
+      "text": "我曾有眩晕的感觉",
+      "type": "single",
+      "status": "启用",
+      "required": true,
+      "options": "此项根本不符合我的情况；此项在某种程度上或是某些时候与我的实际情况相符；此项在很大程度上或是大部分情况下与我的实际情况相符；此项与我的实际情况非常相符",
+      "optionItems": [
+        {
+          "label": "此项根本不符合我的情况",
+          "score": 0
+        },
+        {
+          "label": "此项在某种程度上或是某些时候与我的实际情况相符",
+          "score": 1
+        },
+        {
+          "label": "此项在很大程度上或是大部分情况下与我的实际情况相符",
+          "score": 2
+        },
+        {
+          "label": "此项与我的实际情况非常相符",
+          "score": 3
+        }
+      ],
+      "scale": "DASS-42",
+      "standard": true,
+      "source": "https://www2.psy.unsw.edu.au/dass/Chinese/DASS42%20simplified%20Chinese.pdf",
+      "version": "Zuo-Chang-zh-2026.11.27",
+      "order": 150,
+      "originalItemNumber": 15,
+      "description": "请阅读以下各项，然后根据过去一周之内符合您的实际情况，在相应的数字（0，1，2或3）上打勾。您的回答没有对错之分，所以请不要在以下任何一项上花太多时间。"
+    },
+    {
+      "id": "DASS-42-16",
+      "code": "DASS-42-16",
+      "text": "我一度感到我对几乎任何事情都失去了兴趣",
+      "type": "single",
+      "status": "启用",
+      "required": true,
+      "options": "此项根本不符合我的情况；此项在某种程度上或是某些时候与我的实际情况相符；此项在很大程度上或是大部分情况下与我的实际情况相符；此项与我的实际情况非常相符",
+      "optionItems": [
+        {
+          "label": "此项根本不符合我的情况",
+          "score": 0
+        },
+        {
+          "label": "此项在某种程度上或是某些时候与我的实际情况相符",
+          "score": 1
+        },
+        {
+          "label": "此项在很大程度上或是大部分情况下与我的实际情况相符",
+          "score": 2
+        },
+        {
+          "label": "此项与我的实际情况非常相符",
+          "score": 3
+        }
+      ],
+      "scale": "DASS-42",
+      "standard": true,
+      "source": "https://www2.psy.unsw.edu.au/dass/Chinese/DASS42%20simplified%20Chinese.pdf",
+      "version": "Zuo-Chang-zh-2026.11.27",
+      "order": 160,
+      "originalItemNumber": 16,
+      "description": "请阅读以下各项，然后根据过去一周之内符合您的实际情况，在相应的数字（0，1，2或3）上打勾。您的回答没有对错之分，所以请不要在以下任何一项上花太多时间。"
+    },
+    {
+      "id": "DASS-42-17",
+      "code": "DASS-42-17",
+      "text": "我感到自己曾不具备作为人而存在的价值",
+      "type": "single",
+      "status": "启用",
+      "required": true,
+      "options": "此项根本不符合我的情况；此项在某种程度上或是某些时候与我的实际情况相符；此项在很大程度上或是大部分情况下与我的实际情况相符；此项与我的实际情况非常相符",
+      "optionItems": [
+        {
+          "label": "此项根本不符合我的情况",
+          "score": 0
+        },
+        {
+          "label": "此项在某种程度上或是某些时候与我的实际情况相符",
+          "score": 1
+        },
+        {
+          "label": "此项在很大程度上或是大部分情况下与我的实际情况相符",
+          "score": 2
+        },
+        {
+          "label": "此项与我的实际情况非常相符",
+          "score": 3
+        }
+      ],
+      "scale": "DASS-42",
+      "standard": true,
+      "source": "https://www2.psy.unsw.edu.au/dass/Chinese/DASS42%20simplified%20Chinese.pdf",
+      "version": "Zuo-Chang-zh-2026.11.27",
+      "order": 170,
+      "originalItemNumber": 17,
+      "description": "请阅读以下各项，然后根据过去一周之内符合您的实际情况，在相应的数字（0，1，2或3）上打勾。您的回答没有对错之分，所以请不要在以下任何一项上花太多时间。"
+    },
+    {
+      "id": "DASS-42-18",
+      "code": "DASS-42-18",
+      "text": "我感到我曾极容易因为小事而生气",
+      "type": "single",
+      "status": "启用",
+      "required": true,
+      "options": "此项根本不符合我的情况；此项在某种程度上或是某些时候与我的实际情况相符；此项在很大程度上或是大部分情况下与我的实际情况相符；此项与我的实际情况非常相符",
+      "optionItems": [
+        {
+          "label": "此项根本不符合我的情况",
+          "score": 0
+        },
+        {
+          "label": "此项在某种程度上或是某些时候与我的实际情况相符",
+          "score": 1
+        },
+        {
+          "label": "此项在很大程度上或是大部分情况下与我的实际情况相符",
+          "score": 2
+        },
+        {
+          "label": "此项与我的实际情况非常相符",
+          "score": 3
+        }
+      ],
+      "scale": "DASS-42",
+      "standard": true,
+      "source": "https://www2.psy.unsw.edu.au/dass/Chinese/DASS42%20simplified%20Chinese.pdf",
+      "version": "Zuo-Chang-zh-2026.11.27",
+      "order": 180,
+      "originalItemNumber": 18,
+      "description": "请阅读以下各项，然后根据过去一周之内符合您的实际情况，在相应的数字（0，1，2或3）上打勾。您的回答没有对错之分，所以请不要在以下任何一项上花太多时间。"
+    },
+    {
+      "id": "DASS-42-19",
+      "code": "DASS-42-19",
+      "text": "在不是高温或体力透支的情况下，我明显容易出汗（例如：汗手）",
+      "type": "single",
+      "status": "启用",
+      "required": true,
+      "options": "此项根本不符合我的情况；此项在某种程度上或是某些时候与我的实际情况相符；此项在很大程度上或是大部分情况下与我的实际情况相符；此项与我的实际情况非常相符",
+      "optionItems": [
+        {
+          "label": "此项根本不符合我的情况",
+          "score": 0
+        },
+        {
+          "label": "此项在某种程度上或是某些时候与我的实际情况相符",
+          "score": 1
+        },
+        {
+          "label": "此项在很大程度上或是大部分情况下与我的实际情况相符",
+          "score": 2
+        },
+        {
+          "label": "此项与我的实际情况非常相符",
+          "score": 3
+        }
+      ],
+      "scale": "DASS-42",
+      "standard": true,
+      "source": "https://www2.psy.unsw.edu.au/dass/Chinese/DASS42%20simplified%20Chinese.pdf",
+      "version": "Zuo-Chang-zh-2026.11.27",
+      "order": 190,
+      "originalItemNumber": 19,
+      "description": "请阅读以下各项，然后根据过去一周之内符合您的实际情况，在相应的数字（0，1，2或3）上打勾。您的回答没有对错之分，所以请不要在以下任何一项上花太多时间。"
+    },
+    {
+      "id": "DASS-42-20",
+      "code": "DASS-42-20",
+      "text": "没有什么特殊原因的情况下，我感到害怕",
+      "type": "single",
+      "status": "启用",
+      "required": true,
+      "options": "此项根本不符合我的情况；此项在某种程度上或是某些时候与我的实际情况相符；此项在很大程度上或是大部分情况下与我的实际情况相符；此项与我的实际情况非常相符",
+      "optionItems": [
+        {
+          "label": "此项根本不符合我的情况",
+          "score": 0
+        },
+        {
+          "label": "此项在某种程度上或是某些时候与我的实际情况相符",
+          "score": 1
+        },
+        {
+          "label": "此项在很大程度上或是大部分情况下与我的实际情况相符",
+          "score": 2
+        },
+        {
+          "label": "此项与我的实际情况非常相符",
+          "score": 3
+        }
+      ],
+      "scale": "DASS-42",
+      "standard": true,
+      "source": "https://www2.psy.unsw.edu.au/dass/Chinese/DASS42%20simplified%20Chinese.pdf",
+      "version": "Zuo-Chang-zh-2026.11.27",
+      "order": 200,
+      "originalItemNumber": 20,
+      "description": "请阅读以下各项，然后根据过去一周之内符合您的实际情况，在相应的数字（0，1，2或3）上打勾。您的回答没有对错之分，所以请不要在以下任何一项上花太多时间。"
+    },
+    {
+      "id": "DASS-42-21",
+      "code": "DASS-42-21",
+      "text": "我感到生命没有价值",
+      "type": "single",
+      "status": "启用",
+      "required": true,
+      "options": "此项根本不符合我的情况；此项在某种程度上或是某些时候与我的实际情况相符；此项在很大程度上或是大部分情况下与我的实际情况相符；此项与我的实际情况非常相符",
+      "optionItems": [
+        {
+          "label": "此项根本不符合我的情况",
+          "score": 0
+        },
+        {
+          "label": "此项在某种程度上或是某些时候与我的实际情况相符",
+          "score": 1
+        },
+        {
+          "label": "此项在很大程度上或是大部分情况下与我的实际情况相符",
+          "score": 2
+        },
+        {
+          "label": "此项与我的实际情况非常相符",
+          "score": 3
+        }
+      ],
+      "scale": "DASS-42",
+      "standard": true,
+      "source": "https://www2.psy.unsw.edu.au/dass/Chinese/DASS42%20simplified%20Chinese.pdf",
+      "version": "Zuo-Chang-zh-2026.11.27",
+      "order": 210,
+      "originalItemNumber": 21,
+      "description": "请阅读以下各项，然后根据过去一周之内符合您的实际情况，在相应的数字（0，1，2或3）上打勾。您的回答没有对错之分，所以请不要在以下任何一项上花太多时间。"
+    },
+    {
+      "id": "DASS-42-22",
+      "code": "DASS-42-22",
+      "text": "我发现很难让自己安静下来休息",
+      "type": "single",
+      "status": "启用",
+      "required": true,
+      "options": "此项根本不符合我的情况；此项在某种程度上或是某些时候与我的实际情况相符；此项在很大程度上或是大部分情况下与我的实际情况相符；此项与我的实际情况非常相符",
+      "optionItems": [
+        {
+          "label": "此项根本不符合我的情况",
+          "score": 0
+        },
+        {
+          "label": "此项在某种程度上或是某些时候与我的实际情况相符",
+          "score": 1
+        },
+        {
+          "label": "此项在很大程度上或是大部分情况下与我的实际情况相符",
+          "score": 2
+        },
+        {
+          "label": "此项与我的实际情况非常相符",
+          "score": 3
+        }
+      ],
+      "scale": "DASS-42",
+      "standard": true,
+      "source": "https://www2.psy.unsw.edu.au/dass/Chinese/DASS42%20simplified%20Chinese.pdf",
+      "version": "Zuo-Chang-zh-2026.11.27",
+      "order": 220,
+      "originalItemNumber": 22,
+      "description": "请阅读以下各项，然后根据过去一周之内符合您的实际情况，在相应的数字（0，1，2或3）上打勾。您的回答没有对错之分，所以请不要在以下任何一项上花太多时间。"
+    },
+    {
+      "id": "DASS-42-23",
+      "code": "DASS-42-23",
+      "text": "我曾有过吞咽困难的感觉",
+      "type": "single",
+      "status": "启用",
+      "required": true,
+      "options": "此项根本不符合我的情况；此项在某种程度上或是某些时候与我的实际情况相符；此项在很大程度上或是大部分情况下与我的实际情况相符；此项与我的实际情况非常相符",
+      "optionItems": [
+        {
+          "label": "此项根本不符合我的情况",
+          "score": 0
+        },
+        {
+          "label": "此项在某种程度上或是某些时候与我的实际情况相符",
+          "score": 1
+        },
+        {
+          "label": "此项在很大程度上或是大部分情况下与我的实际情况相符",
+          "score": 2
+        },
+        {
+          "label": "此项与我的实际情况非常相符",
+          "score": 3
+        }
+      ],
+      "scale": "DASS-42",
+      "standard": true,
+      "source": "https://www2.psy.unsw.edu.au/dass/Chinese/DASS42%20simplified%20Chinese.pdf",
+      "version": "Zuo-Chang-zh-2026.11.27",
+      "order": 230,
+      "originalItemNumber": 23,
+      "description": "请阅读以下各项，然后根据过去一周之内符合您的实际情况，在相应的数字（0，1，2或3）上打勾。您的回答没有对错之分，所以请不要在以下任何一项上花太多时间。"
+    },
+    {
+      "id": "DASS-42-24",
+      "code": "DASS-42-24",
+      "text": "我似乎没法从我做过的事情中找到乐趣",
+      "type": "single",
+      "status": "启用",
+      "required": true,
+      "options": "此项根本不符合我的情况；此项在某种程度上或是某些时候与我的实际情况相符；此项在很大程度上或是大部分情况下与我的实际情况相符；此项与我的实际情况非常相符",
+      "optionItems": [
+        {
+          "label": "此项根本不符合我的情况",
+          "score": 0
+        },
+        {
+          "label": "此项在某种程度上或是某些时候与我的实际情况相符",
+          "score": 1
+        },
+        {
+          "label": "此项在很大程度上或是大部分情况下与我的实际情况相符",
+          "score": 2
+        },
+        {
+          "label": "此项与我的实际情况非常相符",
+          "score": 3
+        }
+      ],
+      "scale": "DASS-42",
+      "standard": true,
+      "source": "https://www2.psy.unsw.edu.au/dass/Chinese/DASS42%20simplified%20Chinese.pdf",
+      "version": "Zuo-Chang-zh-2026.11.27",
+      "order": 240,
+      "originalItemNumber": 24,
+      "description": "请阅读以下各项，然后根据过去一周之内符合您的实际情况，在相应的数字（0，1，2或3）上打勾。您的回答没有对错之分，所以请不要在以下任何一项上花太多时间。"
+    },
+    {
+      "id": "DASS-42-25",
+      "code": "DASS-42-25",
+      "text": "在没有体力透支的情况下我也能感觉到自己的心跳或心律不正常（例如：感到心跳过快或心律不齐）",
+      "type": "single",
+      "status": "启用",
+      "required": true,
+      "options": "此项根本不符合我的情况；此项在某种程度上或是某些时候与我的实际情况相符；此项在很大程度上或是大部分情况下与我的实际情况相符；此项与我的实际情况非常相符",
+      "optionItems": [
+        {
+          "label": "此项根本不符合我的情况",
+          "score": 0
+        },
+        {
+          "label": "此项在某种程度上或是某些时候与我的实际情况相符",
+          "score": 1
+        },
+        {
+          "label": "此项在很大程度上或是大部分情况下与我的实际情况相符",
+          "score": 2
+        },
+        {
+          "label": "此项与我的实际情况非常相符",
+          "score": 3
+        }
+      ],
+      "scale": "DASS-42",
+      "standard": true,
+      "source": "https://www2.psy.unsw.edu.au/dass/Chinese/DASS42%20simplified%20Chinese.pdf",
+      "version": "Zuo-Chang-zh-2026.11.27",
+      "order": 250,
+      "originalItemNumber": 25,
+      "description": "请阅读以下各项，然后根据过去一周之内符合您的实际情况，在相应的数字（0，1，2或3）上打勾。您的回答没有对错之分，所以请不要在以下任何一项上花太多时间。"
+    },
+    {
+      "id": "DASS-42-26",
+      "code": "DASS-42-26",
+      "text": "我感到消沉和沮丧",
+      "type": "single",
+      "status": "启用",
+      "required": true,
+      "options": "此项根本不符合我的情况；此项在某种程度上或是某些时候与我的实际情况相符；此项在很大程度上或是大部分情况下与我的实际情况相符；此项与我的实际情况非常相符",
+      "optionItems": [
+        {
+          "label": "此项根本不符合我的情况",
+          "score": 0
+        },
+        {
+          "label": "此项在某种程度上或是某些时候与我的实际情况相符",
+          "score": 1
+        },
+        {
+          "label": "此项在很大程度上或是大部分情况下与我的实际情况相符",
+          "score": 2
+        },
+        {
+          "label": "此项与我的实际情况非常相符",
+          "score": 3
+        }
+      ],
+      "scale": "DASS-42",
+      "standard": true,
+      "source": "https://www2.psy.unsw.edu.au/dass/Chinese/DASS42%20simplified%20Chinese.pdf",
+      "version": "Zuo-Chang-zh-2026.11.27",
+      "order": 260,
+      "originalItemNumber": 26,
+      "description": "请阅读以下各项，然后根据过去一周之内符合您的实际情况，在相应的数字（0，1，2或3）上打勾。您的回答没有对错之分，所以请不要在以下任何一项上花太多时间。"
+    },
+    {
+      "id": "DASS-42-27",
+      "code": "DASS-42-27",
+      "text": "我发现我容易烦躁",
+      "type": "single",
+      "status": "启用",
+      "required": true,
+      "options": "此项根本不符合我的情况；此项在某种程度上或是某些时候与我的实际情况相符；此项在很大程度上或是大部分情况下与我的实际情况相符；此项与我的实际情况非常相符",
+      "optionItems": [
+        {
+          "label": "此项根本不符合我的情况",
+          "score": 0
+        },
+        {
+          "label": "此项在某种程度上或是某些时候与我的实际情况相符",
+          "score": 1
+        },
+        {
+          "label": "此项在很大程度上或是大部分情况下与我的实际情况相符",
+          "score": 2
+        },
+        {
+          "label": "此项与我的实际情况非常相符",
+          "score": 3
+        }
+      ],
+      "scale": "DASS-42",
+      "standard": true,
+      "source": "https://www2.psy.unsw.edu.au/dass/Chinese/DASS42%20simplified%20Chinese.pdf",
+      "version": "Zuo-Chang-zh-2026.11.27",
+      "order": 270,
+      "originalItemNumber": 27,
+      "description": "请阅读以下各项，然后根据过去一周之内符合您的实际情况，在相应的数字（0，1，2或3）上打勾。您的回答没有对错之分，所以请不要在以下任何一项上花太多时间。"
+    },
+    {
+      "id": "DASS-42-28",
+      "code": "DASS-42-28",
+      "text": "我感到我曾接近恐慌",
+      "type": "single",
+      "status": "启用",
+      "required": true,
+      "options": "此项根本不符合我的情况；此项在某种程度上或是某些时候与我的实际情况相符；此项在很大程度上或是大部分情况下与我的实际情况相符；此项与我的实际情况非常相符",
+      "optionItems": [
+        {
+          "label": "此项根本不符合我的情况",
+          "score": 0
+        },
+        {
+          "label": "此项在某种程度上或是某些时候与我的实际情况相符",
+          "score": 1
+        },
+        {
+          "label": "此项在很大程度上或是大部分情况下与我的实际情况相符",
+          "score": 2
+        },
+        {
+          "label": "此项与我的实际情况非常相符",
+          "score": 3
+        }
+      ],
+      "scale": "DASS-42",
+      "standard": true,
+      "source": "https://www2.psy.unsw.edu.au/dass/Chinese/DASS42%20simplified%20Chinese.pdf",
+      "version": "Zuo-Chang-zh-2026.11.27",
+      "order": 280,
+      "originalItemNumber": 28,
+      "description": "请阅读以下各项，然后根据过去一周之内符合您的实际情况，在相应的数字（0，1，2或3）上打勾。您的回答没有对错之分，所以请不要在以下任何一项上花太多时间。"
+    },
+    {
+      "id": "DASS-42-29",
+      "code": "DASS-42-29",
+      "text": "我发现当某件事情使我不开心之后，我很难平静下来",
+      "type": "single",
+      "status": "启用",
+      "required": true,
+      "options": "此项根本不符合我的情况；此项在某种程度上或是某些时候与我的实际情况相符；此项在很大程度上或是大部分情况下与我的实际情况相符；此项与我的实际情况非常相符",
+      "optionItems": [
+        {
+          "label": "此项根本不符合我的情况",
+          "score": 0
+        },
+        {
+          "label": "此项在某种程度上或是某些时候与我的实际情况相符",
+          "score": 1
+        },
+        {
+          "label": "此项在很大程度上或是大部分情况下与我的实际情况相符",
+          "score": 2
+        },
+        {
+          "label": "此项与我的实际情况非常相符",
+          "score": 3
+        }
+      ],
+      "scale": "DASS-42",
+      "standard": true,
+      "source": "https://www2.psy.unsw.edu.au/dass/Chinese/DASS42%20simplified%20Chinese.pdf",
+      "version": "Zuo-Chang-zh-2026.11.27",
+      "order": 290,
+      "originalItemNumber": 29,
+      "description": "请阅读以下各项，然后根据过去一周之内符合您的实际情况，在相应的数字（0，1，2或3）上打勾。您的回答没有对错之分，所以请不要在以下任何一项上花太多时间。"
+    },
+    {
+      "id": "DASS-42-30",
+      "code": "DASS-42-30",
+      "text": "我担心我会因为某些琐碎和不熟悉的工作而感到筋疲力竭",
+      "type": "single",
+      "status": "启用",
+      "required": true,
+      "options": "此项根本不符合我的情况；此项在某种程度上或是某些时候与我的实际情况相符；此项在很大程度上或是大部分情况下与我的实际情况相符；此项与我的实际情况非常相符",
+      "optionItems": [
+        {
+          "label": "此项根本不符合我的情况",
+          "score": 0
+        },
+        {
+          "label": "此项在某种程度上或是某些时候与我的实际情况相符",
+          "score": 1
+        },
+        {
+          "label": "此项在很大程度上或是大部分情况下与我的实际情况相符",
+          "score": 2
+        },
+        {
+          "label": "此项与我的实际情况非常相符",
+          "score": 3
+        }
+      ],
+      "scale": "DASS-42",
+      "standard": true,
+      "source": "https://www2.psy.unsw.edu.au/dass/Chinese/DASS42%20simplified%20Chinese.pdf",
+      "version": "Zuo-Chang-zh-2026.11.27",
+      "order": 300,
+      "originalItemNumber": 30,
+      "description": "请阅读以下各项，然后根据过去一周之内符合您的实际情况，在相应的数字（0，1，2或3）上打勾。您的回答没有对错之分，所以请不要在以下任何一项上花太多时间。"
+    },
+    {
+      "id": "DASS-42-31",
+      "code": "DASS-42-31",
+      "text": "我对任何事情都没法充满热情",
+      "type": "single",
+      "status": "启用",
+      "required": true,
+      "options": "此项根本不符合我的情况；此项在某种程度上或是某些时候与我的实际情况相符；此项在很大程度上或是大部分情况下与我的实际情况相符；此项与我的实际情况非常相符",
+      "optionItems": [
+        {
+          "label": "此项根本不符合我的情况",
+          "score": 0
+        },
+        {
+          "label": "此项在某种程度上或是某些时候与我的实际情况相符",
+          "score": 1
+        },
+        {
+          "label": "此项在很大程度上或是大部分情况下与我的实际情况相符",
+          "score": 2
+        },
+        {
+          "label": "此项与我的实际情况非常相符",
+          "score": 3
+        }
+      ],
+      "scale": "DASS-42",
+      "standard": true,
+      "source": "https://www2.psy.unsw.edu.au/dass/Chinese/DASS42%20simplified%20Chinese.pdf",
+      "version": "Zuo-Chang-zh-2026.11.27",
+      "order": 310,
+      "originalItemNumber": 31,
+      "description": "请阅读以下各项，然后根据过去一周之内符合您的实际情况，在相应的数字（0，1，2或3）上打勾。您的回答没有对错之分，所以请不要在以下任何一项上花太多时间。"
+    },
+    {
+      "id": "DASS-42-32",
+      "code": "DASS-42-32",
+      "text": "我发现我很难忍受我做事的时候受到任何干扰",
+      "type": "single",
+      "status": "启用",
+      "required": true,
+      "options": "此项根本不符合我的情况；此项在某种程度上或是某些时候与我的实际情况相符；此项在很大程度上或是大部分情况下与我的实际情况相符；此项与我的实际情况非常相符",
+      "optionItems": [
+        {
+          "label": "此项根本不符合我的情况",
+          "score": 0
+        },
+        {
+          "label": "此项在某种程度上或是某些时候与我的实际情况相符",
+          "score": 1
+        },
+        {
+          "label": "此项在很大程度上或是大部分情况下与我的实际情况相符",
+          "score": 2
+        },
+        {
+          "label": "此项与我的实际情况非常相符",
+          "score": 3
+        }
+      ],
+      "scale": "DASS-42",
+      "standard": true,
+      "source": "https://www2.psy.unsw.edu.au/dass/Chinese/DASS42%20simplified%20Chinese.pdf",
+      "version": "Zuo-Chang-zh-2026.11.27",
+      "order": 320,
+      "originalItemNumber": 32,
+      "description": "请阅读以下各项，然后根据过去一周之内符合您的实际情况，在相应的数字（0，1，2或3）上打勾。您的回答没有对错之分，所以请不要在以下任何一项上花太多时间。"
+    },
+    {
+      "id": "DASS-42-33",
+      "code": "DASS-42-33",
+      "text": "我曾处于神经紧张的状态",
+      "type": "single",
+      "status": "启用",
+      "required": true,
+      "options": "此项根本不符合我的情况；此项在某种程度上或是某些时候与我的实际情况相符；此项在很大程度上或是大部分情况下与我的实际情况相符；此项与我的实际情况非常相符",
+      "optionItems": [
+        {
+          "label": "此项根本不符合我的情况",
+          "score": 0
+        },
+        {
+          "label": "此项在某种程度上或是某些时候与我的实际情况相符",
+          "score": 1
+        },
+        {
+          "label": "此项在很大程度上或是大部分情况下与我的实际情况相符",
+          "score": 2
+        },
+        {
+          "label": "此项与我的实际情况非常相符",
+          "score": 3
+        }
+      ],
+      "scale": "DASS-42",
+      "standard": true,
+      "source": "https://www2.psy.unsw.edu.au/dass/Chinese/DASS42%20simplified%20Chinese.pdf",
+      "version": "Zuo-Chang-zh-2026.11.27",
+      "order": 330,
+      "originalItemNumber": 33,
+      "description": "请阅读以下各项，然后根据过去一周之内符合您的实际情况，在相应的数字（0，1，2或3）上打勾。您的回答没有对错之分，所以请不要在以下任何一项上花太多时间。"
+    },
+    {
+      "id": "DASS-42-34",
+      "code": "DASS-42-34",
+      "text": "我一度感到我很没价值",
+      "type": "single",
+      "status": "启用",
+      "required": true,
+      "options": "此项根本不符合我的情况；此项在某种程度上或是某些时候与我的实际情况相符；此项在很大程度上或是大部分情况下与我的实际情况相符；此项与我的实际情况非常相符",
+      "optionItems": [
+        {
+          "label": "此项根本不符合我的情况",
+          "score": 0
+        },
+        {
+          "label": "此项在某种程度上或是某些时候与我的实际情况相符",
+          "score": 1
+        },
+        {
+          "label": "此项在很大程度上或是大部分情况下与我的实际情况相符",
+          "score": 2
+        },
+        {
+          "label": "此项与我的实际情况非常相符",
+          "score": 3
+        }
+      ],
+      "scale": "DASS-42",
+      "standard": true,
+      "source": "https://www2.psy.unsw.edu.au/dass/Chinese/DASS42%20simplified%20Chinese.pdf",
+      "version": "Zuo-Chang-zh-2026.11.27",
+      "order": 340,
+      "originalItemNumber": 34,
+      "description": "请阅读以下各项，然后根据过去一周之内符合您的实际情况，在相应的数字（0，1，2或3）上打勾。您的回答没有对错之分，所以请不要在以下任何一项上花太多时间。"
+    },
+    {
+      "id": "DASS-42-35",
+      "code": "DASS-42-35",
+      "text": "我曾对阻碍我正在进行的工作的事情感到无法容忍",
+      "type": "single",
+      "status": "启用",
+      "required": true,
+      "options": "此项根本不符合我的情况；此项在某种程度上或是某些时候与我的实际情况相符；此项在很大程度上或是大部分情况下与我的实际情况相符；此项与我的实际情况非常相符",
+      "optionItems": [
+        {
+          "label": "此项根本不符合我的情况",
+          "score": 0
+        },
+        {
+          "label": "此项在某种程度上或是某些时候与我的实际情况相符",
+          "score": 1
+        },
+        {
+          "label": "此项在很大程度上或是大部分情况下与我的实际情况相符",
+          "score": 2
+        },
+        {
+          "label": "此项与我的实际情况非常相符",
+          "score": 3
+        }
+      ],
+      "scale": "DASS-42",
+      "standard": true,
+      "source": "https://www2.psy.unsw.edu.au/dass/Chinese/DASS42%20simplified%20Chinese.pdf",
+      "version": "Zuo-Chang-zh-2026.11.27",
+      "order": 350,
+      "originalItemNumber": 35,
+      "description": "请阅读以下各项，然后根据过去一周之内符合您的实际情况，在相应的数字（0，1，2或3）上打勾。您的回答没有对错之分，所以请不要在以下任何一项上花太多时间。"
+    },
+    {
+      "id": "DASS-42-36",
+      "code": "DASS-42-36",
+      "text": "我曾感到恐惧",
+      "type": "single",
+      "status": "启用",
+      "required": true,
+      "options": "此项根本不符合我的情况；此项在某种程度上或是某些时候与我的实际情况相符；此项在很大程度上或是大部分情况下与我的实际情况相符；此项与我的实际情况非常相符",
+      "optionItems": [
+        {
+          "label": "此项根本不符合我的情况",
+          "score": 0
+        },
+        {
+          "label": "此项在某种程度上或是某些时候与我的实际情况相符",
+          "score": 1
+        },
+        {
+          "label": "此项在很大程度上或是大部分情况下与我的实际情况相符",
+          "score": 2
+        },
+        {
+          "label": "此项与我的实际情况非常相符",
+          "score": 3
+        }
+      ],
+      "scale": "DASS-42",
+      "standard": true,
+      "source": "https://www2.psy.unsw.edu.au/dass/Chinese/DASS42%20simplified%20Chinese.pdf",
+      "version": "Zuo-Chang-zh-2026.11.27",
+      "order": 360,
+      "originalItemNumber": 36,
+      "description": "请阅读以下各项，然后根据过去一周之内符合您的实际情况，在相应的数字（0，1，2或3）上打勾。您的回答没有对错之分，所以请不要在以下任何一项上花太多时间。"
+    },
+    {
+      "id": "DASS-42-37",
+      "code": "DASS-42-37",
+      "text": "对于未来我看不到任何希望",
+      "type": "single",
+      "status": "启用",
+      "required": true,
+      "options": "此项根本不符合我的情况；此项在某种程度上或是某些时候与我的实际情况相符；此项在很大程度上或是大部分情况下与我的实际情况相符；此项与我的实际情况非常相符",
+      "optionItems": [
+        {
+          "label": "此项根本不符合我的情况",
+          "score": 0
+        },
+        {
+          "label": "此项在某种程度上或是某些时候与我的实际情况相符",
+          "score": 1
+        },
+        {
+          "label": "此项在很大程度上或是大部分情况下与我的实际情况相符",
+          "score": 2
+        },
+        {
+          "label": "此项与我的实际情况非常相符",
+          "score": 3
+        }
+      ],
+      "scale": "DASS-42",
+      "standard": true,
+      "source": "https://www2.psy.unsw.edu.au/dass/Chinese/DASS42%20simplified%20Chinese.pdf",
+      "version": "Zuo-Chang-zh-2026.11.27",
+      "order": 370,
+      "originalItemNumber": 37,
+      "description": "请阅读以下各项，然后根据过去一周之内符合您的实际情况，在相应的数字（0，1，2或3）上打勾。您的回答没有对错之分，所以请不要在以下任何一项上花太多时间。"
+    },
+    {
+      "id": "DASS-42-38",
+      "code": "DASS-42-38",
+      "text": "我曾感到生活没有意义",
+      "type": "single",
+      "status": "启用",
+      "required": true,
+      "options": "此项根本不符合我的情况；此项在某种程度上或是某些时候与我的实际情况相符；此项在很大程度上或是大部分情况下与我的实际情况相符；此项与我的实际情况非常相符",
+      "optionItems": [
+        {
+          "label": "此项根本不符合我的情况",
+          "score": 0
+        },
+        {
+          "label": "此项在某种程度上或是某些时候与我的实际情况相符",
+          "score": 1
+        },
+        {
+          "label": "此项在很大程度上或是大部分情况下与我的实际情况相符",
+          "score": 2
+        },
+        {
+          "label": "此项与我的实际情况非常相符",
+          "score": 3
+        }
+      ],
+      "scale": "DASS-42",
+      "standard": true,
+      "source": "https://www2.psy.unsw.edu.au/dass/Chinese/DASS42%20simplified%20Chinese.pdf",
+      "version": "Zuo-Chang-zh-2026.11.27",
+      "order": 380,
+      "originalItemNumber": 38,
+      "description": "请阅读以下各项，然后根据过去一周之内符合您的实际情况，在相应的数字（0，1，2或3）上打勾。您的回答没有对错之分，所以请不要在以下任何一项上花太多时间。"
+    },
+    {
+      "id": "DASS-42-39",
+      "code": "DASS-42-39",
+      "text": "我发现自己变得焦虑不安",
+      "type": "single",
+      "status": "启用",
+      "required": true,
+      "options": "此项根本不符合我的情况；此项在某种程度上或是某些时候与我的实际情况相符；此项在很大程度上或是大部分情况下与我的实际情况相符；此项与我的实际情况非常相符",
+      "optionItems": [
+        {
+          "label": "此项根本不符合我的情况",
+          "score": 0
+        },
+        {
+          "label": "此项在某种程度上或是某些时候与我的实际情况相符",
+          "score": 1
+        },
+        {
+          "label": "此项在很大程度上或是大部分情况下与我的实际情况相符",
+          "score": 2
+        },
+        {
+          "label": "此项与我的实际情况非常相符",
+          "score": 3
+        }
+      ],
+      "scale": "DASS-42",
+      "standard": true,
+      "source": "https://www2.psy.unsw.edu.au/dass/Chinese/DASS42%20simplified%20Chinese.pdf",
+      "version": "Zuo-Chang-zh-2026.11.27",
+      "order": 390,
+      "originalItemNumber": 39,
+      "description": "请阅读以下各项，然后根据过去一周之内符合您的实际情况，在相应的数字（0，1，2或3）上打勾。您的回答没有对错之分，所以请不要在以下任何一项上花太多时间。"
+    },
+    {
+      "id": "DASS-42-40",
+      "code": "DASS-42-40",
+      "text": "我担心自己可能因为惊慌而干蠢事出洋相",
+      "type": "single",
+      "status": "启用",
+      "required": true,
+      "options": "此项根本不符合我的情况；此项在某种程度上或是某些时候与我的实际情况相符；此项在很大程度上或是大部分情况下与我的实际情况相符；此项与我的实际情况非常相符",
+      "optionItems": [
+        {
+          "label": "此项根本不符合我的情况",
+          "score": 0
+        },
+        {
+          "label": "此项在某种程度上或是某些时候与我的实际情况相符",
+          "score": 1
+        },
+        {
+          "label": "此项在很大程度上或是大部分情况下与我的实际情况相符",
+          "score": 2
+        },
+        {
+          "label": "此项与我的实际情况非常相符",
+          "score": 3
+        }
+      ],
+      "scale": "DASS-42",
+      "standard": true,
+      "source": "https://www2.psy.unsw.edu.au/dass/Chinese/DASS42%20simplified%20Chinese.pdf",
+      "version": "Zuo-Chang-zh-2026.11.27",
+      "order": 400,
+      "originalItemNumber": 40,
+      "description": "请阅读以下各项，然后根据过去一周之内符合您的实际情况，在相应的数字（0，1，2或3）上打勾。您的回答没有对错之分，所以请不要在以下任何一项上花太多时间。"
+    },
+    {
+      "id": "DASS-42-41",
+      "code": "DASS-42-41",
+      "text": "我曾感到发抖（例如：手打哆嗦）",
+      "type": "single",
+      "status": "启用",
+      "required": true,
+      "options": "此项根本不符合我的情况；此项在某种程度上或是某些时候与我的实际情况相符；此项在很大程度上或是大部分情况下与我的实际情况相符；此项与我的实际情况非常相符",
+      "optionItems": [
+        {
+          "label": "此项根本不符合我的情况",
+          "score": 0
+        },
+        {
+          "label": "此项在某种程度上或是某些时候与我的实际情况相符",
+          "score": 1
+        },
+        {
+          "label": "此项在很大程度上或是大部分情况下与我的实际情况相符",
+          "score": 2
+        },
+        {
+          "label": "此项与我的实际情况非常相符",
+          "score": 3
+        }
+      ],
+      "scale": "DASS-42",
+      "standard": true,
+      "source": "https://www2.psy.unsw.edu.au/dass/Chinese/DASS42%20simplified%20Chinese.pdf",
+      "version": "Zuo-Chang-zh-2026.11.27",
+      "order": 410,
+      "originalItemNumber": 41,
+      "description": "请阅读以下各项，然后根据过去一周之内符合您的实际情况，在相应的数字（0，1，2或3）上打勾。您的回答没有对错之分，所以请不要在以下任何一项上花太多时间。"
+    },
+    {
+      "id": "DASS-42-42",
+      "code": "DASS-42-42",
+      "text": "我发现很难发挥主动性去做事情",
+      "type": "single",
+      "status": "启用",
+      "required": true,
+      "options": "此项根本不符合我的情况；此项在某种程度上或是某些时候与我的实际情况相符；此项在很大程度上或是大部分情况下与我的实际情况相符；此项与我的实际情况非常相符",
+      "optionItems": [
+        {
+          "label": "此项根本不符合我的情况",
+          "score": 0
+        },
+        {
+          "label": "此项在某种程度上或是某些时候与我的实际情况相符",
+          "score": 1
+        },
+        {
+          "label": "此项在很大程度上或是大部分情况下与我的实际情况相符",
+          "score": 2
+        },
+        {
+          "label": "此项与我的实际情况非常相符",
+          "score": 3
+        }
+      ],
+      "scale": "DASS-42",
+      "standard": true,
+      "source": "https://www2.psy.unsw.edu.au/dass/Chinese/DASS42%20simplified%20Chinese.pdf",
+      "version": "Zuo-Chang-zh-2026.11.27",
+      "order": 420,
+      "originalItemNumber": 42,
+      "description": "请阅读以下各项，然后根据过去一周之内符合您的实际情况，在相应的数字（0，1，2或3）上打勾。您的回答没有对错之分，所以请不要在以下任何一项上花太多时间。"
+    },
+    {
+      "id": "DASS-21-01",
+      "code": "DASS-21-01",
+      "text": "我发现很难让自己安静下来休息",
+      "type": "single",
+      "status": "启用",
+      "required": true,
+      "options": "此项根本不符合我的情况；此项在某种程度上或是某些时候与我的实际情况相符；此项在很大程度上或是大部分情况下与我的实际情况相符；此项与我的实际情况非常相符",
+      "optionItems": [
+        {
+          "label": "此项根本不符合我的情况",
+          "score": 0
+        },
+        {
+          "label": "此项在某种程度上或是某些时候与我的实际情况相符",
+          "score": 1
+        },
+        {
+          "label": "此项在很大程度上或是大部分情况下与我的实际情况相符",
+          "score": 2
+        },
+        {
+          "label": "此项与我的实际情况非常相符",
+          "score": 3
+        }
+      ],
+      "scale": "DASS-21",
+      "standard": true,
+      "source": "https://www2.psy.unsw.edu.au/dass/Chinese/DASS42%20simplified%20Chinese.pdf",
+      "version": "Zuo-Chang-zh-2026.11.27",
+      "order": 10,
+      "originalItemNumber": 22,
+      "description": "请阅读以下各项，然后根据过去一周之内符合您的实际情况，在相应的数字（0，1，2或3）上打勾。您的回答没有对错之分，所以请不要在以下任何一项上花太多时间。"
+    },
+    {
+      "id": "DASS-21-02",
+      "code": "DASS-21-02",
+      "text": "我感到嘴巴很干",
+      "type": "single",
+      "status": "启用",
+      "required": true,
+      "options": "此项根本不符合我的情况；此项在某种程度上或是某些时候与我的实际情况相符；此项在很大程度上或是大部分情况下与我的实际情况相符；此项与我的实际情况非常相符",
+      "optionItems": [
+        {
+          "label": "此项根本不符合我的情况",
+          "score": 0
+        },
+        {
+          "label": "此项在某种程度上或是某些时候与我的实际情况相符",
+          "score": 1
+        },
+        {
+          "label": "此项在很大程度上或是大部分情况下与我的实际情况相符",
+          "score": 2
+        },
+        {
+          "label": "此项与我的实际情况非常相符",
+          "score": 3
+        }
+      ],
+      "scale": "DASS-21",
+      "standard": true,
+      "source": "https://www2.psy.unsw.edu.au/dass/Chinese/DASS42%20simplified%20Chinese.pdf",
+      "version": "Zuo-Chang-zh-2026.11.27",
+      "order": 20,
+      "originalItemNumber": 2,
+      "description": "请阅读以下各项，然后根据过去一周之内符合您的实际情况，在相应的数字（0，1，2或3）上打勾。您的回答没有对错之分，所以请不要在以下任何一项上花太多时间。"
+    },
+    {
+      "id": "DASS-21-03",
+      "code": "DASS-21-03",
+      "text": "我似乎完全不能积极乐观起来",
+      "type": "single",
+      "status": "启用",
+      "required": true,
+      "options": "此项根本不符合我的情况；此项在某种程度上或是某些时候与我的实际情况相符；此项在很大程度上或是大部分情况下与我的实际情况相符；此项与我的实际情况非常相符",
+      "optionItems": [
+        {
+          "label": "此项根本不符合我的情况",
+          "score": 0
+        },
+        {
+          "label": "此项在某种程度上或是某些时候与我的实际情况相符",
+          "score": 1
+        },
+        {
+          "label": "此项在很大程度上或是大部分情况下与我的实际情况相符",
+          "score": 2
+        },
+        {
+          "label": "此项与我的实际情况非常相符",
+          "score": 3
+        }
+      ],
+      "scale": "DASS-21",
+      "standard": true,
+      "source": "https://www2.psy.unsw.edu.au/dass/Chinese/DASS42%20simplified%20Chinese.pdf",
+      "version": "Zuo-Chang-zh-2026.11.27",
+      "order": 30,
+      "originalItemNumber": 3,
+      "description": "请阅读以下各项，然后根据过去一周之内符合您的实际情况，在相应的数字（0，1，2或3）上打勾。您的回答没有对错之分，所以请不要在以下任何一项上花太多时间。"
+    },
+    {
+      "id": "DASS-21-04",
+      "code": "DASS-21-04",
+      "text": "我感到过呼吸困难（例如： 在没有体力透支的情况下而感到呼吸急促， 喘不过气来）",
+      "type": "single",
+      "status": "启用",
+      "required": true,
+      "options": "此项根本不符合我的情况；此项在某种程度上或是某些时候与我的实际情况相符；此项在很大程度上或是大部分情况下与我的实际情况相符；此项与我的实际情况非常相符",
+      "optionItems": [
+        {
+          "label": "此项根本不符合我的情况",
+          "score": 0
+        },
+        {
+          "label": "此项在某种程度上或是某些时候与我的实际情况相符",
+          "score": 1
+        },
+        {
+          "label": "此项在很大程度上或是大部分情况下与我的实际情况相符",
+          "score": 2
+        },
+        {
+          "label": "此项与我的实际情况非常相符",
+          "score": 3
+        }
+      ],
+      "scale": "DASS-21",
+      "standard": true,
+      "source": "https://www2.psy.unsw.edu.au/dass/Chinese/DASS42%20simplified%20Chinese.pdf",
+      "version": "Zuo-Chang-zh-2026.11.27",
+      "order": 40,
+      "originalItemNumber": 4,
+      "description": "请阅读以下各项，然后根据过去一周之内符合您的实际情况，在相应的数字（0，1，2或3）上打勾。您的回答没有对错之分，所以请不要在以下任何一项上花太多时间。"
+    },
+    {
+      "id": "DASS-21-05",
+      "code": "DASS-21-05",
+      "text": "我发现很难发挥主动性去做事情",
+      "type": "single",
+      "status": "启用",
+      "required": true,
+      "options": "此项根本不符合我的情况；此项在某种程度上或是某些时候与我的实际情况相符；此项在很大程度上或是大部分情况下与我的实际情况相符；此项与我的实际情况非常相符",
+      "optionItems": [
+        {
+          "label": "此项根本不符合我的情况",
+          "score": 0
+        },
+        {
+          "label": "此项在某种程度上或是某些时候与我的实际情况相符",
+          "score": 1
+        },
+        {
+          "label": "此项在很大程度上或是大部分情况下与我的实际情况相符",
+          "score": 2
+        },
+        {
+          "label": "此项与我的实际情况非常相符",
+          "score": 3
+        }
+      ],
+      "scale": "DASS-21",
+      "standard": true,
+      "source": "https://www2.psy.unsw.edu.au/dass/Chinese/DASS42%20simplified%20Chinese.pdf",
+      "version": "Zuo-Chang-zh-2026.11.27",
+      "order": 50,
+      "originalItemNumber": 42,
+      "description": "请阅读以下各项，然后根据过去一周之内符合您的实际情况，在相应的数字（0，1，2或3）上打勾。您的回答没有对错之分，所以请不要在以下任何一项上花太多时间。"
+    },
+    {
+      "id": "DASS-21-06",
+      "code": "DASS-21-06",
+      "text": "我对于所处的环境（情况）易于反应过度",
+      "type": "single",
+      "status": "启用",
+      "required": true,
+      "options": "此项根本不符合我的情况；此项在某种程度上或是某些时候与我的实际情况相符；此项在很大程度上或是大部分情况下与我的实际情况相符；此项与我的实际情况非常相符",
+      "optionItems": [
+        {
+          "label": "此项根本不符合我的情况",
+          "score": 0
+        },
+        {
+          "label": "此项在某种程度上或是某些时候与我的实际情况相符",
+          "score": 1
+        },
+        {
+          "label": "此项在很大程度上或是大部分情况下与我的实际情况相符",
+          "score": 2
+        },
+        {
+          "label": "此项与我的实际情况非常相符",
+          "score": 3
+        }
+      ],
+      "scale": "DASS-21",
+      "standard": true,
+      "source": "https://www2.psy.unsw.edu.au/dass/Chinese/DASS42%20simplified%20Chinese.pdf",
+      "version": "Zuo-Chang-zh-2026.11.27",
+      "order": 60,
+      "originalItemNumber": 6,
+      "description": "请阅读以下各项，然后根据过去一周之内符合您的实际情况，在相应的数字（0，1，2或3）上打勾。您的回答没有对错之分，所以请不要在以下任何一项上花太多时间。"
+    },
+    {
+      "id": "DASS-21-07",
+      "code": "DASS-21-07",
+      "text": "我曾感到发抖（例如：手打哆嗦）",
+      "type": "single",
+      "status": "启用",
+      "required": true,
+      "options": "此项根本不符合我的情况；此项在某种程度上或是某些时候与我的实际情况相符；此项在很大程度上或是大部分情况下与我的实际情况相符；此项与我的实际情况非常相符",
+      "optionItems": [
+        {
+          "label": "此项根本不符合我的情况",
+          "score": 0
+        },
+        {
+          "label": "此项在某种程度上或是某些时候与我的实际情况相符",
+          "score": 1
+        },
+        {
+          "label": "此项在很大程度上或是大部分情况下与我的实际情况相符",
+          "score": 2
+        },
+        {
+          "label": "此项与我的实际情况非常相符",
+          "score": 3
+        }
+      ],
+      "scale": "DASS-21",
+      "standard": true,
+      "source": "https://www2.psy.unsw.edu.au/dass/Chinese/DASS42%20simplified%20Chinese.pdf",
+      "version": "Zuo-Chang-zh-2026.11.27",
+      "order": 70,
+      "originalItemNumber": 41,
+      "description": "请阅读以下各项，然后根据过去一周之内符合您的实际情况，在相应的数字（0，1，2或3）上打勾。您的回答没有对错之分，所以请不要在以下任何一项上花太多时间。"
+    },
+    {
+      "id": "DASS-21-08",
+      "code": "DASS-21-08",
+      "text": "我感到时常神经紧张",
+      "type": "single",
+      "status": "启用",
+      "required": true,
+      "options": "此项根本不符合我的情况；此项在某种程度上或是某些时候与我的实际情况相符；此项在很大程度上或是大部分情况下与我的实际情况相符；此项与我的实际情况非常相符",
+      "optionItems": [
+        {
+          "label": "此项根本不符合我的情况",
+          "score": 0
+        },
+        {
+          "label": "此项在某种程度上或是某些时候与我的实际情况相符",
+          "score": 1
+        },
+        {
+          "label": "此项在很大程度上或是大部分情况下与我的实际情况相符",
+          "score": 2
+        },
+        {
+          "label": "此项与我的实际情况非常相符",
+          "score": 3
+        }
+      ],
+      "scale": "DASS-21",
+      "standard": true,
+      "source": "https://www2.psy.unsw.edu.au/dass/Chinese/DASS42%20simplified%20Chinese.pdf",
+      "version": "Zuo-Chang-zh-2026.11.27",
+      "order": 80,
+      "originalItemNumber": 12,
+      "description": "请阅读以下各项，然后根据过去一周之内符合您的实际情况，在相应的数字（0，1，2或3）上打勾。您的回答没有对错之分，所以请不要在以下任何一项上花太多时间。"
+    },
+    {
+      "id": "DASS-21-09",
+      "code": "DASS-21-09",
+      "text": "我担心自己可能因为惊慌而干蠢事出洋相",
+      "type": "single",
+      "status": "启用",
+      "required": true,
+      "options": "此项根本不符合我的情况；此项在某种程度上或是某些时候与我的实际情况相符；此项在很大程度上或是大部分情况下与我的实际情况相符；此项与我的实际情况非常相符",
+      "optionItems": [
+        {
+          "label": "此项根本不符合我的情况",
+          "score": 0
+        },
+        {
+          "label": "此项在某种程度上或是某些时候与我的实际情况相符",
+          "score": 1
+        },
+        {
+          "label": "此项在很大程度上或是大部分情况下与我的实际情况相符",
+          "score": 2
+        },
+        {
+          "label": "此项与我的实际情况非常相符",
+          "score": 3
+        }
+      ],
+      "scale": "DASS-21",
+      "standard": true,
+      "source": "https://www2.psy.unsw.edu.au/dass/Chinese/DASS42%20simplified%20Chinese.pdf",
+      "version": "Zuo-Chang-zh-2026.11.27",
+      "order": 90,
+      "originalItemNumber": 40,
+      "description": "请阅读以下各项，然后根据过去一周之内符合您的实际情况，在相应的数字（0，1，2或3）上打勾。您的回答没有对错之分，所以请不要在以下任何一项上花太多时间。"
+    },
+    {
+      "id": "DASS-21-10",
+      "code": "DASS-21-10",
+      "text": "我感到我没什么可期待的",
+      "type": "single",
+      "status": "启用",
+      "required": true,
+      "options": "此项根本不符合我的情况；此项在某种程度上或是某些时候与我的实际情况相符；此项在很大程度上或是大部分情况下与我的实际情况相符；此项与我的实际情况非常相符",
+      "optionItems": [
+        {
+          "label": "此项根本不符合我的情况",
+          "score": 0
+        },
+        {
+          "label": "此项在某种程度上或是某些时候与我的实际情况相符",
+          "score": 1
+        },
+        {
+          "label": "此项在很大程度上或是大部分情况下与我的实际情况相符",
+          "score": 2
+        },
+        {
+          "label": "此项与我的实际情况非常相符",
+          "score": 3
+        }
+      ],
+      "scale": "DASS-21",
+      "standard": true,
+      "source": "https://www2.psy.unsw.edu.au/dass/Chinese/DASS42%20simplified%20Chinese.pdf",
+      "version": "Zuo-Chang-zh-2026.11.27",
+      "order": 100,
+      "originalItemNumber": 10,
+      "description": "请阅读以下各项，然后根据过去一周之内符合您的实际情况，在相应的数字（0，1，2或3）上打勾。您的回答没有对错之分，所以请不要在以下任何一项上花太多时间。"
+    },
+    {
+      "id": "DASS-21-11",
+      "code": "DASS-21-11",
+      "text": "我发现我容易烦躁",
+      "type": "single",
+      "status": "启用",
+      "required": true,
+      "options": "此项根本不符合我的情况；此项在某种程度上或是某些时候与我的实际情况相符；此项在很大程度上或是大部分情况下与我的实际情况相符；此项与我的实际情况非常相符",
+      "optionItems": [
+        {
+          "label": "此项根本不符合我的情况",
+          "score": 0
+        },
+        {
+          "label": "此项在某种程度上或是某些时候与我的实际情况相符",
+          "score": 1
+        },
+        {
+          "label": "此项在很大程度上或是大部分情况下与我的实际情况相符",
+          "score": 2
+        },
+        {
+          "label": "此项与我的实际情况非常相符",
+          "score": 3
+        }
+      ],
+      "scale": "DASS-21",
+      "standard": true,
+      "source": "https://www2.psy.unsw.edu.au/dass/Chinese/DASS42%20simplified%20Chinese.pdf",
+      "version": "Zuo-Chang-zh-2026.11.27",
+      "order": 110,
+      "originalItemNumber": 27,
+      "description": "请阅读以下各项，然后根据过去一周之内符合您的实际情况，在相应的数字（0，1，2或3）上打勾。您的回答没有对错之分，所以请不要在以下任何一项上花太多时间。"
+    },
+    {
+      "id": "DASS-21-12",
+      "code": "DASS-21-12",
+      "text": "我发现很难放松下来",
+      "type": "single",
+      "status": "启用",
+      "required": true,
+      "options": "此项根本不符合我的情况；此项在某种程度上或是某些时候与我的实际情况相符；此项在很大程度上或是大部分情况下与我的实际情况相符；此项与我的实际情况非常相符",
+      "optionItems": [
+        {
+          "label": "此项根本不符合我的情况",
+          "score": 0
+        },
+        {
+          "label": "此项在某种程度上或是某些时候与我的实际情况相符",
+          "score": 1
+        },
+        {
+          "label": "此项在很大程度上或是大部分情况下与我的实际情况相符",
+          "score": 2
+        },
+        {
+          "label": "此项与我的实际情况非常相符",
+          "score": 3
+        }
+      ],
+      "scale": "DASS-21",
+      "standard": true,
+      "source": "https://www2.psy.unsw.edu.au/dass/Chinese/DASS42%20simplified%20Chinese.pdf",
+      "version": "Zuo-Chang-zh-2026.11.27",
+      "order": 120,
+      "originalItemNumber": 8,
+      "description": "请阅读以下各项，然后根据过去一周之内符合您的实际情况，在相应的数字（0，1，2或3）上打勾。您的回答没有对错之分，所以请不要在以下任何一项上花太多时间。"
+    },
+    {
+      "id": "DASS-21-13",
+      "code": "DASS-21-13",
+      "text": "我感到伤心和郁闷",
+      "type": "single",
+      "status": "启用",
+      "required": true,
+      "options": "此项根本不符合我的情况；此项在某种程度上或是某些时候与我的实际情况相符；此项在很大程度上或是大部分情况下与我的实际情况相符；此项与我的实际情况非常相符",
+      "optionItems": [
+        {
+          "label": "此项根本不符合我的情况",
+          "score": 0
+        },
+        {
+          "label": "此项在某种程度上或是某些时候与我的实际情况相符",
+          "score": 1
+        },
+        {
+          "label": "此项在很大程度上或是大部分情况下与我的实际情况相符",
+          "score": 2
+        },
+        {
+          "label": "此项与我的实际情况非常相符",
+          "score": 3
+        }
+      ],
+      "scale": "DASS-21",
+      "standard": true,
+      "source": "https://www2.psy.unsw.edu.au/dass/Chinese/DASS42%20simplified%20Chinese.pdf",
+      "version": "Zuo-Chang-zh-2026.11.27",
+      "order": 130,
+      "originalItemNumber": 13,
+      "description": "请阅读以下各项，然后根据过去一周之内符合您的实际情况，在相应的数字（0，1，2或3）上打勾。您的回答没有对错之分，所以请不要在以下任何一项上花太多时间。"
+    },
+    {
+      "id": "DASS-21-14",
+      "code": "DASS-21-14",
+      "text": "我曾对阻碍我正在进行的工作的事情感到无法容忍",
+      "type": "single",
+      "status": "启用",
+      "required": true,
+      "options": "此项根本不符合我的情况；此项在某种程度上或是某些时候与我的实际情况相符；此项在很大程度上或是大部分情况下与我的实际情况相符；此项与我的实际情况非常相符",
+      "optionItems": [
+        {
+          "label": "此项根本不符合我的情况",
+          "score": 0
+        },
+        {
+          "label": "此项在某种程度上或是某些时候与我的实际情况相符",
+          "score": 1
+        },
+        {
+          "label": "此项在很大程度上或是大部分情况下与我的实际情况相符",
+          "score": 2
+        },
+        {
+          "label": "此项与我的实际情况非常相符",
+          "score": 3
+        }
+      ],
+      "scale": "DASS-21",
+      "standard": true,
+      "source": "https://www2.psy.unsw.edu.au/dass/Chinese/DASS42%20simplified%20Chinese.pdf",
+      "version": "Zuo-Chang-zh-2026.11.27",
+      "order": 140,
+      "originalItemNumber": 35,
+      "description": "请阅读以下各项，然后根据过去一周之内符合您的实际情况，在相应的数字（0，1，2或3）上打勾。您的回答没有对错之分，所以请不要在以下任何一项上花太多时间。"
+    },
+    {
+      "id": "DASS-21-15",
+      "code": "DASS-21-15",
+      "text": "我感到我曾接近恐慌",
+      "type": "single",
+      "status": "启用",
+      "required": true,
+      "options": "此项根本不符合我的情况；此项在某种程度上或是某些时候与我的实际情况相符；此项在很大程度上或是大部分情况下与我的实际情况相符；此项与我的实际情况非常相符",
+      "optionItems": [
+        {
+          "label": "此项根本不符合我的情况",
+          "score": 0
+        },
+        {
+          "label": "此项在某种程度上或是某些时候与我的实际情况相符",
+          "score": 1
+        },
+        {
+          "label": "此项在很大程度上或是大部分情况下与我的实际情况相符",
+          "score": 2
+        },
+        {
+          "label": "此项与我的实际情况非常相符",
+          "score": 3
+        }
+      ],
+      "scale": "DASS-21",
+      "standard": true,
+      "source": "https://www2.psy.unsw.edu.au/dass/Chinese/DASS42%20simplified%20Chinese.pdf",
+      "version": "Zuo-Chang-zh-2026.11.27",
+      "order": 150,
+      "originalItemNumber": 28,
+      "description": "请阅读以下各项，然后根据过去一周之内符合您的实际情况，在相应的数字（0，1，2或3）上打勾。您的回答没有对错之分，所以请不要在以下任何一项上花太多时间。"
+    },
+    {
+      "id": "DASS-21-16",
+      "code": "DASS-21-16",
+      "text": "我对任何事情都没法充满热情",
+      "type": "single",
+      "status": "启用",
+      "required": true,
+      "options": "此项根本不符合我的情况；此项在某种程度上或是某些时候与我的实际情况相符；此项在很大程度上或是大部分情况下与我的实际情况相符；此项与我的实际情况非常相符",
+      "optionItems": [
+        {
+          "label": "此项根本不符合我的情况",
+          "score": 0
+        },
+        {
+          "label": "此项在某种程度上或是某些时候与我的实际情况相符",
+          "score": 1
+        },
+        {
+          "label": "此项在很大程度上或是大部分情况下与我的实际情况相符",
+          "score": 2
+        },
+        {
+          "label": "此项与我的实际情况非常相符",
+          "score": 3
+        }
+      ],
+      "scale": "DASS-21",
+      "standard": true,
+      "source": "https://www2.psy.unsw.edu.au/dass/Chinese/DASS42%20simplified%20Chinese.pdf",
+      "version": "Zuo-Chang-zh-2026.11.27",
+      "order": 160,
+      "originalItemNumber": 31,
+      "description": "请阅读以下各项，然后根据过去一周之内符合您的实际情况，在相应的数字（0，1，2或3）上打勾。您的回答没有对错之分，所以请不要在以下任何一项上花太多时间。"
+    },
+    {
+      "id": "DASS-21-17",
+      "code": "DASS-21-17",
+      "text": "我感到自己曾不具备作为人而存在的价值",
+      "type": "single",
+      "status": "启用",
+      "required": true,
+      "options": "此项根本不符合我的情况；此项在某种程度上或是某些时候与我的实际情况相符；此项在很大程度上或是大部分情况下与我的实际情况相符；此项与我的实际情况非常相符",
+      "optionItems": [
+        {
+          "label": "此项根本不符合我的情况",
+          "score": 0
+        },
+        {
+          "label": "此项在某种程度上或是某些时候与我的实际情况相符",
+          "score": 1
+        },
+        {
+          "label": "此项在很大程度上或是大部分情况下与我的实际情况相符",
+          "score": 2
+        },
+        {
+          "label": "此项与我的实际情况非常相符",
+          "score": 3
+        }
+      ],
+      "scale": "DASS-21",
+      "standard": true,
+      "source": "https://www2.psy.unsw.edu.au/dass/Chinese/DASS42%20simplified%20Chinese.pdf",
+      "version": "Zuo-Chang-zh-2026.11.27",
+      "order": 170,
+      "originalItemNumber": 17,
+      "description": "请阅读以下各项，然后根据过去一周之内符合您的实际情况，在相应的数字（0，1，2或3）上打勾。您的回答没有对错之分，所以请不要在以下任何一项上花太多时间。"
+    },
+    {
+      "id": "DASS-21-18",
+      "code": "DASS-21-18",
+      "text": "我感到我曾极容易因为小事而生气",
+      "type": "single",
+      "status": "启用",
+      "required": true,
+      "options": "此项根本不符合我的情况；此项在某种程度上或是某些时候与我的实际情况相符；此项在很大程度上或是大部分情况下与我的实际情况相符；此项与我的实际情况非常相符",
+      "optionItems": [
+        {
+          "label": "此项根本不符合我的情况",
+          "score": 0
+        },
+        {
+          "label": "此项在某种程度上或是某些时候与我的实际情况相符",
+          "score": 1
+        },
+        {
+          "label": "此项在很大程度上或是大部分情况下与我的实际情况相符",
+          "score": 2
+        },
+        {
+          "label": "此项与我的实际情况非常相符",
+          "score": 3
+        }
+      ],
+      "scale": "DASS-21",
+      "standard": true,
+      "source": "https://www2.psy.unsw.edu.au/dass/Chinese/DASS42%20simplified%20Chinese.pdf",
+      "version": "Zuo-Chang-zh-2026.11.27",
+      "order": 180,
+      "originalItemNumber": 18,
+      "description": "请阅读以下各项，然后根据过去一周之内符合您的实际情况，在相应的数字（0，1，2或3）上打勾。您的回答没有对错之分，所以请不要在以下任何一项上花太多时间。"
+    },
+    {
+      "id": "DASS-21-19",
+      "code": "DASS-21-19",
+      "text": "在没有体力透支的情况下我也能感觉到自己的心跳或心律不正常（例如：感到心跳过快或心律不齐）",
+      "type": "single",
+      "status": "启用",
+      "required": true,
+      "options": "此项根本不符合我的情况；此项在某种程度上或是某些时候与我的实际情况相符；此项在很大程度上或是大部分情况下与我的实际情况相符；此项与我的实际情况非常相符",
+      "optionItems": [
+        {
+          "label": "此项根本不符合我的情况",
+          "score": 0
+        },
+        {
+          "label": "此项在某种程度上或是某些时候与我的实际情况相符",
+          "score": 1
+        },
+        {
+          "label": "此项在很大程度上或是大部分情况下与我的实际情况相符",
+          "score": 2
+        },
+        {
+          "label": "此项与我的实际情况非常相符",
+          "score": 3
+        }
+      ],
+      "scale": "DASS-21",
+      "standard": true,
+      "source": "https://www2.psy.unsw.edu.au/dass/Chinese/DASS42%20simplified%20Chinese.pdf",
+      "version": "Zuo-Chang-zh-2026.11.27",
+      "order": 190,
+      "originalItemNumber": 25,
+      "description": "请阅读以下各项，然后根据过去一周之内符合您的实际情况，在相应的数字（0，1，2或3）上打勾。您的回答没有对错之分，所以请不要在以下任何一项上花太多时间。"
+    },
+    {
+      "id": "DASS-21-20",
+      "code": "DASS-21-20",
+      "text": "没有什么特殊原因的情况下，我感到害怕",
+      "type": "single",
+      "status": "启用",
+      "required": true,
+      "options": "此项根本不符合我的情况；此项在某种程度上或是某些时候与我的实际情况相符；此项在很大程度上或是大部分情况下与我的实际情况相符；此项与我的实际情况非常相符",
+      "optionItems": [
+        {
+          "label": "此项根本不符合我的情况",
+          "score": 0
+        },
+        {
+          "label": "此项在某种程度上或是某些时候与我的实际情况相符",
+          "score": 1
+        },
+        {
+          "label": "此项在很大程度上或是大部分情况下与我的实际情况相符",
+          "score": 2
+        },
+        {
+          "label": "此项与我的实际情况非常相符",
+          "score": 3
+        }
+      ],
+      "scale": "DASS-21",
+      "standard": true,
+      "source": "https://www2.psy.unsw.edu.au/dass/Chinese/DASS42%20simplified%20Chinese.pdf",
+      "version": "Zuo-Chang-zh-2026.11.27",
+      "order": 200,
+      "originalItemNumber": 20,
+      "description": "请阅读以下各项，然后根据过去一周之内符合您的实际情况，在相应的数字（0，1，2或3）上打勾。您的回答没有对错之分，所以请不要在以下任何一项上花太多时间。"
+    },
+    {
+      "id": "DASS-21-21",
+      "code": "DASS-21-21",
+      "text": "我曾感到生活没有意义",
+      "type": "single",
+      "status": "启用",
+      "required": true,
+      "options": "此项根本不符合我的情况；此项在某种程度上或是某些时候与我的实际情况相符；此项在很大程度上或是大部分情况下与我的实际情况相符；此项与我的实际情况非常相符",
+      "optionItems": [
+        {
+          "label": "此项根本不符合我的情况",
+          "score": 0
+        },
+        {
+          "label": "此项在某种程度上或是某些时候与我的实际情况相符",
+          "score": 1
+        },
+        {
+          "label": "此项在很大程度上或是大部分情况下与我的实际情况相符",
+          "score": 2
+        },
+        {
+          "label": "此项与我的实际情况非常相符",
+          "score": 3
+        }
+      ],
+      "scale": "DASS-21",
+      "standard": true,
+      "source": "https://www2.psy.unsw.edu.au/dass/Chinese/DASS42%20simplified%20Chinese.pdf",
+      "version": "Zuo-Chang-zh-2026.11.27",
+      "order": 210,
+      "originalItemNumber": 38,
+      "description": "请阅读以下各项，然后根据过去一周之内符合您的实际情况，在相应的数字（0，1，2或3）上打勾。您的回答没有对错之分，所以请不要在以下任何一项上花太多时间。"
     }
   ],
   "questionCategories": [
